@@ -25,10 +25,11 @@ class ApiOutput
      * @var array
      */
     public static $poweredBy = [
-        'X-Powered-By'           => '基于CareyShop商城框架系统',
-        'X-Content-Type-Options' => 'nosniff',
-        'X-Frame-Options'        => 'DENY',
-        'X-XSS-Protection'       => '1; mode=block',
+        'X-Powered-By'                => '基于CareyShop商城框架系统',
+        'X-Content-Type-Options'      => 'nosniff',
+        'X-Frame-Options'             => 'DENY',
+        'X-XSS-Protection'            => '1; mode=block',
+        'Access-Control-Allow-Origin' => '*',
     ];
 
     /**
@@ -42,6 +43,16 @@ class ApiOutput
      */
     public static function outPut($data = [], $code = 200, $error = false, $message = '')
     {
+        // Request
+        $request = Request::instance();
+
+        // 跨域
+        if ($request->isOptions()) {
+            self::$poweredBy['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS';
+            self::$poweredBy['Access-Control-Allow-Headers'] = 'X-Requested-With, Content-Type, Accept';
+            self::$poweredBy['Access-Control-Max-Age'] = '25920'; // 3天
+        }
+
         // 头部
         $header = [];
         $header = array_merge($header, self::$poweredBy);
@@ -59,7 +70,7 @@ class ApiOutput
             $result['data'] = !empty($data) ? $data : (object)[];
         } else {
             // 状态(非HTTPS始终为200状态,防止运营商劫持)
-            $code = Request::instance()->isSsl() ? $code : 200;
+            $code = $request->isSsl() ? $code : 200;
         }
 
         switch (self::$format) {

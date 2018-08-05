@@ -100,7 +100,7 @@ class CareyShop extends Controller
     protected function _initialize()
     {
         // 验证请求方式
-        if (!$this->request->isGet() && !$this->request->isPost()) {
+        if (!in_array($this->request->method(), ['GET', 'POST', 'OPTIONS'])) {
             $this->outputError('不支持的请求方式');
         }
 
