@@ -369,6 +369,11 @@ class Setting extends CareyShop
                         $this->setSettingItem($key, $value, 'system_info', 'Setting.between');
                         break;
 
+                    case 'allow_origin':
+                        !empty($value) ?: $value = [];
+                        $this->setSettingItem($key, $value, 'system_info', 'Setting.array', true);
+                        break;
+
                     default:
                         throw new \Exception('键名' . $key . '不在允许范围内');
                 }

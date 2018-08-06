@@ -118,6 +118,14 @@ class CareyShop extends Controller
             Config::set($value['code'], $value, $value['module']);
         }
 
+        // 跨域检测与设置
+        $this->setAllowOrigin(Config::get('allow_origin.value', 'system_info'));
+
+        // 跨域 OPTIONS 请求提早返回
+        if ($this->request->isOptions()) {
+            $this->outputError('success', 200);
+        }
+
         // 检测是否开启API接口
         if (Config::get('open_api.value', 'system_info') != 1) {
             $this->outputError(Config::get('close_reason.value', 'system_info'));
@@ -514,5 +522,31 @@ class CareyShop extends Controller
 
         $url = sprintf('%s/%s/%s/%s', $module, $version, $controller, $method);
         return $url;
+    }
+
+    /**
+     * 检测并设置跨域信息
+     * @access private
+     * @param  string $allowOrigin 允许列表,为空则表示不跨域
+     * @return void
+     */
+    private function setAllowOrigin($allowOrigin)
+    {
+        $allowOrigin = json_decode($allowOrigin, true);
+        if (empty($allowOrigin)) {
+            return;
+        }
+
+        if (in_array('*', $allowOrigin)) {
+            ApiOutput::$poweredBy['Access-Control-Allow-Origin'] = '*';
+        } elseif (in_array($this->request->header('origin'), $allowOrigin)) {
+            ApiOutput::$poweredBy['Access-Control-Allow-Origin'] = $this->request->header('origin');
+        } else {
+            return;
+        }
+
+        ApiOutput::$poweredBy['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS';
+        ApiOutput::$poweredBy['Access-Control-Allow-Headers'] = 'X-Requested-With, Content-Type, Accept';
+        ApiOutput::$poweredBy['Access-Control-Max-Age'] = '86400'; // 1天
     }
 }
