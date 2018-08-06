@@ -63,7 +63,7 @@ class Batch extends CareyShop
                 // 权限验证
                 if (!$this->apiDebug) {
                     if (!static::$auth->check($authUrl)) {
-                        throw new \Exception('权限不足');
+                        throw new \Exception('权限不足', 403);
                     }
                 }
 
