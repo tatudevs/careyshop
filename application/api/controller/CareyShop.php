@@ -159,13 +159,15 @@ class CareyShop extends Controller
         // 验证Token
         $token = $this->checkToken();
         if (true !== $token) {
-            $this->outputError($token);
+            // 未授权，请重新登录(401)
+            $this->outputError($token, 401);
         }
 
         // 验证Auth
         $auth = $this->checkAuth();
         if (true !== $auth) {
-            $this->outputError($auth);
+            // 拒绝访问(403)
+            $this->outputError($auth, 403);
         }
 
         // 验证Sign
