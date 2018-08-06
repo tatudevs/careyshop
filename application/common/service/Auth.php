@@ -23,6 +23,12 @@ class Auth extends CareyShop
     private $menuAuth = [];
 
     /**
+     * 白名单列表
+     * @var array
+     */
+    private $whiteList = [];
+
+    /**
      * 日志权限
      * @var array
      */
@@ -44,9 +50,10 @@ class Auth extends CareyShop
     {
         // 获取权限数据
         $rule = AuthRule::getMenuAuthRule($module, $groupId);
-        if ($rule && is_array($rule)) {
+        if ($rule) {
             $this->menuAuth = $rule['menu_auth'];
             $this->logAuth = $rule['log_auth'];
+            $this->whiteList = $rule['white_list'];
         }
 
         // 获取菜单数据
@@ -82,7 +89,31 @@ class Auth extends CareyShop
         }
 
         $menuId = $this->menuList[$url]['menu_id'];
-        if (in_array($menuId, (array)$this->menuAuth)) {
+        if (in_array($menuId, $this->menuAuth)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 验证是否属于白名单
+     * @access public
+     * @param  string $url Url(模块/控制器/操作名)
+     * @return bool
+     */
+    public function checkWhite($url)
+    {
+        if (empty($this->whiteList)) {
+            return false;
+        }
+
+        if (!isset($this->menuList[$url])) {
+            return false;
+        }
+
+        $menuId = $this->menuList[$url]['menu_id'];
+        if (in_array($menuId, $this->whiteList)) {
             return true;
         }
 
@@ -109,7 +140,7 @@ class Auth extends CareyShop
         }
 
         $menuId = $this->menuList[$url]['menu_id'];
-        if (!in_array($menuId, (array)$this->logAuth)) {
+        if (!in_array($menuId, $this->logAuth)) {
             return;
         }
 

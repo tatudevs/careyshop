@@ -60,10 +60,12 @@ class Batch extends CareyShop
                     throw new \Exception($validate);
                 }
 
-                // 权限验证
+                // 权限验证,先验证是否属于白名单,再验证是否有权限
                 if (!$this->apiDebug) {
-                    if (!static::$auth->check($authUrl)) {
-                        throw new \Exception('权限不足', 403);
+                    if (!static::$auth->checkWhite($authUrl)) {
+                        if (!static::$auth->check($authUrl)) {
+                            throw new \Exception('权限不足', 403);
+                        }
                     }
                 }
 

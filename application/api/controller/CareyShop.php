@@ -169,7 +169,6 @@ class CareyShop extends Controller
         }
 
         // 验证Sign
-        // TODO:白名单接口不需要验证签名,但其他需要
         $sign = $this->apiDebug ?: $this->checkSign();
         if (true !== $sign) {
             $this->outputError($sign);
@@ -273,7 +272,6 @@ class CareyShop extends Controller
         }
 
         // 记录日志
-        // TODO:日志记录有问题,同时考虑批量接口日志
         if (!is_null(self::$auth)) {
             $logError = empty($this->error) && isset(static::$model) ? static::$model->getError() : $this->error;
             self::$auth->saveLog($this->getAuthUrl(), $this->request, $result, get_called_class(), $logError);
@@ -421,6 +419,11 @@ class CareyShop extends Controller
      */
     private function checkAuth()
     {
+        // 批量API调用或调试模式不需要权限验证
+        if ($this->apiDebug || $this->request->controller() == 'Batch') {
+            return true;
+        }
+
         if (is_null(self::$auth)) {
             $authCache = $this->request->module() . get_client_group();
             self::$auth = Cache::remember($authCache, function () {
@@ -430,13 +433,14 @@ class CareyShop extends Controller
             Cache::tag('CommonAuth', $authCache);
         }
 
-        // 对于批量API调用或调试模式下不进行验证
-        if ($this->apiDebug || $this->request->controller() == 'Batch') {
+        // 优先验证是否属于白名单
+        if (self::$auth->checkWhite($this->getAuthUrl())) {
+            $this->apiDebug = true;
             return true;
         }
 
+        // 再验证是否有权限
         if (self::$auth->check($this->getAuthUrl())) {
-            $this->apiDebug = true;
             return true;
         }
 
