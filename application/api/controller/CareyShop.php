@@ -419,11 +419,7 @@ class CareyShop extends Controller
      */
     private function checkAuth()
     {
-        // 批量API调用或调试模式不需要权限验证
-        if ($this->apiDebug || $this->request->controller() == 'Batch') {
-            return true;
-        }
-
+        // 初始化规则模块
         if (is_null(self::$auth)) {
             $authCache = $this->request->module() . get_client_group();
             self::$auth = Cache::remember($authCache, function () {
@@ -431,6 +427,11 @@ class CareyShop extends Controller
             });
 
             Cache::tag('CommonAuth', $authCache);
+        }
+
+        // 批量API调用或调试模式不需要权限验证
+        if ($this->apiDebug || $this->request->controller() == 'Batch') {
+            return true;
         }
 
         // 优先验证是否属于白名单
