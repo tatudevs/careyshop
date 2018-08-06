@@ -118,10 +118,8 @@ class CareyShop extends Controller
             Config::set($value['code'], $value, $value['module']);
         }
 
-        // 跨域检测与设置
+        // 跨域检测与设置,跨域 OPTIONS 请求友好返回
         $this->setAllowOrigin(Config::get('allow_origin.value', 'system_info'));
-
-        // 跨域 OPTIONS 请求提早返回
         if ($this->request->isOptions()) {
             $this->outputError('success', 200);
         }
@@ -171,6 +169,7 @@ class CareyShop extends Controller
         }
 
         // 验证Sign
+        // TODO:白名单接口不需要验证签名,但其他需要
         $sign = $this->apiDebug ?: $this->checkSign();
         if (true !== $sign) {
             $this->outputError($sign);
@@ -274,6 +273,7 @@ class CareyShop extends Controller
         }
 
         // 记录日志
+        // TODO:日志记录有问题,同时考虑批量接口日志
         if (!is_null(self::$auth)) {
             $logError = empty($this->error) && isset(static::$model) ? static::$model->getError() : $this->error;
             self::$auth->saveLog($this->getAuthUrl(), $this->request, $result, get_called_class(), $logError);
