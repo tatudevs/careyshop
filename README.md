@@ -15,9 +15,7 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 ### 网站地址
 官方网站：[https://www.careyshop.cn](https://www.careyshop.cn "CareyShop官方网站")
 
-demo地址：[https://demo.careyshop.cn](https://demo.careyshop.cn "demo地址")
-
-API沙盒：[https://demo.careyshop.cn/api/](https://demo.careyshop.cn/api/ "API沙盒")
+demo测试地址：[https://demo.careyshop.cn](https://demo.careyshop.cn "demo测试地址")
 
 ### 文档中心
 [https://doc.careyshop.cn](https://doc.careyshop.cn "CareyShop文档中心")
