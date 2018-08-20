@@ -5,7 +5,6 @@
  * CareyShop    规则模型
  *
  * @author      zxm <252404501@qq.com>
- * @version     v1.1
  * @date        2018/3/27
  */
 
@@ -250,19 +249,40 @@ class AuthRule extends CareyShop
      */
     public static function getMenuAuthRule($module, $groupId)
     {
+        // 需要加入游客组的权限(已登录账号也可以使用游客权限)
+        if (AUTH_GUEST !== $groupId) {
+            $groupId = [$groupId, AUTH_GUEST];
+        }
+
         $map['module'] = ['eq', $module];
-        $map['group_id'] = ['eq', $groupId];
+        $map['group_id'] = ['in', $groupId];
         $map['status'] = ['eq', 1];
 
-        $result = self::where($map)->cache(true, null, 'CommonAuth')->find();
-        if (!$result) {
-            if (false === $result) {
-                Cache::clear('CommonAuth');
-            }
-
+        $result = self::where($map)->cache(true, null, 'CommonAuth')->select();
+        if (false === $result) {
+            Cache::clear('CommonAuth');
             return false;
         }
 
-        return $result->toArray();
+        $menuAuth = [];
+        $logAuth = [];
+        $whiteList = [];
+
+        foreach ($result as $value) {
+            // 默认将所有获取到的编号都归入数组
+            $menuAuth = array_merge($menuAuth, $value->getAttr('menu_auth'));
+            $logAuth = array_merge($logAuth, $value->getAttr('log_auth'));
+
+            // 如果是游客组,需要将权限加入白名单列表
+            if ($value->getAttr('group_id') == AUTH_GUEST) {
+                $whiteList = array_merge($whiteList, $value->getAttr('menu_auth'));
+            }
+        }
+
+        return [
+            'menu_auth'  => array_unique($menuAuth),
+            'log_auth'   => array_unique($logAuth),
+            'white_list' => $whiteList,
+        ];
     }
 }

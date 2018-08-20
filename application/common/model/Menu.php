@@ -5,7 +5,6 @@
  * CareyShop    菜单管理模型
  *
  * @author      zxm <252404501@qq.com>
- * @version     v1.1
  * @date        2018/3/9
  */
 
@@ -553,9 +552,9 @@ class Menu extends CareyShop
             return false;
         }
 
-        // 获取对应的权限
+        // 获取当前登录账号对应的权限数据
         $ruleResult = AuthRule::getMenuAuthRule($data['module'], get_client_group());
-        if (!$ruleResult) {
+        if (empty($ruleResult['menu_auth'])) {
             return [];
         }
 

@@ -5,7 +5,6 @@
  * CareyShop    Api基类控制器
  *
  * @author      zxm <252404501@qq.com>
- * @version     v1.1
  * @date        2017/3/22
  */
 
@@ -101,7 +100,7 @@ class CareyShop extends Controller
     protected function _initialize()
     {
         // 验证请求方式
-        if (!$this->request->isGet() && !$this->request->isPost()) {
+        if (!in_array($this->request->method(), ['GET', 'POST', 'OPTIONS'])) {
             $this->outputError('不支持的请求方式');
         }
 
@@ -117,6 +116,12 @@ class CareyShop extends Controller
 
         foreach ($setting as $value) {
             Config::set($value['code'], $value, $value['module']);
+        }
+
+        // 跨域检测与设置,跨域 OPTIONS 请求友好返回
+        $this->setAllowOrigin(Config::get('allow_origin.value', 'system_info'));
+        if ($this->request->isOptions()) {
+            $this->outputError('success', 200);
         }
 
         // 检测是否开启API接口
@@ -152,13 +157,15 @@ class CareyShop extends Controller
         // 验证Token
         $token = $this->checkToken();
         if (true !== $token) {
-            $this->outputError($token);
+            // 未授权，请重新登录(401)
+            $this->outputError($token, 401);
         }
 
         // 验证Auth
         $auth = $this->checkAuth();
         if (true !== $auth) {
-            $this->outputError($auth);
+            // 拒绝访问(403)
+            $this->outputError($auth, 403);
         }
 
         // 验证Sign
@@ -332,7 +339,7 @@ class CareyShop extends Controller
         if (!$appSecret) {
             return 'appkey已禁用或不存在';
         }
-        
+
         unset($this->params['sign']);
         $params = $this->params;
         ksort($params);
@@ -361,8 +368,8 @@ class CareyShop extends Controller
     {
         // 初始账号数据
         $GLOBALS['client'] = [
-            'type'        => config('ClientGroup.' . ($this->apiDebug ? 'user' : 'visitor'))['value'],
-            'group_id'    => $this->apiDebug ? AUTH_CLIENT : AUTH_GUEST,
+            'type'        => config('ClientGroup.' . ($this->apiDebug ? 'admin' : 'visitor'))['value'],
+            'group_id'    => $this->apiDebug ? AUTH_ADMINISTRATOR : AUTH_GUEST,
             'client_id'   => $this->apiDebug ? 1 : 0,
             'client_name' => $this->apiDebug ? 'CareyShop' : '游客',
         ];
@@ -412,6 +419,7 @@ class CareyShop extends Controller
      */
     private function checkAuth()
     {
+        // 初始化规则模块
         if (is_null(self::$auth)) {
             $authCache = $this->request->module() . get_client_group();
             self::$auth = Cache::remember($authCache, function () {
@@ -421,13 +429,19 @@ class CareyShop extends Controller
             Cache::tag('CommonAuth', $authCache);
         }
 
-        // 对于批量API调用或调试模式下不进行验证
+        // 批量API调用或调试模式不需要权限验证
         if ($this->apiDebug || $this->request->controller() == 'Batch') {
             return true;
         }
 
-        if (self::$auth->check($this->getAuthUrl())) {
+        // 优先验证是否属于白名单
+        if (self::$auth->checkWhite($this->getAuthUrl())) {
             $this->apiDebug = true;
+            return true;
+        }
+
+        // 再验证是否有权限
+        if (self::$auth->check($this->getAuthUrl())) {
             return true;
         }
 
@@ -515,5 +529,31 @@ class CareyShop extends Controller
 
         $url = sprintf('%s/%s/%s/%s', $module, $version, $controller, $method);
         return $url;
+    }
+
+    /**
+     * 检测并设置跨域信息
+     * @access private
+     * @param  string $allowOrigin 允许列表,为空则表示不跨域
+     * @return void
+     */
+    private function setAllowOrigin($allowOrigin)
+    {
+        $allowOrigin = json_decode($allowOrigin, true);
+        if (empty($allowOrigin)) {
+            return;
+        }
+
+        if (in_array('*', $allowOrigin)) {
+            ApiOutput::$poweredBy['Access-Control-Allow-Origin'] = '*';
+        } elseif (in_array($this->request->header('origin'), $allowOrigin)) {
+            ApiOutput::$poweredBy['Access-Control-Allow-Origin'] = $this->request->header('origin');
+        } else {
+            return;
+        }
+
+        ApiOutput::$poweredBy['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS';
+        ApiOutput::$poweredBy['Access-Control-Allow-Headers'] = 'X-Requested-With, Content-Type, Accept';
+        ApiOutput::$poweredBy['Access-Control-Max-Age'] = '86400'; // 1天
     }
 }

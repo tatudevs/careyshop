@@ -5,7 +5,6 @@
  * CareyShop    API批量调用
  *
  * @author      zxm <252404501@qq.com>
- * @version     v1.1
  * @date        2017/12/1
  */
 
@@ -61,10 +60,12 @@ class Batch extends CareyShop
                     throw new \Exception($validate);
                 }
 
-                // 权限验证
+                // 权限验证,先验证是否属于白名单,再验证是否有权限
                 if (!$this->apiDebug) {
-                    if (!static::$auth->check($authUrl)) {
-                        throw new \Exception('权限不足');
+                    if (!static::$auth->checkWhite($authUrl)) {
+                        if (!static::$auth->check($authUrl)) {
+                            throw new \Exception('权限不足', 403);
+                        }
                     }
                 }
 

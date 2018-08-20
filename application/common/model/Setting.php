@@ -5,7 +5,6 @@
  * CareyShop    系统配置模型
  *
  * @author      zxm <252404501@qq.com>
- * @version     v1.1
  * @date        2018/2/12
  */
 
@@ -368,6 +367,11 @@ class Setting extends CareyShop
                     case 'withdraw_fee':
                         !empty($value) ?: $value = 0;
                         $this->setSettingItem($key, $value, 'system_info', 'Setting.between');
+                        break;
+
+                    case 'allow_origin':
+                        !empty($value) ?: $value = [];
+                        $this->setSettingItem($key, $value, 'system_info', 'Setting.array', true);
                         break;
 
                     default:

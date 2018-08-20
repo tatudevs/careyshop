@@ -5,7 +5,6 @@
  * CareyShop    Api结果输出
  *
  * @author      zxm <252404501@qq.com>
- * @version     v1.1
  * @date        2017/7/9
  */
 
@@ -25,7 +24,12 @@ class ApiOutput
      * X-Powered-By
      * @var array
      */
-    public static $poweredBy = ['X-Powered-By' => '基于CareyShop商城框架系统'];
+    public static $poweredBy = [
+        'X-Powered-By'                => '基于CareyShop商城框架系统',
+        'X-Content-Type-Options'      => 'nosniff',
+        'X-Frame-Options'             => 'DENY',
+        'X-XSS-Protection'            => '1; mode=block',
+    ];
 
     /**
      * 数据输出

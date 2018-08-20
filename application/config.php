@@ -5,7 +5,6 @@
  * CareyShop    应用（公共）配置文件
  *
  * @author      zxm <252404501@qq.com>
- * @version     v1.1
  * @date        2017/03/22
  */
 
@@ -17,7 +16,7 @@ return [
     // 应用命名空间
     'app_namespace'          => 'app',
     // 应用调试模式
-    'app_debug'              => false,
+    'app_debug'              => true,
     // 应用Trace
     'app_trace'              => false,
     // 应用模式状态
@@ -236,9 +235,9 @@ return [
         // cookie 有效域名
         'domain'    => '',
         //  cookie 启用安全传输
-        'secure'    => false,
+        'secure'    => true,
         // httponly设置
-        'httponly'  => '',
+        'httponly'  => 'HttpOnly',
         // 是否使用 setcookie
         'setcookie' => true,
     ],
