@@ -566,7 +566,6 @@ class Goods extends CareyShop
         empty($data['goods_id']) ?: $map['goods_id'] = ['in', $data['goods_id']];
         empty($data['exclude_id']) ?: $map['goods_id'] = ['not in', $data['exclude_id']];
         !isset($data['goods_category_id']) ?: $map['goods_category_id'] = ['eq', $data['goods_category_id']];
-        empty($data['name']) ?: $map['name|short_name'] = ['like', '%' . $data['name'] . '%'];
         empty($data['goods_code']) ?: $map['goods_code|goods_spu|goods_sku|bar_code'] = ['eq', $data['goods_code']];
         !isset($data['brand_id']) ?: $map['brand_id'] = ['eq', $data['brand_id']];
         !isset($data['store_qty']) ?: $map['store_qty'] = ['between', $data['store_qty']];
@@ -577,6 +576,17 @@ class Goods extends CareyShop
         !isset($data['is_hot']) ?: $map['is_hot'] = ['eq', $data['is_hot']];
         !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
         $map['is_delete'] = ['eq', 0];
+
+        // 支持多个关键词搜索(空格间隔)
+        if (!empty($data['keywords'])) {
+            $keywords = explode(' ', $data['keywords']);
+            foreach ($keywords as &$value) {
+                $value = '%' . $value . '%';
+            }
+
+            unset($value);
+            $map['name|short_name'] = ['like', $keywords, 'OR'];
+        }
 
         // 回收站中不存在"上下架"概念
         if (!empty($data['is_delete'])) {
@@ -1198,10 +1208,20 @@ class Goods extends CareyShop
 
         // 搜索条件
         $map['goods_category_id'] = ['in', $goodsCateList];
-        empty($data['keywords']) ?: $map['name|short_name'] = ['like', '%' . $data['keywords'] . '%'];
         !isset($data['is_postage']) ?: $map['is_postage'] = ['eq', $data['is_postage']];
         empty($data['is_integral']) ?: $map['is_integral'] = ['gt', 0];
         empty($data['bar_code']) ?: $map['bar_code'] = ['eq', $data['bar_code']];
+
+        // 支持多个关键词搜索(空格间隔)
+        if (!empty($data['keywords'])) {
+            $keywords = explode(' ', $data['keywords']);
+            foreach ($keywords as &$value) {
+                $value = '%' . $value . '%';
+            }
+
+            unset($value);
+            $map['name|short_name'] = ['like', $keywords, 'OR'];
+        }
 
         $result = [];
         $filterParam = []; // 将筛选条件归类(所有的筛选都是数组)
