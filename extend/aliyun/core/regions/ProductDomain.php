@@ -24,5 +24,4 @@ class ProductDomain
 	public function setDomainName($domainName) {
 		$this->domainName = $domainName;
 	}
-
 }

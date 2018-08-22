@@ -45,6 +45,4 @@ class ClientException extends \Exception
     {
         $this->errorType = $errorType;
     }
-    
-
 }

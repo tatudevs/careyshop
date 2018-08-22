@@ -585,4 +585,3 @@ class WxPayApi
 		return $time;
 	}
 }
-

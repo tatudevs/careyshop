@@ -16,5 +16,4 @@ class ShaHmac256Signer implements ISigner
 	public function getSignatureVersion() {
 		return "1.0";
 	}
-
 }

@@ -49,5 +49,4 @@ class EndpointProvider
 	{
 		self::$endpoints = $endpoints;
 	}
-	
 }
