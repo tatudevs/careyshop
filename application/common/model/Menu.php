@@ -563,7 +563,7 @@ class Menu extends CareyShop
         $isLayer = isset($data['is_layer']) ? (bool)$data['is_layer'] : true;
         $level = isset($data['level']) ? $data['level'] : null;
 
-        $filter['is_navi'] = isset($data['is_navi']) ? $data['is_navi'] : 1;
+        !isset($data['is_navi']) ?: $filter['status'] = $data['is_navi'];
         $filter['status'] = isset($data['status']) ? $data['status'] : 1;
 
         // 当规则表中存在菜单权限时进行赋值,让获取的函数进行过滤
