@@ -355,8 +355,6 @@ class Admin extends CareyShop
         }
 
         $this->hasToken()->where($map)->delete();
-        $GLOBALS['client'] = [];
-
         return true;
     }
 

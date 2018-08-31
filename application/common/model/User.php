@@ -365,7 +365,7 @@ class User extends CareyShop
 
             // 每页条数
             $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-            
+
             // 排序方式
             $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
 
@@ -432,8 +432,6 @@ class User extends CareyShop
         }
 
         $this->hasToken()->where($map)->delete();
-        $GLOBALS['client'] = [];
-
         return true;
     }
 
