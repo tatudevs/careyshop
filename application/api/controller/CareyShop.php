@@ -360,7 +360,7 @@ class CareyShop extends Controller
     }
 
     /**
-     * 验证Token是否合法
+     * 只验证Token是否合法,否则一律按游客处理
      * @access private
      * @return string|true
      */
@@ -406,7 +406,7 @@ class CareyShop extends Controller
             ];
 
             $cacheTag = 'token:' . (is_client_admin() ? 'admin_' : 'user_') . get_client_id();
-            Cache::tag($cacheTag, ['token' . $this->token]);
+            Cache::tag($cacheTag, ['token:' . $this->token]);
         }
 
         return true;
