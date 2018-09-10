@@ -407,6 +407,9 @@ class CareyShop extends Controller
 
             $cacheTag = 'token:' . (is_client_admin() ? 'admin_' : 'user_') . get_client_id();
             Cache::tag($cacheTag, ['token:' . $this->token]);
+        } else if (!empty($this->token)) {
+            // 不以白名单方式访问一律按Token未授权处理
+            return false;
         }
 
         return true;
