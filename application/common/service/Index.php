@@ -10,8 +10,6 @@
 
 namespace app\common\service;
 
-use think\Cache;
-
 class Index extends CareyShop
 {
     /**
@@ -19,8 +17,16 @@ class Index extends CareyShop
      * @access public
      * @return array|false
      */
-    public static function setSystemOptimize()
+    public function setSystemOptimize()
     {
+        if (ini_get('safe_mode')) {
+            return $this->setError('PHP安全模式下无法运行');
+        }
+
+        if (config('app_debug') === true) {
+            return $this->setError('调试模式下不需要执行');
+        }
+
         $shell = [
             'autoload'   => 'optimize:autoload',    // 生成类库映射文件
             'route'      => 'optimize:route',       // 生成路由缓存
@@ -45,9 +51,9 @@ class Index extends CareyShop
      * @access public
      * @return bool
      */
-    public static function clearCacheAll()
+    public function clearCacheAll()
     {
-        return Cache::clear();
+        return \think\Cache::clear();
     }
 
     /**
@@ -55,7 +61,7 @@ class Index extends CareyShop
      * @access public
      * @return array
      */
-    public static function getVersion()
+    public function getVersion()
     {
         return ['version' => get_version()];
     }
