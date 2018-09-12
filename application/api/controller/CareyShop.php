@@ -409,7 +409,7 @@ class CareyShop extends Controller
             Cache::tag($cacheTag, ['token:' . $this->token]);
         } else if (!empty($this->token)) {
             // 不以白名单方式访问一律按Token未授权处理
-            return false;
+            return '未授权或授权已过期';
         }
 
         return true;
