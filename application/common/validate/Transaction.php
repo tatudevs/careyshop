@@ -32,7 +32,7 @@ class Transaction extends CareyShop
         'end_time'       => 'date|betweenTime|afterTime:begin_time',
         'card_number'    => 'length:16',
         'page_no'        => 'integer|gt:0',
-        'page_size'      => 'integer|between:1,40',
+        'page_size'      => 'integer|gt:0',
         'order_type'     => 'in:asc,desc',
         'order_field'    => 'in:transaction_id,type,create_time',
     ];

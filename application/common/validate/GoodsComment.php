@@ -34,7 +34,7 @@ class GoodsComment extends CareyShop
         'is_image'         => 'in:0,1',
         'goods_spec'       => 'arrayHasOnlyStrings',
         'page_no'          => 'integer|gt:0',
-        'page_size'        => 'integer|between:1,40',
+        'page_size'        => 'integer|gt:0',
         'order_type'       => 'in:asc,desc',
         'order_field'      => 'in:goods_comment_id,is_image,score,is_show,is_top,status,create_time',
     ];

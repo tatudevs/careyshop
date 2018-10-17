@@ -28,7 +28,7 @@ class DeliveryDist extends CareyShop
         'account'       => 'max:80',
         'timeout'       => 'integer|egt:0',
         'page_no'       => 'integer|gt:0',
-        'page_size'     => 'integer|between:1,40',
+        'page_size'     => 'integer|gt:0',
         'order_type'    => 'in:asc,desc',
         'order_field'   => 'in:delivery_dist_id,order_code,delivery_item_id,logistic_code,state,is_sub',
     ];

@@ -28,7 +28,7 @@ class GoodsConsult extends CareyShop
         'is_answer'        => 'in:0,1',
         'account'          => 'max:60',
         'page_no'          => 'integer|gt:0',
-        'page_size'        => 'integer|between:1,40',
+        'page_size'        => 'integer|gt:0',
         'order_type'       => 'in:asc,desc',
         'order_field'      => 'in:goods_consult_id,type,content,is_show,is_anon,status,create_time,username,nickname',
     ];

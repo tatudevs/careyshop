@@ -44,7 +44,7 @@ class OrderService extends CareyShop
         'end_time'       => 'date|betweenTime|afterTime:begin_time',
         'my_service'     => 'in:0,1',
         'page_no'        => 'integer|gt:0',
-        'page_size'      => 'integer|between:1,40',
+        'page_size'      => 'integer|gt:0',
         'order_type'     => 'in:asc,desc',
         'order_field'    => 'in:order_service_id,create_time,update_time',
     ];

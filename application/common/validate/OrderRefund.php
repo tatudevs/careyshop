@@ -30,7 +30,7 @@ class OrderRefund extends CareyShop
         'end_time'        => 'date|betweenTime|afterTime:begin_time',
         'account'         => 'max:80',
         'page_no'         => 'integer|gt:0',
-        'page_size'       => 'integer|between:1,40',
+        'page_size'       => 'integer|gt:0',
         'order_type'      => 'in:asc,desc',
         'order_field'     => 'in:order_refund_id,create_time,status',
     ];

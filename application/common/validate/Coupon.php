@@ -37,7 +37,7 @@ class Coupon extends CareyShop
         'status'           => 'in:0,1',
         'is_invalid'       => 'in:0,1',
         'page_no'          => 'integer|gt:0',
-        'page_size'        => 'integer|between:1,40',
+        'page_size'        => 'integer|gt:0',
         'order_type'       => 'in:asc,desc',
         'order_field'      => 'in:coupon_id,name,type,give_num,receive_num,use_num,status,is_invalid',
     ];

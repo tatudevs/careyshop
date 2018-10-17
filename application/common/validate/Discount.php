@@ -25,7 +25,7 @@ class Discount extends CareyShop
         'status'         => 'in:0,1',
         'discount_goods' => 'require|array',
         'page_no'        => 'integer|gt:0',
-        'page_size'      => 'integer|between:1,40',
+        'page_size'      => 'integer|gt:0',
         'order_type'     => 'in:asc,desc',
         'order_field'    => 'in:promotion_id,name,all_goods,begin_time,end_time,status',
     ];

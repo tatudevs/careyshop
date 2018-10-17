@@ -25,7 +25,7 @@ class Ask extends CareyShop
         'account'     => 'max:80',
         'status'      => 'in:0,1',
         'page_no'     => 'integer|gt:0',
-        'page_size'   => 'integer|between:1,40',
+        'page_size'   => 'integer|gt:0',
         'order_type'  => 'in:asc,desc',
         'order_field' => 'in:ask_id,ask_type,title,status,ask_time,answer_time,username,nickname',
     ];

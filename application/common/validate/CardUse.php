@@ -31,7 +31,7 @@ class CardUse extends CareyShop
         'account'        => 'max:80',
         'goods_id'       => 'arrayHasOnlyInts',
         'page_no'        => 'integer|gt:0',
-        'page_size'      => 'integer|between:1,40',
+        'page_size'      => 'integer|gt:0',
     ];
 
     /**

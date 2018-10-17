@@ -59,7 +59,7 @@ class Order extends CareyShop
         'comment_type'         => 'in:comment,addition',
         'account'              => 'max:80',
         'page_no'              => 'integer|gt:0',
-        'page_size'            => 'integer|between:1,40',
+        'page_size'            => 'integer|gt:0',
         'order_type'           => 'in:asc,desc',
         'order_field'          => 'in:order_id,payment_time,finished_time,create_time,update_time',
     ];

@@ -23,7 +23,7 @@ class Qrcode extends CareyShop
         'size'        => 'integer|between:0,10',
         'logo'        => 'max:255',
         'page_no'     => 'integer|gt:0',
-        'page_size'   => 'integer|between:1,40',
+        'page_size'   => 'integer|gt:0',
         'order_type'  => 'in:asc,desc',
         'order_field' => 'in:qrcode_id,size',
     ];

@@ -58,7 +58,7 @@ class Goods extends CareyShop
         'measure_type'      => 'requireIf:is_postage,0|in:0,1,2',
         'goods_type'        => 'in:integral,recommend,new,hot',
         'page_no'           => 'integer|gt:0',
-        'page_size'         => 'integer|between:1,40',
+        'page_size'         => 'integer|gt:0',
         'order_type'        => 'in:asc,desc',
         'order_field'       => 'in:goods_id,goods_code,name,shop_price,store_qty,is_integral,is_recommend,is_new,is_hot',
     ];
@@ -228,7 +228,7 @@ class Goods extends CareyShop
             'goods_spec_item',
             'goods_attr_item',
             'page_no'           => 'integer|gt:0',
-            'page_size'         => 'integer|between:1,40',
+            'page_size'         => 'integer|gt:0',
             'order_type',
             'order_field'       => 'in:goods_id,sales_sum,comment_sum,shop_price,create_time',
         ],

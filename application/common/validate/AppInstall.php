@@ -23,7 +23,7 @@ class AppInstall extends CareyShop
         'ver'            => 'require|max:16|regex:^\d+(\.\d+){0,3}$',
         'url'            => 'require|max:255',
         'page_no'        => 'integer|gt:0',
-        'page_size'      => 'integer|between:1,40',
+        'page_size'      => 'integer|gt:0',
         'order_type'     => 'in:asc,desc',
         'order_field'    => 'in:app_install_id,name,count,create_time,update_time',
     ];
