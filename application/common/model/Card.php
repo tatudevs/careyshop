@@ -235,7 +235,7 @@ class Card extends CareyShop
         // 搜索条件
         $map['is_delete'] = ['eq', 0];
         empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-        !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
 
         $totalResult = $this->where($map)->count();
         if ($totalResult <= 0) {

@@ -220,12 +220,12 @@ class Ads extends CareyShop
 
         // 搜索条件
         $map = [];
-        !isset($data['platform']) ?: $map['ads.platform'] = ['eq', $data['platform']];
+        is_empty_parm($data['platform']) ?: $map['ads.platform'] = ['eq', $data['platform']];
         !isset($data['ads_position_id']) ?: $map['ads.ads_position_id'] = ['eq', $data['ads_position_id']];
         empty($data['code']) ?: $map['ads.code'] = ['eq', $data['code']];
         empty($data['name']) ?: $map['ads.name'] = ['like', '%' . $data['name'] . '%'];
-        !isset($data['type']) ?: $map['ads.type'] = ['eq', $data['type']];
-        !isset($data['status']) ?: $map['ads.status'] = ['eq', $data['status']];
+        is_empty_parm($data['type']) ?: $map['ads.type'] = ['eq', $data['type']];
+        is_empty_parm($data['status']) ?: $map['ads.status'] = ['eq', $data['status']];
         empty($data['begin_time']) ?: $map['ads.begin_time'] = ['< time', $data['end_time']];
         empty($data['end_time']) ?: $map['ads.end_time'] = ['> time', $data['begin_time']];
 

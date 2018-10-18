@@ -162,7 +162,7 @@ class App extends CareyShop
         $result = self::all(function ($query) use ($data) {
             // 搜索条件
             $map = [];
-            !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+            is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
             empty($data['app_name']) ?: $map['app_name'] = ['like', '%' . $data['app_name'] . '%'];
 
             $query->where($map);

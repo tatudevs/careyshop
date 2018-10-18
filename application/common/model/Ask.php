@@ -322,8 +322,8 @@ class Ask extends CareyShop
         $map['ask.user_id'] = ['eq', get_client_id()];
         $map['ask.type'] = ['eq', self::ASK_TYPT_THEME];
         $map['ask.is_delete'] = ['eq', 0];
-        !isset($data['ask_type']) ?: $map['ask.ask_type'] = ['eq', $data['ask_type']];
-        !isset($data['status']) ?: $map['ask.status'] = ['eq', $data['status']];
+        is_empty_parm($data['ask_type']) ?: $map['ask.ask_type'] = ['eq', $data['ask_type']];
+        is_empty_parm($data['status']) ?: $map['ask.status'] = ['eq', $data['status']];
 
         // 关联查询
         $with = [];

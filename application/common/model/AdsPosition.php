@@ -220,10 +220,10 @@ class AdsPosition extends CareyShop
         $map = [];
         empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
         empty($data['code']) ?: $map['code'] = ['eq', $data['code']];
-        !isset($data['platform']) ?: $map['platform'] = ['eq', $data['platform']];
-        !isset($data['type']) ?: $map['type'] = ['eq', $data['type']];
-        !isset($data['display']) ?: $map['display'] = ['eq', $data['display']];
-        !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        is_empty_parm($data['platform']) ?: $map['platform'] = ['eq', $data['platform']];
+        is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
+        is_empty_parm($data['display']) ?: $map['display'] = ['eq', $data['display']];
+        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
 
         // 获取总数量,为空直接返回
         $totalResult = $this->where($map)->count();
@@ -270,10 +270,10 @@ class AdsPosition extends CareyShop
         $result = self::all(function ($query) use ($data) {
             // 搜索条件
             $map = [];
-            !isset($data['platform']) ?: $map['platform'] = ['eq', $data['platform']];
-            !isset($data['type']) ?: $map['type'] = ['eq', $data['type']];
-            !isset($data['display']) ?: $map['display'] = ['eq', $data['display']];
-            !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+            is_empty_parm($data['platform']) ?: $map['platform'] = ['eq', $data['platform']];
+            is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
+            is_empty_parm($data['display']) ?: $map['display'] = ['eq', $data['display']];
+            is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
 
             $query->field('description,width,height,content,color', true)->where($map);
         });

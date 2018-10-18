@@ -172,8 +172,8 @@ class Article extends CareyShop
         // 后台管理搜索
         if (is_client_admin()) {
             unset($map['article.status']);
-            !isset($data['status']) ?: $map['article.status'] = ['eq', $data['status']];
-            !isset($data['is_top']) ?: $map['article.is_top'] = ['eq', $data['is_top']];
+            is_empty_parm($data['status']) ?: $map['article.status'] = ['eq', $data['status']];
+            is_empty_parm($data['is_top']) ?: $map['article.is_top'] = ['eq', $data['is_top']];
             empty($data['keywords']) ?: $map['article.keywords'] = ['like', '%' . $data['keywords'] . '%'];
         }
 

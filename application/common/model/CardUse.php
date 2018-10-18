@@ -398,8 +398,13 @@ class CardUse extends CareyShop
 
         if (is_client_admin()) {
             empty($data['card_id']) ?: $map['card_use.card_id'] = ['eq', $data['card_id']];
-            empty($data['is_active']) ?: $map['card_use.user_id'] = ['neq', 0];
             empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
+
+            // empty($data['is_active']) ?: $map['card_use.user_id'] = ['neq', 0];
+            // 以上条件被替换成下行
+            if (!is_empty_parm($data['is_active'])) {
+                $map['card_use.user_id'] = empty($data['is_active']) ? ['eq', 0] : ['neq', 0];
+            }
         } else {
             $map['card_use.user_id'] = ['eq', get_client_id()];
         }
@@ -563,7 +568,7 @@ class CardUse extends CareyShop
         }
 
         // 初始化部分数据
-        isset($data['money']) ?: $data['money'] = 0;
+        !is_empty_parm($data['money']) ?: $data['money'] = 0;
 
         // 获取购物卡
         $cardResult = self::get(function ($query) use ($data) {

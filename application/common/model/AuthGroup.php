@@ -167,7 +167,7 @@ class AuthGroup extends CareyShop
             // 搜索条件
             $map = [];
             !isset($data['exclude_id']) ?: $map['group_id'] = ['not in', $data['exclude_id']];
-            !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+            is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
 
             // 排序方式
             $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
