@@ -287,3 +287,15 @@ if (!function_exists('unique_and_delzero')) {
         }
     }
 }
+
+if (!function_exists('is_empty_parm')) {
+    /**
+     * 判断是否为空参数
+     * @param  mixed $parm
+     * @return bool
+     */
+    function is_empty_parm(&$parm)
+    {
+        return !(isset($parm) && $parm != '');
+    }
+}
