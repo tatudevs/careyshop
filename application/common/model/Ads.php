@@ -221,7 +221,7 @@ class Ads extends CareyShop
         // 搜索条件
         $map = [];
         is_empty_parm($data['platform']) ?: $map['ads.platform'] = ['eq', $data['platform']];
-        empty($data['ads_position_id']) ?: $map['ads.ads_position_id'] = ['eq', $data['ads_position_id']];
+        !isset($data['ads_position_id']) ?: $map['ads.ads_position_id'] = ['eq', $data['ads_position_id']];
         empty($data['code']) ?: $map['ads.code'] = ['eq', $data['code']];
         empty($data['name']) ?: $map['ads.name'] = ['like', '%' . $data['name'] . '%'];
         is_empty_parm($data['type']) ?: $map['ads.type'] = ['eq', $data['type']];
@@ -310,7 +310,7 @@ class Ads extends CareyShop
         }
 
         $map['code'] = ['eq', $data['code']];
-        empty($data['exclude_id']) ?: $map['ads_id'] = ['neq', $data['exclude_id']];
+        !isset($data['exclude_id']) ?: $map['ads_id'] = ['neq', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('广告编码已存在');

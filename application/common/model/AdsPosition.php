@@ -153,7 +153,7 @@ class AdsPosition extends CareyShop
         }
 
         $map['code'] = ['eq', $data['code']];
-        empty($data['exclude_id']) ?: $map['ads_position_id'] = ['neq', $data['exclude_id']];
+        !isset($data['exclude_id']) ?: $map['ads_position_id'] = ['neq', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('广告位编码已存在');

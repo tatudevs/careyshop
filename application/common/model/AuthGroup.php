@@ -166,7 +166,7 @@ class AuthGroup extends CareyShop
         $result = self::all(function ($query) use ($data) {
             // 搜索条件
             $map = [];
-            empty($data['exclude_id']) ?: $map['group_id'] = ['not in', $data['exclude_id']];
+            !isset($data['exclude_id']) ?: $map['group_id'] = ['not in', $data['exclude_id']];
             is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
 
             // 排序方式

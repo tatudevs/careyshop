@@ -190,7 +190,7 @@ class Delivery extends CareyShop
 
             // 排序的字段
             $orderField = 'delivery.delivery_id';
-            if (!is_empty_parm($data['order_field'])) {
+            if (isset($data['order_field'])) {
                 switch ($data['order_field']) {
                     case 'delivery_id':
                     case 'content':
@@ -386,7 +386,7 @@ class Delivery extends CareyShop
         }
 
         $map['delivery_item_id'] = ['eq', $data['delivery_item_id']];
-        empty($data['exclude_id']) ?: $map['delivery_id'] = ['neq', $data['exclude_id']];
+        !isset($data['exclude_id']) ?: $map['delivery_id'] = ['neq', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('快递公司编号已存在');

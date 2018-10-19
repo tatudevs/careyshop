@@ -205,7 +205,7 @@ class DeliveryItem extends CareyShop
         $map['code'] = ['eq', $data['code']];
         $map['type'] = ['eq', $data['type']];
         $map['is_delete'] = ['eq', 0];
-        empty($data['exclude_id']) ?: $map['delivery_item_id'] = ['neq', $data['exclude_id']];
+        !isset($data['exclude_id']) ?: $map['delivery_item_id'] = ['neq', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('快递公司编码已存在');

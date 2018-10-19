@@ -209,7 +209,7 @@ class App extends CareyShop
         }
 
         $map['app_name'] = ['eq', $data['app_name']];
-        empty($data['exclude_id']) ?: $map['app_id'] = ['neq', $data['exclude_id']];
+        !isset($data['exclude_id']) ?: $map['app_id'] = ['neq', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('应用名称已存在');
