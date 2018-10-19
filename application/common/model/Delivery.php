@@ -386,7 +386,7 @@ class Delivery extends CareyShop
         }
 
         $map['delivery_item_id'] = ['eq', $data['delivery_item_id']];
-        is_empty_parm($data['exclude_id']) ?: $map['delivery_id'] = ['neq', $data['exclude_id']];
+        empty($data['exclude_id']) ?: $map['delivery_id'] = ['neq', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('快递公司编号已存在');
