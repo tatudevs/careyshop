@@ -180,9 +180,9 @@ class Coupon extends CareyShop
         // 搜索条件
         $map['is_delete'] = ['eq', 0];
         empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-        !isset($data['type']) ?: $map['type'] = ['eq', $data['type']];
-        !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
-        !isset($data['is_invalid']) ?: $map['is_invalid'] = ['eq', $data['is_invalid']];
+        is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
+        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        is_empty_parm($data['is_invalid']) ?: $map['is_invalid'] = ['eq', $data['is_invalid']];
 
         $totalResult = $this->where($map)->count();
         if ($totalResult <= 0) {

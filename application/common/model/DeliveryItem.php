@@ -205,7 +205,7 @@ class DeliveryItem extends CareyShop
         $map['code'] = ['eq', $data['code']];
         $map['type'] = ['eq', $data['type']];
         $map['is_delete'] = ['eq', 0];
-        !isset($data['exclude_id']) ?: $map['delivery_item_id'] = ['neq', $data['exclude_id']];
+        is_empty_parm($data['exclude_id']) ?: $map['delivery_item_id'] = ['neq', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('快递公司编码已存在');
@@ -231,7 +231,7 @@ class DeliveryItem extends CareyShop
         $map = [];
         empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
         empty($data['code']) ?: $map['code'] = ['eq', $data['code']];
-        !isset($data['type']) ?: $map['type'] = ['eq', $data['type']];
+        is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
         isset($data['company_all']) && $data['company_all'] == 1 ?: $map['is_delete'] = ['eq', 0];
 
         $totalResult = $this->where($map)->count();
@@ -280,7 +280,7 @@ class DeliveryItem extends CareyShop
 
         $result = self::all(function ($query) use ($data) {
             $map['is_delete'] = ['eq', 0];
-            !isset($data['type']) ?: $map['type'] = ['eq', $data['type']];
+            is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
 
             $query->where($map);
         });

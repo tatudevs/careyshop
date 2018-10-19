@@ -340,8 +340,8 @@ class DeliveryDist extends CareyShop
         $map = [];
         empty($data['order_code']) ?: $map['delivery_dist.order_code'] = ['eq', $data['order_code']];
         empty($data['logistic_code']) ?: $map['delivery_dist.logistic_code'] = ['eq', $data['logistic_code']];
-        !isset($data['state']) ?: $map['delivery_dist.state'] = ['eq', $data['state']];
-        !isset($data['is_sub']) ?: $map['delivery_dist.is_sub'] = ['eq', $data['is_sub']];
+        is_empty_parm($data['state']) ?: $map['delivery_dist.state'] = ['eq', $data['state']];
+        is_empty_parm($data['is_sub']) ?: $map['delivery_dist.is_sub'] = ['eq', $data['is_sub']];
 
         if (!empty($data['timeout'])) {
             $map['delivery_dist.state'] = ['neq', 3];

@@ -409,7 +409,7 @@ class CardUse extends CareyShop
             $map['card_use.user_id'] = ['eq', get_client_id()];
         }
 
-        if (isset($data['type'])) {
+        if (!is_empty_parm($data['type'])) {
             // 正常状态
             if ($data['type'] == 'normal') {
                 $map['getCard.end_time'] = [['eq', 0], ['egt', time()], 'OR'];

@@ -325,7 +325,7 @@ class CouponGive extends CareyShop
             $map['coupon_give.user_id'] = ['eq', get_client_id()];
         }
 
-        if (isset($data['type'])) {
+        if (!is_empty_parm($data['type'])) {
             // 正常状态优惠劵
             if ($data['type'] == 'normal') {
                 $map['coupon_give.use_time'] = ['eq', 0];
