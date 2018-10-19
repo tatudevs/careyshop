@@ -214,7 +214,7 @@ class Brand extends CareyShop
             }
         }
 
-        // 搜索条件
+        // 搜索条件 todo:$map['b.status']的逻辑不对
         $map['b.status'] = ['eq', is_client_admin() && !is_empty_parm($data['status']) ? $data['status'] : 1];
         empty($data['name']) ?: $map['b.name'] = ['like', '%' . $data['name'] . '%'];
         empty($catIdList) ?: $map['b.goods_category_id'] = ['in', $catIdList];

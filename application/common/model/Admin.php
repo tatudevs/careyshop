@@ -142,7 +142,7 @@ class Admin extends CareyShop
             }
         }
 
-        if (isset($data['group_id'])) {
+        if (!empty($data['group_id'])) {
             Cache::clear('token:admin_' . $data['client_id']);
             $this->hasToken()->where(['client_id' => $data['client_id'], 'client_type' => 1])->delete();
         }
