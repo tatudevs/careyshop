@@ -214,10 +214,18 @@ class Brand extends CareyShop
             }
         }
 
-        // 搜索条件 todo:$map['b.status']的逻辑不对
-        $map['b.status'] = ['eq', is_client_admin() && !is_empty_parm($data['status']) ? $data['status'] : 1];
+        // 搜索条件
+        $map['b.status'] = ['eq', 1];
         empty($data['name']) ?: $map['b.name'] = ['like', '%' . $data['name'] . '%'];
         empty($catIdList) ?: $map['b.goods_category_id'] = ['in', $catIdList];
+
+        if (is_client_admin()) {
+            if (is_empty_parm($data['status'])) {
+                unset($map['b.status']);
+            } else {
+                $map['b.status'] = ['eq', $data['status']];
+            }
+        }
 
         $totalResult = $this->cache(true, null, 'Brand')->alias('b')->where($map)->count();
         if ($totalResult <= 0) {
