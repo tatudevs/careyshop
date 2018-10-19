@@ -154,7 +154,7 @@ class Brand extends CareyShop
         }
 
         $map['name'] = ['eq', $data['name']];
-        !isset($data['exclude_id']) ?: $map['ads_id'] = ['neq', $data['exclude_id']];
+        empty($data['exclude_id']) ?: $map['ads_id'] = ['neq', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('品牌名称已存在');

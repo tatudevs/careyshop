@@ -284,7 +284,7 @@ class ArticleCat extends CareyShop
             return false;
         }
 
-        $isLayer = isset($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         if (!$isLayer && isset($list[$data['article_cat_id']])) {
             $data['article_cat_id'] = $list[$data['article_cat_id']]['parent_id'];
         }
