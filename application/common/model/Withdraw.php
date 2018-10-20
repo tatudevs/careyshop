@@ -151,7 +151,7 @@ class Withdraw extends CareyShop
         // 搜索条件
         $map['withdraw.user_id'] = ['eq', get_client_id()];
         empty($data['withdraw_no']) ?: $map['withdraw.withdraw_no'] = ['eq', $data['withdraw_no']];
-        !isset($data['status']) ?: $map['withdraw.status'] = ['eq', $data['status']];
+        is_empty_parm($data['status']) ?: $map['withdraw.status'] = ['eq', $data['status']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
             $map['withdraw.create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];

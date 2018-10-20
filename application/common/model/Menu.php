@@ -336,7 +336,7 @@ class Menu extends CareyShop
             return false;
         }
 
-        $isLayer = isset($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         $filter['is_navi'] = 1;
         $filter['status'] = 1;
         $data['menu_id'] = isset($data['menu_id']) ?: 0;
@@ -356,7 +356,7 @@ class Menu extends CareyShop
             return false;
         }
 
-        $isLayer = isset($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         $filter['is_navi'] = 1;
         $filter['status'] = 1;
         $filter['url'] = isset($data['url']) ? $data['url'] : null;
@@ -534,7 +534,7 @@ class Menu extends CareyShop
         }
 
         $menuId = isset($data['menu_id']) ? $data['menu_id'] : 0;
-        $isLayer = isset($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         $level = isset($data['level']) ? $data['level'] : null;
 
         return self::getMenuListData($data['module'], $menuId, $isLayer, $level);
@@ -560,10 +560,10 @@ class Menu extends CareyShop
 
         // 生成菜单的条件
         $menuId = isset($data['menu_id']) ? $data['menu_id'] : 0;
-        $isLayer = isset($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         $level = isset($data['level']) ? $data['level'] : null;
 
-        !isset($data['is_navi']) ?: $filter['is_navi'] = $data['is_navi'];
+        is_empty_parm($data['is_navi']) ?: $filter['is_navi'] = $data['is_navi'];
         $filter['status'] = isset($data['status']) ? $data['status'] : 1;
 
         // 当规则表中存在菜单权限时进行赋值,让获取的函数进行过滤

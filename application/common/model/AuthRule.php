@@ -170,7 +170,7 @@ class AuthRule extends CareyShop
             // 搜索条件
             $map = [];
             $map['group_id'] = ['eq', $data['group_id']];
-            empty($data['module']) ?: $map['module'] = ['eq', $data['module']];
+            is_empty_parm($data['module']) ?: $map['module'] = ['eq', $data['module']];
             is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
 
             // 排序方式

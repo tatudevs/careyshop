@@ -433,8 +433,8 @@ class OrderService extends CareyShop
         is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
         empty($data['service_no']) ?: $map['service_no'] = ['eq', $data['service_no']];
         empty($data['order_no']) ?: $map['order_no'] = ['eq', $data['order_no']];
-        !isset($data['type']) ?: $map['type'] = ['eq', $data['type']];
-        !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
+        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
             $map['create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];

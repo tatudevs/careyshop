@@ -106,9 +106,9 @@ class Transaction extends CareyShop
 
         // 搜索条件
         $map['transaction.user_id'] = ['eq', get_client_id()];
-        !isset($data['type']) ?: $map['transaction.type'] = ['eq', $data['type']];
+        is_empty_parm($data['type']) ?: $map['transaction.type'] = ['eq', $data['type']];
         empty($data['source_no']) ?: $map['transaction.source_no'] = ['eq', $data['source_no']];
-        empty($data['module']) ?: $map['transaction.module'] = ['eq', $data['module']];
+        is_empty_parm($data['module']) ?: $map['transaction.module'] = ['eq', $data['module']];
         empty($data['card_number']) ?: $map['transaction.card_number'] = ['eq', $data['card_number']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
@@ -123,7 +123,7 @@ class Transaction extends CareyShop
             $with = ['getUser'];
             unset($map['transaction.user_id']);
             empty($data['action']) ?: $map['transaction.action'] = ['eq', $data['action']];
-            !isset($data['to_payment']) ?: $map['transaction.to_payment'] = ['eq', $data['to_payment']];
+            is_empty_parm($data['to_payment']) ?: $map['transaction.to_payment'] = ['eq', $data['to_payment']];
             empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
         }
 

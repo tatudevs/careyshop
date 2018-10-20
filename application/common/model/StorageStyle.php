@@ -216,8 +216,8 @@ class StorageStyle extends CareyShop
         $map = [];
         empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
         empty($data['code']) ?: $map['code'] = ['eq', $data['code']];
-        !isset($data['platform']) ?: $map['platform'] = ['eq', $data['platform']];
-        !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        is_empty_parm($data['platform']) ?: $map['platform'] = ['eq', $data['platform']];
+        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
 
         $totalResult = $this->where($map)->count();
         if ($totalResult <= 0) {

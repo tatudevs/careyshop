@@ -683,8 +683,8 @@ class GoodsComment extends CareyShop
         $map['goods_comment.type'] = ['eq', self::COMMENT_TYPE_MAIN];
         $map['goods_comment.is_delete'] = ['eq', 0];
 
-        empty($data['is_image']) ?: $map['goods_comment.is_image'] = ['eq', $data['is_image']];
         empty($data['goods_id']) ?: $map['goods_comment.goods_id'] = ['eq', $data['goods_id']];
+        is_empty_parm($data['is_image']) ?: $map['goods_comment.is_image'] = ['eq', $data['is_image']];
         is_client_admin() ?: $map['goods_comment.is_show'] = ['eq', 1];
 
         // 处理查看的评价类型是"追加评价"
@@ -708,9 +708,9 @@ class GoodsComment extends CareyShop
 
         // 后台搜索条件
         if (is_client_admin()) {
-            !isset($data['is_show']) ?: $map['goods_comment.is_show'] = ['eq', $data['is_show']];
-            !isset($data['is_top']) ?: $map['goods_comment.is_top'] = ['eq', $data['is_top']];
-            !isset($data['status']) ?: $map['goods_comment.status'] = ['eq', $data['status']];
+            is_empty_parm($data['is_show']) ?: $map['goods_comment.is_show'] = ['eq', $data['is_show']];
+            is_empty_parm($data['is_top']) ?: $map['goods_comment.is_top'] = ['eq', $data['is_top']];
+            is_empty_parm($data['status']) ?: $map['goods_comment.status'] = ['eq', $data['status']];
             empty($data['order_no']) ?: $map['goods_comment.order_no'] = ['eq', $data['order_no']];
             empty($data['content']) ?: $map['goods_comment.content'] = ['like', '%' . $data['content'] . '%'];
             empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];

@@ -206,7 +206,7 @@ class Brand extends CareyShop
         // 获取商品分类Id,包括子分类
         $catIdList = [];
         if (isset($data['goods_category_id'])) {
-            if ($data['goods_category_id'] == 0) {
+            if (0 == $data['goods_category_id'] || '' == $data['goods_category_id']) {
                 $catIdList[] = 0;
             } else {
                 $goodsCat = GoodsCategory::getCategoryList($data['goods_category_id'], false, true);

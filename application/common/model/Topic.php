@@ -92,7 +92,7 @@ class Topic extends CareyShop
         }
 
         self::destroy($data['topic_id']);
-        
+
         return true;
     }
 
@@ -142,7 +142,7 @@ class Topic extends CareyShop
         // 后台管理搜索
         if (is_client_admin()) {
             unset($map['status']);
-            !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+            is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
             empty($data['title']) ?: $map['title'] = ['like', '%' . $data['title'] . '%'];
             empty($data['alias']) ?: $map['alias'] = ['like', '%' . $data['alias'] . '%'];
             empty($data['keywords']) ?: $map['keywords'] = ['like', '%' . $data['keywords'] . '%'];

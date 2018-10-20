@@ -138,7 +138,7 @@ class Support extends CareyShop
             // 后台管理搜索
             if (is_client_admin()) {
                 unset($map['status']);
-                !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+                is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
                 empty($data['type_name']) ?: $map['type_name'] = ['like', '%' . $data['type_name'] . '%'];
                 empty($data['nick_name']) ?: $map['nick_name'] = ['like', '%' . $data['nick_name'] . '%'];
             }

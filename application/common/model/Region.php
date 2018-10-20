@@ -193,7 +193,7 @@ class Region extends CareyShop
         }
 
         // 是否提取已删除区域
-        $isDelete = isset($data['region_all']) ? (bool)$data['region_all'] : false;
+        $isDelete = !is_empty_parm($data['region_all']) ? (bool)$data['region_all'] : false;
         $regionList = self::getRegionCacheList();
 
         static $result = [];

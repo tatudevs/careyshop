@@ -223,7 +223,7 @@ class GoodsCategory extends CareyShop
             return false;
         }
 
-        $isLayer = isset($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         if (!$isLayer && isset($catList[$data['goods_category_id']])) {
             $data['goods_category_id'] = $catList[$data['goods_category_id']]['parent_id'];
         }
@@ -413,8 +413,8 @@ class GoodsCategory extends CareyShop
         }
 
         $level = isset($data['level']) ? $data['level'] : null;
-        $isGoodsTotal = isset($data['goods_total']) ? $data['goods_total'] : false;
-        $isLayer = isset($data['is_layer']) ? $data['is_layer'] : true;
+        $isGoodsTotal = !is_empty_parm($data['goods_total']) ? $data['goods_total'] : false;
+        $isLayer = !is_empty_parm($data['is_layer']) ? $data['is_layer'] : true;
 
         $result = [];
         foreach ($data['goods_category_id'] as $value) {

@@ -565,16 +565,16 @@ class Goods extends CareyShop
         $map = [];
         empty($data['goods_id']) ?: $map['goods_id'] = ['in', $data['goods_id']];
         empty($data['exclude_id']) ?: $map['goods_id'] = ['not in', $data['exclude_id']];
-        !isset($data['goods_category_id']) ?: $map['goods_category_id'] = ['eq', $data['goods_category_id']];
+        is_empty_parm($data['goods_category_id']) ?: $map['goods_category_id'] = ['eq', $data['goods_category_id']];
         empty($data['goods_code']) ?: $map['goods_code|goods_spu|goods_sku|bar_code'] = ['eq', $data['goods_code']];
-        !isset($data['brand_id']) ?: $map['brand_id'] = ['eq', $data['brand_id']];
+        is_empty_parm($data['brand_id']) ?: $map['brand_id'] = ['eq', $data['brand_id']];
         !isset($data['store_qty']) ?: $map['store_qty'] = ['between', $data['store_qty']];
-        !isset($data['is_postage']) ?: $map['is_postage'] = ['eq', $data['is_postage']];
-        empty($data['is_integral']) ?: $map['is_integral'] = ['gt', 0];
-        !isset($data['is_recommend']) ?: $map['is_recommend'] = ['eq', $data['is_recommend']];
-        !isset($data['is_new']) ?: $map['is_new'] = ['eq', $data['is_new']];
-        !isset($data['is_hot']) ?: $map['is_hot'] = ['eq', $data['is_hot']];
-        !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        is_empty_parm($data['is_postage']) ?: $map['is_postage'] = ['eq', $data['is_postage']];
+        is_empty_parm($data['is_integral']) ?: $map['is_integral'] = ['gt', 0];
+        is_empty_parm($data['is_recommend']) ?: $map['is_recommend'] = ['eq', $data['is_recommend']];
+        is_empty_parm($data['is_new']) ?: $map['is_new'] = ['eq', $data['is_new']];
+        is_empty_parm($data['is_hot']) ?: $map['is_hot'] = ['eq', $data['is_hot']];
+        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
         $map['is_delete'] = ['eq', 0];
 
         // 支持多个关键词搜索(空格间隔)
@@ -643,10 +643,10 @@ class Goods extends CareyShop
         $map['is_delete'] = ['eq', 0];
         $map['store_qty'] = ['gt', 0];
         $map['goods_category_id'] = ['eq', $data['goods_category_id']];
-        !isset($data['brand_id']) ?: $map['brand_id'] = ['eq', $data['brand_id']];
+        is_empty_parm($data['brand_id']) ?: $map['brand_id'] = ['eq', $data['brand_id']];
         !isset($data['shop_price']) ?: $map['shop_price'] = ['between', $data['shop_price']];
 
-        if (isset($data['goods_type'])) {
+        if (!is_empty_parm($data['goods_type'])) {
             switch ($data['goods_type']) {
                 case 'integral':
                     $map['is_integral'] = ['gt', 0];
@@ -1208,8 +1208,8 @@ class Goods extends CareyShop
 
         // 搜索条件
         $map['goods_category_id'] = ['in', $goodsCateList];
-        !isset($data['is_postage']) ?: $map['is_postage'] = ['eq', $data['is_postage']];
-        empty($data['is_integral']) ?: $map['is_integral'] = ['gt', 0];
+        is_empty_parm($data['is_postage']) ?: $map['is_postage'] = ['eq', $data['is_postage']];
+        is_empty_parm($data['is_integral']) ?: $map['is_integral'] = ['gt', 0];
         empty($data['bar_code']) ?: $map['bar_code'] = ['eq', $data['bar_code']];
 
         // 支持多个关键词搜索(空格间隔)

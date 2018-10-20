@@ -180,7 +180,7 @@ class Navigation extends CareyShop
             if (is_client_admin()) {
                 unset($map['status']);
                 empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-                !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+                is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
             }
 
             // 排序方式

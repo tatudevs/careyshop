@@ -302,7 +302,7 @@ class Admin extends CareyShop
         // 搜索条件
         $map = [];
         empty($data['account']) ?: $map['admin.username|admin.nickname'] = ['eq', $data['account']];
-        empty($data['group_id']) ?: $map['admin.group_id'] = ['eq', $data['group_id']];
+        is_empty_parm($data['group_id']) ?: $map['admin.group_id'] = ['eq', $data['group_id']];
         is_empty_parm($data['status']) ?: $map['admin.status'] = ['eq', $data['status']];
 
         $totalResult = $this->alias('admin')->where($map)->count();

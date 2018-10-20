@@ -221,7 +221,7 @@ class Payment extends CareyShop
         is_client_admin() ?: $map['status'] = ['eq', 1];
         empty($data['exclude_code']) ?: $map['code'] = ['not in', $data['exclude_code']];
 
-        if (isset($data['type'])) {
+        if (!is_empty_parm($data['type'])) {
             switch ($data['type']) {
                 case 'deposit':
                     $map['is_deposit'] = ['eq', 1];

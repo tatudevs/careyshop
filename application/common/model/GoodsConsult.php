@@ -278,9 +278,9 @@ class GoodsConsult extends CareyShop
             }
         }
 
-        !isset($data['type']) ?: $map['goods_consult.type'] = ['eq', $data['type']];
-        !isset($data['status']) ?: $map['goods_consult.status'] = ['eq', $data['status']];
-        !isset($data['is_show']) ?: $map['goods_consult.is_show'] = ['eq', $data['is_show']];
+        is_empty_parm($data['type']) ?: $map['goods_consult.type'] = ['eq', $data['type']];
+        is_empty_parm($data['status']) ?: $map['goods_consult.status'] = ['eq', $data['status']];
+        is_empty_parm($data['is_show']) ?: $map['goods_consult.is_show'] = ['eq', $data['is_show']];
         empty($data['content']) ?: $map['goods_consult.content'] = ['like', '%' . $data['content'] . '%'];
 
         $totalResult = $this->with('getUser')->where($map)->count();
@@ -300,7 +300,7 @@ class GoodsConsult extends CareyShop
 
             // 排序的字段
             $orderField = 'goods_consult.goods_consult_id';
-            if (isset($data['order_field'])) {
+            if (!is_empty_parm($data['order_field'])) {
                 switch ($data['order_field']) {
                     case 'goods_consult_id':
                     case 'type':

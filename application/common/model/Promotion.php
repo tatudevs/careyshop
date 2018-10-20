@@ -256,7 +256,7 @@ class Promotion extends CareyShop
         // 搜索条件
         $map = [];
         empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-        !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
         empty($data['begin_time']) ?: $map['begin_time'] = ['< time', $data['end_time']];
         empty($data['end_time']) ?: $map['end_time'] = ['> time', $data['begin_time']];
 

@@ -189,7 +189,7 @@ class Storage extends CareyShop
         }
 
         // 初始化数据
-        $data['storage_id'] = isset($data['storage_id']) ? $data['storage_id'] : 0;
+        $data['storage_id'] = !is_empty_parm($data['storage_id']) ? $data['storage_id'] : 0;
 
         // 搜索条件
         $map = [];
@@ -261,7 +261,7 @@ class Storage extends CareyShop
             return false;
         }
 
-        $isLayer = isset($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         if (!$isLayer && isset($list[$data['storage_id']])) {
             $data['storage_id'] = $list[$data['storage_id']]['parent_id'];
         }

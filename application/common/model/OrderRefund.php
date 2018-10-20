@@ -268,7 +268,7 @@ class OrderRefund extends CareyShop
         empty($data['order_no']) ?: $map['order_refund.order_no'] = ['eq', $data['order_no']];
         empty($data['out_trade_no']) ?: $map['order_refund.out_trade_no'] = ['eq', $data['out_trade_no']];
         empty($data['payment_no']) ?: $map['order_refund.payment_no'] = ['eq', $data['payment_no']];
-        !isset($data['status']) ?: $map['order_refund.status'] = ['eq', $data['status']];
+        is_empty_parm($data['status']) ?: $map['order_refund.status'] = ['eq', $data['status']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
             $map['order_refund.create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];

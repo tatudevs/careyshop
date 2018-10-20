@@ -350,9 +350,9 @@ class User extends CareyShop
         // 搜索条件
         $map = [];
         empty($data['account']) ?: $map['user.username|user.mobile|user.nickname'] = ['eq', $data['account']];
-        !isset($data['user_level_id']) ?: $map['user.user_level_id'] = ['eq', $data['user_level_id']];
-        !isset($data['group_id']) ?: $map['user.group_id'] = ['eq', $data['group_id']];
-        !isset($data['status']) ?: $map['user.status'] = ['eq', $data['status']];
+        is_empty_parm($data['user_level_id']) ?: $map['user.user_level_id'] = ['eq', $data['user_level_id']];
+        is_empty_parm($data['group_id']) ?: $map['user.group_id'] = ['eq', $data['group_id']];
+        is_empty_parm($data['status']) ?: $map['user.status'] = ['eq', $data['status']];
 
         $totalResult = $this->with('getUserLevel,getUserMoney')->where($map)->count();
         if ($totalResult <= 0) {
@@ -371,7 +371,7 @@ class User extends CareyShop
 
             // 排序的字段
             $orderField = 'user.user_id';
-            if (isset($data['order_field'])) {
+            if (!is_empty_parm($data['order_field'])) {
                 switch ($data['order_field']) {
                     case 'user_id':
                     case 'username':

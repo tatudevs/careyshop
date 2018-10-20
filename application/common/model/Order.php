@@ -2022,7 +2022,7 @@ class Order extends CareyShop
         }
 
         // 关联订单商品搜索条件
-        !isset($data['keywords']) ?: $mapGoods['order_no|goods_name'] = ['like', '%' . $data['keywords'] . '%'];
+        empty($data['keywords']) ?: $mapGoods['order_no|goods_name'] = ['like', '%' . $data['keywords'] . '%'];
 
         // 不同的订单状态生成搜索条件
         switch (isset($data['status']) ? $data['status'] : 0) {

@@ -316,11 +316,11 @@ class Message extends CareyShop
         }
 
         // 搜索条件
-        !isset($data['type']) ?: $map['type'] = ['eq', $data['type']];
+        is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
         empty($data['title']) ?: $map['title'] = ['like', '%' . $data['title'] . '%'];
-        !isset($data['is_top']) ?: $map['is_top'] = ['eq', $data['is_top']];
-        !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
-        $map['member'] = isset($data['member']) ? ['eq', $data['member']] : ['neq', 0];
+        is_empty_parm($data['is_top']) ?: $map['is_top'] = ['eq', $data['is_top']];
+        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        $map['member'] = !is_empty_parm($data['member']) ? ['eq', $data['member']] : ['neq', 0];
         $map['is_delete'] = ['eq', 0];
 
         $totalResult = $this->where($map)->count();
@@ -383,7 +383,7 @@ class Message extends CareyShop
             return false;
         }
 
-        !isset($data['type']) ?: $map['m.type'] = ['eq', $data['type']];
+        is_empty_parm($data['type']) ?: $map['m.type'] = ['eq', $data['type']];
         $map['m.status'] = ['eq', 1];
         $map['m.is_delete'] = ['eq', 0];
 
@@ -392,7 +392,7 @@ class Message extends CareyShop
         $clientType = is_client_admin() ? 'admin_id' : 'user_id';
 
         // 是否已读需要特殊对待
-        if (isset($data['is_read'])) {
+        if (!is_empty_parm($data['is_read'])) {
             switch ($data['is_read']) {
                 case 0:
                     $mapRead = '`u`.' . $clientType . ' IS NULL OR `u`.is_read = 0';

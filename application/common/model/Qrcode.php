@@ -152,7 +152,7 @@ class Qrcode extends CareyShop
         // 搜索条件
         $map = [];
         empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-        !isset($data['size']) ?: $map['size'] = ['eq', $data['size']];
+        is_empty_parm($data['size']) ?: $map['size'] = ['eq', $data['size']];
 
         $totalResult = $this->where($map)->count();
         if ($totalResult <= 0) {
