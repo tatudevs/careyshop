@@ -44,4 +44,79 @@ class ActionLog extends CareyShop
         'result'        => 'json',
         'status'        => 'integer',
     ];
+
+    /**
+     * 获取一条操作日志
+     * @access public
+     * @param  array $data 外部数据
+     * @return mixed
+     * @throws
+     */
+    public function getActionLogItem($data)
+    {
+        if (!$this->validateData($data, 'ActionLog.item')) {
+            return false;
+        }
+
+        $result = self::get($data['action_log_id']);
+        if (false !== $result) {
+            return is_null($result) ? null : $result->toArray();
+        }
+
+        return false;
+    }
+
+    /**
+     * 获取操作日志列表
+     * @access public
+     * @param  array $data 外部数据
+     * @return false|array
+     * @throws
+     */
+    public function getActionLogList($data)
+    {
+        if (!$this->validateData($data, 'ActionLog')) {
+            return false;
+        }
+
+        $map = [];
+        is_empty_parm($data['client_type']) ?: $map['client_type'] = ['eq', $data['client_type']];
+        empty($data['username']) ?: $map['username'] = ['eq', $data['username']];
+        empty($data['path']) ?: $map['path'] = ['eq', $data['path']];
+        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+
+        if (!empty($data['begin_time']) && !empty($data['end_time'])) {
+            $map['create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
+        }
+
+        $totalResult = $this->where($map)->count();
+        if ($totalResult <= 0) {
+            return ['total_result' => 0];
+        }
+
+        $result = self::all(function ($query) use ($map, $data) {
+            // 翻页页数
+            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+
+            // 每页条数
+            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
+
+            // 排序方式
+            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
+
+            // 排序的字段
+            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'action_log_id';
+
+            $query
+                ->where($map)
+                ->order([$orderField => $orderType])
+                ->page($pageNo, $pageSize);
+        });
+
+        if (false !== $result) {
+            return ['items' => $result->toArray(), 'total_result' => $totalResult];
+        }
+
+        return false;
+    }
 }
