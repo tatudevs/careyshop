@@ -24,6 +24,7 @@ class Image
     const THUMB_NORTHWEST = 4; //常量，标识缩略图左上角裁剪类型
     const THUMB_SOUTHEAST = 5; //常量，标识缩略图右下角裁剪类型
     const THUMB_FIXED     = 6; //常量，标识缩略图固定尺寸缩放类型
+    const THUMB_PAD       = 7; //常量，标识缩略图固定宽高后填充类型
     /* 水印相关常量定义 */
     const WATER_NORTHWEST = 1; //常量，标识左上角水印
     const WATER_NORTH     = 2; //常量，标识上居中水印
@@ -259,6 +260,7 @@ class Image
         //设置保存尺寸
         empty($width) && $width   = $w;
         empty($height) && $height = $h;
+
         do {
             //创建新图像
             $img = imagecreatetruecolor($width, $height);
@@ -342,6 +344,32 @@ class Image
                 } else {
                     $scale = min($width / $w, $height / $h);
                 }
+                //设置缩略图的坐标及宽度和高度
+                $neww = $w * $scale;
+                $newh = $h * $scale;
+                $x    = $this->info['width'] - $w;
+                $y    = $this->info['height'] - $h;
+                $posx = ($width - $w * $scale) / 2;
+                $posy = ($height - $h * $scale) / 2;
+                do {
+                    //创建新图像
+                    $img = imagecreatetruecolor($width, $height);
+                    // 调整默认颜色
+                    $color = imagecolorallocate($img, 255, 255, 255);
+                    imagefill($img, 0, 0, $color);
+                    //裁剪
+                    imagecopyresampled($img, $this->im, $posx, $posy, $x, $y, $neww, $newh, $w, $h);
+                    imagedestroy($this->im); //销毁原图
+                    $this->im = $img;
+                } while (!empty($this->gif) && $this->gifNext());
+                $this->info['width']  = (int) $width;
+                $this->info['height'] = (int) $height;
+                return $this;
+            /* 固定填充 */
+            case self::THUMB_PAD:
+                //计算缩放比例
+                $scale = min($width / $w, $height / $h);
+
                 //设置缩略图的坐标及宽度和高度
                 $neww = $w * $scale;
                 $newh = $h * $scale;
