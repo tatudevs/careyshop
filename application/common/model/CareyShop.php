@@ -54,7 +54,7 @@ class CareyShop extends Model
      * @param  string $scene 场景
      * @return bool
      */
-    public function validateSetData($data, $name, $scene = '')
+    public function validateSetData(&$data, $name, $scene = '')
     {
         !mb_strpos($name, '.', null, 'utf-8') ?: list($name, $scene) = explode('.', $name);
         $validate = validate($name);
@@ -66,7 +66,8 @@ class CareyShop extends Model
         $rule = $validate->getSetScene($scene);
         foreach ($data as $key => $item) {
             if (!in_array($key, $rule) && !array_key_exists($key, $rule)) {
-                return $this->setError('不接收' . $key . '字段参数');
+                unset($data[$key]);
+                continue;
             }
         }
         unset($key, $item);
