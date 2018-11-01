@@ -88,6 +88,8 @@ class Menu extends CareyShop
             'module',
             'level',
             'is_layer',
+            'is_navi',
+            'status',
         ],
         'sort'   => [
             'menu_id' => 'require|integer|gt:0',

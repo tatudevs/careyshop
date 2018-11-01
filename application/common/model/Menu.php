@@ -537,7 +537,11 @@ class Menu extends CareyShop
         $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         $level = isset($data['level']) ? $data['level'] : null;
 
-        return self::getMenuListData($data['module'], $menuId, $isLayer, $level);
+        $filter = null;
+        is_empty_parm($data['is_navi']) ?: $filter['is_navi'] = $data['is_navi'];
+        is_empty_parm($data['status']) ?: $filter['status'] = $data['status'];
+
+        return self::getMenuListData($data['module'], $menuId, $isLayer, $level, $filter);
     }
 
     /**
