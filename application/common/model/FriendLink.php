@@ -195,4 +195,29 @@ class FriendLink extends CareyShop
 
         return false;
     }
+
+    /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setFriendLinkIndex($data)
+    {
+        if (!$this->validateData($data, 'FriendLink.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['friend_link_id'] as $key => $value) {
+            $list[] = ['friend_link_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            return true;
+        }
+
+        return false;
+    }
 }

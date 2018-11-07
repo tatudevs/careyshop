@@ -33,9 +33,11 @@ class Spec extends CareyShop
             // 批量删除商品规格
             'del.goods.spec.list'  => ['delSpecList'],
             // 批量设置商品规格检索
-            'set.goods.spec.index' => ['setSpecIndex'],
+            'set.goods.spec.key'   => ['setSpecKey'],
             // 设置商品规格排序
             'set.goods.spec.sort'  => ['setSpecSort'],
+            // 根据编号自动排序
+            'set.goods.spec.index' => ['setSpecIndex'],
         ];
     }
 }

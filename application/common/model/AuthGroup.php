@@ -234,4 +234,30 @@ class AuthGroup extends CareyShop
 
         return false;
     }
+
+    /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setAuthGroupIndex($data)
+    {
+        if (!$this->validateData($data, 'AuthGroup.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['group_id'] as $key => $value) {
+            $list[] = ['group_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            Cache::clear('CommonAuth');
+            return true;
+        }
+
+        return false;
+    }
 }

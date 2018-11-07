@@ -23,21 +23,23 @@ class ArticleCat extends CareyShop
     {
         return [
             // 添加一个文章分类
-            'add.article.cat.item' => ['addArticleCatItem'],
+            'add.article.cat.item'  => ['addArticleCatItem'],
             // 编辑一个文章分类
-            'set.article.cat.item' => ['setArticleCatItem'],
+            'set.article.cat.item'  => ['setArticleCatItem'],
             // 批量删除文章分类
-            'del.article.cat.list' => ['delArticleCatList'],
+            'del.article.cat.list'  => ['delArticleCatList'],
             // 获取一个文章分类
-            'get.article.cat.item' => ['getArticleCatItem'],
+            'get.article.cat.item'  => ['getArticleCatItem'],
             // 获取文章分类列表
-            'get.article.cat.list' => ['getArticleCatList'],
+            'get.article.cat.list'  => ['getArticleCatList'],
             // 获取分类导航数据
-            'get.article.cat.navi' => ['getArticleCatNavi'],
+            'get.article.cat.navi'  => ['getArticleCatNavi'],
             // 设置文章分类排序
-            'set.article.cat.sort' => ['setArticleCatSort'],
+            'set.article.cat.sort'  => ['setArticleCatSort'],
+            // 根据编号自动排序
+            'set.article.cat.index' => ['setArticleCatIndex'],
             // 批量设置是否导航
-            'set.article.cat.navi' => ['setArticleCatNavi'],
+            'set.article.cat.navi'  => ['setArticleCatNavi'],
         ];
     }
 

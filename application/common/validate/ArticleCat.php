@@ -53,7 +53,7 @@ class ArticleCat extends CareyShop
      * @var array
      */
     protected $scene = [
-        'set'  => [
+        'set'   => [
             'article_cat_id' => 'require|integer|gt:0',
             'parent_id',
             'cat_name',
@@ -63,27 +63,30 @@ class ArticleCat extends CareyShop
             'sort',
             'is_navi',
         ],
-        'del'  => [
+        'del'   => [
             'article_cat_id' => 'require|arrayHasOnlyInts',
             'not_empty',
         ],
-        'item' => [
+        'item'  => [
             'article_cat_id' => 'require|integer|gt:0',
         ],
-        'list' => [
+        'list'  => [
             'article_cat_id' => 'integer|egt:0',
             'level',
             'is_layer',
         ],
-        'navi' => [
+        'navi'  => [
             'article_cat_id' => 'integer|egt:0',
             'is_layer',
         ],
-        'sort' => [
+        'sort'  => [
             'article_cat_id' => 'require|integer|gt:0',
             'sort'           => 'require|integer|between:0,255',
         ],
-        'nac'  => [
+        'index' => [
+            'article_cat_id' => 'require|arrayHasOnlyInts',
+        ],
+        'nac'   => [
             'article_cat_id' => 'require|arrayHasOnlyInts',
             'is_navi'        => 'require|in:0,1',
         ],

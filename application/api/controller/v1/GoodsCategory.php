@@ -40,6 +40,8 @@ class GoodsCategory extends CareyShop
             'set.goods.category.status' => ['setCategoryStatus'],
             // 设置商品分类排序
             'set.goods.category.sort'   => ['setCategorySort'],
+            // 根据编号自动排序
+            'set.goods.category.index'  => ['setCategoryIndex'],
             // 批量设置是否导航
             'set.goods.category.navi'   => ['setCategoryNavi'],
         ];

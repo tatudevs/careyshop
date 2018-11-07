@@ -202,4 +202,29 @@ class Support extends CareyShop
 
         return false;
     }
+
+    /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setSupportIndex($data)
+    {
+        if (!$this->validateData($data, 'Support.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['support_id'] as $key => $value) {
+            $list[] = ['support_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            return true;
+        }
+
+        return false;
+    }
 }

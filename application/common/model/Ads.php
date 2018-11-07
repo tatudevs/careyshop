@@ -165,6 +165,31 @@ class Ads extends CareyShop
     }
 
     /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setAdsIndex($data)
+    {
+        if (!$this->validateData($data, 'Ads.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['ads_id'] as $key => $value) {
+            $list[] = ['ads_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 批量设置是否显示
      * @access public
      * @param  array $data 外部数据

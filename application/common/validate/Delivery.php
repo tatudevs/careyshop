@@ -131,5 +131,8 @@ class Delivery extends CareyShop
             'delivery_id' => 'require|integer|gt:0',
             'sort'        => 'require|integer|between:0,255',
         ],
+        'index'   => [
+            'delivery_id' => 'require|arrayHasOnlyInts',
+        ],
     ];
 }

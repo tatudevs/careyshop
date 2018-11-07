@@ -451,6 +451,32 @@ class GoodsCategory extends CareyShop
     }
 
     /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setCategoryIndex($data)
+    {
+        if (!$this->validateData($data, 'GoodsCategory.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['goods_category_id'] as $key => $value) {
+            $list[] = ['goods_category_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            Cache::clear('GoodsCategory');
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 批量设置是否导航
      * @access public
      * @param  array $data 外部数据

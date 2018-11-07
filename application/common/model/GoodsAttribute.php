@@ -303,9 +303,9 @@ class GoodsAttribute extends CareyShop
      * @param  array $data 外部数据
      * @return bool
      */
-    public function setAttributeIndex($data)
+    public function setAttributeKey($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.index')) {
+        if (!$this->validateData($data, 'GoodsAttribute.key')) {
             return false;
         }
 
@@ -355,6 +355,31 @@ class GoodsAttribute extends CareyShop
 
         $map['goods_attribute_id'] = ['eq', $data['goods_attribute_id']];
         if (false !== $this->save(['sort' => $data['sort']], $map)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setAttributeIndex($data)
+    {
+        if (!$this->validateData($data, 'GoodsAttribute.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['goods_attribute_id'] as $key => $value) {
+            $list[] = ['goods_attribute_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
             return true;
         }
 

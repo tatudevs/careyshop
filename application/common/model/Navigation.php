@@ -222,4 +222,29 @@ class Navigation extends CareyShop
 
         return false;
     }
+
+    /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setNavigationIndex($data)
+    {
+        if (!$this->validateData($data, 'Navigation.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['navigation_id'] as $key => $value) {
+            $list[] = ['navigation_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            return true;
+        }
+
+        return false;
+    }
 }

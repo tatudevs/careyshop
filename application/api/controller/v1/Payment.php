@@ -34,6 +34,8 @@ class Payment extends CareyShop
             'get.payment.return'  => ['getPaymentReturn', 'app\common\service\Payment'],
             // 设置支付配置排序
             'set.payment.sort'    => ['setPaymentSort'],
+            // 根据编号自动排序
+            'set.payment.index'   => ['setPaymentIndex'],
             // 批量设置支付配置状态
             'set.payment.status'  => ['setPaymentStatus'],
             // 财务对账号进行资金调整

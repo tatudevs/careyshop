@@ -78,5 +78,8 @@ class FriendLink extends CareyShop
             'friend_link_id' => 'require|integer|gt:0',
             'sort'           => 'require|integer|between:0,255',
         ],
+        'index'  => [
+            'friend_link_id' => 'require|arrayHasOnlyInts',
+        ],
     ];
 }

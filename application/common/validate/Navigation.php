@@ -79,5 +79,8 @@ class Navigation extends CareyShop
             'navigation_id' => 'require|integer|gt:0',
             'sort'          => 'require|integer|between:0,255',
         ],
+        'index'  => [
+            'navigation_id' => 'require|arrayHasOnlyInts',
+        ],
     ];
 }

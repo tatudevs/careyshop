@@ -94,6 +94,9 @@ class Ads extends CareyShop
             'ads_id' => 'require|integer|gt:0',
             'sort'   => 'require|integer|between:0,255',
         ],
+        'index'  => [
+            'ads_id' => 'require|arrayHasOnlyInts',
+        ],
         'item'   => [
             'ads_id' => 'require|integer|gt:0',
         ],

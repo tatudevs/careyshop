@@ -36,6 +36,8 @@ class AuthGroup extends CareyShop
             'set.auth.group.status' => ['setAuthGroupStatus'],
             // 设置用户组排序
             'set.auth.group.sort'   => ['setAuthGroupSort'],
+            // 根据编号自动排序
+            'set.auth.group.index'  => ['setAuthGroupIndex'],
         ];
     }
 }

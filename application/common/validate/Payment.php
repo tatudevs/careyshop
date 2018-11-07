@@ -90,6 +90,9 @@ class Payment extends CareyShop
             'payment_id' => 'require|integer|gt:0',
             'sort'       => 'require|integer|between:0,255',
         ],
+        'index'  => [
+            'payment_id' => 'require|arrayHasOnlyInts',
+        ],
         'status' => [
             'payment_id' => 'require|arrayHasOnlyInts',
             'status'     => 'require|in:0,1',

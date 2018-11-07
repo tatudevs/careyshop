@@ -329,6 +329,32 @@ class ArticleCat extends CareyShop
     }
 
     /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setArticleCatIndex($data)
+    {
+        if (!$this->validateData($data, 'ArticleCat.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['article_cat_id'] as $key => $value) {
+            $list[] = ['article_cat_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            Cache::clear('ArticleCat');
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 批量设置是否导航
      * @access public
      * @param  array $data 外部数据

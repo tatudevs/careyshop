@@ -414,4 +414,29 @@ class Delivery extends CareyShop
 
         return false;
     }
+
+    /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setDeliveryIndex($data)
+    {
+        if (!$this->validateData($data, 'Delivery.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['delivery_id'] as $key => $value) {
+            $list[] = ['delivery_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            return true;
+        }
+
+        return false;
+    }
 }

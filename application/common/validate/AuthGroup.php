@@ -74,5 +74,8 @@ class AuthGroup extends CareyShop
             'group_id' => 'require|integer|gt:0',
             'sort'     => 'require|integer|between:0,255',
         ],
+        'index'  => [
+            'group_id' => 'require|arrayHasOnlyInts',
+        ],
     ];
 }

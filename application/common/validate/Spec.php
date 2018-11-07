@@ -57,7 +57,7 @@ class Spec extends CareyShop
         'item'  => [
             'spec_id' => 'require|integer|gt:0',
         ],
-        'index' => [
+        'key'   => [
             'spec_id'    => 'require|arrayHasOnlyInts',
             'spec_index' => 'require|in:0,1',
         ],
@@ -67,6 +67,9 @@ class Spec extends CareyShop
         'sort'  => [
             'spec_id' => 'require|integer|gt:0',
             'sort'    => 'require|integer|between:0,255',
+        ],
+        'index' => [
+            'spec_id' => 'require|arrayHasOnlyInts',
         ],
     ];
 }

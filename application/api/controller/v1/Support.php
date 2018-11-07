@@ -36,6 +36,8 @@ class Support extends CareyShop
             'set.support.status' => ['setSupportStatus'],
             // 设置客服排序
             'set.support.sort'   => ['setSupportSort'],
+            // 根据编号自动排序
+            'set.support.index'  => ['setSupportIndex'],
         ];
     }
 }

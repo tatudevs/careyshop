@@ -273,6 +273,32 @@ class Region extends CareyShop
     }
 
     /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setRegionIndex($data)
+    {
+        if (!$this->validateData($data, 'Region.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['region_id'] as $key => $value) {
+            $list[] = ['region_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            Cache::rm('DeliveryArea');
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 根据区域编号获取区域名称
      * @access public
      * @param  array $data 外部数据

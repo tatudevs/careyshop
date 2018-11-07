@@ -281,6 +281,32 @@ class Payment extends CareyShop
     }
 
     /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setPaymentIndex($data)
+    {
+        if (!$this->validateData($data, 'Payment.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['payment_id'] as $key => $value) {
+            $list[] = ['payment_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            Cache::clear('Payment');
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 批量设置支付配置状态
      * @access public
      * @param  array $data 外部数据

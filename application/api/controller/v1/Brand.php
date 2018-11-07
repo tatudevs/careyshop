@@ -40,6 +40,8 @@ class Brand extends CareyShop
             'get.brand.select'  => ['getBrandSelect'],
             // 设置品牌排序
             'set.brand.sort'    => ['setBrandSort'],
+            // 根据编号自动排序
+            'set.brand.index'   => ['setBrandIndex'],
         ];
     }
 }

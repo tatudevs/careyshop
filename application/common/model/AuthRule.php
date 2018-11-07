@@ -240,6 +240,32 @@ class AuthRule extends CareyShop
     }
 
     /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setAuthRuleIndex($data)
+    {
+        if (!$this->validateData($data, 'AuthRule.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['rule_id'] as $key => $value) {
+            $list[] = ['rule_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            Cache::clear('CommonAuth');
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 根据用户组编号与对应模块获取权限明细
      * @access public
      * @param  string $module  对应模块

@@ -36,6 +36,8 @@ class AuthRule extends CareyShop
             'set.auth.rule.status' => ['setAuthRuleStatus'],
             // 设置规则排序
             'set.auth.rule.sort'   => ['setAuthRuleSort'],
+            // 根据编号自动排序
+            'set.auth.rule.index'  => ['setAuthRuleIndex'],
         ];
     }
 }

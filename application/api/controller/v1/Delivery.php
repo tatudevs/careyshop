@@ -42,6 +42,8 @@ class Delivery extends CareyShop
             'unique.delivery.item' => ['uniqueDeliveryItem'],
             // 设置配送方式排序
             'set.delivery.sort'    => ['setDeliverySort'],
+            // 根据编号自动排序
+            'set.delivery.index'   => ['setDeliveryIndex'],
         ];
     }
 }

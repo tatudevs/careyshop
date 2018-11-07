@@ -240,9 +240,9 @@ class Spec extends CareyShop
      * @param  array $data 外部数据
      * @return array|false
      */
-    public function setSpecIndex($data)
+    public function setSpecKey($data)
     {
-        if (!$this->validateData($data, 'Spec.index')) {
+        if (!$this->validateData($data, 'Spec.key')) {
             return false;
         }
 
@@ -268,6 +268,31 @@ class Spec extends CareyShop
 
         $map['spec_id'] = ['eq', $data['spec_id']];
         if (false !== $this->save(['sort' => $data['sort']], $map)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setSpecIndex($data)
+    {
+        if (!$this->validateData($data, 'Spec.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['spec_id'] as $key => $value) {
+            $list[] = ['spec_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
             return true;
         }
 

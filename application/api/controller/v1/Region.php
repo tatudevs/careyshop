@@ -36,6 +36,8 @@ class Region extends CareyShop
             'get.region.son.list' => ['getRegionSonList'],
             // 设置区域排序
             'set.region.sort'     => ['setRegionSort'],
+            // 根据编号自动排序
+            'set.region.index'    => ['setRegionIndex'],
             // 根据区域编号获取区域名称
             'get.region.name'     => ['getRegionName'],
         ];

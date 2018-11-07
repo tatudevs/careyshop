@@ -315,4 +315,29 @@ class Brand extends CareyShop
 
         return false;
     }
+
+    /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setBrandIndex($data)
+    {
+        if (!$this->validateData($data, 'Brand.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['brand_id'] as $key => $value) {
+            $list[] = ['brand_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            return true;
+        }
+
+        return false;
+    }
 }

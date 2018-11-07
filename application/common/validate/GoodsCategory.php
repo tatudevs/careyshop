@@ -117,6 +117,9 @@ class GoodsCategory extends CareyShop
             'goods_category_id' => 'require|integer|gt:0',
             'sort'              => 'require|integer|between:0,255',
         ],
+        'index'  => [
+            'goods_category_id' => 'require|arrayHasOnlyInts',
+        ],
         'nac'    => [
             'goods_category_id' => 'require|arrayHasOnlyInts',
             'is_navi'           => 'require|in:0,1',

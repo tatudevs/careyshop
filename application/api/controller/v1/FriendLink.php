@@ -36,6 +36,8 @@ class FriendLink extends CareyShop
             'set.friendlink.status' => ['setFriendLinkStatus'],
             // 设置友情链接排序
             'set.friendlink.sort'   => ['setFriendLinkSort'],
+            // 根据编号自动排序
+            'set.friendlink.index'  => ['setFriendLinkIndex'],
         ];
     }
 }

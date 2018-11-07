@@ -407,6 +407,32 @@ class Menu extends CareyShop
     }
 
     /**
+     * 根据编号自动排序
+     * @access public
+     * @param  $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setMenuIndex($data)
+    {
+        if (!$this->validateData($data, 'Menu.index')) {
+            return false;
+        }
+
+        $list = [];
+        foreach ($data['menu_id'] as $key => $value) {
+            $list[] = ['menu_id' => $value, 'sort' => $key + 1];
+        }
+
+        if (false !== $this->isUpdate()->saveAll($list)) {
+            Cache::clear('CommonAuth');
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 根据编号获取上级菜单列表
      * @access public
      * @param  string $module  所属模块

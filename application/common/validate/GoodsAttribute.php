@@ -90,7 +90,7 @@ class GoodsAttribute extends CareyShop
             'goods_type_id',
             'attribute_all',
         ],
-        'index'     => [
+        'key'       => [
             'goods_attribute_id' => 'require|arrayHasOnlyInts',
             'attr_index'         => 'require|in:0,1,2',
         ],
@@ -101,6 +101,9 @@ class GoodsAttribute extends CareyShop
         'sort'      => [
             'goods_attribute_id' => 'require|integer|gt:0',
             'sort'               => 'require|integer|between:0,255',
+        ],
+        'index'     => [
+            'goods_attribute_id' => 'require|arrayHasOnlyInts',
         ],
         'del'       => [
             'goods_attribute_id' => 'require|arrayHasOnlyInts',

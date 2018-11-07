@@ -40,6 +40,8 @@ class Menu extends CareyShop
             'set.menu.navi'      => ['setMenuNavi'],
             // 设置菜单排序
             'set.menu.sort'      => ['setMenuSort'],
+            // 根据编号自动排序
+            'set.menu.index'     => ['setMenuIndex'],
             // 设置菜单状态
             'set.menu.status'    => ['setMenuStatus'],
             // 根据权限获取菜单列表

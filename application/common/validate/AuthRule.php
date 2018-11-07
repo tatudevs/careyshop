@@ -81,5 +81,8 @@ class AuthRule extends CareyShop
             'rule_id' => 'require|integer|gt:0',
             'sort'    => 'require|integer|between:0,255',
         ],
+        'index'  => [
+            'rule_id' => 'require|arrayHasOnlyInts',
+        ],
     ];
 }

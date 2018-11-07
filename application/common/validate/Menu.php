@@ -95,6 +95,9 @@ class Menu extends CareyShop
             'menu_id' => 'require|integer|gt:0',
             'sort'    => 'require|integer|between:0,255',
         ],
+        'index'  => [
+            'menu_id' => 'require|arrayHasOnlyInts',
+        ],
         'status' => [
             'menu_id' => 'require|integer|gt:0',
             'status'  => 'require|in:0,1',

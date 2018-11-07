@@ -38,6 +38,8 @@ class Navigation extends CareyShop
             'set.navigation.status' => ['setNavigationStatus'],
             // 设置导航排序
             'set.navigation.sort'   => ['setNavigationSort'],
+            // 根据编号自动排序
+            'set.navigation.index'  => ['setNavigationIndex'],
         ];
     }
 }

@@ -39,11 +39,13 @@ class GoodsAttribute extends CareyShop
             // 获取商品属性列表
             'get.goods.attribute.list'      => ['getAttributeList'],
             // 批量设置商品属性检索
-            'set.goods.attribute.index'     => ['setAttributeIndex'],
+            'set.goods.attribute.key'       => ['setAttributeKey'],
             // 批量设置商品属性是否核心
             'set.goods.attribute.important' => ['setAttributeImportant'],
             // 设置主体或属性的排序值
             'set.goods.attribute.sort'      => ['setAttributeSort'],
+            // 根据编号自动排序
+            'set.goods.attribute.index'     => ['setAttributeIndex'],
             // 批量删除商品主体或属性
             'del.goods.attribute.list'      => ['delAttributeList'],
             // 获取基础数据索引列表

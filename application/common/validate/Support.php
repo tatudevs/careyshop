@@ -76,5 +76,8 @@ class Support extends CareyShop
             'support_id' => 'require|integer|gt:0',
             'sort'       => 'require|integer|between:0,255',
         ],
+        'index'  => [
+            'support_id' => 'require|arrayHasOnlyInts',
+        ],
     ];
 }
