@@ -110,7 +110,13 @@ class File extends Driver
         if (!is_file($filename)) {
             return $default;
         }
-        $content      = file_get_contents($filename);
+
+        try {
+            $content = file_get_contents($filename);
+        } catch (\Exception $e) {
+            return $default;
+        }
+
         $this->expire = null;
         if (false !== $content) {
             $expire = (int) substr($content, 8, 12);
@@ -218,6 +224,7 @@ class File extends Driver
         try {
             return $this->unlink($filename);
         } catch (\Exception $e) {
+            return false;
         }
     }
 
