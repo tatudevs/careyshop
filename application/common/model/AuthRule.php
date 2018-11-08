@@ -169,7 +169,7 @@ class AuthRule extends CareyShop
         $result = self::all(function ($query) use ($data) {
             // 搜索条件
             $map = [];
-            $map['group_id'] = ['eq', $data['group_id']];
+            empty($data['group_id']) ?: $map['group_id'] = ['eq', $data['group_id']];
             is_empty_parm($data['module']) ?: $map['module'] = ['eq', $data['module']];
             is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
 
