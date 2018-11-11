@@ -149,6 +149,7 @@ class AuthRule extends CareyShop
         }
 
         self::destroy($data['rule_id']);
+        Cache::clear('CommonAuth');
 
         return true;
     }
