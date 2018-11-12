@@ -58,7 +58,7 @@ class AuthRule extends CareyShop
         $map['group_id'] = ['eq', $data['group_id']];
 
         if (self::checkUnique($map)) {
-            return $this->setError('相同的模块已存在');
+            return $this->setError('当前模块下已存在相同用户组');
         }
 
         if (false !== $this->allowField(true)->save($data)) {
@@ -124,7 +124,7 @@ class AuthRule extends CareyShop
             $map['group_id'] = ['eq', $result->getAttr('group_id')];
 
             if (self::checkUnique($map)) {
-                return $this->setError('相同的模块已存在');
+                return $this->setError('当前模块下已存在相同用户组');
             }
         }
 

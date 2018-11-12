@@ -231,8 +231,14 @@ class Menu extends CareyShop
         }
 
         $tree = self::setMenuTree((int)$menuId, $result, $level, $isLayer);
-        Cache::tag('CommonAuth')->set($treeCache, $tree);
+        if (!empty(self::$menuAuth)) {
+            foreach ($result as $value) {
+                $value->setAttr('level', 0);
+                $tree[] = $value;
+            }
+        }
 
+        Cache::tag('CommonAuth')->set($treeCache, $tree);
         return $tree;
     }
 
@@ -254,17 +260,20 @@ class Menu extends CareyShop
         foreach ($list as $key => $value) {
             // 获取菜单主Id
             $menuId = $value->getAttr('menu_id');
+
+            // 优先处理:存在权限列表则需要检测,否则删除节点
+            if (!empty(self::$menuAuth) && !in_array($menuId, self::$menuAuth)) {
+                unset($list[$key]);
+                continue;
+            }
+
+            // 判断菜单是否存在继承关系
             if ($value->getAttr('parent_id') !== $parentId && $menuId !== $parentId) {
                 continue;
             }
 
             // 是否返回本级菜单
             if ($menuId === $parentId && !$isLayer) {
-                continue;
-            }
-
-            // 存在权限列表则需要检测
-            if (!empty(self::$menuAuth) && !in_array($menuId, self::$menuAuth)) {
                 continue;
             }
 
@@ -588,17 +597,10 @@ class Menu extends CareyShop
             return [];
         }
 
-        // 生成菜单的条件
-        $menuId = isset($data['menu_id']) ? $data['menu_id'] : 0;
-        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
-        $level = isset($data['level']) ? $data['level'] : null;
-
-        is_empty_parm($data['is_navi']) ?: $filter['is_navi'] = $data['is_navi'];
-        $filter['status'] = isset($data['status']) ? $data['status'] : 1;
-
         // 当规则表中存在菜单权限时进行赋值,让获取的函数进行过滤
         self::$menuAuth = $ruleResult['menu_auth'];
-        $result = self::getMenuListData($data['module'], $menuId, $isLayer, $level, $filter);
+        $menuId = isset($data['menu_id']) ? $data['menu_id'] : 0;
+        $result = self::getMenuListData($data['module'], $menuId, true);
         self::$menuAuth = [];
 
         return $result;

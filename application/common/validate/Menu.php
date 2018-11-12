@@ -117,10 +117,6 @@ class Menu extends CareyShop
         'auth'   => [
             'menu_id' => 'integer|egt:0',
             'module',
-            'level',
-            'is_navi',
-            'is_layer',
-            'status',
         ],
     ];
 }
