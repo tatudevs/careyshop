@@ -19,13 +19,13 @@ class DeliveryDist extends CareyShop
      * 即时查询URL
      * @var string
      */
-    const TRACK_URL = 'http://api.kdniao.cc/Ebusiness/EbusinessOrderHandle.aspx';
+    const TRACK_URL = 'http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx';
 
     /**
      * 轨迹订阅URL
      * @var string
      */
-    const FOLLOW_URL = 'http://api.kdniao.cc/api/dist';
+    const FOLLOW_URL = 'http://api.kdniao.com/api/dist';
 
     /**
      * 是否需要自动写入时间戳
