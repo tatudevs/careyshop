@@ -114,7 +114,18 @@ class ActionLog extends CareyShop
         });
 
         if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
+            $logList = $result->toArray();
+            $menuList = Menu::getMenuListData('api');
+
+            if (false !== $menuList) {
+                $menuMap = array_column($menuList, 'name', 'url');
+                foreach ($logList as &$value) {
+                    $oldPath = $value['path'];
+                    $value['action'] = array_key_exists($oldPath, $menuMap) ? $menuMap[$oldPath] : '未知操作';
+                }
+            }
+
+            return ['items' => $logList, 'total_result' => $totalResult];
         }
 
         return false;

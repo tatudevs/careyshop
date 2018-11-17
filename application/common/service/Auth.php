@@ -156,6 +156,10 @@ class Auth extends CareyShop
             'status'      => false === $result ? 1 : 0,
         ];
 
+        if ($request->has('method')) {
+            $data['path'] .= '/' . $data['params']['method'];
+        }
+
         ActionLog::create($data);
     }
 }
