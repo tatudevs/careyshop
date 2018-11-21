@@ -178,7 +178,7 @@ class ActionLog extends CareyShop
 
         $result = self::get($data['action_log_id']);
         if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
+            return is_null($result) ? null : $result->append(['action'])->toArray();
         }
 
         return false;
