@@ -40,7 +40,7 @@ class Index extends CareyShop
 
         foreach ($shell as $key => $value) {
             $output = shell_exec(sprintf('php %s %s', $rootPath, $value));
-            $result[] = $key . ':' . chop($output);
+            $result[$key] = chop($output);
         }
 
         return !empty($result) ? $result : false;

@@ -163,7 +163,7 @@ class ActionLog extends CareyShop
         foreach ($arr as $key => $val) {
             if (is_array($val)) {
                 $this->privacyField($arr[$key]);
-            } elseif (in_array($key, $this->safety)) {
+            } elseif (in_array($key, $this->safety, true)) {
                 $arr[$key] = auto_hid_substr($val);
             }
         }
