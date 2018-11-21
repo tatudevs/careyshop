@@ -10,6 +10,8 @@
 
 namespace app\common\model;
 
+use think\Cache;
+
 class ActionLog extends CareyShop
 {
     /**
@@ -70,24 +72,29 @@ class ActionLog extends CareyShop
     ];
 
     /**
-     * 菜单操作动作索引
-     * @var null
-     */
-    private $menuMap = [];
-
-    /**
      * 设置菜单操作动作
      * @access private
-     * @return void
+     * @param string $key   来源值
+     * @param string $value 修改值
      */
-    private function setMenuMap()
+    private function setMenuMap($key, &$value)
     {
-        if ($this->menuMap) {
+        static $menuMap = null;
+        if (empty($menuMap)) {
+            $menuMap = Cache::remember('menuOfActionLog', function () {
+                $menuList = Menu::getMenuListData('api');
+                return array_column($menuList, 'name', 'url');
+            });
+
+            Cache::tag('CommonAuth', 'menuOfActionLog');
+        }
+
+        if (array_key_exists($key, $menuMap)) {
+            $value = $menuMap[$key];
             return;
         }
 
-        $menuList = Menu::getMenuListData('api');
-        $this->menuMap = array_column($menuList, 'name', 'url');
+        $value = '未知操作';
     }
 
     /**
@@ -100,8 +107,7 @@ class ActionLog extends CareyShop
     public function getActionAttr($value, $data)
     {
         try {
-            $this->setMenuMap();
-            $value = array_key_exists($data['path'], $this->menuMap) ? $this->menuMap[$data['path']] : '未知操作';
+            $this->setMenuMap($data['path'], $value);
         } catch (\Exception $e) {
             $value = '未知操作';
         }
