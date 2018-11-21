@@ -364,7 +364,7 @@ class Upload extends UploadBase
         $url = $this->getNewUrl($fileInfo['filename'], $fileInfo['extension'], $fileInfo, $urlArray);
 
         // 非图片资源则直接返回
-        if (!in_array($fileInfo['extension'], $extension)) {
+        if (!in_array($fileInfo['extension'], $extension, true)) {
             return $url;
         }
 
@@ -378,7 +378,7 @@ class Upload extends UploadBase
 
         // 处理输出格式
         if (!empty($param['type'])) {
-            if (in_array($param['type'], $extension)) {
+            if (in_array($param['type'], $extension, true)) {
                 $suffix = $param['type'];
             }
         }

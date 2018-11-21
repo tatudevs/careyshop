@@ -422,7 +422,7 @@ class Upload extends UploadBase
         // 带样式则直接返回
         if (!empty($param['style'])) {
             $style = mb_substr($param['style'], 0, 1, 'utf-8');
-            $url .= in_array($style, ['-', '_', '/', '!']) ? $param['style'] : '?x-oss-process=style/' . $param['style'];
+            $url .= in_array($style, ['-', '_', '/', '!'], true) ? $param['style'] : '?x-oss-process=style/' . $param['style'];
             return $url;
         }
 
@@ -455,7 +455,7 @@ class Upload extends UploadBase
 
         // 处理输出格式
         if (!empty($param['type'])) {
-            if (in_array($param['type'], ['jpg', 'png', 'bmp', 'webp', 'gif', 'tiff'])) {
+            if (in_array($param['type'], ['jpg', 'png', 'bmp', 'webp', 'gif', 'tiff'], true)) {
                 $options .= 'format,' . $param['type'] . '/';
             }
         }

@@ -67,7 +67,7 @@ class StorageStyle extends CareyShop
     {
         if (isset($data['size']) && isset($data['crop'])) {
             foreach ($data as $key => $value) {
-                if (!in_array($key, ['size', 'crop'])) {
+                if (!in_array($key, ['size', 'crop'], true)) {
                     continue;
                 }
 
