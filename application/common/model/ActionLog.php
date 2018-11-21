@@ -46,6 +46,124 @@ class ActionLog extends CareyShop
     ];
 
     /**
+     * 敏感词过滤字段
+     * @var array
+     */
+    protected $safety = [
+        'password',
+        'appkey',
+        'app_key',
+        'app_secret',
+        'give_code',
+        'exchange_code',
+        'setting',
+        'value',
+        'token',
+        'token_expires',
+        'refresh',
+        'refresh_expires',
+        'source_no',
+        'tel',
+        'mobile',
+        'email',
+        'account',
+    ];
+
+    /**
+     * 菜单操作动作索引
+     * @var null
+     */
+    private $menuMap = [];
+
+    /**
+     * 设置菜单操作动作
+     * @access private
+     * @return void
+     */
+    private function setMenuMap()
+    {
+        if ($this->menuMap) {
+            return;
+        }
+
+        $menuList = Menu::getMenuListData('api');
+        $this->menuMap = array_column($menuList, 'name', 'url');
+    }
+
+    /**
+     * 获取器设置日志操作动作
+     * @access public
+     * @param $value
+     * @param $data
+     * @return string
+     */
+    public function getActionAttr($value, $data)
+    {
+        try {
+            $this->setMenuMap();
+            $value = array_key_exists($data['path'], $this->menuMap) ? $this->menuMap[$data['path']] : '未知操作';
+        } catch (\Exception $e) {
+            $value = '未知操作';
+        }
+
+        return $value;
+    }
+
+    /**
+     * 获取器设置请求参数
+     * @access public
+     * @param $value
+     * @return mixed
+     */
+    public function getParamsAttr($value)
+    {
+        if (is_string($value)) {
+            $value = json_decode($value, true);
+        }
+
+        if (is_array($value)) {
+            $this->privacyField($value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * 获取器设置处理结果
+     * @access public
+     * @param $value
+     * @return mixed
+     */
+    public function getResultAttr($value)
+    {
+        if (is_string($value)) {
+            $value = json_decode($value, true);
+        }
+
+        if (is_array($value)) {
+            $this->privacyField($value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * 对过敏字段进行隐私保护
+     * @access private
+     * @param array $arr 原始数组
+     */
+    private function privacyField(&$arr)
+    {
+        foreach ($arr as $key => $val) {
+            if (is_array($val)) {
+                $this->privacyField($arr[$key]);
+            } elseif (in_array($key, $this->safety)) {
+                $arr[$key] = auto_hid_substr($val);
+            }
+        }
+    }
+
+    /**
      * 获取一条操作日志
      * @access public
      * @param  array $data 外部数据
@@ -114,18 +232,7 @@ class ActionLog extends CareyShop
         });
 
         if (false !== $result) {
-            $logList = $result->toArray();
-            $menuList = Menu::getMenuListData('api');
-
-            if (false !== $menuList) {
-                $menuMap = array_column($menuList, 'name', 'url');
-                foreach ($logList as &$value) {
-                    $oldPath = $value['path'];
-                    $value['action'] = array_key_exists($oldPath, $menuMap) ? $menuMap[$oldPath] : '未知操作';
-                }
-            }
-
-            return ['items' => $logList, 'total_result' => $totalResult];
+            return ['items' => $result->append(['action'])->toArray(), 'total_result' => $totalResult];
         }
 
         return false;
