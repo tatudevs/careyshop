@@ -63,7 +63,8 @@ class ArticleCat extends CareyShop
         !isset($catData['level']) ?: $level = $catData['level'];
         !isset($catData['article_cat_id']) ?: $articleCatId = $catData['article_cat_id'];
         empty($catData['is_layer']) ?: $isLayer = true;
+        $isNavi = is_empty_parm($catData['is_navi']) ? null : $catData['is_navi']; // 处理是否过滤导航
 
-        return self::$model->getArticleCatList($articleCatId, $isLayer, $level);
+        return self::$model->getArticleCatList($articleCatId, $isLayer, $level, $isNavi);
     }
 }

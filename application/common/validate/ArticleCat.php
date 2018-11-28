@@ -73,6 +73,7 @@ class ArticleCat extends CareyShop
         'list'  => [
             'article_cat_id' => 'integer|egt:0',
             'level',
+            'is_navi',
             'is_layer',
         ],
         'navi'  => [

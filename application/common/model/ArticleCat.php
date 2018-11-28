@@ -172,25 +172,29 @@ class ArticleCat extends CareyShop
      * @param  int  $catId   分类Id
      * @param  bool $isLayer 是否返回本级分类
      * @param  int  $level   分类深度
+     * @param  int  $isNavi  过滤是否导航
      * @return array|false
      */
-    public static function getArticleCatList($catId = 0, $isLayer = false, $level = null)
+    public static function getArticleCatList($catId = 0, $isLayer = false, $level = null, $isNavi = null)
     {
-        $result = Cache::remember('ArticleCatList', function () {
-            return self::all(function ($query) {
-                // 子查询,查询关联的文章数量
-                $article = Article::field('article_cat_id,count(*) num')
-                    ->group('article_cat_id')
-                    ->buildSql();
+        $result = self::all(function ($query) use ($isNavi) {
+            // 子查询,查询关联的文章数量
+            $article = Article::field('article_cat_id,count(*) num')
+                ->group('article_cat_id')
+                ->buildSql();
 
-                $query
-                    ->alias('c')
-                    ->field('c.*,count(s.article_cat_id) children_total,ifnull(a.num, 0) aricle_total')
-                    ->join('article_cat s', 's.parent_id = c.article_cat_id', 'left')
-                    ->join([$article => 'a'], 'a.article_cat_id = c.article_cat_id', 'left')
-                    ->group('c.article_cat_id')
-                    ->order('c.parent_id,c.sort,c.article_cat_id');
-            });
+            $map = [];
+            is_null($isNavi) ?: $map['c.is_navi'] = ['eq', $isNavi];
+
+            $query
+                ->cache(true, null, 'ArticleCat')
+                ->alias('c')
+                ->field('c.*,count(s.article_cat_id) children_total,ifnull(a.num, 0) aricle_total')
+                ->join('article_cat s', 's.parent_id = c.article_cat_id', 'left')
+                ->join([$article => 'a'], 'a.article_cat_id = c.article_cat_id', 'left')
+                ->where($map)
+                ->group('c.article_cat_id')
+                ->order('c.parent_id,c.sort,c.article_cat_id');
         });
 
         if (false === $result) {
@@ -198,13 +202,16 @@ class ArticleCat extends CareyShop
             return false;
         }
 
-        $treeCache = sprintf('ArticleCat:id%dis_layer%dlevel%d', $catId, $isLayer, is_null($level) ? -1 : $level);
+        $treeCache = sprintf('ArticleCat:id%dis_layer%dlevel%dis_navi%d',
+            $catId, $isLayer, is_null($level) ? -1 : $level, is_null($isNavi) ? -1 : $isNavi);
+
         if (Cache::has($treeCache)) {
             return Cache::get($treeCache);
         }
 
+        // 处理原始数据至菜单数据
         $tree = self::setArticleCatTree((int)$catId, $result, $level, $isLayer);
-        Cache::tag('ArticleCat', ['ArticleCatList', $treeCache])->set($treeCache, $tree);
+        Cache::tag('ArticleCat')->set($treeCache, $tree);
 
         return $tree;
     }
