@@ -53,6 +53,7 @@ class ActionLog extends CareyShop
      */
     protected $safety = [
         'password',
+        'password_confirm',
         'appkey',
         'app_key',
         'app_secret',
