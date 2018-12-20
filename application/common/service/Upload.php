@@ -220,12 +220,16 @@ class Upload extends CareyShop
     /**
      * 获取资源缩略图
      * @access public
-     * @return void
+     * @return mixed
      */
     public function getThumb()
     {
         $url = $this->getThumbUrl();
-        if (false === $url || empty($url['url_prefix'])) {
+        if (false === $url) {
+            return false;
+        }
+
+        if (empty($url['url_prefix'])) {
             header('status: 404 Not Found', true, 404);
             exit;
         }
