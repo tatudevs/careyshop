@@ -343,13 +343,15 @@ class CareyShop extends Controller
         unset($this->params['sign']);
         $params = $this->params;
         ksort($params);
+
+        $type = ['array', 'object'];
         $stringToBeSigned = $appSecret;
-        foreach ($params as $k => $v) {
-            if (is_string($v) && '@' != mb_substr($v, 0, 1, 'utf-8')) {
-                $stringToBeSigned .= "$k$v";
+        foreach ($params as $key => $val) {
+            if ($key != '' && !in_array(gettype($val), $type)) {
+                $stringToBeSigned .= $key.$val;
             }
         }
-        unset($k, $v);
+        unset($key, $val);
         $stringToBeSigned .= $appSecret;
 
         if (!hash_equals(md5($stringToBeSigned), $this->sign)) {
