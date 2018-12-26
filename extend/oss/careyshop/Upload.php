@@ -130,7 +130,11 @@ class Upload extends UploadBase
         $files = $this->request->file();
 
         if (empty($files)) {
-            $uploadMaxSize = ini_get('upload_max_filesize');
+            $uploadMaxSize = Config::get('file_size.value', 'upload');
+            if (empty($uploadMaxSize)) {
+                $uploadMaxSize = ini_get('upload_max_filesize');
+            }
+
             return $this->setError(sprintf('请选择需要上传的附件(单附件大小不能超过 %s)', $uploadMaxSize));
         }
 
