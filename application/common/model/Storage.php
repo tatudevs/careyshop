@@ -449,15 +449,15 @@ class Storage extends CareyShop
         }
 
         // 数组转为字符串格式,用于SQL查询条件,为空直接返回
-        $data['storage_id'] = array_unique($data['storage_id']);
-        $data['storage_id'] = implode(',', $data['storage_id']);
+        $delList['storage_id'] = array_unique($data['storage_id']);
+        $delList['storage_id'] = implode(',', $delList['storage_id']);
 
-        if (empty($data['storage_id'])) {
+        if (empty($delList['storage_id'])) {
             return true;
         }
 
         // 获取子节点资源
-        $storageId = $this->query('SELECT `getStorageChildrenList`(:storage_id) AS `storage_id`', $data);
+        $storageId = $this->query('SELECT `getStorageChildrenList`(:storage_id) AS `storage_id`', $delList);
         if (false === $storageId) {
             return false;
         }

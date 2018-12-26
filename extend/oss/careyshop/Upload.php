@@ -122,15 +122,16 @@ class Upload extends UploadBase
         // 检测请求数据总量不得超过服务器设置值
         $posMaxSize = ini_get('post_max_size');
         if ($this->request->server('CONTENT_LENGTH') > string_to_byte($posMaxSize)) {
-            return $this->setError('附件合计总大小不能超过' . $posMaxSize);
+            return $this->setError('附件合计总大小不能超过 ' . $posMaxSize);
         }
 
         // 获取上传资源数据
         $filesData = [];
         $files = $this->request->file();
 
-        if (is_null($files)) {
-            return $this->setError('请选择需要上传的附件');
+        if (empty($files)) {
+            $uploadMaxSize = ini_get('upload_max_filesize');
+            return $this->setError(sprintf('请选择需要上传的附件(单附件大小不能超过 %s)', $uploadMaxSize));
         }
 
         if ($this->request->has('x:replace', 'param', true) && count($files) > 1) {
