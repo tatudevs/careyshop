@@ -39,6 +39,7 @@ class OrderGoods extends CareyShop
         'is_comment'     => 'integer',
         'is_service'     => 'integer',
         'status'         => 'integer',
+        'goods_image'    => 'array',
     ];
 
     /**

@@ -41,6 +41,7 @@ class GoodsCategory extends CareyShop
         'sort'              => 'integer',
         'is_navi'           => 'integer',
         'status'            => 'integer',
+        'category_pic'      => 'array',
     ];
 
     /**

@@ -27,6 +27,7 @@ class SpecImage extends CareyShop
     protected $type = [
         'goods_id'     => 'integer',
         'spec_item_id' => 'integer',
+        'image'        => 'array',
     ];
 
     /**

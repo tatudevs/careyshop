@@ -19,7 +19,7 @@ class SpecImage extends CareyShop
     protected $rule = [
         'goods_id'     => 'require|integer|gt:0',
         'spec_item_id' => 'require|integer|gt:0',
-        'image'        => 'require|max:255',
+        'image'        => 'array',
     ];
 
     /**

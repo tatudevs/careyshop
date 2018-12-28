@@ -35,6 +35,38 @@ class AdsPosition extends CareyShop
     ];
 
     /**
+     * 修改器对内容处理
+     * @access public
+     * @param  $value
+     * @param  $data
+     * @return mixed
+     */
+    public function setContentAttr($value, $data)
+    {
+        if (isset($data['type']) && $data['type'] == 0) {
+            return json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+
+        return $value;
+    }
+
+    /**
+     * 获取器对内容处理
+     * @access public
+     * @param  $value
+     * @param  $data
+     * @return mixed
+     */
+    public function getContentAttr($value, $data)
+    {
+        if (isset($data['type']) && $data['type'] == 0) {
+            return json_decode($value, true);
+        }
+
+        return $value;
+    }
+
+    /**
      * 添加一个广告位
      * @access public
      * @param  array $data 外部数据

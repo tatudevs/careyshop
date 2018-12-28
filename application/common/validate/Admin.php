@@ -22,7 +22,7 @@ class Admin extends CareyShop
         'password'     => 'require|min:6|confirm',
         'group_id'     => 'require|integer|gt:0',
         'nickname'     => 'require|max:50|unique:admin,nickname,0,admin_id',
-        'head_pic'     => 'max:255',
+        'head_pic'     => 'array',
         'status'       => 'in:0,1',
         'password_old' => 'min:6',
         'account'      => 'max:80',

@@ -55,6 +55,7 @@ class User extends CareyShop
         'last_login'      => 'timestamp',
         'status'          => 'integer',
         'is_delete'       => 'integer',
+        'head_pic'        => 'array',
     ];
 
     /**

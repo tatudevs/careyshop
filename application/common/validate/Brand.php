@@ -22,7 +22,7 @@ class Brand extends CareyShop
         'name'              => 'require|max:50|unique:brand,name,0,brand_id',
         'phonetic'          => 'max:10',
         'description'       => 'max:100',
-        'logo'              => 'max:255',
+        'logo'              => 'array',
         'url'               => 'max:255',
         'target'            => 'in:_self,_blank',
         'sort'              => 'integer|between:0,255',
@@ -31,7 +31,7 @@ class Brand extends CareyShop
         'page_no'           => 'integer|gt:0',
         'page_size'         => 'integer|gt:0',
         'order_type'        => 'in:asc,desc',
-        'order_field'       => 'in:brand_id,goods_category_id,name,phonetic,logo,description,sort,status',
+        'order_field'       => 'in:brand_id,goods_category_id,name,phonetic,description,sort,status',
     ];
 
     /**

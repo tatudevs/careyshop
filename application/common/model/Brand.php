@@ -33,6 +33,7 @@ class Brand extends CareyShop
         'goods_category_id' => 'integer',
         'sort'              => 'integer',
         'status'            => 'integer',
+        'logo'              => 'array',
     ];
 
     /**

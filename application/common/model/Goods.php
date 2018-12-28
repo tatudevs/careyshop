@@ -72,6 +72,7 @@ class Goods extends CareyShop
         'least_sum'         => 'integer',
         'purchase_sum'      => 'integer',
         'attachment'        => 'array',
+        'video'             => 'array',
         'is_recommend'      => 'integer',
         'is_new'            => 'integer',
         'is_hot'            => 'integer',

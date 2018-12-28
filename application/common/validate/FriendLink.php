@@ -20,7 +20,7 @@ class FriendLink extends CareyShop
         'friend_link_id' => 'integer|gt:0',
         'name'           => 'require|max:50',
         'url'            => 'require|max:255',
-        'logo'           => 'max:255',
+        'logo'           => 'array',
         'target'         => 'in:_self,_blank',
         'sort'           => 'integer|between:0,255',
         'status'         => 'in:0,1',

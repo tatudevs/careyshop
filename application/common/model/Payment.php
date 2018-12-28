@@ -81,6 +81,7 @@ class Payment extends CareyShop
         'setting'    => 'array',
         'sort'       => 'integer',
         'status'     => 'integer',
+        'image'      => 'array',
     ];
 
     /**
