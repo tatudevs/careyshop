@@ -308,10 +308,9 @@ class Upload extends UploadBase
         // 检测尺寸是否正确
         list($sWidth, $sHeight) = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
         list($cWidth, $cHeight) = @array_pad(isset($param['crop']) ? $param['crop'] : [], 2, 0);
-
-//        if (!$sWidth && !$sHeight) {
-//            return $url;
-//        }
+        if (!$sWidth && !$sHeight) {
+            return $url;
+        }
 
         // 画布最后的尺寸初始化
         $last = 'size';
