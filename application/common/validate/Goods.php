@@ -38,7 +38,7 @@ class Goods extends CareyShop
         'keywords'          => 'max:255',
         'description'       => 'max:255',
         'content'           => 'require',
-        'attachment'        => 'require|array',
+        'attachment'        => 'arrayHasOnlyStrings',
         'video'             => 'max:255',
         'unit'              => 'max:10',
         'is_recommend'      => 'in:0,1',
