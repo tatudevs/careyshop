@@ -148,7 +148,7 @@ class Auth extends CareyShop
             'client_type' => get_client_type(),
             'user_id'     => get_client_id(),
             'username'    => get_client_name(),
-            'path'        => $request->path(),
+            'path'        => $url,
             'module'      => $class,
             'params'      => $request->param(),
             'result'      => false === $result ? $error : $result,
