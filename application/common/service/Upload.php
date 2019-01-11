@@ -278,13 +278,15 @@ class Upload extends CareyShop
         // 是否定义资源样式
         if ($request->has('code', 'param', true)) {
             $styleResult = (new StorageStyle())->getStorageStyleCode(['code' => $request->param('code')]);
-            foreach ($styleResult as $key => $value) {
-                if (is_array($value)) {
-                    foreach ($value as $k => $v) {
-                        $request->get([$k => $v]);
+            if ($styleResult) {
+                foreach ($styleResult as $key => $value) {
+                    if (is_array($value)) {
+                        foreach ($value as $k => $v) {
+                            $request->get([$k => $v]);
+                        }
+                    } else {
+                        $request->get([$key => $value]);
                     }
-                } else {
-                    $request->get([$key => $value]);
                 }
             }
         }
