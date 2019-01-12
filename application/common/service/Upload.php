@@ -284,7 +284,10 @@ class Upload extends CareyShop
                 foreach ($styleResult as $key => $value) {
                     if ('scale' === $key) {
                         $isMobile = $request->isMobile() ? 'mobile' : 'pc';
-                        $request->get($value[$isMobile]);
+                        if (array_key_exists($isMobile, $value)) {
+                            $request->get($value[$isMobile]);
+                        }
+
                         continue;
                     }
 

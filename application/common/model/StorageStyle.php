@@ -57,41 +57,6 @@ class StorageStyle extends CareyShop
     }
 
     /**
-     * 处理缩放规格
-     * @access private
-     * @param  array $data    外部请求数据
-     * @param  array $oldData 原始缩放数据
-     * @return void
-     */
-    private function setScale(&$data, $oldData = null)
-    {
-        // 构建初始数据结构
-        if ($oldData) {
-            $structure = $oldData;
-        } else {
-            $structure = [
-                'pc'     => ['size' => [], 'crop' => []],
-                'mobile' => ['size' => [], 'crop' => []],
-            ];
-        }
-
-        // 将提交的数据实际写入结构中
-        if (isset($data['scale'])) {
-            foreach (['pc', 'mobile'] as $value) {
-                if (!empty($data['scale'][$value]['size'])) {
-                    $structure[$value]['size'] = $data['scale'][$value]['size'];
-                }
-
-                if (!empty($data['scale'][$value]['crop'])) {
-                    $structure[$value]['crop'] = $data['scale'][$value]['crop'];
-                }
-            }
-        }
-
-        $data['scale'] = $structure;
-    }
-
-    /**
      * 添加一个资源样式
      * @access public
      * @param  array $data 外部数据
@@ -104,8 +69,7 @@ class StorageStyle extends CareyShop
             return false;
         }
 
-        // 处理缩放规格,并且避免无关字段
-        $this->setScale($data);
+        // 避免无关字段
         unset($data['storage_style_id']);
 
         if (false !== $this->allowField(true)->save($data)) {
@@ -142,10 +106,6 @@ class StorageStyle extends CareyShop
         if (!$result) {
             return is_null($result) ? $this->setError('数据不存在') : false;
         }
-
-        // 处理新旧缩放规格
-        $this->setScale($data, $result->getAttr('scale'));
-        unset($data['storage_style_id']);
 
         if (false !== $result->allowField(true)->save($data)) {
             Cache::clear('StorageStyle');
