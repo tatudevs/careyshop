@@ -59,28 +59,37 @@ class StorageStyle extends CareyShop
     /**
      * 处理缩放规格
      * @access private
-     * @param  array $data    外部数据
-     * @param  array $oldData 旧缩放规格数据
+     * @param  array $data    外部请求数据
+     * @param  array $oldData 原始缩放数据
      * @return void
      */
     private function setScale(&$data, $oldData = null)
     {
-        if (isset($data['size']) && isset($data['crop'])) {
-            foreach ($data as $key => $value) {
-                if (!in_array($key, ['size', 'crop'], true)) {
-                    continue;
-                }
-
-                $data['scale'][$key] = $value;
-            }
+        // 构建初始数据结构
+        if ($oldData) {
+            $structure = $oldData;
         } else {
-            null == $oldData ?: $data['scale'] = $oldData;
-            !isset($data['size']) ?: $data['scale']['size'] = $data['size'];
-            !isset($data['crop']) ?: $data['scale']['crop'] = $data['crop'];
+            $structure = [
+                'pc'     => ['size' => [], 'crop' => []],
+                'mobile' => ['size' => [], 'crop' => []],
+            ];
         }
 
-        !empty($data['scale']['size']) ?: $data['scale']['size'] = [];
-        !empty($data['scale']['crop']) ?: $data['scale']['crop'] = [];
+        // 将提交的数据实际写入结构中
+        if (isset($data['scale'])) {
+            $typeList = ['pc', 'mobile'];
+            foreach ($typeList as $value) {
+                if (!empty($data['scale'][$value]['size'])) {
+                    $structure[$value]['size'] = $data['scale'][$value]['size'];
+                }
+
+                if (!empty($data['scale'][$value]['crop'])) {
+                    $structure[$value]['crop'] = $data['scale'][$value]['crop'];
+                }
+            }
+        }
+
+        $data['scale'] = $structure;
     }
 
     /**
@@ -96,9 +105,9 @@ class StorageStyle extends CareyShop
             return false;
         }
 
-        // 避免无关字段,并且处理缩放规格
+        // 处理缩放规格,并且避免无关字段
         $this->setScale($data);
-        unset($data['storage_style_id'], $data['size'], $data['crop']);
+        unset($data['storage_style_id']);
 
         if (false !== $this->allowField(true)->save($data)) {
             return $this->toArray();
@@ -137,7 +146,7 @@ class StorageStyle extends CareyShop
 
         // 处理新旧缩放规格
         $this->setScale($data, $result->getAttr('scale'));
-        unset($data['storage_style_id'], $data['size'], $data['crop']);
+        unset($data['storage_style_id']);
 
         if (false !== $result->allowField(true)->save($data)) {
             Cache::clear('StorageStyle');
@@ -188,7 +197,7 @@ class StorageStyle extends CareyShop
 
             $query
                 ->cache(true, null, 'StorageStyle')
-                ->field('scale,quality,type,style')
+                ->field('scale,quality,suffix,style')
                 ->where($map);
         });
 
