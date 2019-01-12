@@ -236,10 +236,10 @@ class Upload extends CareyShop
 
         if (empty($url['url_prefix'])) {
             header('status: 404 Not Found', true, 404);
-            exit;
+        } else {
+            header('Location:' . $url['url_prefix'], true, 301);
         }
 
-        header('Location:' . $url['url_prefix'], true, 301);
         exit;
     }
 

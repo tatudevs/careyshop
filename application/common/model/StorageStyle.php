@@ -77,8 +77,7 @@ class StorageStyle extends CareyShop
 
         // 将提交的数据实际写入结构中
         if (isset($data['scale'])) {
-            $typeList = ['pc', 'mobile'];
-            foreach ($typeList as $value) {
+            foreach (['pc', 'mobile'] as $value) {
                 if (!empty($data['scale'][$value]['size'])) {
                     $structure[$value]['size'] = $data['scale'][$value]['size'];
                 }
