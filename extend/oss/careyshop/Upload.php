@@ -411,13 +411,27 @@ class Upload extends UploadBase
             $thumb = str_replace(IS_WIN ? '/' : '\\', DS, $thumb);
             !is_dir($thumb) && mkdir($thumb, 0755, true);
 
+            // 处理缩放样式
+            $resize = Image::THUMB_SCALING;
+            if (isset($param['resize'])) {
+                switch ($param['resize']) {
+                    case 'fixed':
+                        $resize = Image::THUMB_FIXED;
+                        break;
+
+                    case 'pad':
+                        $resize = Image::THUMB_PAD;
+                        break;
+                }
+            }
+
             // 处理缩放尺寸、裁剪尺寸
             foreach ($param as $key => $value) {
                 switch ($key) {
                     case 'size':
                         $sWidth <= 0 && $sWidth = $sHeight;
                         $sHeight <= 0 && $sHeight = $sWidth;
-                        $imageFile->thumb($sWidth, $sHeight, Image::THUMB_PAD);
+                        $imageFile->thumb($sWidth, $sHeight, $resize);
                         break;
 
                     case 'crop':

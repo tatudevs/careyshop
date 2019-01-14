@@ -156,7 +156,7 @@ class StorageStyle extends CareyShop
 
             $query
                 ->cache(true, null, 'StorageStyle')
-                ->field('scale,quality,suffix,style')
+                ->field('scale,resize,quality,suffix,style')
                 ->where($map);
         });
 
