@@ -311,6 +311,7 @@ class Upload extends UploadBase
                     }
                     break;
 
+                case 'resize':
                 case 'format':
                 case 'quality':
                     if (is_string($value) || is_numeric($value)) {
