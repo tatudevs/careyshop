@@ -230,6 +230,12 @@ class Upload extends UploadBase
         // 自定义附件名
         $filename = $this->request->param('x:filename');
 
+        // 对外访问域名
+        $host = Config::get('careyshop_url.value', 'upload');
+        if (!$host) {
+            $host = $this->request->host();
+        }
+
         // 写入库数据准备
         $data = [
             'parent_id' => (int)$this->request->param('x:parent_id', 0),
@@ -240,7 +246,7 @@ class Upload extends UploadBase
             'pixel'     => $isImage ? ['width' => $width, 'height' => $height] : [],
             'hash'      => $info->hash('sha1'),
             'path'      => $path,
-            'url'       => $this->request->host() . $path . '?type=' . self::MODULE,
+            'url'       => $host . $path . '?type=' . self::MODULE,
             'protocol'  => self::MODULE,
             'type'      => $isImage ? 0 : 1,
         ];
