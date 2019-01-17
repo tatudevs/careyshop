@@ -399,4 +399,15 @@ class Upload extends UploadBase
 
         return $this->setError($err->message());
     }
+
+    /**
+     * 清除缩略图文件夹
+     * @access public
+     * @param  string $path 路径
+     * @return void
+     */
+    public function clearThumb($path)
+    {
+        // 暂不需要
+    }
 }

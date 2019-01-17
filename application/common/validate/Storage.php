@@ -103,6 +103,9 @@ class Storage extends CareyShop
         'del'            => [
             'storage_id' => 'require|arrayHasOnlyInts',
         ],
+        'thumb'          => [
+            'storage_id' => 'require|integer|gt:0',
+        ],
         'replace'        => [
             'storage_id' => 'require|integer|gt:0',
         ],

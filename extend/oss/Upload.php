@@ -168,4 +168,11 @@ abstract class Upload
      * @return bool
      */
     abstract protected function delFileList();
+
+    /**
+     * 批量删除资源
+     * @access protected
+     * @return void
+     */
+    abstract protected function clearThumb($path);
 }

@@ -523,4 +523,36 @@ class Storage extends CareyShop
             return $this->setError($e->getMessage());
         }
     }
+
+    /**
+     * 清除图片资源缓存
+     * @access public
+     * @param  array $data 外部数据
+     * @return bool
+     */
+    public function clearStorageThumb($data)
+    {
+        if (!$this->validateData($data, 'Storage.thumb')) {
+            return false;
+        }
+
+        $result = self::get(function ($query) use ($data) {
+            $map['storage_id'] = ['eq', $data['storage_id']];
+            $map['type'] = ['eq', 0];
+
+            $query->where($map)->field('path,protocol');
+        });
+
+        if (!$result) {
+            return is_null($result) ? $this->setError('资源图片不存在') : false;
+        }
+
+        $path = ROOT_PATH . 'public' . $result['path'];
+        $path = str_replace(IS_WIN ? '/' : '\\', DS, $path);
+
+        $ossObject = (new Upload())->createOssObject($result['protocol']);
+        $ossObject->clearThumb($path);
+
+        return true;
+    }
 }

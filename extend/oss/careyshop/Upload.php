@@ -483,11 +483,11 @@ class Upload extends UploadBase
 
     /**
      * 清除缩略图文件夹
-     * @access private
+     * @access public
      * @param  string $path 路径
      * @return void
      */
-    private function clearThumb($path)
+    public function clearThumb($path)
     {
         // 去掉后缀名,获得目录路径
         $thumb = mb_substr($path, 0, mb_strripos($path, '.', null, 'utf-8'), 'utf-8');
