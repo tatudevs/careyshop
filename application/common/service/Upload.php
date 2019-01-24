@@ -246,9 +246,10 @@ class Upload extends CareyShop
     /**
      * 获取资源缩略图实际路径
      * @access public
+     * @param  bool $getObject 是否返回OSS组件对象
      * @return mixed
      */
-    public function getThumbUrl()
+    public function getThumbUrl($getObject = false)
     {
         // 补齐协议地址
         $request = Request::instance();
@@ -304,9 +305,41 @@ class Upload extends CareyShop
         $url = $ossObject->getThumbUrl($urlArray);
         $notPrefix = preg_replace($pattern, '', $url);
 
-        return [
+        $data = [
             'url'        => $notPrefix,
             'url_prefix' => strval($url),
         ];
+
+        if ($getObject) {
+            $data['ossObject'] = &$ossObject;
+        }
+
+        return $data;
+    }
+
+    public function getDownload()
+    {
+        // 下载的资源还是需要经过样式处理
+        $url = $this->getThumbUrl(true);
+        $request = Request::instance();
+
+        // 文件不存在,则返回 404 错误提示
+        if (empty($url['url_prefix'])) {
+            header('status: 404 Not Found', true, 404);
+            exit();
+        }
+
+        // 不需要强制另存为文件名,也直接返回
+        if (!$request->has('filename')) {
+            header('Location:' . $url['url_prefix'], true, 301);
+            exit();
+        }
+
+        // 最终的处理方式由组件决定
+        if (isset($url['ossObject'])) {
+            $url['ossObject']->getDownload($url['url_prefix'], $request->get('filename'));
+        }
+
+        exit();
     }
 }

@@ -520,4 +520,47 @@ class Upload extends UploadBase
 
         return true;
     }
+
+    /**
+     * 响应实际下载路径
+     * @access public
+     * @param  string $url      路径
+     * @param  string $filename 文件名
+     * @return void
+     */
+    public function getDownload($url, $filename = '')
+    {
+        $fileInfo = parse_url($url);
+        $filePath = ROOT_PATH . 'public' . $fileInfo['path'];
+        $filePath = str_replace(IS_WIN ? '/' : '\\', DS, $filePath);
+
+        if (!file_exists($filePath)) {
+            header('status: 404 Not Found', true, 404);
+        } else {
+            $filename = urlencode($filename);
+            $filename = str_replace('+', '%20', $filename);
+
+            $ua = $this->request->header('user-agent');
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+
+            if (preg_match('/MSIE/', $ua)) {
+                header('Content-Disposition: attachment; filename="' . $filename . '"');
+            } else if (preg_match('/Firefox/', $ua)) {
+                header('Content-Disposition: attachment; filename*="utf8\'\'' . $filename . '"');
+            } else {
+                header('Content-Disposition: attachment; filename="' . $filename . '"');
+            }
+
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($filePath));
+            ob_clean();
+            flush();
+            readfile($filePath);
+            exit();
+        }
+    }
 }

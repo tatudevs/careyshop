@@ -101,6 +101,7 @@ class Upload extends UploadBase
             ['name' => 'key', 'type' => 'hidden', 'default' => $this->replace],
             ['name' => 'success_action_status', 'type' => 'hidden', 'default' => 200],
             ['name' => 'file', 'type' => 'file', 'default' => ''],
+            ['name' => 'Content-Disposition', 'type' => 'hidden', 'default' => '']
         ];
 
         return ['upload_url' => $uploadUrl, 'module' => self::MODULE, 'param' => $param];
@@ -516,5 +517,17 @@ class Upload extends UploadBase
     public function clearThumb($path)
     {
         // 暂不需要
+    }
+
+    /**
+     * 响应实际下载路径
+     * @access public
+     * @param  string $url 路径
+     * @return void
+     */
+    public function getDownload($url)
+    {
+        header('Location:' . $url, true, 301);
+        exit();
     }
 }

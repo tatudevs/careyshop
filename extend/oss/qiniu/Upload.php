@@ -410,4 +410,18 @@ class Upload extends UploadBase
     {
         // 暂不需要
     }
+
+    /**
+     * 响应实际下载路径
+     * @access public
+     * @param  string $url      路径
+     * @param  string $filename 文件名
+     * @return void
+     */
+    public function getDownload($url, $filename = '')
+    {
+        $url .= '&attname=' . urlencode($filename);
+        header('Location:' . $url, true, 301);
+        exit();
+    }
 }
