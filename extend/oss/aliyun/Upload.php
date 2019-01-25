@@ -418,7 +418,9 @@ class Upload extends UploadBase
     public function getThumbUrl($urlArray)
     {
         // 初始化数据并拼接不带查询条件的URL
+        $fileInfo = pathinfo($urlArray['path']);
         $param = $this->request->param();
+        $extension = ['jpg', 'png', 'bmp', 'webp', 'gif', 'tiff'];
         $options = '?x-oss-process=image/';
         $url = sprintf('%s://%s%s', $urlArray['scheme'], $urlArray['host'], $urlArray['path']);
 
@@ -426,6 +428,11 @@ class Upload extends UploadBase
         if (!empty($param['style'])) {
             $style = mb_substr($param['style'], 0, 1, 'utf-8');
             $url .= in_array($style, ['-', '_', '/', '!'], true) ? $param['style'] : '?x-oss-process=style/' . $param['style'];
+            return $url;
+        }
+
+        // 非图片资源则直接返回
+        if (!in_array(strtolower($fileInfo['extension']), $extension, true)) {
             return $url;
         }
 
@@ -472,7 +479,7 @@ class Upload extends UploadBase
 
         // 处理输出格式
         if (!empty($param['suffix'])) {
-            if (in_array($param['type'], ['jpg', 'png', 'bmp', 'webp', 'gif', 'tiff'], true)) {
+            if (in_array($param['suffix'], $extension, true)) {
                 $options .= 'format,' . $param['suffix'] . '/';
             }
         }

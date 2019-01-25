@@ -297,13 +297,20 @@ class Upload extends UploadBase
     public function getThumbUrl($urlArray)
     {
         // 初始化数据并拼接不带查询条件的URL
+        $fileInfo = pathinfo($urlArray['path']);
         $param = $this->request->param();
+        $extension = ['jpg', 'png', 'svg', 'gif', 'bmp', 'tiff', 'webp'];
         $options = '?imageMogr2/auto-orient/';
         $url = sprintf('%s://%s%s', $urlArray['scheme'], $urlArray['host'], $urlArray['path']);
 
         // 带样式则直接返回
         if (!empty($param['style'])) {
             return $url . $param['style'];
+        }
+
+        // 非图片资源则直接返回
+        if (!in_array(strtolower($fileInfo['extension']), $extension, true)) {
+            return $url;
         }
 
         // 检测尺寸是否正确
@@ -360,7 +367,7 @@ class Upload extends UploadBase
 
         // 处理输出格式
         if (!empty($param['suffix'])) {
-            if (in_array($param['suffix'], ['jpg', 'png', 'svg', 'gif', 'bmp', 'tiff', 'webp'], true)) {
+            if (in_array($param['suffix'], $extension, true)) {
                 $options .= 'format/' . $param['suffix'] . '/';
             }
         }
