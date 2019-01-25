@@ -101,7 +101,6 @@ class Upload extends UploadBase
             ['name' => 'key', 'type' => 'hidden', 'default' => $this->replace],
             ['name' => 'success_action_status', 'type' => 'hidden', 'default' => 200],
             ['name' => 'file', 'type' => 'file', 'default' => ''],
-            ['name' => 'Content-Disposition', 'type' => 'hidden', 'default' => '']
         ];
 
         return ['upload_url' => $uploadUrl, 'module' => self::MODULE, 'param' => $param];
@@ -529,12 +528,39 @@ class Upload extends UploadBase
     /**
      * 响应实际下载路径
      * @access public
-     * @param  string $url 路径
+     * @param  string $url      路径
+     * @param  string $filename 文件名
      * @return void
      */
-    public function getDownload($url)
+    public function getDownload($url, $filename = '')
     {
-        header('Location:' . $url, true, 301);
+        // 拆分 URL 链接
+        $urlArray = parse_url($url);
+
+        $accessKeyId = Config::get('aliyun_access_key.value', 'upload');
+        $accessKeySecret = Config::get('aliyun_secret_key.value', 'upload');
+        $endPoint = Config::get('aliyun_endpoint.value', 'upload');
+        $bucket = Config::get('aliyun_bucket.value', 'upload');
+        $object = mb_substr($urlArray['path'], 1, null, 'UTF-8');
+
+        // 请求参数
+        $filename = urlencode($filename);
+        $options = ['response-content-disposition' => "attachment; filename=\"$filename\""];
+
+        if (isset($urlArray['query'])) {
+            $style = str_ireplace('x-oss-process=', '', $urlArray['query']);
+            $options[OssClient::OSS_PROCESS] = $style;
+        }
+
+        try {
+            $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endPoint);
+            $results = $ossClient->signUrl($bucket, $object, 60, OssClient::OSS_HTTP_GET, $options);
+
+            header('Location:' . $results, true, 301);
+        } catch (OssException $e) {
+            header('status: 505 HTTP Version Not Supported', true, 505);
+        }
+
         exit();
     }
 }

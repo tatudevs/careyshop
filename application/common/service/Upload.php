@@ -317,6 +317,11 @@ class Upload extends CareyShop
         return $data;
     }
 
+    /**
+     * 获取资源下载链接
+     * @access public
+     * @return void
+     */
     public function getDownload()
     {
         // 下载的资源还是需要经过样式处理

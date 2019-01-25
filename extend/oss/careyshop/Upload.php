@@ -569,7 +569,7 @@ class Upload extends UploadBase
 
                 fclose($fp);
             } catch (\Exception $e) {
-                header($e->getMessage(), true, 505);
+                header('status: 505 HTTP Version Not Supported', true, 505);
             }
 
             exit();
