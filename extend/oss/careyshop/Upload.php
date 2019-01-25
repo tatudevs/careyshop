@@ -534,32 +534,44 @@ class Upload extends UploadBase
         $filePath = ROOT_PATH . 'public' . $fileInfo['path'];
         $filePath = str_replace(IS_WIN ? '/' : '\\', DS, $filePath);
 
-        if (!file_exists($filePath)) {
+        if (!is_readable($filePath)) {
             header('status: 404 Not Found', true, 404);
         } else {
-            $filename = urlencode($filename);
-            $filename = str_replace('+', '%20', $filename);
+            // 设置超时时间,避免文件读取过长而导致内容不全
+            set_time_limit(0);
 
-            $ua = $this->request->header('user-agent');
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
+            try {
+                $sumBuffer = 0;
+                $readBuffer = 2048;
+                $fp = fopen($filePath, 'rb');
+                $size = filesize($filePath);
+                $ua = $this->request->header('user-agent');
 
-            if (preg_match('/MSIE/', $ua)) {
-                header('Content-Disposition: attachment; filename="' . $filename . '"');
-            } else if (preg_match('/Firefox/', $ua)) {
-                header('Content-Disposition: attachment; filename*="utf8\'\'' . $filename . '"');
-            } else {
-                header('Content-Disposition: attachment; filename="' . $filename . '"');
+                $encodedFileName = urlencode($filename);
+                $encodedFileName = str_replace('+', '%20', $encodedFileName);
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Accept-Ranges: bytes');
+                header('Accept-Length: ' . $size);
+
+                if (preg_match('/Trident/', $ua)) {
+                    header('Content-Disposition: attachment; filename="' . $encodedFileName . '"');
+                } else if (preg_match('/Firefox/', $ua)) {
+                    header('Content-Disposition: attachment; filename*="utf8\'\'' . $filename . '"');
+                } else {
+                    header('Content-Disposition: attachment; filename="' . $filename . '"');
+                }
+
+                while (!feof($fp) && $sumBuffer < $size) {
+                    echo fread($fp, $readBuffer);
+                    $sumBuffer += $readBuffer;
+                }
+
+                fclose($fp);
+            } catch (\Exception $e) {
+                header($e->getMessage(), true, 505);
             }
 
-            header('Content-Transfer-Encoding: binary');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($filePath));
-            ob_clean();
-            flush();
-            readfile($filePath);
             exit();
         }
     }
