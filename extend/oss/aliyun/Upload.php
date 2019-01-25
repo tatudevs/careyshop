@@ -542,9 +542,11 @@ class Upload extends UploadBase
         $endPoint = Config::get('aliyun_endpoint.value', 'upload');
         $bucket = Config::get('aliyun_bucket.value', 'upload');
         $object = mb_substr($urlArray['path'], 1, null, 'UTF-8');
+        $timeout = 3600;
 
         // 请求参数
         $filename = urlencode($filename);
+        $filename = str_replace('+', '%20', $filename);
         $options = ['response-content-disposition' => "attachment; filename=\"$filename\""];
 
         if (isset($urlArray['query'])) {
@@ -554,8 +556,9 @@ class Upload extends UploadBase
 
         try {
             $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endPoint);
-            $results = $ossClient->signUrl($bucket, $object, 60, OssClient::OSS_HTTP_GET, $options);
+            $results = $ossClient->signUrl($bucket, $object, $timeout, OssClient::OSS_HTTP_GET, $options);
 
+            header('Cache-Control: max-age=' . $timeout);
             header('Location:' . $results, true, 301);
         } catch (OssException $e) {
             header('status: 505 HTTP Version Not Supported', true, 505);

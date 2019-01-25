@@ -427,7 +427,10 @@ class Upload extends UploadBase
      */
     public function getDownload($url, $filename = '')
     {
-        $url .= '&attname=' . urlencode($filename);
+        $filename = urlencode($filename);
+        $filename = str_replace('+', '%20', $filename);
+
+        $url .= '&attname=' . $filename;
         header('Location:' . $url, true, 301);
         exit();
     }
