@@ -22,7 +22,7 @@ class StorageStyle extends CareyShop
         'code'             => 'require|max:32|alphaDash|unique:storage_style,code,0,storage_style_id',
         'platform'         => 'require|integer|between:-128,127',
         'scale'            => 'max:2|array',
-        'resize'           => 'in:scaling,fixed,pad',
+        'resize'           => 'in:scaling,proportion,pad',
         'quality'          => 'integer|between:0,100',
         'suffix'           => 'in:jpg,png,svg,gif,bmp,tiff,webp',
         'style'            => 'max:64|alphaDash',

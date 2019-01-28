@@ -419,16 +419,16 @@ class Upload extends UploadBase
             !is_dir($thumb) && mkdir($thumb, 0755, true);
 
             // 处理缩放样式
+            $isProportion = false;
             $resize = Image::THUMB_SCALING;
-            if (isset($param['resize'])) {
-                switch ($param['resize']) {
-                    case 'fixed':
-                        $resize = Image::THUMB_FIXED;
-                        break;
 
-                    case 'pad':
-                        $resize = Image::THUMB_PAD;
-                        break;
+            if (isset($param['resize'])) {
+                if ('pad' === $param['resize']) {
+                    $resize = Image::THUMB_PAD;
+                }
+
+                if ('proportion' === $param['resize']) {
+                    $isProportion = true;
                 }
             }
 
@@ -436,8 +436,15 @@ class Upload extends UploadBase
             foreach ($param as $key => $value) {
                 switch ($key) {
                     case 'size':
-                        $sWidth <= 0 && $sWidth = $sHeight;
-                        $sHeight <= 0 && $sHeight = $sWidth;
+                        if ($isProportion) {
+                            list($sWidth, $sHeight) = $imageFile->size();
+                            $sWidth = ($param['size'][0] / 100) * $sWidth;
+                            $sHeight = ($param['size'][0] / 100) * $sHeight;
+                        } else {
+                            $sWidth <= 0 && $sWidth = $imageFile->width();
+                            $sHeight <= 0 && $sHeight = $imageFile->height();
+                        }
+
                         $imageFile->thumb($sWidth, $sHeight, $resize);
                         break;
 

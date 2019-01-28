@@ -235,16 +235,17 @@ class Upload extends UploadBase
      * @access private
      * @param  int  $width   宽度
      * @param  int  $height  高度
-     * @param  bool $isFixed 是否是固定宽高
+     * @param  bool $isFixed 是否固定宽高
      * @return string
      */
     private function getSizeParam($width, $height, $isFixed)
     {
         $options = 'thumbnail/';
+        $options .= $isFixed ? '!' : '';
         $options .= $width != 0 ? (int)$width : '';
         $options .= 'x';
         $options .= $height != 0 ? (int)$height : '';
-        $options .= $isFixed ? '!/' : '/';
+        $options .= $isFixed ? 'r/' : '>/';
 
         return $options;
     }
@@ -333,8 +334,6 @@ class Upload extends UploadBase
             switch ($key) {
                 case 'size':
                     $last = 'size';
-                    empty($sWidth) && $sWidth = $sHeight;
-                    empty($sHeight) && $sHeight = $sWidth;
                     $extent = [$sWidth, $sHeight];
                     $options .= $this->getSizeParam($sWidth, $sHeight, $isFixed);
                     break;
