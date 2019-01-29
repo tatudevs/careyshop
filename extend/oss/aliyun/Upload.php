@@ -377,17 +377,22 @@ class Upload extends UploadBase
      * @access private
      * @param  int    $width  宽度
      * @param  int    $height 高度
-     * @param  string $resize 高度
+     * @param  string $resize 缩放方式
      * @return string
      */
     private function getSizeParam($width, $height, $resize)
     {
         $options = 'resize,';
-        $options .= $width != 0 ? sprintf('w_%d,', $width) : '';
-        $options .= $height != 0 ? sprintf('h_%d,', $height) : '';
-        $options .= $resize;
-        $options .= '/';
+        if ('proportion' === $resize) {
+            $options .= sprintf('p_%d', $width);
+        } else {
+            $type = 'pad' === $resize ? 'm_pad' : 'm_lfit';
+            $options .= $width != 0 ? sprintf('w_%d,', $width) : '';
+            $options .= $height != 0 ? sprintf('h_%d,', $height) : '';
+            $options .= $type;
+        }
 
+        $options .= '/';
         return $options;
     }
 
@@ -441,24 +446,11 @@ class Upload extends UploadBase
             return $url;
         }
 
-        // 处理缩放样式
-        $resize = 'm_lfit';
-        if (isset($param['resize'])) {
-            switch ($param['resize']) {
-                case 'fixed':
-                    $resize = 'm_fixed';
-                    break;
-
-                case 'pad':
-                    $resize = 'm_pad';
-                    break;
-            }
-        }
-
         // 处理缩放尺寸、裁剪尺寸
         foreach ($param as $key => $value) {
             switch ($key) {
                 case 'size':
+                    $resize = isset($param['resize']) ? $param['resize'] : '';
                     $options .= $this->getSizeParam($sWidth, $sHeight, $resize);
                     break;
 

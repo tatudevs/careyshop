@@ -363,6 +363,28 @@ class Upload extends UploadBase
     }
 
     /**
+     * 获取缩略大小请求参数
+     * @param int    $width     宽度
+     * @param int    $height    高度
+     * @param mixed  $imageFile 图片文件
+     * @param string $resize    缩放方式
+     */
+    private function getSizeParam(&$width, &$height, $imageFile, $resize)
+    {
+        if ('pad' === $resize) {
+            $width <= 0 && $width = $height;
+            $height <= 0 && $height = $width;
+        } else if ('proportion' === $resize) {
+            list($sWidth, $sHeight) = $imageFile->size();
+            $width = ($width / 100) * $sWidth;
+            $height = ($width / 100) * $sHeight;
+        } else {
+            $width <= 0 && $width = $imageFile->width();
+            $height <= 0 && $height = $imageFile->height();
+        }
+    }
+
+    /**
      * 获取资源缩略图实际路径
      * @access public
      * @param  array $urlArray 路径结构
@@ -419,33 +441,15 @@ class Upload extends UploadBase
             !is_dir($thumb) && mkdir($thumb, 0755, true);
 
             // 处理缩放样式
-            $isProportion = false;
-            $resize = Image::THUMB_SCALING;
-
-            if (isset($param['resize'])) {
-                if ('pad' === $param['resize']) {
-                    $resize = Image::THUMB_PAD;
-                }
-
-                if ('proportion' === $param['resize']) {
-                    $isProportion = true;
-                }
-            }
+            $resize = isset($param['resize']) ? $param['resize'] : 'scaling';
+            $type = 'pad' === $resize ? Image::THUMB_PAD : Image::THUMB_SCALING;
 
             // 处理缩放尺寸、裁剪尺寸
             foreach ($param as $key => $value) {
                 switch ($key) {
                     case 'size':
-                        if ($isProportion) {
-                            list($sWidth, $sHeight) = $imageFile->size();
-                            $sWidth = ($param['size'][0] / 100) * $sWidth;
-                            $sHeight = ($param['size'][0] / 100) * $sHeight;
-                        } else {
-                            $sWidth <= 0 && $sWidth = $imageFile->width();
-                            $sHeight <= 0 && $sHeight = $imageFile->height();
-                        }
-
-                        $imageFile->thumb($sWidth, $sHeight, $resize);
+                        $this->getSizeParam($sWidth, $sHeight, $imageFile, $resize);
+                        $imageFile->thumb($sWidth, $sHeight, $type);
                         break;
 
                     case 'crop':

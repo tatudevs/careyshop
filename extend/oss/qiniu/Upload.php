@@ -233,20 +233,24 @@ class Upload extends UploadBase
     /**
      * 获取缩略大小请求参数
      * @access private
-     * @param  int  $width   宽度
-     * @param  int  $height  高度
-     * @param  bool $isFixed 是否固定宽高
+     * @param  int    $width  宽度
+     * @param  int    $height 高度
+     * @param  string $resize 缩放方式
      * @return string
      */
-    private function getSizeParam($width, $height, $isFixed)
+    private function getSizeParam($width, $height, $resize)
     {
         $options = 'thumbnail/';
-        $options .= $isFixed ? '!' : '';
-        $options .= $width != 0 ? (int)$width : '';
-        $options .= 'x';
-        $options .= $height != 0 ? (int)$height : '';
-        $options .= $isFixed ? 'r/' : '>/';
+        if ('proportion' === $resize) {
+            $options .= sprintf('!%dp', $width);
+        } else {
+            $options .= $width != 0 ? (int)$width : '';
+            $options .= 'x';
+            $options .= $height != 0 ? (int)$height : '';
+            $options .= 'pad' !== $resize ? '>' : '';
+        }
 
+        $options .= '/';
         return $options;
     }
 
@@ -321,10 +325,6 @@ class Upload extends UploadBase
             return $url;
         }
 
-        // 处理缩放尺寸、裁剪尺寸
-        $isPad = isset($param['resize']) && 'pad' === $param['resize'];
-        $isFixed = isset($param['resize']) && 'fixed' === $param['resize'];
-
         // 画布最后的尺寸初始化
         $last = 'size';
         $extent = [0, 0];
@@ -334,8 +334,15 @@ class Upload extends UploadBase
             switch ($key) {
                 case 'size':
                     $last = 'size';
+                    $resize = isset($param['resize']) ? $param['resize'] : '';
+
+                    if ('pad' === $resize) {
+                        empty($sWidth) && $sWidth = $sHeight;
+                        empty($sHeight) && $sHeight = $sWidth;
+                    }
+
                     $extent = [$sWidth, $sHeight];
-                    $options .= $this->getSizeParam($sWidth, $sHeight, $isFixed);
+                    $options .= $this->getSizeParam($sWidth, $sHeight, $resize);
                     break;
 
                 case 'crop':
@@ -353,7 +360,7 @@ class Upload extends UploadBase
         }
 
         // 处理画布尺寸
-        if ($isPad) {
+        if (isset($param['resize']) && 'pad' === $param['resize']) {
             $options .= $this->getExtentParam($extent[0], $extent[1]);
         }
 
