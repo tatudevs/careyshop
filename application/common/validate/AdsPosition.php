@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    广告位验证器
+ * CareyShop    广告位置验证器
  *
  * @author      zxm <252404501@qq.com>
  * @date        2017/3/29
@@ -42,20 +42,20 @@ class AdsPosition extends CareyShop
      * @var array
      */
     protected $field = [
-        'ads_position_id' => '广告位编号',
-        'code'            => '广告位编码',
-        'platform'        => '广告位平台',
-        'name'            => '广告位名称',
-        'description'     => '广告位描述',
-        'width'           => '广告位宽度',
-        'height'          => '广告位高度',
-        'content'         => '广告位默认内容',
-        'color'           => '广告位背景色',
-        'type'            => '广告位类型',
-        'display'         => '广告位展示方式',
-        'status'          => '广告位状态',
+        'ads_position_id' => '广告位置编号',
+        'code'            => '广告位置编码',
+        'platform'        => '广告位置平台',
+        'name'            => '广告位置名称',
+        'description'     => '广告位置描述',
+        'width'           => '广告位置宽度',
+        'height'          => '广告位置高度',
+        'content'         => '广告位置默认内容',
+        'color'           => '广告位置背景色',
+        'type'            => '广告位置类型',
+        'display'         => '广告位置展示方式',
+        'status'          => '广告位置状态',
         'not_empty'       => '是否存在关联广告',
-        'exclude_id'      => '广告位排除Id',
+        'exclude_id'      => '广告位置排除Id',
         'page_no'         => '页码',
         'page_size'       => '每页数量',
         'order_type'      => '排序方式',

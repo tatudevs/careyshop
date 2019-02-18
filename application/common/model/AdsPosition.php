@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    广告位模型
+ * CareyShop    广告位置模型
  *
  * @author      zxm <252404501@qq.com>
  * @date        2017/3/29
@@ -67,7 +67,7 @@ class AdsPosition extends CareyShop
     }
 
     /**
-     * 添加一个广告位
+     * 添加一个广告位置
      * @access public
      * @param  array $data 外部数据
      * @return array|false
@@ -91,7 +91,7 @@ class AdsPosition extends CareyShop
     }
 
     /**
-     * 编辑一个广告位
+     * 编辑一个广告位置
      * @access public
      * @param  array $data 外部数据
      * @return array|false
@@ -108,7 +108,7 @@ class AdsPosition extends CareyShop
             $map['code'] = ['eq', $data['code']];
 
             if (self::checkUnique($map)) {
-                return $this->setError('广告位编码已存在');
+                return $this->setError('广告位置编码已存在');
             }
         }
 
@@ -137,7 +137,7 @@ class AdsPosition extends CareyShop
     }
 
     /**
-     * 批量删除广告位(支持检测是否存在关联广告)
+     * 批量删除广告位置(支持检测是否存在关联广告)
      * @access public
      * @param  array $data 外部数据
      * @return bool
@@ -161,7 +161,7 @@ class AdsPosition extends CareyShop
             });
 
             if ($result) {
-                $error = 'Id:' . $result->getAttr('ads_position_id') . ' 广告位"';
+                $error = 'Id:' . $result->getAttr('ads_position_id') . ' 广告位置"';
                 $error .= $result->getAttr('name') . '"存在关联广告';
                 return $this->setError($error);
             }
@@ -173,7 +173,7 @@ class AdsPosition extends CareyShop
     }
 
     /**
-     * 验证广告位编号是否唯一
+     * 验证广告位置编号是否唯一
      * @access public
      * @param  array $data 外部数据
      * @return bool
@@ -188,14 +188,14 @@ class AdsPosition extends CareyShop
         !isset($data['exclude_id']) ?: $map['ads_position_id'] = ['neq', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
-            return $this->setError('广告位编码已存在');
+            return $this->setError('广告位置编码已存在');
         }
 
         return true;
     }
 
     /**
-     * 批量设置广告位状态
+     * 批量设置广告位置状态
      * @access public
      * @param  array $data 外部数据
      * @return bool
@@ -215,7 +215,7 @@ class AdsPosition extends CareyShop
     }
 
     /**
-     * 获取一个广告位
+     * 获取一个广告位置
      * @access public
      * @param  array $data 外部数据
      * @return array|false
@@ -287,7 +287,7 @@ class AdsPosition extends CareyShop
     }
 
     /**
-     * 获取广告位选择列表
+     * 获取广告位置选择列表
      * @access public
      * @param  array $data 外部数据
      * @return array|false
@@ -318,7 +318,7 @@ class AdsPosition extends CareyShop
     }
 
     /**
-     * 根据广告位编码获取广告
+     * 根据广告位置编码获取广告
      * @access public
      * @param  array $data 外部数据
      * @return array|false
