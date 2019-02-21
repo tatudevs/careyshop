@@ -296,6 +296,6 @@ if (!function_exists('is_empty_parm')) {
      */
     function is_empty_parm(&$parm)
     {
-        return !(isset($parm) && '' != $parm);
+        return !(isset($parm) && '' !== $parm);
     }
 }
