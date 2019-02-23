@@ -116,6 +116,8 @@ class AdsPosition extends CareyShop
             'type'     => 'in:0,1',
             'display',
             'status',
+            'order_type',
+            'order_field',
         ],
     ];
 }

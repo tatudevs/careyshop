@@ -284,10 +284,17 @@ class Brand extends CareyShop
             $map['status'] = ['eq', 1];
             !isset($data['goods_category_id']) ?: $map['goods_category_id'] = ['in', $data['goods_category_id']];
 
+            // 排序方式
+            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
+
+            // 排序的字段
+            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'brand_id';
+
             $query
                 ->cache(true, null, 'Brand')
                 ->field('goods_category_id,brand_id,name,phonetic,logo')
-                ->where($map);
+                ->where($map)
+                ->order([$orderField => $orderType]);
         });
 
         if (false !== $result) {

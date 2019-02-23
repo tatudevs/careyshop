@@ -83,6 +83,8 @@ class DeliveryItem extends CareyShop
         ],
         'select' => [
             'type' => 'integer|between:0,3',
+            'order_type',
+            'order_field',
         ],
         'hot'    => [
             'delivery_item_id' => 'require|integer|gt:0',

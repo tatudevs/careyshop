@@ -307,7 +307,16 @@ class AdsPosition extends CareyShop
             is_empty_parm($data['display']) ?: $map['display'] = ['eq', $data['display']];
             is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
 
-            $query->field('description,width,height,content,color', true)->where($map);
+            // 排序方式
+            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
+
+            // 排序的字段
+            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'ads_position_id';
+
+            $query
+                ->field('description,width,height,content,color', true)
+                ->where($map)
+                ->order([$orderField => $orderType]);
         });
 
         if (false !== $result) {

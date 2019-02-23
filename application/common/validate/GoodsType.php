@@ -66,5 +66,9 @@ class GoodsType extends CareyShop
         'del'    => [
             'goods_type_id' => 'require|arrayHasOnlyInts',
         ],
+        'select' => [
+            'order_type',
+            'order_field',
+        ],
     ];
 }

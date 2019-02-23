@@ -282,7 +282,15 @@ class DeliveryItem extends CareyShop
             $map['is_delete'] = ['eq', 0];
             is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
 
-            $query->where($map);
+            // 排序方式
+            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
+
+            // 排序的字段
+            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'delivery_item_id';
+
+            $query
+                ->where($map)
+                ->order([$orderField => $orderType]);
         });
 
         if (false !== $result) {

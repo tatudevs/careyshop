@@ -127,13 +127,27 @@ class GoodsType extends CareyShop
     /**
      * 获取商品模型选择列表
      * @access public
+     * @param  array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getTypeSelect()
+    public function getTypeSelect($data)
     {
+        if (!$this->validateData($data, 'GoodsType.select')) {
+            return false;
+        }
+
         // 获取商品模型列表
-        $result = self::all();
+        $result = self::all(function ($query) use ($data) {
+            // 排序方式
+            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
+
+            // 排序的字段
+            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'goods_type_id';
+
+            $query->order([$orderField => $orderType]);
+        });
+
         if (false !== $result) {
             return $result->toArray();
         }
