@@ -71,10 +71,14 @@ class Auth extends CareyShop
      */
     public function check($url)
     {
-        // 超级管理员直接返回
-        if (AUTH_SUPER_ADMINISTRATOR == get_client_group()) {
-            return true;
-        }
+        /**
+         * 不能直接返回,否则后台的权限勾选失去了意义
+         * 而且部分API并不适合混用
+         */
+//        // 超级管理员直接返回
+//        if (AUTH_SUPER_ADMINISTRATOR == get_client_group()) {
+//            return true;
+//        }
 
         // 转为小写
         $url = mb_strtolower($url, 'utf-8');
