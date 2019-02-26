@@ -309,7 +309,7 @@ class Ads extends CareyShop
             $order['ads.' . $orderField] = $orderType;
 
             $query
-                ->field('ads_position_id,content', true)
+                ->field('content', true)
                 ->with('getAdsPosition')
                 ->where($map)
                 ->order($order)

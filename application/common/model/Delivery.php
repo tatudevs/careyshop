@@ -209,7 +209,7 @@ class Delivery extends CareyShop
             $order['delivery.sort'] = 'asc';
             $order[$orderField] = $orderType;
 
-            $query->field('delivery_item_id', true)->with('getDeliveryItem')->where($map)->order($order);
+            $query->with('getDeliveryItem')->where($map)->order($order);
         });
 
         if (false !== $result) {

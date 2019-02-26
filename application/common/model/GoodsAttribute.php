@@ -284,7 +284,7 @@ class GoodsAttribute extends CareyShop
             }];
 
             $query
-                ->field('goods_attribute_id,attr_name,description,icon,goods_type_id,sort')
+                ->field('attr_name,description,icon,goods_type_id,sort')
                 ->with($with)
                 ->where($map)
                 ->order($order);
