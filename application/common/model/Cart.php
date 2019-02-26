@@ -19,7 +19,7 @@ class Cart extends CareyShop
     protected $autoWriteTimestamp = true;
 
     /**
-     * 创建时间字段
+     * 创建日期字段
      * @var bool/string
      */
     protected $createTime = false;

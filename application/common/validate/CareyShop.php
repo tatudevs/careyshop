@@ -26,7 +26,7 @@ class CareyShop extends Validate
     }
 
     /**
-     * 时间是否在合理范围内
+     * 日期是否在合理范围内
      * @access public
      * @param  array $args 参数
      * @return bool
@@ -37,11 +37,11 @@ class CareyShop extends Validate
             return true;
         }
 
-        return $args[4] . '不在合理时间范围内';
+        return $args[4] . '不在合理日期范围内';
     }
 
     /**
-     * 某个字段的值是否小于某个字段(时间)
+     * 某个字段的值是否小于某个字段(日期)
      * @access public
      * @param  array $args 参数
      * @return bool
@@ -60,7 +60,7 @@ class CareyShop extends Validate
     }
 
     /**
-     * 某个字段的值是否大于某个字段(时间)
+     * 某个字段的值是否大于某个字段(日期)
      * @access public
      * @param  array $args 参数
      * @return bool

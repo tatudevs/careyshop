@@ -44,8 +44,8 @@ class Promotion extends CareyShop
     /**
      * 检测相同时间段内是否存在重复促销
      * @access private
-     * @param  string $beginTime 开始时间
-     * @param  string $endTime   结束时间
+     * @param  string $beginTime 开始日期
+     * @param  string $endTime   结束日期
      * @param  int    $excludeId 排除折扣Id
      * @return bool
      * @throws
@@ -57,7 +57,7 @@ class Promotion extends CareyShop
         $map['begin_time'] = ['< time', $endTime];
         $map['end_time'] = ['> time', $beginTime];
 
-        // 获取相同时间范围内的促销
+        // 获取相同日期范围内的促销
         $result = $this->where($map)->find();
         if (false === $result) {
             return false;

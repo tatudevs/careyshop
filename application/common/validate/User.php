@@ -59,7 +59,7 @@ class User extends CareyShop
         'group_id'      => '所属用户组',
         'status'        => '账号状态',
         'password_old'  => '原始密码',
-        'last_login'    => '登录时间',
+        'last_login'    => '登录日期',
         'account'       => '账号、昵称、手机号',
         'platform'      => '来源平台',
         'page_no'       => '页码',

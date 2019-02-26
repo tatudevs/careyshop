@@ -19,7 +19,7 @@ class CouponGive extends CareyShop
     protected $autoWriteTimestamp = true;
 
     /**
-     * 更新时间字段
+     * 更新日期字段
      * @var bool/string
      */
     protected $updateTime = false;
@@ -151,11 +151,11 @@ class CouponGive extends CareyShop
             }
 
             if (time() < $couponResult->getData('give_begin_time')) {
-                return $this->setError('优惠劵领取时间未到');
+                return $this->setError('优惠劵领取日期未到');
             }
 
             if (time() > $couponResult->getData('give_end_time')) {
-                return $this->setError('优惠劵领取时间已结束');
+                return $this->setError('优惠劵领取日期已结束');
             }
         }
 

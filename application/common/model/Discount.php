@@ -45,8 +45,8 @@ class Discount extends CareyShop
     /**
      * 检测相同时间段内是否存在重复商品
      * @access private
-     * @param  string $beginTime 开始时间
-     * @param  string $endTime   结束时间
+     * @param  string $beginTime 开始日期
+     * @param  string $endTime   结束日期
      * @param  array  $goodsList 外部商品列表
      * @param  int    $excludeId 排除折扣Id
      * @return bool
@@ -59,7 +59,7 @@ class Discount extends CareyShop
         $map['begin_time'] = ['< time', $endTime];
         $map['end_time'] = ['> time', $beginTime];
 
-        // 获取相同时间范围内的商品
+        // 获取相同日期范围内的商品
         $result = self::all(function ($query) use ($map) {
             $query->with('discountGoods')->where($map);
         });

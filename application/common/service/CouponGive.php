@@ -34,11 +34,11 @@ class CouponGive extends CareyShop
         }
 
         if (time() < strtotime($coupon['get_coupon']['use_begin_time'])) {
-            return $this->setError('优惠劵使用时间未到');
+            return $this->setError('优惠劵使用日期未到');
         }
 
         if (time() > strtotime($coupon['get_coupon']['use_end_time'])) {
-            return $this->setError('优惠劵使用时间已过期');
+            return $this->setError('优惠劵使用日期已过期');
         }
 
         if (!empty($coupon['get_coupon']['level'])) {

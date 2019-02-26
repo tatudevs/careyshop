@@ -36,8 +36,8 @@ class Promotion extends CareyShop
     protected $field = [
         'promotion_id'    => '促销编号',
         'name'            => '促销名称',
-        'begin_time'      => '促销开始时间',
-        'end_time'        => '促销结束时间',
+        'begin_time'      => '促销开始日期',
+        'end_time'        => '促销结束日期',
         'status'          => '促销状态',
         'promotion_item'  => '促销方式',
         'page_no'         => '页码',

@@ -19,7 +19,7 @@ class Verification extends CareyShop
     protected $autoWriteTimestamp = true;
 
     /**
-     * 更新时间字段
+     * 更新日期字段
      * @var bool/string
      */
     protected $updateTime = false;
@@ -48,7 +48,7 @@ class Verification extends CareyShop
         });
 
         if ($result) {
-            // 现在时间与创建时间
+            // 现在时间与创建日期
             $nowTime = time();
             $createTime = $result->getData('create_time');
 

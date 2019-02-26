@@ -31,7 +31,7 @@ class Transaction extends CareyShop
     protected $autoWriteTimestamp = true;
 
     /**
-     * 更新时间字段
+     * 更新日期字段
      * @var bool/string
      */
     protected $updateTime = false;

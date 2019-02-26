@@ -37,13 +37,13 @@ class Ask extends CareyShop
     protected $autoWriteTimestamp = true;
 
     /**
-     * 创建时间字段
+     * 创建日期字段
      * @var bool/string
      */
     protected $createTime = 'ask_time';
 
     /**
-     * 更新时间字段
+     * 更新日期字段
      * @var bool/string
      */
     protected $updateTime = 'answer_time';
