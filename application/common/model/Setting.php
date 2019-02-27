@@ -54,6 +54,14 @@ class Setting extends CareyShop
             }
         }
 
+        if (!is_empty_parm($data['code'])) {
+            if (array_key_exists($data['code'], $result)) {
+                return [$data['code'] => $result[$data['code']]];
+            } else {
+                return $this->setError('键名 '. $data['code'] . ' 不存在');
+            }
+        }
+
         return $result;
     }
 
@@ -370,6 +378,7 @@ class Setting extends CareyShop
                         break;
 
                     case 'allow_origin':
+                    case 'platform':
                         !empty($value) ?: $value = [];
                         $this->setSettingItem($key, $value, 'system_info', 'Setting.array', true);
                         break;
