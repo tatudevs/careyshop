@@ -26,20 +26,33 @@ class Upload extends CareyShop
      */
     public function getUploadModule()
     {
-        return [
+        $moduleList = [
             [
-                'name'   => \oss\careyshop\Upload::NAME,
-                'module' => \oss\careyshop\Upload::MODULE,
+                'name'    => \oss\careyshop\Upload::NAME,
+                'module'  => \oss\careyshop\Upload::MODULE,
+                'default' => 0,
             ],
             [
-                'name'   => \oss\qiniu\Upload::NAME,
-                'module' => \oss\qiniu\Upload::MODULE,
+                'name'    => \oss\qiniu\Upload::NAME,
+                'module'  => \oss\qiniu\Upload::MODULE,
+                'default' => 0,
             ],
             [
-                'name'   => \oss\aliyun\Upload::NAME,
-                'module' => \oss\aliyun\Upload::MODULE,
+                'name'    => \oss\aliyun\Upload::NAME,
+                'module'  => \oss\aliyun\Upload::MODULE,
+                'default' => 0,
             ],
         ];
+
+        $default = Config::get('default.value', 'upload');
+        foreach ($moduleList as &$module) {
+            if ($default === $module['module']) {
+                $module['default'] = 1;
+                break;
+            }
+        }
+
+        return $moduleList;
     }
 
     /**
