@@ -248,7 +248,7 @@ class StorageStyle extends CareyShop
             return false;
         }
 
-        $map['storage_style_id'] = ['eq', $data['storage_style_id']];
+        $map['storage_style_id'] = ['in', $data['storage_style_id']];
         if (false !== $this->save(['status' => $data['status']], $map)) {
             Cache::clear('StorageStyle');
             return true;
