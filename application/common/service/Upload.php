@@ -340,11 +340,32 @@ class Upload extends CareyShop
     {
         // 协议头
         $request = Request::instance();
-        if (!$request->has('url', 'param', true)) {
-            return $this->setError('url参数不能为空');
+
+        $url = $request->param('url');
+        if (!$url) {
+            return $this->setError('url参数值不能为空');
         }
 
-        return true;
+        $source = $request->param('source');
+        if (!$source) {
+            return $this->setError('source参数值不能为空');
+        }
+
+        if (!in_array($source, array_column($this->getUploadModule(), 'module'))) {
+            return $this->setError('source参数值错误');
+        }
+
+        $ossObject = $this->createOssObject($source);
+        if (false === $ossObject) {
+            return false;
+        }
+
+        $info = $ossObject->getThumbInfo($source, $url);
+        if (false === $info) {
+            return $this->setError($ossObject->getError());
+        }
+
+        return $info;
     }
 
     /**
