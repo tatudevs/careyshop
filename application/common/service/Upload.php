@@ -319,6 +319,7 @@ class Upload extends CareyShop
         $notPrefix = preg_replace($pattern, '', $url);
 
         $data = [
+            'source'     => $module,
             'url'        => $notPrefix,
             'url_prefix' => strval($url),
         ];
@@ -337,6 +338,13 @@ class Upload extends CareyShop
      */
     public function getThumbInfo()
     {
+        // 协议头
+        $request = Request::instance();
+        if (!$request->has('url', 'param', true)) {
+            return $this->setError('url参数不能为空');
+        }
+
+        return true;
     }
 
     /**
