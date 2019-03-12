@@ -428,9 +428,6 @@ class Upload extends UploadBase
         // 检测尺寸是否正确
         list($sWidth, $sHeight) = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
         list($cWidth, $cHeight) = @array_pad(isset($param['crop']) ? $param['crop'] : [], 2, 0);
-        if (!$sWidth && !$sHeight) {
-            return $url;
-        }
 
         try {
             // 创建图片实例(并且是图片才创建缩略图文件夹)
@@ -440,27 +437,29 @@ class Upload extends UploadBase
             $thumb = str_replace(IS_WIN ? '/' : '\\', DS, $thumb);
             !is_dir($thumb) && mkdir($thumb, 0755, true);
 
-            // 处理缩放样式
-            $resize = isset($param['resize']) ? $param['resize'] : 'scaling';
-            $type = 'pad' === $resize ? Image::THUMB_PAD : Image::THUMB_SCALING;
+            if ($sWidth || $sHeight) {
+                // 处理缩放样式
+                $resize = isset($param['resize']) ? $param['resize'] : 'scaling';
+                $type = 'pad' === $resize ? Image::THUMB_PAD : Image::THUMB_SCALING;
 
-            // 处理缩放尺寸、裁剪尺寸
-            foreach ($param as $key => $value) {
-                switch ($key) {
-                    case 'size':
-                        $this->getSizeParam($sWidth, $sHeight, $imageFile, $resize);
-                        $imageFile->thumb($sWidth, $sHeight, $type);
-                        break;
+                // 处理缩放尺寸、裁剪尺寸
+                foreach ($param as $key => $value) {
+                    switch ($key) {
+                        case 'size':
+                            $this->getSizeParam($sWidth, $sHeight, $imageFile, $resize);
+                            $imageFile->thumb($sWidth, $sHeight, $type);
+                            break;
 
-                    case 'crop':
-                        $cWidth > $imageFile->width() && $cWidth = $imageFile->width();
-                        $cHeight > $imageFile->height() && $cHeight = $imageFile->height();
-                        $cWidth <= 0 && $cWidth = $imageFile->width();
-                        $cHeight <= 0 && $cHeight = $imageFile->height();
-                        $x = ($imageFile->width() - $cWidth) / 2;
-                        $y = ($imageFile->height() - $cHeight) / 2;
-                        $imageFile->crop($cWidth, $cHeight, $x, $y);
-                        break;
+                        case 'crop':
+                            $cWidth > $imageFile->width() && $cWidth = $imageFile->width();
+                            $cHeight > $imageFile->height() && $cHeight = $imageFile->height();
+                            $cWidth <= 0 && $cWidth = $imageFile->width();
+                            $cHeight <= 0 && $cHeight = $imageFile->height();
+                            $x = ($imageFile->width() - $cWidth) / 2;
+                            $y = ($imageFile->height() - $cHeight) / 2;
+                            $imageFile->crop($cWidth, $cHeight, $x, $y);
+                            break;
+                    }
                 }
             }
 

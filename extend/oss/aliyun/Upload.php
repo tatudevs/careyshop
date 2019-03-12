@@ -442,22 +442,21 @@ class Upload extends UploadBase
 
         // 检测尺寸是否正确
         list($sWidth, $sHeight) = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
-        if (!$sWidth && !$sHeight) {
-            return $url;
-        }
 
         // 处理缩放尺寸、裁剪尺寸
-        foreach ($param as $key => $value) {
-            switch ($key) {
-                case 'size':
-                    $resize = isset($param['resize']) ? $param['resize'] : '';
-                    $options .= $this->getSizeParam($sWidth, $sHeight, $resize);
-                    break;
+        if ($sWidth || $sHeight) {
+            foreach ($param as $key => $value) {
+                switch ($key) {
+                    case 'size':
+                        $resize = isset($param['resize']) ? $param['resize'] : '';
+                        $options .= $this->getSizeParam($sWidth, $sHeight, $resize);
+                        break;
 
-                case 'crop':
-                    list($cWidth, $cHeight) = @array_pad($value, 2, 0);
-                    $options .= $this->getCropParam($cWidth, $cHeight);
-                    break;
+                    case 'crop':
+                        list($cWidth, $cHeight) = @array_pad($value, 2, 0);
+                        $options .= $this->getCropParam($cWidth, $cHeight);
+                        break;
+                }
             }
         }
 

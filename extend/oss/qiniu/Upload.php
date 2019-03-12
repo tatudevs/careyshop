@@ -321,47 +321,46 @@ class Upload extends UploadBase
         // 检测尺寸是否正确
         list($sWidth, $sHeight) = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
         list($cWidth, $cHeight) = @array_pad(isset($param['crop']) ? $param['crop'] : [], 2, 0);
-        if (!$sWidth && !$sHeight) {
-            return $url;
-        }
 
-        // 画布最后的尺寸初始化
-        $last = 'size';
-        $extent = [0, 0];
+        if ($sWidth || $sHeight) {
+            // 画布最后的尺寸初始化
+            $last = 'size';
+            $extent = [0, 0];
 
-        // 处理缩放尺寸、裁剪尺寸
-        foreach ($param as $key => $value) {
-            switch ($key) {
-                case 'size':
-                    $last = 'size';
-                    $resize = isset($param['resize']) ? $param['resize'] : '';
+            // 处理缩放尺寸、裁剪尺寸
+            foreach ($param as $key => $value) {
+                switch ($key) {
+                    case 'size':
+                        $last = 'size';
+                        $resize = isset($param['resize']) ? $param['resize'] : '';
 
-                    if ('pad' === $resize) {
-                        empty($sWidth) && $sWidth = $sHeight;
-                        empty($sHeight) && $sHeight = $sWidth;
-                    }
+                        if ('pad' === $resize) {
+                            empty($sWidth) && $sWidth = $sHeight;
+                            empty($sHeight) && $sHeight = $sWidth;
+                        }
 
-                    $extent = [$sWidth, $sHeight];
-                    $options .= $this->getSizeParam($sWidth, $sHeight, $resize);
-                    break;
+                        $extent = [$sWidth, $sHeight];
+                        $options .= $this->getSizeParam($sWidth, $sHeight, $resize);
+                        break;
 
-                case 'crop':
-                    $last = 'crop';
-                    $extent = [$cWidth, $cHeight];
-                    $options .= $this->getCropParam($cWidth, $cHeight);
-                    break;
+                    case 'crop':
+                        $last = 'crop';
+                        $extent = [$cWidth, $cHeight];
+                        $options .= $this->getCropParam($cWidth, $cHeight);
+                        break;
+                }
             }
-        }
 
-        // 决定图片画布最后的尺寸
-        if ($last === 'crop') {
-            $extent[0] = $sWidth > $cWidth && $cWidth > 0 ? $cWidth : $sWidth;
-            $extent[1] = $sHeight > $cHeight ? $cHeight : $sHeight;
-        }
+            // 决定图片画布最后的尺寸
+            if ($last === 'crop') {
+                $extent[0] = $sWidth > $cWidth && $cWidth > 0 ? $cWidth : $sWidth;
+                $extent[1] = $sHeight > $cHeight ? $cHeight : $sHeight;
+            }
 
-        // 处理画布尺寸
-        if (isset($param['resize']) && 'pad' === $param['resize']) {
-            $options .= $this->getExtentParam($extent[0], $extent[1]);
+            // 处理画布尺寸
+            if (isset($param['resize']) && 'pad' === $param['resize']) {
+                $options .= $this->getExtentParam($extent[0], $extent[1]);
+            }
         }
 
         // 处理图片质量
