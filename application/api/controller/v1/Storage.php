@@ -48,6 +48,8 @@ class Storage extends CareyShop
             'get.storage.thumb'             => ['getThumb', 'app\common\service\Upload'],
             // 获取资源缩略图实际路径
             'get.storage.thumb.url'         => ['getThumbUrl', 'app\common\service\Upload'],
+            // 获取资源缩略图信息
+            'get.storage.thumb.info'        => ['getThumbInfo', 'app\common\service\Upload'],
             // 获取资源下载链接
             'get.storage.download'          => ['getDownload', 'app\common\service\Upload'],
             // 批量删除资源

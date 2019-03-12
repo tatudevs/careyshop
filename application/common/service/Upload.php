@@ -323,11 +323,20 @@ class Upload extends CareyShop
             'url_prefix' => strval($url),
         ];
 
-        if ($getObject) {
+        if (is_bool($getObject) && $getObject) {
             $data['ossObject'] = &$ossObject;
         }
 
         return $data;
+    }
+
+    /**
+     * 获取资源缩略图信息
+     * @access public
+     * @return mixed
+     */
+    public function getThumbInfo()
+    {
     }
 
     /**
