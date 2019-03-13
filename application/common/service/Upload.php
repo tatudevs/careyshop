@@ -360,12 +360,7 @@ class Upload extends CareyShop
             return false;
         }
 
-        $info = $ossObject->getThumbInfo($source, $url);
-        if (false === $info) {
-            return $this->setError($ossObject->getError());
-        }
-
-        return $info;
+        return $ossObject->getThumbInfo($url);
     }
 
     /**

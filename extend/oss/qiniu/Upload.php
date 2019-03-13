@@ -18,6 +18,7 @@ use Qiniu\Zone;
 use think\Cache;
 use think\Config;
 use think\Url;
+use util\Http;
 
 class Upload extends UploadBase
 {
@@ -438,5 +439,39 @@ class Upload extends UploadBase
         $url .= '&attname=' . $filename;
         header('Location:' . $url, true, 301);
         exit();
+    }
+
+    /**
+     * 获取资源缩略图信息
+     * @access public
+     * @param  string $url 路径
+     * @return array
+     */
+    public function getThumbInfo($url)
+    {
+        $info = [
+            'size'   => 0,
+            'width'  => 0,
+            'height' => 0,
+        ];
+
+        try {
+            $result = Http::httpGet($url);
+            $size = getimagesize('data://image/*;base64,' . base64_encode($result));
+
+            if (empty($size)) {
+                return $info;
+            }
+
+            $info = [
+                'size'   => strlen($result),
+                'width'  => $size[0],
+                'height' => $size[1],
+            ];
+        } catch (\Exception $e) {
+            return $info;
+        }
+
+        return $info;
     }
 }

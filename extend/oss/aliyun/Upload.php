@@ -21,6 +21,7 @@ use aliyun\AssumeRoleRequest;
 use aliyun\core\Config as AliyunConfig;
 use aliyun\core\profile\DefaultProfile;
 use aliyun\core\DefaultAcsClient;
+use util\Http;
 
 class Upload extends UploadBase
 {
@@ -556,5 +557,42 @@ class Upload extends UploadBase
         }
 
         exit();
+    }
+
+    /**
+     * 获取资源缩略图信息
+     * @access public
+     * @param  string $url 路径
+     * @return array
+     */
+    public function getThumbInfo($url)
+    {
+        $info = [
+            'size'   => 0,
+            'width'  => 0,
+            'height' => 0,
+        ];
+
+        try {
+            $url .= '/info/';
+            $result = Http::httpGet($url);
+
+            $encode = mb_detect_encoding($result, ['UTF-8', 'GB2312', 'GBK']);
+            $result = json_decode(@iconv($encode, 'UTF-8', $result), true);
+
+            if (JSON_ERROR_NONE != json_last_error()) {
+                return $info;
+            }
+
+            $info = [
+                'size'   => $result['FileSize']['value'],
+                'width'  => $result['ImageWidth']['value'],
+                'height' => $result['ImageHeight']['value'],
+            ];
+        } catch (\Exception $e) {
+            return $info;
+        }
+
+        return $info;
     }
 }

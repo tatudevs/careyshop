@@ -585,4 +585,15 @@ class Upload extends UploadBase
             exit();
         }
     }
+
+    /**
+     * 获取资源缩略图信息
+     * @access public
+     * @param  string $url 路径
+     * @return array/false
+     */
+    public function getThumbInfo($url)
+    {
+        return [];
+    }
 }

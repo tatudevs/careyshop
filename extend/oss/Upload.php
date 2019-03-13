@@ -175,4 +175,21 @@ abstract class Upload
      * @return void
      */
     abstract protected function clearThumb($path);
+
+    /**
+     * 响应实际下载路径
+     * @access protected
+     * @param  string $url      路径
+     * @param  string $filename 文件名
+     * @return void
+     */
+    abstract protected function getDownload($url, $filename);
+
+    /**
+     * 获取资源缩略图信息
+     * @access protected
+     * @param  string $url 路径
+     * @return array
+     */
+    abstract protected function getThumbInfo($url);
 }
