@@ -404,6 +404,11 @@ class Upload extends UploadBase
             return $url;
         }
 
+        // 不支持第三方样式,如果存在样式则直接返回
+        if (!empty($param['style'])) {
+            return $url;
+        }
+
         // 获取源文件位置,并且生成缩略图文件名,验证源文件是否存在
         $source = $this->getNewUrl('', '', $fileInfo, null, null);
         $fileSign = $this->getFileSign($param, $source);
