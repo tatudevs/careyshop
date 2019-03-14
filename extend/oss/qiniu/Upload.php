@@ -457,16 +457,16 @@ class Upload extends UploadBase
 
         try {
             $result = Http::httpGet($url);
-            $size = getimagesize('data://image/*;base64,' . base64_encode($result));
+            list($width, $height) = @getimagesize('data://image/*;base64,' . base64_encode($result));
 
-            if (empty($size)) {
+            if ($width <= 0 || $height <= 0) {
                 return $info;
             }
 
             $info = [
-                'size'   => strlen($result),
-                'width'  => $size[0],
-                'height' => $size[1],
+                'size'   => strlen($result) * sizeof($result),
+                'width'  => $width,
+                'height' => $height,
             ];
         } catch (\Exception $e) {
             return $info;

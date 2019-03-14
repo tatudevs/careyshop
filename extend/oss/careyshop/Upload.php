@@ -590,10 +590,41 @@ class Upload extends UploadBase
      * 获取资源缩略图信息
      * @access public
      * @param  string $url 路径
-     * @return array/false
+     * @return array
      */
     public function getThumbInfo($url)
     {
-        return [];
+        $info = [
+            'size'   => 0,
+            'width'  => 0,
+            'height' => 0,
+        ];
+
+        try {
+            $fileInfo = parse_url($url);
+            $pos = mb_strpos($fileInfo['path'], '/');
+
+            $filePath = ROOT_PATH . 'public' . mb_substr($fileInfo['path'], $pos, null, 'utf-8');
+            $result = str_replace(IS_WIN ? '/' : '\\', DS, $filePath);
+
+            if (!file_exists($result)) {
+                return $info;
+            }
+
+            list($width, $height) = @getimagesize($result);
+            if ($width <= 0 || $height <= 0) {
+                return $info;
+            }
+
+            $info = [
+                'size'   => filesize($result),
+                'width'  => $width,
+                'height' => $height,
+            ];
+        } catch (\Exception $e) {
+            return $info;
+        }
+
+        return $info;
     }
 }
