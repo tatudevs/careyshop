@@ -172,6 +172,7 @@ abstract class Upload
     /**
      * 批量删除资源
      * @access protected
+     * @param  string $path 路径
      * @return void
      */
     abstract protected function clearThumb($path);

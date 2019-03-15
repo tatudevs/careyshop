@@ -574,20 +574,17 @@ class Upload extends UploadBase
         ];
 
         try {
-            $url .= '/info/';
             $result = Http::httpGet($url);
+            list($width, $height) = @getimagesize('data://image/*;base64,' . base64_encode($result));
 
-            $encode = mb_detect_encoding($result, ['UTF-8', 'GB2312', 'GBK']);
-            $result = json_decode(@iconv($encode, 'UTF-8', $result), true);
-
-            if (JSON_ERROR_NONE != json_last_error()) {
+            if ($width <= 0 || $height <= 0) {
                 return $info;
             }
 
             $info = [
-                'size'   => $result['FileSize']['value'],
-                'width'  => $result['ImageWidth']['value'],
-                'height' => $result['ImageHeight']['value'],
+                'size'   => strlen($result) * sizeof($result),
+                'width'  => $width,
+                'height' => $height,
             ];
         } catch (\Exception $e) {
             return $info;
