@@ -23,12 +23,17 @@ class Help extends CareyShop
     {
         return [
             // 添加一条帮助文档
-            'add.help.item' => ['addHelpItem'],
+            'add.help.item'    => ['addHelpItem'],
             // 编辑一条帮助文档
-            'set.help.item' => ['setHelpItem'],
+            'set.help.item'    => ['setHelpItem'],
             // 获取一条帮助文档
-            'get.help.item' => ['getHelpItem'],
-            // ...待续
+            'get.help.item'    => ['getHelpItem'],
+            // 验证帮助文档是否唯一
+            'unique.help.item' => ['uniqueHelpItem'],
+            // 获取帮助文档列表
+            'get.help.list'    => ['getHelpList'],
+            // 根据路由获取帮助文档
+            'get.help.router'  => ['getHelpRouter'],
         ];
     }
 }
