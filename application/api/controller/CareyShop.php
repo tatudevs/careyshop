@@ -376,6 +376,7 @@ class CareyShop extends Controller
             'client_name' => $this->apiDebug ? 'CareyShop' : '游客',
         ];
 
+        // Token为空则表示以游客身份访问
         if (empty($this->token) || $this->apiDebug) {
             return true;
         }
@@ -440,7 +441,7 @@ class CareyShop extends Controller
             return true;
         }
 
-        // 优先验证是否属于白名单
+        // 优先验证是否属于白名单接口(任何访问者都可访问)
         if (self::$auth->checkWhite($this->getAuthUrl())) {
             $this->apiDebug = true;
             return true;
