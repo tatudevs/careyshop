@@ -380,11 +380,12 @@ class CareyShop extends Controller
             return true;
         }
 
-        // 获取Token
+        // 从本地数据库获取Token
         $data = Cache::remember('token:' . $this->token, function () {
             return Db::name('token')->where(['token' => ['eq', $this->token]])->find();
         });
 
+        // 存在Token则进行验证
         if (!is_null($data)) {
             // 必须先检测Token是否过期,不然下面的检测没意义
             if (empty($data['token_expires']) || time() > $data['token_expires']) {
