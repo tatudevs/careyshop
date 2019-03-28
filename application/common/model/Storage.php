@@ -60,8 +60,10 @@ class Storage extends CareyShop
         // 初始化数据
         $data['type'] = 2;
         $data['protocol'] = '';
+        $data['priority'] = 0;
+        $field = ['parent_id', 'name', 'type', 'protocol', 'priority', 'sort'];
 
-        if (false !== $this->allowField(['parent_id', 'name', 'type', 'protocol', 'sort'])->save($data)) {
+        if (false !== $this->allowField($field)->save($data)) {
             Cache::clear('StorageDirectory');
             return $this->hidden(['protocol'])->toArray();
         }
@@ -108,7 +110,7 @@ class Storage extends CareyShop
         }
 
         // 排序方式与排序字段
-        $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
+        $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
         $orderField = !empty($data['order_field']) ? $data['order_field'] : 'storage_id';
         $order['sort'] = 'asc';
         $order[$orderField] = $orderType;
@@ -214,13 +216,13 @@ class Storage extends CareyShop
             $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
 
             // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
+            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
 
             // 排序的字段
             $orderField = !empty($data['order_field']) ? $data['order_field'] : 'storage_id';
 
             // 排序处理
-            $order['type'] = 'desc';
+            $order['priority'] = 'asc';
             $order[$orderField] = $orderType;
 
             $query
