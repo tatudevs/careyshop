@@ -30,6 +30,8 @@ class Storage extends CareyShop
             'get.storage.directory.select'  => ['getStorageDirectorySelect'],
             // 将资源目录标设为默认目录
             'set.storage.directory.default' => ['setStorageDirectoryDefault'],
+            // 获取默认目录的资源编号
+            'get.storage.directory.default' => ['getDefaultStorageId'],
             // 获取一个资源或资源目录
             'get.storage.item'              => ['getStorageItem'],
             // 获取资源列表

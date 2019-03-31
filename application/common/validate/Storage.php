@@ -35,6 +35,7 @@ class Storage extends CareyShop
         'order_type'  => 'in:asc,desc',
         'order_field' => 'in:storage_id,name,type,create_time,update_time',
         'is_layer'    => 'in:0,1',
+        'is_default'  => 'in:0,1',
     ];
 
     /**
@@ -60,6 +61,7 @@ class Storage extends CareyShop
         'order_type'  => '排序方式',
         'order_field' => '排序字段',
         'is_layer'    => '是否返回本级',
+        'is_default'  => '是否设为默认',
     ];
 
     /**
@@ -112,6 +114,10 @@ class Storage extends CareyShop
         'navi'           => [
             'storage_id' => 'integer|egt:0',
             'is_layer',
+        ],
+        'default'        => [
+            'storage_id' => 'require|integer|gt:0',
+            'is_default' => 'require|in:0,1',
         ],
     ];
 }

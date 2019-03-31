@@ -138,7 +138,7 @@ class Storage extends CareyShop
      */
     public function setStorageDirectoryDefault($data)
     {
-        if (!$this->validateData($data, 'Storage.item')) {
+        if (!$this->validateData($data, 'Storage.default')) {
             return false;
         }
 
@@ -148,7 +148,7 @@ class Storage extends CareyShop
         }
 
         $map['storage_id'] = ['eq', $data['storage_id']];
-        if (false === $this->save(['is_default' => 1], $map)) {
+        if (false === $this->save(['is_default' => $data['is_default']], $map)) {
             return false;
         }
 
@@ -226,7 +226,6 @@ class Storage extends CareyShop
             $order[$orderField] = $orderType;
 
             $query
-                ->field('is_default', true)
                 ->where($map)
                 ->order($order)
                 ->page($pageNo, $pageSize);
@@ -531,6 +530,7 @@ class Storage extends CareyShop
      * @access public
      * @param  array $data 外部数据
      * @return bool
+     * @throws
      */
     public function clearStorageThumb($data)
     {
@@ -556,5 +556,22 @@ class Storage extends CareyShop
         $ossObject->clearThumb($path);
 
         return true;
+    }
+
+    /**
+     * 获取默认目录的资源编号
+     * @access public
+     * @return integer
+     */
+    public static function getDefaultStorageId()
+    {
+        $map['type'] = ['eq', 2];
+        $map['is_default'] = ['eq', 1];
+
+        $result = self::cache(true, null, 'StorageDirectory')
+            ->where($map)
+            ->value('storage_id');
+
+        return $result ? $result : 0;
     }
 }

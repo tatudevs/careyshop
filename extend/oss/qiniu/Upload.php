@@ -68,9 +68,11 @@ class Upload extends UploadBase
 
         $random = array_rand($zone->cdnUpHosts, 1);
         $uploadUrl = Url::bUild('/', '', false, $zone->cdnUpHosts[$random]);
+        $parentId = Storage::getDefaultStorageId();
+
         $param = [
             ['name' => 'x:replace', 'type' => 'hidden', 'default' => $this->replace],
-            ['name' => 'x:parent_id', 'type' => 'hidden', 'default' => 0],
+            ['name' => 'x:parent_id', 'type' => 'hidden', 'default' => $parentId],
             ['name' => 'x:filename', 'type' => 'hidden', 'default' => ''],
             ['name' => 'key', 'type' => 'hidden', 'default' => $this->replace],
             ['name' => 'token', 'type' => 'hidden', 'default' => ''],
