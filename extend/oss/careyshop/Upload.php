@@ -86,11 +86,9 @@ class Upload extends UploadBase
     public function getUploadUrl()
     {
         $uploadUrl = Url::bUild('/api/v1/upload', ['method' => 'add.upload.list'], true, true);
-        $parentId = Storage::getDefaultStorageId();
-
         $param = [
             ['name' => 'x:replace', 'type' => 'hidden', 'default' => $this->replace],
-            ['name' => 'x:parent_id', 'type' => 'hidden', 'default' => $parentId],
+            ['name' => 'x:parent_id', 'type' => 'hidden', 'default' => 0],
             ['name' => 'x:filename', 'type' => 'hidden', 'default' => ''],
             ['name' => 'key', 'type' => 'hidden', 'default' => ''],
             ['name' => 'token', 'type' => 'hidden', 'default' => ''],

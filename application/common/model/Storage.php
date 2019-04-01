@@ -124,7 +124,14 @@ class Storage extends CareyShop
             ->select();
 
         if (false !== $result) {
-            return $isKey ? $result->column(null, 'storage_id') : $result->toArray();
+            if ($isKey) {
+                return $result->column(null, 'storage_id');
+            } else {
+                return [
+                    'list'    => $result->toArray(),
+                    'default' => self::getDefaultStorageId(),
+                ];
+            }
         }
 
         return false;
@@ -199,6 +206,7 @@ class Storage extends CareyShop
 
         if (!empty($data['name'])) {
             $map['name'] = ['like', '%' . $data['name'] . '%'];
+            $map['storage_id'] = ['neq', $data['storage_id']];
             unset($map['parent_id']);
         }
 

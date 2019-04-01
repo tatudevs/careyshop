@@ -91,11 +91,9 @@ class Upload extends UploadBase
         }
 
         $uploadUrl = Url::bUild('/', '', false, $location);
-        $parentId = Storage::getDefaultStorageId();
-
         $param = [
             ['name' => 'x:replace', 'type' => 'hidden', 'default' => $this->replace],
-            ['name' => 'x:parent_id', 'type' => 'hidden', 'default' => $parentId],
+            ['name' => 'x:parent_id', 'type' => 'hidden', 'default' => 0],
             ['name' => 'x:filename', 'type' => 'hidden', 'default' => ''],
             ['name' => 'OSSAccessKeyId', 'type' => 'hidden', 'default' => ''],
             ['name' => 'policy', 'type' => 'hidden', 'default' => ''],
