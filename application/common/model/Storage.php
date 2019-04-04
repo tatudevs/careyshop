@@ -428,20 +428,48 @@ class Storage extends CareyShop
             return false;
         }
 
-        $data['storage_id'] = array_unique($data['storage_id']);
-        $result = $this->isMoveStorage($data['storage_id'], $data['parent_id']);
+        // 开启事务
+        self::startTrans();
 
-        if (true !== $result) {
-            return false;
-        }
+        try {
+            $data['storage_id'] = array_unique($data['storage_id']);
+            $rootId = self::where('storage_id', $data['storage_id'][0])->value('parent_id'); // 原来的父级
 
-        $map['storage_id'] = ['in', $data['storage_id']];
-        if (false !== $this->save(['parent_id' => $data['parent_id']], $map)) {
+            // 不需要任何移动操作
+            if ($data['parent_id'] == $rootId) {
+                return [];
+            }
+
+            // 防止自身移动到自身
+            $posNode = array_search($data['parent_id'], $data['storage_id']);
+            if (false !== $posNode) {
+                unset($data['storage_id'][$posNode]);
+            }
+
+            if (0 != $data['parent_id']) {
+                $parentResult = self::get($data['parent_id']); // 新的父级
+                if (!$parentResult) {
+                    throw new \Exception('上级资源目录不存在');
+                }
+
+                // 将原来的子级处理为新的父级目录
+                if (in_array($parentResult['parent_id'], $data['storage_id'])) {
+                    $parentResult->save(['parent_id' => $rootId]);
+                }
+            }
+
+            $map['storage_id'] = ['in', $data['storage_id']];
+            if (false === $this->save(['parent_id' => $data['parent_id']], $map)) {
+                throw new \Exception($this->getError());
+            }
+
             Cache::clear('StorageDirectory');
-            return true;
+            self::commit();
+            return $data['storage_id'];
+        } catch (\Exception $e) {
+            self::rollback();
+            return $this->setError($e->getMessage());
         }
-
-        return false;
     }
 
     /**
