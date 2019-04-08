@@ -349,7 +349,8 @@ class Storage extends CareyShop
      * 批量移动资源到指定目录
      * @access public
      * @param  array $data 外部数据
-     * @return bool
+     * @return mixed
+     * @throws
      */
     public function moveStorageList($data)
     {
