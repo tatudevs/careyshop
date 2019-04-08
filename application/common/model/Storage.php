@@ -463,8 +463,10 @@ class Storage extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            Cache::clear('StorageDirectory');
             self::commit();
+            Cache::clear('StorageDirectory');
+
+            sort($data['storage_id']);
             return $data['storage_id'];
         } catch (\Exception $e) {
             self::rollback();
