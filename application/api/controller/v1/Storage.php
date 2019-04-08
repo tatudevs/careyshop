@@ -42,8 +42,6 @@ class Storage extends CareyShop
             'rename.storage.item'           => ['renameStorageItem'],
             // 将图片资源设为目录封面
             'cover.storage.item'            => ['coverStorageItem'],
-            // 验证资源是否允许移动到指定目录
-            'check.storage.move'            => ['checkStorageMove'],
             // 批量移动资源到指定目录
             'move.storage.list'             => ['moveStorageList'],
             // 获取资源缩略图
@@ -59,22 +57,5 @@ class Storage extends CareyShop
             // 清除图片资源缓存
             'clear.storage.thumb'           => ['clearStorageThumb'],
         ];
-    }
-
-    /**
-     * 验证资源是否允许移动到指定目录
-     * @access protected
-     * @return bool
-     */
-    protected function checkStorageMove()
-    {
-        $data = $this->getParams();
-        $validate = $this->validate($data, 'Storage.move');
-
-        if (true !== $validate) {
-            return $this->setError($validate);
-        }
-
-        return self::$model->isMoveStorage($data['storage_id'], $data['parent_id']);
     }
 }

@@ -98,12 +98,11 @@ class Storage extends CareyShop
     /**
      * 获取资源目录选择列表
      * @access public
-     * @param  array $data  外部数据
-     * @param  bool  $isKey 是否以键名为索引
+     * @param  array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getStorageDirectorySelect($data, $isKey = false)
+    public function getStorageDirectorySelect($data)
     {
         if (!$this->validateData($data, 'Storage.list_directory')) {
             return false;
@@ -124,14 +123,10 @@ class Storage extends CareyShop
             ->select();
 
         if (false !== $result) {
-            if ($isKey) {
-                return $result->column(null, 'storage_id');
-            } else {
-                return [
-                    'list'    => $result->toArray(),
-                    'default' => self::getDefaultStorageId(),
-                ];
-            }
+            return [
+                'list'    => $result->toArray(),
+                'default' => self::getDefaultStorageId(),
+            ];
         }
 
         return false;
@@ -348,72 +343,6 @@ class Storage extends CareyShop
         }
 
         return false;
-    }
-
-    /**
-     * 根据指定资源编号获取不允许移动的目录树(返回自身)
-     * @access private
-     * @param  int   $parentId 上级资源目录Id
-     * @param  array $list     原始数据结构
-     * @return array
-     */
-    private static function getNotAllowedMoveTree($parentId, $list)
-    {
-        static $tree = [];
-        foreach ($list as $key => $value) {
-            if ($parentId != $value['parent_id'] && $parentId != $value['storage_id']) {
-                continue;
-            }
-
-            // 返回的数据只能通过键名比较,键值无任何效果
-            $tree[$value['storage_id']] = 0;
-            $tree[$value['parent_id']] = 0;
-
-            //返回自身时需要保留源数据,否则引起树的重复
-            if ($parentId == $value['storage_id']) {
-                continue;
-            }
-
-            unset($list[$key]);
-            self::getNotAllowedMoveTree($value['storage_id'], $list);
-        }
-
-        return $tree;
-    }
-
-    /**
-     * 验证资源是否允许移动到指定目录
-     * @access public
-     * @param  array $storageIdList 待移动资源编号集
-     * @param  int   $parentId      上级资源编号
-     * @return bool
-     */
-    public function isMoveStorage($storageIdList, $parentId)
-    {
-        $result = $this->getStorageDirectorySelect([], true);
-        if (false === $result) {
-            return false;
-        }
-
-        if ($parentId != 0 && !array_key_exists($parentId, $result)) {
-            return $this->setError('上级资源目录不存在');
-        }
-
-        // 验证资源是否允许移动
-        $unmovable = self::getNotAllowedMoveTree($parentId, $result);
-        do {
-            $key = key($unmovable);
-            if (false === $key) {
-                return false;
-            }
-
-            $findId = array_search($key, $storageIdList);
-            if (false !== $findId) {
-                return $this->setError($result[$storageIdList[$findId]]['name'] . '不允许移动到同源资源目录下');
-            }
-        } while (false !== next($unmovable));
-
-        return true;
     }
 
     /**
