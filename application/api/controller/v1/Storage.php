@@ -41,7 +41,9 @@ class Storage extends CareyShop
             // 重命名一个资源
             'rename.storage.item'           => ['renameStorageItem'],
             // 将图片资源设为目录封面
-            'cover.storage.item'            => ['coverStorageItem'],
+            'set.storage.cover'             => ['setStorageCover'],
+            // 清除目录资源的封面
+            'clear.storage.cover'           => ['clearStorageCover'],
             // 批量移动资源到指定目录
             'move.storage.list'             => ['moveStorageList'],
             // 获取资源缩略图

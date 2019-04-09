@@ -346,6 +346,28 @@ class Storage extends CareyShop
     }
 
     /**
+     * 清除目录资源的封面
+     * @access public
+     * @param  array $data 外部数据
+     * @return bool
+     * @throws
+     */
+    public function clearStorageCover($data)
+    {
+        if (!$this->validateData($data, 'Storage.cover')) {
+            return false;
+        }
+
+        $map['storage_id'] = ['eq', $data['storage_id']];
+        if (false !== $this->save(['cover' => ''], $map)) {
+            Cache::clear('StorageDirectory');
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 批量移动资源到指定目录
      * @access public
      * @param  array $data 外部数据
