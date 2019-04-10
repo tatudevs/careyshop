@@ -532,11 +532,18 @@ class Storage extends CareyShop
             $map['storage_id'] = ['eq', $data['storage_id']];
             $map['type'] = ['eq', 0];
 
-            $query->where($map)->field('path,protocol');
+            $query->where($map)->field('path,protocol,url');
         });
 
         if (!$result) {
             return is_null($result) ? $this->setError('资源图片不存在') : false;
+        }
+
+        $url = parse_url($result['url']);
+        $newUrl = sprintf('%s?type=%s&rand=%s', $url['path'], $result['protocol'], mt_rand(0, time()));
+
+        if (false === $result->save(['url' => $newUrl])) {
+            return $this->setError($this->getError());
         }
 
         $path = ROOT_PATH . 'public' . $result['path'];

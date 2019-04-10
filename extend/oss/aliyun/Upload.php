@@ -329,6 +329,7 @@ class Upload extends UploadBase
 
         if (!empty($params['replace'])) {
             unset($data['parent_id']);
+            $data['url'] .= sprintf('&rand=%s', mt_rand(0, time()));
         }
 
         $map['path'] = ['eq', $data['path']];

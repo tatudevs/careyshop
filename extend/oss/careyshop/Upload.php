@@ -253,6 +253,7 @@ class Upload extends UploadBase
 
         if ($this->request->has('x:replace', 'param', true)) {
             unset($data['parent_id']);
+            $data['url'] .= sprintf('&rand=%s', mt_rand(0, time()));
         }
 
         $map['path'] = ['eq', $data['path']];
