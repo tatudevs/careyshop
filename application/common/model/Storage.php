@@ -317,7 +317,7 @@ class Storage extends CareyShop
      * @return bool
      * @throws
      */
-    public function coverStorageItem($data)
+    public function setStorageCover($data)
     {
         if (!$this->validateData($data, 'Storage.item')) {
             return false;

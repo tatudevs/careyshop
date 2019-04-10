@@ -170,6 +170,11 @@ class Upload extends CareyShop
             return $this->setError($ossObject->getError());
         }
 
+        // 附加可上传后缀及附件大小限制
+        $result['image_ext'] = Config::get('image_ext.value', 'upload');
+        $result['file_ext'] = Config::get('file_ext.value', 'upload');
+        $result['file_size'] = Config::get('file_size.value', 'upload');
+
         return $result;
     }
 

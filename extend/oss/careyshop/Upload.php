@@ -260,7 +260,7 @@ class Upload extends UploadBase
         $map['type'] = ['neq', 2];
 
         $storageDb = new Storage();
-        $result = $storageDb->field('mime,path,cover,sort', true)->where($map)->find();
+        $result = $storageDb->where($map)->find();
 
         if (false === $result) {
             return $this->setError($storageDb->getError());
@@ -280,14 +280,14 @@ class Upload extends UploadBase
                 return $this->setError($storageDb->getError());
             }
 
-            $ossResult = $result->hidden(['mime'])->setAttr('status', 200)->toArray();
+            $ossResult = $result->setAttr('status', 200)->toArray();
         } else {
             // 插入新记录
             if (false === $storageDb->isUpdate(false)->save($data)) {
                 return $this->setError($storageDb->getError());
             }
 
-            $ossResult = $storageDb->hidden(['mime'])->setAttr('status', 200)->toArray();
+            $ossResult = $storageDb->setAttr('status', 200)->toArray();
         }
 
         $ossResult['oss'] = Config::get('oss.value', 'upload');
