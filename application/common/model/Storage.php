@@ -201,7 +201,7 @@ class Storage extends CareyShop
 
         if (!empty($data['name'])) {
             $map['name'] = ['like', '%' . $data['name'] . '%'];
-            $map['storage_id'] = ['neq', $data['storage_id']];
+            $map['type'] = ['neq', 2];
             unset($map['parent_id']);
         }
 
