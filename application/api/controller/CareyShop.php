@@ -344,7 +344,7 @@ class CareyShop extends Controller
         $params = $this->params;
         ksort($params);
 
-        $type = ['array', 'object'];
+        $type = ['array', 'object', 'NULL'];
         $stringToBeSigned = $appSecret;
         foreach ($params as $key => $val) {
             if ($key != '' && !in_array(gettype($val), $type)) {
