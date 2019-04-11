@@ -82,5 +82,8 @@ class Transaction extends CareyShop
             'order_type',
             'order_field',
         ],
+        'item' => [
+            'transaction_id' => 'require|integer|gt:0',
+        ],
     ];
 }

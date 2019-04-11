@@ -22,6 +22,8 @@ class Transaction extends CareyShop
     protected static function initMethod()
     {
         return [
+            // 获取一笔交易结算
+            'get.transaction.item' => ['getTransactionItem'],
             // 获取交易结算列表
             'get.transaction.list' => ['getTransactionList'],
         ];

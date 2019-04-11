@@ -92,6 +92,33 @@ class Transaction extends CareyShop
     }
 
     /**
+     * 获取一笔交易结算
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|false
+     * @throws
+     */
+    public function getTransactionItem($data)
+    {
+        if (!$this->validateData($data, 'Transaction.item')) {
+            return false;
+        }
+
+        $result = self::get(function ($query) use ($data) {
+            $map['transaction_id'] = ['eq', $data['transaction_id']];
+            is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
+
+            $query->where($map);
+        });
+
+        if (false !== $result) {
+            return is_null($result) ? null : $result->toArray();
+        }
+
+        return false;
+    }
+
+    /**
      * 获取交易结算列表
      * @access public
      * @param  array $data 外部数据
