@@ -74,6 +74,7 @@ class PaymentLog extends CareyShop
             'order_no',
             'out_trade_no',
             'to_payment',
+            'type' => 'in:0,1',
             'status',
             'account',
             'begin_time',

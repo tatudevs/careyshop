@@ -43,7 +43,6 @@ class PaymentLog extends CareyShop
         'payment_log_id' => 'integer',
         'user_id'        => 'integer',
         'amount'         => 'float',
-        'to_payment'     => 'integer',
         'type'           => 'integer',
         'status'         => 'integer',
     ];
@@ -185,6 +184,7 @@ class PaymentLog extends CareyShop
         empty($data['payment_no']) ?: $map['payment_log.payment_no'] = ['eq', $data['payment_no']];
         empty($data['order_no']) ?: $map['payment_log.order_no'] = ['eq', $data['order_no']];
         empty($data['out_trade_no']) ?: $map['payment_log.out_trade_no'] = ['eq', $data['out_trade_no']];
+        is_empty_parm($data['type']) ?: $map['payment_log.type'] = ['eq', $data['type']];
         is_empty_parm($data['status']) ?: $map['payment_log.status'] = ['eq', $data['status']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
@@ -196,7 +196,7 @@ class PaymentLog extends CareyShop
         if (is_client_admin()) {
             $with = ['getUser'];
             unset($map['payment_log.user_id']);
-            is_empty_parm($data['to_payment']) ?: $map['payment_log.to_payment'] = ['eq', $data['to_payment']];
+            is_empty_parm($data['to_payment']) ?: $map['payment_log.to_payment'] = ['eq', (string)$data['to_payment']];
             empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
         }
 
