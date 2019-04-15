@@ -174,6 +174,7 @@ class ArticleCat extends CareyShop
      * @param  int  $level   分类深度
      * @param  int  $isNavi  过滤是否导航
      * @return array|false
+     * @throws
      */
     public static function getArticleCatList($catId = 0, $isLayer = false, $level = null, $isNavi = null)
     {

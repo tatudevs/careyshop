@@ -133,6 +133,7 @@ class History extends CareyShop
      * 获取我的足迹数量
      * @access public
      * @return array
+     * @throws
      */
     public function getHistoryCount()
     {

@@ -455,6 +455,7 @@ class GoodsComment extends CareyShop
      * @access public
      * @param  array $data 外部数据
      * @return array|false
+     * @throws
      */
     public function getCommentScore($data)
     {
@@ -567,6 +568,7 @@ class GoodsComment extends CareyShop
      * @access public
      * @param  array $data 外部数据
      * @return array|false
+     * @throws
      */
     public function getCommentCount($data)
     {

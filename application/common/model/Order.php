@@ -2125,6 +2125,7 @@ class Order extends CareyShop
      * 获取订单各个状态合计数
      * @access public
      * @return array
+     * @throws
      */
     public function getOrderStatusTotal()
     {

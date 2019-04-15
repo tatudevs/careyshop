@@ -207,6 +207,7 @@ class Collect extends CareyShop
      * 获取商品收藏数量
      * @access public
      * @return array
+     * @throws
      */
     public function getCollectCount()
     {

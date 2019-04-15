@@ -265,6 +265,7 @@ class UserAddress extends CareyShop
      * @access public
      * @param  array $data 外部数据
      * @return bool
+     * @throws
      */
     public function isAddressMaximum($data)
     {

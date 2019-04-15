@@ -512,6 +512,7 @@ class OrderService extends CareyShop
      * @access private
      * @param  string $orderNo 订单号
      * @return bool
+     * @throws
      */
     private function isServiceEgtOrderGoods($orderNo)
     {
