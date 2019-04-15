@@ -366,18 +366,53 @@ class Message extends CareyShop
             return false;
         }
 
-        return $this->getMessageUserList($data, true);
+        is_empty_parm($data['type']) ?: $map['m.type'] = ['eq', $data['type']];
+        $map['m.status'] = ['eq', 1];
+        $map['m.is_delete'] = ['eq', 0];
+
+        $clientType = is_client_admin() ? 'admin_id' : 'user_id';
+        $mapRead = '`u`.' . $clientType . ' IS NULL OR `u`.is_read = 0';
+
+        // 构建子语句
+        $userSQL = MessageUser::where([$clientType => ['eq', get_client_id()]])->buildSql();
+
+        // 联合查询语句
+        $userWhere_1 = '`u`.' . $clientType . ' IS NULL OR `u`.' . $clientType . ' = :' . $clientType . '';
+        $userWhere_2 = '`u`.' . $clientType . ' IS NULL OR `u`.is_delete = 0';
+        $userWhere_3 = '`u`.' . $clientType . ' IS NOT NULL OR `m`.member > 0';
+
+        $result = $this
+            ->alias('m')
+            ->field('`m`.`type`, COUNT(*) AS total')
+            ->join([$userSQL => 'u'], 'u.message_id = m.message_id', 'left')
+            ->where($userWhere_1, [$clientType => [get_client_id(), \PDO::PARAM_INT]])
+            ->where($userWhere_2)
+            ->where($userWhere_3)
+            ->where($mapRead)
+            ->where($map)
+            ->group('`m`.`type`')
+            ->select();
+
+        if (false !== $result) {
+            $totalResult = 0;
+            foreach ($result as $value) {
+                $totalResult += $value->getAttr('total');
+            }
+
+            return ['total' => $result, 'total_result' => $totalResult];
+        }
+
+        return false;
     }
 
     /**
      * 用户获取消息列表
      * @access public
-     * @param  array $data       外部数据
-     * @param  bool  $isGetTotal 是否只获取数量
+     * @param  array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getMessageUserList($data, $isGetTotal = false)
+    public function getMessageUserList($data)
     {
         if (!$this->validateData($data, 'Message.list')) {
             return false;
@@ -388,7 +423,6 @@ class Message extends CareyShop
         $map['m.is_delete'] = ['eq', 0];
 
         $mapRead = null;
-        !$isGetTotal ?: $data['is_read'] = 0;
         $clientType = is_client_admin() ? 'admin_id' : 'user_id';
 
         // 是否已读需要特殊对待
@@ -422,7 +456,7 @@ class Message extends CareyShop
             ->where($map)
             ->count();
 
-        if ($totalResult <= 0 || $isGetTotal) {
+        if ($totalResult <= 0) {
             return ['total_result' => $totalResult];
         }
 
