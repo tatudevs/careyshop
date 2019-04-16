@@ -98,8 +98,8 @@ class Message extends CareyShop
         }
 
         // 避免无关参数及初始化部分数据
-        unset($data['message_id'], $data['page_views']);
         $data['member'] = 0;
+        unset($data['message_id'], $data['page_views']);
 
         // 开启事务
         self::startTrans();
@@ -371,16 +371,21 @@ class Message extends CareyShop
         $map['m.status'] = ['eq', 1];
         $map['m.is_delete'] = ['eq', 0];
 
-        $clientType = is_client_admin() ? 'admin_id' : 'user_id';
-        $mapRead = '`u`.' . $clientType . ' IS NULL OR `u`.is_read = 0';
+        $member = '< 2';
+        $clientType = 'user_id';
+
+        if (is_client_admin()) {
+            $member = '= 2';
+            $clientType = 'admin_id';
+        }
 
         // 构建子语句
         $userSQL = MessageUser::where([$clientType => ['eq', get_client_id()]])->buildSql();
 
         // 联合查询语句
-        $userWhere_1 = '`u`.' . $clientType . ' IS NULL OR `u`.' . $clientType . ' = :' . $clientType . '';
+        $userWhere_1 = '`u`.' . $clientType . ' IS NULL OR `u`.' . $clientType . ' = :' . $clientType;
         $userWhere_2 = '`u`.' . $clientType . ' IS NULL OR `u`.is_delete = 0';
-        $userWhere_3 = '`u`.' . $clientType . ' IS NOT NULL OR `m`.member > 0';
+        $userWhere_3 = '`u`.' . $clientType . ' IS NOT NULL OR `m`.member ' . $member;
 
         $result = $this
             ->alias('m')
@@ -389,7 +394,7 @@ class Message extends CareyShop
             ->where($userWhere_1, [$clientType => [get_client_id(), \PDO::PARAM_INT]])
             ->where($userWhere_2)
             ->where($userWhere_3)
-            ->where($mapRead)
+            ->where('`u`.' . $clientType . ' IS NULL OR `u`.is_read = 0')
             ->where($map)
             ->group('`m`.`type`')
             ->select();
@@ -424,7 +429,13 @@ class Message extends CareyShop
         $map['m.is_delete'] = ['eq', 0];
 
         $mapRead = null;
-        $clientType = is_client_admin() ? 'admin_id' : 'user_id';
+        $member = '< 2';
+        $clientType = 'user_id';
+
+        if (is_client_admin()) {
+            $member = '= 2';
+            $clientType = 'admin_id';
+        }
 
         // 是否已读需要特殊对待
         if (!is_empty_parm($data['is_read'])) {
@@ -443,9 +454,9 @@ class Message extends CareyShop
         $userSQL = MessageUser::where([$clientType => ['eq', get_client_id()]])->buildSql();
 
         // 联合查询语句
-        $userWhere_1 = '`u`.' . $clientType . ' IS NULL OR `u`.' . $clientType . ' = :' . $clientType . '';
+        $userWhere_1 = '`u`.' . $clientType . ' IS NULL OR `u`.' . $clientType . ' = :' . $clientType;
         $userWhere_2 = '`u`.' . $clientType . ' IS NULL OR `u`.is_delete = 0';
-        $userWhere_3 = '`u`.' . $clientType . ' IS NOT NULL OR `m`.member > 0';
+        $userWhere_3 = '`u`.' . $clientType . ' IS NOT NULL OR `m`.member ' . $member;
 
         $totalResult = $this
             ->alias('m')
