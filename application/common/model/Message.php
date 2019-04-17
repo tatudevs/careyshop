@@ -400,12 +400,10 @@ class Message extends CareyShop
             ->select();
 
         if (false !== $result) {
-            $totalResult = 0;
-            foreach ($result as $value) {
-                $totalResult += $value->getAttr('total');
-            }
+            $total = $result->column('total', 'type');
+            $total['total'] = array_sum($total);
 
-            return ['total' => $result, 'total_result' => $totalResult];
+            return $total;
         }
 
         return false;
@@ -490,7 +488,7 @@ class Message extends CareyShop
 
         $result = $this
             ->alias('m')
-            ->field('m.message_id,m.title,m.url,m.target,m.page_views,ifnull(`u`.is_read, 0) is_read,m.create_time')
+            ->field('m.message_id,m.title,m.url,m.target,ifnull(`u`.is_read, 0) is_read,m.create_time')
             ->join([$userSQL => 'u'], 'u.message_id = m.message_id', 'left')
             ->where($userWhere_1, [$clientType => [get_client_id(), \PDO::PARAM_INT]])
             ->where($userWhere_2)
