@@ -500,7 +500,19 @@ class Message extends CareyShop
             ->select();
 
         if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
+            $message = [
+                'items'        => $result->toArray(),
+                'total_result' => $totalResult,
+            ];
+
+            if (!empty($data['is_unread'])) {
+                $unread = $this->getMessageUserUnread([]);
+                if (false !== $unread) {
+                    $message['unread_count'] = $unread;
+                }
+            }
+
+            return $message;
         }
 
         return false;
