@@ -466,8 +466,16 @@ class Message extends CareyShop
             ->where($map)
             ->count();
 
+        $message = ['total_result' => $totalResult];
+        if (!empty($data['is_unread'])) {
+            $unread = $this->getMessageUserUnread([]);
+            if (false !== $unread) {
+                $message['unread_count'] = $unread;
+            }
+        }
+
         if ($totalResult <= 0) {
-            return ['total_result' => $totalResult];
+            return $message;
         }
 
         // 翻页页数
@@ -488,7 +496,7 @@ class Message extends CareyShop
 
         $result = $this
             ->alias('m')
-            ->field('m.message_id,m.title,m.url,m.target,ifnull(`u`.is_read, 0) is_read,m.create_time')
+            ->field('m.message_id,m.type,m.title,m.url,m.target,ifnull(`u`.is_read, 0) is_read,m.create_time')
             ->join([$userSQL => 'u'], 'u.message_id = m.message_id', 'left')
             ->where($userWhere_1, [$clientType => [get_client_id(), \PDO::PARAM_INT]])
             ->where($userWhere_2)
@@ -500,18 +508,7 @@ class Message extends CareyShop
             ->select();
 
         if (false !== $result) {
-            $message = [
-                'items'        => $result->toArray(),
-                'total_result' => $totalResult,
-            ];
-
-            if (!empty($data['is_unread'])) {
-                $unread = $this->getMessageUserUnread([]);
-                if (false !== $unread) {
-                    $message['unread_count'] = $unread;
-                }
-            }
-
+            $message['items'] = $result->toArray();
             return $message;
         }
 
