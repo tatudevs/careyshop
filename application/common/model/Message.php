@@ -494,6 +494,10 @@ class Message extends CareyShop
         $order['m.is_top'] = 'desc';
         $order['m.' . $orderField] = $orderType;
 
+        if (!empty($data['order_field'])) {
+            $order = array_reverse($order);
+        }
+
         $result = $this
             ->alias('m')
             ->field('m.message_id,m.type,m.title,m.url,m.is_top,m.target,ifnull(`u`.is_read, 0) is_read,m.create_time')

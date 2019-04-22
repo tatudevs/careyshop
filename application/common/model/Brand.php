@@ -250,6 +250,10 @@ class Brand extends CareyShop
             $order['b.sort'] = 'asc';
             $order['b.' . $orderField] = $orderType;
 
+            if (!empty($data['order_field'])) {
+                $order = array_reverse($order);
+            }
+
             $query
                 ->cache(true, null, 'Brand')
                 ->alias('b')

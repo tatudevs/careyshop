@@ -200,6 +200,10 @@ class Article extends CareyShop
             is_client_admin() ?: $order['article.is_top'] = 'desc';
             $order['article.' . $orderField] = $orderType;
 
+            if (!empty($data['order_field'])) {
+                $order = array_reverse($order);
+            }
+
             $query
                 ->field('content', true)
                 ->with('getArticleCat')

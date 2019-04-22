@@ -308,6 +308,10 @@ class Ads extends CareyShop
             $order['ads.sort'] = 'asc';
             $order['ads.' . $orderField] = $orderType;
 
+            if (!empty($data['order_field'])) {
+                $order = array_reverse($order);
+            }
+
             $query
                 ->with('getAdsPosition')
                 ->where($map)

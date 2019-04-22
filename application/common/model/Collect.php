@@ -193,6 +193,10 @@ class Collect extends CareyShop
             $order['collect.is_top'] = 'desc';
             $order['collect.' . $orderField] = $orderType;
 
+            if (!empty($data['order_field'])) {
+                $order = array_reverse($order);
+            }
+
             $query->with('getGoods')->where($map)->order($order)->page($pageNo, $pageSize);
         });
 

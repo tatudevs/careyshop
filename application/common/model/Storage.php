@@ -114,6 +114,10 @@ class Storage extends CareyShop
         $order['sort'] = 'asc';
         $order[$orderField] = $orderType;
 
+        if (!empty($data['order_field'])) {
+            $order = array_reverse($order);
+        }
+
         // 获取实际数据
         $result = $this
             ->cache(true, null, 'StorageDirectory')
