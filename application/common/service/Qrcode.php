@@ -60,9 +60,9 @@ class Qrcode extends CareyShop
     public static function getQrcodeItem($data)
     {
         // 参数值处理
-        isset($data['text']) ?: $data['text'] = base64_decode('5Z+65LqOQ2FyZXlTaG9w5ZWG5Z+O5qGG5p6257O757uf');
+        !empty($data['text']) ?: $data['text'] = base64_decode('5Z+65LqOQ2FyZXlTaG9w5ZWG5Z+O5qGG5p6257O757uf');
         $size = !empty($data['size']) ? (int)$data['size'] : 3;
-        $logo = isset($data['logo']) ? $data['logo'] : config('qrcode_logo.value', null, 'system_info');
+        $logo = !empty($data['logo']) ? $data['logo'] : config('qrcode_logo.value', null, 'system_info');
         $logo = self::getQrcodeLogoPath($logo);
 
         ob_start();
