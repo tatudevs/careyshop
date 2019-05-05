@@ -21,6 +21,6 @@ class Withdraw extends CareyShop
      */
     public function getWithdrawFee()
     {
-        return ['withdraw_fee' => (float)Config::get('withdraw_fee.value', 'system_info')];
+        return ['withdraw_fee' => (float)Config::get('withdraw_fee.value', 'system_shopping')];
     }
 }

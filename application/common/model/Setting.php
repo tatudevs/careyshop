@@ -266,6 +266,7 @@ class Setting extends CareyShop
                         break;
 
                     case 'invoice':
+                    case 'withdraw_fee':
                         $this->setSettingItem($key, $value, 'system_shopping', 'Setting.between');
                         break;
 
@@ -370,11 +371,6 @@ class Setting extends CareyShop
                     case 'third_count':
                     case 'qrcode_logo':
                         $this->setSettingItem($key, $value, 'system_info', 'Setting.string');
-                        break;
-
-                    case 'withdraw_fee':
-                        !empty($value) ?: $value = 0;
-                        $this->setSettingItem($key, $value, 'system_info', 'Setting.between');
                         break;
 
                     case 'allow_origin':

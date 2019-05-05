@@ -223,7 +223,7 @@ class Withdraw extends CareyShop
 
         // 处理数据
         unset($data['withdraw_id'], $data['remark']);
-        $data['fee'] = Config::get('withdraw_fee.value', 'system_info');
+        $data['fee'] = Config::get('withdraw_fee.value', 'system_shopping');
         $data['withdraw_no'] = $this->getWithdrawNo();
         $data['user_id'] = get_client_id();
         $data['amount'] = round($data['money'] + (($data['fee'] / 100) * $data['money']), 2);
