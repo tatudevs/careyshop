@@ -370,11 +370,11 @@ class Setting extends CareyShop
                     case 'weixin_url':
                     case 'third_count':
                     case 'qrcode_logo':
+                    case 'platform':
                         $this->setSettingItem($key, $value, 'system_info', 'Setting.string');
                         break;
 
                     case 'allow_origin':
-                    case 'platform':
                         !empty($value) ?: $value = [];
                         $this->setSettingItem($key, $value, 'system_info', 'Setting.array', true);
                         break;
