@@ -424,6 +424,7 @@ class Setting extends CareyShop
                     case 'oss':
                     case 'image_ext':
                     case 'file_ext':
+                    case 'careyshop_url':
                     case 'qiniu_access_key':
                     case 'qiniu_secret_key':
                     case 'qiniu_bucket':
