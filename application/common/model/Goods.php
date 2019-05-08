@@ -578,7 +578,7 @@ class Goods extends CareyShop
         is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
         $map['is_delete'] = ['eq', 0];
 
-        // 支持多个关键词搜索(空格间隔)
+        // 支持多个关键词搜索(空格分隔)
         if (!empty($data['keywords'])) {
             $keywords = explode(' ', $data['keywords']);
             foreach ($keywords as &$value) {
@@ -1213,7 +1213,7 @@ class Goods extends CareyShop
         is_empty_parm($data['is_integral']) ?: $map['is_integral'] = ['gt', 0];
         empty($data['bar_code']) ?: $map['bar_code'] = ['eq', $data['bar_code']];
 
-        // 支持多个关键词搜索(空格间隔)
+        // 支持多个关键词搜索(空格分隔)
         if (!empty($data['keywords'])) {
             $keywords = explode(' ', $data['keywords']);
             foreach ($keywords as &$value) {

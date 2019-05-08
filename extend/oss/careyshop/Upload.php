@@ -133,7 +133,7 @@ class Upload extends UploadBase
 
         if (empty($files)) {
             $uploadMaxSize = Config::get('file_size.value', 'upload');
-            if (empty($uploadMaxSize)) {
+            if (!string_to_byte($uploadMaxSize)) {
                 $uploadMaxSize = ini_get('upload_max_filesize');
             }
 

@@ -646,7 +646,7 @@ class Order extends CareyShop
             return '';
         }
 
-        // 如区域地址存在,则需要添加间隔符用于增加详细地址
+        // 如区域地址存在,则需要添加分隔符用于增加详细地址
         if ($completeAddress != '') {
             $completeAddress .= Config::get('spacer.value', 'system_shopping');
         }
