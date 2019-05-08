@@ -33,7 +33,7 @@ class Payment extends CareyShop
         $vars = ['method' => 'put.payment.data', 'to_payment' => $data['to_payment'], 'type' => 'notify'];
         $notifyUrl = Url::bUild('/api/v1/payment', $vars, true, true);
 
-        return $isString ? $notifyUrl : ['notify_url' => $notifyUrl];
+        return $isString ? $notifyUrl : ['notify_url' => $notifyUrl, 'to_payment' => $data['to_payment']];
     }
 
     /**
@@ -53,7 +53,7 @@ class Payment extends CareyShop
         $vars = ['method' => 'put.payment.data', 'to_payment' => $data['to_payment'], 'type' => 'return'];
         $notifyUrl = Url::bUild('/api/v1/payment', $vars, true, true);
 
-        return $isString ? $notifyUrl : ['return_url' => $notifyUrl];
+        return $isString ? $notifyUrl : ['return_url' => $notifyUrl, 'to_payment' => $data['to_payment']];
     }
 
     /**
