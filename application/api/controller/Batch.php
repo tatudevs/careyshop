@@ -51,7 +51,9 @@ class Batch extends CareyShop
 
             $callback = null;
             static::$model = null;
-            $authUrl = sprintf('%s/%s/%s/%s', $this->request->module(), $version, $controller, $method);
+
+            // 此处的$controller值必须使用源值,否则大小写匹配不上
+            $authUrl = sprintf('%s/%s/%s/%s', $this->request->module(), $version, $value['controller'], $method);
 
             try {
                 // 验证数据
