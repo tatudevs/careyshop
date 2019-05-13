@@ -221,6 +221,7 @@ class Navigation extends CareyShop
 
         $map['navigation_id'] = ['eq', $data['navigation_id']];
         if (false !== $this->save(['sort' => $data['sort']], $map)) {
+            Cache::clear('Navigation');
             return true;
         }
 
@@ -246,6 +247,7 @@ class Navigation extends CareyShop
         }
 
         if (false !== $this->isUpdate()->saveAll($list)) {
+            Cache::clear('Navigation');
             return true;
         }
 
