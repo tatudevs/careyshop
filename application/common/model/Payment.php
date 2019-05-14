@@ -239,7 +239,7 @@ class Payment extends CareyShop
             }
         }
 
-        $field = 'payment_id,name,code,image,is_deposit,is_inpour,is_payment,is_refund,model,sort,status';
+        $field = 'payment_id,name,code,image,is_deposit,is_inpour,is_payment,is_refund,setting,model,sort,status';
         if (!empty($data['is_select'])) {
             $field = 'name,code,image';
             $map['status'] = ['eq', 1];
