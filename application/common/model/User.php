@@ -160,6 +160,8 @@ class User extends CareyShop
                 throw new \Exception($this->getError());
             }
 
+            // TODO 添加账号之后需要把之前存在的消息全部删除
+
             self::commit();
             return true;
         } catch (\Exception $e) {

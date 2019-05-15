@@ -112,6 +112,7 @@ class Admin extends CareyShop
 
         $field = ['username', 'password', 'group_id', 'nickname', 'head_pic'];
         if (false !== $this->allowField($field)->save($data)) {
+            // TODO 添加账号之后需要把之前存在的消息全部删除
             return $this->hidden(['password_confirm'])->toArray();
         }
 
