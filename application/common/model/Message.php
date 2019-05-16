@@ -367,20 +367,24 @@ class Message extends CareyShop
             return false;
         }
 
-        is_empty_parm($data['type']) ?: $map['m.type'] = ['eq', $data['type']];
-        $map['m.status'] = ['eq', 1];
-        $map['m.is_delete'] = ['eq', 0];
-
-        $member = '< 2';
-        $clientType = 'user_id';
-
+        $clientId = get_client_id();
         if (is_client_admin()) {
             $member = '= 2';
             $clientType = 'admin_id';
+            $createTime = Admin::where([$clientType => ['eq', $clientId]])->value('create_time');
+        } else {
+            $member = '< 2';
+            $clientType = 'user_id';
+            $createTime = User::where([$clientType => ['eq', $clientId]])->value('create_time');
         }
 
+        is_empty_parm($data['type']) ?: $map['m.type'] = ['eq', $data['type']];
+        $map['m.status'] = ['eq', 1];
+        $map['m.is_delete'] = ['eq', 0];
+        $map['m.create_time'] = ['egt', $createTime];
+
         // 构建子语句
-        $userSQL = MessageUser::where([$clientType => ['eq', get_client_id()]])->buildSql();
+        $userSQL = MessageUser::where([$clientType => ['eq', $clientId]])->buildSql();
 
         // 联合查询语句
         $userWhere_1 = '`u`.' . $clientType . ' IS NULL OR `u`.' . $clientType . ' = :' . $clientType;
@@ -391,7 +395,7 @@ class Message extends CareyShop
             ->alias('m')
             ->field('`m`.`type`, COUNT(*) AS total')
             ->join([$userSQL => 'u'], 'u.message_id = m.message_id', 'left')
-            ->where($userWhere_1, [$clientType => [get_client_id(), \PDO::PARAM_INT]])
+            ->where($userWhere_1, [$clientType => [$clientId, \PDO::PARAM_INT]])
             ->where($userWhere_2)
             ->where($userWhere_3)
             ->where('`u`.' . $clientType . ' IS NULL OR `u`.is_read = 0')
@@ -422,18 +426,22 @@ class Message extends CareyShop
             return false;
         }
 
-        is_empty_parm($data['type']) ?: $map['m.type'] = ['eq', $data['type']];
-        $map['m.status'] = ['eq', 1];
-        $map['m.is_delete'] = ['eq', 0];
-
-        $mapRead = null;
-        $member = '< 2';
-        $clientType = 'user_id';
-
+        $clientId = get_client_id();
         if (is_client_admin()) {
             $member = '= 2';
             $clientType = 'admin_id';
+            $createTime = Admin::where([$clientType => ['eq', $clientId]])->value('create_time');
+        } else {
+            $member = '< 2';
+            $clientType = 'user_id';
+            $createTime = User::where([$clientType => ['eq', $clientId]])->value('create_time');
         }
+
+        is_empty_parm($data['type']) ?: $map['m.type'] = ['eq', $data['type']];
+        $map['m.status'] = ['eq', 1];
+        $map['m.is_delete'] = ['eq', 0];
+        $map['m.create_time'] = ['egt', $createTime];
+        $mapRead = null;
 
         // 是否已读需要特殊对待
         if (!is_empty_parm($data['is_read'])) {
@@ -449,7 +457,7 @@ class Message extends CareyShop
         }
 
         // 构建子语句
-        $userSQL = MessageUser::where([$clientType => ['eq', get_client_id()]])->buildSql();
+        $userSQL = MessageUser::where([$clientType => ['eq', $clientId]])->buildSql();
 
         // 联合查询语句
         $userWhere_1 = '`u`.' . $clientType . ' IS NULL OR `u`.' . $clientType . ' = :' . $clientType;
@@ -459,7 +467,7 @@ class Message extends CareyShop
         $totalResult = $this
             ->alias('m')
             ->join([$userSQL => 'u'], 'u.message_id = m.message_id', 'left')
-            ->where($userWhere_1, [$clientType => [get_client_id(), \PDO::PARAM_INT]])
+            ->where($userWhere_1, [$clientType => [$clientId, \PDO::PARAM_INT]])
             ->where($userWhere_2)
             ->where($userWhere_3)
             ->where($mapRead)
@@ -502,7 +510,7 @@ class Message extends CareyShop
             ->alias('m')
             ->field('m.message_id,m.type,m.title,m.url,m.is_top,m.target,ifnull(`u`.is_read, 0) is_read,m.create_time')
             ->join([$userSQL => 'u'], 'u.message_id = m.message_id', 'left')
-            ->where($userWhere_1, [$clientType => [get_client_id(), \PDO::PARAM_INT]])
+            ->where($userWhere_1, [$clientType => [$clientId, \PDO::PARAM_INT]])
             ->where($userWhere_2)
             ->where($userWhere_3)
             ->where($mapRead)
