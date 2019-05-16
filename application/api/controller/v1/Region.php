@@ -30,9 +30,9 @@ class Region extends CareyShop
             'del.region.list'     => ['delRegionList'],
             // 获取指定区域
             'get.region.item'     => ['getRegionItem'],
-            // 获取指定Id下的子节点(不包含本身)
+            // 获取指定Id下的子节点
             'get.region.list'     => ['getRegionList'],
-            // 获取指定Id下的所有子节点(包含本身)
+            // 获取指定Id下的所有子节点
             'get.region.son.list' => ['getRegionSonList'],
             // 设置区域排序
             'set.region.sort'     => ['setRegionSort'],

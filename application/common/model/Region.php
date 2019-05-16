@@ -16,14 +16,6 @@ use think\Config;
 class Region extends CareyShop
 {
     /**
-     * 隐藏属性
-     * @var array
-     */
-    protected $hidden = [
-        'is_delete',
-    ];
-
-    /**
      * 只读属性
      * @var array
      */
@@ -44,27 +36,15 @@ class Region extends CareyShop
     ];
 
     /**
-     * 全局查询条件
-     * @access protected
-     * @param  object $query 模型
-     * @return void
-     */
-    protected function base($query)
-    {
-        $query->where(['is_delete' => ['eq', 0]]);
-    }
-
-    /**
      * 获取区域缓存列表
      * @access public
      * @return array|false
      */
     public static function getRegionCacheList()
     {
-        return self::useGlobalScope(false)
-            ->cache('DeliveryArea')
+        return self::cache('DeliveryArea')
             ->order(['sort', 'region_id'])
-            ->column('region_id,parent_id,region_name,sort,is_delete', 'region_id');
+            ->column('region_id');
     }
 
     /**
@@ -80,7 +60,8 @@ class Region extends CareyShop
             return false;
         }
 
-        if (false !== $this->allowField(['parent_id', 'region_name', 'sort'])->save($data)) {
+        $field = ['parent_id', 'region_name', 'sort', 'is_delete'];
+        if (false !== $this->allowField($field)->save($data)) {
             Cache::rm('DeliveryArea');
             return $this->toArray();
         }
@@ -123,7 +104,7 @@ class Region extends CareyShop
         }
 
         $map['region_id'] = ['in', $data['region_id']];
-        if (false !== $this->save(['is_delete' => 1], $map)) {
+        if (false !== $this->save(['is_delete' => $data['is_delete']], $map)) {
             Cache::rm('DeliveryArea');
             return true;
         }
@@ -144,10 +125,7 @@ class Region extends CareyShop
             return false;
         }
 
-        // 是否提取已删除区域
-        $scope = isset($data['region_all']) ? !$data['region_all'] : true;
-        $result = self::useGlobalScope($scope)->where(['region_id' => ['eq', $data['region_id']]])->find();
-
+        $result = self::get($data['region_id']);
         if (false !== $result) {
             return is_null($result) ? null : $result->toArray();
         }
@@ -156,7 +134,7 @@ class Region extends CareyShop
     }
 
     /**
-     * 获取指定Id下的子节点(不包含本身)
+     * 获取指定Id下的子节点
      * @access public
      * @param  array $data 外部数据
      * @return array|false
@@ -168,11 +146,10 @@ class Region extends CareyShop
             return false;
         }
 
-        // 是否提取已删除区域
-        $scope = isset($data['region_all']) ? !$data['region_all'] : true;
         $map['parent_id'] = isset($data['region_id']) ? ['eq', $data['region_id']] : ['eq', 0];
-        $result = self::useGlobalScope($scope)->where($map)->order(['sort', 'region_id'])->select();
+        !isset($data['is_delete']) ?: $map['is_delete'] = ['eq', $data['is_delete']];
 
+        $result = $this->where($map)->order(['sort', 'region_id'])->select();
         if (false !== $result) {
             return $result->toArray();
         }
@@ -181,38 +158,25 @@ class Region extends CareyShop
     }
 
     /**
-     * 获取指定Id下的所有子节点(包含本身)
+     * 获取指定Id下的所有子节点
      * @access public
      * @param  array $data 外部数据
      * @return array|false
      */
     public function getRegionSonList($data)
     {
-        if (!$this->validateData($data, 'Region.son')) {
+        // TODO: 修改到此处
+        if (!$this->validateData($data, 'Region.list')) {
             return false;
         }
 
         // 是否提取已删除区域
-        $isDelete = !is_empty_parm($data['region_all']) ? (bool)$data['region_all'] : false;
+        isset($data['region_id']) ?: $data['region_id'] = 0;
+        $isDelete = !is_empty_parm($data['is_delete']) ? (bool)$data['is_delete'] : false;
         $regionList = self::getRegionCacheList();
 
         static $result = [];
-        $data['region_id'] = array_unique($data['region_id']);
-
-        foreach ($data['region_id'] as $value) {
-            if (!isset($regionList[$value])) {
-                continue;
-            }
-
-            if (!$isDelete && $regionList[$value]['is_delete'] == 1) {
-                continue;
-            }
-
-            unset($regionList[$value]['is_delete']);
-            $result[] = $regionList[$value];
-
-            self::getRegionChildrenList($value, $result, $regionList, $isDelete);
-        }
+        self::getRegionChildrenList($data['region_id'], $result, $regionList, $isDelete);
 
         return $result;
     }
@@ -223,10 +187,10 @@ class Region extends CareyShop
      * @param  int   $id    上级区域Id
      * @param  array &$tree 树结构
      * @param  array &$list 原始数据结构
-     * @param  bool  $isAll 是否提取已删除区域
+     * @param  bool  $isDelete 是否提取已删除区域
      * @return void
      */
-    private static function getRegionChildrenList($id, &$tree, &$list, $isAll)
+    private static function getRegionChildrenList($id, &$tree, &$list, $isDelete)
     {
         static $keyList = null;
         if (is_null($keyList)) {
@@ -238,7 +202,7 @@ class Region extends CareyShop
                 continue;
             }
 
-            if (!$isAll && $value['is_delete'] == 1) {
+            if (!$isDelete && $value['is_delete'] == 1) {
                 continue;
             }
 
@@ -246,7 +210,7 @@ class Region extends CareyShop
             $tree[] = $value;
 
             if ($value['region_id'] != 0 && isset($keyList[$value['region_id']])) {
-                self::getRegionChildrenList($value['region_id'], $tree, $list, $isAll);
+                self::getRegionChildrenList($value['region_id'], $tree, $list, $isDelete);
             }
         }
     }
