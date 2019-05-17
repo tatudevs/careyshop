@@ -16,6 +16,14 @@ use think\Config;
 class Region extends CareyShop
 {
     /**
+     * 隐藏属性
+     * @var array
+     */
+    protected $hidden = [
+        'is_delete',
+    ];
+
+    /**
      * 只读属性
      * @var array
      */
@@ -36,15 +44,27 @@ class Region extends CareyShop
     ];
 
     /**
+     * 全局查询条件
+     * @access protected
+     * @param  object $query 模型
+     * @return void
+     */
+    protected function base($query)
+    {
+        $query->where(['is_delete' => ['eq', 0]]);
+    }
+
+    /**
      * 获取区域缓存列表
      * @access public
      * @return array|false
      */
     public static function getRegionCacheList()
     {
-        return self::cache('DeliveryArea')
+        return self::useGlobalScope(false)
+            ->cache('DeliveryArea')
             ->order(['sort', 'region_id'])
-            ->column('region_id');
+            ->column('region_id,parent_id,region_name,sort,is_delete', 'region_id');
     }
 
     /**
@@ -60,8 +80,7 @@ class Region extends CareyShop
             return false;
         }
 
-        $field = ['parent_id', 'region_name', 'sort', 'is_delete'];
-        if (false !== $this->allowField($field)->save($data)) {
+        if (false !== $this->allowField(['parent_id', 'region_name', 'sort'])->save($data)) {
             Cache::rm('DeliveryArea');
             return $this->toArray();
         }
@@ -104,7 +123,7 @@ class Region extends CareyShop
         }
 
         $map['region_id'] = ['in', $data['region_id']];
-        if (false !== $this->save(['is_delete' => $data['is_delete']], $map)) {
+        if (false !== $this->save(['is_delete' => 1], $map)) {
             Cache::rm('DeliveryArea');
             return true;
         }
@@ -125,7 +144,10 @@ class Region extends CareyShop
             return false;
         }
 
-        $result = self::get($data['region_id']);
+        // 是否提取已删除区域
+        $scope = isset($data['region_all']) ? !$data['region_all'] : true;
+        $result = self::useGlobalScope($scope)->where(['region_id' => ['eq', $data['region_id']]])->find();
+
         if (false !== $result) {
             return is_null($result) ? null : $result->toArray();
         }
@@ -146,10 +168,11 @@ class Region extends CareyShop
             return false;
         }
 
+        // 是否提取已删除区域
+        $scope = isset($data['region_all']) ? !$data['region_all'] : true;
         $map['parent_id'] = isset($data['region_id']) ? ['eq', $data['region_id']] : ['eq', 0];
-        !isset($data['is_delete']) ?: $map['is_delete'] = ['eq', $data['is_delete']];
+        $result = self::useGlobalScope($scope)->where($map)->order(['sort', 'region_id'])->select();
 
-        $result = $this->where($map)->order(['sort', 'region_id'])->select();
         if (false !== $result) {
             return $result->toArray();
         }
@@ -165,14 +188,13 @@ class Region extends CareyShop
      */
     public function getRegionSonList($data)
     {
-        // TODO: 修改到此处
-        if (!$this->validateData($data, 'Region.list')) {
+        if (!$this->validateData($data, 'Region.son')) {
             return false;
         }
 
         // 是否提取已删除区域
+        $isDelete = !is_empty_parm($data['region_all']) ? (bool)$data['region_all'] : false;
         isset($data['region_id']) ?: $data['region_id'] = 0;
-        $isDelete = !is_empty_parm($data['is_delete']) ? (bool)$data['is_delete'] : false;
         $regionList = self::getRegionCacheList();
 
         static $result = [];
@@ -206,9 +228,11 @@ class Region extends CareyShop
                 continue;
             }
 
-            unset($value['is_delete']);
-            $tree[] = $value;
+            if ($isDelete) {
+                unset($value['is_delete']);
+            }
 
+            $tree[] = $value;
             if ($value['region_id'] != 0 && isset($keyList[$value['region_id']])) {
                 self::getRegionChildrenList($value['region_id'], $tree, $list, $isDelete);
             }
@@ -275,7 +299,7 @@ class Region extends CareyShop
         }
 
         $map['region_id'] = ['in', $data['region_id']];
-        $result = $this->where($map)->column('region_name', 'region_id');
+        $result = self::useGlobalScope(false)->where($map)->column('region_name', 'region_id');
 
         // 根据用户输入的顺序返回
         $name = [];

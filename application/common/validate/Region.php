@@ -21,7 +21,7 @@ class Region extends CareyShop
         'parent_id'   => 'require|integer|egt:0',
         'region_name' => 'require|max:120',
         'sort'        => 'integer|between:0,255',
-        'is_delete'   => 'in:0,1',
+        'region_all'  => 'in:0,1',
     ];
 
     /**
@@ -33,7 +33,7 @@ class Region extends CareyShop
         'parent_id'   => '父区域编号',
         'region_name' => '区域名称',
         'sort'        => '区域排序值',
-        'is_delete'   => '是否已删除',
+        'region_all'  => '所有区域(包括已删除)',
     ];
 
     /**
@@ -45,18 +45,17 @@ class Region extends CareyShop
             'region_id' => 'require|integer|gt:0',
             'region_name',
             'sort',
-            'is_delete',
         ],
         'del'   => [
             'region_id' => 'require|arrayHasOnlyInts',
-            'is_delete' => 'require|in:0,1',
         ],
         'item'  => [
             'region_id' => 'require|integer|gt:0',
+            'region_all',
         ],
         'list'  => [
             'region_id' => 'integer|egt:0',
-            'is_delete',
+            'region_all',
         ],
         'sort'  => [
             'region_id' => 'require|integer|gt:0',
