@@ -18,7 +18,7 @@ class Region extends CareyShop
      */
     protected $rule = [
         'region_id'   => 'integer|gt:0',
-        'parent_id'   => 'require|integer|egt:0',
+        'parent_id'   => 'integer|egt:0',
         'region_name' => 'require|max:120',
         'sort'        => 'integer|between:0,255',
         'region_all'  => 'in:0,1',

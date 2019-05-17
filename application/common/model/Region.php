@@ -188,7 +188,7 @@ class Region extends CareyShop
      */
     public function getRegionSonList($data)
     {
-        if (!$this->validateData($data, 'Region.son')) {
+        if (!$this->validateData($data, 'Region.list')) {
             return false;
         }
 
@@ -228,7 +228,7 @@ class Region extends CareyShop
                 continue;
             }
 
-            if ($isDelete) {
+            if (!$isDelete) {
                 unset($value['is_delete']);
             }
 
