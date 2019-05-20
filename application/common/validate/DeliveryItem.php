@@ -37,7 +37,7 @@ class DeliveryItem extends CareyShop
     protected $field = [
         'delivery_item_id' => '快递公司编号',
         'name'             => '快递公司名称',
-        'phonetic'         => '快递公司拼音',
+        'phonetic'         => '快递公司首拼',
         'code'             => '快递公司编码',
         'type'             => '快递公司类型',
         'exclude_id'       => '快递公司排除Id',
