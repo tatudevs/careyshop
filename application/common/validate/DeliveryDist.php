@@ -20,6 +20,7 @@ class DeliveryDist extends CareyShop
         'client_id'     => 'require|integer|gt:0',
         'order_code'    => 'require|max:50',/*|unique:delivery_dist'*/
         'delivery_id'   => 'require|integer|gt:0',
+        'delivery_code' => 'max:30',
         'logistic_code' => 'require|max:50',
         'exclude_code'  => 'arrayHasOnlyStrings',
         'is_trace'      => 'in:0,1',
@@ -41,6 +42,7 @@ class DeliveryDist extends CareyShop
         'client_id'     => '账号编号',
         'order_code'    => '流水号',
         'delivery_id'   => '配送方式编号',
+        'delivery_code' => '快递公司编码',
         'logistic_code' => '快递单号',
         'exclude_code'  => '排除快递单号',
         'is_trace'      => '是否获取配送轨迹',
@@ -59,12 +61,12 @@ class DeliveryDist extends CareyShop
      * @var array
      */
     protected $scene = [
-        'item' => [
+        'item'  => [
             'order_code'    => 'require|max:50',
             'logistic_code' => 'max:50',
             'exclude_code',
         ],
-        'list' => [
+        'list'  => [
             'order_code'    => 'max:50',
             'logistic_code' => 'max:50',
             'is_trace',
@@ -76,6 +78,10 @@ class DeliveryDist extends CareyShop
             'page_size',
             'order_type',
             'order_field',
+        ],
+        'trace' => [
+            'delivery_code' => 'require|max:30',
+            'logistic_code',
         ],
     ];
 }

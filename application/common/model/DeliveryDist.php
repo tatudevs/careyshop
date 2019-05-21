@@ -90,7 +90,7 @@ class DeliveryDist extends CareyShop
     }
 
     /**
-     * 添加一条配送记录
+     * 添加一条配送轨迹
      * @access public
      * @param  array $data 外部数据
      * @return false|array
@@ -126,7 +126,7 @@ class DeliveryDist extends CareyShop
         $data['is_sub'] = Config::get('is_sub.value', 'delivery_dist');
         unset($data['client_id'], $data['delivery_id']);
 
-        // 配送记录存在则直接返回
+        // 配送轨迹存在则直接返回
         $distResult = self::get(function ($query) use ($data) {
             $map['user_id'] = ['eq', $data['user_id']];
             $map['order_code'] = ['eq', $data['order_code']];
@@ -264,7 +264,22 @@ class DeliveryDist extends CareyShop
     }
 
     /**
-     * 根据流水号获取配送记录
+     * 根据快递单号即时查询配送轨迹
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|bool|false
+     */
+    public function getDeliveryDistTrace($data)
+    {
+        if (!$this->validateData($data, 'DeliveryDist.trace')) {
+            return false;
+        }
+
+        return $this->getOrderTracesByJson($data['delivery_code'], $data['logistic_code']);
+    }
+
+    /**
+     * 根据流水号获取配送轨迹
      * @access public
      * @param  array $data 外部数据
      * @return false|array
@@ -295,7 +310,7 @@ class DeliveryDist extends CareyShop
         $result = $result->toArray();
 
         foreach ($result as $key => $value) {
-            // 忽略已订阅或已签收的配送记录
+            // 忽略已订阅或已签收的配送轨迹
             if (1 === $value['is_sub'] || 3 === $value['state']) {
                 continue;
             }
@@ -324,7 +339,7 @@ class DeliveryDist extends CareyShop
     }
 
     /**
-     * 获取配送记录列表
+     * 获取配送轨迹列表
      * @access public
      * @param  array $data 外部数据
      * @return false|array
