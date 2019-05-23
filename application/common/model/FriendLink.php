@@ -28,7 +28,6 @@ class FriendLink extends CareyShop
         'friend_link_id' => 'integer',
         'sort'           => 'integer',
         'status'         => 'integer',
-        'logo'           => 'array',
     ];
 
     /**

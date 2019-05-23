@@ -20,7 +20,7 @@ class Payment extends CareyShop
         'payment_id'   => 'integer|gt:0',
         'name'         => 'require|max:50',
         'code'         => 'require|integer|between:0,9',
-        'image'        => 'array',
+        'image'        => 'max:512',
         'is_deposit'   => 'require|in:0,1',
         'is_inpour'    => 'require|in:0,1',
         'is_payment'   => 'require|in:0,1',

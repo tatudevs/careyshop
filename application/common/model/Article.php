@@ -36,7 +36,6 @@ class Article extends CareyShop
         'is_top'         => 'integer',
         'status'         => 'integer',
         'page_views'     => 'integer',
-        'image'          => 'array',
     ];
 
     /**

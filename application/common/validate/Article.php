@@ -20,7 +20,7 @@ class Article extends CareyShop
         'article_id'     => 'integer|gt:0',
         'article_cat_id' => 'require|integer|gt:0',
         'title'          => 'require|max:200',
-        'image'          => 'array',
+        'image'          => 'max:512',
         'content'        => 'require',
         'source'         => 'max:60|requireWith:source_url',
         'source_url'     => 'max:255|requireWith:source',
