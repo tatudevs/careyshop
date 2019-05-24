@@ -249,7 +249,11 @@ class Upload extends CareyShop
     {
         $url = $this->getThumbUrl();
         if (false === $url) {
-            return false;
+            $request = Request::instance();
+            $oldUrl = $request->param('url');
+
+            header('Location:' . $oldUrl, true, 301);
+            exit;
         }
 
         if (empty($url['url_prefix'])) {
