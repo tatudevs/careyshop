@@ -61,12 +61,12 @@ class DeliveryDist extends CareyShop
      * @var array
      */
     protected $scene = [
-        'item'  => [
+        'item'      => [
             'order_code'    => 'require|max:50',
             'logistic_code' => 'max:50',
             'exclude_code',
         ],
-        'list'  => [
+        'list'      => [
             'order_code'    => 'max:50',
             'logistic_code' => 'max:50',
             'is_trace',
@@ -79,8 +79,11 @@ class DeliveryDist extends CareyShop
             'order_type',
             'order_field',
         ],
-        'trace' => [
+        'trace'     => [
             'delivery_code' => 'require|max:30',
+            'logistic_code',
+        ],
+        'recognise' => [
             'logistic_code',
         ],
     ];
