@@ -53,25 +53,25 @@ class DeliveryItem extends CareyShop
      * @var array
      */
     protected $scene = [
-        'set'    => [
+        'set'       => [
             'delivery_item_id' => 'require|integer|gt:0',
             'name',
             'phonetic',
             'code',
             'type',
         ],
-        'del'    => [
+        'del'       => [
             'delivery_item_id' => 'require|arrayHasOnlyInts',
         ],
-        'item'   => [
+        'item'      => [
             'delivery_item_id' => 'require|integer|gt:0',
         ],
-        'unique' => [
+        'unique'    => [
             'code',
             'type',
             'exclude_id',
         ],
-        'list'   => [
+        'list'      => [
             'name' => 'max:50',
             'code' => 'max:30',
             'type' => 'integer|between:0,3',
@@ -81,13 +81,16 @@ class DeliveryItem extends CareyShop
             'order_type',
             'order_field',
         ],
-        'select' => [
+        'select'    => [
             'type' => 'integer|between:0,3',
             'order_type',
             'order_field',
         ],
-        'hot'    => [
+        'hot'       => [
             'delivery_item_id' => 'require|integer|gt:0',
+        ],
+        'recognise' => [
+            'code',
         ],
     ];
 }

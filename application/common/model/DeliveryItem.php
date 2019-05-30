@@ -12,9 +12,16 @@ namespace app\common\model;
 
 use util\Phonetic;
 use think\helper\Str;
+use think\Config;
 
 class DeliveryItem extends CareyShop
 {
+    /**
+     * 快递鸟查询URL
+     * @var string
+     */
+    const KDNIAO_URL = 'http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx';
+
     /**
      * 隐藏属性
      * @var array
@@ -298,6 +305,48 @@ class DeliveryItem extends CareyShop
         }
 
         return false;
+    }
+
+    /**
+     * 根据快递单号识别快递公司
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|false
+     */
+    public function getCompanyRecognise($data)
+    {
+        if (!$this->validateData($data, 'DeliveryItem.recognise')) {
+            return false;
+        }
+
+        // 请求正文内容
+        $requestData = ['LogisticCode' => $data['code']];
+        $requestData = json_encode($requestData, JSON_UNESCAPED_UNICODE);
+
+        // 请求系统参数
+        $postData = [
+            'RequestData' => urlencode($requestData),
+            'EBusinessID' => Config::get('api_id.value', 'delivery_dist'),
+            'RequestType' => '2002',
+            'DataSign'    => \app\common\service\DeliveryDist::getCallbackSign($requestData),
+            'DataType'    => '2',
+        ];
+
+
+        $result = \util\Http::httpPost(self::KDNIAO_URL, $postData);
+        $result = json_decode($result, true);
+
+        if (!isset($result['Success']) || true != $result['Success']) {
+            return false;
+        }
+
+        $shippers = [];
+        // todo 需要把$result['Shippers']中的code提取出来
+
+        return [
+            'logistic_code' => $result['LogisticCode'],
+            'shippers'      => $shippers,
+        ];
     }
 
     /**

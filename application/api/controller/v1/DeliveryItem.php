@@ -23,21 +23,23 @@ class DeliveryItem extends CareyShop
     {
         return [
             // 添加一个快递公司
-            'add.delivery.company.item'    => ['addCompanyItem'],
+            'add.delivery.company.item'      => ['addCompanyItem'],
             // 编辑一个快递公司
-            'set.delivery.company.item'    => ['setCompanyItem'],
+            'set.delivery.company.item'      => ['setCompanyItem'],
             // 批量删除快递公司
-            'del.delivery.company.list'    => ['delCompanyList'],
+            'del.delivery.company.list'      => ['delCompanyList'],
             // 获取一个快递公司
-            'get.delivery.company.item'    => ['getCompanyItem'],
+            'get.delivery.company.item'      => ['getCompanyItem'],
             // 查询快递公司编码是否已存在
-            'unique.delivery.company.code' => ['uniqueCompanyCode'],
+            'unique.delivery.company.code'   => ['uniqueCompanyCode'],
             // 获取快递公司列表
-            'get.delivery.company.list'    => ['getCompanyList'],
+            'get.delivery.company.list'      => ['getCompanyList'],
             // 获取快递公司选择列表
-            'get.delivery.company.select'  => ['getCompanySelect'],
+            'get.delivery.company.select'    => ['getCompanySelect'],
+            // 根据快递单号识别快递公司
+            'get.delivery.company.recognise' => ['getCompanyRecognise'],
             // 复制一个快递公司为"热门类型"
-            'copy.delivery.company.hot'    => ['copyCompanyHot'],
+            'copy.delivery.company.hot'      => ['copyCompanyHot'],
         ];
     }
 }

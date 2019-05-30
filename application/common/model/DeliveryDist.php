@@ -280,44 +280,6 @@ class DeliveryDist extends CareyShop
     }
 
     /**
-     * 根据快递单号即时查询配送轨迹
-     * @access public
-     * @param  array $data 外部数据
-     * @return array|false
-     */
-    public function getDeliveryDistRecognise($data)
-    {
-        if (!$this->validateData($data, 'DeliveryDist.recognise')) {
-            return false;
-        }
-
-        // 请求正文内容
-        $requestData = ['LogisticCode' => $data['logistic_code']];
-        $requestData = json_encode($requestData, JSON_UNESCAPED_UNICODE);
-
-        // 请求系统参数
-        $postData = [
-            'RequestData' => urlencode($requestData),
-            'EBusinessID' => Config::get('api_id.value', 'delivery_dist'),
-            'RequestType' => '2002',
-            'DataSign'    => Dist::getCallbackSign($requestData),
-            'DataType'    => '2',
-        ];
-
-        $result = Http::httpPost(self::KDNIAO_URL, $postData);
-        $result = json_decode($result, true);
-
-        if (!isset($result['Success']) || true != $result['Success']) {
-            return false;
-        }
-
-        return [
-            'logistic_code' => $result['LogisticCode'],
-            'shippers'      => Dist::snake($result['Shippers']),
-        ];
-    }
-
-    /**
      * 根据流水号获取配送轨迹
      * @access public
      * @param  array $data 外部数据
