@@ -332,7 +332,6 @@ class DeliveryItem extends CareyShop
             'DataType'    => '2',
         ];
 
-
         $result = \util\Http::httpPost(self::KDNIAO_URL, $postData);
         $result = json_decode($result, true);
 
@@ -340,12 +339,9 @@ class DeliveryItem extends CareyShop
             return false;
         }
 
-        $shippers = [];
-        // todo 需要把$result['Shippers']中的code提取出来
-
         return [
             'logistic_code' => $result['LogisticCode'],
-            'shippers'      => $shippers,
+            'shippers'      => \app\common\service\DeliveryDist::snake($result['Shippers']),
         ];
     }
 
