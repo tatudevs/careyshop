@@ -48,6 +48,10 @@ class DeliveryDist extends CareyShop
      */
     public static function snake($data)
     {
+        if (empty($data)) {
+            return [];
+        }
+
         foreach ($data as $itemKey => $item) {
             foreach ($item as $valueKey => $value) {
                 $data[$itemKey][Str::snake($valueKey)] = $value;

@@ -336,7 +336,7 @@ class DeliveryItem extends CareyShop
         $result = json_decode($result, true);
 
         if (!isset($result['Success']) || true != $result['Success']) {
-            return false;
+            return $this->setError($result['Code']);
         }
 
         return [
