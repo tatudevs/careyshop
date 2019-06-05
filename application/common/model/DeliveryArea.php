@@ -241,8 +241,8 @@ class DeliveryArea extends CareyShop
 
         $baseData = [
             'delivery_area_id'    => 0,
-            'name'                => '默认',
-            'region'              => ['name' => '配送其他区域', 'region_id' => 0],
+            'name'                => '默认基数',
+            'region'              => [['name' => '其他配送区域', 'region_id' => 0]],
             'first_weight_price'  => $deliveryData->getAttr('first_weight_price'),
             'second_weight_price' => $deliveryData->getAttr('second_weight_price'),
             'first_item_price'    => $deliveryData->getAttr('first_item_price'),
