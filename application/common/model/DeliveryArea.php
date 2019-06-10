@@ -112,7 +112,7 @@ class DeliveryArea extends CareyShop
         foreach ($source as $value) {
             foreach ($tempData as $item) {
                 if ($value == $item['region_id']) {
-                    return !$this->setError($item['name'] . '重复出现在配送区域中');
+                    return !$this->setError($item['name'] . '在其他配送区域项中重复出现');
                 }
             }
         }
