@@ -53,7 +53,7 @@ class NoticeTpl extends CareyShop
             'notice_tpl_id' => 'require|integer|gt:0',
         ],
         'list'      => [
-            'code' => 'require|in:sms,email',
+            'code',
         ],
         'set_sms'   => [
             'sms_code' => 'require|max:20',

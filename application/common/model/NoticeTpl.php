@@ -147,7 +147,10 @@ class NoticeTpl extends CareyShop
 
         // 获取数据
         $result = self::all(function ($query) use ($data) {
-            $query->with('getNoticeItem')->where(['code' => ['eq', $data['code']]]);
+            $map = [];
+            !isset($data['code']) ?: $map['code'] = ['eq', $data['code']];
+
+            $query->with('getNoticeItem')->where($map);
         });
 
         if (false !== $result) {
