@@ -132,8 +132,15 @@ class CareyShop extends Controller
         // API_DEBUG模式是否运行
         $this->apiDebug = Config::has('api_debug') ? Config::get('api_debug') : false;
 
+        // 支持"text/plain"协议(仅限JSON)
+        if (false !== strpos($this->request->contentType(), 'text/plain')) {
+            $plain = json_decode($this->request->getInput(), true);
+            $this->request->post($plain);
+        }
+
         // 获取外部参数
         $this->params = $this->request->param();
+
         unset($this->params['version']);
         unset($this->params['controller']);
         unset($this->params[str_replace('.', '_', $_SERVER['PATH_INFO'])]);
