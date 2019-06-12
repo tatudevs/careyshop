@@ -140,6 +140,7 @@ class CareyShop extends Controller
 
         // 获取外部参数
         $this->params = $this->request->param();
+
         unset($this->params['version']);
         unset($this->params['controller']);
         unset($this->params[str_replace('.', '_', $_SERVER['PATH_INFO'])]);
