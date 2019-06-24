@@ -37,7 +37,7 @@ class User extends CareyShop
         'page_no'       => 'integer|gt:0',
         'page_size'     => 'integer|gt:0',
         'order_type'    => 'in:asc,desc',
-        'order_field'   => 'in:user_id,username,mobile,nickname,sex,birthday,user_level_id,status,create_time,total_money,balance,lock_balance,points,lock_points,name,discount',
+        'order_field'   => 'in:user_id,username,mobile,nickname,sex,birthday,user_level_id,status,create_time,name,discount',
     ];
 
     /**

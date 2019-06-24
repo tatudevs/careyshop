@@ -355,7 +355,7 @@ class User extends CareyShop
         is_empty_parm($data['group_id']) ?: $map['user.group_id'] = ['eq', $data['group_id']];
         is_empty_parm($data['status']) ?: $map['user.status'] = ['eq', $data['status']];
 
-        $totalResult = $this->with('getUserLevel,getUserMoney')->where($map)->count();
+        $totalResult = $this->with('getUserLevel')->where($map)->count();
         if ($totalResult <= 0) {
             return ['total_result' => 0];
         }
@@ -386,14 +386,6 @@ class User extends CareyShop
                         $orderField = 'user.'.$data['order_field'];
                         break;
 
-                    case 'total_money':
-                    case 'balance':
-                    case 'lock_balance':
-                    case 'points':
-                    case 'lock_points':
-                        $orderField = 'getUserMoney.'.$data['order_field'];
-                        break;
-
                     case 'name':
                     case 'discount':
                         $orderField = 'getUserLevel.'.$data['order_field'];
@@ -402,7 +394,7 @@ class User extends CareyShop
             }
 
             $query
-                ->with('getUserLevel,getUserMoney')
+                ->with('getUserLevel')
                 ->where($map)
                 ->order([$orderField => $orderType])
                 ->page($pageNo, $pageSize);
