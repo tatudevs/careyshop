@@ -55,7 +55,6 @@ class User extends CareyShop
         'last_login'      => 'timestamp',
         'status'          => 'integer',
         'is_delete'       => 'integer',
-        'head_pic'        => 'array',
     ];
 
     /**
@@ -123,6 +122,19 @@ class User extends CareyShop
         return $this
             ->hasOne('userLevel', 'user_level_id', 'user_level_id', [], 'left')
             ->field('name,discount')
+            ->setEagerlyType(0);
+    }
+
+    /**
+     * hasOne cs_auth_group
+     * @access public
+     * @return mixed
+     */
+    public function getAuthGroup()
+    {
+        return $this
+            ->hasOne('AuthGroup', 'group_id', 'group_id', [], 'left')
+            ->field('name,status')
             ->setEagerlyType(0);
     }
 
@@ -326,7 +338,7 @@ class User extends CareyShop
         }
 
         $userId = is_client_admin() ? $data['client_id'] : get_client_id();
-        $result = self::get($userId, 'getUserLevel,getUserMoney');
+        $result = self::get($userId, 'getUserLevel,getAuthGroup');
 
         if (false !== $result) {
             return is_null($result) ? null : $result->toArray();
@@ -355,7 +367,7 @@ class User extends CareyShop
         is_empty_parm($data['group_id']) ?: $map['user.group_id'] = ['eq', $data['group_id']];
         is_empty_parm($data['status']) ?: $map['user.status'] = ['eq', $data['status']];
 
-        $totalResult = $this->with('getUserLevel')->where($map)->count();
+        $totalResult = $this->with('getUserLevel,getAuthGroup')->where($map)->count();
         if ($totalResult <= 0) {
             return ['total_result' => 0];
         }
@@ -378,6 +390,7 @@ class User extends CareyShop
                     case 'username':
                     case 'mobile':
                     case 'nickname':
+                    case 'group_id':
                     case 'sex':
                     case 'birthday':
                     case 'user_level_id':
@@ -394,7 +407,7 @@ class User extends CareyShop
             }
 
             $query
-                ->with('getUserLevel')
+                ->with('getUserLevel,getAuthGroup')
                 ->where($map)
                 ->order([$orderField => $orderType])
                 ->page($pageNo, $pageSize);
