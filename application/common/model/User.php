@@ -161,7 +161,7 @@ class User extends CareyShop
             }
 
             is_client_admin() ?: $data['group_id'] = AUTH_CLIENT;
-            $field = ['password', 'head_pic', 'sex', 'birthday', 'username', 'mobile', 'nickname', 'group_id'];
+            $field = ['password', 'head_pic', 'sex', 'birthday', 'username', 'mobile', 'email', 'nickname', 'group_id'];
 
             if (!$this->allowField($field)->save($data)) {
                 throw new \Exception($this->getError());

@@ -24,7 +24,7 @@ class User extends CareyShop
         'code'          => 'integer|max:6',
         'email'         => 'email|max:60',
         'nickname'      => 'max:50|unique:user,nickname,0,user_id',
-        'head_pic'      => 'array',
+        'head_pic'      => 'max:512',
         'sex'           => 'in:0,1,2',
         'birthday'      => 'date|dateFormat:Y-m-d',
         'user_level_id' => 'integer|gt:0',

@@ -83,6 +83,7 @@ class Verification extends CareyShop
      * @access public
      * @param  array $data 外部数据
      * @return bool
+     * @throws
      */
     public function useVerificationItem($data)
     {
@@ -115,8 +116,11 @@ class Verification extends CareyShop
                 $userDb = new User();
                 $type = $result->getAttr('type');
 
-                $userMap = [$type == 'sms' ? 'mobile' : 'email' => ['eq', $data['number']]];
                 $userData = [$type == 'sms' ? 'is_mobile' : 'is_email' => 1];
+                $userMap = [
+                    $type == 'sms' ? 'mobile' : 'email' => ['eq', $data['number']],
+                    'is_delete'                         => ['eq', 0],
+                ];
 
                 if (false === $userDb->update($userData, $userMap)) {
                     throw new \Exception($userDb->getError());
