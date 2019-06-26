@@ -348,6 +348,27 @@ class User extends CareyShop
     }
 
     /**
+     * 获取一个账号的简易信息
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|false
+     * @throws
+     */
+    public function getUserInfo($data)
+    {
+        if (!$this->validateData($data, 'User.item')) {
+            return false;
+        }
+
+        $result = self::get(is_client_admin() ? $data['client_id'] : get_client_id());
+        if (false !== $result) {
+            return is_null($result) ? null : $result->toArray();
+        }
+
+        return false;
+    }
+
+    /**
      * 获取账号列表
      * @access public
      * @param  array $data 外部数据

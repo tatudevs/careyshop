@@ -40,6 +40,8 @@ class User extends CareyShop
             'del.user.list'       => ['delUserList'],
             // 获取一个账号
             'get.user.item'       => ['getUserItem'],
+            // 获取一个账号的简易信息
+            'get.user.info'       => ['getUserInfo'],
             // 获取账号列表
             'get.user.list'       => ['getUserList'],
             // 注销账号
