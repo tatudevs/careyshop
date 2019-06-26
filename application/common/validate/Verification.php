@@ -17,10 +17,11 @@ class Verification extends CareyShop
      * @var array
      */
     protected $rule = [
-        'mobile' => 'number|length:7,15',
-        'email'  => 'email|max:60',
-        'code'   => 'integer|max:6',
-        'number' => 'max:60',
+        'mobile'   => 'number|length:7,15',
+        'email'    => 'email|max:60',
+        'code'     => 'integer|max:6',
+        'number'   => 'max:60',
+        'is_check' => 'in:0,1',
     ];
 
     /**
@@ -28,10 +29,11 @@ class Verification extends CareyShop
      * @var array
      */
     protected $field = [
-        'mobile' => '手机号',
-        'email'  => '邮箱地址',
-        'code'   => '验证码',
-        'number' => '手机号或邮箱地址',
+        'mobile'   => '手机号',
+        'email'    => '邮箱地址',
+        'code'     => '验证码',
+        'number'   => '手机号或邮箱地址',
+        'is_check' => '是否验证通过',
     ];
 
     /**
@@ -55,6 +57,7 @@ class Verification extends CareyShop
         ],
         'use'       => [
             'number' => 'require|max:60',
+            'is_check',
         ],
     ];
 }

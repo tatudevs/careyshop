@@ -65,7 +65,13 @@ class Verification extends CareyShop
         }
 
         // 添加新的验证码
-        if (false === $this->isUpdate(false)->save(['number' => $number, 'code' => $data['number']])) {
+        $data = [
+            'number' => $number,
+            'code'   => $data['number'],
+            'type'   => $code,
+        ];
+
+        if (false === $this->isUpdate(false)->save($data)) {
             return false;
         }
 
@@ -84,7 +90,45 @@ class Verification extends CareyShop
             return false;
         }
 
-        return $this->isUpdate()->save(['status' => 0], ['number' => ['eq', $data['number']]]) !== false;
+        $result = self::get(function ($query) use ($data) {
+            $map['number'] = ['eq', $data['number']];
+            $map['status'] = ['eq', 1];
+
+            $query->where($map);
+        });
+
+        if (!$result) {
+            return is_null($result) ? $this->setError('验证码已无效') : false;
+        }
+
+        // 开启事务
+        self::startTrans();
+
+        try {
+            // 完成主业务数据
+            if (false === $result->save(['status' => 0])) {
+                throw new \Exception($this->getError());
+            }
+
+            // 变更账户验证状态
+            if (!empty($data['is_check'])) {
+                $userDb = new User();
+                $type = $result->getAttr('type');
+
+                $userMap = [$type == 'sms' ? 'mobile' : 'email' => ['eq', $data['number']]];
+                $userData = [$type == 'sms' ? 'is_mobile' : 'is_email' => 1];
+
+                if (false === $userDb->update($userData, $userMap)) {
+                    throw new \Exception($userDb->getError());
+                }
+            }
+
+            self::commit();
+            return true;
+        } catch (\Exception $e) {
+            self::rollback();
+            return $this->setError($e->getMessage());
+        }
     }
 
     /**
