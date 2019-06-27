@@ -349,9 +349,9 @@ class Payment extends CareyShop
             return $this->setError('支付方式不可用');
         }
 
-        $userResult = User::where(['username' => ['eq', $data['username']], 'status' => ['eq', 1]])->value('user_id');
-        if (!$userResult) {
-            return $this->setError('账号不存在');
+        $userMap = ['user_id' => ['eq', $data['client_id']], 'status' => ['eq', 1]];
+        if (!User::checkUnique($userMap)) {
+            return $this->setError('账号不存在或已被禁用');
         }
 
         // 开启事务
@@ -363,15 +363,15 @@ class Payment extends CareyShop
 
             // 调整可用余额
             if (isset($data['money'])) {
-                if (!$userMoneyDb->setBalance($data['money'], $userResult)) {
+                if (!$userMoneyDb->setBalance($data['money'], $data['client_id'])) {
                     throw new \Exception($userMoneyDb->getError());
                 }
 
                 $txMoneyData = [
-                    'user_id'    => $userResult,
+                    'user_id'    => $data['client_id'],
                     'type'       => $data['money'] > 0 ? 0 : 1,
                     'amount'     => sprintf('%.2f', $data['money'] > 0 ? $data['money'] : -$data['money']),
-                    'balance'    => $userMoneyDb->where(['user_id' => ['eq', $userResult]])->value('balance'),
+                    'balance'    => $userMoneyDb->where(['user_id' => ['eq', $data['client_id']]])->value('balance'),
                     'source_no'  => !empty($data['source_no']) ? $data['source_no'] : '',
                     'remark'     => '财务调整',
                     'cause'      => $data['cause'],
@@ -386,15 +386,15 @@ class Payment extends CareyShop
 
             if (isset($data['points'])) {
                 // 调整账号积分
-                if (!$userMoneyDb->setPoints($data['points'], $userResult)) {
+                if (!$userMoneyDb->setPoints($data['points'], $data['client_id'])) {
                     throw new \Exception($userMoneyDb->getError());
                 }
 
                 $txPointsData = [
-                    'user_id'    => $userResult,
+                    'user_id'    => $data['client_id'],
                     'type'       => $data['points'] > 0 ? 0 : 1,
                     'amount'     => $data['points'] > 0 ? $data['points'] : -$data['points'],
-                    'balance'    => $userMoneyDb->where(['user_id' => ['eq', $userResult]])->value('points'),
+                    'balance'    => $userMoneyDb->where(['user_id' => ['eq', $data['client_id']]])->value('points'),
                     'source_no'  => !empty($data['source_no']) ? $data['source_no'] : '',
                     'remark'     => '财务调整',
                     'cause'      => $data['cause'],

@@ -17,7 +17,7 @@ class Recharge extends CareyShop
      * @var array
      */
     protected $rule = [
-        'username'     => 'require|max:80',
+        'client_id'    => 'require|integer|gt:0',
         'money'        => ['float', 'regex' => '^(-|\+)?\d+(\.\d{1,2})?$'],
         'points'       => 'integer',
         'to_payment'   => 'require|integer|egt:0',
@@ -34,7 +34,7 @@ class Recharge extends CareyShop
      * @var array
      */
     protected $field = [
-        'username'     => '账号',
+        'client_id'    => '账号编号',
         'money'        => '金额',
         'points'       => '积分',
         'to_payment'   => '支付方式',
@@ -52,7 +52,7 @@ class Recharge extends CareyShop
      */
     protected $scene = [
         'finance' => [
-            'username',
+            'client_id',
             'money',
             'points',
             'to_payment',
