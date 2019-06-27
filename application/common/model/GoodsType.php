@@ -64,7 +64,7 @@ class GoodsType extends CareyShop
             return false;
         }
 
-        if (isset($data['type_name'])) {
+        if (!empty($data['type_name'])) {
             $map['goods_type_id'] = ['neq', $data['goods_type_id']];
             $map['type_name'] = ['eq', $data['type_name']];
 

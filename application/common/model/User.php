@@ -38,6 +38,7 @@ class User extends CareyShop
         'user_id',
         'username',
         'mobile',
+        'email'
     ];
 
     /**
@@ -199,7 +200,7 @@ class User extends CareyShop
         $map = ['user_id' => is_client_admin() ? $data['client_id'] : get_client_id()];
         $field = ['group_id', 'nickname', 'head_pic', 'sex', 'birthday', 'status'];
 
-        if (isset($data['nickname'])) {
+        if (!empty($data['nickname'])) {
             $nickMap['user_id'] = ['neq', $map['user_id']];
             $nickMap['nickname'] = ['eq', $data['nickname']];
 

@@ -106,7 +106,7 @@ class Delivery extends CareyShop
             return false;
         }
 
-        if (isset($data['delivery_item_id'])) {
+        if (!empty($data['delivery_item_id'])) {
             $map['delivery_id'] = ['neq', $data['delivery_id']];
             $map['delivery_item_id'] = ['eq', $data['delivery_item_id']];
 

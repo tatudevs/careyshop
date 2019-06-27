@@ -134,7 +134,7 @@ class Admin extends CareyShop
         // 数据类型修改
         $data['client_id'] = (int)$data['client_id'];
 
-        if (isset($data['nickname'])) {
+        if (!empty($data['nickname'])) {
             $nickMap['admin_id'] = ['neq', $data['client_id']];
             $nickMap['nickname'] = ['eq', $data['nickname']];
 

@@ -105,7 +105,7 @@ class App extends CareyShop
             return false;
         }
 
-        if (isset($data['app_name'])) {
+        if (!empty($data['app_name'])) {
             $map['app_id'] = ['neq', $data['app_id']];
             $map['app_name'] = ['eq', $data['app_name']];
 

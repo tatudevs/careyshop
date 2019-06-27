@@ -79,7 +79,7 @@ class Brand extends CareyShop
             return false;
         }
 
-        if (isset($data['name'])) {
+        if (!empty($data['name'])) {
             $map['brand_id'] = ['neq', $data['brand_id']];
             $map['name'] = ['eq', $data['name']];
 
