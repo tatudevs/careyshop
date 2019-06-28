@@ -362,7 +362,7 @@ class Payment extends CareyShop
             $transactionDb = new Transaction();
 
             // 调整可用余额
-            if (isset($data['money'])) {
+            if (!empty($data['money'])) {
                 if (!$userMoneyDb->setBalance($data['money'], $data['client_id'])) {
                     throw new \Exception($userMoneyDb->getError());
                 }
@@ -384,7 +384,7 @@ class Payment extends CareyShop
                 }
             }
 
-            if (isset($data['points'])) {
+            if (!empty($data['points'])) {
                 // 调整账号积分
                 if (!$userMoneyDb->setPoints($data['points'], $data['client_id'])) {
                     throw new \Exception($userMoneyDb->getError());
