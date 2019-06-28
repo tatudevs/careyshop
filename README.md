@@ -1,4 +1,4 @@
-CareyShop
+CareyShop 商城框架系统
 ===============
 CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城框架系统，秉承简洁、快速、极致的开发理念，框架内使用面向对象模块化调用，在多终端、跨平台时采用 REST API 架构来进行数据交互，可直接对接 PC、移动设备、小程序、云部署，构建 Android、IOS 的 APP。
 
@@ -15,7 +15,7 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 ### 网站地址
 官方网站：[https://www.careyshop.cn](https://www.careyshop.cn "CareyShop官方网站")
 
-demo地址：[https://demo.careyshop.cn](https://demo.careyshop.cn "demo地址")
+后台演示：[https://demo.careyshop.cn/admin/](https://demo.careyshop.cn/admin/ "后台演示地址")
 
 API沙盒：[https://demo.careyshop.cn/api/](https://demo.careyshop.cn/api/ "API沙盒")
 
