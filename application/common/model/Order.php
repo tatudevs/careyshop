@@ -642,9 +642,6 @@ class Order extends CareyShop
 
         $regionDb = new Region();
         $completeAddress = $regionDb->getRegionName(['region_id' => $regionId]);
-        if (false === $completeAddress) {
-            return '';
-        }
 
         // 如区域地址存在,则需要添加分隔符用于增加详细地址
         if ($completeAddress != '') {

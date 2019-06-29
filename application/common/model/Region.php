@@ -295,7 +295,7 @@ class Region extends CareyShop
     public function getRegionName($data)
     {
         if (!$this->validateData($data, 'Region.name')) {
-            return false;
+            return '';
         }
 
         $map['region_id'] = ['in', $data['region_id']];
