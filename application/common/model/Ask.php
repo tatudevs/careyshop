@@ -37,16 +37,10 @@ class Ask extends CareyShop
     protected $autoWriteTimestamp = true;
 
     /**
-     * 创建日期字段
-     * @var bool/string
-     */
-    protected $createTime = 'ask_time';
-
-    /**
      * 更新日期字段
      * @var bool/string
      */
-    protected $updateTime = 'answer_time';
+    protected $updateTime = false;
 
     /**
      * 隐藏属性
@@ -217,6 +211,7 @@ class Ask extends CareyShop
             unset($result['ask_id']);
             unset($result['title']);
             unset($result['status']);
+            unset($result['create_time']);
 
             if (false === $result->isUpdate(false)->save()) {
                 throw new \Exception($this->getError());
@@ -360,8 +355,7 @@ class Ask extends CareyShop
                         case 'ask_type':
                         case 'title':
                         case 'status':
-                        case 'ask_time':
-                        case 'answer_time':
+                        case 'create_time':
                             $orderField = 'ask.' . $data['order_field'];
                             break;
 
