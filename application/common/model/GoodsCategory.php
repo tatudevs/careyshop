@@ -41,7 +41,6 @@ class GoodsCategory extends CareyShop
         'sort'              => 'integer',
         'is_navi'           => 'integer',
         'status'            => 'integer',
-        'category_pic'      => 'array',
     ];
 
     /**
@@ -61,13 +60,13 @@ class GoodsCategory extends CareyShop
         unset($data['goods_category_id']);
 
         // 识别并转换分类名称首拼
-        if (!isset($data['name_phonetic'])) {
+        if (empty($data['name_phonetic'])) {
             $data['name_phonetic'] = Phonetic::encode(Str::substr($data['name'], 0, 1));
             $data['name_phonetic'] = Str::lower($data['name_phonetic']);
         }
 
         // 识别并转换分类别名首拼
-        if (!empty($data['alias']) && !isset($data['alias_phonetic'])) {
+        if (!empty($data['alias']) && empty($data['alias_phonetic'])) {
             $data['alias_phonetic'] = Phonetic::encode(Str::substr($data['alias'], 0, 1));
             $data['alias_phonetic'] = Str::lower($data['alias_phonetic']);
         }
@@ -110,12 +109,12 @@ class GoodsCategory extends CareyShop
             }
         }
 
-        if (!empty($data['name']) && !isset($data['name_phonetic'])) {
+        if (!empty($data['name']) && empty($data['name_phonetic'])) {
             $data['name_phonetic'] = Phonetic::encode(Str::substr($data['name'], 0, 1));
             $data['name_phonetic'] = Str::lower($data['name_phonetic']);
         }
 
-        if (!empty($data['alias']) && !isset($data['alias_phonetic'])) {
+        if (!empty($data['alias']) && empty($data['alias_phonetic'])) {
             $data['alias_phonetic'] = Phonetic::encode(Str::substr($data['alias'], 0, 1));
             $data['alias_phonetic'] = Str::lower($data['alias_phonetic']);
         }
