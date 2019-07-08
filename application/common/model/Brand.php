@@ -33,7 +33,6 @@ class Brand extends CareyShop
         'goods_category_id' => 'integer',
         'sort'              => 'integer',
         'status'            => 'integer',
-        'logo'              => 'array',
     ];
 
     /**
@@ -49,11 +48,15 @@ class Brand extends CareyShop
             return false;
         }
 
+        if (!$this->uniqueBrandName($data)) {
+            return false;
+        }
+
         // 避免无关字段
         unset($data['brand_id']);
 
         // 确认用户自定义或系统转换
-        if (!isset($data['phonetic'])) {
+        if (empty($data['phonetic'])) {
             $data['phonetic'] = Phonetic::encode(Str::substr($data['name'], 0, 1));
             $data['phonetic'] = Str::lower($data['phonetic']);
         }
@@ -82,13 +85,14 @@ class Brand extends CareyShop
         if (!empty($data['name'])) {
             $map['brand_id'] = ['neq', $data['brand_id']];
             $map['name'] = ['eq', $data['name']];
+            $map['goods_category_id'] = ['eq', !empty($data['goods_category_id']) ? $data['goods_category_id'] : 0];
 
             if (self::checkUnique($map)) {
                 return $this->setError('品牌名称已存在');
             }
 
             // 确认用户自定义或系统转换
-            if (!isset($data['phonetic'])) {
+            if (empty($data['phonetic'])) {
                 $data['phonetic'] = Phonetic::encode(Str::substr($data['name'], 0, 1));
                 $data['phonetic'] = Str::lower($data['phonetic']);
             }
@@ -155,6 +159,7 @@ class Brand extends CareyShop
         }
 
         $map['name'] = ['eq', $data['name']];
+        $map['goods_category_id'] = ['eq', !empty($data['goods_category_id']) ? $data['goods_category_id'] : 0];
         !isset($data['exclude_id']) ?: $map['ads_id'] = ['neq', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
@@ -322,6 +327,7 @@ class Brand extends CareyShop
 
         $map['brand_id'] = ['eq', $data['brand_id']];
         if (false !== $this->save(['sort' => $data['sort']], $map)) {
+            Cache::clear('Brand');
             return true;
         }
 
@@ -347,6 +353,7 @@ class Brand extends CareyShop
         }
 
         if (false !== $this->isUpdate()->saveAll($list)) {
+            Cache::clear('Brand');
             return true;
         }
 

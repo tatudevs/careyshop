@@ -90,7 +90,7 @@ class GoodsCategory extends CareyShop
             'not_empty',
         ],
         'item'   => [
-            'goods_category_id' => 'require|integer|gt:0',
+            'goods_category_id' => 'require|integer|egt:0',
         ],
         'navi'   => [
             'goods_category_id' => 'integer|egt:0',
