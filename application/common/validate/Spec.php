@@ -62,7 +62,7 @@ class Spec extends CareyShop
             'spec_index' => 'require|in:0,1',
         ],
         'list'  => [
-            'goods_type_id',
+            'goods_type_id' => 'integer|egt:0',
         ],
         'sort'  => [
             'spec_id' => 'require|integer|gt:0',

@@ -269,8 +269,8 @@ class GoodsAttribute extends CareyShop
         }
 
         $result = self::all(function ($query) use ($data) {
-            $map['goods_type_id'] = ['eq', $data['goods_type_id']];
             $map['parent_id'] = ['eq', 0];
+            empty($data['goods_type_id']) ?: $map['goods_type_id'] = ['eq', $data['goods_type_id']];
             isset($data['attribute_all']) && $data['attribute_all'] == 1 ?: $map['is_delete'] = ['eq', 0];
 
             $order['sort'] = 'asc';

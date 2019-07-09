@@ -87,7 +87,7 @@ class GoodsAttribute extends CareyShop
             'goods_attribute_id' => 'require|integer|gt:0',
         ],
         'list'      => [
-            'goods_type_id',
+            'goods_type_id' => 'integer|egt:0',
             'attribute_all',
         ],
         'key'       => [

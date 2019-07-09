@@ -183,7 +183,8 @@ class Spec extends CareyShop
         }
 
         $result = self::all(function ($query) use ($data) {
-            $map['goods_type_id'] = ['eq', $data['goods_type_id']];
+            $map = [];
+            empty($data['goods_type_id']) ?: $map['goods_type_id'] = ['eq', $data['goods_type_id']];
 
             $order['sort'] = 'asc';
             $order['spec_id'] = 'asc';
