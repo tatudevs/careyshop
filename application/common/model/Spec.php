@@ -43,6 +43,18 @@ class Spec extends CareyShop
     }
 
     /**
+     * hasOne cs_goods_type
+     * @access public
+     * @return mixed
+     */
+    public function getGoodsType()
+    {
+        return $this
+            ->hasOne('GoodsType', 'goods_type_id', 'goods_type_id', [], 'left')
+            ->setEagerlyType(0);
+    }
+
+    /**
      * 添加一个商品规格
      * @access public
      * @param  array $data 外部数据
@@ -170,6 +182,67 @@ class Spec extends CareyShop
     }
 
     /**
+     * 获取商品规格列表(可翻页)
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|false
+     * @throws
+     */
+    public function getSpecPage($data)
+    {
+        if (!$this->validateData($data, 'Spec.page')) {
+            return false;
+        }
+
+        $map = [];
+        empty($data['goods_type_id']) ?: $map['goods_type_id'] = ['eq', $data['goods_type_id']];
+
+        $totalResult = $this->where($map)->count();
+        if ($totalResult <= 0) {
+            return ['total_result' => 0];
+        }
+
+        $result = self::all(function ($query) use ($data, $map) {
+            // 翻页页数
+            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+
+            // 每页条数
+            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
+
+            // 排序方式
+            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
+
+            // 排序的字段
+            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'spec_id';
+
+            // 排序处理
+            $order['sort'] = 'asc';
+            $order[$orderField] = $orderType;
+
+            if (!empty($data['order_field'])) {
+                $order = array_reverse($order);
+            }
+
+            $query
+                ->with('hasSpecItem,getGoodsType')
+                ->where($map)
+                ->order($order)
+                ->page($pageNo, $pageSize);
+        });
+
+        if (false !== $result) {
+            $result = $result->toArray();
+            foreach ($result as $key => $value) {
+                $this->replaceSpecItem($result[$key]);
+            }
+
+            return ['items' => $result, 'total_result' => $totalResult];
+        }
+
+        return false;
+    }
+
+    /**
      * 获取商品规格列表
      * @access public
      * @param  array $data 外部数据
@@ -183,8 +256,7 @@ class Spec extends CareyShop
         }
 
         $result = self::all(function ($query) use ($data) {
-            $map = [];
-            empty($data['goods_type_id']) ?: $map['goods_type_id'] = ['eq', $data['goods_type_id']];
+            $map['goods_type_id'] = ['eq', $data['goods_type_id']];
 
             $order['sort'] = 'asc';
             $order['spec_id'] = 'asc';

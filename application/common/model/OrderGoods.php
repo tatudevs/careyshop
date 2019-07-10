@@ -111,7 +111,7 @@ class OrderGoods extends CareyShop
                 $orderDb->field('order_id,trade_status')->where(['is_delete' => ['eq', 0]]);
             };
 
-            $query->with($with)->field('is_comment,status')->where($map);
+            $query->with($with)->field('order_id,is_comment,status')->where($map);
         });
 
         if (!$result) {

@@ -23,6 +23,10 @@ class Spec extends CareyShop
         'spec_item'     => 'require|arrayHasOnlyStrings',
         'spec_index'    => 'in:0,1',
         'sort'          => 'integer|between:0,255',
+        'page_no'       => 'integer|gt:0',
+        'page_size'     => 'integer|gt:0',
+        'order_type'    => 'in:asc,desc',
+        'order_field'   => 'in:spec_id,goods_type_id,name,spec_index,sort',
     ];
 
     /**
@@ -36,6 +40,10 @@ class Spec extends CareyShop
         'spec_item'     => '商品规格项',
         'spec_index'    => '商品规格检索',
         'sort'          => '商品规格排序值',
+        'page_no'       => '页码',
+        'page_size'     => '每页数量',
+        'order_type'    => '排序方式',
+        'order_field'   => '排序字段',
     ];
 
     /**
@@ -61,8 +69,15 @@ class Spec extends CareyShop
             'spec_id'    => 'require|arrayHasOnlyInts',
             'spec_index' => 'require|in:0,1',
         ],
+        'page'  => [
+            'goods_type_id' => 'integer|gt:0',
+            'page_no',
+            'page_size',
+            'order_type',
+            'order_field',
+        ],
         'list'  => [
-            'goods_type_id' => 'integer|egt:0',
+            'goods_type_id',
         ],
         'sort'  => [
             'spec_id' => 'require|integer|gt:0',

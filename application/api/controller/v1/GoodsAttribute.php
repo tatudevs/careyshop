@@ -36,6 +36,8 @@ class GoodsAttribute extends CareyShop
             'set.goods.attribute.item'      => ['setAttributeItem'],
             // 获取一个商品属性
             'get.goods.attribute.item'      => ['getAttributeItem'],
+            // 获取商品属性列表(可翻页)
+            'get.goods.attribute.page'      => ['getAttributePage'],
             // 获取商品属性列表
             'get.goods.attribute.list'      => ['getAttributeList'],
             // 批量设置商品属性检索
