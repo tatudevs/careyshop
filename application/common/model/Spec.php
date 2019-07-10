@@ -194,6 +194,7 @@ class Spec extends CareyShop
             return false;
         }
 
+        // 搜索条件
         $map = [];
         empty($data['goods_type_id']) ?: $map['goods_type_id'] = ['eq', $data['goods_type_id']];
 

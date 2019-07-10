@@ -256,6 +256,73 @@ class GoodsAttribute extends CareyShop
     }
 
     /**
+     * 获取商品属性列表(可翻页)
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|false
+     * @throws
+     */
+    public function getAttributePage($data)
+    {
+        if (!$this->validateData($data, 'GoodsAttribute.page')) {
+            return false;
+        }
+
+        // 搜索条件
+        $map = [];
+        $map['parent_id'] = ['eq', 0];
+        empty($data['goods_type_id']) ?: $map['goods_type_id'] = ['eq', $data['goods_type_id']];
+        isset($data['attribute_all']) && $data['attribute_all'] == 1 ?: $map['is_delete'] = ['eq', 0];
+
+        $totalResult = $this->where($map)->count();
+        if ($totalResult <= 0) {
+            return ['total_result' => 0];
+        }
+
+        $result = self::all(function ($query) use ($data, $map) {
+            // 翻页页数
+            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+
+            // 每页条数
+            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
+
+            // 排序方式
+            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
+
+            // 排序的字段
+            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'goods_attribute_id';
+
+            // 排序处理
+            $order['sort'] = 'asc';
+            $order[$orderField] = $orderType;
+
+            if (!empty($data['order_field'])) {
+                $order = array_reverse($order);
+            }
+
+            $with = ['getAttribute' => function ($query) use ($order, $map) {
+                $withMap = [];
+                !isset($map['is_delete']) ?: $withMap['is_delete'] = $map['is_delete'];
+
+                $query->where($withMap)->order($order);
+            }];
+
+            $query
+                ->field('goods_attribute_id,attr_name,description,icon,goods_type_id,sort')
+                ->with($with)
+                ->where($map)
+                ->order($order)
+                ->page($pageNo, $pageSize);
+        });
+
+        if (false !== $result) {
+            return ['items' => $result->toArray(), 'total_result' => $totalResult];
+        }
+
+        return false;
+    }
+
+    /**
      * 获取商品属性列表
      * @access public
      * @param  array $data 外部数据
