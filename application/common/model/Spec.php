@@ -203,7 +203,7 @@ class Spec extends CareyShop
             return ['total_result' => 0];
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
+        $result = self::all(function ($query) use ($data) {
             // 翻页页数
             $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
 
@@ -223,6 +223,10 @@ class Spec extends CareyShop
             if (!empty($data['order_field'])) {
                 $order = array_reverse($order);
             }
+
+            // 搜索条件
+            $map = [];
+            empty($data['goods_type_id']) ?: $map['getGoodsType.goods_type_id'] = ['eq', $data['goods_type_id']];
 
             $query
                 ->with('hasSpecItem,getGoodsType')
