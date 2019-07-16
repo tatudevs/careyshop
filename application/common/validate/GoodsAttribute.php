@@ -32,7 +32,7 @@ class GoodsAttribute extends CareyShop
         'page_no'            => 'integer|gt:0',
         'page_size'          => 'integer|gt:0',
         'order_type'         => 'in:asc,desc',
-        'order_field'        => 'in:goods_attribute_id,goods_type_id,attr_index,sort',
+        'order_field'        => 'in:goods_attribute_id,goods_type_id,attr_name,attr_index,sort',
     ];
 
     /**
