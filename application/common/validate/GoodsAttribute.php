@@ -21,7 +21,7 @@ class GoodsAttribute extends CareyShop
         'parent_id'          => 'require|integer|gt:0',
         'attr_name'          => 'require|max:60',
         'description'        => 'max:255',
-        'icon'               => 'max:64',
+        'icon'               => 'max:512',
         'goods_type_id'      => 'require|integer|gt:0',
         'attr_index'         => 'in:0,1,2',
         'attr_input_type'    => 'require|in:0,1,2',
