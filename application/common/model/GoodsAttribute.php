@@ -476,7 +476,7 @@ class GoodsAttribute extends CareyShop
             $attributeId = $value->getAttr('goods_attribute_id');
 
             if ($value->getAttr('parent_id') === 0) {
-                $this->save(['is_delete' => 1], ['parent_id' => ['eq', $attributeId]]);
+                $this->update(['is_delete' => 1], ['parent_id' => ['eq', $attributeId]]);
             }
 
             $value->save(['is_delete' => 1], ['goods_attribute_id' => ['eq', $attributeId]]);
