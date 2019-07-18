@@ -80,8 +80,10 @@ class GoodsAttribute extends CareyShop
         }
 
         $field = ['attr_name', 'description', 'icon', 'goods_type_id', 'sort'];
+        $hidden = ['attr_index', 'attr_input_type', 'attr_values', 'is_important'];
+
         if (false !== $this->allowField($field)->save($data)) {
-            return $this->hidden(['attr_input_type', 'attr_values'])->toArray();
+            return $this->hidden($hidden)->toArray();
         }
 
         return false;
