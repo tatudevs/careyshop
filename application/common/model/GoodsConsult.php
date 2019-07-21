@@ -223,14 +223,17 @@ class GoodsConsult extends CareyShop
         }
 
         $result = self::get(function ($query) use ($data) {
-            $map['goods_consult_id'] = ['eq', $data['goods_consult_id']];
-            $map['parent_id'] = ['eq', 0];
-            $map['is_delete'] = ['eq', 0];
-            is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
+            $map['goods_consult.goods_consult_id'] = ['eq', $data['goods_consult_id']];
+            $map['goods_consult.parent_id'] = ['eq', 0];
+            $map['goods_consult.is_delete'] = ['eq', 0];
+            is_client_admin() ?: $map['goods_consult.user_id'] = ['eq', get_client_id()];
 
-            $query->with(['getAnswer' => function ($query) {
+            $with = ['getUser'];
+            $with['getAnswer'] = function($query) {
                 $query->field('is_show,status,type', true)->where(['is_delete' => 0]);
-            }])->where($map);
+            };
+
+            $query->with($with)->where($map);
         });
 
         if (false !== $result) {
