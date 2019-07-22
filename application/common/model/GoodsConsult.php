@@ -228,7 +228,7 @@ class GoodsConsult extends CareyShop
             $map['goods_consult.is_delete'] = ['eq', 0];
             is_client_admin() ?: $map['goods_consult.user_id'] = ['eq', get_client_id()];
 
-            $with = ['getUser'];
+            $with = ['getUser', 'getGoods'];
             $with['getAnswer'] = function($query) {
                 $query->field('is_show,status,type', true)->where(['is_delete' => 0]);
             };
