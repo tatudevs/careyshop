@@ -74,7 +74,6 @@ class GoodsComment extends CareyShop
      */
     protected $hidden = [
         'parent_id',
-        'order_no',
         'user_id',
         'is_anon',
         'is_image',
@@ -139,7 +138,7 @@ class GoodsComment extends CareyShop
      * @access public
      * @return mixed
      */
-    public function getGoods()
+    public function getOrderGoods()
     {
         return $this
             ->hasOne('OrderGoods', 'order_goods_id', 'order_goods_id', [], 'left')
@@ -626,10 +625,10 @@ class GoodsComment extends CareyShop
 
         $result = self::get(function ($query) use ($map) {
             // 关联数据
-            $with = ['getUser', 'getGoods'];
+            $with = ['getUser', 'getOrderGoods'];
 
             // 关联表不返回的字段
-            $replyField = 'goods_id,order_goods_id,score,is_top,status,is_show,reply_count';
+            $replyField = 'goods_id,order_goods_id,order_no,score,is_top,status,is_show,reply_count';
 
             // 关联表搜索条件
             $replyMap['is_delete'] = ['eq', 0];
@@ -652,7 +651,11 @@ class GoodsComment extends CareyShop
                 $query->field($replyField . ',ip_address', true)->where($replyMap);
             };
 
-            $query->field('goods_id,order_goods_id,is_show,is_top,status', true)->with($with)->where($map);
+            // 过滤不返回的字段
+            $field = 'goods_id,order_goods_id,is_show,is_top';
+            is_client_admin() ?: $field .= ',status,order_no';
+
+            $query->field($field, true)->with($with)->where($map);
         });
 
         if (!$result) {
@@ -720,10 +723,10 @@ class GoodsComment extends CareyShop
 
         // 查看指定商品规格评价
         if (!empty($data['goods_id']) && !empty($data['goods_spec'])) {
-            $with[] = 'getGoods';
+            $with[] = 'getOrderGoods';
             sort($data['goods_spec']);
             $data['goods_spec'] = implode('_', $data['goods_spec']);
-            $map['getGoods.key_name'] = ['eq', $data['goods_spec']];
+            $map['getOrderGoods.key_name'] = ['eq', $data['goods_spec']];
         }
 
         $with[] = 'getUser';
@@ -741,10 +744,10 @@ class GoodsComment extends CareyShop
             $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
 
             // 关联数据
-            $with = ['getUser', 'getGoods'];
+            $with = ['getUser', 'getOrderGoods'];
 
             // 关联表不返回的字段
-            $replyField = 'goods_id,order_goods_id,score,is_top,status,is_show,reply_count';
+            $replyField = 'goods_id,order_goods_id,order_no,score,is_top,status,is_show,reply_count';
 
             // 关联表搜索条件
             $replyMap['is_delete'] = ['eq', 0];
@@ -782,7 +785,7 @@ class GoodsComment extends CareyShop
 
             // 过滤不需要返回的字段
             $field = 'goods_id,order_goods_id,is_show,is_top';
-            is_client_admin() ?: $field .= ',status';
+            is_client_admin() ?: $field .= ',status,order_no';
 
             $query
                 ->field($field, true)
