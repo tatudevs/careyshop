@@ -93,6 +93,7 @@ class GoodsComment extends CareyShop
         'is_anon'          => 'integer',
         'type'             => 'integer',
         'is_image'         => 'integer',
+        'is_append'        => 'integer',
         'score'            => 'integer',
         'praise'           => 'integer',
         'reply_count'      => 'integer',
@@ -266,6 +267,7 @@ class GoodsComment extends CareyShop
         try {
             // 设置主评价为未读,并且判断追评是否存在图片
             $updata['status'] = 0;
+            $updata['is_append'] = 1;
             empty($data['image']) ?: $updata['is_image'] = 1;
 
             if (false === $result->save($updata)) {
@@ -276,6 +278,7 @@ class GoodsComment extends CareyShop
             $result->setAttr('score', 0);
             $result->setAttr('praise', 0);
             $result->setAttr('reply_count', 0);
+            $result->setAttr('is_append', 0);
             $result->setAttr('is_show', 0);
             $result->setAttr('is_top', 0);
             $result->setAttr('status', 0);
@@ -343,6 +346,7 @@ class GoodsComment extends CareyShop
         $result->setAttr('praise', 0);
         $result->setAttr('reply_count', 0);
         $result->setAttr('ip_address', '');
+        $result->setAttr('is_append', 0);
         $result->setAttr('is_show', 0);
         $result->setAttr('is_top', 0);
         $result->setAttr('status', 0);
@@ -690,6 +694,7 @@ class GoodsComment extends CareyShop
 
         empty($data['goods_id']) ?: $map['goods_comment.goods_id'] = ['eq', $data['goods_id']];
         is_empty_parm($data['is_image']) ?: $map['goods_comment.is_image'] = ['eq', $data['is_image']];
+        is_empty_parm($data['is_append']) ?: $map['goods_comment.is_append'] = ['eq', $data['is_append']];
         is_client_admin() ?: $map['goods_comment.is_show'] = ['eq', 1];
 
         // 处理查看的评价类型是"追加评价"
