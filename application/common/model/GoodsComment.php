@@ -406,13 +406,19 @@ class GoodsComment extends CareyShop
         $result->save(['is_delete' => 1]);
 
         // 如果是追评需要处理主评是否有图
-        if ($result->getAttr('type') === self::COMMENT_TYPE_ADDITION && $result->getAttr('is_image') === 1) {
+        if ($result->getAttr('type') === self::COMMENT_TYPE_ADDITION) {
             $map['goods_comment_id'] = ['eq', $result->getAttr('parent_id')];
             $map['is_delete'] = ['eq', 0];
 
-            $mainResult = $this->where($map)->find();
-            if ($mainResult && empty($mainResult->getAttr('image'))) {
-                $mainResult->save(['is_image' => 0]);
+            $setData = ['is_append' => 0];
+            $parent = $this->where($map)->find();
+
+            if ($parent) {
+                if ($result->getAttr('is_image') === 1 && empty($parent->getAttr('image'))) {
+                    $setData['is_image'] = 0;
+                }
+
+                $parent->save($setData);
             }
         }
 
@@ -696,11 +702,6 @@ class GoodsComment extends CareyShop
         is_empty_parm($data['is_image']) ?: $map['goods_comment.is_image'] = ['eq', $data['is_image']];
         is_empty_parm($data['is_append']) ?: $map['goods_comment.is_append'] = ['eq', $data['is_append']];
         is_client_admin() ?: $map['goods_comment.is_show'] = ['eq', 1];
-
-        // 处理查看的评价类型是"追加评价"
-        if (isset($data['type']) && $data['type'] == self::COMMENT_TYPE_ADDITION) {
-            $map['goods_comment.type'] = ['eq', self::COMMENT_TYPE_ADDITION];
-        }
 
         // 处理"好中差"评价搜索(0=好评 1=中评 其他=差评)
         if (isset($data['score'])) {
