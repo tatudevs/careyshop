@@ -758,21 +758,21 @@ class GoodsComment extends CareyShop
             // 关联表搜索条件
             $replyMap['is_delete'] = ['eq', 0];
 
+            // 获取追加评价
+            $with['getAddition'] = function ($query) use ($replyField, $replyMap) {
+                $replyMap['type'] = ['eq', self::COMMENT_TYPE_ADDITION];
+                $query->field($replyField, true)->where($replyMap);
+            };
+
             // 列表模式的区分(当"goods_id"为空表示简洁列表,否则为明细列表)
             if (!empty($data['goods_id'])) {
-                // 设置主评回复
+                // 获取主评回复
                 $with['getMainReply'] = function ($query) use ($replyField, $replyMap) {
                     $replyMap['type'] = ['eq', self::COMMENT_TYPE_MAIN_REPLY];
                     $query->field($replyField . ',ip_address', true)->where($replyMap);
                 };
 
-                // 设置追加评价
-                $with['getAddition'] = function ($query) use ($replyField, $replyMap) {
-                    $replyMap['type'] = ['eq', self::COMMENT_TYPE_ADDITION];
-                    $query->field($replyField, true)->where($replyMap);
-                };
-
-                // 设置追评回复
+                // 获取追评回复
                 $with['getAdditionReply'] = function ($query) use ($replyField, $replyMap) {
                     $replyMap['type'] = ['eq', self::COMMENT_TYPE_ADDITION_REPLY];
                     $query->field($replyField . ',ip_address', true)->where($replyMap);
