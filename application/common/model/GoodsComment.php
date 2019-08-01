@@ -105,13 +105,13 @@ class GoodsComment extends CareyShop
     ];
 
     /**
-     * hasMany cs_goods_comment
+     * hasOne cs_goods_comment
      * @access public
      * @return mixed
      */
     public function getAddition()
     {
-        return $this->hasMany('GoodsComment', 'parent_id');
+        return $this->hasOne('GoodsComment', 'parent_id');
     }
 
     /**
