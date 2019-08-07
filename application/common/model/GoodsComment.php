@@ -790,7 +790,7 @@ class GoodsComment extends CareyShop
             $order['goods_comment.goods_comment_id'] = $orderType;
 
             // 过滤不需要返回的字段
-            $field = 'goods_id,order_goods_id,is_show,is_top';
+            $field = 'goods_id,order_goods_id';
             is_client_admin() ?: $field .= ',status,order_no';
 
             $query
