@@ -54,12 +54,26 @@ class UserLevel extends CareyShop
     /**
      * 获取账号等级列表
      * @access public
+     * @param  array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getLevelList()
+    public function getLevelList($data)
     {
-        $result = self::all();
+        if (!$this->validateData($data, 'User.list')) {
+            return false;
+        }
+
+        $result = self::all(function ($query) use ($data) {
+            // 排序方式
+            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
+
+            // 排序的字段
+            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'amount';
+
+            $query->order([$orderField => $orderType]);
+        });
+
         if (false !== $result) {
             return $result->toArray();
         }

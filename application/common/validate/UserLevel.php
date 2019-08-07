@@ -23,6 +23,8 @@ class UserLevel extends CareyShop
         'amount'        => 'require|float|egt:0|regex:^\d+(\.\d{1,2})?$',
         'discount'      => 'require|integer|between:0,100',
         'description'   => 'max:200',
+        'order_type'    => 'in:asc,desc',
+        'order_field'   => 'in:user_level_id,amount,discount',
     ];
 
     /**
@@ -36,6 +38,8 @@ class UserLevel extends CareyShop
         'amount'        => '消费金额',
         'discount'      => '折扣',
         'description'   => '等级描述',
+        'order_type'    => '排序方式',
+        'order_field'   => '排序字段',
     ];
 
     /**
@@ -56,6 +60,10 @@ class UserLevel extends CareyShop
         ],
         'item' => [
             'user_level_id' => 'require|integer|gt:0',
+        ],
+        'list' => [
+            'order_type',
+            'order_field',
         ],
     ];
 }
