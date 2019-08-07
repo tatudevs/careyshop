@@ -21,7 +21,7 @@ class Qrcode extends CareyShop
         'name'        => 'max:64',
         'text'        => 'max:255',
         'size'        => 'integer|between:0,10',
-        'logo'        => 'max:255',
+        'logo'        => 'max:512',
         'page_no'     => 'integer|gt:0',
         'page_size'   => 'integer|gt:0',
         'order_type'  => 'in:asc,desc',
