@@ -122,7 +122,7 @@ class User extends CareyShop
     {
         return $this
             ->hasOne('userLevel', 'user_level_id', 'user_level_id', [], 'left')
-            ->field('name,discount')
+            ->field('name,icon,discount')
             ->setEagerlyType(0);
     }
 

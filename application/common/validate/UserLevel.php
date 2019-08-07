@@ -19,6 +19,7 @@ class UserLevel extends CareyShop
     protected $rule = [
         'user_level_id' => 'integer|gt:0',
         'name'          => 'require|length:1,30',
+        'icon'          => 'max:512',
         'amount'        => 'require|float|egt:0|regex:^\d+(\.\d{1,2})?$',
         'discount'      => 'require|integer|between:0,100',
         'description'   => 'max:200',
@@ -31,6 +32,7 @@ class UserLevel extends CareyShop
     protected $field = [
         'user_level_id' => '等级编号',
         'name'          => '等级名称',
+        'icon'          => '等级图标',
         'amount'        => '消费金额',
         'discount'      => '折扣',
         'description'   => '等级描述',
@@ -44,6 +46,7 @@ class UserLevel extends CareyShop
         'set'  => [
             'user_level_id' => 'require|integer|gt:0',
             'name',
+            'icon',
             'amount',
             'discount',
             'description',
