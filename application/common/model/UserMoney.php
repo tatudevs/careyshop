@@ -338,13 +338,18 @@ class UserMoney extends CareyShop
      */
     private function setUserLevel($totalMoney, $clientId)
     {
-        $userLevelId = UserLevel::where(['amount' => ['elt', $totalMoney]])
+        $result = UserLevel::where(['amount' => ['elt', $totalMoney]])
             ->order(['amount' => 'desc'])
-            ->value('user_level_id');
+            ->find();
 
-        if ($userLevelId) {
-            User::where(['user_id' => ['eq', $clientId]])->setField('user_level_id', $userLevelId);
+        if (!$result) {
+            return;
         }
+
+        $data['level_icon'] = $result->getAttr('icon');
+        $data['user_level_id'] = $result->getAttr('user_level_id');
+
+        User::where(['user_id' => ['eq', $clientId]])->save($data);
     }
 
     /**

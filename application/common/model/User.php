@@ -162,7 +162,12 @@ class User extends CareyShop
             }
 
             is_client_admin() ?: $data['group_id'] = AUTH_CLIENT;
-            $field = ['password', 'head_pic', 'sex', 'birthday', 'username', 'mobile', 'email', 'nickname', 'group_id'];
+            $data['level_icon'] = UserLevel::where('user_level_id', 1)->value('icon', '');
+
+            $field = [
+                'password', 'head_pic', 'sex', 'birthday', 'level_icon',
+                'username', 'mobile', 'email', 'nickname', 'group_id'
+            ];
 
             if (!$this->allowField($field)->save($data)) {
                 throw new \Exception($this->getError());

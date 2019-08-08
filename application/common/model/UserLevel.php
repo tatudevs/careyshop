@@ -118,11 +118,31 @@ class UserLevel extends CareyShop
         }
 
         $map['user_level_id'] = ['eq', $data['user_level_id']];
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            return $this->toArray();
+        $result = $this->where($map)->find();
+
+        if (!$result) {
+            return is_null($result) ? $this->setError('数据不存在') : false;
         }
 
-        return false;
+        // 开启事务
+        self::startTrans();
+
+        try {
+            if (false === $result->allowField(true)->save($data)) {
+                throw new \Exception($result->getError());
+            }
+
+            $userDb = new User();
+            if (false === $userDb->save(['level_icon' => $result->getAttr('icon')], $map)) {
+                throw new \Exception($userDb->getError());
+            }
+
+            self::commit();
+            return $result->toArray();
+        } catch (\Exception $e) {
+            self::rollback();
+            return $this->setError($e->getMessage());
+        }
     }
 
     /**
@@ -135,6 +155,10 @@ class UserLevel extends CareyShop
     {
         if (!$this->validateData($data, 'UserLevel.del')) {
             return false;
+        }
+
+        if (self::checkUnique(['user_level_id' => ['in', $data['user_level_id']]])) {
+            return $this->setError('等级已在使用中,建议进行编辑修改');
         }
 
         self::destroy($data['user_level_id']);
