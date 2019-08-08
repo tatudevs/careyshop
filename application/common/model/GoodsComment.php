@@ -156,7 +156,7 @@ class GoodsComment extends CareyShop
     {
         return $this
             ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('username,nickname,user_level_id,head_pic')
+            ->field('username,nickname,level_icon,user_level_id,head_pic')
             ->setEagerlyType(0);
     }
 

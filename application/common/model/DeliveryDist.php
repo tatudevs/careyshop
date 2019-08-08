@@ -86,7 +86,7 @@ class DeliveryDist extends CareyShop
     {
         return $this
             ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('username,nickname,head_pic')
+            ->field('username,nickname,level_icon,head_pic')
             ->setEagerlyType(0);
     }
 

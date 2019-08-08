@@ -108,7 +108,7 @@ class OrderService extends CareyShop
     {
         return $this
             ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('user_id,username,nickname,head_pic');
+            ->field('user_id,username,nickname,level_icon,head_pic');
     }
 
     /**
