@@ -366,7 +366,7 @@ class GoodsComment extends CareyShop
 
         if (false !== $result->isUpdate(false)->save()) {
             // 隐藏不返回的字段
-            $hidden = ['is_show', 'is_top', 'status', 'praise', 'reply_count'];
+            $hidden = ['is_show', 'is_top', 'status', 'reply_count'];
             return $result->hidden($hidden)->toArray();
         }
 
@@ -638,7 +638,7 @@ class GoodsComment extends CareyShop
             $with = ['getUser', 'getOrderGoods'];
 
             // 关联表不返回的字段
-            $replyField = 'goods_id,order_goods_id,order_no,score,is_top,status,is_show,reply_count';
+            $replyField = 'goods_id,order_goods_id,order_no,score,is_top,is_append,status,is_show,reply_count';
 
             // 关联表搜索条件
             $replyMap['is_delete'] = ['eq', 0];
@@ -662,7 +662,7 @@ class GoodsComment extends CareyShop
             };
 
             // 过滤不返回的字段
-            $field = 'goods_id,order_goods_id,is_show,is_top';
+            $field = 'goods_id,order_goods_id,type,is_append,is_show,is_top';
             is_client_admin() ?: $field .= ',status,order_no';
 
             $query->field($field, true)->with($with)->where($map);
