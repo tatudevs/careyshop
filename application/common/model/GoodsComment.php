@@ -340,6 +340,14 @@ class GoodsComment extends CareyShop
             return is_null($result) ? $this->setError('数据不存在') : false;
         }
 
+        // 设置状态为已读
+        $readId = $result->getAttr('parent_id');
+        if (0 <= $readId) {
+            $readId = $result->getAttr('goods_comment_id');
+        }
+
+        $this->batchSetting(['status'], ['goods_comment_id' => [$readId], 'status' => 1]);
+
         // 准备插入数据
         $result->setAttr('goods_comment_id', null);
         $result->setAttr('score', 0);
@@ -662,7 +670,7 @@ class GoodsComment extends CareyShop
             };
 
             // 过滤不返回的字段
-            $field = 'goods_id,order_goods_id,type,is_append,is_show,is_top';
+            $field = 'goods_id,order_goods_id,is_append,is_show,is_top';
             is_client_admin() ?: $field .= ',status,order_no';
 
             $query->field($field, true)->with($with)->where($map);
