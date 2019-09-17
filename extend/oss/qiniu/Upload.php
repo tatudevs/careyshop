@@ -308,7 +308,18 @@ class Upload extends UploadBase
         $fileInfo = pathinfo($urlArray['path']);
         $param = $this->request->param();
         $extension = ['jpg', 'png', 'svg', 'gif', 'bmp', 'tiff', 'webp'];
+
+        // 是否带有随机值,用于强制刷新
+        $query = [];
         $options = '?imageMogr2/auto-orient/';
+        if (isset($urlArray['query'])) {
+            parse_str($urlArray['query'], $query);
+            if (array_key_exists('rand', $query)) {
+                $options = sprintf('?rand=%s&imageMogr2/auto-orient/', $query['rand']);
+            }
+        }
+
+        // 实际连接
         $url = sprintf('%s://%s%s', $urlArray['scheme'], $urlArray['host'], $urlArray['path']);
 
         // 带样式则直接返回

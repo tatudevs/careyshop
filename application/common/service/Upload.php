@@ -285,16 +285,16 @@ class Upload extends CareyShop
         // 从URL分析获取对应模型
         $urlArray = parse_url($url);
         if (!isset($urlArray['query'])) {
-            return $this->setError('请填写合法的url或缺少type参数');
+            return $this->setError('请填写合法的url参数');
         }
 
-        list(, $module) = explode('=', $urlArray['query']);
-        if (empty($module)) {
+        parse_str($urlArray['query'], $items);
+        if (!array_key_exists('type', $items)) {
             return $this->setError('type参数值不能为空');
         }
 
         $pact = array_column($this->getUploadModule(), 'module');
-        if (!in_array($module, $pact)) {
+        if (!in_array($items['type'], $pact)) {
             return $this->setError('type协议错误');
         }
 
@@ -319,7 +319,7 @@ class Upload extends CareyShop
             }
         }
 
-        $ossObject = $this->createOssObject($module);
+        $ossObject = $this->createOssObject($items['type']);
         if (false === $ossObject) {
             return false;
         }
@@ -328,7 +328,7 @@ class Upload extends CareyShop
         $notPrefix = preg_replace($pattern, '', $url);
 
         $data = [
-            'source'     => $module,
+            'source'     => $items['type'],
             'url'        => $notPrefix,
             'url_prefix' => strval($url),
         ];

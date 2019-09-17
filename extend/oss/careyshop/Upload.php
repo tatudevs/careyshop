@@ -349,6 +349,13 @@ class Upload extends UploadBase
             $url .= $fileInfo['dirname'];
             $url .= '/' . $fileName;
             $url .= '.' . $suffix;
+
+            if (isset($urlArray['query'])) {
+                parse_str($urlArray['query'], $query);
+                if (array_key_exists('rand', $query)) {
+                    $url .= sprintf('?rand=%s', $query['rand']);
+                }
+            }
         } else if ($type === 'path') {
             $url = ROOT_PATH . 'public';
             $url .= str_replace(IS_WIN ? '/' : '\\', DS, $fileInfo['dirname']);

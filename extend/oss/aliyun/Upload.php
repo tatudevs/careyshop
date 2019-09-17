@@ -427,13 +427,32 @@ class Upload extends UploadBase
         $fileInfo = pathinfo($urlArray['path']);
         $param = $this->request->param();
         $extension = ['jpg', 'png', 'bmp', 'webp', 'gif', 'tiff'];
+
+        // 是否带有随机值,用于强制刷新
+        $query = [];
         $options = '?x-oss-process=image/';
+        if (isset($urlArray['query'])) {
+            parse_str($urlArray['query'], $query);
+            if (array_key_exists('rand', $query)) {
+                $options = sprintf('?rand=%s&x-oss-process=image/', $query['rand']);
+            }
+        }
+
+        // 实际连接
         $url = sprintf('%s://%s%s', $urlArray['scheme'], $urlArray['host'], $urlArray['path']);
 
         // 带样式则直接返回
         if (!empty($param['style'])) {
             $style = mb_substr($param['style'], 0, 1, 'utf-8');
-            $url .= in_array($style, ['-', '_', '/', '!'], true) ? $param['style'] : '?x-oss-process=style/' . $param['style'];
+            if (in_array($style, ['-', '_', '/', '!'], true)) {
+                return $url . $param['style'];
+            }
+
+            $url .= '?x-oss-process=style/' . $param['style'];
+            if (array_key_exists('rand', $query)) {
+                $url = sprintf('%s?rand=%s&x-oss-process=style/%s', $url, $query['rand'], $param['style']);
+            }
+
             return $url;
         }
 
