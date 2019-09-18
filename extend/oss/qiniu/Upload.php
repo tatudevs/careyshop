@@ -324,7 +324,18 @@ class Upload extends UploadBase
 
         // 带样式则直接返回
         if (!empty($param['style'])) {
-            return $url . $param['style'];
+            $style = mb_substr($param['style'], 0, 1, 'utf-8');
+            if (in_array($style, ['-', '_', '!', '/'])) {
+                $url .= $param['style'];
+            } else {
+                $url .= sprintf('-%s', $param['style']);
+            }
+
+            if (array_key_exists('rand', $query)) {
+                $url .= sprintf('?rand=%s', $query['rand']);
+            }
+
+            return $url;
         }
 
         // 非图片资源则直接返回

@@ -444,8 +444,13 @@ class Upload extends UploadBase
         // 带样式则直接返回
         if (!empty($param['style'])) {
             $style = mb_substr($param['style'], 0, 1, 'utf-8');
-            if (in_array($style, ['-', '_', '/', '!'], true)) {
-                return $url . $param['style'];
+            if (in_array($style, ['-', '_', '/', '!'])) {
+                $url .= $param['style'];
+                if (array_key_exists('rand', $query)) {
+                    $url .= sprintf('?rand=%s', $query['rand']);
+                }
+
+                return $url;
             }
 
             $url .= '?x-oss-process=style/' . $param['style'];
