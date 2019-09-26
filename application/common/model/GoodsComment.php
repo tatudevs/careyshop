@@ -265,7 +265,7 @@ class GoodsComment extends CareyShop
         self::startTrans();
 
         try {
-            // 设置主评价为未读,并且判断追评是否存在图片
+            // 设置主评为未读,并且判断追评是否存在图片
             $updata['status'] = 0;
             $updata['is_append'] = 1;
             empty($data['image']) ?: $updata['is_image'] = 1;
@@ -289,6 +289,7 @@ class GoodsComment extends CareyShop
             $result->setAttr('content', $data['content']);
             $result->setAttr('is_image', !empty($data['image']) ? 1 : 0);
             $result->setAttr('image', !empty($data['image']) ? $data['image'] : []);
+            $result->setAttr('create_time', time());
 
             if (false === $result->isUpdate(false)->save()) {
                 throw new \Exception($this->getError());
@@ -342,7 +343,7 @@ class GoodsComment extends CareyShop
 
         // 设置状态为已读
         $readId = $result->getAttr('parent_id');
-        if (0 <= $readId) {
+        if (0 >= $readId) {
             $readId = $result->getAttr('goods_comment_id');
         }
 
@@ -362,6 +363,7 @@ class GoodsComment extends CareyShop
         $result->setAttr('content', $data['content']);
         $result->setAttr('is_image', !empty($data['image']) ? 1 : 0);
         $result->setAttr('image', !empty($data['image']) ? $data['image'] : []);
+        $result->setAttr('create_time', time());
 
         // 回复和追加共用数据结构
         if ($result->getAttr('type') === self::COMMENT_TYPE_MAIN) {
