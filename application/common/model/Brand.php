@@ -290,20 +290,26 @@ class Brand extends CareyShop
         }
 
         $result = self::all(function ($query) use ($data) {
-            $map['status'] = ['eq', 1];
-            !isset($data['goods_category_id']) ?: $map['goods_category_id'] = ['in', $data['goods_category_id']];
+            $map['b.status'] = ['eq', 1];
+            !isset($data['goods_category_id']) ?: $map['b.goods_category_id'] = ['in', $data['goods_category_id']];
 
             // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
+            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
 
             // 排序的字段
             $orderField = !empty($data['order_field']) ? $data['order_field'] : 'brand_id';
 
+            // 返回字段
+            $field = 'b.goods_category_id,b.brand_id,b.name,b.phonetic,b.logo,';
+            $field .= 'ifnull(c.name, \'\') category_name,ifnull(c.alias, \'\') category_alias';
+
             $query
                 ->cache(true, null, 'Brand')
-                ->field('goods_category_id,brand_id,name,phonetic,logo')
+                ->alias('b')
+                ->field($field)
+                ->join('goods_category c', 'c.status = 1 AND c.goods_category_id = b.goods_category_id', 'left')
                 ->where($map)
-                ->order([$orderField => $orderType]);
+                ->order(['b.' . $orderField => $orderType]);
         });
 
         if (false !== $result) {
