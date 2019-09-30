@@ -613,11 +613,22 @@ class Goods extends CareyShop
             // 排序的字段
             $orderField = !empty($data['order_field']) ? $data['order_field'] : 'goods_id';
 
+            // 关联查询
+            $with = [];
+
             if (!empty($data['is_goods_spec'])) {
-                $query->with('goodsSpecItem');
+                $with[] = 'goodsSpecItem';
             }
 
-            $query->where($map)->order([$orderField => $orderType])->page($pageNo, $pageSize);
+            if (!empty($data['is_spec_image'])) {
+                $with[] = 'specImage';
+            }
+
+            $query
+                ->with($with)
+                ->where($map)
+                ->order([$orderField => $orderType])
+                ->page($pageNo, $pageSize);
         });
 
         if (false !== $result) {
