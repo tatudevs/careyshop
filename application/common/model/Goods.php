@@ -569,7 +569,7 @@ class Goods extends CareyShop
         is_empty_parm($data['goods_category_id']) ?: $map['goods_category_id'] = ['eq', $data['goods_category_id']];
         empty($data['goods_code']) ?: $map['goods_code|goods_spu|goods_sku|bar_code'] = ['eq', $data['goods_code']];
         empty($data['brand_id']) ?: $map['brand_id'] = ['in', $data['brand_id']];
-        !isset($data['store_qty']) ?: $map['store_qty'] = ['between', $data['store_qty']];
+        empty($data['store_qty']) ?: $map['store_qty'] = ['between', $data['store_qty']];
         is_empty_parm($data['is_postage']) ?: $map['is_postage'] = ['eq', $data['is_postage']];
         is_empty_parm($data['is_integral']) ?: $map['is_integral'] = ['gt', 0];
         is_empty_parm($data['is_recommend']) ?: $map['is_recommend'] = ['eq', $data['is_recommend']];
