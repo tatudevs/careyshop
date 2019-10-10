@@ -50,7 +50,7 @@ class Goods extends CareyShop
         'goods_attr_item'   => 'array',
         'goods_spec_item'   => 'array',
         'spec_image'        => 'array',
-        'is_delete'         => 'in:0,1',
+        'is_delete'         => 'in:0,1,2',
         'exclude_id'        => 'integer|gt:0',
         'is_goods_spec'     => 'in:0,1',
         'is_spec_image'     => 'in:0,1',
