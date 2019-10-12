@@ -61,7 +61,7 @@ class Goods extends CareyShop
         'page_no'           => 'integer|gt:0',
         'page_size'         => 'integer|gt:0',
         'order_type'        => 'in:asc,desc',
-        'order_field'       => 'in:goods_id,goods_code,name,shop_price,store_qty,is_integral,is_recommend,is_new,is_hot',
+        'order_field'       => 'in:goods_id,goods_code,name,shop_price,store_qty,sales_sum,sort,is_integral,is_recommend,is_new,is_hot,create_time',
     ];
 
     /**
