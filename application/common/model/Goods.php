@@ -592,7 +592,7 @@ class Goods extends CareyShop
         // 回收站中不存在"上下架"概念
         if (!empty($data['is_delete'])) {
             $map['is_delete'] = ['eq', 1];
-            unset($data['status']);
+            unset($map['status']);
         }
 
         $totalResult = $this->where($map)->count();
@@ -1380,6 +1380,7 @@ class Goods extends CareyShop
 
         $result = $result->toArray();
         unset($result['goods_id'], $result['goods_code']);
+
         return $this->addGoodsItem($result);
     }
 }

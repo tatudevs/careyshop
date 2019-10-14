@@ -168,7 +168,7 @@ class Goods extends CareyShop
         ],
         'del'        => [
             'goods_id'  => 'require|arrayHasOnlyInts',
-            'is_delete' => 'require|in:0,1',
+            'is_delete' => 'require|in:0,1,2',
         ],
         'integral'   => [
             'goods_id'    => 'require|arrayHasOnlyInts',
@@ -257,7 +257,7 @@ class Goods extends CareyShop
      */
     public function checkLeast($value, $rule, $data)
     {
-        if (isset($data[$rule]) && $value > $data[$rule]) {
+        if (!empty($data[$rule]) && $value > $data[$rule]) {
             return $this->field['least_sum'] . '必须大于等于 ' . $this->field[$rule];
         }
 
