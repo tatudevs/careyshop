@@ -28,9 +28,6 @@ class Cart extends CareyShop
             // 补全需要的数据
             $goodsData[$key]['error'] = 0;
             $goodsData[$key]['error_msg'] = '';
-            // TODO:订单商品的封面图得根据顾客购物时选择的规格进行,如果规格存在图片,则取规格的第一张图
-            // TODO:如果规格不存在图,则取商品主图,否则直接留空
-            // TODO:并且商品规格图允许多图集
             $goodsData[$key]['goods']['goods_image'] = isset($goodsData[$key]['goods']['attachment'][0]) ? $goodsData[$key]['goods']['attachment'][0] : '';
             unset($goodsData[$key]['goods']['attachment']);
 
