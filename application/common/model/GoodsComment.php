@@ -740,7 +740,6 @@ class GoodsComment extends CareyShop
         // 查看指定商品规格评价
         if (!empty($data['goods_id']) && !empty($data['goods_spec'])) {
             $with[] = 'getOrderGoods';
-            sort($data['goods_spec']);
             $data['goods_spec'] = implode('_', $data['goods_spec']);
             $map['getOrderGoods.key_name'] = ['eq', $data['goods_spec']];
         }

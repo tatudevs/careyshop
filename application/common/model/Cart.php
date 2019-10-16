@@ -211,11 +211,10 @@ class Cart extends CareyShop
         $data['key_value'] = '';
 
         if (!empty($data['goods_spec'])) {
-            sort($data['goods_spec']);
-            $data['goods_spec'] = implode('_', $data['goods_spec']);
-
             // 验证提交的商品规格是否存在及库存
+            $data['goods_spec'] = implode('_', $data['goods_spec']);
             $goodsSpec = array_column($goodsResult['goods_spec_item'], null, 'key_name');
+
             if (!array_key_exists($data['goods_spec'], $goodsSpec)) {
                 return $this->setError('商品规格错误');
             }

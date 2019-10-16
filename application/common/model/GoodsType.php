@@ -217,6 +217,7 @@ class GoodsType extends CareyShop
         $result = self::all(function ($query) use ($data) {
             $attribute = GoodsAttribute::field('goods_type_id, count(*) num')
                 ->group('goods_type_id')
+                ->where(['is_delete' => ['eq', 0]])
                 ->buildSql();
 
             $spec = Spec::field('goods_type_id, count(*) num')

@@ -33,7 +33,7 @@ class GoodsComment extends CareyShop
         'account'          => 'max:60',
         'is_image'         => 'in:0,1',
         'is_append'        => 'in:0,1',
-        'goods_spec'       => 'arrayHasOnlyStrings',
+        'goods_spec'       => 'arrayHasOnlyInts',
         'page_no'          => 'integer|gt:0',
         'page_size'        => 'integer|gt:0',
         'order_type'       => 'in:asc,desc',
