@@ -1058,7 +1058,7 @@ class Goods extends CareyShop
         $selectSpec = $this->getSpecOrAttrItem($filterParam, 'spec');
 
         // 获取可检索的规格
-        $map['spec_index'] = ['neq', 0];
+        $map['spec_index'] = ['eq', 1];
         empty($selectSpec) ?: $map['spec_id'] = ['not in', $selectSpec];
         $specResult = Spec::where($map)->order(['sort' => 'asc', 'spec_id' => 'asc'])->column('name', 'spec_id');
 

@@ -18,7 +18,6 @@ class Spec extends CareyShop
      */
     protected $readonly = [
         'spec_id',
-        //'goods_type_id',
     ];
 
     /**
@@ -70,23 +69,27 @@ class Spec extends CareyShop
         // 避免无关字段
         unset($data['spec_id']);
 
-        // 整理商品规格项数据
+        // 整理商品规格项数据(去重)
         $itemData = [];
         $data['spec_item'] = array_unique($data['spec_item']);
 
         foreach ($data['spec_item'] as $value) {
-            $itemData[] = ['item_name' => $value];
+            $itemData[] = [
+                'item_name' => $value,
+                'is_type'   => 1,
+            ];
         }
 
         // 开启事务
         self::startTrans();
 
         try {
-            // 添加主表
+            // 添加规格主表
             if (false === $this->allowField(true)->save($data)) {
                 throw new \Exception($this->getError());
             }
 
+            // 添加规格项表
             if (!$this->hasSpecItem()->saveAll($itemData)) {
                 throw new \Exception($this->getError());
             }
@@ -115,14 +118,34 @@ class Spec extends CareyShop
         // 开启事务
         self::startTrans();
 
+        // 避免无关字段
+        unset($data['goods_type_id']);
+        $map['spec_id'] = ['eq', $data['spec_id']];
+
         try {
-            if (false === $this->allowField(true)->save($data, ['spec_id' => ['eq', $data['spec_id']]])) {
+            // 修改规格主表
+            if (false === $this->allowField(true)->save($data, $map)) {
                 throw new \Exception($this->getError());
             }
 
             if (!empty($data['spec_item'])) {
-                if (!SpecItem::updataItem($data['spec_id'], $data['spec_item'])) {
-                    throw new \Exception();
+                // 断开模型字段
+                SpecItem::update(['is_type' => 0], $map);
+
+                // 重新插入规格项
+                $itemData = [];
+                $data['spec_item'] = array_unique($data['spec_item']);
+
+                foreach ($data['spec_item'] as $value) {
+                    $itemData[] = [
+                        'item_name' => $value,
+                        'is_type'   => 1,
+                    ];
+                }
+
+                // 添加规格项表
+                if (!$this->hasSpecItem()->saveAll($itemData)) {
+                    throw new \Exception($this->getError());
                 }
             }
 
@@ -166,7 +189,15 @@ class Spec extends CareyShop
             return false;
         }
 
-        $result = self::get($data['spec_id'], 'hasSpecItem');
+        $result = self::get(function ($query) use ($data) {
+            $map['spec_id'] = ['eq', $data['spec_id']];
+            $with['hasSpecItem'] = function($query) {
+                $query->where(['is_type' => ['eq', 1]]);
+            };
+
+            $query->with($with)->where($map);
+        });
+
         if (false !== $result) {
             if (is_null($result)) {
                 return null;
@@ -195,7 +226,7 @@ class Spec extends CareyShop
         }
 
         // 搜索条件
-        $map = [];
+        $map['goods_type_id'] = ['neq', 0];
         empty($data['goods_type_id']) ?: $map['goods_type_id'] = ['eq', $data['goods_type_id']];
 
         $totalResult = $this->where($map)->count();
@@ -225,11 +256,16 @@ class Spec extends CareyShop
             }
 
             // 搜索条件
-            $map = [];
+            $map['spec.goods_type_id'] = ['neq', 0];
             empty($data['goods_type_id']) ?: $map['getGoodsType.goods_type_id'] = ['eq', $data['goods_type_id']];
 
+            $with = ['getGoodsType'];
+            $with['hasSpecItem'] = function($query) {
+                $query->where(['is_type' => ['eq', 1]]);
+            };
+
             $query
-                ->with('hasSpecItem,getGoodsType')
+                ->with($with)
                 ->where($map)
                 ->order($order)
                 ->page($pageNo, $pageSize);
@@ -266,7 +302,11 @@ class Spec extends CareyShop
             $order['sort'] = 'asc';
             $order['spec_id'] = 'asc';
 
-            $query->with('hasSpecItem')->where($map)->order($order);
+            $with['hasSpecItem'] = function($query) {
+                $query->where(['is_type' => ['eq', 1]]);
+            };
+
+            $query->with($with)->where($map)->order($order);
         });
 
         if (false !== $result) {
@@ -298,11 +338,15 @@ class Spec extends CareyShop
         self::startTrans();
 
         try {
-            self::destroy($data['spec_id']);
-
-            foreach ($data['spec_id'] as $value) {
-                SpecItem::updataItem($value, []);
+            // 修改规格主表
+            $map['spec_id'] = ['in', $data['spec_id']];
+            if (false === $this->update(['goods_type_id' => 0], $map)) {
+                throw new \Exception($this->getError());
             }
+
+            // 断开模型字段
+            $map['is_type'] = ['neq', 0];
+            SpecItem::update(['is_type' => 0], $map);
 
             self::commit();
             return true;

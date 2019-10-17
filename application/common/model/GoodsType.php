@@ -222,6 +222,7 @@ class GoodsType extends CareyShop
 
             $spec = Spec::field('goods_type_id, count(*) num')
                 ->group('goods_type_id')
+                ->where(['goods_type_id' => ['neq', 0]])
                 ->buildSql();
 
             $query
