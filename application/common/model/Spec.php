@@ -118,12 +118,9 @@ class Spec extends CareyShop
         // 开启事务
         self::startTrans();
 
-        // 避免无关字段
-        unset($data['goods_type_id']);
-        $map['spec_id'] = ['eq', $data['spec_id']];
-
         try {
             // 修改规格主表
+            $map['spec_id'] = ['eq', $data['spec_id']];
             if (false === $this->allowField(true)->save($data, $map)) {
                 throw new \Exception($this->getError());
             }
@@ -340,7 +337,7 @@ class Spec extends CareyShop
         try {
             // 修改规格主表
             $map['spec_id'] = ['in', $data['spec_id']];
-            if (false === $this->update(['goods_type_id' => 0], $map)) {
+            if (false === $this->save(['goods_type_id' => 0, 'spec_index' => 0], $map)) {
                 throw new \Exception($this->getError());
             }
 

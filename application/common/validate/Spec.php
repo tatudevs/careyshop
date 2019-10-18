@@ -53,6 +53,7 @@ class Spec extends CareyShop
     protected $scene = [
         'set'   => [
             'spec_id' => 'require|integer|gt:0',
+            'goods_type_id',
             'name',
             'spec_item',
             'spec_index',
