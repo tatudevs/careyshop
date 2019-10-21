@@ -73,10 +73,11 @@ class Spec extends CareyShop
         $itemData = [];
         $data['spec_item'] = array_unique($data['spec_item']);
 
-        foreach ($data['spec_item'] as $value) {
+        foreach ($data['spec_item'] as $key => $value) {
             $itemData[] = [
-                'item_name' => $value,
-                'is_type'   => 1,
+                'item_name'  => $value,
+                'is_contact' => 1,
+                'sort'       => $key,
             ];
         }
 
@@ -126,23 +127,8 @@ class Spec extends CareyShop
             }
 
             if (!empty($data['spec_item'])) {
-                // 断开模型字段
-                SpecItem::update(['is_type' => 0], $map);
-
-                // 重新插入规格项
-                $itemData = [];
-                $data['spec_item'] = array_unique($data['spec_item']);
-
-                foreach ($data['spec_item'] as $value) {
-                    $itemData[] = [
-                        'item_name' => $value,
-                        'is_type'   => 1,
-                    ];
-                }
-
-                // 添加规格项表
-                if (!$this->hasSpecItem()->saveAll($itemData)) {
-                    throw new \Exception($this->getError());
+                if (!SpecItem::updataItem($data['spec_id'], $data['spec_item'])) {
+                    throw new \Exception();
                 }
             }
 
@@ -189,7 +175,7 @@ class Spec extends CareyShop
         $result = self::get(function ($query) use ($data) {
             $map['spec_id'] = ['eq', $data['spec_id']];
             $with['hasSpecItem'] = function($query) {
-                $query->where(['is_type' => ['eq', 1]]);
+                $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
             };
 
             $query->with($with)->where($map);
@@ -258,7 +244,7 @@ class Spec extends CareyShop
 
             $with = ['getGoodsType'];
             $with['hasSpecItem'] = function($query) {
-                $query->where(['is_type' => ['eq', 1]]);
+                $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
             };
 
             $query
@@ -300,7 +286,7 @@ class Spec extends CareyShop
             $order['spec_id'] = 'asc';
 
             $with['hasSpecItem'] = function($query) {
-                $query->where(['is_type' => ['eq', 1]]);
+                $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
             };
 
             $query->with($with)->where($map)->order($order);
@@ -342,8 +328,8 @@ class Spec extends CareyShop
             }
 
             // 断开模型字段
-            $map['is_type'] = ['neq', 0];
-            SpecItem::update(['is_type' => 0], $map);
+            $map['is_contact'] = ['neq', 0];
+            SpecItem::update(['is_contact' => 0], $map);
 
             self::commit();
             return true;
