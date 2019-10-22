@@ -190,6 +190,7 @@ class Goods extends CareyShop
         }
 
         // 插入商品规格列表
+        // todo:此处与规格有关
         if (!empty($data['goods_spec_item'])) {
             $result['goods_spec_item'] = self::$specGoods->addGoodsSpec($goodsId, $data['goods_spec_item']);
             if (false === $result['goods_spec_item']) {
@@ -239,10 +240,12 @@ class Goods extends CareyShop
         self::startTrans();
 
         try {
+            // 写入主表
             if (!$this->allowField(true)->save($data)) {
                 throw new \Exception($this->getError());
             }
 
+            // 写入属性与规格
             $result = $this->toArray();
             if (!$this->addGoodSubjoin($this->getAttr('goods_id'), $result, $data)) {
                 throw new \Exception($this->getError());
@@ -337,6 +340,7 @@ class Goods extends CareyShop
             return false;
         }
 
+        // todo:此处与规格有关
         $result = self::get(function ($query) use ($data) {
             $with = ['goodsSpecItem', 'specImage'];
             $with['goodsAttrItem'] = function ($query) {
@@ -514,6 +518,7 @@ class Goods extends CareyShop
             return false;
         }
 
+        // todo:此处与规格有关
         $result = SpecGoods::all(function ($query) use ($data) {
             $query->where(['goods_id' => ['eq', $data['goods_id']]]);
         });
@@ -616,6 +621,7 @@ class Goods extends CareyShop
             // 关联查询
             $with = [];
 
+            // todo:此处与规格有关
             if (!empty($data['is_goods_spec'])) {
                 $with[] = 'goodsSpecItem';
             }
@@ -734,6 +740,7 @@ class Goods extends CareyShop
     private function getGoodsIdBySpec($specList)
     {
         // 数组首位对应的是"cs_spec"中的"spec_id",非同一类值
+        // todo:此处与规格有关
         is_array(current($specList)) ?: array_shift($specList);
 
         if (empty($specList)) {
@@ -1035,6 +1042,7 @@ class Goods extends CareyShop
      */
     private function getFilterSpec($goodsIdList, $filterParam)
     {
+        // todo:此处与规格有关
         if (empty($goodsIdList)) {
             return [];
         }
@@ -1369,6 +1377,7 @@ class Goods extends CareyShop
             return $this->setError('商品编号不能为空');
         }
 
+        // todo:此处与规格有关
         $result = self::get(function ($query) use ($data) {
             $with = ['goodsAttrItem', 'goodsSpecItem', 'specImage'];
             $query->with($with)->where(['goods_id' => ['eq', $data['goods_id']]]);
