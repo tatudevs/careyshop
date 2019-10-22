@@ -87,6 +87,16 @@ class Cart extends CareyShop
     }
 
     /**
+     * hasMany cs_spec_image
+     * @access public
+     * @return mixed
+     */
+    public function goodsSpecImage()
+    {
+        return $this->hasMany('SpecImage', 'goods_id', 'goods_id');
+    }
+
+    /**
      * 添加或编辑购物车商品
      * @access public
      * @param  array $data     外部数据
@@ -318,7 +328,7 @@ class Cart extends CareyShop
         $map['is_selected'] = ['eq', 1];
 
         $result = $this
-            ->with('goods,goodsSpecItem')
+            ->with('goods,goodsSpecItem,goodsSpecImage')
             ->where($map)
             ->limit(empty($data['show_size']) ? 0 : $data['show_size'])
             ->order(['update_time' => 'desc'])

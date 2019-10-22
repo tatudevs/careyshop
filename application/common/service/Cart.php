@@ -13,6 +13,34 @@ namespace app\common\service;
 class Cart extends CareyShop
 {
     /**
+     * 获取购物车或订单商品封面
+     * @access private
+     * @param  array $goods 商品数据
+     * @return mixed
+     */
+    private function getGoodsImage($goods)
+    {
+        $default = isset($goods['goods']['attachment'][0]) ? $goods['goods']['attachment'][0] : [];
+
+        // 不存在规格或规格不存在图集
+        if (empty($goods['key_name']) || empty($goods['goods_spec_image'])) {
+            return $default;
+        }
+
+        $keyName = array_reverse(explode('_', $goods['key_name']));
+        $imageKey = array_column($goods['goods_spec_image'], 'image', 'spec_item_id');
+
+        foreach ($keyName as $value) {
+            if (array_key_exists($value, $imageKey)) {
+                $default = $imageKey[$value][0];
+                break;
+            }
+        }
+
+        return $default;
+    }
+
+    /**
      * 验证购物车商品
      * @access public
      * @param  array $goodsData  商品数据(附带商品规格)
@@ -28,7 +56,7 @@ class Cart extends CareyShop
             // 补全需要的数据
             $goodsData[$key]['error'] = 0;
             $goodsData[$key]['error_msg'] = '';
-            $goodsData[$key]['goods']['goods_image'] = isset($goodsData[$key]['goods']['attachment'][0]) ? $goodsData[$key]['goods']['attachment'][0] : '';
+            $goodsData[$key]['goods']['goods_image'] = $this->getGoodsImage($value);
             unset($goodsData[$key]['goods']['attachment']);
 
             // 检测商品是否存在
@@ -84,7 +112,6 @@ class Cart extends CareyShop
                 unset($goodsData[$key]['goods_spec_item']);
             }
         }
-
 
         return $goodsData;
     }

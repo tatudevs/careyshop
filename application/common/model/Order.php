@@ -223,7 +223,7 @@ class Order extends CareyShop
         $cartDb = new Cart();
         $cartData = $cartDb::all(function ($query) use ($cartMap) {
             $query
-                ->with('goods,goodsSpecItem')
+                ->with('goods,goodsSpecItem,goodsSpecImage')
                 ->where($cartMap)
                 ->limit($cartMap['is_show'] == 0 ? 1 : 0)
                 ->order(['cart_id' => 'desc']);
