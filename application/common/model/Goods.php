@@ -740,7 +740,6 @@ class Goods extends CareyShop
     private function getGoodsIdBySpec($specList)
     {
         // 数组首位对应的是"cs_spec"中的"spec_id",非同一类值
-        // todo:此处与规格有关
         is_array(current($specList)) ?: array_shift($specList);
 
         if (empty($specList)) {
@@ -1042,7 +1041,6 @@ class Goods extends CareyShop
      */
     private function getFilterSpec($goodsIdList, $filterParam)
     {
-        // todo:此处与规格有关
         if (empty($goodsIdList)) {
             return [];
         }
@@ -1053,8 +1051,7 @@ class Goods extends CareyShop
             ->find();
 
         if ($specKeyList) {
-            $specKeyList = explode('_', $specKeyList->getAttr('key_name'));
-            $specKeyList = array_unique($specKeyList);
+            $specKeyList = array_unique(explode('_', $specKeyList->getAttr('key_name')));
             $specKeyList = array_filter($specKeyList);
         }
 
@@ -1066,13 +1063,21 @@ class Goods extends CareyShop
         $selectSpec = $this->getSpecOrAttrItem($filterParam, 'spec');
 
         // 获取可检索的规格
-        $map['spec_index'] = ['eq', 1];
+        $map = ['goods_type_id' => ['neq', 0], 'spec_index' => ['eq', 1]];
         empty($selectSpec) ?: $map['spec_id'] = ['not in', $selectSpec];
-        $specResult = Spec::where($map)->order(['sort' => 'asc', 'spec_id' => 'asc'])->column('name', 'spec_id');
+
+        $specResult = Spec::where($map)
+            ->order(['sort' => 'asc', 'spec_id' => 'asc'])
+            ->column('name', 'spec_id');
 
         // 根据规格获取对应的规格项
-        $specItemResult = SpecItem::where(['spec_item_id' => ['in', $specKeyList]])
-            ->where(['spec_id' => ['in', array_keys($specResult)]])
+        $map = [
+            'spec_item_id' => ['in', $specKeyList],
+            'spec_id'      => ['in', array_keys($specResult)],
+            'is_contact'   => ['eq', 1],
+        ];
+
+        $specItemResult = SpecItem::where($map)
             ->column('spec_id,item_name', 'spec_item_id');
 
         // 生成(排除不符合的)规格筛选菜单,必须以"$spec_result"做循环,否则排序无效
