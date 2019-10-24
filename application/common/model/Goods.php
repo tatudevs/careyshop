@@ -113,6 +113,23 @@ class Goods extends CareyShop
     }
 
     /**
+     * 获取器设置规格菜单数据
+     * @access public
+     * @param  mixed ...$args
+     * @return array
+     */
+    public function getGoodsSpecMenuAttr(...$args)
+    {
+        $data = [];
+        if (isset($args[2]['goods_spec_item'])) {
+            $specMenuSer = new \app\common\service\SpecGoods();
+            $data = $specMenuSer->specItemToMenu($args[2]['goods_spec_item']->toArray());
+        }
+
+        return $data;
+    }
+
+    /**
      * 初始化处理
      * @access protected
      * @return void
@@ -351,7 +368,7 @@ class Goods extends CareyShop
         });
 
         if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
+            return is_null($result) ? null : $result->append(['goods_spec_menu'])->toArray();
         }
 
         return false;
