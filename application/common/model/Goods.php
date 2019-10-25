@@ -13,6 +13,7 @@ namespace app\common\model;
 use think\Cache;
 use util\Http;
 use think\helper\Str;
+use app\common\service\SpecGoods as SpecGoodsSer;
 
 class Goods extends CareyShop
 {
@@ -122,8 +123,7 @@ class Goods extends CareyShop
     {
         $data = [];
         if (isset($args[2]['goods_spec_item'])) {
-            $specMenuSer = new \app\common\service\SpecGoods();
-            $data = $specMenuSer->specItemToMenu($args[2]['goods_spec_item']->toArray());
+            $data = SpecGoodsSer::specItemToMenu($args[2]['goods_spec_item']->toArray());
         }
 
         return $data;
@@ -357,7 +357,6 @@ class Goods extends CareyShop
             return false;
         }
 
-        // todo:此处与规格有关
         $result = self::get(function ($query) use ($data) {
             $with = ['goodsSpecItem', 'specImage'];
             $with['goodsAttrItem'] = function ($query) {
@@ -535,13 +534,15 @@ class Goods extends CareyShop
             return false;
         }
 
-        // todo:此处与规格有关
         $result = SpecGoods::all(function ($query) use ($data) {
             $query->where(['goods_id' => ['eq', $data['goods_id']]]);
         });
 
         if (false !== $result) {
-            return $result->toArray();
+            $specItem = $result->toArray();
+            $specMenu = SpecGoodsSer::specItemToMenu($specItem);
+
+            return ['goods_spec_item' => $specItem, 'goods_spec_menu' => $specMenu];
         }
 
         return false;
@@ -638,7 +639,6 @@ class Goods extends CareyShop
             // 关联查询
             $with = [];
 
-            // todo:此处与规格有关
             if (!empty($data['is_goods_spec'])) {
                 $with[] = 'goodsSpecItem';
             }
@@ -655,6 +655,10 @@ class Goods extends CareyShop
         });
 
         if (false !== $result) {
+            if (!empty($data['is_goods_spec'])) {
+                $result->append(['goods_spec_menu']);
+            }
+
             return ['items' => $result->toArray(), 'total_result' => $totalResult];
         }
 
