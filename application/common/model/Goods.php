@@ -188,6 +188,58 @@ class Goods extends CareyShop
         return true;
     }
 
+    private function validateSpecMenu(&$data)
+    {
+        // 待替换内容 key=查找内容 value=替换为
+        $replace = [];
+
+        foreach ($data['goods_spec_menu'] as $value) {
+            // 判断主体是否有变更,如果主体变更,则项无条件重新插入
+            $isChange = false;
+
+            // 规格主体
+            if ($value['spec_id'] <= 0) {
+                $specModel = Spec::create([
+                    'goods_type_id' => 0,
+                    'name'          => $value['text'],
+                    'spec_index'    => 0,
+                ]);
+
+                $isChange = true;
+                $value['spec_id'] = $specModel->getAttr('spec_id');
+            }
+
+            foreach ($value['value'] as $item) {
+                if ($isChange || $item['spec_item_id'] <= 0) {
+                    $specItemModel = SpecItem::create([
+                        'spec_id'    => $value['spec_id'],
+                        'item_name'  => $item['item_name'],
+                        'is_contact' => 0,
+                    ]);
+
+                    $replace[$item['spec_item_id']] = $specItemModel->getAttr('spec_item_id');
+                }
+            }
+        }
+
+        // 如果需要替换,开始将旧值换为新的值
+        if (empty($replace)) {
+            return true;
+        }
+
+        if (!empty($data['spec_image'])) {
+            foreach ($data['spec_image'] as &$value) {
+                if (array_key_exists($value['spec_item_id'], $replace)) {
+                    $value['spec_item_id'] = $replace[$value['spec_item_id']];
+                }
+            }
+        }
+
+        if (!empty($data['goods_spec_item'])) {
+            // TODO:待续
+        }
+    }
+
     /**
      * 添加商品附加属性与规格
      * @access private
@@ -206,8 +258,14 @@ class Goods extends CareyShop
             }
         }
 
+        // 验证规格菜单数据
+        if (!empty($data['goods_spec_menu'])) {
+            if (false === $this->validateSpecMenu($data)) {
+                return false;
+            }
+        }
+
         // 插入商品规格列表
-        // todo:此处与规格有关
         if (!empty($data['goods_spec_item'])) {
             $result['goods_spec_item'] = self::$specGoods->addGoodsSpec($goodsId, $data['goods_spec_item']);
             if (false === $result['goods_spec_item']) {

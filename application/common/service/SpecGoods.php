@@ -75,14 +75,16 @@ class SpecGoods extends CareyShop
             if (false === $key) {
                 $sort[] = $specId;
                 $result[] = [
-                    'text'  => $specResult[$specId],
-                    'value' => [],
+                    'spec_id' => $specId,
+                    'text'    => $specResult[$specId],
+                    'value'   => [],
                 ];
 
                 $key = count($sort) - 1;
             }
 
             // 将项压入到主体中
+            unset($specItemResult[$value]['spec_id']);
             $result[$key]['value'][] = $specItemResult[$value];
         }
 

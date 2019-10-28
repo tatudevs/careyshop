@@ -18,8 +18,8 @@ class SpecGoods extends CareyShop
      */
     protected $rule = [
         'goods_id'  => 'require|integer|gt:0',
-        'key_name'  => 'require|max:100',
-        'key_value' => 'require|max:60',
+        'key_name'  => 'require|array',
+        'key_value' => 'require|max:100',
         'price'     => 'require|float|gt:0|regex:^\d+(\.\d{1,2})?$',
         'store_qty' => 'require|integer|egt:0',
         'bar_code'  => 'max:60',
