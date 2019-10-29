@@ -188,6 +188,12 @@ class Goods extends CareyShop
         return true;
     }
 
+    /**
+     * 检测规格菜单是否存在自定义,并且替换原始数据
+     * @access private
+     * @param  array $data 外部数据
+     * @return bool
+     */
     private function validateSpecMenu(&$data)
     {
         // 待替换内容 key=查找内容 value=替换为
@@ -236,8 +242,16 @@ class Goods extends CareyShop
         }
 
         if (!empty($data['goods_spec_item'])) {
-            // TODO:待续
+            foreach ($data['goods_spec_item'] as &$value) {
+                foreach ($value['key_name'] as $key => $item) {
+                    if (array_key_exists($item, $replace)) {
+                        $value['key_name'][$key] = $replace[$item];
+                    }
+                }
+            }
         }
+
+        return true;
     }
 
     /**
@@ -1461,7 +1475,6 @@ class Goods extends CareyShop
             return $this->setError('商品编号不能为空');
         }
 
-        // todo:此处与规格有关
         $result = self::get(function ($query) use ($data) {
             $with = ['goodsAttrItem', 'goodsSpecItem', 'specImage'];
             $query->with($with)->where(['goods_id' => ['eq', $data['goods_id']]]);
@@ -1471,8 +1484,14 @@ class Goods extends CareyShop
             return $this->setError('商品不存在');
         }
 
-        $result = $result->toArray();
+        $result = $result->append(['goods_spec_menu'])->toArray();
         unset($result['goods_id'], $result['goods_code']);
+
+        if (!empty($result['goods_spec_item'])) {
+            foreach ($result['goods_spec_item'] as &$value) {
+                $value['key_name'] = explode('_', $value['key_name']);
+            }
+        }
 
         return $this->addGoodsItem($result);
     }
