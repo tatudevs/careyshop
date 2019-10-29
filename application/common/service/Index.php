@@ -43,7 +43,7 @@ class Index extends CareyShop
             $result[$key] = chop($output);
         }
 
-        sleep(5);
+        sleep(2);
         return !empty($result) ? $result : false;
     }
 
@@ -55,7 +55,7 @@ class Index extends CareyShop
     public function clearCacheAll()
     {
         \think\Cache::clear();
-        sleep(5);
+        sleep(3);
 
         return true;
     }
