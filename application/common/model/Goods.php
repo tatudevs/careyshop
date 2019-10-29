@@ -243,6 +243,10 @@ class Goods extends CareyShop
 
         if (!empty($data['goods_spec_item'])) {
             foreach ($data['goods_spec_item'] as &$value) {
+                if (is_string($value['key_name'])) {
+                    $value['key_name'] = explode('_', $value['key_name']);
+                }
+
                 foreach ($value['key_name'] as $key => $item) {
                     if (array_key_exists($item, $replace)) {
                         $value['key_name'][$key] = $replace[$item];
@@ -1486,12 +1490,6 @@ class Goods extends CareyShop
 
         $result = $result->append(['goods_spec_menu'])->toArray();
         unset($result['goods_id'], $result['goods_code']);
-
-        if (!empty($result['goods_spec_item'])) {
-            foreach ($result['goods_spec_item'] as &$value) {
-                $value['key_name'] = explode('_', $value['key_name']);
-            }
-        }
 
         return $this->addGoodsItem($result);
     }

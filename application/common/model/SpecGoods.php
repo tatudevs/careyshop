@@ -57,7 +57,9 @@ class SpecGoods extends CareyShop
             }
 
             // 将规格项编号转为"_"链接的字符串
-            $data[$key]['key_name'] = implode('_', $value['key_name']);
+            if (is_array($data[$key]['key_name'])) {
+                $data[$key]['key_name'] = implode('_', $value['key_name']);
+            }
         }
 
         $result = $this->allowField(true)->saveAll($data);
