@@ -192,18 +192,19 @@ class Goods extends CareyShop
      * 检测规格菜单是否存在自定义,并且替换原始数据
      * @access private
      * @param  array $data 外部数据
-     * @return bool
+     * @return array
      */
     private function validateSpecMenu(&$data)
     {
         // 待替换内容 key=查找内容 value=替换为
         $replace = [];
+        $specMenu = $data['goods_spec_menu'];
 
-        foreach ($data['goods_spec_menu'] as $value) {
+        foreach ($specMenu as &$value) {
             // 判断主体是否有变更,如果主体变更,则项无条件重新插入
             $isChange = false;
 
-            // 规格主体
+            // 检测是否需要添加规格主体
             if ($value['spec_id'] <= 0) {
                 $specModel = Spec::create([
                     'goods_type_id' => 0,
@@ -215,7 +216,7 @@ class Goods extends CareyShop
                 $value['spec_id'] = $specModel->getAttr('spec_id');
             }
 
-            foreach ($value['value'] as $item) {
+            foreach ($value['value'] as &$item) {
                 if ($isChange || $item['spec_item_id'] <= 0) {
                     $specItemModel = SpecItem::create([
                         'spec_id'    => $value['spec_id'],
@@ -224,38 +225,40 @@ class Goods extends CareyShop
                     ]);
 
                     $replace[$item['spec_item_id']] = $specItemModel->getAttr('spec_item_id');
+                    $item['spec_item_id'] = $specItemModel->getAttr('spec_item_id');
                 }
             }
         }
+
+        // 释放上次循环的引用
+        unset($value, $item);
 
         // 如果需要替换,开始将旧值换为新的值
-        if (empty($replace)) {
-            return true;
-        }
+        if (!empty($replace)) {
+            if (!empty($data['goods_spec_item'])) {
+                foreach ($data['goods_spec_item'] as &$value) {
+                    if (is_string($value['key_name'])) {
+                        $value['key_name'] = explode('_', $value['key_name']);
+                    }
 
-        if (!empty($data['spec_image'])) {
-            foreach ($data['spec_image'] as &$value) {
-                if (array_key_exists($value['spec_item_id'], $replace)) {
-                    $value['spec_item_id'] = $replace[$value['spec_item_id']];
+                    foreach ($value['key_name'] as $key => $item) {
+                        if (array_key_exists($item, $replace)) {
+                            $value['key_name'][$key] = $replace[$item];
+                        }
+                    }
                 }
             }
-        }
 
-        if (!empty($data['goods_spec_item'])) {
-            foreach ($data['goods_spec_item'] as &$value) {
-                if (is_string($value['key_name'])) {
-                    $value['key_name'] = explode('_', $value['key_name']);
-                }
-
-                foreach ($value['key_name'] as $key => $item) {
-                    if (array_key_exists($item, $replace)) {
-                        $value['key_name'][$key] = $replace[$item];
+            if (!empty($data['spec_image'])) {
+                foreach ($data['spec_image'] as &$value) {
+                    if (array_key_exists($value['spec_item_id'], $replace)) {
+                        $value['spec_item_id'] = $replace[$value['spec_item_id']];
                     }
                 }
             }
         }
 
-        return true;
+        return $specMenu;
     }
 
     /**
@@ -278,9 +281,7 @@ class Goods extends CareyShop
 
         // 验证规格菜单数据
         if (!empty($data['goods_spec_menu'])) {
-            if (false === $this->validateSpecMenu($data)) {
-                return false;
-            }
+            $result['goods_spec_menu'] = $this->validateSpecMenu($data);
         }
 
         // 插入商品规格列表
