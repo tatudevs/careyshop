@@ -182,7 +182,7 @@ class Upload extends UploadBase
             'path'      => $params['path'],
             'url'       => Config::get('qiniu_url.value', 'upload') . '/' . $params['path'] . '?type=' . self::MODULE,
             'protocol'  => self::MODULE,
-            'type'      => $isImage ? 0 : stripos($params['mime'], 'video') ? 3 : 1,
+            'type'      => $isImage ? 0 : $this->getFileType($params['mime']),
         ];
 
         if (!empty($params['replace'])) {

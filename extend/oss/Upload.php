@@ -126,6 +126,21 @@ abstract class Upload
     }
 
     /**
+     * 根据文件mime判断资源类型 1=普通资源 3=视频资源
+     * @access public
+     * @param  array $options 查询条件
+     * @return string
+     */
+    protected function getFileType($mime)
+    {
+        if (stripos($mime, 'video') !== false) {
+            return 3;
+        }
+
+        return 1;
+    }
+
+    /**
      * 获取上传地址
      * @access protected
      * @return array

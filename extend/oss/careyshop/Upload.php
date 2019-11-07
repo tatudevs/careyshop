@@ -248,7 +248,7 @@ class Upload extends UploadBase
             'path'      => $path,
             'url'       => $host . $path . '?type=' . self::MODULE,
             'protocol'  => self::MODULE,
-            'type'      => $isImage ? 0 : stripos($file->getInfo('type'), 'video') ? 3 : 1,
+            'type'      => $isImage ? 0 : $this->getFileType($file->getInfo('type')),
         ];
 
         if ($this->request->has('x:replace', 'param', true)) {
