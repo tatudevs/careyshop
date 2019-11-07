@@ -324,7 +324,7 @@ class Upload extends UploadBase
             'path'      => $params['path'],
             'url'       => Config::get('aliyun_url.value', 'upload') . '/' . $params['path'] . '?type=' . self::MODULE,
             'protocol'  => self::MODULE,
-            'type'      => $isImage ? 0 : 1,
+            'type'      => $isImage ? 0 : stripos($params['mime'], 'video') ? 3 : 1,
         ];
 
         if (!empty($params['replace'])) {
