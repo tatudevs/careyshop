@@ -394,6 +394,38 @@ class Setting extends CareyShop
     }
 
     /**
+     * 检测上传大小是否符合服务器限制
+     * @access public
+     * @param  array $data 外部数据
+     * @return bool
+     */
+    public function checkPostMaxSize($data)
+    {
+        if (!array_key_exists('default', $data) && !array_key_exists('file_size', $data)) {
+            return true;
+        }
+
+        $module = array_key_exists('default', $data)
+            ? $data['default']
+            : Config::get('default.value', 'upload');
+
+        if (\oss\careyshop\Upload::MODULE !== $module) {
+            return true;
+        }
+
+        $fileSize = array_key_exists('file_size', $data)
+            ? $data['file_size']
+            : Config::get('file_size.value', 'upload');
+
+        $serverSize = ini_get('upload_max_filesize');
+        if (string_to_byte($fileSize) > string_to_byte($serverSize)) {
+            return $this->setError(\oss\careyshop\Upload::NAME . ' 上传大小最大仅支持 ' . $serverSize);
+        }
+
+        return true;
+    }
+
+    /**
      * 设置上传配置
      * @access public
      * @param  array $data 外部数据
@@ -403,6 +435,10 @@ class Setting extends CareyShop
     public function setUploadList($data)
     {
         if (!$this->validateData($data, 'Setting.rule')) {
+            return false;
+        }
+
+        if (!$this->checkPostMaxSize($data['data'])) {
             return false;
         }
 
