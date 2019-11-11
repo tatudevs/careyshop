@@ -40,7 +40,7 @@ class Storage extends CareyShop
             'get.storage.navi'              => ['getStorageNavi'],
             // 重命名一个资源
             'rename.storage.item'           => ['renameStorageItem'],
-            // 将图片资源设为目录封面
+            // 将某张图片资源设为目录或视频封面
             'set.storage.cover'             => ['setStorageCover'],
             // 清除目录资源的封面
             'clear.storage.cover'           => ['clearStorageCover'],

@@ -315,7 +315,7 @@ class Storage extends CareyShop
     }
 
     /**
-     * 将图片资源设为目录封面
+     * 将某张图片资源设为目录或视频封面
      * @access public
      * @param  array $data 外部数据
      * @return bool
@@ -323,7 +323,7 @@ class Storage extends CareyShop
      */
     public function setStorageCover($data)
     {
-        if (!$this->validateData($data, 'Storage.item')) {
+        if (!$this->validateData($data, 'Storage.cover')) {
             return false;
         }
 
@@ -338,8 +338,8 @@ class Storage extends CareyShop
             return is_null($result) ? $this->setError('资源图片不存在') : false;
         }
 
-        $coverMap['storage_id'] = ['eq', $result->getAttr('parent_id')];
-        $coverMap['type'] = ['eq', 2];
+        $coverMap['storage_id'] = ['eq', $data['parent_id']];
+        $coverMap['type'] = ['in', [2, 3]];
 
         if (false !== $this->save(['cover' => $result->getAttr('url')], $coverMap)) {
             Cache::clear('StorageDirectory');
@@ -358,7 +358,7 @@ class Storage extends CareyShop
      */
     public function clearStorageCover($data)
     {
-        if (!$this->validateData($data, 'Storage.cover')) {
+        if (!$this->validateData($data, 'Storage.clear_cover')) {
             return false;
         }
 

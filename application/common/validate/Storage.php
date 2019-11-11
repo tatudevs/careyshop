@@ -120,6 +120,10 @@ class Storage extends CareyShop
             'is_default' => 'require|in:0,1',
         ],
         'cover'          => [
+            'storage_id' => 'require|integer|gt:0',
+            'parent_id'  => 'require|integer|gt:0',
+        ],
+        'clear_cover'    => [
             'storage_id' => 'require|integer|egt:0',
         ],
     ];
