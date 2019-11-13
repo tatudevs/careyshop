@@ -27,7 +27,7 @@ class Storage extends CareyShop
         'path'        => 'max:255',
         'url'         => 'max:255',
         'protocol'    => 'require|max:10',
-        'type'        => 'in:0,1,2',
+        'type'        => 'in:0,1,2,3',
         'cover'       => 'max:255',
         'sort'        => 'integer|between:0,255',
         'page_no'     => 'integer|gt:0',
@@ -89,6 +89,7 @@ class Storage extends CareyShop
         'list'           => [
             'storage_id' => 'integer|egt:0',
             'name'       => 'max:255',
+            'type'       => 'array',
             'page_no',
             'page_size',
             'order_type',

@@ -202,6 +202,7 @@ class Storage extends CareyShop
         // 搜索条件
         $map = [];
         $map['parent_id'] = ['eq', $data['storage_id']];
+        empty($data['type']) ?: $map['type'] = ['in', $data['type']];
 
         if (!empty($data['name'])) {
             $map['name'] = ['like', '%' . $data['name'] . '%'];
