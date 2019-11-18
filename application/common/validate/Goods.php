@@ -74,7 +74,7 @@ class Goods extends CareyShop
         'goods_category_id' => '商品分类编号',
         'name'              => '商品名称',
         'short_name'        => '商品短名称',
-        'product_name'      => '商品促销名',
+        'product_name'      => '商品促销语',
         'goods_code'        => '商品货号',
         'goods_spu'         => '商品SPU',
         'goods_sku'         => '商品SKU',
@@ -196,7 +196,7 @@ class Goods extends CareyShop
         'admin_list' => [
             'goods_id'          => 'arrayHasOnlyInts',
             'exclude_id'        => 'arrayHasOnlyInts',
-            'goods_category_id' => 'integer|gt:0',
+            'goods_category_id' => 'arrayHasOnlyInts',
             'keywords'          => 'max:200',
             'goods_code'        => 'max:60', // code,spu,sku,bar
             'brand_id'          => 'arrayHasOnlyInts',
