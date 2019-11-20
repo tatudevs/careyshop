@@ -21,7 +21,7 @@ class GoodsAttr extends CareyShop
         'goods_attribute_id' => 'require|integer|gt:0',
         'parent_id'          => 'require|integer|egt:0',
         'is_important'       => 'require|in:0,1',
-        'attr_value'         => 'max:150',
+        'attr_value'         => 'max:512',
         'sort'               => 'integer|between:0,255',
     ];
 
