@@ -689,17 +689,6 @@ class GoodsComment extends CareyShop
             $result['get_user']->setAttr('nickname', auto_hid_substr($result['get_user']->getAttr('nickname')));
         }
 
-        // 处理ip地址查询
-        $result->setAttr('ip_address_region', '');
-        $ipAddress = $result->getAttr('ip_address');
-
-        if (!empty($ipAddress)) {
-            $ipRegion = (new Ip2Region())->memorySearch($ipAddress);
-            if ($ipRegion) {
-                $result->setAttr('ip_address_region', get_ip2region_str($ipRegion['region']));
-            }
-        }
-
         return $result->toArray();
     }
 
