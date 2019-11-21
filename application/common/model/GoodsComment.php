@@ -16,6 +16,12 @@ use util\Ip2Region;
 class GoodsComment extends CareyShop
 {
     /**
+     * IP查询
+     * @var null
+     */
+    private static $ip2region = null;
+
+    /**
      * 主评论
      * @var int
      */
@@ -67,6 +73,31 @@ class GoodsComment extends CareyShop
     protected function setIpAddressAttr()
     {
         return Request::instance()->ip();
+    }
+
+    /**
+     * 获取器ip地址
+     * @param $value
+     * @param $data
+     * @return string
+     * @throws \Exception
+     */
+    protected function getIpAddressRegionAttr($value, $data)
+    {
+        if (empty($data['ip_address'])) {
+            return '';
+        }
+
+        if (is_null(self::$ip2region)) {
+            self::$ip2region = new Ip2Region();
+        }
+
+        $result = self::$ip2region->memorySearch($data['ip_address']);
+        if ($result) {
+            $value = get_ip2region_str($result['region']);
+        }
+
+        return $value;
     }
 
     /**
@@ -689,7 +720,8 @@ class GoodsComment extends CareyShop
             $result['get_user']->setAttr('nickname', auto_hid_substr($result['get_user']->getAttr('nickname')));
         }
 
-        return $result->toArray();
+        $result['get_addition']->append(['ip_address_region']);
+        return $result->append(['ip_address_region'])->toArray();
     }
 
     /**
@@ -812,29 +844,20 @@ class GoodsComment extends CareyShop
         });
 
         if (false !== $result) {
-            $ip2region = new Ip2Region();
-            foreach ($result as $value) {
-                // 账号资料匿名处理
-                if (!is_client_admin()) {
+            // 账号资料匿名处理
+            if (!is_client_admin()) {
+                foreach ($result as $value) {
                     if ($value->getAttr('is_anon') !== 0) {
                         $value['get_user']->setAttr('username', auto_hid_substr($value['get_user']->getAttr('username')));
                         $value['get_user']->setAttr('nickname', auto_hid_substr($value['get_user']->getAttr('nickname')));
                     }
                 }
-
-                // 处理ip地址查询
-                $value->setAttr('ip_address_region', '');
-                $ipAddress = $value->getAttr('ip_address');
-
-                if (!empty($ipAddress)) {
-                    $ipRegion = $ip2region->memorySearch($ipAddress);
-                    if ($ipRegion) {
-                        $value->setAttr('ip_address_region', get_ip2region_str($ipRegion['region']));
-                    }
-                }
             }
 
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
+            return [
+                'items'        => $result->append(['ip_address_region'])->toArray(),
+                'total_result' => $totalResult,
+            ];
         }
 
         return false;

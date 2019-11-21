@@ -271,7 +271,10 @@ class ActionLog extends CareyShop
         });
 
         if (false !== $result) {
-            return ['items' => $result->append(['action', 'ip_region'])->toArray(), 'total_result' => $totalResult];
+            return [
+                'items'        => $result->append(['action', 'ip_region'])->toArray(),
+                'total_result' => $totalResult,
+            ];
         }
 
         return false;
