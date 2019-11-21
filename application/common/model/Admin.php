@@ -17,16 +17,16 @@ use util\Ip2Region;
 class Admin extends CareyShop
 {
     /**
+     * IP查询
+     * @var null
+     */
+    private static $ip2region = null;
+
+    /**
      * 是否需要自动写入时间戳
      * @var bool
      */
     protected $autoWriteTimestamp = true;
-
-    /**
-     * IP查询
-     * @var null
-     */
-    protected $ip2region = null;
 
     /**
      * 隐藏属性
@@ -79,11 +79,15 @@ class Admin extends CareyShop
      */
     protected function getLastIpRegionAttr($value, $data)
     {
-        if (!$this->ip2region) {
-            $this->ip2region = new Ip2Region();
+        if (empty($data['last_ip'])) {
+            return '';
         }
 
-        $result = $this->ip2region->memorySearch($data['last_ip']);
+        if (is_null(self::$ip2region)) {
+            self::$ip2region = new Ip2Region();
+        }
+
+        $result = self::$ip2region->memorySearch($data['last_ip']);
         if ($result) {
             $value = get_ip2region_str($result['region']);
         }

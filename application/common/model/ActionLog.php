@@ -16,6 +16,12 @@ use util\Ip2Region;
 class ActionLog extends CareyShop
 {
     /**
+     * IP查询
+     * @var null
+     */
+    private static $ip2region = null;
+
+    /**
      * 是否需要自动写入时间戳
      * @var bool
      */
@@ -34,12 +40,6 @@ class ActionLog extends CareyShop
     protected $readonly = [
         'action_log_id',
     ];
-
-    /**
-     * IP查询
-     * @var null
-     */
-    protected $ip2region = null;
 
     /**
      * 字段类型或者格式转换
@@ -114,11 +114,15 @@ class ActionLog extends CareyShop
      */
     protected function getIpRegionAttr($value, $data)
     {
-        if (!$this->ip2region) {
-            $this->ip2region = new Ip2Region();
+        if (empty($data['ip'])) {
+            return '';
         }
 
-        $result = $this->ip2region->memorySearch($data['ip']);
+        if (is_null(self::$ip2region)) {
+            self::$ip2region = new Ip2Region();
+        }
+
+        $result = self::$ip2region->memorySearch($data['ip']);
         if ($result) {
             $value = get_ip2region_str($result['region']);
         }
