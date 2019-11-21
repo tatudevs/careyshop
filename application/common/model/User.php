@@ -12,6 +12,7 @@ namespace app\common\model;
 
 use think\Cache;
 use think\Request;
+use util\Ip2Region;
 
 class User extends CareyShop
 {
@@ -20,6 +21,12 @@ class User extends CareyShop
      * @var bool
      */
     protected $autoWriteTimestamp = true;
+
+    /**
+     * IP查询
+     * @var null
+     */
+    protected $ip2region = null;
 
     /**
      * 隐藏属性
@@ -67,6 +74,27 @@ class User extends CareyShop
     protected function setPasswordAttr($value)
     {
         return user_md5($value);
+    }
+
+    /**
+     * 获取器最后登录ip
+     * @param $value
+     * @param $data
+     * @return string
+     * @throws \Exception
+     */
+    protected function getLastIpRegionAttr($value, $data)
+    {
+        if (!$this->ip2region) {
+            $this->ip2region = new Ip2Region();
+        }
+
+        $result = $this->ip2region->memorySearch($data['last_ip']);
+        if ($result) {
+            $value = get_ip2region_str($result['region']);
+        }
+
+        return $value;
     }
 
     /**
@@ -347,7 +375,7 @@ class User extends CareyShop
         $result = self::get($userId, 'getUserLevel,getAuthGroup');
 
         if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
+            return is_null($result) ? null : $result->append(['last_ip_region'])->toArray();
         }
 
         return false;
@@ -368,7 +396,7 @@ class User extends CareyShop
 
         $result = self::get(is_client_admin() ? $data['client_id'] : get_client_id());
         if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
+            return is_null($result) ? null : $result->append(['last_ip_region'])->toArray();
         }
 
         return false;
@@ -441,7 +469,7 @@ class User extends CareyShop
         });
 
         if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
+            return ['items' => $result->append(['last_ip_region'])->toArray(), 'total_result' => $totalResult];
         }
 
         return false;

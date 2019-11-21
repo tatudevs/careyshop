@@ -12,7 +12,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use util\IpLocation as IpLocationObj;
+use util\Ip2Region;
 
 class IpLocation extends CareyShop
 {
@@ -44,11 +44,11 @@ class IpLocation extends CareyShop
         }
 
         $result = [];
-        $ipObj = new IpLocationObj();
+        $ip2region = new Ip2Region();
 
         foreach ($data['ip'] as $key => $value) {
             try {
-                $result[$key] = $ipObj->memorySearch($value);
+                $result[$key] = $ip2region->memorySearch($value);
                 $result[$key]['status'] = 200;
             } catch (\exception $e) {
                 $result[$key]['error'] = $e->getMessage();

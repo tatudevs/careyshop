@@ -299,3 +299,23 @@ if (!function_exists('is_empty_parm')) {
         return !(isset($parm) && '' !== $parm);
     }
 }
+
+if (!function_exists('get_ip2region_str')) {
+    /**
+     * 将Ip2Region查询到的IP进行格式化
+     * @param string $ip IP地址
+     * @return string
+     */
+    function get_ip2region_str($ip)
+    {
+        $ipStr = '';
+        list($country, , $region, $city, $isp) = explode('|', $ip);
+
+        '0' === $country ?: $ipStr .= $country;
+        '0' === $region ?: $ipStr .= $region;
+        '0' === $city ?: $ipStr .= $city;
+        '0' === $isp ?: $ipStr .= " {$isp}";
+
+        return trim($ipStr);
+    }
+}

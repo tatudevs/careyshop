@@ -11,6 +11,7 @@
 namespace app\common\model;
 
 use think\Cache;
+use util\Ip2Region;
 
 class ActionLog extends CareyShop
 {
@@ -33,6 +34,12 @@ class ActionLog extends CareyShop
     protected $readonly = [
         'action_log_id',
     ];
+
+    /**
+     * IP查询
+     * @var null
+     */
+    protected $ip2region = null;
 
     /**
      * 字段类型或者格式转换
@@ -96,6 +103,27 @@ class ActionLog extends CareyShop
         }
 
         $value = '未知操作';
+    }
+
+    /**
+     * 获取器IP地址
+     * @param $value
+     * @param $data
+     * @return string
+     * @throws \Exception
+     */
+    protected function getIpRegionAttr($value, $data)
+    {
+        if (!$this->ip2region) {
+            $this->ip2region = new Ip2Region();
+        }
+
+        $result = $this->ip2region->memorySearch($data['ip']);
+        if ($result) {
+            $value = get_ip2region_str($result['region']);
+        }
+
+        return $value;
     }
 
     /**
@@ -185,7 +213,7 @@ class ActionLog extends CareyShop
 
         $result = self::get($data['action_log_id']);
         if (false !== $result) {
-            return is_null($result) ? null : $result->append(['action'])->toArray();
+            return is_null($result) ? null : $result->append(['action', 'ip_region'])->toArray();
         }
 
         return false;
@@ -239,7 +267,7 @@ class ActionLog extends CareyShop
         });
 
         if (false !== $result) {
-            return ['items' => $result->append(['action'])->toArray(), 'total_result' => $totalResult];
+            return ['items' => $result->append(['action', 'ip_region'])->toArray(), 'total_result' => $totalResult];
         }
 
         return false;

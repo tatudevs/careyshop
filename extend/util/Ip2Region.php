@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    IP地址查询
+ * CareyShop    IP查询扩展库
  *
  * @author      zxm <252404501@qq.com>
  * @version     v1.1
@@ -14,7 +14,7 @@ namespace util;
 defined('INDEX_BLOCK_LENGTH') or define('INDEX_BLOCK_LENGTH', 12);
 defined('TOTAL_HEADER_LENGTH') or define('TOTAL_HEADER_LENGTH', 8192);
 
-class IpLocation
+class Ip2Region
 {
     /**
      * db file handler
@@ -43,7 +43,7 @@ class IpLocation
     private $dbFile = null;
 
     /**
-     * IpLocation constructor.
+     * Ip2Region constructor.
      * @param $dbFile
      */
     public function __construct($dbFile = null)
@@ -334,9 +334,12 @@ class IpLocation
      */
     public static function safeIp2long($ip)
     {
-        $ip = ip2long($ip);
+        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            $ip = gethostbyname($ip);
+        }
 
         // convert signed int to unsigned int if on 32 bit operating system
+        $ip = ip2long($ip);
         if ($ip < 0 && PHP_INT_SIZE == 4) {
             $ip = sprintf("%u", $ip);
         }
