@@ -720,7 +720,10 @@ class GoodsComment extends CareyShop
             $result['get_user']->setAttr('nickname', auto_hid_substr($result['get_user']->getAttr('nickname')));
         }
 
-        $result['get_addition']->append(['ip_address_region']);
+        if ($result['get_addition']) {
+            $result['get_addition']->append(['ip_address_region']);
+        }
+
         return $result->append(['ip_address_region'])->toArray();
     }
 
