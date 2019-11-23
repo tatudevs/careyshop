@@ -662,14 +662,25 @@ class Goods extends CareyShop
             return false;
         }
 
+        // 获取商品分类Id,包括子分类
+        $catIdList = [];
+        if (isset($data['goods_category_id'])) {
+            if (0 == $data['goods_category_id'] || '' == $data['goods_category_id']) {
+                $catIdList[] = 0;
+            } else {
+                $goodsCat = GoodsCategory::getCategoryList($data['goods_category_id'], false, true);
+                $catIdList = array_column((array)$goodsCat, 'goods_category_id');
+            }
+        }
+
         // 搜索条件
         $map = [];
         empty($data['goods_id']) ?: $map['goods_id'] = ['in', $data['goods_id']];
         empty($data['exclude_id']) ?: $map['goods_id'] = ['not in', $data['exclude_id']];
-        empty($data['goods_category_id']) ?: $map['goods_category_id'] = ['in', $data['goods_category_id']];
         empty($data['goods_code']) ?: $map['goods_code|goods_spu|goods_sku|bar_code'] = ['eq', $data['goods_code']];
         empty($data['brand_id']) ?: $map['brand_id'] = ['in', $data['brand_id']];
         empty($data['store_qty']) ?: $map['store_qty'] = ['between', $data['store_qty']];
+        empty($catIdList) ?: $map['goods_category_id'] = ['in', $catIdList];
         is_empty_parm($data['is_postage']) ?: $map['is_postage'] = ['eq', $data['is_postage']];
         is_empty_parm($data['is_integral']) ?: $map['is_integral'] = ['gt', 0];
         is_empty_parm($data['is_recommend']) ?: $map['is_recommend'] = ['eq', $data['is_recommend']];

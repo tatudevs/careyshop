@@ -190,8 +190,13 @@ class GoodsAttribute extends CareyShop
         unset($data['goods_attribute_id'], $data['is_delete']);
 
         // 当attr_input_type为手工填写(值=0)时需要清除attr_values
+//        if (0 == $data['attr_input_type']) {
+//            $data['attr_values'] = [];
+//        }
+
+        // 当attr_input_type为手工填写(值=0)时自动设为不检索
         if (0 == $data['attr_input_type']) {
-            $data['attr_values'] = [];
+            $data['attr_index'] = 0;
         }
 
         if (false !== $this->allowField(true)->save($data)) {
@@ -218,8 +223,13 @@ class GoodsAttribute extends CareyShop
         unset($data['is_delete']);
 
         // 当attr_input_type为手工填写(值=0)时需要清除attr_values
+//        if (isset($data['attr_input_type']) && 0 == $data['attr_input_type']) {
+//            $data['attr_values'] = [];
+//        }
+
+        // 当attr_input_type为手工填写(值=0)时自动设为不检索
         if (isset($data['attr_input_type']) && 0 == $data['attr_input_type']) {
-            $data['attr_values'] = [];
+            $data['attr_index'] = 0;
         }
 
         $map['goods_attribute_id'] = ['eq', $data['goods_attribute_id']];

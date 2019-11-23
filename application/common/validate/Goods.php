@@ -196,7 +196,7 @@ class Goods extends CareyShop
         'admin_list' => [
             'goods_id'          => 'arrayHasOnlyInts',
             'exclude_id'        => 'arrayHasOnlyInts',
-            'goods_category_id' => 'arrayHasOnlyInts',
+            'goods_category_id' => 'integer|gt:0',
             'keywords'          => 'max:200',
             'goods_code'        => 'max:60', // code,spu,sku,bar
             'brand_id'          => 'arrayHasOnlyInts',
