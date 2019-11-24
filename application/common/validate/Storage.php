@@ -95,6 +95,11 @@ class Storage extends CareyShop
             'order_type',
             'order_field',
         ],
+        'collection'     => [
+            'storage_id' => 'require|arrayHasOnlyInts',
+            'order_type',
+            'order_field',
+        ],
         'rename'         => [
             'storage_id' => 'require|integer|gt:0',
             'name',

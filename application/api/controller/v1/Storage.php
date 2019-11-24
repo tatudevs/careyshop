@@ -36,6 +36,8 @@ class Storage extends CareyShop
             'get.storage.item'              => ['getStorageItem'],
             // 获取资源列表
             'get.storage.list'              => ['getStorageList'],
+            // 根据资源编号获取集合
+            'get.storage.collection'        => ['getStorageCollection'],
             // 获取导航数据
             'get.storage.navi'              => ['getStorageNavi'],
             // 重命名一个资源

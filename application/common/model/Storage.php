@@ -247,6 +247,39 @@ class Storage extends CareyShop
     }
 
     /**
+     * 根据资源编号获取集合
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|false
+     * @throws
+     */
+    public function getStorageCollection($data)
+    {
+        if (!$this->validateData($data, 'Storage.collection')) {
+            return false;
+        }
+
+        $result = self::all(function ($query) use ($data) {
+            $map['type'] = ['neq', 2];
+            $map['storage_id'] = ['in', array_unique($data['storage_id'])];
+
+            // 排序方式
+            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
+
+            // 排序的字段
+            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'storage_id';
+
+            $query->where($map)->order([$orderField => $orderType]);
+        });
+
+        if (false !== $result) {
+            return $result->toArray();
+        }
+
+        return false;
+    }
+
+    /**
      * 获取导航数据
      * @access public
      * @param  array $data 外部数据
