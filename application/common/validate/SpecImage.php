@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    商品规格图片验证器
+ * CareyShop    商品规格展现方式验证器
  *
  * @author      zxm <252404501@qq.com>
  * @date        2017/4/21
@@ -20,6 +20,7 @@ class SpecImage extends CareyShop
         'goods_id'     => 'require|integer|gt:0',
         'spec_item_id' => 'require|integer|gt:0',
         'image'        => 'array',
+        'color'        => 'max:50',
     ];
 
     /**
@@ -27,8 +28,9 @@ class SpecImage extends CareyShop
      * @var array
      */
     protected $field = [
-        'goods_id'     => '商品规格图片中的商品编号',
-        'spec_item_id' => '商品规格图片中的商品规格项编号',
-        'image'        => '商品规格图片中的商品规格图片',
+        'goods_id'     => '商品规格中的商品编号',
+        'spec_item_id' => '商品规格中的商品规格项编号',
+        'image'        => '商品规格中的商品规格图片',
+        'color'        => '商品规格中的规格颜色',
     ];
 }

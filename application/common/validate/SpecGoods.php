@@ -31,12 +31,12 @@ class SpecGoods extends CareyShop
      * @var array
      */
     protected $field = [
-        'goods_id'  => '商品规则列表中的商品编码',
-        'key_name'  => '商品规则列表中的商品规格键名',
-        'key_value' => '商品规则列表中的商品规格值',
-        'price'     => '商品规则列表中的商品价格',
-        'store_qty' => '商品规则列表中的商品库存',
-        'bar_code'  => '商品规则列表中的商品条码',
-        'goods_sku' => '商品规则列表中的商品SKU',
+        'goods_id'  => '规格列表中的商品编码',
+        'key_name'  => '规格列表中的商品规格键名',
+        'key_value' => '规格列表中的商品规格值',
+        'price'     => '规格列表中的商品价格',
+        'store_qty' => '规格列表中的商品库存',
+        'bar_code'  => '规格列表中的商品条码',
+        'goods_sku' => '规格列表中的商品SKU',
     ];
 }

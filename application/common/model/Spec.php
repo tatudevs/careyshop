@@ -28,6 +28,7 @@ class Spec extends CareyShop
         'spec_id'       => 'integer',
         'goods_type_id' => 'integer',
         'spec_index'    => 'integer',
+        'spec_type'     => 'integer',
         'sort'          => 'integer',
     ];
 

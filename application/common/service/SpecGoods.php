@@ -50,7 +50,7 @@ class SpecGoods extends CareyShop
 
         $idList = array_unique($idList);
         $map = ['spec_id' => ['in', $idList]];
-        $specResult = Spec::where($map)->column('name', 'spec_id');
+        $specResult = Spec::where($map)->column('name,spec_type', 'spec_id');
 
         if (empty($specResult)) {
             return [];
@@ -76,7 +76,8 @@ class SpecGoods extends CareyShop
                 $sort[] = $specId;
                 $result[] = [
                     'spec_id' => $specId,
-                    'text'    => $specResult[$specId],
+                    'text'    => $specResult[$specId]['name'],
+                    'type'    => $specResult[$specId]['spec_type'],
                     'value'   => [],
                 ];
 

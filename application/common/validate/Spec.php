@@ -22,6 +22,7 @@ class Spec extends CareyShop
         'name'          => 'require|max:60',
         'spec_item'     => 'require|arrayHasOnlyStrings',
         'spec_index'    => 'in:0,1',
+        'spec_type'     => 'in:0,1,2',
         'sort'          => 'integer|between:0,255',
         'page_no'       => 'integer|gt:0',
         'page_size'     => 'integer|gt:0',
@@ -39,6 +40,7 @@ class Spec extends CareyShop
         'name'          => '商品规格名称',
         'spec_item'     => '商品规格项',
         'spec_index'    => '商品规格检索',
+        'spec_type'     => '商品规格展现方式',
         'sort'          => '商品规格排序值',
         'page_no'       => '页码',
         'page_size'     => '每页数量',
@@ -57,6 +59,7 @@ class Spec extends CareyShop
             'name',
             'spec_item',
             'spec_index',
+            'spec_type',
             'sort',
         ],
         'del'   => [
