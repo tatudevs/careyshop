@@ -104,6 +104,16 @@ class Goods extends CareyShop
     }
 
     /**
+     * hasOne cs_goods_spec
+     * @access public
+     * @return mixed
+     */
+    public function goodsSpecState()
+    {
+        return $this->hasOne('GoodsSpec', 'goods_id');
+    }
+
+    /**
      * hasMany cs_spec_image
      * @access public
      * @return mixed
@@ -435,16 +445,11 @@ class Goods extends CareyShop
         }
 
         $result = self::get(function ($query) use ($data) {
-            $with = ['goodsSpecItem', 'specImage'];
-            $with['goodsAttrItem'] = function ($query) {
-                $query->order(['sort' => 'asc', 'goods_attribute_id' => 'asc']);
-            };
-
-            $query->with($with)->where(['goods_id' => ['eq', $data['goods_id']]]);
+            $query->where(['goods_id' => ['eq', $data['goods_id']]]);
         });
 
         if (false !== $result) {
-            return is_null($result) ? null : $result->append(['goods_spec_menu'])->toArray();
+            return is_null($result) ? null : $result->toArray();
         }
 
         return false;
@@ -724,29 +729,13 @@ class Goods extends CareyShop
             // 排序的字段
             $orderField = !empty($data['order_field']) ? $data['order_field'] : 'goods_id';
 
-            // 关联查询
-            $with = [];
-
-            if (!empty($data['is_goods_spec'])) {
-                $with[] = 'goodsSpecItem';
-            }
-
-            if (!empty($data['is_spec_image'])) {
-                $with[] = 'specImage';
-            }
-
             $query
-                ->with($with)
                 ->where($map)
                 ->order([$orderField => $orderType])
                 ->page($pageNo, $pageSize);
         });
 
         if (false !== $result) {
-            if (!empty($data['is_goods_spec'])) {
-                $result->append(['goods_spec_menu']);
-            }
-
             return ['items' => $result->toArray(), 'total_result' => $totalResult];
         }
 
