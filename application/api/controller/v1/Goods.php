@@ -42,24 +42,30 @@ class Goods extends CareyShop
             'set.hot.goods.list'         => ['setHotGoodsList'],
             // 批量设置商品是否上下架
             'set.shelves.goods.list'     => ['setShelvesGoodsList'],
-            // 获取指定商品的属性列表
-            'get.goods.attr.list'        => ['getGoodsAttrList'],
-            // 获取指定商品的规格列表
-            'get.goods.spec.list'        => ['getGoodsSpecList'],
-            // 获取指定商品的规格图
-            'get.goods.spec.image'       => ['getGoodsSpecImage'],
-            // 获取管理后台商品列表
-            'get.goods.admin.list'       => ['getGoodsAdminList'],
-            // 根据商品分类获取指定类型的商品
-            'get.goods.index.type'       => ['getGoodsIndexType'],
-            // 根据商品分类获取前台商品列表页
-            'get.goods.index.list'       => ['getGoodsIndexList'],
             // 设置商品排序
             'set.goods.sort'             => ['setGoodsSort'],
             // 获取商品关键词联想词
             'get.goods.keywords.suggest' => ['getGoodsKeywordsSuggest'],
             // 复制一个商品
             'copy.goods.item'            => ['copyGoodsItem'],
+            // 获取管理后台商品列表
+            'get.goods.admin.list'       => ['getGoodsAdminList'],
+            // 根据商品分类获取指定类型的商品
+            'get.goods.index.type'       => ['getGoodsIndexType'],
+            // 根据商品分类获取前台商品列表页
+            'get.goods.index.list'       => ['getGoodsIndexList'],
+            // 获取指定商品的属性列表
+            'get.goods.attr.list'        => ['getGoodsAttrList'],
+            // 获取指定商品的规格列表
+            'get.goods.spec.list'        => ['getGoodsSpecList'],
+            // 获取指定商品的规格图
+            'get.goods.spec.image'       => ['getGoodsSpecImage'],
+            // 获取指定商品的属性配置数据
+            'get.goods.attr.config'      => ['getGoodsAttrConfig'],
+            // 获取指定商品的规格配置数据
+            'get.goods.spec.config'      => ['getGoodsSpecConfig'],
+            // 获取指定商品的规格菜单数据
+            'get.goods.spec.menu'        => ['getGoodsSpecMenu'],
         ];
     }
 }

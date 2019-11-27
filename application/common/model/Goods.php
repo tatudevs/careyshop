@@ -189,79 +189,6 @@ class Goods extends CareyShop
     }
 
     /**
-     * 检测规格菜单是否存在自定义,并且替换原始数据
-     * @access private
-     * @param  array $data 外部数据
-     * @return array
-     */
-    private function validateSpecMenu(&$data)
-    {
-        // 待替换内容 key=查找内容 value=替换为
-        $replace = [];
-        $specMenu = $data['goods_spec_menu'];
-
-        foreach ($specMenu as &$value) {
-            // 判断主体是否有变更,如果主体变更,则项无条件重新插入
-            $isChange = false;
-
-            // 检测是否需要添加规格主体
-            if ($value['spec_id'] <= 0) {
-                $specModel = Spec::create([
-                    'goods_type_id' => 0,
-                    'name'          => $value['text'],
-                    'spec_index'    => 0,
-                ]);
-
-                $isChange = true;
-                $value['spec_id'] = $specModel->getAttr('spec_id');
-            }
-
-            foreach ($value['value'] as &$item) {
-                if ($isChange || $item['spec_item_id'] <= 0) {
-                    $specItemModel = SpecItem::create([
-                        'spec_id'    => $value['spec_id'],
-                        'item_name'  => $item['item_name'],
-                        'is_contact' => 0,
-                    ]);
-
-                    $replace[$item['spec_item_id']] = $specItemModel->getAttr('spec_item_id');
-                    $item['spec_item_id'] = $specItemModel->getAttr('spec_item_id');
-                }
-            }
-        }
-
-        // 释放上次循环的引用
-        unset($value, $item);
-
-        // 如果需要替换,开始将旧值换为新的值
-        if (!empty($replace)) {
-            if (!empty($data['goods_spec_item'])) {
-                foreach ($data['goods_spec_item'] as &$value) {
-                    if (is_string($value['key_name'])) {
-                        $value['key_name'] = explode('_', $value['key_name']);
-                    }
-
-                    foreach ($value['key_name'] as $key => $item) {
-                        if (array_key_exists($item, $replace)) {
-                            $value['key_name'][$key] = $replace[$item];
-                        }
-                    }
-                }
-            }
-
-            if (!empty($data['spec_image'])) {
-                foreach ($data['spec_image'] as &$value) {
-                    if (array_key_exists($value['spec_item_id'], $replace)) {
-                        $value['spec_item_id'] = $replace[$value['spec_item_id']];
-                    }
-                }
-            }
-        }
-
-        return $specMenu;
-    }
-
-    /**
      * 添加商品附加属性与规格
      * @access private
      * @param  int   $goodsId 商品编号
@@ -281,7 +208,7 @@ class Goods extends CareyShop
 
         // 验证规格菜单数据
         if (!empty($data['goods_spec_menu'])) {
-            $result['goods_spec_menu'] = $this->validateSpecMenu($data);
+            $result['goods_spec_menu'] = SpecGoodsSer::validateSpecMenu($data);
         }
 
         // 插入商品规格列表
@@ -435,16 +362,11 @@ class Goods extends CareyShop
         }
 
         $result = self::get(function ($query) use ($data) {
-            $with = ['goodsSpecItem', 'specImage'];
-            $with['goodsAttrItem'] = function ($query) {
-                $query->order(['sort' => 'asc', 'goods_attribute_id' => 'asc']);
-            };
-
-            $query->with($with)->where(['goods_id' => ['eq', $data['goods_id']]]);
+            $query->where(['goods_id' => ['eq', $data['goods_id']]]);
         });
 
         if (false !== $result) {
-            return is_null($result) ? null : $result->append(['goods_spec_menu'])->toArray();
+            return is_null($result) ? null : $result->toArray();
         }
 
         return false;
@@ -616,10 +538,7 @@ class Goods extends CareyShop
         });
 
         if (false !== $result) {
-            $specItem = $result->toArray();
-            $specMenu = SpecGoodsSer::specItemToMenu($specItem);
-
-            return ['goods_spec_item' => $specItem, 'goods_spec_menu' => $specMenu];
+            return $result->toArray();
         }
 
         return false;
@@ -724,29 +643,13 @@ class Goods extends CareyShop
             // 排序的字段
             $orderField = !empty($data['order_field']) ? $data['order_field'] : 'goods_id';
 
-            // 关联查询
-            $with = [];
-
-            if (!empty($data['is_goods_spec'])) {
-                $with[] = 'goodsSpecItem';
-            }
-
-            if (!empty($data['is_spec_image'])) {
-                $with[] = 'specImage';
-            }
-
             $query
-                ->with($with)
                 ->where($map)
                 ->order([$orderField => $orderType])
                 ->page($pageNo, $pageSize);
         });
 
         if (false !== $result) {
-            if (!empty($data['is_goods_spec'])) {
-                $result->append(['goods_spec_menu']);
-            }
-
             return ['items' => $result->toArray(), 'total_result' => $totalResult];
         }
 
@@ -1487,22 +1390,40 @@ class Goods extends CareyShop
      */
     public function copyGoodsItem($data)
     {
-        if (!isset($data['goods_id'])) {
-            return $this->setError('商品编号不能为空');
+        return $data;
+//        if (!isset($data['goods_id'])) {
+//            return $this->setError('商品编号不能为空');
+//        }
+//
+//        $result = self::get(function ($query) use ($data) {
+//            $with = ['goodsAttrItem', 'goodsSpecItem', 'specImage'];
+//            $query->with($with)->where(['goods_id' => ['eq', $data['goods_id']]]);
+//        });
+//
+//        if (is_null($result)) {
+//            return $this->setError('商品不存在');
+//        }
+//
+//        $result = $result->append(['goods_spec_menu'])->toArray();
+//        unset($result['goods_id'], $result['goods_code']);
+//
+//        return $this->addGoodsItem($result);
+    }
+
+    public function getGoodsAttrConfig($data)
+    {
+    }
+
+    public function getGoodsSpecConfig($data)
+    {
+    }
+
+    public function getGoodsSpecMenu($data)
+    {
+        if (!$this->validateData($data, 'Goods.item')) {
+            return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $with = ['goodsAttrItem', 'goodsSpecItem', 'specImage'];
-            $query->with($with)->where(['goods_id' => ['eq', $data['goods_id']]]);
-        });
 
-        if (is_null($result)) {
-            return $this->setError('商品不存在');
-        }
-
-        $result = $result->append(['goods_spec_menu'])->toArray();
-        unset($result['goods_id'], $result['goods_code']);
-
-        return $this->addGoodsItem($result);
     }
 }
