@@ -13,7 +13,6 @@ namespace app\common\model;
 use think\Cache;
 use util\Http;
 use think\helper\Str;
-use app\common\service\SpecGoods as SpecGoodsSer;
 
 class Goods extends CareyShop
 {
@@ -182,43 +181,58 @@ class Goods extends CareyShop
      */
     private function addGoodSubjoin($goodsId, &$result, $data)
     {
-//        // 插入商品属性列表
-//        if (!empty($data['goods_attr_item'])) {
-//            $result['goods_attr_item'] = self::$goodsAttr->addGoodsAttr($goodsId, $data['goods_attr_item']);
-//            if (false === $result['goods_attr_item']) {
-//                return $this->setError(self::$goodsAttr->getError());
-//            }
-//        }
-//
-//        // 验证规格菜单数据
-//        if (!empty($data['goods_spec_menu'])) {
-//            $result['goods_spec_menu'] = SpecGoodsSer::validateSpecMenu($data);
-//        }
-//
-//        // 插入商品规格列表
-//        if (!empty($data['goods_spec_item'])) {
-//            $result['goods_spec_item'] = self::$specGoods->addGoodsSpec($goodsId, $data['goods_spec_item']);
-//            if (false === $result['goods_spec_item']) {
-//                return $this->setError(self::$specGoods->getError());
-//            }
-//
-//            // 计算实际商品库存
-//            $result['store_qty'] = 0;
-//            foreach ($result['goods_spec_item'] as $value) {
-//                $result['store_qty'] += $value['store_qty'];
-//            }
-//
-//            // 更新实际商品库存
-//            $this->where(['goods_id' => ['eq', $goodsId]])->setField('store_qty', $result['store_qty']);
-//        }
-//
-//        // 插入商品规格图片
-//        if (!empty($data['spec_image'])) {
-//            $result['spec_image'] = self::$specImage->addSpecImage($goodsId, $data['spec_image']);
-//            if (false === $result['spec_image']) {
-//                return $this->setError(self::$specImage->getError());
-//            }
-//        }
+        // 检测规格是否存在自定义,存在则更新,并且返回会附带规格图集合
+//        \app\common\service\SpecGoods::validateSpecMenu($data);
+
+        // 插入商品属性列表
+        if (!empty($data['attr_config'])) {
+            $attrList = [];
+            GoodsAttrConfig::updateAttrConfig($goodsId, $data['attr_config']);
+
+            foreach ($data['attr_config'] as $value) {
+                foreach ($value['get_attribute'] as $key => $item) {
+                    if (!is_empty_parm($item['result'])) {
+                        $attrList[] = [
+                            'goods_id'           => $goodsId,
+                            'goods_attribute_id' => $item['goods_attribute_id'],
+                            'parent_id'          => $item['parent_id'],
+                            'is_important'       => $item['is_important'],
+                            'attr_value'         => $item['result'],
+                            'sort'               => $key,
+                        ];
+                    }
+                }
+            }
+
+            if (!empty($attrList)) {
+                if (false === self::$goodsAttr->addGoodsAttr($goodsId, $attrList)) {
+                    return $this->setError(self::$goodsAttr->getError());
+                }
+            }
+        }
+
+        // 处理商品规格配置
+        if (!empty($data['spec_config'])) {
+            SpecConfig::updateSpecConfig($goodsId, $data['spec_config']);
+        }
+
+        // 插入商品规格组合列表
+        if (!empty($data['spec_combo'])) {
+            if (false === self::$specGoods->addGoodsSpec($goodsId, $data['spec_combo'])) {
+                return $this->setError(self::$specGoods->getError());
+            }
+
+            // 计算实际商品库存并更新
+            $result['store_qty'] = (int)array_sum(array_column($data['spec_combo'], 'store_qty'));
+            $this->where(['goods_id' => ['eq', $goodsId]])->setField('store_qty', $result['store_qty']);
+        }
+
+        // 插入商品规格图片
+        if (!empty($data['spec_image'])) {
+            if (false === self::$specImage->addSpecImage($goodsId, $data['spec_image'])) {
+                return $this->setError(self::$specImage->getError());
+            }
+        }
 
         return true;
     }
@@ -301,23 +315,23 @@ class Goods extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-//            if (!empty($data['attr_config'])) {
-//                if (false === self::$goodsAttr->where($map)->delete()) {
-//                    throw new \Exception(self::$goodsAttr->getError());
-//                }
-//            }
-//
-//            if (!empty($data['spec_config'])) {
-//                if (false === self::$specImage->where($map)->delete()) {
-//                    throw new \Exception(self::$specImage->getError());
-//                }
-//            }
-//
-//            if (!empty($data['spec_combo'])) {
-//                if (false === self::$specGoods->where($map)->delete()) {
-//                    throw new \Exception(self::$specGoods->getError());
-//                }
-//            }
+            if (!empty($data['attr_config'])) {
+                if (false === self::$goodsAttr->where($map)->delete()) {
+                    throw new \Exception(self::$goodsAttr->getError());
+                }
+            }
+
+            if (!empty($data['spec_config'])) {
+                if (false === self::$specImage->where($map)->delete()) {
+                    throw new \Exception(self::$specImage->getError());
+                }
+            }
+
+            if (!empty($data['spec_combo'])) {
+                if (false === self::$specGoods->where($map)->delete()) {
+                    throw new \Exception(self::$specGoods->getError());
+                }
+            }
 
             $result = $this->toArray();
             if (!$this->addGoodSubjoin($data['goods_id'], $result, $data)) {
@@ -1374,31 +1388,48 @@ class Goods extends CareyShop
      */
     public function copyGoodsItem($data)
     {
-        return $data;
-//        if (!isset($data['goods_id'])) {
-//            return $this->setError('商品编号不能为空');
-//        }
-//
-//        $result = self::get(function ($query) use ($data) {
-//            $with = ['goodsAttrItem', 'goodsSpecItem', 'specImage'];
-//            $query->with($with)->where(['goods_id' => ['eq', $data['goods_id']]]);
-//        });
-//
-//        if (is_null($result)) {
-//            return $this->setError('商品不存在');
-//        }
-//
-//        $result = $result->append(['goods_spec_menu'])->toArray();
-//        unset($result['goods_id'], $result['goods_code']);
-//
-//        return $this->addGoodsItem($result);
+        if (!$this->validateData($data, 'Goods.item')) {
+            return false;
+        }
+
+        $result = self::get(function ($query) use ($data) {
+            $query->with('goodsSpecItem')->where(['goods_id' => ['eq', $data['goods_id']]]);
+        });
+
+        if (is_null($result)) {
+            return $this->setError('商品不存在');
+        }
+
+        // 清理原始数据
+        $result->setAttr('goods_id', null);
+        $result->setAttr('goods_code', '');
+        $result->setAttr('comment_sum', 0);
+        $result->setAttr('sales_sum', 0);
+        $result->setAttr('create_time', null);
+        $result->setAttr('update_time', null);
+        $goodsData = $result->toArray();
+        $goodsData['spec_combo'] = $goodsData['goods_spec_item'];
+        unset($goodsData['goods_spec_item']);
+
+        // 获取规格与属性配置数据
+        $specConfigData = (new SpecConfig())->getSpecConfigItem($data);
+        if ($specConfigData) {
+            $goodsData['spec_config'] = $specConfigData['spec_config'];
+        }
+
+        $attrConfigData = (new GoodsAttrConfig())->getAttrConfigItem($data);
+        if ($attrConfigData) {
+            $goodsData['attr_config'] = $attrConfigData['attr_config'];
+        }
+
+        return $this->addGoodsItem($goodsData);
     }
 
     /**
      * 获取指定商品的规格菜单数据
      * @access public
      * @param  array $data 外部数据
-     * @return array
+     * @return array|bool
      */
     public function getGoodsSpecMenu($data)
     {
@@ -1415,7 +1446,7 @@ class Goods extends CareyShop
             return [];
         }
 
-        $result = SpecGoodsSer::specItemToMenu($specList, $data['goods_id']);
+        $result = \app\common\service\SpecGoods::specItemToMenu($specList, $data['goods_id']);
         return ['spec_list' => $specList, 'spec_menu' => $result];
     }
 }

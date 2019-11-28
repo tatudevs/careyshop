@@ -65,7 +65,15 @@ class SpecConfig extends CareyShop
         });
 
         if (false !== $result) {
-            return is_null($result) ? null : $result->getAttr('config_data');
+            if (is_null($result)) {
+                return null;
+            }
+
+            $specConfig = $result->getAttr('config_data');
+            return [
+                'spec_config' => $specConfig,
+                'spec_key'    => array_column($specConfig, 'spec_id'),
+            ];
         }
 
         return false;

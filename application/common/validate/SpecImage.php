@@ -19,6 +19,7 @@ class SpecImage extends CareyShop
     protected $rule = [
         'goods_id'     => 'require|integer|gt:0',
         'spec_item_id' => 'require|integer|gt:0',
+        'spec_type'    => 'require|in:1,2',
         'image'        => 'array',
         'color'        => 'max:50',
     ];
@@ -30,7 +31,8 @@ class SpecImage extends CareyShop
     protected $field = [
         'goods_id'     => '商品规格中的商品编号',
         'spec_item_id' => '商品规格中的商品规格项编号',
-        'image'        => '商品规格中的商品规格图片',
+        'spec_type'    => '商品规格中的规格展现方式',
+        'image'        => '商品规格中的规格图片',
         'color'        => '商品规格中的规格颜色',
     ];
 }

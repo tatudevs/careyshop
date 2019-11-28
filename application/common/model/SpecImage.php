@@ -27,6 +27,7 @@ class SpecImage extends CareyShop
     protected $type = [
         'goods_id'     => 'integer',
         'spec_item_id' => 'integer',
+        'spec_type'    => 'integer',
         'image'        => 'array',
     ];
 
@@ -35,7 +36,7 @@ class SpecImage extends CareyShop
      * @access public
      * @param  int   $goodsId 商品编号
      * @param  array $data    外部数据
-     * @return array|false
+     * @return bool
      * @throws
      */
     public function addSpecImage($goodsId, $data)
@@ -50,10 +51,6 @@ class SpecImage extends CareyShop
         }
 
         $result = $this->allowField(true)->saveAll($data);
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return false;
+        return false !== $result;
     }
 }

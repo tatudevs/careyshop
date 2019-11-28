@@ -65,7 +65,15 @@ class GoodsAttrConfig extends CareyShop
         });
 
         if (false !== $result) {
-            return is_null($result) ? null : $result->getAttr('config_data');
+            if (is_null($result)) {
+                return null;
+            }
+
+            $attrConfig = $result->getAttr('config_data');
+            return [
+                'attr_config' => $attrConfig,
+                'attr_key'    => array_column($attrConfig, 'goods_attribute_id'),
+            ];
         }
 
         return false;
