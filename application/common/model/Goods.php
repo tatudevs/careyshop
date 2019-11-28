@@ -182,7 +182,7 @@ class Goods extends CareyShop
     private function addGoodSubjoin($goodsId, &$result, $data)
     {
         // 检测规格是否存在自定义,存在则更新,并且返回会附带规格图集合
-//        \app\common\service\SpecGoods::validateSpecMenu($data);
+        \app\common\service\SpecGoods::validateSpecMenu($data);
 
         // 插入商品属性列表
         if (!empty($data['attr_config'])) {
@@ -1405,8 +1405,8 @@ class Goods extends CareyShop
         $result->setAttr('goods_code', '');
         $result->setAttr('comment_sum', 0);
         $result->setAttr('sales_sum', 0);
-        $result->setAttr('create_time', null);
-        $result->setAttr('update_time', null);
+        $result->setAttr('create_time', time());
+        $result->setAttr('update_time', time());
         $goodsData = $result->toArray();
         $goodsData['spec_combo'] = $goodsData['goods_spec_item'];
         unset($goodsData['goods_spec_item']);
@@ -1447,6 +1447,6 @@ class Goods extends CareyShop
         }
 
         $result = \app\common\service\SpecGoods::specItemToMenu($specList, $data['goods_id']);
-        return ['spec_list' => $specList, 'spec_menu' => $result];
+        return ['spec_combo' => $specList, 'spec_config' => $result];
     }
 }

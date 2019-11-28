@@ -168,6 +168,7 @@ class Spec extends CareyShop
                 return null;
             }
 
+            //todo 待修改
             $result['spec_item'] = $result['has_spec_item']->column('item_name');
             unset($result['has_spec_item']);
 
