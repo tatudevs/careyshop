@@ -356,9 +356,7 @@ class GoodsAttribute extends CareyShop
             $order['goods_attribute_id'] = 'asc';
 
             $with = ['getAttribute' => function ($query) use ($order, $map) {
-                $withMap = [];
-                !isset($map['is_delete']) ?: $withMap['is_delete'] = $map['is_delete'];
-
+                $withMap['is_delete'] = isset($map['is_delete']) ? $map['is_delete'] : [];
                 $query->where($withMap)->order($order);
             }];
 
@@ -370,7 +368,20 @@ class GoodsAttribute extends CareyShop
         });
 
         if (false !== $result) {
-            return $result->toArray();
+            if ($result->isEmpty()) {
+                return [];
+            }
+
+            foreach ($result as $value) {
+                foreach ($value['get_attribute'] as $item) {
+                    $item->setAttr('result', '');
+                }
+            }
+
+            return [
+                'attr_config' => $result->toArray(),
+                'attr_key'    => $result->column('goods_attribute_id'),
+            ];
         }
 
         return false;

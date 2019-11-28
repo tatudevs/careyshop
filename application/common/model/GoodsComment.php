@@ -298,11 +298,11 @@ class GoodsComment extends CareyShop
 
         try {
             // 设置主评为未读,并且判断追评是否存在图片
-            $updata['status'] = 0;
-            $updata['is_append'] = 1;
-            empty($data['image']) ?: $updata['is_image'] = 1;
+            $update['status'] = 0;
+            $update['is_append'] = 1;
+            empty($data['image']) ?: $update['is_image'] = 1;
 
-            if (false === $result->save($updata)) {
+            if (false === $result->save($update)) {
                 throw new \Exception($this->getError());
             }
 

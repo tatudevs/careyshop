@@ -128,7 +128,7 @@ class Spec extends CareyShop
             }
 
             if (!empty($data['spec_item'])) {
-                if (!SpecItem::updataItem($data['spec_id'], $data['spec_item'])) {
+                if (!SpecItem::updateItem($data['spec_id'], $data['spec_item'])) {
                     throw new \Exception();
                 }
             }
@@ -139,25 +139,6 @@ class Spec extends CareyShop
             self::rollback();
             return $this->setError($e->getMessage());
         }
-    }
-
-    /**
-     * 替换商品规格项
-     * @access private
-     * @param  array $data 待修改数据
-     * @return void
-     */
-    private function replaceSpecItem(&$data)
-    {
-        if (!isset($data['has_spec_item'])) {
-            return;
-        }
-
-        foreach ($data['has_spec_item'] as $value) {
-            $data['spec_item'][] = $value['item_name'];
-        }
-
-        unset($data['has_spec_item']);
     }
 
     /**
@@ -187,10 +168,10 @@ class Spec extends CareyShop
                 return null;
             }
 
-            $result = $result->toArray();
-            $this->replaceSpecItem($result);
+            $result['spec_item'] = $result['has_spec_item']->column('item_name');
+            unset($result['has_spec_item']);
 
-            return $result;
+            return $result->toArray();
         }
 
         return false;
@@ -256,9 +237,9 @@ class Spec extends CareyShop
         });
 
         if (false !== $result) {
-            $result = $result->toArray();
-            foreach ($result as $key => $value) {
-                $this->replaceSpecItem($result[$key]);
+            foreach ($result as $value) {
+                $value['spec_item'] = $value['has_spec_item']->column('item_name');
+                unset($value['has_spec_item']);
             }
 
             return ['items' => $result, 'total_result' => $totalResult];
@@ -281,25 +262,30 @@ class Spec extends CareyShop
         }
 
         $result = self::all(function ($query) use ($data) {
+            $with['hasSpecItem'] = function($query) {
+                $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
+            };
+
             $map['goods_type_id'] = ['eq', $data['goods_type_id']];
 
             $order['sort'] = 'asc';
             $order['spec_id'] = 'asc';
 
-            $with['hasSpecItem'] = function($query) {
-                $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
-            };
-
             $query->with($with)->where($map)->order($order);
         });
 
         if (false !== $result) {
-            $result = $result->toArray();
-            foreach ($result as $key => $value) {
-                $this->replaceSpecItem($result[$key]);
+            foreach ($result as $value) {
+                $value['spec_item'] = $value['has_spec_item']->column('item_name');
+                $value['spec_image'] = [];
+                $value['check_list'] = [];
+                unset($value['has_spec_item']);
             }
 
-            return $result;
+            return [
+                'spec_config' => $result->toArray(),
+                'spec_key'    => $result->column('spec_id'),
+            ];
         }
 
         return false;

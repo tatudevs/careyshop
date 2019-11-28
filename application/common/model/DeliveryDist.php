@@ -215,14 +215,14 @@ class DeliveryDist extends CareyShop
         $requestData = json_decode($requestData, true);
         foreach ($requestData['Data'] as $value) {
             if (true == $value['Success']) {
-                $updata = [
+                $update = [
                     'state' => $value['State'],
                     'trace' => Dist::snake($value['Traces']),
                 ];
 
                 $map['delivery_code'] = ['eq', $value['ShipperCode']];
                 $map['logistic_code'] = ['eq', $value['LogisticCode']];
-                $this->data($updata, true)->isUpdate(true)->save($updata, $map);
+                $this->data($update, true)->isUpdate(true)->save($update, $map);
             }
         }
 
@@ -307,7 +307,7 @@ class DeliveryDist extends CareyShop
             return false;
         }
 
-        $updata = [];
+        $update = [];
         $result = $result->toArray();
 
         foreach ($result as $key => $value) {
@@ -323,7 +323,7 @@ class DeliveryDist extends CareyShop
 
                 // 如已签收则更新数据
                 if (3 == $track['state']) {
-                    $updata[] = [
+                    $update[] = [
                         'delivery_dist_id' => $value['delivery_dist_id'],
                         'state'            => $track['state'],
                         'trace'            => $track['trace'],
@@ -332,8 +332,8 @@ class DeliveryDist extends CareyShop
             }
         }
 
-        if (!empty($updata)) {
-            self::saveAll($updata);
+        if (!empty($update)) {
+            self::saveAll($update);
         }
 
         return $result;

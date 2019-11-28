@@ -11,6 +11,7 @@
 namespace app\common\service;
 
 use app\common\model\Spec;
+use app\common\model\SpecImage;
 use app\common\model\SpecItem;
 
 class SpecGoods extends CareyShop
@@ -18,10 +19,11 @@ class SpecGoods extends CareyShop
     /**
      * 将商品规格项还原成菜单结构数据
      * @access public
-     * @param  array $data 待处理数据
+     * @param  array  $data    待处理数据
+     * @param  number $goodsId 商品编号
      * @return array
      */
-    public static function specItemToMenu($data)
+    public static function specItemToMenu($data, $goodsId = null)
     {
         if (!is_array($data) || empty($data)) {
             return [];
@@ -56,6 +58,22 @@ class SpecGoods extends CareyShop
             return [];
         }
 
+        // 如果存在图片或色彩数据
+        $imageList = [];
+        if ($goodsId) {
+            $imageList = SpecImage::where(['goods_id' => ['eq', $goodsId]])->column(null, 'spec_item_id');
+        }
+
+        $getImage = function ($specItemId, $type) use ($imageList) {
+            if (0 != $type && !empty($imageList)) {
+                if (array_key_exists($specItemId, $imageList)) {
+                    return $imageList[$specItemId][$type == 1 ? 'image' : 'color'];
+                }
+            }
+
+            return '';
+        };
+
         // 必须使用"$keyList"做为循环主体,否则项的先后顺序无法保证输入前后的一致
         $sort = [];
         $result = [];
@@ -70,7 +88,7 @@ class SpecGoods extends CareyShop
                 continue;
             }
 
-            // 项的主体不存在时创建
+            // 项的主体不存在时创建一次
             $key = array_search($specId, $sort);
             if (false === $key) {
                 $sort[] = $specId;
@@ -86,6 +104,7 @@ class SpecGoods extends CareyShop
 
             // 将项压入到主体中
             unset($specItemResult[$value]['spec_id']);
+            $specItemResult[$value]['image'] = $getImage($value, $result[$key]['type']);
             $result[$key]['value'][] = $specItemResult[$value];
         }
 

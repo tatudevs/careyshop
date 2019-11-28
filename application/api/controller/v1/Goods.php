@@ -56,14 +56,14 @@ class Goods extends CareyShop
             'get.goods.index.list'       => ['getGoodsIndexList'],
             // 获取指定商品的属性列表
             'get.goods.attr.list'        => ['getGoodsAttrList'],
-            // 获取指定商品的规格列表
+            // 获取指定商品的规格组合列表
             'get.goods.spec.list'        => ['getGoodsSpecList'],
             // 获取指定商品的规格图
             'get.goods.spec.image'       => ['getGoodsSpecImage'],
             // 获取指定商品的属性配置数据
-            'get.goods.attr.config'      => ['getGoodsAttrConfig'],
+            'get.goods.attr.config'      => ['getAttrConfigItem', 'app\common\model\GoodsAttrConfig'],
             // 获取指定商品的规格配置数据
-            'get.goods.spec.config'      => ['getGoodsSpecConfig'],
+            'get.goods.spec.config'      => ['getSpecConfigItem', 'app\common\model\SpecConfig'],
             // 获取指定商品的规格菜单数据
             'get.goods.spec.menu'        => ['getGoodsSpecMenu'],
         ];
