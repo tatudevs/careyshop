@@ -117,7 +117,8 @@ class SpecGoods extends CareyShop
         return $result;
     }
 
-    /**检测规格菜单是否存在自定义,并且替换原始数据
+    /**
+     * 检测规格菜单是否存在自定义,并且替换原始数据
      * @access public
      * @param  array $data 外部数据
      */
