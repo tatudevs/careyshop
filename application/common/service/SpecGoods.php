@@ -61,19 +61,21 @@ class SpecGoods extends CareyShop
         // 如果存在图片或色彩数据
         $imageList = [];
         if ($goodsId) {
-            $imageList = SpecImage::where(['goods_id' => ['eq', $goodsId]])->column(null, 'spec_item_id');
+            $imageResult = SpecImage::where(['goods_id' => ['eq', $goodsId]])->select();
+            $imageList = array_column($imageResult->toArray(), null, 'spec_item_id');
         }
 
-        //todo 待修改
-//        $getImage = function ($specItemId, $type) use ($imageList) {
-//            if (0 != $type && !empty($imageList)) {
-//                if (array_key_exists($specItemId, $imageList)) {
-//                    return $imageList[$specItemId][$type == 1 ? 'image' : 'color'];
-//                }
-//            }
-//
-//            return '';
-//        };
+        $getImage = function ($specItemId, $type) use ($imageList) {
+            if (0 != $type && !empty($imageList)) {
+                if (array_key_exists($specItemId, $imageList)) {
+                    if ($imageList[$specItemId]['spec_type'] == $type) {
+                        return $imageList[$specItemId][$type == 1 ? 'image' : 'color'];
+                    }
+                }
+            }
+
+            return $type == 1 ? [] : '';
+        };
 
         // 必须使用"$keyList"做为循环主体,否则项的先后顺序无法保证输入前后的一致
         $sort = [];
@@ -91,12 +93,14 @@ class SpecGoods extends CareyShop
 
             // 项的主体不存在时创建一次
             $key = array_search($specId, $sort);
+            $specType = $specResult[$specId]['spec_type'];
+
             if (false === $key) {
                 $sort[] = $specId;
                 $result[] = [
                     'spec_id'   => $specId,
                     'name'      => $specResult[$specId]['name'],
-                    'spec_type' => $specResult[$specId]['spec_type'],
+                    'spec_type' => $specType,
                     'spec_item' => [],
                 ];
 
@@ -105,84 +109,92 @@ class SpecGoods extends CareyShop
 
             // 将项压入到主体中
             unset($specItemResult[$value]['spec_id']);
-            $specItemResult[$value][] = $getImage($value, $result[$key]['spec_type']);
+            $specItemResult[$value]['image'] = $getImage($value, 0 != $specType ? 1 : 0);
+            $specItemResult[$value]['color'] = $getImage($value, 0 != $specType ? 2 : 0);
             $result[$key]['spec_item'][] = $specItemResult[$value];
         }
 
         return $result;
     }
 
-    /**
-     * 检测规格菜单是否存在自定义,并且替换原始数据
+    /**检测规格菜单是否存在自定义,并且替换原始数据
      * @access public
      * @param  array $data 外部数据
-     * @return array
      */
     public static function validateSpecMenu(&$data)
     {
-        return $data;
         // 待替换内容 key=查找内容 value=替换为
-//        $replace = [];
-//        $specMenu = $data['goods_spec_menu'];
+        $replace = [];
 
-//        foreach ($specMenu as &$value) {
-//            // 判断主体是否有变更,如果主体变更,则项无条件重新插入
-//            $isChange = false;
-//
-//            // 检测是否需要添加规格主体
-//            if ($value['spec_id'] <= 0) {
-//                $specModel = Spec::create([
-//                    'goods_type_id' => 0,
-//                    'name'          => $value['text'],
-//                    'spec_index'    => 0,
-//                ]);
-//
-//                $isChange = true;
-//                $value['spec_id'] = $specModel->getAttr('spec_id');
-//            }
-//
-//            foreach ($value['value'] as &$item) {
-//                if ($isChange || $item['spec_item_id'] <= 0) {
-//                    $specItemModel = SpecItem::create([
-//                        'spec_id'    => $value['spec_id'],
-//                        'item_name'  => $item['item_name'],
-//                        'is_contact' => 0,
-//                    ]);
-//
-//                    $replace[$item['spec_item_id']] = $specItemModel->getAttr('spec_item_id');
-//                    $item['spec_item_id'] = $specItemModel->getAttr('spec_item_id');
-//                }
-//            }
-//        }
-//
-//        // 释放上次循环的引用
-//        unset($value, $item);
-//
-//        // 如果需要替换,开始将旧值换为新的值
-//        if (!empty($replace)) {
-//            if (!empty($data['goods_spec_item'])) {
-//                foreach ($data['goods_spec_item'] as &$value) {
-//                    if (is_string($value['key_name'])) {
-//                        $value['key_name'] = explode('_', $value['key_name']);
-//                    }
-//
-//                    foreach ($value['key_name'] as $key => $item) {
-//                        if (array_key_exists($item, $replace)) {
-//                            $value['key_name'][$key] = $replace[$item];
-//                        }
-//                    }
-//                }
-//            }
-//
-//            if (!empty($data['spec_image'])) {
-//                foreach ($data['spec_image'] as &$value) {
-//                    if (array_key_exists($value['spec_item_id'], $replace)) {
-//                        $value['spec_item_id'] = $replace[$value['spec_item_id']];
-//                    }
-//                }
-//            }
-//        }
+        // 待从配置数据中提取图集
+        $data['spec_image'] = [];
 
-//        return $specMenu;
+        foreach ($data['spec_config'] as &$value) {
+            // 判断主体是否有变更,如果主体变更,则项值无条件重新生成
+            $isChange = false;
+
+            // 检测是否需要添加规格主体
+            if ($value['spec_id'] <= 0) {
+                $specModel = Spec::create([
+                    'goods_type_id' => 0,
+                    'name'          => $value['name'],
+                    'spec_index'    => 0,
+                    'spec_type'     => $value['spec_type'],
+                ]);
+
+                $isChange = true;
+                $value['spec_id'] = $specModel->getAttr('spec_id');
+            }
+
+            // 处理规格列表
+            foreach ($value['spec_item'] as &$item) {
+                if ($isChange || $item['spec_item_id'] <= 0) {
+                    $specItemModel = SpecItem::create([
+                        'spec_id'    => $value['spec_id'],
+                        'item_name'  => $item['item_name'],
+                        'is_contact' => 0,
+                    ]);
+
+                    // spec_item_id: key=旧值 value=新值
+                    $replace[$item['spec_item_id']] = $specItemModel->getAttr('spec_item_id');
+                    $item['spec_item_id'] = $replace[$item['spec_item_id']];
+                }
+
+                // 提取图集与颜色 0=文字
+                if (0 == $value['spec_type']) {
+                    continue;
+                }
+
+                if (!empty($item['image']) || !empty($item['color'])) {
+                    $data['spec_image'][] = [
+                        'spec_item_id' => $item['spec_item_id'],
+                        'spec_type'    => $value['spec_type'],
+                        'image'        => $item['image'],
+                        'color'        => $item['color'],
+                    ];
+                }
+            }
+
+            unset($item);
+        }
+
+        unset($value);
+
+        // 如果需要替换,则将规格组合中的编号进行更新
+        if (!empty($replace) && !empty($data['spec_combo'])) {
+            foreach ($data['spec_combo'] as &$value) {
+                if (is_string($value['key_name'])) {
+                    $value['key_name'] = explode('_', $value['key_name']);
+                }
+
+                foreach ($value['key_name'] as $key => $item) {
+                    if (array_key_exists($item, $replace)) {
+                        $value['key_name'][$key] = $replace[$item];
+                    }
+                }
+            }
+
+            unset($value);
+        }
     }
 }

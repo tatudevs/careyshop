@@ -54,6 +54,8 @@ class Setting extends CareyShop
             }
         }
 
+        unset($value);
+
         if (!is_empty_parm($data['code'])) {
             if (array_key_exists($data['code'], $result)) {
                 return [$data['code'] => $result[$data['code']]];

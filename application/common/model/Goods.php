@@ -765,6 +765,8 @@ class Goods extends CareyShop
                 foreach ($item as &$value) {
                     $value = '%\_' . $value . '\_%';
                 }
+
+                unset($value);
             }
 
             if (empty($item)) {

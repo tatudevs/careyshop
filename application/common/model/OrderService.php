@@ -731,6 +731,8 @@ class OrderService extends CareyShop
             $value = round(($data['refund_fee'] / $totalAmount) * $value, 2);
         }
 
+        unset($value);
+
         // 售后单入库数据准备
         $serviceData = [
             'service_no'     => $this->getServiceNo(),

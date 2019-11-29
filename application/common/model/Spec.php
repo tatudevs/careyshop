@@ -37,7 +37,7 @@ class Spec extends CareyShop
      * @access public
      * @return mixed
      */
-    public function hasSpecItem()
+    public function specItem()
     {
         return $this->hasMany('SpecItem', 'spec_id');
     }
@@ -92,7 +92,7 @@ class Spec extends CareyShop
             }
 
             // 添加规格项表
-            if (!$this->hasSpecItem()->saveAll($itemData)) {
+            if (!$this->specItem()->saveAll($itemData)) {
                 throw new \Exception($this->getError());
             }
 
@@ -156,7 +156,7 @@ class Spec extends CareyShop
 
         $result = self::get(function ($query) use ($data) {
             $map['spec_id'] = ['eq', $data['spec_id']];
-            $with['hasSpecItem'] = function($query) {
+            $with['specItem'] = function ($query) {
                 $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
             };
 
@@ -168,11 +168,12 @@ class Spec extends CareyShop
                 return null;
             }
 
-            //todo 待修改
-            $result['spec_item'] = $result['has_spec_item']->column('item_name');
-            unset($result['has_spec_item']);
+            $specData = $result->toArray();
+            if (empty($data['is_detail'])) {
+                $specData['spec_item'] = array_column($specData['spec_item'], 'item_name');
+            }
 
-            return $result->toArray();
+            return $specData;
         }
 
         return false;
@@ -226,7 +227,7 @@ class Spec extends CareyShop
             empty($data['goods_type_id']) ?: $map['getGoodsType.goods_type_id'] = ['eq', $data['goods_type_id']];
 
             $with = ['getGoodsType'];
-            $with['hasSpecItem'] = function($query) {
+            $with['specItem'] = function ($query) {
                 $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
             };
 
@@ -238,12 +239,14 @@ class Spec extends CareyShop
         });
 
         if (false !== $result) {
-            foreach ($result as $value) {
-                $value['spec_item'] = $value['has_spec_item']->column('item_name');
-                unset($value['has_spec_item']);
+            $specData = $result->toArray();
+            if (empty($data['is_detail'])) {
+                foreach ($specData as $key => $value) {
+                    $specData[$key]['spec_item'] = array_column($value['spec_item'], 'item_name');
+                }
             }
 
-            return ['items' => $result, 'total_result' => $totalResult];
+            return ['items' => $specData, 'total_result' => $totalResult];
         }
 
         return false;
@@ -263,7 +266,7 @@ class Spec extends CareyShop
         }
 
         $result = self::all(function ($query) use ($data) {
-            $with['hasSpecItem'] = function($query) {
+            $with['specItem'] = function ($query) {
                 $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
             };
 
@@ -276,16 +279,19 @@ class Spec extends CareyShop
         });
 
         if (false !== $result) {
-            foreach ($result as $value) {
-                $value['spec_item'] = $value['has_spec_item']->column('item_name');
-                $value['spec_image'] = [];
+            $specData = $result->toArray();
+            foreach ($specData as &$value) {
                 $value['check_list'] = [];
-                unset($value['has_spec_item']);
+                foreach ($value['spec_item'] as &$item) {
+                    $item['image'] = [];
+                    $item['color'] = '';
+                }
             }
 
+            unset($value);
             return [
-                'spec_config' => $result->toArray(),
-                'spec_key'    => $result->column('spec_id'),
+                'spec_config' => $specData,
+                'spec_key'    => array_column($specData, 'spec_id'),
             ];
         }
 
