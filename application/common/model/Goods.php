@@ -1390,8 +1390,8 @@ class Goods extends CareyShop
      */
     public function copyGoodsItem($data)
     {
-        if (!$this->validateData($data, 'Goods.item')) {
-            return false;
+        if (!isset($data['goods_id'])) {
+            return $this->setError('商品编号不能为空');
         }
 
         $result = self::get(function ($query) use ($data) {

@@ -18,7 +18,9 @@ return [
     // 默认输出类型
     'default_return_type' => 'json',
     // API调试模式
-    'api_debug'           => false,
+    'api_debug'           => true,
+    // API请求结果为空时返回内容
+    'empty_result'        => null,
 
     // +----------------------------------------------------------------------
     // | 异常及错误设置

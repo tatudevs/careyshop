@@ -11,6 +11,7 @@
 namespace app\api\exception;
 
 use think\Request;
+use think\Config;
 
 class ApiOutput
 {
@@ -53,7 +54,7 @@ class ApiOutput
         ];
 
         if (!$error) {
-            $result['data'] = !empty($data) ? $data : (object)[];
+            $result['data'] = !empty($data) ? $data : Config::get('empty_result');
         } else {
             // 状态(非HTTPS始终为200状态,防止运营商劫持)
             $code = Request::instance()->isSsl() ? $code : 200;

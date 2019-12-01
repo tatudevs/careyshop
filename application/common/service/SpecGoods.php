@@ -124,6 +124,10 @@ class SpecGoods extends CareyShop
      */
     public static function validateSpecMenu(&$data)
     {
+        if (empty($data['spec_config'])) {
+            return;
+        }
+
         // 待替换内容 key=查找内容 value=替换为
         $replace = [];
 
