@@ -368,19 +368,16 @@ class GoodsAttribute extends CareyShop
         });
 
         if (false !== $result) {
-            if ($result->isEmpty()) {
-                return [];
-            }
-
-            foreach ($result as $value) {
-                foreach ($value['get_attribute'] as $item) {
-                    $item->setAttr('result', '');
+            $attrData = $result->toArray();
+            foreach ($attrData as $value) {
+                foreach ($value['get_attribute'] as &$item) {
+                    $item['result'] = '';
                 }
             }
 
             return [
-                'attr_config' => $result->toArray(),
-                'attr_key'    => $result->column('goods_attribute_id'),
+                'attr_config' => $attrData,
+                'attr_key'    => array_column($attrData, 'goods_attribute_id'),
             ];
         }
 
