@@ -32,6 +32,8 @@ class Spec extends CareyShop
             'get.goods.spec.page'  => ['getSpecPage'],
             // 获取商品规格列表
             'get.goods.spec.list'  => ['getSpecList'],
+            // 获取所有商品规格及规格项
+            'get.goods.spec.all'   => ['getSpecAll'],
             // 批量删除商品规格
             'del.goods.spec.list'  => ['delSpecList'],
             // 批量设置商品规格检索
