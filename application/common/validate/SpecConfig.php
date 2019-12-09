@@ -19,6 +19,7 @@ class SpecConfig extends CareyShop
     protected $rule = [
         'spec_config_id' => 'integer|gt:0',
         'goods_id'       => 'require|integer|gt:0',
+        'key_to_array'   => 'in:0,1',
     ];
 
     /**
@@ -28,5 +29,6 @@ class SpecConfig extends CareyShop
     protected $field = [
         'spec_config_id' => '商品规格配置编号',
         'goods_id'       => '商品编号',
+        'key_to_array'   => '是否将规格键名转为数组',
     ];
 }

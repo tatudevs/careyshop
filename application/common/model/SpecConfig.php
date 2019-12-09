@@ -31,6 +31,16 @@ class SpecConfig extends CareyShop
     ];
 
     /**
+     * hasMany cs_spec_goods
+     * @access public
+     * @return mixed
+     */
+    public function specCombo()
+    {
+        return $this->hasMany('SpecGoods', 'goods_id', 'goods_id');
+    }
+
+    /**
      * 新增或编辑指定的商品规格配置
      * @access public
      * @param  number $goodsId    商品编号
@@ -61,19 +71,28 @@ class SpecConfig extends CareyShop
         }
 
         $result = self::get(function ($query) use ($data) {
-            $query->where(['goods_id' => ['eq', $data['goods_id']]]);
+            $query->with('specCombo')->where(['goods_id' => ['eq', $data['goods_id']]]);
         });
 
         if (false !== $result) {
+            $resultData = ['spec_config' => [], 'spec_combo' => [], 'spec_key' => []];
             if (is_null($result)) {
-                return null;
+                return $resultData;
             }
 
-            $specConfig = $result->getAttr('config_data');
-            return [
-                'spec_config' => $specConfig,
-                'spec_key'    => array_column($specConfig, 'spec_id'),
-            ];
+            $resultData['spec_config'] = $result->getAttr('config_data');
+            $resultData['spec_combo'] = $result->getAttr('spec_combo');
+            $resultData['spec_key'] = array_column($resultData['spec_config'], 'spec_id');
+
+            if (!empty($data['key_to_array'])) {
+                foreach ($resultData['spec_combo'] as &$value) {
+                    $value['key_name'] = explode('_', $value['key_name']);
+                }
+
+                unset($value);
+            }
+
+            return $resultData;
         }
 
         return false;
