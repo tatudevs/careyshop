@@ -324,7 +324,19 @@ class Spec extends CareyShop
         });
 
         if (false !== $result) {
-            return $result->toArray();
+            $resultData = [];
+            $result = $result->toArray();
+
+            foreach ($result as $value) {
+                if (!array_key_exists($value['goods_type_id'], $resultData)) {
+                    $resultData[$value['goods_type_id']] = ['name' => $value['get_goods_type']['type_name']];
+                }
+
+                unset($value['get_goods_type']);
+                $resultData[$value['goods_type_id']]['item'][] = $value;
+            }
+
+            return $resultData;
         }
 
         return false;
