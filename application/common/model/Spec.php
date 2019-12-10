@@ -326,14 +326,14 @@ class Spec extends CareyShop
 
             foreach ($result as $value) {
                 if (!array_key_exists($value['goods_type_id'], $resultData)) {
-                    $resultData[$value['goods_type_id']] = ['name' => $value['get_goods_type']['type_name']];
+                    $resultData[$value['goods_type_id']] = [];
                 }
 
                 unset($value['get_goods_type']);
-                $resultData[$value['goods_type_id']]['item'][] = $value;
+                $resultData[$value['goods_type_id']][] = $value;
             }
 
-            return $resultData;
+            return array_values($resultData);
         }
 
         return false;
