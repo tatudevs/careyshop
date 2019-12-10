@@ -90,10 +90,11 @@ class Upload extends UploadBase
     public function getToken($replace = '')
     {
         // 初始化Auth状态
+        empty($replace) ?: $this->replace = $replace;
         $accessKey = Config::get('qiniu_access_key.value', 'upload');
         $secretKey = Config::get('qiniu_secret_key.value', 'upload');
         $bucket = Config::get('qiniu_bucket.value', 'upload');
-        empty($replace) ?: $this->replace = $replace;
+        $tokenExpires = Config::get('token_expires.value', 'upload');
 
         // 回调参数(别用JSON,处理很麻烦)
         $callbackBody = 'replace=$(x:replace)&parent_id=$(x:parent_id)&filename=$(x:filename)&mime=$(mimeType)&path=$(key)&';
@@ -124,13 +125,13 @@ class Upload extends UploadBase
         ];
 
         $auth = new Auth($accessKey, $secretKey);
-        $upToken = $auth->uploadToken($bucket, $dir . $key, 3600, $policy, true);
+        $upToken = $auth->uploadToken($bucket, $dir . $key, $tokenExpires, $policy, true);
 
         $response['upload_url'] = $this->getUploadUrl();
         $response['token'] = $upToken;
         $response['dir'] = $dir;
 
-        return ['token' => $response, 'expires' => time() + 3600];
+        return ['token' => $response, 'expires' => time() + $tokenExpires];
     }
 
     /**

@@ -476,6 +476,11 @@ class Setting extends CareyShop
                         $this->setSettingItem($key, $value, 'upload', 'Setting.string');
                         break;
 
+                    case 'token_expires':
+                        !empty($value) ?: $value = 0;
+                        $this->setSettingItem($key, $value, 'upload', 'Setting.integer');
+                        break;
+
                     default:
                         throw new \Exception('键名' . $key . '不在允许范围内');
                 }

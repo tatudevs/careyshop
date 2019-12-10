@@ -107,11 +107,13 @@ class Upload extends UploadBase
     public function getToken($replace = '')
     {
         empty($replace) ?: $this->replace = $replace;
+        $tokenExpires = Config::get('token_expires.value', 'upload');
+
         $response['upload_url'] = $this->getUploadUrl();
         $response['token'] = self::MODULE;
         $response['dir'] = '';
 
-        return ['token' => $response, 'expires' => 0];
+        return ['token' => $response, 'expires' => time() + $tokenExpires,];
     }
 
     /**

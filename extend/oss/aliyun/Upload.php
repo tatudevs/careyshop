@@ -136,7 +136,7 @@ class Upload extends UploadBase
         $accessKeySecret = Config::get('aliyun_secret_key.value', 'upload');
 
         $timestamp = new \DateTime();
-        $expires = time() + 3600;
+        $expires = time() + Config::get('token_expires.value', 'upload');
         $dir = 'uploads/files/' . date('Ymd/', time());
 
         if (!empty($this->replace)) {
@@ -200,6 +200,7 @@ class Upload extends UploadBase
         $accessKeySecret = Config::get('aliyun_secret_key.value', 'upload');
         $roleArn = Config::get('aliyun_rolearn.value', 'upload');
         $bucket = Config::get('aliyun_bucket.value', 'upload');
+        $tokenExpires = Config::get('token_expires.value', 'upload');
 
         // 加载区域结点配置
         AliyunConfig::load();
@@ -230,7 +231,7 @@ class Upload extends UploadBase
             $request->setRoleSessionName('temp_user');
             $request->setRoleArn($roleArn);
             $request->setPolicy(json_encode($policy, JSON_UNESCAPED_UNICODE));
-            $request->setDurationSeconds(3600);
+            $request->setDurationSeconds($tokenExpires);
             $response = $client->getAcsResponse($request);
         } catch (\exception $e) {
             return $this->setError($e->getMessage());
@@ -251,7 +252,7 @@ class Upload extends UploadBase
             'bucket'            => $bucket,
             'callback'          => $this->getCallbackData(),
             'callback_url'      => $this->getCallbackUrl(),
-            'expires'           => time() + 3600,
+            'expires'           => time() + $tokenExpires,
         ];
 
         return $result;
