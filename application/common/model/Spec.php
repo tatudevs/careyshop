@@ -309,10 +309,7 @@ class Spec extends CareyShop
         $result = self::all(function ($query) {
             $with = ['getGoodsType'];
             $with['specItem'] = function ($query) {
-                $query
-                    ->field('spec_id,spec_item_id,item_name')
-                    ->where(['is_contact' => ['eq', 1]])
-                    ->order(['sort' => 'asc']);
+                $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
             };
 
             $map['spec.goods_type_id'] = ['neq', 0];
