@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    IP查询扩展库
+ * CareyShop    IP查询扩展库(https://github.com/lionsoul2014/ip2region)
  *
  * @author      zxm <252404501@qq.com>
  * @version     v1.1

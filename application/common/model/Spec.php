@@ -332,6 +332,12 @@ class Spec extends CareyShop
                     ];
                 }
 
+                foreach ($value['spec_item'] as &$item) {
+                    $item['image'] = [];
+                    $item['color'] = '';
+                }
+
+                unset($item);
                 unset($value['get_goods_type']);
                 $resultData[$value['goods_type_id']]['item'][] = $value;
             }
