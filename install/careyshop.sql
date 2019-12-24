@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 2019-12-09 13:21:32
+-- Generation Time: 2019-12-24 13:03:47
 -- 服务器版本： 5.7.27-log
 -- PHP Version: 7.1.11
 
@@ -68,10 +68,10 @@ CREATE TABLE `cs_admin` (
 --
 
 INSERT INTO `cs_admin` (`admin_id`, `username`, `password`, `group_id`, `nickname`, `head_pic`, `last_login`, `last_ip`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
-(1, 'admin', '5631c89340a5413dc8124d23c85b900a', 1, '思维空间', '', 1575854594, '127.0.0.1', 1, 0, 1530289832, 1575854594),
-(2, 'dnyz520', '5631c89340a5413dc8124d23c85b900a', 2, 'dnyz520', '', 1566956047, '127.0.0.1', 1, 0, 1530289832, 1566956047),
-(3, 'admin2', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop2', '', 1575561508, '127.0.0.1', 1, 0, 1530289832, 1575561508),
-(4, 'admin3', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop3', '', 1556433362, '127.0.0.1', 1, 0, 1530289832, 1556433362),
+(1, 'admin', '5631c89340a5413dc8124d23c85b900a', 1, '思维空间', '', 1577150643, '127.0.0.1', 1, 0, 1530289832, 1577150643),
+(2, 'dnyz520', '5631c89340a5413dc8124d23c85b900a', 2, 'dnyz520', '', 1575879266, '127.0.0.1', 1, 0, 1530289832, 1575879266),
+(3, 'admin2', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop2', '', 1577111831, '127.0.0.1', 1, 0, 1530289832, 1577111831),
+(4, 'admin3', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop3', '', 1576338129, '127.0.0.1', 1, 0, 1530289832, 1576338129),
 (5, 'admin4', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop4', '', 1556380966, '127.0.0.1', 1, 0, 1530289832, 1556380966),
 (6, 'admin5', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop5', '', 1551194662, '127.0.0.1', 1, 0, 1530289832, 1541576329),
 (7, 'admin6', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop6', '', 1551194662, '127.0.0.1', 1, 0, 1530289832, 1541576329),
@@ -119,7 +119,7 @@ INSERT INTO `cs_admin` (`admin_id`, `username`, `password`, `group_id`, `nicknam
 (51, 'admin49', '5631c89340a5413dc8124d23c85b900a', 1, 'admin49', '', 1551194662, '221.12.48.19', 1, 0, 1540343927, 1540460311),
 (53, 'admin50', '5631c89340a5413dc8124d23c85b900a', 1, 'admin50', '', 1551194662, '221.12.48.19', 1, 0, 1540435162, 1540460311),
 (54, 'admin44', '5631c89340a5413dc8124d23c85b900a', 1, 'admin48', '', 1551194662, '127.0.0.1', 1, 0, 1540486559, 1540525146),
-(56, 'admin1', '5631c89340a5413dc8124d23c85b900a', 2, 'admin1', '', 1561082351, '222.240.1.29', 1, 0, 1540519794, 1561599969),
+(56, 'admin1', '5631c89340a5413dc8124d23c85b900a', 2, 'admin1', '', 1575879730, '127.0.0.1', 1, 0, 1540519794, 1575879730),
 (57, 'admin51', '5631c89340a5413dc8124d23c85b900a', 1, 'admin51', '', 0, '', 1, 0, 1572499187, 1572499187);
 
 -- --------------------------------------------------------
@@ -631,7 +631,7 @@ INSERT INTO `cs_article` (`article_id`, `article_cat_id`, `title`, `image`, `con
 (71, 5, '测试', '', '内容', '', '', '', '', '', '_self', 30, 0, 0, 1499959652, 1558714525),
 (72, 4, '测试666', 'aliyun.oss.careyshop.cn/uploads/files/20191112/2c82bed2-233d-45e5-8752-d169b8265ee6.jpg?type=aliyun', '<code></code>\n<table class=\"highlight tab-size js-file-line-container\" data-tab-size=\"8\">\n<tbody>\n<tr>\n<td id=\"LC1\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">template</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L2\" class=\"blob-num js-line-number\" data-line-number=\"2\">&nbsp;</td>\n<td id=\"LC2\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">d2-container</span></td>\n</tr>\n<tr>\n<td id=\"L3\" class=\"blob-num js-line-number\" data-line-number=\"3\">&nbsp;</td>\n<td id=\"LC3\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">ref</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>container<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L4\" class=\"blob-num js-line-number\" data-line-number=\"4\">&nbsp;</td>\n<td id=\"LC4\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">type</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>containerType<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L5\" class=\"blob-num js-line-number\" data-line-number=\"5\">&nbsp;</td>\n<td id=\"LC5\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">better-scroll</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>betterScroll<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L6\" class=\"blob-num js-line-number\" data-line-number=\"6\">&nbsp;</td>\n<td id=\"LC6\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">scroll-delay</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>scrollDelay<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L7\" class=\"blob-num js-line-number\" data-line-number=\"7\">&nbsp;</td>\n<td id=\"LC7\" class=\"blob-code blob-code-inner js-file-line\">@<span class=\"pl-e\">scroll</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>({x, y}) <span class=\"pl-k\">=&gt;</span> { scrollTop <span class=\"pl-k\">=</span> y }<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L8\" class=\"blob-num js-line-number\" data-line-number=\"8\">&nbsp;</td>\n<td id=\"LC8\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">template</span> <span class=\"pl-e\">slot</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>header<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L9\" class=\"blob-num js-line-number\" data-line-number=\"9\">&nbsp;</td>\n<td id=\"LC9\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form</span></td>\n</tr>\n<tr>\n<td id=\"L10\" class=\"blob-num js-line-number\" data-line-number=\"10\">&nbsp;</td>\n<td id=\"LC10\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">inline</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-c1\">true</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L11\" class=\"blob-num js-line-number\" data-line-number=\"11\">&nbsp;</td>\n<td id=\"LC11\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">size</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>mini<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L12\" class=\"blob-num js-line-number\" data-line-number=\"12\">&nbsp;</td>\n<td id=\"LC12\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span></td>\n</tr>\n<tr>\n<td id=\"L13\" class=\"blob-num js-line-number\" data-line-number=\"13\">&nbsp;</td>\n<td id=\"LC13\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>布局类型<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L14\" class=\"blob-num js-line-number\" data-line-number=\"14\">&nbsp;</td>\n<td id=\"LC14\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L15\" class=\"blob-num js-line-number\" data-line-number=\"15\">&nbsp;</td>\n<td id=\"LC15\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-radio-group</span> <span class=\"pl-e\">v-model</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>containerType<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L16\" class=\"blob-num js-line-number\" data-line-number=\"16\">&nbsp;</td>\n<td id=\"LC16\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-radio-button</span> <span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>full<span class=\"pl-pds\">\"</span></span>&gt;&lt;/<span class=\"pl-ent\">el-radio-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L17\" class=\"blob-num js-line-number\" data-line-number=\"17\">&nbsp;</td>\n<td id=\"LC17\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-radio-button</span> <span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>card<span class=\"pl-pds\">\"</span></span>&gt;&lt;/<span class=\"pl-ent\">el-radio-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L18\" class=\"blob-num js-line-number\" data-line-number=\"18\">&nbsp;</td>\n<td id=\"LC18\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-radio-button</span> <span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>ghost<span class=\"pl-pds\">\"</span></span>&gt;&lt;/<span class=\"pl-ent\">el-radio-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L19\" class=\"blob-num js-line-number\" data-line-number=\"19\">&nbsp;</td>\n<td id=\"LC19\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-radio-group</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L20\" class=\"blob-num js-line-number\" data-line-number=\"20\">&nbsp;</td>\n<td id=\"LC20\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L21\" class=\"blob-num js-line-number\" data-line-number=\"21\">&nbsp;</td>\n<td id=\"LC21\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span></td>\n</tr>\n<tr>\n<td id=\"L22\" class=\"blob-num js-line-number\" data-line-number=\"22\">&nbsp;</td>\n<td id=\"LC22\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>滚动距离<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L23\" class=\"blob-num js-line-number\" data-line-number=\"23\">&nbsp;</td>\n<td id=\"LC23\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L24\" class=\"blob-num js-line-number\" data-line-number=\"24\">&nbsp;</td>\n<td id=\"LC24\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-input</span></td>\n</tr>\n<tr>\n<td id=\"L25\" class=\"blob-num js-line-number\" data-line-number=\"25\">&nbsp;</td>\n<td id=\"LC25\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">value</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>scrollTop<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L26\" class=\"blob-num js-line-number\" data-line-number=\"26\">&nbsp;</td>\n<td id=\"LC26\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">style</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>width: 130px;<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L27\" class=\"blob-num js-line-number\" data-line-number=\"27\">&nbsp;</td>\n<td id=\"LC27\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">template</span> <span class=\"pl-e\">slot</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>append<span class=\"pl-pds\">\"</span></span>&gt;px&lt;/<span class=\"pl-ent\">template</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L28\" class=\"blob-num js-line-number\" data-line-number=\"28\">&nbsp;</td>\n<td id=\"LC28\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-input</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L29\" class=\"blob-num js-line-number\" data-line-number=\"29\">&nbsp;</td>\n<td id=\"LC29\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L30\" class=\"blob-num js-line-number\" data-line-number=\"30\">&nbsp;</td>\n<td id=\"LC30\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span></td>\n</tr>\n<tr>\n<td id=\"L31\" class=\"blob-num js-line-number\" data-line-number=\"31\">&nbsp;</td>\n<td id=\"LC31\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">v-if</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-k\">!</span>betterScroll<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L32\" class=\"blob-num js-line-number\" data-line-number=\"32\">&nbsp;</td>\n<td id=\"LC32\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>事件延迟(ms)<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L33\" class=\"blob-num js-line-number\" data-line-number=\"33\">&nbsp;</td>\n<td id=\"LC33\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L34\" class=\"blob-num js-line-number\" data-line-number=\"34\">&nbsp;</td>\n<td id=\"LC34\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-input-number</span></td>\n</tr>\n<tr>\n<td id=\"L35\" class=\"blob-num js-line-number\" data-line-number=\"35\">&nbsp;</td>\n<td id=\"LC35\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">v-model</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>scrollDelay<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L36\" class=\"blob-num js-line-number\" data-line-number=\"36\">&nbsp;</td>\n<td id=\"LC36\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">min</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-c1\">10</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L37\" class=\"blob-num js-line-number\" data-line-number=\"37\">&nbsp;</td>\n<td id=\"LC37\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">max</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-c1\">2000</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L38\" class=\"blob-num js-line-number\" data-line-number=\"38\">&nbsp;</td>\n<td id=\"LC38\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">step</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-c1\">100</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L39\" class=\"blob-num js-line-number\" data-line-number=\"39\">&nbsp;</td>\n<td id=\"LC39\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">style</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>width: 110px;<span class=\"pl-pds\">\"</span></span>/&gt;</td>\n</tr>\n<tr>\n<td id=\"L40\" class=\"blob-num js-line-number\" data-line-number=\"40\">&nbsp;</td>\n<td id=\"LC40\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L41\" class=\"blob-num js-line-number\" data-line-number=\"41\">&nbsp;</td>\n<td id=\"LC41\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span> <span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L42\" class=\"blob-num js-line-number\" data-line-number=\"42\">&nbsp;</td>\n<td id=\"LC42\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-button</span></td>\n</tr>\n<tr>\n<td id=\"L43\" class=\"blob-num js-line-number\" data-line-number=\"43\">&nbsp;</td>\n<td id=\"LC43\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">v-if</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>scrollTop <span class=\"pl-k\">&gt;=</span> <span class=\"pl-c1\">55</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L44\" class=\"blob-num js-line-number\" data-line-number=\"44\">&nbsp;</td>\n<td id=\"LC44\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">type</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>primary<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L45\" class=\"blob-num js-line-number\" data-line-number=\"45\">&nbsp;</td>\n<td id=\"LC45\" class=\"blob-code blob-code-inner js-file-line\">@<span class=\"pl-e\">click</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-smi\">$refs</span>.<span class=\"pl-smi\">container</span>.<span class=\"pl-smi\">scrollToTop</span><span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L46\" class=\"blob-num js-line-number\" data-line-number=\"46\">&nbsp;</td>\n<td id=\"LC46\" class=\"blob-code blob-code-inner js-file-line\">回到顶部</td>\n</tr>\n<tr>\n<td id=\"L47\" class=\"blob-num js-line-number\" data-line-number=\"47\">&nbsp;</td>\n<td id=\"LC47\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L48\" class=\"blob-num js-line-number\" data-line-number=\"48\">&nbsp;</td>\n<td id=\"LC48\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L49\" class=\"blob-num js-line-number\" data-line-number=\"49\">&nbsp;</td>\n<td id=\"LC49\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L50\" class=\"blob-num js-line-number\" data-line-number=\"50\">&nbsp;</td>\n<td id=\"LC50\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">template</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L51\" class=\"blob-num js-line-number\" data-line-number=\"51\">&nbsp;</td>\n<td id=\"LC51\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-alert</span></td>\n</tr>\n<tr>\n<td id=\"L52\" class=\"blob-num js-line-number\" data-line-number=\"52\">&nbsp;</td>\n<td id=\"LC52\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">type</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>success<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L53\" class=\"blob-num js-line-number\" data-line-number=\"53\">&nbsp;</td>\n<td id=\"LC53\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">title</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-s\"><span class=\"pl-pds\">`</span><span class=\"pl-pse\">${</span>betterScroll <span class=\"pl-k\">?</span> <span class=\"pl-pds\">\'</span>此示例开启了 BetterScroll <span class=\"pl-pds\">\'</span> <span class=\"pl-k\">:</span> <span class=\"pl-pds\">\'</span><span class=\"pl-pds\">\'</span><span class=\"pl-pse\">}</span>请向下滚动<span class=\"pl-pds\">`</span></span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L54\" class=\"blob-num js-line-number\" data-line-number=\"54\">&nbsp;</td>\n<td id=\"LC54\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-10<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L55\" class=\"blob-num js-line-number\" data-line-number=\"55\">&nbsp;</td>\n<td id=\"LC55\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">center</span>/&gt;</td>\n</tr>\n<tr>\n<td id=\"L56\" class=\"blob-num js-line-number\" data-line-number=\"56\">&nbsp;</td>\n<td id=\"LC56\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">d2-demo-article</span></td>\n</tr>\n<tr>\n<td id=\"L57\" class=\"blob-num js-line-number\" data-line-number=\"57\">&nbsp;</td>\n<td id=\"LC57\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">v-for</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>i <span class=\"pl-k\">in</span> <span class=\"pl-c1\">10</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L58\" class=\"blob-num js-line-number\" data-line-number=\"58\">&nbsp;</td>\n<td id=\"LC58\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">key</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>i<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L59\" class=\"blob-num js-line-number\" data-line-number=\"59\">&nbsp;</td>\n<td id=\"LC59\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">style</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>articleStyle<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L60\" class=\"blob-num js-line-number\" data-line-number=\"60\">&nbsp;</td>\n<td id=\"LC60\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">long</span>/&gt;</td>\n</tr>\n<tr>\n<td id=\"L61\" class=\"blob-num js-line-number\" data-line-number=\"61\">&nbsp;</td>\n<td id=\"LC61\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">template</span> <span class=\"pl-e\">slot</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>footer<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L62\" class=\"blob-num js-line-number\" data-line-number=\"62\">&nbsp;</td>\n<td id=\"LC62\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form</span></td>\n</tr>\n<tr>\n<td id=\"L63\" class=\"blob-num js-line-number\" data-line-number=\"63\">&nbsp;</td>\n<td id=\"LC63\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">inline</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-c1\">true</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L64\" class=\"blob-num js-line-number\" data-line-number=\"64\">&nbsp;</td>\n<td id=\"LC64\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">size</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>mini<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L65\" class=\"blob-num js-line-number\" data-line-number=\"65\">&nbsp;</td>\n<td id=\"LC65\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span> <span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L66\" class=\"blob-num js-line-number\" data-line-number=\"66\">&nbsp;</td>\n<td id=\"LC66\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-button</span> @<span class=\"pl-e\">click</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-smi\">$refs</span>.<span class=\"pl-smi\">container</span>.<span class=\"pl-c1\">scrollBy</span>(<span class=\"pl-c1\">0</span>, <span class=\"pl-c1\">30</span>)<span class=\"pl-pds\">\"</span></span>&gt;相对滚动 (0, 30) 像素&lt;/<span class=\"pl-ent\">el-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L67\" class=\"blob-num js-line-number\" data-line-number=\"67\">&nbsp;</td>\n<td id=\"LC67\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L68\" class=\"blob-num js-line-number\" data-line-number=\"68\">&nbsp;</td>\n<td id=\"LC68\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span> <span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L69\" class=\"blob-num js-line-number\" data-line-number=\"69\">&nbsp;</td>\n<td id=\"LC69\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-button</span> @<span class=\"pl-e\">click</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-smi\">$refs</span>.<span class=\"pl-smi\">container</span>.<span class=\"pl-c1\">scrollTo</span>(<span class=\"pl-c1\">0</span>, <span class=\"pl-c1\">100</span>)<span class=\"pl-pds\">\"</span></span>&gt;滚动到 (0, 100) 像素位置&lt;/<span class=\"pl-ent\">el-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L70\" class=\"blob-num js-line-number\" data-line-number=\"70\">&nbsp;</td>\n<td id=\"LC70\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L71\" class=\"blob-num js-line-number\" data-line-number=\"71\">&nbsp;</td>\n<td id=\"LC71\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span> <span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L72\" class=\"blob-num js-line-number\" data-line-number=\"72\">&nbsp;</td>\n<td id=\"LC72\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-button</span> @<span class=\"pl-e\">click</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-smi\">$refs</span>.<span class=\"pl-smi\">container</span>.<span class=\"pl-en\">scrollTop</span>(<span class=\"pl-c1\">100</span>)<span class=\"pl-pds\">\"</span></span>&gt;滚动到垂直位置 100&lt;/<span class=\"pl-ent\">el-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L73\" class=\"blob-num js-line-number\" data-line-number=\"73\">&nbsp;</td>\n<td id=\"LC73\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L74\" class=\"blob-num js-line-number\" data-line-number=\"74\">&nbsp;</td>\n<td id=\"LC74\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L75\" class=\"blob-num js-line-number\" data-line-number=\"75\">&nbsp;</td>\n<td id=\"LC75\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">template</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L76\" class=\"blob-num js-line-number\" data-line-number=\"76\">&nbsp;</td>\n<td id=\"LC76\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">d2-container</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L77\" class=\"blob-num js-line-number\" data-line-number=\"77\">&nbsp;</td>\n<td id=\"LC77\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">template</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L78\" class=\"blob-num js-line-number\" data-line-number=\"78\">&nbsp;</td>\n<td id=\"LC78\" class=\"blob-code blob-code-inner js-file-line\">&nbsp;</td>\n</tr>\n<tr>\n<td id=\"L79\" class=\"blob-num js-line-number\" data-line-number=\"79\">&nbsp;</td>\n<td id=\"LC79\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\">&lt;<span class=\"pl-ent\">script</span>&gt;</span></td>\n</tr>\n<tr>\n<td id=\"L80\" class=\"blob-num js-line-number\" data-line-number=\"80\">&nbsp;</td>\n<td id=\"LC80\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"><span class=\"pl-k\">import</span> <span class=\"pl-smi\">d2DemoArticle</span> <span class=\"pl-k\">from</span> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>./components/d2-demo-article<span class=\"pl-pds\">\'</span></span></span></td>\n</tr>\n<tr>\n<td id=\"L81\" class=\"blob-num js-line-number\" data-line-number=\"81\">&nbsp;</td>\n<td id=\"LC81\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"><span class=\"pl-k\">export</span> <span class=\"pl-c1\">default</span> {</span></td>\n</tr>\n<tr>\n<td id=\"L82\" class=\"blob-num js-line-number\" data-line-number=\"82\">&nbsp;</td>\n<td id=\"LC82\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> components<span class=\"pl-k\">:</span> {</span></td>\n</tr>\n<tr>\n<td id=\"L83\" class=\"blob-num js-line-number\" data-line-number=\"83\">&nbsp;</td>\n<td id=\"LC83\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>d2-demo-article<span class=\"pl-pds\">\'</span></span><span class=\"pl-k\">:</span> d2DemoArticle</span></td>\n</tr>\n<tr>\n<td id=\"L84\" class=\"blob-num js-line-number\" data-line-number=\"84\">&nbsp;</td>\n<td id=\"LC84\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> },</span></td>\n</tr>\n<tr>\n<td id=\"L85\" class=\"blob-num js-line-number\" data-line-number=\"85\">&nbsp;</td>\n<td id=\"LC85\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-en\">data</span> () {</span></td>\n</tr>\n<tr>\n<td id=\"L86\" class=\"blob-num js-line-number\" data-line-number=\"86\">&nbsp;</td>\n<td id=\"LC86\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-k\">return</span> {</span></td>\n</tr>\n<tr>\n<td id=\"L87\" class=\"blob-num js-line-number\" data-line-number=\"87\">&nbsp;</td>\n<td id=\"LC87\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> containerType<span class=\"pl-k\">:</span> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>full<span class=\"pl-pds\">\'</span></span>,</span></td>\n</tr>\n<tr>\n<td id=\"L88\" class=\"blob-num js-line-number\" data-line-number=\"88\">&nbsp;</td>\n<td id=\"LC88\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> scrollDelay<span class=\"pl-k\">:</span> <span class=\"pl-c1\">10</span>,</span></td>\n</tr>\n<tr>\n<td id=\"L89\" class=\"blob-num js-line-number\" data-line-number=\"89\">&nbsp;</td>\n<td id=\"LC89\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> scrollTop<span class=\"pl-k\">:</span> <span class=\"pl-c1\">0</span></span></td>\n</tr>\n<tr>\n<td id=\"L90\" class=\"blob-num js-line-number\" data-line-number=\"90\">&nbsp;</td>\n<td id=\"LC90\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> }</span></td>\n</tr>\n<tr>\n<td id=\"L91\" class=\"blob-num js-line-number\" data-line-number=\"91\">&nbsp;</td>\n<td id=\"LC91\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> },</span></td>\n</tr>\n<tr>\n<td id=\"L92\" class=\"blob-num js-line-number\" data-line-number=\"92\">&nbsp;</td>\n<td id=\"LC92\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> computed<span class=\"pl-k\">:</span> {</span></td>\n</tr>\n<tr>\n<td id=\"L93\" class=\"blob-num js-line-number\" data-line-number=\"93\">&nbsp;</td>\n<td id=\"LC93\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-c\">// 是否开启 better scroll</span></span></td>\n</tr>\n<tr>\n<td id=\"L94\" class=\"blob-num js-line-number\" data-line-number=\"94\">&nbsp;</td>\n<td id=\"LC94\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-en\">betterScroll</span> () {</span></td>\n</tr>\n<tr>\n<td id=\"L95\" class=\"blob-num js-line-number\" data-line-number=\"95\">&nbsp;</td>\n<td id=\"LC95\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-k\">return</span> <span class=\"pl-c1\">this</span>.<span class=\"pl-smi\">$route</span>.<span class=\"pl-smi\">query</span>.<span class=\"pl-smi\">bs</span> <span class=\"pl-k\">===</span> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>true<span class=\"pl-pds\">\'</span></span></span></td>\n</tr>\n<tr>\n<td id=\"L96\" class=\"blob-num js-line-number\" data-line-number=\"96\">&nbsp;</td>\n<td id=\"LC96\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> },</span></td>\n</tr>\n<tr>\n<td id=\"L97\" class=\"blob-num js-line-number\" data-line-number=\"97\">&nbsp;</td>\n<td id=\"LC97\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-c\">// 根据滚动位置返回文章的样式</span></span></td>\n</tr>\n<tr>\n<td id=\"L98\" class=\"blob-num js-line-number\" data-line-number=\"98\">&nbsp;</td>\n<td id=\"LC98\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-en\">articleStyle</span> () {</span></td>\n</tr>\n<tr>\n<td id=\"L99\" class=\"blob-num js-line-number\" data-line-number=\"99\">&nbsp;</td>\n<td id=\"LC99\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-k\">return</span> {</span></td>\n</tr>\n<tr>\n<td id=\"L100\" class=\"blob-num js-line-number\" data-line-number=\"100\">&nbsp;</td>\n<td id=\"LC100\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> opacity<span class=\"pl-k\">:</span> <span class=\"pl-c1\">this</span>.<span class=\"pl-smi\">scrollTop</span> <span class=\"pl-k\">&gt;</span> <span class=\"pl-c1\">55</span> <span class=\"pl-k\">?</span> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>1<span class=\"pl-pds\">\'</span></span> <span class=\"pl-k\">:</span> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>.1<span class=\"pl-pds\">\'</span></span></span></td>\n</tr>\n<tr>\n<td id=\"L101\" class=\"blob-num js-line-number\" data-line-number=\"101\">&nbsp;</td>\n<td id=\"LC101\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> }</span></td>\n</tr>\n<tr>\n<td id=\"L102\" class=\"blob-num js-line-number\" data-line-number=\"102\">&nbsp;</td>\n<td id=\"LC102\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> }</span></td>\n</tr>\n<tr>\n<td id=\"L103\" class=\"blob-num js-line-number\" data-line-number=\"103\">&nbsp;</td>\n<td id=\"LC103\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> }</span></td>\n</tr>\n<tr>\n<td id=\"L104\" class=\"blob-num js-line-number\" data-line-number=\"104\">&nbsp;</td>\n<td id=\"LC104\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\">}</span></td>\n</tr>\n<tr>\n<td id=\"L105\" class=\"blob-num js-line-number\" data-line-number=\"105\">&nbsp;</td>\n<td id=\"LC105\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\">&lt;/<span class=\"pl-ent\">script</span>&gt;</span></td>\n</tr>\n</tbody>\n</table>\n<code></code>', '', '', '', '', '', '_self', 95, 1, 1, 1499959656, 1573624520),
 (73, 3, '测试Zzz', 'aliyun.oss.careyshop.cn/uploads/files/20191112/25a53e28-eedc-4b60-8d63-e2830f5d5aee.jpg?type=aliyun', '<p>邮件端</p>\n<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p>序号</p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>功能</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>备注</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">1</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>自定义搜索文件夹</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">2</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>邮件与客户关联</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">3</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>客户往来邮件<span lang=\"EN-US\"><br /></span>客户往来邮件<span lang=\"EN-US\"><br /></span>客户某个邮箱往来邮件</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">4</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>新邮件创建客户</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n</tbody>\n</table>\n<p><span lang=\"EN-US\">&nbsp;</span></p>\n<p>客户资料端</p>\n<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td valign=\"top\" width=\"36\">\n<p>序号</p>\n</td>\n<td valign=\"top\" width=\"117\">\n<p>功能</p>\n</td>\n<td valign=\"top\" width=\"400\">\n<p>备注</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"36\">\n<p><span lang=\"EN-US\">1</span></p>\n</td>\n<td valign=\"top\" width=\"117\">\n<p>客户资料关联往来邮件</p>\n</td>\n<td valign=\"top\" width=\"400\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"36\">\n<p><span lang=\"EN-US\">2</span></p>\n</td>\n<td valign=\"top\" width=\"117\">\n<p>邮件地址出发动作（最好）</p>\n</td>\n<td valign=\"top\" width=\"400\">\n<p>&nbsp;</p>\n</td>\n</tr>\n</tbody>\n</table>\n<p><span lang=\"EN-US\">&nbsp;</span></p>\n<p><span lang=\"EN-US\">&nbsp;</span></p>', '', '', '', '', '', '_self', 188, 0, 0, 1499959658, 1573624507),
-(74, 2, '测试B', 'careyshop.oruei.com/uploads/files/20191206/47a84479bcfa0c379cc40a37febb4f9a.png?type=careyshop', '<p><strong> <img src=\"../api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn/uploads/files/20190511/c14c58fe-e725-4ccb-8280-e6bc59e407ff.jpg?type=aliyun\" alt=\"\" />@ClouderSky </strong> commented on this pull request.</p>\n<hr />\n<p>In <a href=\"https://github.com/overtrue/wechat/pull/1457#discussion_r249626156\" target=\"_blank\" rel=\"noopener\"> src/Payment/Sharing/Client.php </a> :</p>\n<pre style=\"color: #555;\">&gt; +     */\n\n+    public function multiSharing(\n\n+        string $transactionId,\n\n+        string $outOrderNo,\n\n+        array $receivers\n\n+    ) {\n\n+        $params = [\n\n+            \'appid\' =&gt; $this-&gt;app[\'config\']-&gt;app_id,\n\n+            \'transaction_id\' =&gt; $transactionId,\n\n+            \'out_order_no\' =&gt; $outOrderNo,\n\n+            \'receivers\' =&gt; json_encode(\n\n+                $receivers, JSON_UNESCAPED_UNICODE\n\n+            ),\n\n+        ];\n\n+\n\n+        return $this-&gt;safeRequest(\n\n</pre>\n<p>具体可参考 <a href=\"https://pay.weixin.qq.com/wiki/doc/api/allocation_sl.php?chapter=25_6&amp;index=2\" target=\"_blank\" rel=\"nofollow noopener\"> 文档 </a> 。</p>\n<p>按照个人的理解：</p>\n<ul>\n<li>\n<p>单次分账的含义是对一笔支付进行一次性的分账操作，所有该次分账未声明去处的资金都在该次分账中被认为是归入收款主体账户的，于是分账结束后所有资金都被处理完成。</p>\n</li>\n<li>\n<p>多次分账是指一次分账操作后，剩余未分配资金仍然保持未分配状态，等待下一个分账指令处理或者通过markOrderAsFinished操作一次性归入收款主体账户。</p>\n</li>\n</ul>\n<p style=\"font-size: small; -webkit-text-size-adjust: none; color: #666;\">&mdash; <br />You are receiving this because you are subscribed to this thread. <br />Reply to this email directly, <a href=\"https://github.com/overtrue/wechat/pull/1457#discussion_r249626156\" target=\"_blank\" rel=\"noopener\"> view it on GitHub </a> , or <a href=\"https://github.com/notifications/unsubscribe-auth/AclPcFh6qlZ4itE1KK4KMG2L1mZ3xcySks5vFnsPgaJpZM4aKL-7\" target=\"_blank\" rel=\"noopener\"> mute the thread </a> . <img style=\"display: none !important;\" hidden=\"\" src=\"https://github.com/notifications/beacon/AclPcIqq4UUIR3SIt0mEYzzrq2aM7MCUks5vFnsPgaJpZM4aKL-7.gif\" alt=\"\" width=\"1\" height=\"1\" /></p>', '', '', '', '', 'http://www.baidu.com', '_self', 90, 1, 1, 1499959763, 1575642594),
+(74, 2, '测试B', 'careyshop.oruei.com/uploads/files/20191206/47a84479bcfa0c379cc40a37febb4f9a.png?type=careyshop', '<p><strong> <img src=\"../api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn/uploads/files/20190511/c14c58fe-e725-4ccb-8280-e6bc59e407ff.jpg?type=aliyun\" alt=\"\" />@ClouderSky </strong> commented on this pull request.</p>\n<hr />\n<p>In <a href=\"https://github.com/overtrue/wechat/pull/1457#discussion_r249626156\" target=\"_blank\" rel=\"noopener\"> src/Payment/Sharing/Client.php </a> :</p>\n<pre style=\"color: #555;\">&gt; +     */\n\n+    public function multiSharing(\n\n+        string $transactionId,\n\n+        string $outOrderNo,\n\n+        array $receivers\n\n+    ) {\n\n+        $params = [\n\n+            \'appid\' =&gt; $this-&gt;app[\'config\']-&gt;app_id,\n\n+            \'transaction_id\' =&gt; $transactionId,\n\n+            \'out_order_no\' =&gt; $outOrderNo,\n\n+            \'receivers\' =&gt; json_encode(\n\n+                $receivers, JSON_UNESCAPED_UNICODE\n\n+            ),\n\n+        ];\n\n+\n\n+        return $this-&gt;safeRequest(\n\n</pre>\n<p>具体可参考 <a href=\"https://pay.weixin.qq.com/wiki/doc/api/allocation_sl.php?chapter=25_6&amp;index=2\" target=\"_blank\" rel=\"nofollow noopener\"> 文档 </a> 。</p>\n<p>按照个人的理解：</p>\n<ul>\n<li>\n<p>单次分账的含义是对一笔支付进行一次性的分账操作，所有该次分账未声明去处的资金都在该次分账中被认为是归入收款主体账户的，于是分账结束后所有资金都被处理完成。</p>\n</li>\n<li>\n<p>多次分账是指一次分账操作后，剩余未分配资金仍然保持未分配状态，等待下一个分账指令处理或者通过markOrderAsFinished操作一次性归入收款主体账户。</p>\n</li>\n</ul>\n<p style=\"font-size: small; -webkit-text-size-adjust: none; color: #666;\">&mdash; <br />You are receiving this because you are subscribed to this thread. <br />Reply to this email directly, <a href=\"https://github.com/overtrue/wechat/pull/1457#discussion_r249626156\" target=\"_blank\" rel=\"noopener\"> view it on GitHub </a> , or <a href=\"https://github.com/notifications/unsubscribe-auth/AclPcFh6qlZ4itE1KK4KMG2L1mZ3xcySks5vFnsPgaJpZM4aKL-7\" target=\"_blank\" rel=\"noopener\"> mute the thread </a> . <img style=\"display: none !important;\" hidden=\"\" src=\"https://github.com/notifications/beacon/AclPcIqq4UUIR3SIt0mEYzzrq2aM7MCUks5vFnsPgaJpZM4aKL-7.gif\" alt=\"\" width=\"1\" height=\"1\" /></p>', '', '', '', '', 'http://www.baidu.com', '_self', 92, 1, 1, 1499959763, 1575642594),
 (83, 29, '标题', '', '内容11', '百度', 'http://www.baidu.com', '', '', '', '_self', 0, 0, 1, 1482677507, 1482677507),
 (101, 29, '标题', '', '内容11', '百度', 'http://www.baidu.com', '', '', '', '_self', 0, 0, 1, 1482677507, 1482677507),
 (119, 29, '标题', '', '内容11', '百度', 'http://www.baidu.com', '', '', '', '_self', 0, 0, 1, 1482677507, 1482677507),
@@ -924,10 +924,10 @@ CREATE TABLE `cs_auth_rule` (
 --
 
 INSERT INTO `cs_auth_rule` (`rule_id`, `module`, `group_id`, `name`, `menu_auth`, `log_auth`, `sort`, `status`) VALUES
-(1, 'api', 1, '超级管理员', '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,615,617,618,23,24,25,26,27,28,29,30,614,616,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,619,66,67,69,70,71,72,73,74,75,76,77,78,620,79,80,81,82,83,84,85,86,621,87,88,89,90,91,92,93,94,95,96,622,97,98,99,100,101,102,103,106,107,110,130,131,132,133,134,135,136,137,138,141,142,144,145,146,147,150,151,152,153,154,155,156,157,158,159,160,623,161,162,163,164,165,166,169,171,172,774,168,173,174,175,176,177,178,179,180,777,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,624,199,200,201,202,203,204,205,206,207,208,209,210,211,212,215,216,217,957,958,959,218,219,220,221,222,223,224,225,226,227,228,908,229,230,231,625,232,233,234,235,236,237,238,239,240,241,242,626,246,247,249,250,251,252,253,254,255,258,259,260,261,262,265,266,267,268,269,270,271,272,273,274,281,282,283,284,734,285,286,287,288,289,290,291,292,293,294,295,296,627,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,628,320,321,322,323,324,325,326,327,328,329,332,333,334,335,336,337,338,341,342,343,344,345,346,347,348,349,350,353,354,355,360,361,362,363,366,367,368,370,371,372,373,374,375,376,377,379,380,629,383,384,385,386,387,388,389,390,391,392,393,394,395,723,724,725,726,727,396,397,398,399,400,401,402,403,404,630,405,406,407,408,409,410,411,412,413,414,415,416,417,418,419,907,420,421,631,422,423,424,425,426,427,428,429,430,431,432,433,434,435,574,641,648,664,665,956,436,437,438,439,440,441,442,443,632,444,445,446,447,448,449,450,451,452,454,455,456,457,459,461,462,463,464,465,466,467,468,469,840,470,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,498,499,502,503,504,505,506,507,508,509,510,511,512,575,576,577,633,634,635,636,637,638,639,640,657,658,659,660,661,662,663,64,104,139,167,198,243,256,263,330,351,369,381,453,460,497]', '[4,5,6,7,8,9,12,13,14,72,73,74,75,77,78,80,81,82,83,85,86,200,201,203,204,205,206,207,208,215,217,283,284,286,287,288,289,293,294,295,377,464,465,466,467,468,487,488,502,503,504,507,508,509,1,71,79,198,281,285,369,460,483,497,506]', 1, 1),
-(2, 'api', 2, '普通管理员', '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,615,617,618,23,24,25,26,27,28,29,30,614,616,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,619,66,67,69,70,74,76,81,84,87,88,89,90,91,92,93,94,95,96,622,97,98,99,100,101,102,103,106,107,110,130,131,132,133,134,135,136,137,138,141,142,144,145,146,147,150,151,152,153,154,155,156,157,158,159,160,623,161,162,163,164,165,166,169,171,172,774,168,173,174,175,176,177,178,179,180,777,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,624,199,200,201,202,203,204,205,206,207,208,209,210,211,212,215,216,217,957,958,959,218,219,220,221,222,223,224,225,226,227,228,908,229,230,231,625,232,233,234,235,236,237,238,239,240,241,242,626,246,247,249,250,251,252,253,254,255,258,259,260,261,262,265,266,267,268,269,270,271,272,273,274,281,282,283,284,734,287,290,291,292,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,628,320,321,322,323,324,325,326,327,328,329,332,333,334,335,336,337,338,341,342,343,344,345,346,347,348,349,350,353,354,355,360,361,362,363,366,367,368,372,373,374,377,379,380,383,384,385,386,387,388,389,390,391,392,393,394,395,723,724,725,726,727,396,397,398,399,400,401,402,403,404,630,406,414,415,416,417,418,419,907,420,421,631,422,423,424,425,426,427,428,429,430,431,432,433,434,435,574,641,648,664,665,956,436,437,438,439,440,441,442,443,632,444,445,446,447,448,449,450,451,452,454,455,456,457,459,461,462,463,464,465,466,467,468,469,840,470,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,498,499,502,503,504,505,506,507,508,509,510,511,512,575,576,577,633,634,635,636,637,638,639,640,657,658,659,660,661,662,663,64,71,79,104,139,167,198,243,256,263,285,330,351,369,381,405,453,460,497]', '[4,5,6,7,8,9,10,11,12,13,14,377,465,467,487,488,502,503,504,507,508,509,1,369,460,483,497,506]', 2, 1),
+(1, 'api', 1, '超级管理员', '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,615,617,618,23,24,25,26,27,28,29,30,614,616,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,619,66,67,69,70,71,72,73,74,75,76,77,78,620,79,80,81,82,83,84,85,86,621,87,88,89,90,91,92,93,94,95,96,622,97,98,99,100,101,102,103,106,107,110,130,131,132,133,134,135,136,137,138,141,142,144,145,146,147,150,151,152,153,154,155,156,157,158,159,160,623,161,162,163,164,165,166,169,171,172,774,168,173,174,175,176,177,178,179,180,777,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,624,199,200,201,202,203,204,205,206,207,208,209,210,211,212,215,216,217,957,958,959,218,219,220,221,222,223,224,225,226,227,228,908,229,230,231,625,232,233,234,235,236,237,238,239,240,241,242,626,246,247,249,250,251,252,253,254,255,258,259,260,261,262,265,266,267,268,269,270,271,272,273,274,281,282,283,284,734,285,286,287,288,289,290,291,292,293,294,295,296,627,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,628,320,321,322,323,324,325,326,327,328,329,332,333,334,335,336,337,338,341,342,343,344,345,346,347,348,349,350,353,354,355,360,361,362,363,366,367,368,370,371,372,373,374,375,376,377,379,380,629,383,384,385,386,387,388,389,390,391,392,393,394,395,723,724,725,726,727,396,397,398,399,400,401,402,403,404,630,405,406,407,408,409,410,411,412,413,414,415,416,417,418,419,907,962,420,421,631,422,423,424,425,426,427,428,429,430,431,432,433,434,435,574,641,648,664,665,956,436,437,438,439,440,441,442,443,632,444,445,446,447,448,449,450,451,452,454,455,456,457,459,461,462,463,464,465,466,467,468,469,840,470,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,498,499,502,503,504,505,506,507,508,509,510,511,512,575,576,577,633,634,635,636,637,638,639,640,657,658,659,660,661,662,663,64,104,139,167,198,243,256,263,330,351,369,381,453,460,497]', '[4,5,6,7,8,9,12,13,14,72,73,74,75,77,78,80,81,82,83,85,86,200,201,203,204,205,206,207,208,215,217,283,284,286,287,288,289,293,294,295,377,464,465,466,467,468,487,488,502,503,504,507,508,509,1,71,79,198,281,285,369,460,483,497,506]', 1, 1),
+(2, 'api', 2, '普通管理员', '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,615,617,618,23,24,25,26,27,28,29,30,614,616,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,619,66,67,69,70,74,76,81,84,87,88,89,90,91,92,93,94,95,96,622,97,98,99,100,101,102,103,106,107,110,130,131,132,133,134,135,136,137,138,141,142,144,145,146,147,150,151,152,153,154,155,156,157,158,159,160,623,161,162,163,164,165,166,169,171,172,774,168,173,174,175,176,177,178,179,180,777,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,624,199,200,201,202,203,204,205,206,207,208,209,210,211,212,215,216,217,957,958,959,232,233,234,235,236,237,238,239,240,241,242,626,246,247,249,250,251,252,253,254,255,258,259,260,261,262,265,266,267,268,269,270,271,272,273,274,218,219,220,221,222,223,224,225,226,227,228,908,229,230,231,625,414,415,416,417,418,419,907,962,420,421,631,281,282,283,284,734,287,290,291,292,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,628,320,321,322,323,324,325,326,327,328,329,332,333,334,335,336,337,338,341,342,343,344,345,346,347,348,349,350,353,354,355,360,361,362,363,366,367,368,372,373,374,377,379,380,383,384,385,386,387,388,389,390,391,392,393,394,395,723,724,725,726,727,396,397,398,399,400,401,402,403,404,630,406,422,423,424,425,426,427,428,429,430,431,432,433,434,435,574,641,648,664,665,956,436,437,438,439,440,441,442,443,632,444,445,446,447,448,449,450,451,452,454,455,456,457,459,461,462,463,464,465,466,467,468,469,840,470,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,498,499,502,503,504,505,506,507,508,509,510,511,512,575,576,577,633,634,635,636,637,638,639,640,657,658,659,660,661,662,663,64,71,79,104,139,167,198,243,256,263,285,330,351,369,381,405,453,460,497]', '[4,5,6,7,8,9,10,11,12,13,14,377,465,467,487,488,502,503,504,507,508,509,1,369,460,483,497,506]', 2, 1),
 (3, 'api', 3, '普通顾客', '[617,616,46,51,52,59,60,61,65,66,68,69,70,93,94,95,105,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,138,143,144,145,146,148,149,156,157,171,172,774,180,777,189,195,202,209,210,211,213,214,216,957,958,959,237,238,239,244,245,248,249,253,254,255,257,261,262,264,266,275,276,277,278,279,280,291,292,296,304,305,306,307,308,309,310,316,331,335,336,337,338,339,340,341,342,343,346,347,348,349,350,352,354,355,356,357,358,359,360,364,365,367,372,379,380,381,382,383,384,392,394,395,400,401,402,404,418,419,907,425,427,428,433,434,574,641,648,956,440,441,448,449,451,452,455,456,457,461,462,463,464,465,467,469,840,471,472,473,474,475,476,477,478,479,480,481,482,489,490,491,492,493,494,495,496,498,499,500,501,505,506,507,508,509,510,511,512,637,638,660,663,15,23,40,47,55,64,87,104,130,139,150,167,173,182,190,198,232,243,256,263,285,297,311,330,351,369,385,393,396,414,422,436,444,453,460,497,633,657]', '[467,500,501,507,508,509,460,497,506]', 3, 1),
-(4, 'api', 4, '游客', '[13,617,616,46,51,52,59,60,61,93,94,95,115,138,156,157,170,180,189,195,202,209,210,211,213,214,216,957,958,959,237,238,239,249,253,254,255,282,316,341,342,378,392,394,395,400,401,402,404,418,419,907,425,427,428,433,434,574,641,648,956,440,441,448,449,458,461,462,463,464,472,473,474,491,492,493,494,495,496,637,660,663,1,15,23,40,47,55,87,113,130,150,167,173,182,190,198,232,243,281,311,330,369,385,393,396,414,422,436,444,453,460,633,657]', '[13,170,378,458,1,167,369,453]', 4, 1),
+(4, 'api', 4, '游客', '[13,617,616,46,51,52,59,60,61,93,94,95,115,138,156,157,170,180,189,195,202,209,210,211,213,214,216,957,958,959,237,238,239,249,253,254,255,418,419,907,282,316,341,342,378,392,394,395,400,401,402,404,425,427,428,433,434,574,641,648,956,440,441,448,449,458,461,462,463,464,472,473,474,491,492,493,494,495,496,637,660,663,1,15,23,40,47,55,87,113,130,150,167,173,182,190,198,232,243,414,281,311,330,369,385,393,396,422,436,444,453,460,633,657]', '[13,170,378,458,1,167,369,453]', 4, 1),
 (5, 'admin', 1, '超级管理员', '[513,534,535,536,679,514,871,872,960,873,940,941,948,947,952,949,942,944,945,946,950,954,955,882,874,884,885,886,887,888,889,890,875,891,892,893,894,897,898,895,896,876,901,902,903,904,905,906,878,909,910,911,912,913,914,915,877,916,917,918,919,920,921,923,924,879,880,932,933,934,935,936,937,939,938,881,927,928,929,930,931,515,867,868,865,866,869,870,516,854,857,858,859,855,860,861,856,862,864,517,819,812,813,828,829,830,831,832,833,834,835,836,846,847,848,849,837,841,842,843,844,845,838,839,814,820,821,822,823,651,815,816,824,825,826,827,817,818,852,850,851,518,519,520,735,523,524,587,541,542,543,544,545,546,525,526,588,547,548,549,550,551,552,528,589,529,530,531,532,533,527,590,553,554,555,556,557,558,538,559,560,591,567,568,569,570,561,592,578,579,580,583,584,585,586,562,593,594,595,596,598,599,563,564,600,601,602,603,604,605,565,606,607,608,609,610,612,613,571,572,667,668,669,670,671,672,674,673,675,676,677,678,573,642,643,644,645,646,647,539,540,686,687,688,689,690,566,680,681,682,683,684,685,652,656,706,714,715,716,717,718,719,698,707,720,721,722,653,691,692,696,693,697,694,695,654,699,700,701,702,703,704,705,655,708,728,729,730,731,521,740,712,713,733,732,741,742,743,744,745,746,747,710,748,751,752,753,754,755,756,650,709,757,764,765,766,767,768,758,769,770,771,772,773,760,778,779,780,781,785,782,786,787,788,789,790,783,784,759,804,805,711,802,806,807,808,809,810,811,522]', '[]', 1, 1),
 (6, 'admin', 2, '普通管理员', '[535,679,871,960,884,891,901,909,916,932,927,819,828,846,841,820,651,824,852,518,519,735,587,588,589,590,538,591,592,593,600,606,667,678,642,540,686,687,688,689,690,680,706,707,691,699,708,731,740,733,741,751,650,764,769,778,786,804,806,522,513,534,514,872,882,874,875,876,878,877,879,880,881,517,812,813,834,836,837,814,815,816,817,818,520,523,524,525,526,528,527,559,560,561,562,563,564,565,571,572,573,539,566,652,656,698,653,654,655,521,712,732,710,748,709,757,758,760,782,759,711,802]', '[]', 2, 1),
 (27, 'home', 1, '超级管理员', '[]', '[]', 1, 0),
@@ -2210,7 +2210,7 @@ INSERT INTO `cs_goods_attribute` (`goods_attribute_id`, `parent_id`, `attr_name`
 (24, 20, '机身厚度', '', '', 1, 0, 0, '[]', 0, 5, 0),
 (25, 20, '重量', '', '', 1, 0, 0, '[]', 0, 2, 0),
 (26, 20, '机身材质', '', '', 1, 0, 1, '[\"塑料\",\"玻璃\",\"合金\",\"其他\"]', 0, 6, 0),
-(27, 12, '特意出现比较长的内容用来测试样式', '', '', 1, 0, 0, '[]', 0, 50, 0),
+(27, 12, '特意出现比较长的内容用来测试样式', '', '', 1, 0, 0, '[\"默认值\"]', 0, 50, 0),
 (28, 4, '测试手工填写', '', '', 2, 0, 0, '[\"测试手工填写测试手工填写测试手工填写\",\"AAA测试手工填写AAA\"]', 0, 50, 1),
 (29, 4, '属性', '', '', 2, 0, 2, '[\"1\",\"2\",\"3\"]', 1, 50, 0),
 (30, 4, '测试手工填写', '', '', 2, 0, 0, '[\"测试手工填写\",\"AAA测试手工填写AAA\"]', 1, 50, 1),
@@ -3444,7 +3444,7 @@ CREATE TABLE `cs_menu` (
 --
 
 INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
-(1, 0, '管理组账户', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(1, 0, '管理组账户', '', '', '', 'api', 0, '', '', '_self', 0, 1, 1),
 (2, 1, '验证账号是否合法', '', '', '', 'api', 0, 'api/v1/admin/check.admin.username', '', '_self', 0, 50, 1),
 (3, 1, '验证账号昵称是否合法', '', '', '', 'api', 0, 'api/v1/admin/check.admin.nickname', '', '_self', 0, 50, 1),
 (4, 1, '添加一个账号', '', '', '', 'api', 0, 'api/v1/admin/add.admin.item', '', '_self', 0, 50, 1),
@@ -3458,7 +3458,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (12, 1, '注销账号', '', '', '', 'api', 0, 'api/v1/admin/logout.admin.user', '', '_self', 0, 50, 1),
 (13, 1, '登录账号', '', '', '', 'api', 0, 'api/v1/admin/login.admin.user', '', '_self', 0, 50, 1),
 (14, 1, '刷新Token', '', '', '', 'api', 0, 'api/v1/admin/refresh.admin.token', '', '_self', 0, 50, 1),
-(15, 0, '广告管理', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(15, 0, '广告管理', '', '', '', 'api', 0, '', '', '_self', 0, 2, 1),
 (16, 15, '添加一个广告', '', '', '', 'api', 0, 'api/v1/ads/add.ads.item', '', '_self', 0, 50, 1),
 (17, 15, '编辑一个广告', '', '', '', 'api', 0, 'api/v1/ads/set.ads.item', '', '_self', 0, 50, 1),
 (18, 15, '批量删除广告', '', '', '', 'api', 0, 'api/v1/ads/del.ads.list', '', '_self', 0, 50, 1),
@@ -3466,7 +3466,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (20, 15, '批量设置广告是否显示', '', '', '', 'api', 0, 'api/v1/ads/set.ads.status', '', '_self', 0, 50, 1),
 (21, 15, '获取一个广告', '', '', '', 'api', 0, 'api/v1/ads/get.ads.item', '', '_self', 0, 50, 1),
 (22, 15, '获取广告列表', '', '', '', 'api', 0, 'api/v1/ads/get.ads.list', '', '_self', 0, 50, 1),
-(23, 0, '广告位置', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(23, 0, '广告位置', '', '', '', 'api', 0, '', '', '_self', 0, 3, 1),
 (24, 23, '添加一个广告位置', '', '', '', 'api', 0, 'api/v1/ads_position/add.ads.position.item', '', '_self', 0, 50, 1),
 (25, 23, '编辑一个广告位置', '', '', '', 'api', 0, 'api/v1/ads_position/set.ads.position.item', '', '_self', 0, 50, 1),
 (26, 23, '批量删除广告位置', '', '', '', 'api', 0, 'api/v1/ads_position/del.ads.position.list', '', '_self', 0, 50, 1),
@@ -3474,7 +3474,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (28, 23, '获取一个广告位置', '', '', '', 'api', 0, 'api/v1/ads_position/get.ads.position.item', '', '_self', 0, 50, 1),
 (29, 23, '获取广告位置列表', '', '', '', 'api', 0, 'api/v1/ads_position/get.ads.position.list', '', '_self', 0, 50, 1),
 (30, 23, '批量设置广告位置状态', '', '', '', 'api', 0, 'api/v1/ads_position/set.ads.position.status', '', '_self', 0, 50, 1),
-(31, 0, '应用管理', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(31, 0, '应用管理', '', '', '', 'api', 0, '', '', '_self', 0, 4, 1),
 (32, 31, '添加一个应用', '', '', '', 'api', 0, 'api/v1/app/add.app.item', '', '_self', 0, 50, 1),
 (33, 31, '编辑一个应用', '', '', '', 'api', 0, 'api/v1/app/set.app.item', '', '_self', 0, 50, 1),
 (34, 31, '获取一个应用', '', '', '', 'api', 0, 'api/v1/app/get.app.item', '', '_self', 0, 50, 1),
@@ -3483,14 +3483,14 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (37, 31, '查询应用名称是否已存在', '', '', '', 'api', 0, 'api/v1/app/unique.app.name', '', '_self', 0, 50, 1),
 (38, 31, '更换应用Secret', '', '', '', 'api', 0, 'api/v1/app/replace.app.secret', '', '_self', 0, 50, 1),
 (39, 31, '批量设置应用状态', '', '', '', 'api', 0, 'api/v1/app/set.app.status', '', '_self', 0, 50, 1),
-(40, 0, '应用安装包', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(40, 0, '应用安装包', '', '', '', 'api', 0, '', '', '_self', 0, 5, 1),
 (41, 40, '添加一个应用安装包', '', '', '', 'api', 0, 'api/v1/app_install/add.app.install.item', '', '_self', 0, 50, 1),
 (42, 40, '编辑一个应用安装包', '', '', '', 'api', 0, 'api/v1/app_install/set.app.install.item', '', '_self', 0, 50, 1),
 (43, 40, '获取一个应用安装包', '', '', '', 'api', 0, 'api/v1/app_install/get.app.install.item', '', '_self', 0, 50, 1),
 (44, 40, '批量删除应用安装包', '', '', '', 'api', 0, 'api/v1/app_install/del.app.install.list', '', '_self', 0, 50, 1),
 (45, 40, '获取应用安装包列表', '', '', '', 'api', 0, 'api/v1/app_install/get.app.install.list', '', '_self', 0, 50, 1),
 (46, 40, '根据请求获取一个应用安装包', '', '', '', 'api', 0, 'api/v1/app_install/request.app.install.item', '', '_self', 0, 50, 1),
-(47, 0, '文章管理', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(47, 0, '文章管理', '', '', '', 'api', 0, '', '', '_self', 0, 6, 1),
 (48, 47, '添加一篇文章', '', '', '', 'api', 0, 'api/v1/article/add.article.item', '', '_self', 0, 50, 1),
 (49, 47, '编辑一篇文章', '', '', '', 'api', 0, 'api/v1/article/set.article.item', '', '_self', 0, 50, 1),
 (50, 47, '批量删除文章', '', '', '', 'api', 0, 'api/v1/article/del.article.list', '', '_self', 0, 50, 1),
@@ -3498,7 +3498,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (52, 47, '获取文章列表', '', '', '', 'api', 0, 'api/v1/article/get.article.list', '', '_self', 0, 50, 1),
 (53, 47, '批量设置文章置顶', '', '', '', 'api', 0, 'api/v1/article/set.article.top', '', '_self', 0, 50, 1),
 (54, 47, '批量设置文章是否显示', '', '', '', 'api', 0, 'api/v1/article/set.article.status', '', '_self', 0, 50, 1),
-(55, 0, '文章分类', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(55, 0, '文章分类', '', '', '', 'api', 0, '', '', '_self', 0, 7, 1),
 (56, 55, '添加一个文章分类', '', '', '', 'api', 0, 'api/v1/article_cat/add.article.cat.item', '', '_self', 0, 50, 1),
 (57, 55, '编辑一个文章分类', '', '', '', 'api', 0, 'api/v1/article_cat/set.article.cat.item', '', '_self', 0, 50, 1),
 (58, 55, '批量删除文章分类', '', '', '', 'api', 0, 'api/v1/article_cat/del.article.cat.list', '', '_self', 0, 50, 1),
@@ -3507,14 +3507,14 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (61, 55, '根据分类Id生成导航数据', '', '', '', 'api', 0, 'api/v1/article_cat/get.article.cat.navi', '', '_self', 0, 50, 1),
 (62, 55, '设置文章分类排序', '', '', '', 'api', 0, 'api/v1/article_cat/set.article.cat.sort', '', '_self', 0, 50, 1),
 (63, 55, '批量设置文章分类是否导航', '', '', '', 'api', 0, 'api/v1/article_cat/set.article.cat.navi', '', '_self', 0, 50, 1),
-(64, 0, '问答管理', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(64, 0, '问答管理', '', '', '', 'api', 0, '', '', '_self', 0, 8, 1),
 (65, 64, '添加一个新的咨询', '', '', '', 'api', 0, 'api/v1/ask/add.ask.item', '', '_self', 0, 50, 1),
 (66, 64, '删除一条记录', '', '', '', 'api', 0, 'api/v1/ask/del.ask.item', '', '_self', 0, 50, 1),
 (67, 64, '回复一个咨询', '', '', '', 'api', 0, 'api/v1/ask/reply.ask.item', '', '_self', 0, 50, 1),
 (68, 64, '在主题上继续提交咨询', '', '', '', 'api', 0, 'api/v1/ask/continue.ask.item', '', '_self', 0, 50, 1),
 (69, 64, '根据主题获取一个问答明细', '', '', '', 'api', 0, 'api/v1/ask/get.ask.item', '', '_self', 0, 50, 1),
 (70, 64, '获取咨询主题列表', '', '', '', 'api', 0, 'api/v1/ask/get.ask.list', '', '_self', 0, 50, 1),
-(71, 0, '用户组', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(71, 0, '用户组', '', '', '', 'api', 0, '', '', '_self', 0, 9, 1),
 (72, 71, '添加一个用户组', '', '', '', 'api', 0, 'api/v1/auth_group/add.auth.group.item', '', '_self', 0, 50, 1),
 (73, 71, '编辑一个用户组', '', '', '', 'api', 0, 'api/v1/auth_group/set.auth.group.item', '', '_self', 0, 50, 1),
 (74, 71, '获取一个用户组', '', '', '', 'api', 0, 'api/v1/auth_group/get.auth.group.item', '', '_self', 0, 50, 1),
@@ -3522,7 +3522,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (76, 71, '获取用户组列表', '', '', '', 'api', 0, 'api/v1/auth_group/get.auth.group.list', '', '_self', 0, 50, 1),
 (77, 71, '批量设置用户组状态', '', '', '', 'api', 0, 'api/v1/auth_group/set.auth.group.status', '', '_self', 0, 50, 1),
 (78, 71, '设置用户组排序', '', '', '', 'api', 0, 'api/v1/auth_group/set.auth.group.sort', '', '_self', 0, 50, 1),
-(79, 0, '权限规则', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(79, 0, '权限规则', '', '', '', 'api', 0, '', '', '_self', 0, 10, 1),
 (80, 79, '添加一条规则', '', '', '', 'api', 0, 'api/v1/auth_rule/add.auth.rule.item', '', '_self', 0, 50, 1),
 (81, 79, '获取一条规则', '', '', '', 'api', 0, 'api/v1/auth_rule/get.auth.rule.item', '', '_self', 0, 50, 1),
 (82, 79, '编辑一条规则', '', '', '', 'api', 0, 'api/v1/auth_rule/set.auth.rule.item', '', '_self', 0, 50, 1),
@@ -3530,7 +3530,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (84, 79, '获取规则列表', '', '', '', 'api', 0, 'api/v1/auth_rule/get.auth.rule.list', '', '_self', 0, 50, 1),
 (85, 79, '批量设置规则状态', '', '', '', 'api', 0, 'api/v1/auth_rule/set.auth.rule.status', '', '_self', 0, 50, 1),
 (86, 79, '设置规则排序', '', '', '', 'api', 0, 'api/v1/auth_rule/set.auth.rule.sort', '', '_self', 0, 50, 1),
-(87, 0, '品牌管理', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(87, 0, '品牌管理', '', '', '', 'api', 0, '', '', '_self', 0, 11, 1),
 (88, 87, '添加一个品牌', '', '', '', 'api', 0, 'api/v1/brand/add.brand.item', '', '_self', 0, 50, 1),
 (89, 87, '编辑一个品牌', '', '', '', 'api', 0, 'api/v1/brand/set.brand.item', '', '_self', 0, 50, 1),
 (90, 87, '批量删除品牌', '', '', '', 'api', 0, 'api/v1/brand/del.brand.list', '', '_self', 0, 50, 1),
@@ -3540,14 +3540,14 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (94, 87, '获取品牌列表', '', '', '', 'api', 0, 'api/v1/brand/get.brand.list', '', '_self', 0, 50, 1),
 (95, 87, '获取品牌选择列表', '', '', '', 'api', 0, 'api/v1/brand/get.brand.select', '', '_self', 0, 50, 1),
 (96, 87, '设置品牌排序', '', '', '', 'api', 0, 'api/v1/brand/set.brand.sort', '', '_self', 0, 50, 1),
-(97, 0, '购物卡', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(97, 0, '购物卡', '', '', '', 'api', 0, '', '', '_self', 0, 12, 1),
 (98, 97, '添加一条购物卡', '', '', '', 'api', 0, 'api/v1/card/add.card.item', '', '_self', 0, 50, 1),
 (99, 97, '编辑一条购物卡', '', '', '', 'api', 0, 'api/v1/card/set.card.item', '', '_self', 0, 50, 1),
 (100, 97, '获取一条购物卡', '', '', '', 'api', 0, 'api/v1/card/get.card.item', '', '_self', 0, 50, 1),
 (101, 97, '批量设置购物卡状态', '', '', '', 'api', 0, 'api/v1/card/set.card.status', '', '_self', 0, 50, 1),
 (102, 97, '批量删除购物卡', '', '', '', 'api', 0, 'api/v1/card/del.card.list', '', '_self', 0, 50, 1),
 (103, 97, '获取购物卡列表', '', '', '', 'api', 0, 'api/v1/card/get.card.list', '', '_self', 0, 50, 1),
-(104, 0, '购物卡使用', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(104, 0, '购物卡使用', '', '', '', 'api', 0, '', '', '_self', 0, 13, 1),
 (105, 104, '绑定购物卡', '', '', '', 'api', 0, 'api/v1/card_use/bind.card.use.item', '', '_self', 0, 50, 1),
 (106, 104, '批量设置购物卡是否有效', '', '', '', 'api', 0, 'api/v1/card_use/set.card.use.invalid', '', '_self', 0, 50, 1),
 (107, 104, '导出生成的购物卡', '', '', '', 'api', 0, 'api/v1/card_use/get.card.use.export', '', '_self', 0, 50, 1),
@@ -3556,7 +3556,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (110, 104, '获取已绑定的购物卡', '', '', '', 'api', 0, 'api/v1/card_use/get.card.use.list', '', '_self', 0, 50, 1),
 (111, 104, '根据商品Id列出可使用的购物卡', '', '', '', 'api', 0, 'api/v1/card_use/get.card.use.select', '', '_self', 0, 50, 1),
 (112, 104, '验证购物卡是否可使用', '', '', '', 'api', 0, 'api/v1/card_use/get.card.use.check', '', '_self', 0, 50, 1),
-(113, 0, '购物车', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(113, 0, '购物车', '', '', '', 'api', 0, '', '', '_self', 0, 14, 1),
 (114, 113, '添加或编辑购物车商品', '', '', '', 'api', 0, 'api/v1/cart/set.cart.item', '', '_self', 0, 50, 1),
 (115, 113, '验证是否允许添加或编辑购物车', '', '', '', 'api', 0, 'api/v1/cart/check.cart.goods', '', '_self', 0, 50, 1),
 (116, 113, '批量添加商品到购物车', '', '', '', 'api', 0, 'api/v1/cart/add.cart.list', '', '_self', 0, 50, 1),
@@ -3566,14 +3566,14 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (120, 113, '批量删除购物车商品', '', '', '', 'api', 0, 'api/v1/cart/del.cart.list', '', '_self', 0, 50, 1),
 (121, 113, '清空购物车', '', '', '', 'api', 0, 'api/v1/cart/clear.cart.list', '', '_self', 0, 50, 1),
 (122, 113, '请求商品立即购买', '', '', '', 'api', 0, 'api/v1/cart/create.cart.buynow', '', '_self', 0, 50, 1),
-(123, 0, '收藏夹', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(123, 0, '收藏夹', '', '', '', 'api', 0, '', '', '_self', 0, 15, 1),
 (124, 123, '添加一个商品收藏', '', '', '', 'api', 0, 'api/v1/collect/add.collect.item', '', '_self', 0, 50, 1),
 (125, 123, '批量删除商品收藏', '', '', '', 'api', 0, 'api/v1/collect/del.collect.list', '', '_self', 0, 50, 1),
 (126, 123, '清空商品收藏夹', '', '', '', 'api', 0, 'api/v1/collect/clear.collect.list', '', '_self', 0, 50, 1),
 (127, 123, '设置收藏商品是否置顶', '', '', '', 'api', 0, 'api/v1/collect/set.collect.top', '', '_self', 0, 50, 1),
 (128, 123, '获取商品收藏列表', '', '', '', 'api', 0, 'api/v1/collect/get.collect.list', '', '_self', 0, 50, 1),
 (129, 123, '获取商品收藏数量', '', '', '', 'api', 0, 'api/v1/collect/get.collect.count', '', '_self', 0, 50, 1),
-(130, 0, '优惠劵', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(130, 0, '优惠劵', '', '', '', 'api', 0, '', '', '_self', 0, 16, 1),
 (131, 130, '添加一张优惠劵', '', '', '', 'api', 0, 'api/v1/coupon/add.coupon.item', '', '_self', 0, 50, 1),
 (132, 130, '编辑一张优惠劵', '', '', '', 'api', 0, 'api/v1/coupon/set.coupon.item', '', '_self', 0, 50, 1),
 (133, 130, '获取一张优惠劵', '', '', '', 'api', 0, 'api/v1/coupon/get.coupon.item', '', '_self', 0, 50, 1),
@@ -3582,7 +3582,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (136, 130, '批量设置优惠劵状态', '', '', '', 'api', 0, 'api/v1/coupon/set.coupon.status', '', '_self', 0, 50, 1),
 (137, 130, '批量设置优惠劵是否失效', '', '', '', 'api', 0, 'api/v1/coupon/set.coupon.invalid', '', '_self', 0, 50, 1),
 (138, 130, '获取当前可领取的优惠劵列表', '', '', '', 'api', 0, 'api/v1/coupon/get.coupon.active', '', '_self', 0, 50, 1),
-(139, 0, '优惠劵发放', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(139, 0, '优惠劵发放', '', '', '', 'api', 0, '', '', '_self', 0, 17, 1),
 (140, 139, '使用优惠劵', '', '', '', 'api', 0, 'api/v1/coupon_give/use.coupon.item', '', '_self', 0, 50, 1),
 (141, 139, '指定用户发放优惠劵', '', '', '', 'api', 0, 'api/v1/coupon_give/give.coupon.user', '', '_self', 0, 50, 1),
 (142, 139, '生成线下优惠劵', '', '', '', 'api', 0, 'api/v1/coupon_give/give.coupon.live', '', '_self', 0, 50, 1),
@@ -3593,7 +3593,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (147, 139, '导出线下生成的优惠劵', '', '', '', 'api', 0, 'api/v1/coupon_give/get.coupon.give.export', '', '_self', 0, 50, 1),
 (148, 139, '根据商品Id列出可使用的优惠劵', '', '', '', 'api', 0, 'api/v1/coupon_give/get.coupon.give.select', '', '_self', 0, 50, 1),
 (149, 139, '验证优惠劵是否可使用', '', '', '', 'api', 0, 'api/v1/coupon_give/get.coupon.give.check', '', '_self', 0, 50, 1),
-(150, 0, '配送方式', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(150, 0, '配送方式', '', '', '', 'api', 0, '', '', '_self', 0, 18, 1),
 (151, 150, '添加一个配送方式', '', '', '', 'api', 0, 'api/v1/delivery/add.delivery.item', '', '_self', 0, 50, 1),
 (152, 150, '编辑一个配送方式', '', '', '', 'api', 0, 'api/v1/delivery/set.delivery.item', '', '_self', 0, 50, 1),
 (153, 150, '批量删除配送方式', '', '', '', 'api', 0, 'api/v1/delivery/del.delivery.list', '', '_self', 0, 50, 1),
@@ -3604,19 +3604,19 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (158, 150, '批量设置配送方式状态', '', '', '', 'api', 0, 'api/v1/delivery/set.delivery.status', '', '_self', 0, 50, 1),
 (159, 150, '验证快递公司编号是否唯一', '', '', '', 'api', 0, 'api/v1/delivery/unique.delivery.item.id', '', '_self', 0, 50, 1),
 (160, 150, '设置配送方式排序', '', '', '', 'api', 0, 'api/v1/delivery/set.delivery.sort', '', '_self', 0, 50, 1),
-(161, 0, '配送区域', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(161, 0, '配送区域', '', '', '', 'api', 0, '', '', '_self', 0, 19, 1),
 (162, 161, '添加一个配送区域', '', '', '', 'api', 0, 'api/v1/delivery_area/add.delivery.area.item', '', '_self', 0, 50, 1),
 (163, 161, '编辑一个配送区域', '', '', '', 'api', 0, 'api/v1/delivery_area/set.delivery.area.item', '', '_self', 0, 50, 1),
 (164, 161, '批量删除配送区域', '', '', '', 'api', 0, 'api/v1/delivery_area/del.delivery.area.list', '', '_self', 0, 50, 1),
 (165, 161, '获取一个配送区域', '', '', '', 'api', 0, 'api/v1/delivery_area/get.delivery.area.item', '', '_self', 0, 50, 1),
 (166, 161, '获取配送区域列表', '', '', '', 'api', 0, 'api/v1/delivery_area/get.delivery.area.list', '', '_self', 0, 50, 1),
-(167, 0, '配送轨迹', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(167, 0, '配送轨迹', '', '', '', 'api', 0, '', '', '_self', 0, 20, 1),
 (168, 167, '获取配送回调URL接口', '', '', '', 'api', 0, 'api/v1/delivery_dist/get.delivery.dist.callback', '', '_self', 0, 7, 1),
 (169, 167, '添加一条配送轨迹', '', '', '', 'api', 0, 'api/v1/delivery_dist/add.delivery.dist.item', '', '_self', 0, 1, 1),
 (170, 167, '接收推送过来的配送轨迹', '', '', '', 'api', 0, 'api/v1/delivery_dist/put.delivery.dist.data', '', '_self', 0, 2, 1),
 (171, 167, '根据流水号获取配送轨迹', '', '', '', 'api', 0, 'api/v1/delivery_dist/get.delivery.dist.code', '', '_self', 0, 3, 1),
 (172, 167, '获取配送轨迹列表', '', '', '', 'api', 0, 'api/v1/delivery_dist/get.delivery.dist.list', '', '_self', 0, 4, 1),
-(173, 0, '快递公司', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(173, 0, '快递公司', '', '', '', 'api', 0, '', '', '_self', 0, 21, 1),
 (174, 173, '添加一个快递公司', '', '', '', 'api', 0, 'api/v1/delivery_item/add.delivery.company.item', '', '_self', 0, 1, 1),
 (175, 173, '编辑一个快递公司', '', '', '', 'api', 0, 'api/v1/delivery_item/set.delivery.company.item', '', '_self', 0, 2, 1),
 (176, 173, '批量删除快递公司', '', '', '', 'api', 0, 'api/v1/delivery_item/del.delivery.company.list', '', '_self', 0, 3, 1),
@@ -3625,7 +3625,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (179, 173, '获取快递公司列表', '', '', '', 'api', 0, 'api/v1/delivery_item/get.delivery.company.list', '', '_self', 0, 6, 1),
 (180, 173, '获取快递公司选择列表', '', '', '', 'api', 0, 'api/v1/delivery_item/get.delivery.company.select', '', '_self', 0, 7, 1),
 (181, 173, '复制一个快递公司为\"热门类型\"', '', '', '', 'api', 0, 'api/v1/delivery_item/copy.delivery.company.hot', '', '_self', 0, 9, 1),
-(182, 0, '商品折扣', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(182, 0, '商品折扣', '', '', '', 'api', 0, '', '', '_self', 0, 22, 1),
 (183, 182, '添加一个商品折扣', '', '', '', 'api', 0, 'api/v1/discount/add.discount.item', '', '_self', 0, 50, 1),
 (184, 182, '编辑一个商品折扣', '', '', '', 'api', 0, 'api/v1/discount/set.discount.item', '', '_self', 0, 50, 1),
 (185, 182, '获取一个商品折扣', '', '', '', 'api', 0, 'api/v1/discount/get.discount.item', '', '_self', 0, 50, 1),
@@ -3633,7 +3633,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (187, 182, '批量设置商品折扣状态', '', '', '', 'api', 0, 'api/v1/discount/set.discount.status', '', '_self', 0, 50, 1),
 (188, 182, '获取商品折扣列表', '', '', '', 'api', 0, 'api/v1/discount/get.discount.list', '', '_self', 0, 50, 1),
 (189, 182, '根据商品编号获取折扣信息', '', '', '', 'api', 0, 'api/v1/discount/get.discount.goods.info', '', '_self', 0, 50, 1),
-(190, 0, '友情链接', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(190, 0, '友情链接', '', '', '', 'api', 0, '', '', '_self', 0, 23, 1),
 (191, 190, '添加一个友情链接', '', '', '', 'api', 0, 'api/v1/friend_link/add.friendlink.item', '', '_self', 0, 50, 1),
 (192, 190, '编辑一个友情链接', '', '', '', 'api', 0, 'api/v1/friend_link/set.friendlink.item', '', '_self', 0, 50, 1),
 (193, 190, '批量删除友情链接', '', '', '', 'api', 0, 'api/v1/friend_link/del.friendlink.list', '', '_self', 0, 50, 1),
@@ -3641,7 +3641,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (195, 190, '获取友情链接列表', '', '', '', 'api', 0, 'api/v1/friend_link/get.friendlink.list', '', '_self', 0, 50, 1),
 (196, 190, '批量设置友情链接状态', '', '', '', 'api', 0, 'api/v1/friend_link/set.friendlink.status', '', '_self', 0, 50, 1),
 (197, 190, '设置友情链接排序', '', '', '', 'api', 0, 'api/v1/friend_link/set.friendlink.sort', '', '_self', 0, 50, 1),
-(198, 0, '商品管理', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(198, 0, '商品管理', '', '', '', 'api', 0, '', '', '_self', 0, 24, 1),
 (199, 198, '检测商品货号是否唯一', '', '', '', 'api', 0, 'api/v1/goods/unique.goods.code', '', '_self', 0, 50, 1),
 (200, 198, '添加一个商品', '', '', '', 'api', 0, 'api/v1/goods/add.goods.item', '', '_self', 0, 50, 1),
 (201, 198, '编辑一个商品', '', '', '', 'api', 0, 'api/v1/goods/set.goods.item', '', '_self', 0, 50, 1),
@@ -3661,7 +3661,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (215, 198, '设置商品排序', '', '', '', 'api', 0, 'api/v1/goods/set.goods.sort', '', '_self', 0, 50, 1),
 (216, 198, '获取商品关键词联想词', '', '', '', 'api', 0, 'api/v1/goods/get.goods.keywords.suggest', '', '_self', 0, 50, 1),
 (217, 198, '复制一个商品', '', '', '', 'api', 0, 'api/v1/goods/copy.goods.item', '', '_self', 0, 50, 1),
-(218, 0, '商品属性', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(218, 0, '商品属性', '', '', '', 'api', 0, '', '', '_self', 0, 30, 1),
 (219, 218, '添加一个商品属性主体', '', '', '', 'api', 0, 'api/v1/goods_attribute/add.goods.attribute.body.item', '', '_self', 0, 1, 1),
 (220, 218, '编辑一个商品属性主体', '', '', '', 'api', 0, 'api/v1/goods_attribute/set.goods.attribute.body.item', '', '_self', 0, 2, 1),
 (221, 218, '获取一个商品属性主体', '', '', '', 'api', 0, 'api/v1/goods_attribute/get.goods.attribute.body.item', '', '_self', 0, 3, 1),
@@ -3675,7 +3675,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (229, 218, '批量设置商品属性检索', '', '', '', 'api', 0, 'api/v1/goods_attribute/set.goods.attribute.key', '', '_self', 0, 12, 1),
 (230, 218, '批量设置商品属性是否核心', '', '', '', 'api', 0, 'api/v1/goods_attribute/set.goods.attribute.important', '', '_self', 0, 13, 1),
 (231, 218, '设置商品属性排序', '', '', '', 'api', 0, 'api/v1/goods_attribute/set.goods.attribute.sort', '', '_self', 0, 14, 1),
-(232, 0, '商品分类', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(232, 0, '商品分类', '', '', '', 'api', 0, '', '', '_self', 0, 25, 1),
 (233, 232, '添加一个商品分类', '', '', '', 'api', 0, 'api/v1/goods_category/add.goods.category.item', '', '_self', 0, 50, 1),
 (234, 232, '编辑一个商品分类', '', '', '', 'api', 0, 'api/v1/goods_category/set.goods.category.item', '', '_self', 0, 50, 1),
 (235, 232, '批量删除商品分类', '', '', '', 'api', 0, 'api/v1/goods_category/del.goods.category.list', '', '_self', 0, 50, 1),
@@ -3686,7 +3686,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (240, 232, '批量设置商品分类是否显示', '', '', '', 'api', 0, 'api/v1/goods_category/set.goods.category.status', '', '_self', 0, 50, 1),
 (241, 232, '设置商品分类排序', '', '', '', 'api', 0, 'api/v1/goods_category/set.goods.category.sort', '', '_self', 0, 50, 1),
 (242, 232, '批量设置商品分类是否导航', '', '', '', 'api', 0, 'api/v1/goods_category/set.goods.category.navi', '', '_self', 0, 50, 1),
-(243, 0, '商品评价', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(243, 0, '商品评价', '', '', '', 'api', 0, '', '', '_self', 0, 26, 1),
 (244, 243, '添加一条新的商品评价', '', '', '', 'api', 0, 'api/v1/goods_comment/add.goods.comment.item', '', '_self', 0, 50, 1),
 (245, 243, '追加一条商品评价', '', '', '', 'api', 0, 'api/v1/goods_comment/add.goods.addition.item', '', '_self', 0, 50, 1),
 (246, 243, '回复一条商品评价或追加评价', '', '', '', 'api', 0, 'api/v1/goods_comment/reply.goods.comment.item', '', '_self', 0, 50, 1),
@@ -3699,18 +3699,18 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (253, 243, '获取一个商品评价数量', '', '', '', 'api', 0, 'api/v1/goods_comment/get.goods.comment.count', '', '_self', 0, 50, 1),
 (254, 243, '获取某个主评价的明细', '', '', '', 'api', 0, 'api/v1/goods_comment/get.goods.comment.item', '', '_self', 0, 50, 1),
 (255, 243, '获取评价列表', '', '', '', 'api', 0, 'api/v1/goods_comment/get.goods.comment.list', '', '_self', 0, 50, 1),
-(256, 0, '商品咨询', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(256, 0, '商品咨询', '', '', '', 'api', 0, '', '', '_self', 0, 27, 1),
 (257, 256, '添加一个新的商品咨询', '', '', '', 'api', 0, 'api/v1/goods_consult/add.goods.consult.item', '', '_self', 0, 50, 1),
 (258, 256, '批量删除商品咨询', '', '', '', 'api', 0, 'api/v1/goods_consult/del.goods.consult.list', '', '_self', 0, 50, 1),
 (259, 256, '批量设置是否前台显示', '', '', '', 'api', 0, 'api/v1/goods_consult/set.goods.consult.show', '', '_self', 0, 50, 1),
 (260, 256, '回复一个商品咨询', '', '', '', 'api', 0, 'api/v1/goods_consult/reply.goods.consult.item', '', '_self', 0, 50, 1),
 (261, 256, '根据主Id获取一个问答明细', '', '', '', 'api', 0, 'api/v1/goods_consult/get.goods.consult.item', '', '_self', 0, 50, 1),
 (262, 256, '获取商品咨询列表', '', '', '', 'api', 0, 'api/v1/goods_consult/get.goods.consult.list', '', '_self', 0, 50, 1),
-(263, 0, '商品评价回复', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(263, 0, '商品评价回复', '', '', '', 'api', 0, '', '', '_self', 0, 28, 1),
 (264, 263, '对商品评价添加一个回复', '', '', '', 'api', 0, 'api/v1/goods_reply/add.goods.reply.item', '', '_self', 0, 50, 1),
 (265, 263, '批量删除商品评价的回复', '', '', '', 'api', 0, 'api/v1/goods_reply/del.goods.reply.list', '', '_self', 0, 50, 1),
 (266, 263, '获取商品评价回复列表', '', '', '', 'api', 0, 'api/v1/goods_reply/get.goods.reply.list', '', '_self', 0, 50, 1),
-(267, 0, '商品模型', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(267, 0, '商品模型', '', '', '', 'api', 0, '', '', '_self', 0, 29, 1),
 (268, 267, '添加一个商品模型', '', '', '', 'api', 0, 'api/v1/goods_type/add.goods.type.item', '', '_self', 0, 50, 1),
 (269, 267, '编辑一个商品模型', '', '', '', 'api', 0, 'api/v1/goods_type/set.goods.type.item', '', '_self', 0, 50, 1),
 (270, 267, '批量删除商品模型', '', '', '', 'api', 0, 'api/v1/goods_type/del.goods.type.list', '', '_self', 0, 50, 1),
@@ -3718,17 +3718,17 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (272, 267, '获取一个商品模型', '', '', '', 'api', 0, 'api/v1/goods_type/get.goods.type.item', '', '_self', 0, 50, 1),
 (273, 267, '获取商品模型列表', '', '', '', 'api', 0, 'api/v1/goods_type/get.goods.type.list', '', '_self', 0, 50, 1),
 (274, 267, '获取商品模型选择列表', '', '', '', 'api', 0, 'api/v1/goods_type/get.goods.type.select', '', '_self', 0, 50, 1),
-(275, 0, '我的足迹', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(275, 0, '我的足迹', '', '', '', 'api', 0, '', '', '_self', 0, 32, 1),
 (276, 275, '添加一条我的足迹', '', '', '', 'api', 0, 'api/v1/history/add.history.item', '', '_self', 0, 50, 1),
 (277, 275, '批量删除我的足迹', '', '', '', 'api', 0, 'api/v1/history/del.history.list', '', '_self', 0, 50, 1),
 (278, 275, '清空我的足迹', '', '', '', 'api', 0, 'api/v1/history/clear.history.list', '', '_self', 0, 50, 1),
 (279, 275, '获取我的足迹数量', '', '', '', 'api', 0, 'api/v1/history/get.history.count', '', '_self', 0, 50, 1),
 (280, 275, '获取我的足迹列表', '', '', '', 'api', 0, 'api/v1/history/get.history.list', '', '_self', 0, 50, 1),
-(281, 0, 'API访问测试', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(281, 0, 'API访问测试', '', '', '', 'api', 0, '', '', '_self', 0, 33, 1),
 (282, 281, 'API访问测试接口', '', '', '', 'api', 0, 'api/v1/index/get.index.host', '', '_self', 0, 50, 1),
 (283, 281, '清空缓存', '', '', '', 'api', 0, 'api/v1/index/clear.cache.all', '', '_self', 0, 50, 1),
 (284, 281, '正式环境下调整为最优状态', '', '', '', 'api', 0, 'api/v1/index/set.system.optimize', '', '_self', 0, 50, 1),
-(285, 0, '菜单管理', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(285, 0, '菜单管理', '', '', '', 'api', 0, '', '', '_self', 0, 34, 1),
 (286, 285, '添加一个菜单', '', '', '', 'api', 0, 'api/v1/menu/add.menu.item', '', '_self', 0, 50, 1),
 (287, 285, '获取一个菜单', '', '', '', 'api', 0, 'api/v1/menu/get.menu.item', '', '_self', 0, 50, 1),
 (288, 285, '编辑一个菜单', '', '', '', 'api', 0, 'api/v1/menu/set.menu.item', '', '_self', 0, 50, 1),
@@ -3740,7 +3740,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (294, 285, '设置菜单排序', '', '', '', 'api', 0, 'api/v1/menu/set.menu.sort', '', '_self', 0, 50, 1),
 (295, 285, '设置菜单状态', '', '', '', 'api', 0, 'api/v1/menu/set.menu.status', '', '_self', 0, 50, 1),
 (296, 285, '根据权限获取菜单列表', '', '', '', 'api', 0, 'api/v1/menu/get.menu.auth.list', '', '_self', 0, 50, 1),
-(297, 0, '消息', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(297, 0, '消息', '', '', '', 'api', 0, '', '', '_self', 0, 35, 1),
 (298, 297, '添加一条消息', '', '', '', 'api', 0, 'api/v1/message/add.message.item', '', '_self', 0, 50, 1),
 (299, 297, '编辑一条消息', '', '', '', 'api', 0, 'api/v1/message/set.message.item', '', '_self', 0, 50, 1),
 (300, 297, '批量删除消息', '', '', '', 'api', 0, 'api/v1/message/del.message.list', '', '_self', 0, 50, 1),
@@ -3754,7 +3754,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (308, 297, '用户设置消息全部已读', '', '', '', 'api', 0, 'api/v1/message/set.message.user.allread', '', '_self', 0, 50, 1),
 (309, 297, '用户批量删除消息', '', '', '', 'api', 0, 'api/v1/message/del.message.user.list', '', '_self', 0, 50, 1),
 (310, 297, '用户删除全部消息', '', '', '', 'api', 0, 'api/v1/message/del.message.user.all', '', '_self', 0, 50, 1),
-(311, 0, '导航', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(311, 0, '导航', '', '', '', 'api', 0, '', '', '_self', 0, 36, 1),
 (312, 311, '添加一个导航', '', '', '', 'api', 0, 'api/v1/navigation/add.navigation.item', '', '_self', 0, 50, 1),
 (313, 311, '编辑一个导航', '', '', '', 'api', 0, 'api/v1/navigation/set.navigation.item', '', '_self', 0, 50, 1),
 (314, 311, '批量删除导航', '', '', '', 'api', 0, 'api/v1/navigation/del.navigation.list', '', '_self', 0, 50, 1),
@@ -3763,17 +3763,17 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (317, 311, '批量设置是否新开窗口', '', '', '', 'api', 0, 'api/v1/navigation/set.navigation.target', '', '_self', 0, 50, 1),
 (318, 311, '批量设置是否启用', '', '', '', 'api', 0, 'api/v1/navigation/set.navigation.status', '', '_self', 0, 50, 1),
 (319, 311, '设置导航排序', '', '', '', 'api', 0, 'api/v1/navigation/set.navigation.sort', '', '_self', 0, 50, 1),
-(320, 0, '通知系统', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(320, 0, '通知系统', '', '', '', 'api', 0, '', '', '_self', 0, 37, 1),
 (321, 320, '获取一个通知系统', '', '', '', 'api', 0, 'api/v1/notice/get.notice.item', '', '_self', 0, 50, 1),
 (322, 320, '获取通知系统列表', '', '', '', 'api', 0, 'api/v1/notice/get.notice.list', '', '_self', 0, 50, 1),
 (323, 320, '批量设置通知系统是否启用', '', '', '', 'api', 0, 'api/v1/notice/set.notice.status', '', '_self', 0, 50, 1),
 (324, 320, '设置一个通知系统', '', '', '', 'api', 0, 'api/v1/notice/set.notice.item', '', '_self', 0, 50, 1),
-(325, 0, '通知系统模板', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(325, 0, '通知系统模板', '', '', '', 'api', 0, '', '', '_self', 0, 38, 1),
 (326, 325, '获取一个通知系统模板', '', '', '', 'api', 0, 'api/v1/notice_tpl/get.notice.tpl.item', '', '_self', 0, 50, 1),
 (327, 325, '获取通知系统模板列表', '', '', '', 'api', 0, 'api/v1/notice_tpl/get.notice.tpl.list', '', '_self', 0, 50, 1),
 (328, 325, '编辑一个通知系统模板', '', '', '', 'api', 0, 'api/v1/notice_tpl/set.notice.tpl.item', '', '_self', 0, 50, 1),
 (329, 325, '批量设置通知系统模板是否启用', '', '', '', 'api', 0, 'api/v1/notice_tpl/set.notice.tpl.status', '', '_self', 0, 50, 1),
-(330, 0, '订单管理', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(330, 0, '订单管理', '', '', '', 'api', 0, '', '', '_self', 0, 39, 1),
 (331, 330, '获取订单确认或提交订单', '', '', '', 'api', 0, 'api/v1/order/confirm.order.list', '', '_self', 0, 50, 1),
 (332, 330, '调整订单应付金额', '', '', '', 'api', 0, 'api/v1/order/change.price.order.item', '', '_self', 0, 50, 1),
 (333, 330, '添加或编辑卖家备注', '', '', '', 'api', 0, 'api/v1/order/remark.order.item', '', '_self', 0, 50, 1),
@@ -3791,10 +3791,10 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (345, 330, '订单设为发货状态', '', '', '', 'api', 0, 'api/v1/order/delivery.order.item', '', '_self', 0, 50, 1),
 (346, 330, '订单确认收货', '', '', '', 'api', 0, 'api/v1/order/complete.order.item', '', '_self', 0, 50, 1),
 (347, 330, '获取一个订单商品明细', '', '', '', 'api', 0, 'api/v1/order/get.order.goods.item', '', '_self', 0, 50, 1),
-(348, 0, '订单退款', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(348, 0, '订单退款', '', '', '', 'api', 0, '', '', '_self', 0, 40, 1),
 (349, 348, '查询一笔退款记录', '', '', '', 'api', 0, 'api/v1/order_refund/query.refund.item', '', '_self', 0, 50, 1),
 (350, 348, '获取退款记录列表', '', '', '', 'api', 0, 'api/v1/order_refund/get.refund.list', '', '_self', 0, 50, 1),
-(351, 0, '售后服务', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(351, 0, '售后服务', '', '', '', 'api', 0, '', '', '_self', 0, 41, 1),
 (352, 351, '获取订单商品可申请的售后服务', '', '', '', 'api', 0, 'api/v1/order_service/get.order.service.goods', '', '_self', 0, 50, 1),
 (353, 351, '客服对售后服务单添加备注(顾客不可见)', '', '', '', 'api', 0, 'api/v1/order_service/set.order.service.remark', '', '_self', 0, 50, 1),
 (354, 351, '获取一个售后服务单', '', '', '', 'api', 0, 'api/v1/order_service/get.order.service.item', '', '_self', 0, 50, 1),
@@ -3812,7 +3812,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (366, 351, '设置一个售后服务单状态(售后中)', '', '', '', 'api', 0, 'api/v1/order_service/set.order.service.after', '', '_self', 0, 50, 1),
 (367, 351, '撤销一个售后服务单', '', '', '', 'api', 0, 'api/v1/order_service/set.order.service.cancel', '', '_self', 0, 50, 1),
 (368, 351, '完成一个售后服务单', '', '', '', 'api', 0, 'api/v1/order_service/set.order.service.complete', '', '_self', 0, 50, 1),
-(369, 0, '支付管理', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(369, 0, '支付管理', '', '', '', 'api', 0, '', '', '_self', 0, 42, 1),
 (370, 369, '编辑一个支付配置', '', '', '', 'api', 0, 'api/v1/payment/set.payment.item', '', '_self', 0, 50, 1),
 (371, 369, '获取一个支付配置', '', '', '', 'api', 0, 'api/v1/payment/get.payment.item', '', '_self', 0, 50, 1),
 (372, 369, '获取支付配置列表', '', '', '', 'api', 0, 'api/v1/payment/get.payment.list', '', '_self', 0, 50, 1),
@@ -3824,11 +3824,11 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (378, 369, '接收支付返回内容', '', '', '', 'api', 0, 'api/v1/payment/put.payment.data', '', '_self', 0, 50, 1),
 (379, 369, '账号在线充值余额', '', '', '', 'api', 0, 'api/v1/payment/user.payment.pay', '', '_self', 0, 50, 1),
 (380, 369, '订单付款在线支付', '', '', '', 'api', 0, 'api/v1/payment/order.payment.pay', '', '_self', 0, 50, 1),
-(381, 0, '支付日志', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(381, 0, '支付日志', '', '', '', 'api', 0, '', '', '_self', 0, 43, 1),
 (382, 381, '关闭一笔充值记录', '', '', '', 'api', 0, 'api/v1/payment_log/close.payment.log.item', '', '_self', 0, 50, 1),
 (383, 381, '获取一笔充值记录', '', '', '', 'api', 0, 'api/v1/payment_log/get.payment.log.item', '', '_self', 0, 50, 1),
 (384, 381, '获取充值记录列表', '', '', '', 'api', 0, 'api/v1/payment_log/get.payment.log.list', '', '_self', 0, 50, 1),
-(385, 0, '订单促销', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(385, 0, '订单促销', '', '', '', 'api', 0, '', '', '_self', 0, 44, 1),
 (386, 385, '添加一个订单促销', '', '', '', 'api', 0, 'api/v1/promotion/add.promotion.item', '', '_self', 0, 50, 1),
 (387, 385, '编辑一个订单促销', '', '', '', 'api', 0, 'api/v1/promotion/set.promotion.item', '', '_self', 0, 50, 1),
 (388, 385, '获取一个订单促销', '', '', '', 'api', 0, 'api/v1/promotion/get.promotion.item', '', '_self', 0, 50, 1),
@@ -3836,10 +3836,10 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (390, 385, '批量删除订单促销', '', '', '', 'api', 0, 'api/v1/promotion/del.promotion.list', '', '_self', 0, 50, 1),
 (391, 385, '获取订单促销列表', '', '', '', 'api', 0, 'api/v1/promotion/get.promotion.list', '', '_self', 0, 50, 1),
 (392, 385, '获取正在进行的促销列表', '', '', '', 'api', 0, 'api/v1/promotion/get.promotion.active', '', '_self', 0, 50, 1),
-(393, 0, '二维码', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(393, 0, '二维码', '', '', '', 'api', 0, '', '', '_self', 0, 45, 1),
 (394, 393, '动态生成一个二维码', '', '', '', 'api', 0, 'api/v1/qrcode/get.qrcode.item', '', '_self', 0, 50, 1),
 (395, 393, '获取二维码调用地址', '', '', '', 'api', 0, 'api/v1/qrcode/get.qrcode.callurl', '', '_self', 0, 50, 1),
-(396, 0, '区域', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(396, 0, '区域', '', '', '', 'api', 0, '', '', '_self', 0, 46, 1),
 (397, 396, '添加一个区域', '', '', '', 'api', 0, 'api/v1/region/add.region.item', '', '_self', 0, 50, 1),
 (398, 396, '编辑一个区域', '', '', '', 'api', 0, 'api/v1/region/set.region.item', '', '_self', 0, 50, 1),
 (399, 396, '批量删除区域', '', '', '', 'api', 0, 'api/v1/region/del.region.list', '', '_self', 0, 50, 1),
@@ -3848,7 +3848,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (402, 396, '获取指定Id下的所有子节点(包含本身)', '', '', '', 'api', 0, 'api/v1/region/get.region.son.list', '', '_self', 0, 50, 1),
 (403, 396, '设置区域排序', '', '', '', 'api', 0, 'api/v1/region/set.region.sort', '', '_self', 0, 50, 1),
 (404, 396, '根据区域编号获取区域名称', '', '', '', 'api', 0, 'api/v1/region/get.region.name', '', '_self', 0, 50, 1),
-(405, 0, '系统配置', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(405, 0, '系统配置', '', '', '', 'api', 0, '', '', '_self', 0, 47, 1),
 (406, 405, '获取某个模块的设置', '', '', '', 'api', 0, 'api/v1/setting/get.setting.list', '', '_self', 0, 50, 1),
 (407, 405, '设置配送轨迹', '', '', '', 'api', 0, 'api/v1/setting/set.delivery.dist.list', '', '_self', 0, 50, 1),
 (408, 405, '设置支付完成提示页', '', '', '', 'api', 0, 'api/v1/setting/set.payment.list', '', '_self', 0, 50, 1),
@@ -3857,15 +3857,15 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (411, 405, '设置售后服务', '', '', '', 'api', 0, 'api/v1/setting/set.service.list', '', '_self', 0, 50, 1),
 (412, 405, '设置系统配置', '', '', '', 'api', 0, 'api/v1/setting/set.system.list', '', '_self', 0, 50, 1),
 (413, 405, '设置上传配置', '', '', '', 'api', 0, 'api/v1/setting/set.upload.list', '', '_self', 0, 50, 1),
-(414, 0, '商品规格', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(414, 0, '商品规格', '', '', '', 'api', 0, '', '', '_self', 0, 31, 1),
 (415, 414, '添加一个商品规格', '', '', '', 'api', 0, 'api/v1/spec/add.goods.spec.item', '', '_self', 0, 1, 1),
 (416, 414, '编辑一个商品规格', '', '', '', 'api', 0, 'api/v1/spec/set.goods.spec.item', '', '_self', 0, 2, 1),
 (417, 414, '批量删除商品规格', '', '', '', 'api', 0, 'api/v1/spec/del.goods.spec.list', '', '_self', 0, 3, 1),
 (418, 414, '获取一条商品规格', '', '', '', 'api', 0, 'api/v1/spec/get.goods.spec.item', '', '_self', 0, 4, 1),
 (419, 414, '获取商品规格列表', '', '', '', 'api', 0, 'api/v1/spec/get.goods.spec.list', '', '_self', 0, 5, 1),
-(420, 414, '批量设置商品规格检索', '', '', '', 'api', 0, 'api/v1/spec/set.goods.spec.key', '', '_self', 0, 7, 1),
-(421, 414, '设置商品规格排序', '', '', '', 'api', 0, 'api/v1/spec/set.goods.spec.sort', '', '_self', 0, 8, 1),
-(422, 0, '资源管理', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(420, 414, '批量设置商品规格检索', '', '', '', 'api', 0, 'api/v1/spec/set.goods.spec.key', '', '_self', 0, 8, 1),
+(421, 414, '设置商品规格排序', '', '', '', 'api', 0, 'api/v1/spec/set.goods.spec.sort', '', '_self', 0, 9, 1),
+(422, 0, '资源管理', '', '', '', 'api', 0, '', '', '_self', 0, 48, 1),
 (423, 422, '添加一个资源目录', '', '', '', 'api', 0, 'api/v1/storage/add.storage.directory.item', '', '_self', 0, 50, 1),
 (424, 422, '编辑一个资源目录', '', '', '', 'api', 0, 'api/v1/storage/set.storage.directory.item', '', '_self', 0, 50, 1),
 (425, 422, '获取资源目录选择列表', '', '', '', 'api', 0, 'api/v1/storage/get.storage.directory.select', '', '_self', 0, 50, 1),
@@ -3879,7 +3879,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (433, 422, '获取资源缩略图', '', '', '', 'api', 0, 'api/v1/storage/get.storage.thumb', '', '_self', 0, 50, 1),
 (434, 422, '获取资源缩略图实际路径', '', '', '', 'api', 0, 'api/v1/storage/get.storage.thumb.url', '', '_self', 0, 50, 1),
 (435, 422, '批量删除资源', '', '', '', 'api', 0, 'api/v1/storage/del.storage.list', '', '_self', 0, 50, 1),
-(436, 0, '客服', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(436, 0, '客服', '', '', '', 'api', 0, '', '', '_self', 0, 49, 1),
 (437, 436, '添加一名客服', '', '', '', 'api', 0, 'api/v1/support/add.support.item', '', '_self', 0, 50, 1),
 (438, 436, '编辑一名客服', '', '', '', 'api', 0, 'api/v1/support/set.support.item', '', '_self', 0, 50, 1),
 (439, 436, '批量删除客服', '', '', '', 'api', 0, 'api/v1/support/del.support.list', '', '_self', 0, 50, 1),
@@ -3894,16 +3894,16 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (448, 444, '获取一个专题', '', '', '', 'api', 0, 'api/v1/topic/get.topic.item', '', '_self', 0, 50, 1),
 (449, 444, '获取专题列表', '', '', '', 'api', 0, 'api/v1/topic/get.topic.list', '', '_self', 0, 50, 1),
 (450, 444, '批量设置专题是否显示', '', '', '', 'api', 0, 'api/v1/topic/set.topic.status', '', '_self', 0, 50, 1),
-(451, 0, '交易结算', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(451, 0, '交易结算', '', '', '', 'api', 0, '', '', '_self', 0, 51, 1),
 (452, 451, '获取交易结算列表', '', '', '', 'api', 0, 'api/v1/transaction/get.transaction.list', '', '_self', 0, 50, 1),
-(453, 0, '资源上传', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(453, 0, '资源上传', '', '', '', 'api', 0, '', '', '_self', 0, 52, 1),
 (454, 453, '获取上传模块列表', '', '', '', 'api', 0, 'api/v1/upload/get.upload.module', '', '_self', 0, 50, 1),
 (455, 453, '获取上传地址', '', '', '', 'api', 0, 'api/v1/upload/get.upload.url', '', '_self', 0, 50, 1),
 (456, 453, '获取上传Token', '', '', '', 'api', 0, 'api/v1/upload/get.upload.token', '', '_self', 0, 50, 1),
 (457, 453, '资源上传请求', '', '', '', 'api', 0, 'api/v1/upload/add.upload.list', '', '_self', 0, 50, 1),
 (458, 453, '接收第三方推送数据', '', '', '', 'api', 0, 'api/v1/upload/put.upload.data', '', '_self', 0, 50, 1),
 (459, 453, '替换上传资源', '', '', '', 'api', 0, 'api/v1/upload/replace.upload.item', '', '_self', 0, 50, 1),
-(460, 0, '账号管理', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(460, 0, '账号管理', '', '', '', 'api', 0, '', '', '_self', 0, 53, 1),
 (461, 460, '验证账号是否合法', '', '', '', 'api', 0, 'api/v1/user/check.user.username', '', '_self', 0, 1, 1),
 (462, 460, '验证账号手机是否合法', '', '', '', 'api', 0, 'api/v1/user/check.user.mobile', '', '_self', 0, 2, 1),
 (463, 460, '验证账号昵称是否合法', '', '', '', 'api', 0, 'api/v1/user/check.user.nickname', '', '_self', 0, 3, 1),
@@ -3918,7 +3918,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (472, 460, '登录账号', '', '', '', 'api', 0, 'api/v1/user/login.user.user', '', '_self', 0, 13, 1),
 (473, 460, '刷新Token', '', '', '', 'api', 0, 'api/v1/user/refresh.user.token', '', '_self', 0, 14, 1),
 (474, 460, '忘记密码', '', '', '', 'api', 0, 'api/v1/user/find.user.password', '', '_self', 0, 15, 1),
-(475, 0, '收货地址', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(475, 0, '收货地址', '', '', '', 'api', 0, '', '', '_self', 0, 54, 1),
 (476, 475, '获取指定账号的收货地址列表', '', '', '', 'api', 0, 'api/v1/user_address/get.user.address.list', '', '_self', 0, 50, 1),
 (477, 475, '获取指定账号的一个收货地址', '', '', '', 'api', 0, 'api/v1/user_address/get.user.address.item', '', '_self', 0, 50, 1),
 (478, 475, '添加一个收货地址', '', '', '', 'api', 0, 'api/v1/user_address/add.user.address.item', '', '_self', 0, 50, 1),
@@ -3926,22 +3926,22 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (480, 475, '批量删除收货地址', '', '', '', 'api', 0, 'api/v1/user_address/del.user.address.list', '', '_self', 0, 50, 1),
 (481, 475, '设置一个收货地址为默认', '', '', '', 'api', 0, 'api/v1/user_address/set.user.address.default', '', '_self', 0, 50, 1),
 (482, 475, '检测是否超出最大添加数量', '', '', '', 'api', 0, 'api/v1/user_address/is.user.address.maximum', '', '_self', 0, 50, 1),
-(483, 0, '账号等级', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(483, 0, '账号等级', '', '', '', 'api', 0, '', '', '_self', 0, 55, 1),
 (484, 483, '获取一个账号等级', '', '', '', 'api', 0, 'api/v1/user_level/get.user.level.item', '', '_self', 0, 50, 1),
 (485, 483, '获取账号等级列表', '', '', '', 'api', 0, 'api/v1/user_level/get.user.level.list', '', '_self', 0, 50, 1),
 (486, 483, '添加一个账号等级', '', '', '', 'api', 0, 'api/v1/user_level/add.user.level.item', '', '_self', 0, 50, 1),
 (487, 483, '编辑一个账号等级', '', '', '', 'api', 0, 'api/v1/user_level/set.user.level.item', '', '_self', 0, 50, 1),
 (488, 483, '批量删除账号等级', '', '', '', 'api', 0, 'api/v1/user_level/del.user.level.list', '', '_self', 0, 50, 1),
-(489, 0, '账号资金', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(489, 0, '账号资金', '', '', '', 'api', 0, '', '', '_self', 0, 56, 1),
 (490, 489, '获取指定账号资金信息', '', '', '', 'api', 0, 'api/v1/user_money/get.user.money.info', '', '_self', 0, 50, 1),
-(491, 0, '验证码', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(491, 0, '验证码', '', '', '', 'api', 0, '', '', '_self', 0, 57, 1),
 (492, 491, '使用验证码', '', '', '', 'api', 0, 'api/v1/verification/use.verification.item', '', '_self', 0, 50, 1);
 INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
 (493, 491, '发送短信验证码', '', '', '', 'api', 0, 'api/v1/verification/send.verification.sms', '', '_self', 0, 50, 1),
 (494, 491, '发送邮件验证码', '', '', '', 'api', 0, 'api/v1/verification/send.verification.email', '', '_self', 0, 50, 1),
 (495, 491, '验证短信验证码', '', '', '', 'api', 0, 'api/v1/verification/ver.verification.sms', '', '_self', 0, 50, 1),
 (496, 491, '验证邮件验证码', '', '', '', 'api', 0, 'api/v1/verification/ver.verification.email', '', '_self', 0, 50, 1),
-(497, 0, '提现', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(497, 0, '提现', '', '', '', 'api', 0, '', '', '_self', 0, 58, 1),
 (498, 497, '获取一个提现请求', '', '', '', 'api', 0, 'api/v1/withdraw/get.withdraw.item', '', '_self', 0, 50, 1),
 (499, 497, '获取提现请求列表', '', '', '', 'api', 0, 'api/v1/withdraw/get.withdraw.list', '', '_self', 0, 50, 1),
 (500, 497, '申请一个提现请求', '', '', '', 'api', 0, 'api/v1/withdraw/add.withdraw.item', '', '_self', 0, 50, 1),
@@ -3950,26 +3950,26 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (503, 497, '完成一个提现请求', '', '', '', 'api', 0, 'api/v1/withdraw/complete.withdraw.item', '', '_self', 0, 50, 1),
 (504, 497, '拒绝一个提现请求', '', '', '', 'api', 0, 'api/v1/withdraw/refuse.withdraw.item', '', '_self', 0, 50, 1),
 (505, 497, '获取提现手续费', '', '', '', 'api', 0, 'api/v1/withdraw/get.withdraw.fee', '', '_self', 0, 50, 1),
-(506, 0, '提现账号', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(506, 0, '提现账号', '', '', '', 'api', 0, '', '', '_self', 0, 59, 1),
 (507, 506, '添加一个提现账号', '', '', '', 'api', 0, 'api/v1/withdraw_user/add.withdraw.user.item', '', '_self', 0, 50, 1),
 (508, 506, '编辑一个提现账号', '', '', '', 'api', 0, 'api/v1/withdraw_user/set.withdraw.user.item', '', '_self', 0, 50, 1),
 (509, 506, '批量删除提现账号', '', '', '', 'api', 0, 'api/v1/withdraw_user/del.withdraw.user.list', '', '_self', 0, 50, 1),
 (510, 506, '获取指定账号的一个提现账号', '', '', '', 'api', 0, 'api/v1/withdraw_user/get.withdraw.user.item', '', '_self', 0, 50, 1),
 (511, 506, '获取指定账号的提现账号列表', '', '', '', 'api', 0, 'api/v1/withdraw_user/get.withdraw.user.list', '', '_self', 0, 50, 1),
 (512, 506, '检测是否超出最大添加数量', '', '', '', 'api', 0, 'api/v1/withdraw_user/is.withdraw.user.maximum', '', '_self', 0, 50, 1),
-(513, 0, '首页', '', 'home', '', 'admin', 0, '/index', '', '_self', 1, 1, 1),
-(514, 0, '商品', '', 'cart-plus', '', 'admin', 0, '/goods', '', '_self', 1, 2, 1),
-(515, 0, '订单', '', 'barcode', '', 'admin', 0, '/order', '', '_self', 1, 3, 1),
-(516, 0, '营销', '', 'tags', '', 'admin', 0, '/promotion', '', '_self', 1, 4, 1),
-(517, 0, '会员', '', 'user-o', '', 'admin', 0, '/member', '', '_self', 1, 5, 1),
-(518, 0, '数据', '', 'bar-chart', '/data', 'admin', 0, '', '', '_self', 1, 6, 0),
-(519, 0, '微信', '', 'wechat', '/wechat', 'admin', 0, '', '', '_self', 1, 7, 0),
-(520, 0, '系统', '', 'server', '', 'admin', 0, '/system', '', '_self', 1, 8, 1),
-(521, 0, '设置', '', 'cogs', '', 'admin', 0, '/setting', '', '_self', 1, 9, 1),
-(522, 0, '云端', '', 'cloud', '/cloud', 'admin', 0, 'https://www.careyshop.cn/', '', '_blank', 1, 10, 1),
-(523, 520, '人员管理', '', 'users', '', 'admin', 0, '/system/admin', '', '_self', 1, 2, 1),
+(513, 0, '首页', '', 'shouye', '', 'admin', 0, '/index', '', '_self', 1, 1, 1),
+(514, 0, '商品', '', 'bangongbao', '', 'admin', 0, '/goods', '', '_self', 1, 2, 1),
+(515, 0, '订单', '', 'yemianliu', '', 'admin', 0, '/order', '', '_self', 1, 3, 1),
+(516, 0, '营销', '', 'liwu', '', 'admin', 0, '/promotion', '', '_self', 1, 4, 1),
+(517, 0, '会员', '', 'CPhezuo', '', 'admin', 0, '/member', '', '_self', 1, 5, 1),
+(518, 0, '数据', '', 'zhuzhuangtu', '/data', 'admin', 0, '', '', '_self', 1, 6, 0),
+(519, 0, '微信', '', 'weixin', '/wechat', 'admin', 0, '', '', '_self', 1, 7, 0),
+(520, 0, '系统', '', 'zhongkong', '', 'admin', 0, '/system', '', '_self', 1, 8, 1),
+(521, 0, '设置', '', 'kongzhizhongxin', '', 'admin', 0, '/setting', '', '_self', 1, 9, 1),
+(522, 0, '云端', '', 'yun', '/cloud', 'admin', 0, 'https://www.careyshop.cn/', '', '_blank', 1, 10, 1),
+(523, 520, '人员管理', '', '', '', 'admin', 0, '/system/admin', '', '_self', 1, 2, 1),
 (524, 523, '管理人员', '', '', '对管理组成员账号进行管理', 'admin', 0, '/system/admin/member', '', '_self', 1, 50, 1),
-(525, 520, '权限分配', '', 'sitemap', '', 'admin', 0, '/system/auth', '', '_self', 1, 3, 1),
+(525, 520, '权限分配', '', '', '', 'admin', 0, '/system/auth', '', '_self', 1, 3, 1),
 (526, 525, '用户组', '', '', '为系统分配前后台用户组', 'admin', 0, '/system/auth/group', '', '_self', 1, 1, 1),
 (527, 525, '权限规则', '', '', '将菜单访问权限分配给不同的用户组', 'admin', 0, '/system/auth/rule', '', '_self', 1, 3, 1),
 (528, 525, '菜单管理', '', '', '为系统配置前后台导航菜单', 'admin', 0, '/system/auth/menu', '', '_self', 1, 2, 1),
@@ -3978,11 +3978,11 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (531, 528, '编辑菜单', '', '', '', 'admin', 0, '/system/auth/menu/set', '', '_self', 0, 4, 1),
 (532, 528, '修改状态', '', '', '', 'admin', 0, '/system/auth/menu/status', '', '_self', 0, 5, 1),
 (533, 528, '移动排序', '', '', '', 'admin', 0, '/system/auth/menu/move', '', '_self', 0, 6, 1),
-(534, 513, '辅助', '', 'coffee', '', 'admin', 0, '/index/help', '', '_self', 0, 50, 1),
+(534, 513, '辅助', '', 'linggan_o', '', 'admin', 0, '/index/help', '', '_self', 0, 50, 1),
 (535, 534, '清空缓存', '', '', '', 'admin', 0, '/index/help/cache', '', '_self', 0, 50, 1),
 (536, 534, '优化缓存', '', '', '', 'admin', 0, '/index/help/optimize', '', '_self', 0, 50, 1),
 (538, 525, '操作日志', '', '', '访问者的行踪轨迹记录', 'admin', 0, '/system/auth/action', '', '_self', 1, 4, 1),
-(539, 520, '消息管理', '', 'envelope', '', 'admin', 0, '/system/message', '', '_self', 1, 7, 1),
+(539, 520, '消息管理', '', '', '', 'admin', 0, '/system/message', '', '_self', 1, 7, 1),
 (540, 539, '我的消息', '', '', '接收系统发送过来的消息', 'admin', 0, '/system/message/user', '', '_self', 1, 50, 1),
 (541, 524, '新增用户', '', '', '', 'admin', 0, '/system/admin/member/add', '', '_self', 0, 2, 1),
 (542, 524, '删除用户', '', '', '', 'admin', 0, '/system/admin/member/del', '', '_self', 0, 3, 1),
@@ -4002,11 +4002,11 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (556, 527, '设为启用', '', '', '', 'admin', 0, '/system/auth/rule/enable', '', '_self', 0, 5, 1),
 (557, 527, '设为禁用', '', '', '', 'admin', 0, '/system/auth/rule/disable', '', '_self', 0, 6, 1),
 (558, 527, '移动排序', '', '', '', 'admin', 0, '/system/auth/rule/move', '', '_self', 0, 7, 1),
-(559, 520, '文章发布', '', 'newspaper-o', '', 'admin', 0, '/system/article', '', '_self', 1, 4, 1),
+(559, 520, '文章发布', '', '', '', 'admin', 0, '/system/article', '', '_self', 1, 4, 1),
 (560, 559, '文章分类', '', '', '为文章分配可归类的类目', 'admin', 0, '/system/article/cat', '', '_self', 1, 50, 1),
 (561, 559, '文章管理', '', '', '管理文章的增、删、改等', 'admin', 0, '/system/article/article', '', '_self', 1, 50, 1),
 (562, 559, '专题管理', '', '', '管理专题的增、删、改等', 'admin', 0, '/system/article/topic', '', '_self', 1, 50, 1),
-(563, 520, '广告发布', '', 'rocket', '', 'admin', 0, '/system/ads', '', '_self', 1, 5, 1),
+(563, 520, '广告发布', '', '', '', 'admin', 0, '/system/ads', '', '_self', 1, 5, 1),
 (564, 563, '广告位置', '', '', '广告位置是广告列表的母版与集合', 'admin', 0, '/system/ads/position', '', '_self', 1, 1, 1),
 (565, 563, '广告列表', '', '', '可单独发布或归类到广告位置', 'admin', 0, '/system/ads/ads', '', '_self', 1, 2, 1),
 (566, 539, '发布消息', '', '', '对外发布消息', 'admin', 0, '/system/message/send', '', '_self', 1, 50, 1),
@@ -4014,11 +4014,11 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (568, 560, '编辑分类', '', '', '', 'admin', 0, '/system/article/cat/set', '', '_self', 0, 3, 1),
 (569, 560, '删除分类', '', '', '', 'admin', 0, '/system/article/cat/del', '', '_self', 0, 4, 1),
 (570, 560, '移动排序', '', '', '', 'admin', 0, '/system/article/cat/move', '', '_self', 0, 5, 1),
-(571, 520, '附件资源', '', 'clone', '', 'admin', 0, '/system/storage', '', '_self', 1, 6, 1),
+(571, 520, '附件资源', '', '', '', 'admin', 0, '/system/storage', '', '_self', 1, 6, 1),
 (572, 571, '资源管理', '', '', '对已上传的资源进行管理', 'admin', 0, '/system/storage/storage', '', '_self', 1, 50, 1),
 (573, 571, '资源样式', '', '', '动态分配、管理资源样式', 'admin', 0, '/system/storage/style', '', '_self', 1, 50, 1),
 (574, 422, '获取资源下载链接', '', '', '', 'api', 0, 'api/v1/storage/get.storage.download', '', '_self', 0, 50, 1),
-(575, 0, '操作日志', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(575, 0, '操作日志', '', '', '', 'api', 0, '', '', '_self', 0, 60, 1),
 (576, 575, '获取一条操作日志', '', '', '', 'api', 0, 'api/v1/action_log/get.action.log.item', '', '_self', 0, 50, 1),
 (577, 575, '获取操作日志列表', '', '', '', 'api', 0, 'api/v1/action_log/get.action.log.list', '', '_self', 0, 50, 1),
 (578, 561, '新增文章', '', '', '', 'admin', 0, '/system/article/article/add', '', '_self', 0, 2, 1),
@@ -4070,9 +4070,9 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (628, 311, '根据编号自动排序', '', '', '', 'api', 0, 'api/v1/navigation/set.navigation.index', '', '_self', 0, 50, 1),
 (629, 369, '根据编号自动排序', '', '', '', 'api', 0, 'api/v1/payment/set.payment.index', '', '_self', 0, 50, 1),
 (630, 396, '根据编号自动排序', '', '', '', 'api', 0, 'api/v1/region/set.region.index', '', '_self', 0, 50, 1),
-(631, 414, '根据编号自动排序', '', '', '', 'api', 0, 'api/v1/spec/set.goods.spec.index', '', '_self', 0, 9, 1),
+(631, 414, '根据编号自动排序', '', '', '', 'api', 0, 'api/v1/spec/set.goods.spec.index', '', '_self', 0, 10, 1),
 (632, 436, '根据编号自动排序', '', '', '', 'api', 0, 'api/v1/support/set.support.index', '', '_self', 0, 50, 1),
-(633, 0, '资源样式', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(633, 0, '资源样式', '', '', '', 'api', 0, '', '', '_self', 0, 61, 1),
 (634, 633, '验证资源样式编码是否唯一', '', '', '', 'api', 0, 'api/v1/storage_style/unique.storage.style.code', '', '_self', 0, 50, 1),
 (635, 633, '添加一个资源样式', '', '', '', 'api', 0, 'api/v1/storage_style/add.storage.style.item', '', '_self', 0, 50, 1),
 (636, 633, '编辑一个资源样式', '', '', '', 'api', 0, 'api/v1/storage_style/set.storage.style.item', '', '_self', 0, 50, 1),
@@ -4090,12 +4090,12 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (648, 422, '获取导航数据', '', '', '', 'api', 0, 'api/v1/storage/get.storage.navi', '', '_self', 0, 50, 1),
 (650, 710, '支付日志', '', '', '支付行为、结果的流水账', 'admin', 0, '/setting/payment/log', '', '_self', 1, 50, 1),
 (651, 812, '交易结算', '', '', '账户资金支出、收入的流水账', 'admin', 0, '/member/user/transaction', '', '_self', 1, 3, 1),
-(652, 520, '辅助管理', '', 'sliders', '', 'admin', 0, '/system/aided', '', '_self', 1, 9, 1),
+(652, 520, '辅助管理', '', '', '', 'admin', 0, '/system/aided', '', '_self', 1, 9, 1),
 (653, 652, '客服人员', '', '', '添加自定义代码，供前端调用', 'admin', 0, '/system/aided/support', '', '_self', 1, 4, 1),
 (654, 652, '友情链接', '', '', '友情链接管理', 'admin', 0, '/system/aided/friendlink', '', '_self', 1, 5, 1),
 (655, 652, '二维码', '', '', '可作为物料的发布与管理', 'admin', 0, '/system/aided/qrcode', '', '_self', 1, 6, 1),
 (656, 652, 'App应用', '', '', '移动、PC端都属于一个独立的APP', 'admin', 0, '/system/aided/app', '', '_self', 1, 2, 1),
-(657, 0, '帮助文档', '', '', '', 'api', 0, '', '', '_self', 0, 50, 1),
+(657, 0, '帮助文档', '', '', '', 'api', 0, '', '', '_self', 0, 62, 1),
 (658, 657, '添加一条帮助文档', '', '', '', 'api', 0, 'api/v1/help/add.help.item', '', '_self', 0, 50, 1),
 (659, 657, '编辑一条帮助文档', '', '', '', 'api', 0, 'api/v1/help/set.help.item', '', '_self', 0, 50, 1),
 (660, 657, '获取一条帮助文档', '', '', '', 'api', 0, 'api/v1/help/get.help.item', '', '_self', 0, 50, 1),
@@ -4146,10 +4146,10 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (706, 656, '查询列表', '', '', '', 'admin', 0, '/system/aided/app/list', '', '_self', 0, 50, 1),
 (707, 698, '查询列表', '', '', '', 'admin', 0, '/system/aided/app_install/list', '', '_self', 0, 50, 1),
 (708, 655, '查询列表', '', '', '', 'admin', 0, '/system/aided/qrcode/list', '', '_self', 0, 50, 1),
-(709, 521, '物流管控', '', 'truck', '', 'admin', 0, '/setting/logistics', '', '_self', 1, 4, 1),
-(710, 521, '支付系统', '', 'gg-circle', '', 'admin', 0, '/setting/payment', '', '_self', 1, 3, 1),
-(711, 521, '消息通知', '', 'commenting-o', '', 'admin', 0, '/setting/notice', '', '_self', 1, 5, 1),
-(712, 521, '店铺设置', '', 'tasks', '', 'admin', 0, '/setting/setting', '', '_self', 1, 2, 1),
+(709, 521, '物流管控', '', '', '', 'admin', 0, '/setting/logistics', '', '_self', 1, 4, 1),
+(710, 521, '支付系统', '', '', '', 'admin', 0, '/setting/payment', '', '_self', 1, 3, 1),
+(711, 521, '消息通知', '', '', '', 'admin', 0, '/setting/notice', '', '_self', 1, 5, 1),
+(712, 521, '店铺设置', '', '', '', 'admin', 0, '/setting/setting', '', '_self', 1, 2, 1),
 (713, 712, '系统设置', '', '', '系统基础的参数设置', 'admin', 0, '/setting/setting/system', '', '_self', 1, 1, 1),
 (714, 656, '新增应用', '', '', '', 'admin', 0, '/system/aided/app/add', '', '_self', 0, 50, 1),
 (715, 656, '编辑应用', '', '', '', 'admin', 0, '/system/aided/app/set', '', '_self', 0, 50, 1),
@@ -4172,8 +4172,8 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (732, 712, '前台导航', '', '', '前台主导航栏的管理', 'admin', 0, '/setting/setting/navi', '', '_self', 1, 3, 1),
 (733, 712, '系统信息', '', '', '系统常用信息的显示', 'admin', 0, '/setting/setting/info', '', '_self', 1, 2, 1),
 (734, 281, '获取系统版本号', '', '', '', 'api', 0, 'api/v1/index/get.system.version', '', '_self', 0, 50, 1),
-(735, 520, '系统首页', '', 'home', '', 'admin', 0, '/system/index', '', '_self', 1, 1, 1),
-(740, 521, '设置首页', '', 'home', '', 'admin', 0, '/setting/index', '', '_self', 1, 1, 1),
+(735, 520, '系统首页', '', 'shouye_o', '', 'admin', 0, '/system/index', '', '_self', 1, 1, 1),
+(740, 521, '设置首页', '', 'shouye_o', '', 'admin', 0, '/setting/index', '', '_self', 1, 1, 1),
 (741, 732, '查询列表', '', '', '', 'admin', 0, '/setting/setting/navi/list', '', '_self', 0, 50, 1),
 (742, 732, '新增导航', '', '', '', 'admin', 0, '/setting/setting/navi/add', '', '_self', 0, 50, 1),
 (743, 732, '编辑导航', '', '', '', 'admin', 0, '/setting/setting/navi/set', '', '_self', 0, 50, 1),
@@ -4226,14 +4226,14 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (809, 802, '设为启用', '', '', '', 'admin', 0, '/setting/notice/template/enable', '', '_self', 0, 50, 1),
 (810, 802, '设为禁用', '', '', '', 'admin', 0, '/setting/notice/template/disable', '', '_self', 0, 50, 1),
 (811, 802, '编辑模板', '', '', '', 'admin', 0, '/setting/notice/template/tpl', '', '_self', 0, 50, 1),
-(812, 517, '账号管理', '', 'user-circle', '', 'admin', 0, '/member/user', '', '_self', 1, 2, 1),
+(812, 517, '账号管理', '', '', '', 'admin', 0, '/member/user', '', '_self', 1, 2, 1),
 (813, 812, '会员账号', '', '', '对顾客组成员账号进行管理', 'admin', 0, '/member/user/client', '', '_self', 1, 1, 1),
 (814, 812, '账号等级', '', '', '会员等级、折扣额度的管理', 'admin', 0, '/member/user/level', '', '_self', 1, 2, 1),
-(815, 517, '提现审批', '', 'money', '', 'admin', 0, '/member/withdraw', '', '_self', 1, 4, 1),
+(815, 517, '提现审批', '', '', '', 'admin', 0, '/member/withdraw', '', '_self', 1, 4, 1),
 (816, 815, '提现列表', '', '', '提现申请的审批、拒绝、查询', 'admin', 0, '/member/withdraw/list', '', '_self', 1, 50, 1),
-(817, 517, '咨询问答', '', 'comments-o', '', 'admin', 0, '/member/ask', '', '_self', 1, 5, 1),
+(817, 517, '咨询问答', '', '', '', 'admin', 0, '/member/ask', '', '_self', 1, 5, 1),
 (818, 817, '问答列表', '', '', '咨询、售后、投诉、求购问答管理', 'admin', 0, '/member/ask/list', '', '_self', 1, 50, 1),
-(819, 517, '会员首页', '', 'home', '', 'admin', 0, '/member/index', '', '_self', 1, 1, 1),
+(819, 517, '会员首页', '', 'shouye_o', '', 'admin', 0, '/member/index', '', '_self', 1, 1, 1),
 (820, 814, '查询列表', '', '', '', 'admin', 0, '/member/user/level/list', '', '_self', 0, 50, 1),
 (821, 814, '新增等级', '', '', '', 'admin', 0, '/member/user/level/add', '', '_self', 0, 50, 1),
 (822, 814, '编辑等级', '', '', '', 'admin', 0, '/member/user/level/set', '', '_self', 0, 50, 1),
@@ -4267,10 +4267,10 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (850, 818, '问答明细', '', '', '', 'admin', 0, '/member/ask/list/detail', '', '_self', 0, 2, 1),
 (851, 818, '删除问答', '', '', '', 'admin', 0, '/member/ask/list/del', '', '_self', 0, 3, 1),
 (852, 818, '查询列表', '', '', '', 'admin', 0, '/member/ask/list/list', '', '_self', 0, 1, 1),
-(854, 516, '营销首页', '', 'home', '', 'admin', 0, '/promotion/index', '', '_self', 1, 1, 1),
-(855, 516, '优惠劵', '', 'tag', '', 'admin', 0, '', '', '_self', 1, 3, 1),
-(856, 516, '购物卡', '', 'credit-card', '', 'admin', 0, '', '', '_self', 1, 4, 1),
-(857, 516, '营销中心', '', 'gift', '', 'admin', 0, '', '', '_self', 1, 2, 1),
+(854, 516, '营销首页', '', 'shouye_o', '', 'admin', 0, '/promotion/index', '', '_self', 1, 1, 1),
+(855, 516, '优惠劵', '', '', '', 'admin', 0, '', '', '_self', 1, 3, 1),
+(856, 516, '购物卡', '', '', '', 'admin', 0, '', '', '_self', 1, 4, 1),
+(857, 516, '营销中心', '', '', '', 'admin', 0, '', '', '_self', 1, 2, 1),
 (858, 857, '商品折扣', '', '', '下单前对商品的折扣优惠', 'admin', 0, '', '', '_self', 1, 50, 1),
 (859, 857, '订单促销', '', '', '下单后对订单的促销优惠', 'admin', 0, '', '', '_self', 1, 50, 1),
 (860, 855, '优惠劵', '', '', '优惠劵的发放与管理', 'admin', 0, '', '', '_self', 1, 50, 1),
@@ -4278,23 +4278,23 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (862, 856, '购物卡', '', '', '购物卡的生成与管理', 'admin', 0, '', '', '_self', 1, 50, 1),
 (864, 856, '购物卡使用', '', '', '对已绑定的购物卡进行管理', 'admin', 0, '', '', '_self', 1, 50, 1),
 (865, 868, '订单列表', '', '', '订单的常规管理', 'admin', 0, '', '', '_self', 1, 3, 1),
-(866, 868, '退款日志', '', '', '订单生成退款后的日志', 'admin', 0, '', '', '_self', 1, 4, 1),
-(867, 515, '订单首页', '', 'home', '', 'admin', 0, '/order/index', '', '_self', 1, 1, 1),
-(868, 515, '订单管理', '', 'archive', '', 'admin', 0, '', '', '_self', 1, 2, 1),
-(869, 515, '售后中心', '', 'fax', '', 'admin', 0, '', '', '_self', 1, 50, 1),
-(870, 869, '售后列表', '', '', '买家申请售后服务', 'admin', 0, '', '', '_self', 1, 50, 1),
-(871, 514, '商品首页', '', 'home', '', 'admin', 0, '/goods/index', '', '_self', 1, 1, 1),
-(872, 514, '商品管理', '', 'shopping-bag', '', 'admin', 0, '/goods/admin', '', '_self', 1, 2, 1),
-(873, 872, '商品列表', '', '', '商品的常规管理', 'admin', 0, '/goods/admin/list', '', '_self', 1, 2, 1),
+(866, 868, '退款日志', '', 'lishijilu_o', '订单生成退款后的日志', 'admin', 0, '', '', '_self', 1, 4, 1),
+(867, 515, '订单首页', '', 'shouye_o', '', 'admin', 0, '/order/index', '', '_self', 1, 1, 1),
+(868, 515, '订单管理', '', 'shebeidadian', '', 'admin', 0, '', '', '_self', 1, 2, 1),
+(869, 515, '售后中心', '', 'fuwuxunhuanguanli_o', '', 'admin', 0, '', '', '_self', 1, 50, 1),
+(870, 869, '售后列表', '', 'fuwuguanli_o', '买家申请售后服务', 'admin', 0, '', '', '_self', 1, 50, 1),
+(871, 514, '商品首页', '', 'shouye_o', '', 'admin', 0, '/goods/index', '', '_self', 1, 1, 1),
+(872, 514, '商品管理', '', 'bangongbao_o', '', 'admin', 0, '/goods/admin', '', '_self', 1, 2, 1),
+(873, 872, '商品列表', '', 'RectangleCopy75', '商品的常规管理', 'admin', 0, '/goods/admin/list', '', '_self', 1, 2, 1),
 (874, 882, '商品分类', '', '', '商品分类的常规管理', 'admin', 0, '/goods/setting/category', '', '_self', 1, 1, 1),
 (875, 882, '商品品牌', '', '', '商品品牌的常规管理', 'admin', 0, '/goods/setting/brand', '', '_self', 1, 2, 1),
 (876, 882, '商品模型', '', '', '商品模型的设置', 'admin', 0, '/goods/setting/type', '', '_self', 1, 3, 1),
 (877, 882, '商品属性', '', '', '商品属性的设置', 'admin', 0, '/goods/setting/attribute', '', '_self', 1, 5, 1),
 (878, 882, '商品规格', '', '', '商品规格的设置', 'admin', 0, '/goods/setting/spec', '', '_self', 1, 4, 1),
-(879, 514, '评价咨询', '', 'comments', '', 'admin', 0, '/goods/opinion', '', '_self', 1, 6, 1),
+(879, 514, '评价咨询', '', 'jianpan_o', '', 'admin', 0, '/goods/opinion', '', '_self', 1, 6, 1),
 (880, 879, '商品评价', '', '', '买家收货后对商品的评价', 'admin', 0, '/goods/opinion/comment', '', '_self', 1, 50, 1),
 (881, 879, '商品咨询', '', '', '买家购买前对商品的咨询', 'admin', 0, '/goods/opinion/consult', '', '_self', 1, 50, 1),
-(882, 514, '商品配置', '', 'tasks', '', 'admin', 0, '/goods/setting', '', '_self', 1, 5, 1),
+(882, 514, '商品配置', '', 'shebeidadian_o', '', 'admin', 0, '/goods/setting', '', '_self', 1, 5, 1),
 (884, 874, '查询列表', '', '', '', 'admin', 0, '/goods/setting/category/list', '', '_self', 0, 50, 1),
 (885, 874, '新增分类', '', '', '', 'admin', 0, '/goods/setting/category/add', '', '_self', 0, 50, 1),
 (886, 874, '编辑分类', '', '', '', 'admin', 0, '/goods/setting/category/set', '', '_self', 0, 50, 1),
@@ -4363,7 +4363,8 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (957, 198, '获取指定商品的属性配置数据', '', '', '', 'api', 0, 'api/v1/goods/get.goods.attr.config', '', '_self', 0, 50, 1),
 (958, 198, '获取指定商品的规格配置数据', '', '', '', 'api', 0, 'api/v1/goods/get.goods.spec.config', '', '_self', 0, 50, 1),
 (959, 198, '获取指定商品的规格菜单数据', '', '', '', 'api', 0, 'api/v1/goods/get.goods.spec.menu', '', '_self', 0, 50, 1),
-(960, 872, '新增商品', '', '', '添加新的商品', 'admin', 0, '/goods/admin/create', '', '_self', 1, 1, 1);
+(960, 872, '新增商品', '', 'RectangleCopy76', '添加新的商品', 'admin', 0, '/goods/admin/create', '', '_self', 1, 1, 1),
+(962, 414, '获取所有商品规格及规格项', '', '', '', 'api', 0, 'api/v1/spec/get.goods.spec.all', '', '_self', 0, 7, 1);
 
 -- --------------------------------------------------------
 
@@ -5157,7 +5158,7 @@ INSERT INTO `cs_qrcode` (`qrcode_id`, `name`, `text`, `size`, `logo`) VALUES
 (11, '1', '2', 3, ''),
 (12, '2', '2', 3, ''),
 (13, '3', 'test', 3, ''),
-(14, 'test', 'testAAABBBBBBB', 5, '');
+(14, 'test', 'testAAABBBBBBB', 5, 'http://aliyun.oss.careyshop.cn/uploads/files/20191112/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun');
 
 -- --------------------------------------------------------
 
@@ -9307,7 +9308,7 @@ INSERT INTO `cs_setting` (`setting_id`, `code`, `value`, `module`, `description`
 (40, 'logo', '', 'system_info', '商城LOGO', '默认商城LOGO,通用头部显示，最佳显示尺寸为240*60像素'),
 (41, 'third_count', '<script>\r\nvar _hmt = _hmt || [];\r\n(function() {\r\n  var hm = document.createElement(\"script\");\r\n  hm.src = \"https://hm.baidu.com/hm.js?e325e60ca4cd358f2b424f5aecb8021a\";\r\n  var s = document.getElementsByTagName(\"script\")[0]; \r\n  s.parentNode.insertBefore(hm, s);\r\n})();</script>', 'system_info', '第三方统计代码', '第三方统计的脚本代码'),
 (42, 'miitbeian', '', 'system_info', 'ICP备案许可证号', 'ICP备案许可证号，将显示在前台底部等位置'),
-(43, 'miitbeian_url', 'http://www.miitbeian.gov.cn', 'system_info', 'ICP备案链接地址', 'ICP备案链接地址，点击后将引导到该网站'),
+(43, 'miitbeian_url', 'http://www.beian.miit.gov.cn', 'system_info', 'ICP备案链接地址', 'ICP备案链接地址，点击后将引导到该网站'),
 (44, 'miitbeian_ico', '', 'system_info', 'ICP备案图标', 'ICP备案图标，将显示在前台底部等位置'),
 (45, 'beian', '', 'system_info', '公安机关备案号', '公安机关备案号，将显示在前台底部等位置'),
 (46, 'beian_url', 'http://www.beian.gov.cn', 'system_info', '公安机关备案链接', '公安机关备案链接，点击后将引导到该网站'),
@@ -9319,17 +9320,18 @@ INSERT INTO `cs_setting` (`setting_id`, `code`, `value`, `module`, `description`
 (52, 'image_ext', 'jpg,png,svg,gif,bmp,tiff,webp', 'upload', '允许上传的图片后缀', ''),
 (53, 'file_ext', 'doc,docx,xls,xlsx,ppt,pptx,pdf,wps,txt,rar,zip,gz,bz2,7z,pem,mp4,ogg,webm,ico', 'upload', '允许上传的文件后缀', ''),
 (54, 'file_size', '5M', 'upload', '附件上传大小限制', ''),
-(55, 'careyshop_url', '', 'upload', '资源绑定域名别名', 'CareyShop(本地上传)自定义绑定域名'),
-(56, 'qiniu_access_key', '-eibVM1dkuOQU9vbF9oMRbiMtw4t_-QUMQJgPPDJ', 'upload', 'AccessKey(AK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">AK</span>'),
-(57, 'qiniu_secret_key', 'pcDGWPh8eOvnvcWBKbBhAod0R6MiC3_OU-V4hayZ', 'upload', 'SecretKey(SK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">SK</span>'),
-(58, 'qiniu_bucket', 'careyshop', 'upload', '存储空间名称', '选择一个存储空间，请保证访问控制为 <span style=\"color:#F56C6C;\">公开空间</span>'),
-(59, 'qiniu_url', 'poask1ml1.bkt.clouddn.com', 'upload', '外链域名', '存储空间 <span style=\"color:#F56C6C;\">对外访问域名</span>，也支持填写 <span style=\"color:#F56C6C;\">自定义域名</span>'),
-(60, 'aliyun_access_key', 'LTAIiZASEnhdoDWO', 'upload', 'AccessKey ID', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey ID</span> 值'),
-(61, 'aliyun_secret_key', 'wpEQEFZRHVRgTy87MjYy7bFTKBWgXA', 'upload', 'AccessKey Secret', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey Secret</span> 值'),
-(62, 'aliyun_bucket', 'careyshop', 'upload', 'Bucket 名称', '选择一个Bucket，请保证读写权限为 <span style=\"color:#F56C6C;\">公共读</span>'),
-(63, 'aliyun_url', 'aliyun.oss.careyshop.cn', 'upload', 'Bucket 域名', '外网访问 <span style=\"color:#F56C6C;\">Bucket域名</span>，也支持填写 <span style=\"color:#F56C6C;\">用户域名</span>'),
-(64, 'aliyun_endpoint', 'oss-cn-hangzhou.aliyuncs.com', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
-(65, 'aliyun_rolearn', 'acs:ram::1763866338345155:role/aliyunosstokengeneratorrole', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>');
+(55, 'token_expires', '300', 'upload', '上传令牌有效时长(秒)', '获得上传令牌后多少秒后视为无效'),
+(56, 'careyshop_url', '', 'upload', '资源绑定域名别名', 'CareyShop(本地上传)自定义绑定域名'),
+(57, 'qiniu_access_key', '-eibVM1dkuOQU9vbF9oMRbiMtw4t_-QUMQJgPPDJ', 'upload', 'AccessKey(AK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">AK</span>'),
+(58, 'qiniu_secret_key', 'pcDGWPh8eOvnvcWBKbBhAod0R6MiC3_OU-V4hayZ', 'upload', 'SecretKey(SK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">SK</span>'),
+(59, 'qiniu_bucket', 'careyshop', 'upload', '存储空间名称', '选择一个存储空间，请保证访问控制为 <span style=\"color:#F56C6C;\">公开空间</span>'),
+(60, 'qiniu_url', 'poask1ml1.bkt.clouddn.com', 'upload', '外链域名', '存储空间 <span style=\"color:#F56C6C;\">对外访问域名</span>，也支持填写 <span style=\"color:#F56C6C;\">自定义域名</span>'),
+(61, 'aliyun_access_key', 'LTAIiZASEnhdoDWO', 'upload', 'AccessKey ID', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey ID</span> 值'),
+(62, 'aliyun_secret_key', 'wpEQEFZRHVRgTy87MjYy7bFTKBWgXA', 'upload', 'AccessKey Secret', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey Secret</span> 值'),
+(63, 'aliyun_bucket', 'careyshop', 'upload', 'Bucket 名称', '选择一个Bucket，请保证读写权限为 <span style=\"color:#F56C6C;\">公共读</span>'),
+(64, 'aliyun_url', 'aliyun.oss.careyshop.cn', 'upload', 'Bucket 域名', '外网访问 <span style=\"color:#F56C6C;\">Bucket域名</span>，也支持填写 <span style=\"color:#F56C6C;\">用户域名</span>'),
+(65, 'aliyun_endpoint', 'oss-cn-hangzhou.aliyuncs.com', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
+(66, 'aliyun_rolearn', 'acs:ram::1763866338345155:role/aliyunosstokengeneratorrole', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>');
 
 -- --------------------------------------------------------
 
@@ -9351,7 +9353,7 @@ CREATE TABLE `cs_spec` (
 --
 
 INSERT INTO `cs_spec` (`spec_id`, `goods_type_id`, `name`, `spec_index`, `spec_type`, `sort`) VALUES
-(1, 2, '颜色', 1, 0, 30),
+(1, 2, '颜色', 1, 2, 30),
 (2, 6, '制冷', 1, 0, 50),
 (3, 1, '网络', 1, 2, 10),
 (4, 1, '内存', 1, 1, 20),
@@ -9360,7 +9362,9 @@ INSERT INTO `cs_spec` (`spec_id`, `goods_type_id`, `name`, `spec_index`, `spec_t
 (21, 1, '星期', 1, 2, 50),
 (76, 0, '颜色', 0, 0, 50),
 (78, 0, '色彩', 0, 1, 50),
-(79, 0, '船舶', 0, 1, 50);
+(79, 0, '船舶', 0, 1, 50),
+(80, 2, 'CPU', 1, 1, 50),
+(81, 2, '屏幕', 1, 0, 50);
 
 -- --------------------------------------------------------
 
@@ -9605,8 +9609,8 @@ INSERT INTO `cs_spec_item` (`spec_item_id`, `spec_id`, `item_name`, `is_contact`
 (205, 5, 'M', 0, 50),
 (206, 5, 'X', 0, 50),
 (207, 5, 'XL', 0, 50),
-(208, 1, '黑色', 1, 50),
-(209, 1, '白色', 1, 50),
+(208, 1, '黑色', 1, 0),
+(209, 1, '白色', 1, 1),
 (210, 10, '黑色', 0, 2),
 (211, 10, '灰色', 1, 1),
 (212, 10, '银色', 1, 0),
@@ -9665,7 +9669,12 @@ INSERT INTO `cs_spec_item` (`spec_item_id`, `spec_id`, `item_name`, `is_contact`
 (407, 10, '黄色', 0, 6),
 (408, 10, '深黑色', 1, 2),
 (409, 10, '淡蓝色', 1, 3),
-(410, 10, '绿黄色', 1, 6);
+(410, 10, '绿黄色', 1, 6),
+(411, 80, 'I5', 1, 0),
+(412, 80, 'I7', 1, 1),
+(413, 81, '13寸', 1, 0),
+(414, 81, '15寸', 1, 1),
+(415, 81, '19寸', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -9904,7 +9913,6 @@ INSERT INTO `cs_storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `siz
 (203, 0, 'q04.png', 'image/png', 'png', 45842, '{\"width\":1014,\"height\":215}', '1C05CB12545587F95E3E0893C6F0ADCE', 'uploads/files/20191112/c67cd881-6aaf-4caa-89c0-3725cb0dd33d.png', 'aliyun.oss.careyshop.cn/uploads/files/20191112/c67cd881-6aaf-4caa-89c0-3725cb0dd33d.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548174, 1573548174),
 (204, 0, 'q03.png', 'image/png', 'png', 333759, '{\"width\":1073,\"height\":547}', 'A42159A5EA7F2574D1F23180DE653347', 'uploads/files/20191112/008df859-3318-4b5e-8df3-4193420a3cfd.png', 'aliyun.oss.careyshop.cn/uploads/files/20191112/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548174, 1573548174),
 (206, 492, 'wcode.jpg', 'image/jpeg', 'jpg', 9700, '{\"width\":85,\"height\":85}', '6B827F905627B8564E739ACDE390F538', 'uploads/files/20191112/ea8c5aa7-c66f-44ae-8c44-1f6b53f62ff5.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191112/ea8c5aa7-c66f-44ae-8c44-1f6b53f62ff5.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548174, 1574598170),
-(208, 5, 'icon.jpg', 'image/jpeg', 'jpg', 1686116, '{\"width\":1920,\"height\":1080}', '44FA9140FC1557925AD38D5603795317', 'uploads/files/20191113/62b8f65b-dff3-4f32-8618-6c61fcf2e877.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191113/62b8f65b-dff3-4f32-8618-6c61fcf2e877.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573609312, 1574598183),
 (283, 3, 'trailer.mp4', 'video/mp4', 'mp4', 4372373, '[]', 'DF6ED4BBC93613C68C8525E21BBDDF98', 'uploads/files/20191113/376e733f-ddaf-4ccf-8bf9-feee14ca1a17.mp4', 'aliyun.oss.careyshop.cn/uploads/files/20191113/376e733f-ddaf-4ccf-8bf9-feee14ca1a17.mp4?type=aliyun', 'aliyun', 3, 1, 'aliyun.oss.careyshop.cn/uploads/files/20191113/ffccba0b-1b23-4a65-9991-39f9c9c7633b.jpg?type=aliyun', 50, 0, 1573651438, 1573652399),
 (284, 3, 'big_buck_bunny.mp4', 'video/mp4', 'mp4', 5510872, '[]', 'F13004EED4251C602BBE15737E8A1ECB', 'uploads/files/20191113/959c79ed-7ecf-4a93-88ef-3f10fe2a7c7a.mp4', 'aliyun.oss.careyshop.cn/uploads/files/20191113/959c79ed-7ecf-4a93-88ef-3f10fe2a7c7a.mp4?type=aliyun', 'aliyun', 3, 1, 'aliyun.oss.careyshop.cn/uploads/files/20191113/abafd222-9795-4623-919e-97034d1ffb32.jpg?type=aliyun', 50, 0, 1573651438, 1574595124),
 (285, 3, '视频-无海报-有截图', 'video/mp4', 'mp4', 11199835, '[]', 'B688550AE45010D699EA79AA1727D938', 'uploads/files/20191113/9bbf7ac9-a452-445b-8152-4443bc3505e8.mp4', 'aliyun.oss.careyshop.cn/uploads/files/20191113/9bbf7ac9-a452-445b-8152-4443bc3505e8.mp4?type=aliyun', 'aliyun', 3, 1, '', 50, 0, 1573651443, 1574595176),
@@ -9915,11 +9923,10 @@ INSERT INTO `cs_storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `siz
 (435, 2, '子目录', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1574088815, 1574091828),
 (436, 435, '子子目录', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1574088825, 1574599294),
 (437, 436, '...子子目录', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1574088838, 1574091828),
-(438, 492, 'weimms53.jpg', 'image/jpeg', 'jpg', 267534, '{\"width\":1680,\"height\":1050}', 'c64dc9b7471a778478c6460317b96e2fc87c88f8', '/uploads/files/20191118/1eb05e740c61889b6dfb0928e6801f42.jpg', 'careyshop.oruei.com/uploads/files/20191118/1eb05e740c61889b6dfb0928e6801f42.jpg?type=careyshop', 'careyshop', 0, 1, '', 50, 0, 1574089470, 1574598170),
 (492, 419, '二级目录', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1574584853, 1574585200),
-(493, 2, 'O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg', 'image/jpeg', 'jpg', 469566, '{\"width\":800,\"height\":800}', '19b22a20d39cc6b283acf20694c72963f4ace2cd', '/uploads/files/20191206/0ca7b4ec0fb75e0cf19244542a963799.jpg', 'careyshop.oruei.com/uploads/files/20191206/0ca7b4ec0fb75e0cf19244542a963799.jpg?type=careyshop', 'careyshop', 0, 1, '', 50, 0, 1575622040, 1575622040),
-(494, 2, 'O1CN01awPGBj1Mqd7qIcu3n_!!0-item_pic.jpg', 'image/jpeg', 'jpg', 377537, '{\"width\":800,\"height\":800}', '0a89d784b932b28358853ff659c1346685f66969', '/uploads/files/20191206/34d4da89e65d2114792ba82d93d2bde6.jpg', 'careyshop.oruei.com/uploads/files/20191206/34d4da89e65d2114792ba82d93d2bde6.jpg?type=careyshop', 'careyshop', 0, 1, '', 50, 0, 1575641364, 1575641364),
-(495, 2, 'ghs.png', 'image/png', 'png', 19256, '{\"width\":20,\"height\":20}', '29c400bc3b89f6085766dac4e0330ded5cb73d52', '/uploads/files/20191206/47a84479bcfa0c379cc40a37febb4f9a.png', 'careyshop.oruei.com/uploads/files/20191206/47a84479bcfa0c379cc40a37febb4f9a.png?type=careyshop', 'careyshop', 0, 1, '', 50, 0, 1575641394, 1575641394);
+(515, 419, '同级', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1575959313, 1575959313),
+(558, 0, '666.txt', 'text/plain', 'txt', 4, '[]', '011c945f30ce2cbafc452f39840f025693339c42', '/uploads/files/20191217/2ee6d0e18af2f3f0b4869cd380332173.txt', 'careyshop.oruei.com/uploads/files/20191217/2ee6d0e18af2f3f0b4869cd380332173.txt?type=careyshop', 'careyshop', 1, 1, '', 50, 0, 1576582537, 1576582537),
+(559, 0, 'TIM截图20190128090957.png', 'image/png', 'png', 320736, '{\"width\":1374,\"height\":727}', 'ab67fa802dd15ca5de088b0a578b3cf00f4fd3ac', '/uploads/files/20191220/ad18357b289eb0df6989fe8c91b833a8.png', 'careyshop.oruei.com/uploads/files/20191220/ad18357b289eb0df6989fe8c91b833a8.png?type=careyshop', 'careyshop', 0, 1, '', 50, 0, 1576821046, 1576821046);
 
 -- --------------------------------------------------------
 
@@ -10002,6 +10009,17 @@ CREATE TABLE `cs_token` (
   `refresh` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '刷新授权码',
   `refresh_expires` int(11) NOT NULL COMMENT '刷新授权码过期时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='token';
+
+--
+-- 转存表中的数据 `cs_token`
+--
+
+INSERT INTO `cs_token` (`token_id`, `client_id`, `group_id`, `username`, `client_type`, `platform`, `code`, `token`, `token_expires`, `refresh`, `refresh_expires`) VALUES
+(1093, 5, 1, 'admin4', 1, 'admin', '087f29b380b6fa4fef401423807f45e5', '5ee053c77b497bd83487a9217cda9de7', 1558972966, 'e4c097d03fd1dc322476e7808ff7bf69', 1559059366),
+(1097, 4, 1, 'admin3', 1, 'admin', '49b74d83c7e7bfdbe94734871234dbb8', '8a11802f3c9caba91f264212cdda18a2', 1578930129, '01db09ed9d7cdbf2856907687c02d8e1', 1579016529),
+(1444, 56, 2, 'admin1', 1, 'admin', 'c65c359118ec285730dc09ea5f531a52', '17191300ebc7e972490588cbb7623db2', 1578471730, 'd1195d829f13f58d245267920eeda8d6', 1578558130),
+(1526, 1, 1, 'admin', 1, 'admin', '2c121ca392385e7facd8158ac56d89c9', '92342361bd042ab86f5abd46850a86e7', 1579742643, '94a6139c364ee7b69f106495cea020d1', 1579829043),
+(1527, 3, 1, 'admin2', 1, 'admin', '15ae0a874ead0030291696540d54a456', '0dd12aa1fd23bdaf5877c55a2c3b5dea', 1579703831, '6cf0efd4ace01f05d5bf855564451a12', 1579790231);
 
 -- --------------------------------------------------------
 
@@ -11493,7 +11511,7 @@ ALTER TABLE `cs_withdraw_user`
 -- 使用表AUTO_INCREMENT `cs_action_log`
 --
 ALTER TABLE `cs_action_log`
-  MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4864;
+  MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5339;
 --
 -- 使用表AUTO_INCREMENT `cs_admin`
 --
@@ -11663,7 +11681,7 @@ ALTER TABLE `cs_history`
 -- 使用表AUTO_INCREMENT `cs_menu`
 --
 ALTER TABLE `cs_menu`
-  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=962;
+  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=963;
 --
 -- 使用表AUTO_INCREMENT `cs_message`
 --
@@ -11753,12 +11771,12 @@ ALTER TABLE `cs_service_log`
 -- 使用表AUTO_INCREMENT `cs_setting`
 --
 ALTER TABLE `cs_setting`
-  MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 --
 -- 使用表AUTO_INCREMENT `cs_spec`
 --
 ALTER TABLE `cs_spec`
-  MODIFY `spec_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `spec_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 --
 -- 使用表AUTO_INCREMENT `cs_spec_config`
 --
@@ -11768,12 +11786,12 @@ ALTER TABLE `cs_spec_config`
 -- 使用表AUTO_INCREMENT `cs_spec_item`
 --
 ALTER TABLE `cs_spec_item`
-  MODIFY `spec_item_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=411;
+  MODIFY `spec_item_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=416;
 --
 -- 使用表AUTO_INCREMENT `cs_storage`
 --
 ALTER TABLE `cs_storage`
-  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=496;
+  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=560;
 --
 -- 使用表AUTO_INCREMENT `cs_storage_style`
 --
@@ -11788,7 +11806,7 @@ ALTER TABLE `cs_support`
 -- 使用表AUTO_INCREMENT `cs_token`
 --
 ALTER TABLE `cs_token`
-  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1440;
+  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1528;
 --
 -- 使用表AUTO_INCREMENT `cs_topic`
 --
