@@ -251,7 +251,6 @@ class Storage extends CareyShop
      * @access public
      * @param  array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function getStorageCollection($data)
     {
@@ -259,18 +258,22 @@ class Storage extends CareyShop
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $map['type'] = ['neq', 2];
-            $map['storage_id'] = ['in', array_unique($data['storage_id'])];
+        $map = [
+            'type'       => ['neq', 2],
+            'storage_id' => ['in', $data['storage_id']],
+        ];
 
-            $query->where($map);
-        });
+        $order = [];
+        $result = $this->where($map)->column(null, 'storage_id');
 
-        if (false !== $result) {
-            return $result->toArray();
+        // 根据传入顺序返回列表
+        foreach ($data['storage_id'] as $value) {
+            if (array_key_exists($value, $result)) {
+                $order[] = $result[$value];
+            }
         }
 
-        return false;
+        return $order;
     }
 
     /**
