@@ -214,7 +214,7 @@ class Upload extends UploadBase
             $filePath = $movePath['dirname'] . DS;
             $info = $file->validate($rule)->move(ROOT_PATH . 'public' . $filePath, $movePath['basename']);
         } else {
-            $info = $file->validate($rule)->move(ROOT_PATH . 'public' . $filePath);
+            $info = $file->validate($rule)->move(ROOT_PATH . 'public' . $filePath, guid_v4());
         }
 
         if (false === $info) {

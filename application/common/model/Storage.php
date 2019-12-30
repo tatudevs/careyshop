@@ -263,13 +263,7 @@ class Storage extends CareyShop
             $map['type'] = ['neq', 2];
             $map['storage_id'] = ['in', array_unique($data['storage_id'])];
 
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'storage_id';
-
-            $query->where($map)->order([$orderField => $orderType]);
+            $query->where($map);
         });
 
         if (false !== $result) {
