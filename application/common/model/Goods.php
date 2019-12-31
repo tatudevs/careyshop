@@ -509,10 +509,7 @@ class Goods extends CareyShop
         }
 
         $result = GoodsAttr::all(function ($query) use ($data) {
-            $order['sort'] = 'asc';
-            $order['goods_attribute_id'] = 'asc';
-
-            $query->where(['goods_id' => ['eq', $data['goods_id']]])->order($order);
+            $query->where(['goods_id' => ['eq', $data['goods_id']]]);
         });
 
         if (false !== $result) {
