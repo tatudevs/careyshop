@@ -191,13 +191,17 @@ class Goods extends CareyShop
 
             foreach ($data['attr_config'] as $value) {
                 foreach ($value['get_attribute'] as $key => $item) {
-                    if (!is_empty_parm($item['result'])) {
+                    if (!is_empty_parm($item['attr_value'])) {
+                        $attr_value = is_array($item['attr_value'])
+                            ? implode(' ', $item['attr_value'])
+                            : $item['attr_value'];
+
                         $attrList[] = [
                             'goods_id'           => $goodsId,
                             'goods_attribute_id' => $item['goods_attribute_id'],
                             'parent_id'          => $item['parent_id'],
                             'is_important'       => $item['is_important'],
-                            'attr_value'         => $item['result'],
+                            'attr_value'         => $attr_value,
                             'sort'               => $key,
                         ];
                     }
