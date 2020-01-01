@@ -520,7 +520,8 @@ class GoodsAttribute extends CareyShop
         $map['goods_type_id'] = ['eq', $data['goods_type_id']];
         isset($data['attribute_all']) && $data['attribute_all'] == 1 ?: $map['is_delete'] = ['eq', 0];
 
-        $result = $this->where($map)->column('goods_attribute_id,attr_name,description,icon');
+        $field = 'goods_attribute_id,parent_id,attr_name,description,icon,is_important';
+        $result = $this->where($map)->column($field);
         if (false !== $result) {
             return $result;
         }
