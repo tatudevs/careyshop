@@ -537,7 +537,7 @@ class Goods extends CareyShop
         });
 
         if (false !== $result) {
-            return $result->toArray();
+            return array_column($result->toArray(), null, 'key_name');
         }
 
         return false;
