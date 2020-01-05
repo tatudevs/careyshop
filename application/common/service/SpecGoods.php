@@ -22,6 +22,7 @@ class SpecGoods extends CareyShop
      * @param  array  $data    待处理数据
      * @param  number $goodsId 商品编号
      * @return array
+     * @throws
      */
     public static function specItemToMenu($data, $goodsId = null)
     {
@@ -180,7 +181,14 @@ class SpecGoods extends CareyShop
                 }
             }
 
-            unset($item);
+            // 处理选中项
+            foreach ($value['check_list'] as &$check) {
+                if (array_key_exists($check, $replace)) {
+                    $check = $replace[$check];
+                }
+            }
+
+            unset($item, $check);
         }
 
         unset($value);
