@@ -27,7 +27,7 @@ class Discount extends CareyShop
         'page_no'        => 'integer|gt:0',
         'page_size'      => 'integer|gt:0',
         'order_type'     => 'in:asc,desc',
-        'order_field'    => 'in:promotion_id,name,all_goods,begin_time,end_time,status',
+        'order_field'    => 'in:promotion_id,name,begin_time,end_time,status',
     ];
 
     /**
@@ -75,7 +75,7 @@ class Discount extends CareyShop
         'list'   => [
             'name'       => 'max:100',
             'status'     => 'in:0,1',
-            'type'       => 'arrayHasOnlyInts',
+            'type'       => 'arrayHasOnlyInts:zero',
             'begin_time' => 'date|betweenTime|beforeTime:end_time',
             'end_time'   => 'date|betweenTime|afterTime:begin_time',
             'page_no',

@@ -264,10 +264,10 @@ class Discount extends CareyShop
         // 搜索条件
         $map = [];
         empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-        is_empty_parm($data['type']) ?: $map['type'] = ['in', $data['type']];
-        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        empty($data['type']) ?: $map['type'] = ['in', $data['type']];
         empty($data['begin_time']) ?: $map['begin_time'] = ['< time', $data['end_time']];
         empty($data['end_time']) ?: $map['end_time'] = ['> time', $data['begin_time']];
+        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
 
         $totalResult = $this->where($map)->count();
         if ($totalResult <= 0) {
