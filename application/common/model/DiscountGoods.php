@@ -39,6 +39,18 @@ class DiscountGoods extends CareyShop
     ];
 
     /**
+     * hasMany cs_goods
+     * @access public
+     * @return mixed
+     */
+    public function getGoods()
+    {
+        return $this
+            ->hasOne('Goods', 'goods_id', 'goods_id')
+            ->field('goods_id,name,store_qty,sales_sum,status,is_delete');
+    }
+
+    /**
      * 添加折扣商品
      * @access public
      * @param  array $discountGoods 商品数据
@@ -101,5 +113,31 @@ class DiscountGoods extends CareyShop
         }
 
         return [];
+    }
+
+    /**
+     * 根据编号获取折扣商品明细
+     * @access public
+     * @param  array $data 外部数据
+     * @return false|array
+     * @throws
+     */
+    public function getDiscountGoodsList($data)
+    {
+        if (!$this->validateData($data, 'DiscountGoods.list')) {
+            return false;
+        }
+
+        $result = self::all(function ($query) use ($data) {
+            $query
+                ->with('getGoods')
+                ->where(['discount_id' => ['eq', $data['discount_id']]]);
+        });
+
+        if (false !== $result) {
+            return $result->hidden(['goods_id'])->toArray();
+        }
+
+        return false;
     }
 }

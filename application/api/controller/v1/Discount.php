@@ -36,6 +36,8 @@ class Discount extends CareyShop
             'get.discount.list'       => ['getDiscountList'],
             // 根据商品编号获取折扣信息
             'get.discount.goods.info' => ['getDiscountGoodsInfo', 'app\common\model\DiscountGoods'],
+            // 根据编号获取折扣商品明细
+            'get.discount.goods.list' => ['getDiscountGoodsList', 'app\common\model\DiscountGoods'],
         ];
     }
 }

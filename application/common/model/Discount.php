@@ -194,7 +194,7 @@ class Discount extends CareyShop
             return false;
         }
 
-        $result = self::get($data['discount_id'], 'discountGoods');
+        $result = self::get($data['discount_id']);
         if (false !== $result) {
             return is_null($result) ? null : $result->toArray();
         }
@@ -288,7 +288,6 @@ class Discount extends CareyShop
             $orderField = !empty($data['order_field']) ? $data['order_field'] : 'discount_id';
 
             $query
-                ->with('discountGoods')
                 ->where($map)
                 ->order([$orderField => $orderType])
                 ->page($pageNo, $pageSize);

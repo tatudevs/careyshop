@@ -42,5 +42,8 @@ class DiscountGoods extends CareyShop
         'info' => [
             'goods_id' => 'require|arrayHasOnlyInts',
         ],
+        'list' => [
+            'discount_id' => 'require|integer|gt:0',
+        ],
     ];
 }
