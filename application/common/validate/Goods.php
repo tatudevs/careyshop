@@ -243,6 +243,9 @@ class Goods extends CareyShop
         'copy'       => [
             'goods_id' => 'require|integer|gt:0',
         ],
+        'select'     => [
+            'goods_id' => 'require|arrayHasOnlyInts',
+        ],
     ];
 
     /**

@@ -396,6 +396,34 @@ class Goods extends CareyShop
     }
 
     /**
+     * 获取指定编号商品的基础数据
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|bool
+     */
+    public function getGoodsSelect($data)
+    {
+        if (!$this->validateData($data, 'Goods.select')) {
+            return false;
+        }
+
+        $map['goods_id'] = ['in', $data['goods_id']];
+        $field = 'goods_id,name,store_qty,sales_sum,status,is_delete';
+
+        $order = [];
+        $result = $this->where($map)->column($field, 'goods_id');
+
+        // 根据传入顺序返回列表
+        foreach ($data['goods_id'] as $value) {
+            if (array_key_exists($value, $result)) {
+                $order[] = $result[$value];
+            }
+        }
+
+        return $order;
+    }
+
+    /**
      * 批量设置或关闭商品可积分抵扣
      * @access public
      * @param  array $data 外部数据

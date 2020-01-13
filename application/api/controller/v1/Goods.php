@@ -32,6 +32,8 @@ class Goods extends CareyShop
             'get.goods.item'             => ['getGoodsItem'],
             // 批量删除或恢复商品(回收站)
             'del.goods.list'             => ['delGoodsList'],
+            // 获取指定编号商品的基础数据
+            'get.goods.select'           => ['getGoodsSelect'],
             // 批量设置或关闭商品可积分抵扣
             'set.integral.goods.list'    => ['setIntegralGoodsList'],
             // 批量设置商品是否推荐
