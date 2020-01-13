@@ -22,6 +22,7 @@ class PromotionItem extends CareyShop
         'settings'     => 'require|array',
         'type'         => 'in:0,1,2,3,4',
         'value'        => 'float|egt:0|regex:^\d+(\.\d{1,2})?$',
+        'description'  => 'max:255',
     ];
 
     /**
@@ -34,6 +35,7 @@ class PromotionItem extends CareyShop
         'settings'     => '促销方式项',
         'type'         => '促销方式类型',
         'value'        => '促销方式数值',
+        'description'  => '促销描述',
     ];
 
     /**
@@ -49,6 +51,7 @@ class PromotionItem extends CareyShop
         'settings' => [
             'type'  => 'require|in:0,1,2,3,4',
             'value' => 'require|float|egt:0|regex:^\d+(\.\d{1,2})?$',
+            'description',
         ],
     ];
 }
