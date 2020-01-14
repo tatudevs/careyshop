@@ -621,8 +621,8 @@ class Goods extends CareyShop
 
         // 搜索条件
         $map = [];
-        empty($data['goods_id']) ?: $map['goods_id'] = ['in', $data['goods_id']];
-        empty($data['exclude_id']) ?: $map['goods_id'] = ['not in', $data['exclude_id']];
+        !isset($data['goods_id']) ?: $map['goods_id'] = ['in', $data['goods_id']];
+        !isset($data['exclude_id']) ?: $map['goods_id'] = ['not in', $data['exclude_id']];
         empty($data['goods_code']) ?: $map['goods_code|goods_spu|goods_sku|bar_code'] = ['eq', $data['goods_code']];
         empty($data['brand_id']) ?: $map['brand_id'] = ['in', $data['brand_id']];
         empty($data['store_qty']) ?: $map['store_qty'] = ['between', $data['store_qty']];
