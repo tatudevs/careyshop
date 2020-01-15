@@ -217,6 +217,35 @@ class Coupon extends CareyShop
     }
 
     /**
+     * 获取优惠劵选择列表
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|false
+     * @throws
+     */
+    public function getCouponSelect($data)
+    {
+        if (!$this->validateData($data, 'Coupon.select')) {
+            return false;
+        }
+
+        $result = self::all(function ($query) use ($data) {
+            $map['is_delete'] = ['eq', 0];
+            is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
+            is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+            is_empty_parm($data['is_invalid']) ?: $map['is_invalid'] = ['eq', $data['is_invalid']];
+
+            $query->where($map)->order(['coupon_id' => 'desc']);
+        });
+
+        if (false !== $result) {
+            return $result->toArray();
+        }
+
+        return false;
+    }
+
+    /**
      * 批量删除优惠劵
      * @access public
      * @param  array $data 外部数据

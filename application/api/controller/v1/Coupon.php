@@ -30,6 +30,8 @@ class Coupon extends CareyShop
             'get.coupon.item'    => ['getCouponItem'],
             // 获取优惠劵列表
             'get.coupon.list'    => ['getCouponList'],
+            // 获取优惠劵选择列表
+            'get.coupon.select'  => ['getCouponSelect'],
             // 批量删除优惠劵
             'del.coupon.list'    => ['delCouponList'],
             // 批量设置优惠劵状态

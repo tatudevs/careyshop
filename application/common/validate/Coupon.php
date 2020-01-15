@@ -109,6 +109,11 @@ class Coupon extends CareyShop
             'order_type',
             'order_field',
         ],
+        'select'  => [
+            'type' => 'in:0,1,2,3',
+            'status',
+            'is_invalid',
+        ],
         'del'     => [
             'coupon_id' => 'require|arrayHasOnlyInts',
         ],
