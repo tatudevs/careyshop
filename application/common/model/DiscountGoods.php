@@ -135,7 +135,7 @@ class DiscountGoods extends CareyShop
         });
 
         if (false !== $result) {
-            return $result->hidden(['goods_id'])->toArray();
+            return $result->toArray();
         }
 
         return false;
