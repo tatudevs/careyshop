@@ -235,6 +235,11 @@ class Coupon extends CareyShop
             is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
             is_empty_parm($data['is_invalid']) ?: $map['is_invalid'] = ['eq', $data['is_invalid']];
 
+            if (!empty($data['is_shelf_life'])) {
+                $map['give_end_time'] = ['> time', time()];
+                $map['use_end_time'] = ['> time', time()];
+            }
+
             $query->where($map)->order(['coupon_id' => 'desc']);
         });
 

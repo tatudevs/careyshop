@@ -36,6 +36,7 @@ class Coupon extends CareyShop
         'use_end_time'     => 'require|date|betweenTime|afterTime:use_begin_time',
         'status'           => 'in:0,1',
         'is_invalid'       => 'in:0,1',
+        'is_shelf_life'    => 'in:0,1',
         'page_no'          => 'integer|gt:0',
         'page_size'        => 'integer|gt:0',
         'order_type'       => 'in:asc,desc',
@@ -66,6 +67,7 @@ class Coupon extends CareyShop
         'use_end_time'     => '使用结束日期',
         'status'           => '优惠劵状态',
         'is_invalid'       => '优惠劵是否作废',
+        'is_shelf_life'    => '过滤有效期',
         'page_no'          => '页码',
         'page_size'        => '每页数量',
         'order_type'       => '排序方式',
@@ -113,6 +115,7 @@ class Coupon extends CareyShop
             'type' => 'in:0,1,2,3',
             'status',
             'is_invalid',
+            'is_shelf_life',
         ],
         'del'     => [
             'coupon_id' => 'require|arrayHasOnlyInts',
