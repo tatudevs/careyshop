@@ -26,7 +26,7 @@ class Promotion extends CareyShop
         'page_no'         => 'integer|gt:0',
         'page_size'       => 'integer|gt:0',
         'order_type'      => 'in:asc,desc',
-        'order_field'     => 'in:discount_id,name,default_dct,begin_time,end_time,status',
+        'order_field'     => 'in:promotion_id,name,default_dct,begin_time,end_time,status',
     ];
 
     /**
