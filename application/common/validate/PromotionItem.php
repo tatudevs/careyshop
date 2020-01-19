@@ -32,9 +32,9 @@ class PromotionItem extends CareyShop
     protected $field = [
         'promotion_id' => '促销编号',
         'quota'        => '促销限额',
-        'settings'     => '促销方式项',
-        'type'         => '促销方式类型',
-        'value'        => '促销方式数值',
+        'settings'     => '促销方案配置',
+        'type'         => '促销方案类型',
+        'value'        => '促销方案数值',
         'description'  => '促销描述',
     ];
 

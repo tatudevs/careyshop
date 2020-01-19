@@ -39,7 +39,7 @@ class Promotion extends CareyShop
         'begin_time'      => '促销开始日期',
         'end_time'        => '促销结束日期',
         'status'          => '促销状态',
-        'promotion_item'  => '促销方式',
+        'promotion_item'  => '促销方案',
         'page_no'         => '页码',
         'page_size'       => '每页数量',
         'order_type'      => '排序方式',

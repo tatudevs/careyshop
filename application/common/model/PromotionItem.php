@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    订单促销方式模型
+ * CareyShop    订单促销方案模型
  *
  * @author      zxm <252404501@qq.com>
  * @date        2017/5/31
@@ -31,9 +31,9 @@ class PromotionItem extends CareyShop
     ];
 
     /**
-     * 添加促销方式
+     * 添加促销方案
      * @access public
-     * @param  array $settings    促销方式配置参数
+     * @param  array $settings    促销方案配置
      * @param  int   $promotionId 促销编号
      * @return array|false
      * @throws

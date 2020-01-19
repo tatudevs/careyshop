@@ -103,7 +103,7 @@ class Promotion extends CareyShop
             // 保留主表数据
             $result = $this->toArray();
 
-            // 添加促销方式配置项
+            // 添加促销方案配置
             $promotionItemDb = new PromotionItem();
             $result['promotion_item'] = $promotionItemDb->addPromotionItem($data['promotion_item'], $this->getAttr('promotion_id'));
 
@@ -158,7 +158,7 @@ class Promotion extends CareyShop
                     throw new \Exception($promotionItemDb->getError());
                 }
 
-                // 添加促销方式配置项
+                // 添加促销方案配置
                 $result['promotion_item'] = $promotionItemDb->addPromotionItem($data['promotion_item'], $data['promotion_id']);
                 if (false === $result['promotion_item']) {
                     throw new \Exception($promotionItemDb->getError());
