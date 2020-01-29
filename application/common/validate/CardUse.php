@@ -19,14 +19,14 @@ class CardUse extends CareyShop
     protected $rule = [
         'card_use_id'    => 'integer|gt:0',
         'card_id'        => 'integer|gt:0',
-        'number'         => 'length:16',
+        'number'         => 'length:11',
         'password'       => 'length:16',
         'is_invalid'     => 'in:0,1',
         'is_active'      => 'in:0,1',
         'remark'         => 'max:255',
-        'src_number'     => 'length:16',
+        'src_number'     => 'length:11',
         'money'          => 'float|egt:0|regex:^\d+(\.\d{1,2})?$',
-        'exclude_number' => 'length:16',
+        'exclude_number' => 'length:11',
         'type'           => 'in:normal,invalid',
         'account'        => 'max:80',
         'goods_id'       => 'arrayHasOnlyInts',
@@ -62,7 +62,7 @@ class CardUse extends CareyShop
      */
     protected $scene = [
         'bind'       => [
-            'number'   => 'require|length:16',
+            'number'   => 'require|length:11',
             'password' => 'require|length:16',
         ],
         'invalid'    => [
@@ -77,8 +77,8 @@ class CardUse extends CareyShop
             'exclude_number',
         ],
         'merge'      => [
-            'number'     => 'require|length:16',
-            'src_number' => 'require|length:16',
+            'number'     => 'require|length:11',
+            'src_number' => 'require|length:11',
             'money',
         ],
         'list'       => [
@@ -93,7 +93,7 @@ class CardUse extends CareyShop
             'goods_id' => 'require|arrayHasOnlyInts',
         ],
         'check'      => [
-            'number'   => 'require|length:16',
+            'number'   => 'require|length:11',
             'goods_id' => 'require|arrayHasOnlyInts',
             'money'    => 'float|egt:0|regex:^\d+(\.\d{1,2})?$',
         ],

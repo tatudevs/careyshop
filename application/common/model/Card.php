@@ -94,7 +94,7 @@ class Card extends CareyShop
             for ($i = 0; $i < $data['give_num']; $i++) {
                 $useData[] = [
                     'card_id'  => $this->getAttr('card_id'),
-                    'number'   => rand_number(16),
+                    'number'   => rand_number(11),
                     'password' => rand_string(16, false),
                     'money'    => $data['money'],
                 ];
