@@ -398,6 +398,8 @@ class CardUse extends CareyShop
 
         if (is_client_admin()) {
             empty($data['card_id']) ?: $map['card_use.card_id'] = ['eq', $data['card_id']];
+            empty($data['number']) ?: $map['card_use.number'] = ['eq', $data['number']];
+            empty($data['name']) ?: $map['getCard.name'] = ['like', '%' . $data['name'] . '%'];
             empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
 
             // empty($data['is_active']) ?: $map['card_use.user_id'] = ['neq', 0];

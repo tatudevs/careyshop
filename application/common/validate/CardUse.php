@@ -19,6 +19,7 @@ class CardUse extends CareyShop
     protected $rule = [
         'card_use_id'    => 'integer|gt:0',
         'card_id'        => 'integer|gt:0',
+        'name'           => 'max:50',
         'number'         => 'length:11',
         'password'       => 'length:16',
         'is_invalid'     => 'in:0,1',
@@ -41,6 +42,7 @@ class CardUse extends CareyShop
     protected $field = [
         'card_use_id'    => '编号',
         'card_id'        => '购物卡编号',
+        'name'           => '购物卡名称',
         'number'         => '卡号',
         'password'       => '卡密',
         'is_invalid'     => '是否有效',
@@ -83,6 +85,8 @@ class CardUse extends CareyShop
         ],
         'list'       => [
             'card_id' => 'integer|egt:0',
+            'number',
+            'name',
             'type',
             'account',
             'is_active',
