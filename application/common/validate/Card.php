@@ -44,7 +44,7 @@ class Card extends CareyShop
         'category'         => '指定商品分类',
         'exclude_category' => '排除商品分类',
         'give_num'         => '发放数量',
-        'end_time'         => '截止有效期',
+        'end_time'         => '截止日期',
         'status'           => '购物卡状态',
         'page_no'          => '页码',
         'page_size'        => '每页数量',
