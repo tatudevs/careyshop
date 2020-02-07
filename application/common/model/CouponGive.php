@@ -183,7 +183,7 @@ class CouponGive extends CareyShop
         self::startTrans();
 
         try {
-            $result = $this->saveAll($data);
+            $result = $type == 3 ? $this->saveAll($data) : $this->insertAll($data);
             if (false === $result) {
                 throw new \Exception($this->getError());
             }
