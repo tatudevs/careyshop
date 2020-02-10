@@ -107,6 +107,7 @@ class User extends CareyShop
             'refresh' => 'require|max:32',
         ],
         'list'    => [
+            'client_id' => 'arrayHasOnlyInts',
             'user_level_id',
             'group_id',
             'account',
@@ -115,6 +116,9 @@ class User extends CareyShop
             'page_size',
             'order_type',
             'order_field',
+        ],
+        'select'  => [
+            'client_id' => 'require|arrayHasOnlyInts',
         ],
         'find'    => [
             'code'     => 'require|integer|max:6',

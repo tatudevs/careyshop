@@ -421,6 +421,7 @@ class User extends CareyShop
 
         // 搜索条件
         $map = [];
+        !isset($data['client_id']) ?: $map['user.user_id'] = ['in', $data['client_id']];
         empty($data['account']) ?: $map['user.username|user.mobile|user.nickname'] = ['eq', $data['account']];
         is_empty_parm($data['user_level_id']) ?: $map['user.user_level_id'] = ['eq', $data['user_level_id']];
         is_empty_parm($data['group_id']) ?: $map['user.group_id'] = ['eq', $data['group_id']];
@@ -480,6 +481,34 @@ class User extends CareyShop
         }
 
         return false;
+    }
+
+    /**
+     * 获取指定账号的基础数据
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|bool
+     */
+    public function getUserSelect($data)
+    {
+        if (!$this->validateData($data, 'User.select')) {
+            return false;
+        }
+
+        $map['user_id'] = ['in', $data['client_id']];
+        $field = 'user_id,username,nickname,mobile,status';
+
+        $order = [];
+        $result = $this->where($map)->column($field, 'user_id');
+
+        // 根据传入顺序返回列表
+        foreach ($data['client_id'] as $value) {
+            if (array_key_exists($value, $result)) {
+                $order[] = $result[$value];
+            }
+        }
+
+        return $order;
     }
 
     /**

@@ -44,6 +44,8 @@ class User extends CareyShop
             'get.user.info'       => ['getUserInfo'],
             // 获取账号列表
             'get.user.list'       => ['getUserList'],
+            // 获取指定账号的基础数据
+            'get.user.select'     => ['getUserSelect'],
             // 注销账号
             'logout.user.user'    => ['logoutUser'],
             // 登录账号

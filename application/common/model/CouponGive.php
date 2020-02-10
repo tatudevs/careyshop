@@ -117,7 +117,7 @@ class CouponGive extends CareyShop
      * 发放优惠劵
      * @access public
      * @param  int   $couponId 优惠劵编号
-     * @param  array $userId   发放用户(等同于发放数量)
+     * @param  array $userId   发放用户(等同于发放数)
      * @param  int   $type     优惠劵类型
      * @return false|object
      * @throws
@@ -165,7 +165,7 @@ class CouponGive extends CareyShop
 
         $remaining = $couponResult->getAttr('give_num') - $couponResult->getAttr('receive_num');
         if (count($userId) > $remaining && $couponResult->getAttr('give_num') !== 0) {
-            return $this->setError('可发放数量不足' . count($userId) . '张');
+            return $this->setError('可发放数不足，实际需要' . count($userId) . '张');
         }
 
         // 准备生成的数据
@@ -230,11 +230,20 @@ class CouponGive extends CareyShop
 
         $userIdResult = User::where($map)->column('user_id');
         if (!$userIdResult) {
-            return $this->setError('账号数据不存在');
+            if (!empty($data['username'])) {
+                return $this->setError('账号数据存在');
+            }
+
+            if (!empty($data['user_level_id'])) {
+                return $this->setError('当前选择的会员等级下不存在可发放账号');
+            }
+
+            return $this->setError('未知的错误');
         }
 
-        if ($this->addCouponGive($data['coupon_id'], $userIdResult, 0)) {
-            return true;
+        $result = $this->addCouponGive($data['coupon_id'], $userIdResult, 0);
+        if (false !== $result) {
+            return $result;
         }
 
         return false;
