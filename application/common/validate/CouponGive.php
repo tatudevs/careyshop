@@ -72,7 +72,7 @@ class CouponGive extends CareyShop
             'give_code' => 'require|max:10',
         ],
         'list'   => [
-            'coupon_id' => 'integer|gt:0',
+            'coupon_id' => 'integer|egt:0',
             'type',
             'account',
             'page_no',

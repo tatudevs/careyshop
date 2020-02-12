@@ -328,7 +328,7 @@ class CouponGive extends CareyShop
         $map['coupon_give.is_delete'] = ['eq', 0];
 
         if (is_client_admin()) {
-            !isset($data['coupon_id']) ?: $map['coupon_give.coupon_id'] = ['eq', $data['coupon_id']];
+            empty($data['coupon_id']) ?: $map['coupon_give.coupon_id'] = ['eq', $data['coupon_id']];
             empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
         } else {
             $map['coupon_give.user_id'] = ['eq', get_client_id()];
@@ -356,7 +356,7 @@ class CouponGive extends CareyShop
 
             // 回收站优惠劵
             if ($data['type'] == 'delete') {
-                $map['coupon_give.delete'] = ['eq', 1];
+                $map['coupon_give.is_delete'] = ['eq', 1];
             }
         }
 
