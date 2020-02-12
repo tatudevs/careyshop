@@ -913,6 +913,7 @@ class Order extends CareyShop
         if (!empty($this->dataParams['coupon_give_id']) || !empty($this->dataParams['coupon_exchange_code'])) {
             $couponDb = new CouponGive();
             $couponData['order_id'] = $this->getAttr('order_id');
+            $couponData['order_no'] = $this->getAttr('order_no');
 
             if (!empty($this->dataParams['coupon_give_id'])) {
                 $couponData['coupon_give_id'] = $this->dataParams['coupon_give_id'];

@@ -103,7 +103,9 @@ class CouponGive extends CareyShop
         }
 
         $data['use_time'] = time();
-        if (false === $this->allowField(['user_id', 'order_id', 'use_time'])->save($data, $map)) {
+        $field = ['user_id', 'order_id', 'order_no', 'use_time'];
+
+        if (false === $this->allowField($field)->save($data, $map)) {
             return false;
         }
 
