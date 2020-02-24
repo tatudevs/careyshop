@@ -201,7 +201,7 @@ class AppInstall extends CareyShop
         $result = self::all(function ($query) use ($data) {
             $query
                 ->cache(true, null, 'AppInstall')
-                ->field('name,ver')
+                ->field('name,ver,url')
                 ->where(['user_agent' => ['eq', $data['user_agent']]]);
         });
 
