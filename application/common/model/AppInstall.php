@@ -201,7 +201,7 @@ class AppInstall extends CareyShop
         $result = self::all(function ($query) use ($data) {
             $query
                 ->cache(true, null, 'AppInstall')
-                ->field('ver')
+                ->field('name,ver')
                 ->where(['user_agent' => ['eq', $data['user_agent']]]);
         });
 
@@ -211,7 +211,8 @@ class AppInstall extends CareyShop
 
         foreach ($result as $value) {
             if (version_compare($value->getAttr('ver'), $data['ver'], '>')) {
-                return ['is_updated' => true];
+                $value->setAttr('is_updated', true);
+                return $value->toArray();
             }
         }
 
