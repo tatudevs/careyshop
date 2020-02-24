@@ -189,7 +189,7 @@ class AppInstall extends CareyShop
      * 根据条件查询是否有更新
      * @access public
      * @param  array $data 外部数据
-     * @return bool
+     * @return array|bool
      * @throws
      */
     public function queryAppInstallUpdated($data)
@@ -211,11 +211,11 @@ class AppInstall extends CareyShop
 
         foreach ($result as $value) {
             if (version_compare($value->getAttr('ver'), $data['ver'], '>')) {
-                return true;
+                return ['is_updated' => true];
             }
         }
 
-        return $this->setError('当前应用版本已是最新');
+        return ['is_updated' => false];
     }
 
     /**
