@@ -353,6 +353,8 @@ class Setting extends CareyShop
                     case 'open_index':
                     case 'open_api':
                     case 'open_mobile':
+                    case 'home_captcha':
+                    case 'admin_captcha':
                         !empty($value) ?: $value = 0;
                         $this->setSettingItem($key, $value, 'system_info', 'Setting.status');
                         break;

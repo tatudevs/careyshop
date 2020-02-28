@@ -11,6 +11,8 @@
 namespace app\common\model;
 
 use think\Cache;
+use think\captcha\Captcha;
+use think\Request;
 
 class App extends CareyShop
 {
@@ -36,10 +38,11 @@ class App extends CareyShop
      * @var array
      */
     protected $type = [
-        'app_id'	=> 'integer',
-        'app_key'	=> 'integer',
-        'status'	=> 'integer',
-        'is_delete'	=> 'integer',
+        'app_id'        => 'integer',
+        'app_key'       => 'integer',
+        'login_captcha' => 'integer',
+        'status'        => 'integer',
+        'is_delete'     => 'integer',
     ];
 
     /**
@@ -114,7 +117,7 @@ class App extends CareyShop
             }
         }
 
-        $field = ['app_name', 'status'];
+        $field = ['app_name', 'login_captcha', 'status'];
         $map = ['app_id' => ['eq', $data['app_id']]];
 
         if (false !== $this->allowField($field)->save($data, $map)) {
@@ -243,6 +246,27 @@ class App extends CareyShop
     }
 
     /**
+     * 批量设置登录验证码
+     * @access public
+     * @param  array $data 外部数据
+     * @return bool
+     */
+    public function setAppCaptcha($data)
+    {
+        if (!$this->validateData($data, 'App.captcha')) {
+            return false;
+        }
+
+        $map['app_id'] = ['in', $data['app_id']];
+        if (false !== $this->save(['login_captcha' => $data['login_captcha']], $map)) {
+            Cache::clear('app');
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 批量设置应用状态
      * @access public
      * @param  array $data 外部数据
@@ -261,5 +285,34 @@ class App extends CareyShop
         }
 
         return false;
+    }
+
+    /**
+     * 查询应用是否需要登录验证码
+     * @access public
+     * @return array|false
+     * @throws
+     */
+    public function getAppCaptcha()
+    {
+        $appKey = Request::instance()->param('app_key');
+        $result = $this->where(['app_key' => ['eq', $appKey]])->find();
+
+        if (false !== $result && !is_null($result)) {
+            if ($result->getAttr('login_captcha') === 1) {
+                return ['captcha' => true];
+            }
+        }
+
+        return ['captcha' => false];
+    }
+
+    public function imageAppCaptcha()
+    {
+        $captcha = new Captcha();
+        $data['callback_return_type'] = 'html';
+        $data['is_callback'] = $captcha->entry();
+
+        return $data;
     }
 }

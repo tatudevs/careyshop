@@ -17,10 +17,11 @@ class App extends CareyShop
      * @var array
      */
     protected $rule = [
-        'app_id'     => 'integer|gt:0',
-        'app_name'   => 'require|max:30|unique:app,app_name,0,app_id',
-        'status'     => 'in:0,1',
-        'exclude_id' => 'integer|gt:0',
+        'app_id'        => 'integer|gt:0',
+        'app_name'      => 'require|max:30|unique:app,app_name,0,app_id',
+        'login_captcha' => 'require|in:0,1',
+        'status'        => 'in:0,1',
+        'exclude_id'    => 'integer|gt:0',
     ];
 
     /**
@@ -28,10 +29,11 @@ class App extends CareyShop
      * @var array
      */
     protected $field = [
-        'app_id'     => '应用编号',
-        'app_name'   => '应用名称',
-        'status'     => '应用状态',
-        'exclude_id' => '应用排除Id',
+        'app_id'        => '应用编号',
+        'app_name'      => '应用名称',
+        'login_captcha' => '登录验证码',
+        'status'        => '应用状态',
+        'exclude_id'    => '应用排除Id',
     ];
 
     /**
@@ -42,6 +44,7 @@ class App extends CareyShop
         'set'     => [
             'app_id'   => 'require|integer|gt:0',
             'app_name' => 'require|max:30',
+            'login_captcha',
             'status',
         ],
         'item'    => [
@@ -56,6 +59,10 @@ class App extends CareyShop
         ],
         'replace' => [
             'app_id' => 'require|integer|gt:0',
+        ],
+        'captcha' => [
+            'app_id'        => 'require|arrayHasOnlyInts',
+            'login_captcha' => 'require|in:0,1',
         ],
         'status'  => [
             'app_id' => 'require|arrayHasOnlyInts',

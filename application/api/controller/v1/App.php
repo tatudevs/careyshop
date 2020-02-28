@@ -36,8 +36,14 @@ class App extends CareyShop
             'unique.app.name'    => ['uniqueAppName'],
             // 更换应用Secret
             'replace.app.secret' => ['replaceAppSecret'],
+            // 批量设置登录验证码
+            'set.app.captcha'    => ['setAppCaptcha'],
             // 批量设置应用状态
             'set.app.status'     => ['setAppStatus'],
+            // 查询应用是否需要登录验证码
+            'get.app.captcha'    => ['getAppCaptcha'],
+            // 获取指定应用登录验证码
+            'image.app.captcha'  => ['imageAppCaptcha'],
         ];
     }
 }

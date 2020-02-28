@@ -48,7 +48,7 @@ class Admin extends CareyShop
         'status'       => '账号状态',
         'password_old' => '原始密码',
         'account'      => '账号、昵称',
-        'platform'     => '来源平台',
+        'platform'     => '来源终端',
         'page_no'      => '页码',
         'page_size'    => '每页数量',
         'order_type'   => '排序方式',

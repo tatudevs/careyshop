@@ -61,7 +61,7 @@ class User extends CareyShop
         'password_old'  => '原始密码',
         'last_login'    => '登录日期',
         'account'       => '账号、昵称、手机号',
-        'platform'      => '来源平台',
+        'platform'      => '来源终端',
         'page_no'       => '页码',
         'page_size'     => '每页数量',
         'order_type'    => '排序方式',
