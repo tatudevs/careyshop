@@ -50,8 +50,10 @@ class Qrcode extends CareyShop
             }
         }
 
-        \app\common\service\Qrcode::getQrcodeItem($data);
-        return true;
+        return [
+            'callback_return_type' => 'response',
+            'is_callback'          => \app\common\service\Qrcode::getQrcodeItem($data),
+        ];
     }
 
     /**

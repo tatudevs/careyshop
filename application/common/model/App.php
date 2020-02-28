@@ -11,7 +11,6 @@
 namespace app\common\model;
 
 use think\Cache;
-use think\captcha\Captcha;
 use think\Request;
 
 class App extends CareyShop
@@ -288,31 +287,22 @@ class App extends CareyShop
     }
 
     /**
-     * 查询应用是否需要登录验证码
+     * 查询登录是否需要验证码
      * @access public
      * @return array|false
      * @throws
      */
     public function getAppCaptcha()
     {
-        $appKey = Request::instance()->param('app_key');
+        $appKey = Request::instance()->param('appkey');
         $result = $this->where(['app_key' => ['eq', $appKey]])->find();
 
         if (false !== $result && !is_null($result)) {
-            if ($result->getAttr('login_captcha') === 1) {
-                return ['captcha' => true];
+            if ($result->getAttr('login_captcha') === 0) {
+                return ['captcha' => false];
             }
         }
 
-        return ['captcha' => false];
-    }
-
-    public function imageAppCaptcha()
-    {
-        $captcha = new Captcha();
-        $data['callback_return_type'] = 'html';
-        $data['is_callback'] = $captcha->entry();
-
-        return $data;
+        return ['captcha' => true];
     }
 }

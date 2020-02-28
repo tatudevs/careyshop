@@ -408,6 +408,20 @@ class Admin extends CareyShop
             return false;
         }
 
+        // 请求实列
+        $request = Request::instance();
+
+        // 验证码识别
+        $appDb = new App();
+        $appResult = $appDb->getAppCaptcha();
+
+        if (false !== $appResult['captcha']) {
+            $loginCode = $request->param('login_code', '');
+            if (!\app\common\service\App::checkCaptcha($loginCode)) {
+                return $this->setError('验证码错误');
+            }
+        }
+
         // 根据账号获取
         $result = self::get(['username' => $data['username']]);
         if (!$result) {
@@ -423,7 +437,7 @@ class Admin extends CareyShop
         }
 
         $data['last_login'] = time();
-        $data['last_ip'] = Request::instance()->ip();
+        $data['last_ip'] = $request->ip();
         unset($data['admin_id']);
         $this->allowField(['last_login', 'last_ip'])->save($data, ['username' => $data['username']]);
 

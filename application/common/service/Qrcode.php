@@ -82,9 +82,10 @@ class Qrcode extends CareyShop
         $fromWidth = ($qrWidth - $logoQrWidth) / 2;
         imagecopyresampled($qr, $logo, $fromWidth, $fromWidth, 0, 0, $logoQrWidth, $logoQrHeight, $logoWidth, $logoHeight);
 
-        header('Content-type: image/png');
         imagepng($qr);
+        $content = ob_get_clean();
         imagedestroy($qr);
-        exit;
+
+        return response($content, 200, ['Content-Length' => strlen($content)])->contentType('image/png');
     }
 }

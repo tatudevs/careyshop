@@ -296,6 +296,9 @@ class CareyShop extends Controller
                 case 'jsonp':
                     return jsonp($result['is_callback'], 200, ApiOutput::$poweredBy);
 
+                case 'response':
+                    return $result['is_callback'];
+
                 default:
                     return json($result['is_callback'], 200, ApiOutput::$poweredBy);
             }

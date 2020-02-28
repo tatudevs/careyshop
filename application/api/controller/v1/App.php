@@ -23,27 +23,29 @@ class App extends CareyShop
     {
         return [
             // 添加一个应用
-            'add.app.item'       => ['addAppItem'],
+            'add.app.item'            => ['addAppItem'],
             // 编辑一个应用
-            'set.app.item'       => ['setAppItem'],
+            'set.app.item'            => ['setAppItem'],
             // 获取一个应用
-            'get.app.item'       => ['getAppItem'],
+            'get.app.item'            => ['getAppItem'],
             // 获取应用列表
-            'get.app.list'       => ['getAppList'],
+            'get.app.list'            => ['getAppList'],
             // 批量删除应用
-            'del.app.list'       => ['delAppList'],
+            'del.app.list'            => ['delAppList'],
             // 查询应用名称是否已存在
-            'unique.app.name'    => ['uniqueAppName'],
+            'unique.app.name'         => ['uniqueAppName'],
             // 更换应用Secret
-            'replace.app.secret' => ['replaceAppSecret'],
+            'replace.app.secret'      => ['replaceAppSecret'],
             // 批量设置登录验证码
-            'set.app.captcha'    => ['setAppCaptcha'],
+            'set.app.captcha'         => ['setAppCaptcha'],
             // 批量设置应用状态
-            'set.app.status'     => ['setAppStatus'],
-            // 查询应用是否需要登录验证码
-            'get.app.captcha'    => ['getAppCaptcha'],
-            // 获取指定应用登录验证码
-            'image.app.captcha'  => ['imageAppCaptcha'],
+            'set.app.status'          => ['setAppStatus'],
+            // 查询登录是否需要验证码
+            'get.app.captcha'         => ['getAppCaptcha'],
+            // 获取应用验证码调用地址
+            'get.app.captcha.callurl' => ['getCaptchaCallurl', 'app\common\service\App'],
+            // 获取应用验证码
+            'image.app.captcha'       => ['imageAppCaptcha', 'app\common\service\App'],
         ];
     }
 }
