@@ -556,15 +556,17 @@ class CareyShop extends Controller
      */
     private function setAllowOrigin($allowOrigin)
     {
+        $origin = $this->request->header('origin');
         $allowOrigin = json_decode($allowOrigin, true);
+
         if (empty($allowOrigin)) {
             return;
         }
 
         if (in_array('*', $allowOrigin, true)) {
-            ApiOutput::$poweredBy['Access-Control-Allow-Origin'] = '*';
-        } elseif (in_array($this->request->header('origin'), $allowOrigin, true)) {
-            ApiOutput::$poweredBy['Access-Control-Allow-Origin'] = $this->request->header('origin');
+            ApiOutput::$poweredBy['Access-Control-Allow-Origin'] = $origin;
+        } elseif (in_array($origin, $allowOrigin, true)) {
+            ApiOutput::$poweredBy['Access-Control-Allow-Origin'] = $origin;
         } else {
             return;
         }
