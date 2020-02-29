@@ -39,10 +39,9 @@ class App extends CareyShop
     {
         $config = [
             'length'   => 4,
-            'fontSize' => 30,
             'useCurve' => false,
             'fontttf'  => '1.ttf',
-            'codeSet'  => '0123456789',
+            'codeSet'  => '02345689',
         ];
 
         $captcha = new Captcha($config);
