@@ -23,62 +23,81 @@ class ApiOutput
     public static $format = 'json';
 
     /**
-     * 是否回调输出
-     * @var boolean
-     */
-    public static $isCallback = false;
-
-    /**
      * 默认响应头
      * @var array
      */
     public static $header = [];
 
-    /**
-     * 构造方法
-     * @access public
-     */
-    public function __construct()
-    {
-        self::$header['X-Powered-By'] = 'CareyShop/' . get_version();
-    }
-
     public static function setCrossDomain()
     {
-    }
+        self::$header['X-Powered-By'] = 'CareyShop/' . get_version();
+//        $allowOrigin = json_decode(Config::get('allow_origin.value', 'system_info'), true);
 
-    public static function outJson($result, $code)
-    {
-        $data = !self::$isCallback ? $result : $result['is_callback'];
-        return json($data, $code, self::$header);
-    }
-
-    public static function outXml($result, $code)
-    {
-        $options = ['root_node' => 'careyshop'];
-        $data = !self::$isCallback ? $result : $result['is_callback'];
-        return xml($data, $code, self::$header, $options);
-    }
-
-    public static function outJsonp($result, $code)
-    {
-        $data = !self::$isCallback ? $result : $result['is_callback'];
-        return jsonp($data, $code, self::$header);
-    }
-
-    public static function outView($result)
-    {
-        $data = !self::$isCallback ?: $result['is_callback'];
-        return view('common@/CareyShop', $data);
-    }
-
-    public static function outResponse($result)
-    {
-        $data = !self::$isCallback ?: $result['is_callback'];
-        if ($data instanceof Response) {
+        $origin = Request::instance()->header('origin');
+        if (empty($origin)) {
+            $origin = '*';
         }
 
-        return $data;
+        self::$header['Access-Control-Allow-Origin'] = $origin;
+        self::$header['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS';
+        self::$header['Access-Control-Allow-Credentials'] = 'true';
+        self::$header['Access-Control-Allow-Headers'] = 'X-Requested-With, Content-Type, Accept';
+        self::$header['Access-Control-Max-Age'] = '86400'; // 1天
+    }
+
+    /**
+     * @param $result
+     * @param $code
+     * @return \think\response\Json
+     */
+    public static function outJson($result, $code)
+    {
+        return json($result, $code, self::$header);
+    }
+
+    /**
+     * @param $result
+     * @param $code
+     * @return \think\response\Xml
+     */
+    public static function outXml($result, $code)
+    {
+        return xml($result, $code, self::$header, ['root_node' => 'careyshop']);
+    }
+
+    /**
+     * @param $result
+     * @param $code
+     * @return \think\response\Jsonp
+     */
+    public static function outJsonp($result, $code)
+    {
+        return jsonp($result, $code, self::$header);
+    }
+
+    /**
+     * @param $result
+     * @param $code
+     * @return \think\response\View
+     */
+    public static function outView($result, $code)
+    {
+        return view('common@/CareyShop', $result, [], $code);
+    }
+
+    /**
+     * @param $result
+     * @param $code
+     * @return Response
+     */
+    public static function outResponse($result, $code)
+    {
+        if ($result instanceof Response) {
+            $header = array_merge($result->getHeader(), self::$header);
+            return $result->code($code)->header($header);
+        }
+
+        return $result;
     }
 
     /**
@@ -92,35 +111,42 @@ class ApiOutput
      */
     public static function outPut($data = [], $code = 200, $error = false, $message = '')
     {
-//        // 头部
-//        $header = [];
-//        $header = array_merge($header, self::$poweredBy);
-//
+        if (isset($data['callback_return_type']) && array_key_exists('is_callback', $data)) {
+            // 自定义回调接口返回
+            self::$format = $data['callback_return_type'];
+            $result = $data['is_callback'];
+        } else {
+            // 正常请求返回
+            $result = [
+                'status'  => $code,
+                'message' => $error == true ? empty($message) ? '发生未知异常' : $message : 'success',
+            ];
 
-//
-//        // 数据
-//        $result = [
-//            'status'  => $code,
-//            'message' => $error == true ? empty($message) ? '发生未知异常' : $message : 'success',
-//        ];
-//
-//        if (!$error) {
-//            $result['data'] = !empty($data) ? $data : Config::get('empty_result');
-//        } else {
-//            // 状态(非HTTPS始终为200状态,防止运营商劫持)
-//            $code = Request::instance()->isSsl() ? $code : 200;
-//        }
-//
-//        switch (self::$format) {
-//            case 'jsonp':
-//                return jsonp($result, $code, $header);
-//
-//            case 'xml':
-//                return xml($result, $code, $header, $options);
-//
-//            case 'json':
-//            default:
-//                return json($result, $code, $header);
-//        }
+            if (!$error) {
+                $result['data'] = !empty($data) ? $data : Config::get('empty_result');
+            } else {
+                // 状态(非HTTPS始终为200状态,防止运营商劫持)
+                $code = Request::instance()->isSsl() ? $code : 200;
+            }
+        }
+
+        self::setCrossDomain();
+        switch (self::$format) {
+            case 'view':
+                return self::outView($result, $code);
+
+            case 'response':
+                return self::outResponse($result, $code);
+
+            case 'jsonp':
+                return self::outJsonp($result, $code);
+
+            case 'xml':
+                return self::outXml($result, $code);
+
+            case 'json':
+            default:
+                return self::outJson($result, $code);
+        }
     }
 }
