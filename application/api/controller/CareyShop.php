@@ -118,8 +118,7 @@ class CareyShop extends Controller
             Config::set($value['code'], $value, $value['module']);
         }
 
-        // 跨域检测与设置,跨域 OPTIONS 请求友好返回
-        $this->setAllowOrigin(Config::get('allow_origin.value', 'system_info'));
+        // 跨域 OPTIONS 请求友好返回
         if ($this->request->isOptions()) {
             $this->outputError('success', 200);
         }
@@ -140,7 +139,6 @@ class CareyShop extends Controller
 
         // 获取外部参数
         $this->params = $this->request->param();
-
         unset($this->params['version']);
         unset($this->params['controller']);
         unset($this->params[str_replace('.', '_', $_SERVER['PATH_INFO'])]);
@@ -284,28 +282,8 @@ class CareyShop extends Controller
             self::$auth->saveLog($this->getAuthUrl(), $this->request, $result, get_called_class(), $logError);
         }
 
-        // 自定义输出格式(通常用于异步回调接口)
-        if (isset($result['callback_return_type']) && array_key_exists('is_callback', $result)) {
-            switch ($result['callback_return_type']) {
-                case 'view':
-                    return view('common@/CareyShop', ['data' => $result['is_callback']]);
-
-                case 'xml':
-                    return xml($result['is_callback'], 200, ApiOutput::$poweredBy);
-
-                case 'jsonp':
-                    return jsonp($result['is_callback'], 200, ApiOutput::$poweredBy);
-
-                case 'response':
-                    return $result['is_callback'];
-
-                default:
-                    return json($result['is_callback'], 200, ApiOutput::$poweredBy);
-            }
-        }
-
         // 输出结果
-        if (false === $result) {
+        if (false === $result && !isset($result['callback_return_type'])) {
             !empty($this->error) || !is_object(static::$model) ?: $this->error = static::$model->getError();
             $this->outputError($this->error);
         }
@@ -546,34 +524,5 @@ class CareyShop extends Controller
 
         $url = sprintf('%s/%s/%s/%s', $module, $version, $controller, $method);
         return $url;
-    }
-
-    /**
-     * 检测并设置跨域信息
-     * @access private
-     * @param  string $allowOrigin 允许列表,为空则表示不跨域
-     * @return void
-     */
-    private function setAllowOrigin($allowOrigin)
-    {
-        $origin = $this->request->header('origin');
-        $allowOrigin = json_decode($allowOrigin, true);
-
-        if (empty($allowOrigin)) {
-            return;
-        }
-
-        if (in_array('*', $allowOrigin, true)) {
-            ApiOutput::$poweredBy['Access-Control-Allow-Origin'] = $origin;
-        } elseif (in_array($origin, $allowOrigin, true)) {
-            ApiOutput::$poweredBy['Access-Control-Allow-Origin'] = $origin;
-        } else {
-            return;
-        }
-
-        ApiOutput::$poweredBy['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS';
-        ApiOutput::$poweredBy['Access-Control-Allow-Credentials'] = 'true';
-        ApiOutput::$poweredBy['Access-Control-Allow-Headers'] = 'X-Requested-With, Content-Type, Accept';
-        ApiOutput::$poweredBy['Access-Control-Max-Age'] = '86400'; // 1天
     }
 }

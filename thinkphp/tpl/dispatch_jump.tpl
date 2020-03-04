@@ -14,15 +14,6 @@
         .system-message .success,.system-message .error{ line-height: 1.8em; font-size: 36px; }
         .system-message .detail{ font-size: 12px; line-height: 20px; margin-top: 12px; display: none; }
     </style>
-    <script>
-        var _hmt = _hmt || [];
-        (function () {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?e325e60ca4cd358f2b424f5aecb8021a";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
 </head>
 <body>
     <div class="system-message">
@@ -41,6 +32,7 @@
             页面自动 <a id="href" href="<?php echo($url);?>">跳转</a> 等待时间： <b id="wait"><?php echo($wait);?></b>
         </p>
     </div>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/@careyshop/stats@1.0.1/stats.min.js"></script>
     <script type="text/javascript">
         (function(){
             var wait = document.getElementById('wait'),
