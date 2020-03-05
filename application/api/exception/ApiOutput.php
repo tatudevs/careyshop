@@ -31,14 +31,14 @@ class ApiOutput
     public static function setCrossDomain()
     {
         self::$header['X-Powered-By'] = 'CareyShop/' . get_version();
-//        $allowOrigin = json_decode(Config::get('allow_origin.value', 'system_info'), true);
+        $allowOrigin = json_decode(Config::get('allow_origin.value', 'system_info'), true);
 
         $origin = Request::instance()->header('origin');
         if (empty($origin)) {
             $origin = '*';
         }
 
-        self::$header['Access-Control-Allow-Origin'] = $origin;
+        self::$header['Access-Control-Allow-Origin'] = 'http://careyshop.oruei.com/';
         self::$header['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS';
         self::$header['Access-Control-Allow-Credentials'] = 'true';
         self::$header['Access-Control-Allow-Headers'] = 'X-Requested-With, Content-Type, Accept';
