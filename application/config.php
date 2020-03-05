@@ -234,10 +234,10 @@ return [
         'path'      => '/',
         // cookie 有效域名
         'domain'    => '',
-        //  cookie 启用安全传输
-        'secure'    => true,
+        // cookie 启用安全传输
+        'secure'    => false,
         // httponly设置
-        'httponly'  => 'HttpOnly',
+        'httponly'  => '',
         // 是否使用 setcookie
         'setcookie' => true,
     ],

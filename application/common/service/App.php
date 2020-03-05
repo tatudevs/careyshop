@@ -11,9 +11,9 @@
 
 namespace app\common\service;
 
+use captcha\Captcha;
 use think\Url;
 use think\Request;
-use think\captcha\Captcha;
 
 class App extends CareyShop
 {
