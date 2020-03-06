@@ -36,16 +36,27 @@ class App extends CareyShop
             'unique.app.name'         => ['uniqueAppName'],
             // 更换应用Secret
             'replace.app.secret'      => ['replaceAppSecret'],
-            // 批量设置登录验证码
+            // 批量设置应用验证码
             'set.app.captcha'         => ['setAppCaptcha'],
             // 批量设置应用状态
             'set.app.status'          => ['setAppStatus'],
-            // 查询登录是否需要验证码
+            // 查询应用验证码状态
             'get.app.captcha'         => ['getAppCaptcha'],
             // 获取应用验证码调用地址
             'get.app.captcha.callurl' => ['getCaptchaCallurl', 'app\common\service\App'],
             // 获取应用验证码
             'image.app.captcha'       => ['imageAppCaptcha', 'app\common\service\App'],
         ];
+    }
+
+    /**
+     * 查询应用验证码
+     * @access protected
+     * @return array|false
+     */
+    protected function getAppCaptcha()
+    {
+        $appKey = $this->request->param('appkey');
+        return \app\common\model\App::getAppCaptcha($appKey);
     }
 }

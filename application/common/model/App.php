@@ -10,6 +10,7 @@
 
 namespace app\common\model;
 
+use captcha\Captcha;
 use think\Cache;
 use think\Request;
 
@@ -37,11 +38,11 @@ class App extends CareyShop
      * @var array
      */
     protected $type = [
-        'app_id'        => 'integer',
-        'app_key'       => 'integer',
-        'login_captcha' => 'integer',
-        'status'        => 'integer',
-        'is_delete'     => 'integer',
+        'app_id'    => 'integer',
+        'app_key'   => 'integer',
+        'captcha'   => 'integer',
+        'status'    => 'integer',
+        'is_delete' => 'integer',
     ];
 
     /**
@@ -116,7 +117,7 @@ class App extends CareyShop
             }
         }
 
-        $field = ['app_name', 'login_captcha', 'status'];
+        $field = ['app_name', 'captcha', 'status'];
         $map = ['app_id' => ['eq', $data['app_id']]];
 
         if (false !== $this->allowField($field)->save($data, $map)) {
@@ -245,7 +246,7 @@ class App extends CareyShop
     }
 
     /**
-     * 批量设置登录验证码
+     * 批量设置应用验证码
      * @access public
      * @param  array $data 外部数据
      * @return bool
@@ -257,7 +258,7 @@ class App extends CareyShop
         }
 
         $map['app_id'] = ['in', $data['app_id']];
-        if (false !== $this->save(['login_captcha' => $data['login_captcha']], $map)) {
+        if (false !== $this->save(['captcha' => $data['captcha']], $map)) {
             Cache::clear('app');
             return true;
         }
@@ -287,22 +288,41 @@ class App extends CareyShop
     }
 
     /**
-     * 查询登录是否需要验证码
+     * 查询应用验证码状态
      * @access public
-     * @return array|false
+     * @param string $key     外部数据
+     * @param bool   $session 是否创建Session
+     * @return array
      * @throws
      */
-    public function getAppCaptcha()
+    public static function getAppCaptcha($key, $session = true)
     {
-        $appKey = Request::instance()->param('appkey');
-        $result = $this->where(['app_key' => ['eq', $appKey]])->find();
+        $result = [
+            'captcha'    => true,
+            'session_id' => '',
+        ];
 
-        if (false !== $result && !is_null($result)) {
-            if ($result->getAttr('login_captcha') === 0) {
-                return ['captcha' => false];
+        if (empty($key)) {
+            return $result;
+        }
+
+        $appResult = self::where(['app_key' => $key])->find();
+        if (false !== $appResult && !is_null($appResult)) {
+            if ($appResult->getAttr('captcha') === 0) {
+                $result['captcha'] = false;
+                return $result;
             }
         }
 
-        return ['captcha' => true];
+        if ($session) {
+            $captcha = new Captcha();
+            if (-1 === get_client_type()) {
+                $result['session_id'] = $captcha->getKey(rand_string());
+            } else {
+                $result['session_id'] = $captcha->getKey(get_client_token());
+            }
+        }
+
+        return $result;
     }
 }

@@ -31,7 +31,7 @@ class ApiOutput
     public static function setCrossDomain()
     {
         self::$header['X-Powered-By'] = 'CareyShop/' . get_version();
-        $allowOrigin = json_decode(Config::get('allow_origin.value', 'system_info'), true);
+//        $allowOrigin = json_decode(Config::get('allow_origin.value', 'system_info'), true);
 
         $origin = Request::instance()->header('origin');
         if (empty($origin)) {

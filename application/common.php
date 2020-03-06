@@ -100,6 +100,17 @@ if (!function_exists('get_client_group')) {
     }
 }
 
+if (!function_exists('get_client_token')) {
+    /**
+     * 返回当前账号token
+     * @return string
+     */
+    function get_client_token()
+    {
+        return isset($GLOBALS['client']['token']) ? $GLOBALS['client']['token'] : null;
+    }
+}
+
 if (!function_exists('user_md5')) {
     /**
      * 非常规用户密码加盐处理

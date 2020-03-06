@@ -362,6 +362,7 @@ class CareyShop extends Controller
             'group_id'    => $this->apiDebug ? AUTH_SUPER_ADMINISTRATOR : AUTH_GUEST,
             'client_id'   => $this->apiDebug ? 1 : 0,
             'client_name' => $this->apiDebug ? 'CareyShop' : '游客',
+            'token'       => $this->token,
         ];
 
         // Token为空则表示以游客身份访问
@@ -395,6 +396,7 @@ class CareyShop extends Controller
                 'group_id'    => $data['group_id'],
                 'client_id'   => $data['client_id'],
                 'client_name' => $data['username'],
+                'token'       => $this->token,
             ];
 
             $cacheTag = 'token:' . (is_client_admin() ? 'admin_' : 'user_') . get_client_id();

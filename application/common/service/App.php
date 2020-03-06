@@ -46,10 +46,10 @@ class App extends CareyShop
         ];
 
         $captcha = new Captcha($config);
-        $appKey = Request::instance()->param('appkey', '');
+        $id = Request::instance()->param('session_id');
 
         $data['callback_return_type'] = 'response';
-        $data['is_callback'] = $captcha->entry($appKey);
+        $data['is_callback'] = $captcha->entry($id);
 
         return $data;
     }
@@ -63,8 +63,6 @@ class App extends CareyShop
     public static function checkCaptcha($code)
     {
         $captcha = new Captcha();
-        $appKey = Request::instance()->param('appkey', '');
-
-        return $captcha->check($code, $appKey);
+        return $captcha->check($code, Request::instance()->param('session_id'));
     }
 }

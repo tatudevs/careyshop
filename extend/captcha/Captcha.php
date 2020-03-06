@@ -97,6 +97,17 @@ class Captcha
     }
 
     /**
+     * 返回验证码标识
+     * @access public
+     * @param string $key 验证码标识
+     * @return string
+     */
+    public function getKey($key)
+    {
+        return $this->authcode($this->seKey . $key);
+    }
+
+    /**
      * 验证验证码是否正确
      * @access public
      * @param string $code 用户验证码
@@ -105,11 +116,15 @@ class Captcha
      */
     public function check($code, $guid)
     {
-        $key = $this->authcode($this->seKey) . $guid;
+        if (empty($code) || empty($guid)) {
+            return false;
+        }
+
+        $key = $this->authcode($this->seKey . $guid);
         $secode = Cache::get($key);
 
         // 验证码不能为空
-        if (empty($code) || empty($secode)) {
+        if (empty($secode)) {
             return false;
         }
 
@@ -193,14 +208,14 @@ class Captcha
         }
 
         // 保存验证码
-        $key                   = $this->authcode($this->seKey);
+        $key                   = $this->authcode($this->seKey . $guid);
         $code                  = $this->authcode(strtoupper(implode('', $code)));
         $secode                = [];
         $secode['verify_code'] = $code; // 把校验码保存到缓存
         $secode['verify_time'] = time(); // 验证码创建时间
 
         if (!empty($guid)) {
-            Cache::set($key . $guid, $secode, $this->expire);
+            Cache::set($key, $secode, $this->expire);
         }
 
         ob_start();

@@ -412,12 +412,9 @@ class Admin extends CareyShop
         $request = Request::instance();
 
         // 验证码识别
-        $appDb = new App();
-        $appResult = $appDb->getAppCaptcha();
-
+        $appResult = App::getAppCaptcha($request->param('appkey'), false);
         if (false !== $appResult['captcha']) {
-            $loginCode = $request->param('login_code', '');
-            if (!\app\common\service\App::checkCaptcha($loginCode)) {
+            if (!\app\common\service\App::checkCaptcha($request->param('login_code'))) {
                 return $this->setError('验证码错误');
             }
         }
