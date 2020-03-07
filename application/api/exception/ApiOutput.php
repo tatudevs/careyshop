@@ -45,9 +45,10 @@ class ApiOutput
         $origin = $request->header('origin');
         if (empty($origin)) {
             /**
-             * "origin"键名存在,但缺少键值,可能是由于30x跳转后引起
-             * 最常见的是客户端通过http协议访问,而服务器跳转到了https协议,这时origin=null
-             * 所以在这里对"origin"键值进行模拟生成
+             * "origin"键名存在,但缺少键值,可能是由于30x跳转或其他各方面原因
+             * 所以在这里对"origin"键值进行模拟生成,但也有被游览器拦截的可能
+             * 比如Chrome对30x跳转后"origin=null"处理,导致诸多问题
+             * 使用SSL就没有那么多麻烦,或者指定url协议头不进行重定向.
              */
             $referer = $request->header('referer');
             if (empty($referer)) {

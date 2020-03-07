@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 2020-03-02 14:02:41
+-- Generation Time: 2020-03-08 02:29:07
 -- 服务器版本： 5.7.27-log
 -- PHP Version: 7.1.11
 
@@ -68,7 +68,7 @@ CREATE TABLE `cs_admin` (
 --
 
 INSERT INTO `cs_admin` (`admin_id`, `username`, `password`, `group_id`, `nickname`, `head_pic`, `last_login`, `last_ip`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
-(1, 'admin', '5631c89340a5413dc8124d23c85b900a', 1, '思维空间', '', 1583119487, '127.0.0.1', 1, 0, 1530289832, 1583119487),
+(1, 'admin', '5631c89340a5413dc8124d23c85b900a', 1, '思维空间', '', 1583604832, '127.0.0.1', 1, 0, 1530289832, 1583604832),
 (2, 'dnyz520', '5631c89340a5413dc8124d23c85b900a', 2, 'dnyz520', '', 1582512211, '127.0.0.1', 1, 0, 1530289832, 1582512211),
 (3, 'admin2', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop2', '', 1582870707, '127.0.0.1', 1, 0, 1530289832, 1582870707),
 (4, 'admin3', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop3', '', 1576338129, '127.0.0.1', 1, 0, 1530289832, 1576338129),
@@ -455,7 +455,7 @@ CREATE TABLE `cs_app` (
   `app_name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
   `app_key` int(8) UNSIGNED NOT NULL COMMENT '钥匙',
   `app_secret` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密钥',
-  `login_captcha` tinyint(1) NOT NULL DEFAULT '0' COMMENT '登录验证码',
+  `captcha` tinyint(1) NOT NULL DEFAULT '0' COMMENT '启用验证码 0=否 1=是',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用 ',
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='应用列表';
@@ -464,7 +464,7 @@ CREATE TABLE `cs_app` (
 -- 转存表中的数据 `cs_app`
 --
 
-INSERT INTO `cs_app` (`app_id`, `app_name`, `app_key`, `app_secret`, `login_captcha`, `status`, `is_delete`) VALUES
+INSERT INTO `cs_app` (`app_id`, `app_name`, `app_key`, `app_secret`, `captcha`, `status`, `is_delete`) VALUES
 (1, 'Admin(后台管理)', 86757125, 'ea1bd533d001fd73b09944f04c96a6fc', 1, 1, 0),
 (2, 'IOS(iPhone)', 26945134, '1e900e2a76da224b665c7dd0949b49e8', 0, 0, 0),
 (3, 'Web(微信小程序)', 76472358, '36affdc58f50e1035649abc808c22b48', 0, 0, 0);
@@ -491,7 +491,7 @@ CREATE TABLE `cs_app_install` (
 --
 
 INSERT INTO `cs_app_install` (`app_install_id`, `user_agent`, `name`, `ver`, `url`, `count`, `create_time`, `update_time`) VALUES
-(1, 'vue', 'CareyShop Admin', '1.5.1', 'https://github.com/dnyz520/careyshop-admin', 0, 1582526239, 1582701216);
+(1, 'vue', 'CareyShop Admin', '1.5.2', 'https://github.com/dnyz520/careyshop-admin', 0, 1582526239, 1583604707);
 
 -- --------------------------------------------------------
 
@@ -4375,7 +4375,6 @@ INSERT INTO `cs_delivery_area` (`delivery_area_id`, `delivery_id`, `name`, `regi
 (1, 1, '江浙沪', '[{\"name\":\"浙江\",\"region_id\":12},{\"name\":\"北京\",\"region_id\":2},{\"name\":\"上海\",\"region_id\":10},{\"name\":\"天津\",\"region_id\":3},{\"name\":\"重庆\",\"region_id\":23},{\"name\":\"河北\",\"region_id\":4},{\"name\":\"山西\",\"region_id\":5},{\"name\":\"河南\",\"region_id\":17}]', '11.00', '6.00', '5.00', '3.50', '0.00', '6.66'),
 (11, 2, '区域名', '[{\"name\":\"辽宁省\",\"region_id\":7},{\"name\":\"辽源市\",\"region_id\":90}]', '12.00', '7.00', '0.00', '0.00', '0.00', '0.00'),
 (15, 2, '北上广', '[{\"name\":\"浙江省\",\"region_id\":12},{\"name\":\"宁波市\",\"region_id\":124}]', '13.00', '8.00', '0.00', '0.00', '0.00', '0.00'),
-(23, 4, 'AAA', '[{\"name\":\"香港\",\"region_id\":34},{\"name\":\"澳门\",\"region_id\":35},{\"name\":\"台湾\",\"region_id\":33}]', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00'),
 (26, 1, '北上广', '[{\"name\":\"香港\",\"region_id\":34},{\"name\":\"澳门\",\"region_id\":35},{\"name\":\"台湾\",\"region_id\":33}]', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00');
 
 -- --------------------------------------------------------
@@ -7805,8 +7804,8 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (1007, 866, '查询列表', '', '', '', 'admin', 0, '/order/admin/refund/list', '', '_self', 0, 50, 1),
 (1008, 866, '退款信息', '', '', '', 'admin', 0, '/order/admin/refund/query', '', '_self', 0, 50, 1),
 (1009, 40, '根据条件查询是否有更新', '', '', '', 'api', 0, 'api/v1/app_install/query.app.install.updated', '', '_self', 0, 50, 1),
-(1010, 31, '批量设置登录验证码', '', '', '', 'api', 0, 'api/v1/app/set.app.captcha', '', '_self', 0, 9, 1),
-(1011, 31, '查询登录是否需要验证码', '', '', '', 'api', 0, 'api/v1/app/get.app.captcha', '', '_self', 0, 10, 1),
+(1010, 31, '批量设置应用验证码', '', '', '', 'api', 0, 'api/v1/app/set.app.captcha', '', '_self', 0, 9, 1),
+(1011, 31, '查询应用验证码状态', '', '', '', 'api', 0, 'api/v1/app/get.app.captcha', '', '_self', 0, 10, 1),
 (1012, 31, '获取应用验证码', '', '', '', 'api', 0, 'api/v1/app/image.app.captcha', '', '_self', 0, 12, 1),
 (1013, 31, '获取应用验证码调用地址', '', '', '', 'api', 0, 'api/v1/app/get.app.captcha.callurl', '', '_self', 0, 11, 1);
 
@@ -14110,7 +14109,7 @@ CREATE TABLE `cs_token` (
 --
 
 INSERT INTO `cs_token` (`token_id`, `client_id`, `group_id`, `username`, `client_type`, `platform`, `code`, `token`, `token_expires`, `refresh`, `refresh_expires`) VALUES
-(16, 1, 1, 'admin', 1, 'admin', '8d7f2a9ffebeece128752ca4f83b4936', 'b492eb2096cf1fc5648d74a4f42a1f87', 1585711487, 'b7874c23bdefc67a17ca591650eb6ca4', 1585797887);
+(77, 1, 1, 'admin', 1, 'admin', 'c9e2020b8893d93d8ead398013307995', '08b052e59004f58ede0932ef3f1650e1', 1586196832, '226bf5dfd22e4dc047c18ab612db5927', 1586283232);
 
 -- --------------------------------------------------------
 
@@ -15602,7 +15601,7 @@ ALTER TABLE `cs_withdraw_user`
 -- 使用表AUTO_INCREMENT `cs_action_log`
 --
 ALTER TABLE `cs_action_log`
-  MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6295;
+  MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6642;
 --
 -- 使用表AUTO_INCREMENT `cs_admin`
 --
@@ -15897,7 +15896,7 @@ ALTER TABLE `cs_support`
 -- 使用表AUTO_INCREMENT `cs_token`
 --
 ALTER TABLE `cs_token`
-  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 --
 -- 使用表AUTO_INCREMENT `cs_topic`
 --
