@@ -28,20 +28,48 @@ class ApiOutput
      */
     public static $header = [];
 
-    public static function setCrossDomain()
+    /**
+     * @param Request $request
+     */
+    public static function setCrossDomain(&$request)
     {
+        $isOrigin = $request->has('origin', 'header');
+        $allowOrigin = json_decode(Config::get('allow_origin.value', 'system_info'), true);
         self::$header['X-Powered-By'] = 'CareyShop/' . get_version();
-//        $allowOrigin = json_decode(Config::get('allow_origin.value', 'system_info'), true);
 
-        $origin = Request::instance()->header('origin');
+        // 未配置跨域或"origin"不存在时不返回访问控制(CORS)
+        if (empty($allowOrigin) || !$isOrigin) {
+            return;
+        }
+
+        $origin = $request->header('origin');
         if (empty($origin)) {
-            $origin = '*';
+            /**
+             * "origin"键名存在,但缺少键值,可能是由于30x跳转后引起
+             * 最常见的是客户端通过http协议访问,而服务器跳转到了https协议,这时origin=null
+             * 所以在这里对"origin"键值进行模拟生成
+             */
+            $referer = $request->header('referer');
+            if (empty($referer)) {
+                return;
+            }
+
+            $url = parse_url($referer);
+            $origin = sprintf('%s://%s', $url['scheme'], $url['host']);
+
+            if (isset($url['port'])) {
+                $origin .= ':' . $url['port'];
+            }
+        }
+
+        if (!in_array('*', $allowOrigin) && !in_array($origin, $allowOrigin)) {
+            return;
         }
 
         self::$header['Access-Control-Allow-Origin'] = $origin;
         self::$header['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS';
         self::$header['Access-Control-Allow-Credentials'] = 'true';
-        self::$header['Access-Control-Allow-Headers'] = 'X-Requested-With, Content-Type, Accept';
+        self::$header['Access-Control-Allow-Headers'] = 'Content-Type, Accept';
         self::$header['Access-Control-Max-Age'] = '86400'; // 1天
     }
 
@@ -111,6 +139,10 @@ class ApiOutput
      */
     public static function outPut($data = [], $code = 200, $error = false, $message = '')
     {
+        // 获取请求对象
+        $request = Request::instance();
+
+        // 区分返回数据类型
         if (isset($data['callback_return_type']) && array_key_exists('is_callback', $data)) {
             // 自定义回调接口返回
             self::$format = $data['callback_return_type'];
@@ -126,11 +158,12 @@ class ApiOutput
                 $result['data'] = !empty($data) ? $data : Config::get('empty_result');
             } else {
                 // 状态(非HTTPS始终为200状态,防止运营商劫持)
-                $code = Request::instance()->isSsl() ? $code : 200;
+                $code = $request->isSsl() ? $code : 200;
             }
         }
 
-        self::setCrossDomain();
+        // 按请求格式返回
+        self::setCrossDomain($request);
         switch (self::$format) {
             case 'view':
                 return self::outView($result, $code);
