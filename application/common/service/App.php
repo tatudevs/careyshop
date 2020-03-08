@@ -65,6 +65,7 @@ class App extends CareyShop
         $captcha = new Captcha();
         $id = Request::instance()->param('session_id');
 
-        return $captcha->check($code, $id);
+        $result = $captcha->check($code, $id);
+        return $result === false ? $captcha->getError() : true;
     }
 }

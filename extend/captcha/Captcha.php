@@ -20,7 +20,7 @@ class Captcha
         // 验证码字符集合
         'codeSet'  => '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY',
         // 验证码过期时间（s）
-        'expire'   => 1800,
+        'expire'   => 120,
         // 使用中文验证码
         'useZh'    => false,
         // 中文验证码字符串
@@ -49,6 +49,7 @@ class Captcha
 
     private $_image = null; // 验证码图片实例
     private $_color = null; // 验证码字体颜色
+    private $_errpr = '';
 
     /**
      * 架构方法 设置参数
@@ -97,6 +98,28 @@ class Captcha
     }
 
     /**
+     * 返回错误信息
+     * @access public
+     * @return string
+     */
+    public function getError()
+    {
+        return $this->_errpr;
+    }
+
+    /**
+     * 设置错误信息
+     * @access public
+     * @param string $var
+     * @return bool
+     */
+    public function setError($var)
+    {
+        $this->_errpr = $var;
+        return false;
+    }
+
+    /**
      * 返回验证码标识
      * @access public
      * @param string $key 验证码标识
@@ -121,17 +144,12 @@ class Captcha
         }
 
         $key = $this->authcode($this->seKey . $id);
-        $secode = Cache::get($key);
-
-        // 验证码不能为空
-        if (empty($secode)) {
-            return false;
-        }
+        $secode = Cache::get($key, ['verify_time' => 0]);
 
         // 验证码过期
         if (time() - $secode['verify_time'] > $this->expire) {
             Cache::rm($key);
-            return false;
+            return $this->setError('验证码过期');
         }
 
         if ($this->authcode(strtoupper($code)) == $secode['verify_code']) {
@@ -139,7 +157,7 @@ class Captcha
             return true;
         }
 
-        return false;
+        return $this->setError('验证码错误');
     }
 
     /**
