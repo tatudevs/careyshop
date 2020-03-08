@@ -12,7 +12,6 @@ namespace app\common\model;
 
 use captcha\Captcha;
 use think\Cache;
-use think\Request;
 
 class App extends CareyShop
 {

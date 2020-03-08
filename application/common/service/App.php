@@ -63,6 +63,8 @@ class App extends CareyShop
     public static function checkCaptcha($code)
     {
         $captcha = new Captcha();
-        return $captcha->check($code, Request::instance()->param('session_id'));
+        $id = Request::instance()->param('session_id');
+
+        return $captcha->check($code, $id);
     }
 }

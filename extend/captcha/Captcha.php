@@ -111,16 +111,16 @@ class Captcha
      * 验证验证码是否正确
      * @access public
      * @param string $code 用户验证码
-     * @param string $guid 验证码标识
+     * @param string $id   已生成的验证码标识
      * @return bool 用户验证码是否正确
      */
-    public function check($code, $guid)
+    public function check($code, $id)
     {
-        if (empty($code) || empty($guid)) {
+        if (empty($code) || empty($id)) {
             return false;
         }
 
-        $key = $this->authcode($this->seKey . $guid);
+        $key = $this->authcode($this->seKey . $id);
         $secode = Cache::get($key);
 
         // 验证码不能为空
@@ -230,7 +230,7 @@ class Captcha
     /**
      * 输出验证码并把验证码的值保存在缓存中
      * @access public
-     * @param string $id 要生成验证码的标识
+     * @param string $id 要生成的验证码标识
      * @return \think\Response
      */
     public function entry($id)
