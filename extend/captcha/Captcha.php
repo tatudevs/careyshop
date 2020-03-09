@@ -139,8 +139,12 @@ class Captcha
      */
     public function check($code, $id)
     {
-        if (empty($code) || empty($id)) {
-            return false;
+        if (empty($code)) {
+            return $this->setError('验证码不能为空');
+        }
+
+        if (empty($id)) {
+            return $this->setError('验证码标识无效，请刷新页面');
         }
 
         $key = $this->authcode($this->seKey . $id);
