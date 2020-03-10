@@ -131,7 +131,7 @@ class Auth extends CareyShop
      * @param  object $request 请求对象
      * @param  array  $result  处理结果
      * @param  string $class   手动输入当前类
-     * @param  string  $error   错误信息
+     * @param  string $error   错误信息
      * @return void
      */
     public function saveLog($url, &$request, $result, $class, $error = '')
@@ -154,6 +154,7 @@ class Auth extends CareyShop
             'username'    => get_client_name(),
             'path'        => $url,
             'module'      => $class,
+            'header'      => $request->header(),
             'params'      => $request->param(),
             'result'      => false === $result ? $error : $result,
             'ip'          => $request->ip(),
