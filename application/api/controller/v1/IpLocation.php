@@ -48,7 +48,7 @@ class IpLocation extends CareyShop
 
         foreach ($data['ip'] as $key => $value) {
             try {
-                $result[$key] = $ip2region->memorySearch($value);
+                $result[$key] = $ip2region->btreeSearch($value);
                 $result[$key]['status'] = 200;
             } catch (\exception $e) {
                 $result[$key]['error'] = $e->getMessage();

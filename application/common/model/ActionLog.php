@@ -16,12 +16,6 @@ use util\Ip2Region;
 class ActionLog extends CareyShop
 {
     /**
-     * IP查询
-     * @var null
-     */
-    private static $ip2region = null;
-
-    /**
      * 是否需要自动写入时间戳
      * @var bool
      */
@@ -119,11 +113,9 @@ class ActionLog extends CareyShop
             return '';
         }
 
-        if (is_null(self::$ip2region)) {
-            self::$ip2region = new Ip2Region();
-        }
+        $ip2region = new Ip2Region();
+        $result = $ip2region->btreeSearch($data['ip']);
 
-        $result = self::$ip2region->memorySearch($data['ip']);
         if ($result) {
             $value = get_ip2region_str($result['region']);
         }

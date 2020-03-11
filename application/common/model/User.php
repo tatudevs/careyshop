@@ -17,12 +17,6 @@ use util\Ip2Region;
 class User extends CareyShop
 {
     /**
-     * IP查询
-     * @var null
-     */
-    private static $ip2region = null;
-
-    /**
      * 是否需要自动写入时间戳
      * @var bool
      */
@@ -89,11 +83,9 @@ class User extends CareyShop
             return '';
         }
 
-        if (is_null(self::$ip2region)) {
-            self::$ip2region = new Ip2Region();
-        }
+        $ip2region = new Ip2Region();
+        $result = $ip2region->btreeSearch($data['last_ip']);
 
-        $result = self::$ip2region->memorySearch($data['last_ip']);
         if ($result) {
             $value = get_ip2region_str($result['region']);
         }

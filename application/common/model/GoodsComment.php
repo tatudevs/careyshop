@@ -16,12 +16,6 @@ use util\Ip2Region;
 class GoodsComment extends CareyShop
 {
     /**
-     * IP查询
-     * @var null
-     */
-    private static $ip2region = null;
-
-    /**
      * 主评论
      * @var int
      */
@@ -88,11 +82,9 @@ class GoodsComment extends CareyShop
             return '';
         }
 
-        if (is_null(self::$ip2region)) {
-            self::$ip2region = new Ip2Region();
-        }
+        $ip2region = new Ip2Region();
+        $result = $ip2region->btreeSearch($data['ip_address']);
 
-        $result = self::$ip2region->memorySearch($data['ip_address']);
         if ($result) {
             $value = get_ip2region_str($result['region']);
         }
