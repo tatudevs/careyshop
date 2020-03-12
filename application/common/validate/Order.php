@@ -181,7 +181,7 @@ class Order extends CareyShop
             'is_recycle' => 'require|in:0,1,2',
         ],
         'picking'      => [
-            'order_no' => 'require|max:50',
+            'order_no' => 'require|arrayHasOnlyStrings',
         ],
         'delivery'     => [
             'order_no'       => 'require|max:50',
@@ -190,7 +190,7 @@ class Order extends CareyShop
             'delivery_id',
         ],
         'complete'     => [
-            'order_no' => 'require|max:50',
+            'order_no' => 'require|arrayHasOnlyStrings',
         ],
         'list'         => [
             'is_export',

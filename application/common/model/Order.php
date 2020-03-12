@@ -1557,7 +1557,7 @@ class Order extends CareyShop
     }
 
     /**
-     * 订单设为配货状态
+     * 订单批量设为配货状态
      * @access public
      * @param  array $data 外部数据
      * @return array|false
@@ -1569,44 +1569,51 @@ class Order extends CareyShop
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['order_no'] = ['eq', $data['order_no']];
+        $result = self::all(function ($query) use ($data) {
+            $map['order_no'] = ['in', $data['order_no']];
             $map['is_delete'] = ['eq', 0];
             is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
 
             $query->where($map);
         });
 
-        if (!$result) {
-            return is_null($result) ? $this->setError('订单不存在') : false;
-        }
-
-        if ($result->getAttr('payment_status') !== 1) {
-            return $this->setError('订单未付款不允许配货');
-        }
-
-        if ($result->getAttr('trade_status') !== 0 && $result->getAttr('trade_status') !== 1) {
-            return $this->setError('订单状态不允许配货');
+        if (false === $result) {
+            return false;
         }
 
         // 开启事务
         self::startTrans();
 
         try {
-            // 修改订单状态
-            $isPicking = !$result->getAttr('trade_status');
-            if (false === $result->save(['trade_status' => $isPicking])) {
-                throw new \Exception($this->getError());
-            }
+            $tradeStatus = [];
+            foreach ($result as $value) {
+                $orderNo = $value->getAttr('order_no');
+                if ($value->getAttr('payment_status') !== 1) {
+                    return $this->setError(sprintf('订单号：%s 未付款不允许配货', $orderNo));
+                }
 
-            // 写入订单操作日志
-            $info = $isPicking ? '订单开始配货' : '订单取消配货';
-            if (!$this->addOrderLog($result->toArray(), $info, '订单配货')) {
-                throw new \Exception($this->getError());
+                if ($value->getAttr('trade_status') !== 0 && $value->getAttr('trade_status') !== 1) {
+                    return $this->setError(sprintf('订单号：%s 状态不允许配货', $orderNo));
+                }
+
+                // 修改订单状态
+                $isPicking = !$value->getAttr('trade_status');
+                if (false === $value->save(['trade_status' => $isPicking])) {
+                    throw new \Exception($this->getError());
+                }
+
+                // 写入订单操作日志
+                $info = $isPicking ? '订单开始配货' : '订单取消配货';
+                if (!$this->addOrderLog($value->toArray(), $info, '订单配货')) {
+                    throw new \Exception($this->getError());
+                }
+
+                // 待返回交易状态
+                $tradeStatus[$orderNo] = $value->getAttr('trade_status');
             }
 
             self::commit();
-            return ['trade_status' => $result->getAttr('trade_status')];
+            return ['trade_status' => $tradeStatus];
         } catch (\Exception $e) {
             self::rollback();
             return $this->setError($e->getMessage());
@@ -1833,7 +1840,7 @@ class Order extends CareyShop
     }
 
     /**
-     * 订单确认收货
+     * 订单批量确认收货
      * @access public
      * @param  array $data 外部数据
      * @return bool
@@ -1845,66 +1852,69 @@ class Order extends CareyShop
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['order_no'] = ['eq', $data['order_no']];
+        $result = self::all(function ($query) use ($data) {
+            $map['order_no'] = ['in', $data['order_no']];
             $map['is_delete'] = ['eq', 0];
             is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
 
             $query->where($map);
         });
 
-        if (!$result) {
-            return is_null($result) ? $this->setError('订单不存在') : false;
-        }
-
-        if ($result->getAttr('delivery_status') !== 1) {
-            return $this->setError('订单未发货或未全部发货完成');
-        }
-
-        if ($result->getAttr('trade_status') === 3) {
-            return $this->setError('该笔订单已完成确认收货');
-        }
-
-        if ($result->getAttr('trade_status') !== 2 || $result->getAttr('delivery_status') === 0) {
-            return $this->setError('订单状态不允许确认收货');
+        if (false === $result) {
+            return false;
         }
 
         // 开启事务
         self::startTrans();
 
         try {
-            // 修改订单状态
-            if (false === $result->save(['trade_status' => 3, 'finished_time' => time()])) {
-                throw new \Exception($this->getError());
-            }
+            foreach ($result as $value) {
+                $orderNo = $value->getAttr('order_no');
+                if ($value->getAttr('delivery_status') !== 1) {
+                    return $this->setError(sprintf('订单号：%s 未发货或未全部发货完成', $orderNo));
+                }
 
-            // 重新赋值订单数据
-            unset($this->orderData);
-            $this->orderData = $result->toArray();
+                if ($value->getAttr('trade_status') === 3) {
+                    return $this->setError(sprintf('订单号：%s 已完成确认收货', $orderNo));
+                }
 
-            // 撤销售后服务单
-            if (!$this->cancelOrderService('complete')) {
-                throw new \Exception($this->getError());
-            }
+                if ($value->getAttr('trade_status') !== 2 || $value->getAttr('delivery_status') === 0) {
+                    return $this->setError(sprintf('订单号：%s 状态不允许确认收货', $orderNo));
+                }
 
-            // 订单商品设为收货状态
-            if (!$this->completeOrderGoods($this->orderData['order_id'])) {
-                throw new \Exception($this->getError());
-            }
-
-            // 写入订单操作日志
-            if (!$this->addOrderLog($this->orderData, '确认收货，交易已完成', '确认收货')) {
-                throw new \Exception($this->getError());
-            }
-
-            // 结算累计消费金额,赠送积分,赠送优惠劵
-            if ($this->orderData['is_give'] === 1) {
-                if (!$this->completeUserData()) {
+                // 修改订单状态
+                if (false === $value->save(['trade_status' => 3, 'finished_time' => time()])) {
                     throw new \Exception($this->getError());
                 }
 
-                if (!$this->completeGiveCoupon($result)) {
+                // 重新赋值订单数据
+                unset($this->orderData);
+                $this->orderData = $value->toArray();
+
+                // 撤销售后服务单
+                if (!$this->cancelOrderService('complete')) {
                     throw new \Exception($this->getError());
+                }
+
+                // 订单商品设为收货状态
+                if (!$this->completeOrderGoods($this->orderData['order_id'])) {
+                    throw new \Exception($this->getError());
+                }
+
+                // 写入订单操作日志
+                if (!$this->addOrderLog($this->orderData, '确认收货，交易已完成', '确认收货')) {
+                    throw new \Exception($this->getError());
+                }
+
+                // 结算累计消费金额,赠送积分,赠送优惠劵
+                if ($this->orderData['is_give'] === 1) {
+                    if (!$this->completeUserData()) {
+                        throw new \Exception($this->getError());
+                    }
+
+                    if (!$this->completeGiveCoupon($value)) {
+                        throw new \Exception($this->getError());
+                    }
                 }
             }
 
