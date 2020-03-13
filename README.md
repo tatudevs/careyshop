@@ -58,10 +58,3 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 app_key：86757125
 
 app_secret：ea1bd533d001fd73b09944f04c96a6fc
-
-### 版权信息
-CareyShop 仅提供个人非商业用途免费使用，商业需授权。
-
-本项目包含的第三方源码和二进制文件之版权信息另行标注。
-
-Copyright © 2016-2019 [Carey Stu.](https://www.careyshop.cn "CareyShop") 保留所有权利。
