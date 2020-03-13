@@ -182,7 +182,7 @@ class Delivery extends CareyShop
             if (is_client_admin()) {
                 unset($map['delivery.status']);
                 is_empty_parm($data['status']) ?: $map['delivery.status'] = ['eq', $data['status']];
-                empty($data['name']) ?: $map['getDeliveryItem.name'] = ['like', '%' . $data['name'] . '%'];
+                empty($data['name']) ?: $map['delivery.alias|getDeliveryItem.name'] = ['like', '%' . $data['name'] . '%'];
             }
 
             // 排序方式

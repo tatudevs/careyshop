@@ -19,6 +19,7 @@ class Delivery extends CareyShop
     protected $rule = [
         'delivery_id'         => 'integer|gt:0',
         'delivery_item_id'    => 'require|integer|gt:0|unique:delivery,delivery_item_id,0,delivery_id',
+        'alias'               => 'max:32',
         'content'             => 'max:150',
         'first_weight'        => 'require|float|egt:0|regex:^\d+(\.\d{1,2})?$',
         'first_weight_price'  => 'require|float|egt:0|regex:^\d+(\.\d{1,2})?$',
@@ -51,6 +52,7 @@ class Delivery extends CareyShop
     protected $field = [
         'delivery_id'         => '配送方式编号',
         'delivery_item_id'    => '快递公司编号',
+        'alias'               => '配送方式别名',
         'content'             => '配送方式描述',
         'first_weight'        => '首重',
         'first_weight_price'  => '续重费运',
@@ -84,6 +86,7 @@ class Delivery extends CareyShop
         'set'     => [
             'delivery_id'      => 'require|integer|gt:0',
             'delivery_item_id' => 'require|integer|gt:0',
+            'alias',
             'content',
             'first_weight',
             'first_weight_price',
