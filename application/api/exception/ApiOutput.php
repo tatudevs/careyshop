@@ -111,6 +111,7 @@ class ApiOutput
      */
     public static function outView($result, $code)
     {
+        header('X-Powered-By: '. self::$header['X-Powered-By']);
         return view('common@/CareyShop', ['data' => $result], [], $code);
     }
 

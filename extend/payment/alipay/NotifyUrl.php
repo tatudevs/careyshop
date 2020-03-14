@@ -116,15 +116,15 @@ class NotifyUrl
      */
     public function checkReturn($setting = null)
     {
-        if (empty($setting)) {
-            return false;
-        }
-
-        if ($_POST['trade_status'] != 'TRADE_FINISHED' && $_POST['trade_status'] != 'TRADE_SUCCESS') {
+        if (empty($setting) || !isset($_POST['trade_status'])) {
             return false;
         }
 
         $arr = $_POST;
+        if ($arr['trade_status'] != 'TRADE_FINISHED' && $arr['trade_status'] != 'TRADE_SUCCESS') {
+            return false;
+        }
+
         $this->paymentNo = isset($arr['out_trade_no']) ? $arr['out_trade_no'] : 0;
         $this->totalAmount = isset($arr['total_amount']) ? $arr['total_amount'] : 0;
         $this->tradeNo = isset($arr['trade_no']) ? $arr['trade_no'] : '';
