@@ -111,7 +111,7 @@ class ApiOutput
      */
     public static function outView($result, $code)
     {
-        return view('common@/CareyShop', $result, [], $code);
+        return view('common@/CareyShop', ['data' => $result], [], $code);
     }
 
     /**
