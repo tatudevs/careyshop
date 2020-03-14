@@ -27,13 +27,17 @@ class Cart extends CareyShop
             return $default;
         }
 
-        $keyName = array_reverse(explode('_', $goods['key_name']));
+        $keyName = explode('_', $goods['key_name']);
         $imageKey = array_column($goods['goods_spec_image'], 'image', 'spec_item_id');
 
         foreach ($keyName as $value) {
             if (array_key_exists($value, $imageKey)) {
-                $default = $imageKey[$value][0];
-                break;
+                $image = pos($imageKey[$value]);
+
+                if (!empty($image) && is_array($image)) {
+                    $default = $image;
+                    break;
+                }
             }
         }
 
