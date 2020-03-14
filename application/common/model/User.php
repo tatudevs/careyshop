@@ -368,7 +368,7 @@ class User extends CareyShop
         }
 
         $userId = is_client_admin() ? $data['client_id'] : get_client_id();
-        $result = self::get($userId, 'getUserLevel,getAuthGroup');
+        $result = self::get($userId, 'getUserLevel,getAuthGroup,getUserMoney');
 
         if (false !== $result) {
             return is_null($result) ? null : $result->append(['last_ip_region'])->toArray();
