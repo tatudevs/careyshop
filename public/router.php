@@ -9,13 +9,14 @@
  */
 
 /**
- * 启动命令：php -S localhost:8080 router.php
+ * 启动命令：php -S 127.0.0.1:8080 router.php
+ * 建议使用"IP"启动，避免使用"localhost"
  */
 if (is_file($_SERVER["DOCUMENT_ROOT"] . $_SERVER["SCRIPT_NAME"])) {
     return false;
 } else {
     if (!isset($_SERVER['PATH_INFO'])) {
-        $_SERVER['PATH_INFO'] = $_SERVER['REQUEST_URI'];
+        $_SERVER['PATH_INFO'] = $_SERVER['SCRIPT_NAME'];
     }
 
     require __DIR__ . "/index.php";
