@@ -12,6 +12,35 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 
 如果您还不熟悉 GitHub 的 Fork and Pull 开发模式，您可以 [阅读GitHub的文档](https://help.github.com/articles/about-pull-requests/ "阅读GitHub的文档") 获得更多的信息。
 
+### 安装使用
+> *您除了在下方通过`Git`方式获得源代码外，还可通过`Composer`安装。注意：该方式只获得后端源码*
+
+#### Composer
+如果还没有安装 Composer，在 Linux 和 Mac OS X 中可以运行如下命令：
+
+    curl -sS https://getcomposer.org/installer | php
+    mv composer.phar /usr/local/bin/composer
+
+在 Windows 中，你需要下载并运行 [Composer-Setup.exe](https://getcomposer.org/Composer-Setup.exe "Composer-Setup.exe")。
+如果遇到任何问题或者想更深入地学习 Composer，请参考 Composer 文档（[英文文档](https://getcomposer.org/doc/ "英文文档")，[中文文档](http://www.kancloud.cn/thinkphp/composer "中文文档")）。
+
+由于众所周知的原因，国外的网站连接速度很慢。因此安装的时间可能会比较长，我们建议使用国内镜像（阿里云）。
+
+打开命令行窗口（windows用户）或控制台（Linux、Mac 用户）并执行如下命令：
+
+    composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
+
+#### 安装 更新
+如果你是第一次安装的话，在命令行下面，切换到你的 web 根目录下面并执行下面的命令：
+
+    composer create-project dnyz520/careyshop cs
+
+这里的`cs`目录名你可以任意更改，这个目录是应用根目录。
+
+如果你之前已经安装过，那么切换到你的应用根目录下面，然后执行下面的命令进行更新：
+
+    composer update dnyz520/careyshop
+
 ### 导航向导
 官方网站
 
@@ -21,17 +50,13 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 
 [Demo API 沙盒](https://demo.careyshop.cn/api "Demo API 沙盒")
 
-[Github 仓库](https://github.com/dnyz520/careyshop "Github 仓库") |
-[码云仓库](https://gitee.com/careyshop/careyshop "码云仓库") |
-[Coding 仓库](https://e.coding.net/careyshop/careyshop.git "Coding 仓库")
+[Github 仓库](https://github.com/dnyz520/careyshop "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop.git "Coding 仓库")
 
 后台仓库
 
 [Demo 预览地址](https://demo.careyshop.cn/admin "Demo 预览地址")
 
-[Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") |
-[码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") |
-[Coding 仓库](https://e.coding.net/careyshop/careyshop-admin.git "Coding 仓库")
+[Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-admin.git "Coding 仓库")
 
 ### 文档中心
 [https://doc.careyshop.cn](https://doc.careyshop.cn "CareyShop文档中心")
