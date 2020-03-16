@@ -440,7 +440,8 @@ class Upload extends UploadBase
         }
 
         // 实际连接
-        $url = sprintf('%s://%s%s', $urlArray['scheme'], $urlArray['host'], $urlArray['path']);
+        $port = isset($urlArray['port']) ? ':' . $urlArray['port'] : '';
+        $url = sprintf('%s://%s%s%s', $urlArray['scheme'], $urlArray['host'], $port, $urlArray['path']);
 
         // 带样式则直接返回
         if (!empty($param['style'])) {

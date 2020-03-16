@@ -57,10 +57,7 @@ class ApiOutput
 
             $url = parse_url($referer);
             $origin = sprintf('%s://%s', $url['scheme'], $url['host']);
-
-            if (isset($url['port'])) {
-                $origin .= ':' . $url['port'];
-            }
+            isset($url['port']) && $origin .= ':' . $url['port'];
         }
 
         if (!in_array('*', $allowOrigin) && !in_array($origin, $allowOrigin)) {
