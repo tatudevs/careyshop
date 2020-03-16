@@ -3,11 +3,11 @@
     "description": "high performance mall framework system for CareyShop",
     "type": "project",
     "keywords": [
-        "careyshop",
-        "framework",
-        "thinkphp",
         "shop",
-        "ORM"
+        "php",
+        "vue",
+        "careyshop",
+        "framework"
     ],
     "homepage": "https://careyshop.cn/",
     "license": "other",
@@ -36,9 +36,6 @@
         "psr-4": {
             "app\\": "application"
         }
-    },
-    "extra": {
-        "think-path": "thinkphp"
     },
     "config": {
         "preferred-install": "dist"

@@ -210,57 +210,6 @@
             "time": "2018-11-06T13:34:32+00:00"
         },
         {
-            "name": "topthink/framework",
-            "version": "v5.0.24",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/top-think/framework.git",
-                "reference": "c255c22b2f5fa30f320ecf6c1d29f7740eb3e8be"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/top-think/framework/zipball/c255c22b2f5fa30f320ecf6c1d29f7740eb3e8be",
-                "reference": "c255c22b2f5fa30f320ecf6c1d29f7740eb3e8be",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "topthink/think-installer": "~1.0"
-            },
-            "require-dev": {
-                "johnkary/phpunit-speedtrap": "^1.0",
-                "mikey179/vfsstream": "~1.6",
-                "phpdocumentor/reflection-docblock": "^2.0",
-                "phploc/phploc": "2.*",
-                "phpunit/phpunit": "4.8.*",
-                "sebastian/phpcpd": "2.*"
-            },
-            "type": "think-framework",
-            "autoload": {
-                "psr-4": {
-                    "think\\": "library/think"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "liu21st",
-                    "email": "liu21st@gmail.com"
-                }
-            ],
-            "description": "the new thinkphp framework",
-            "homepage": "http://thinkphp.cn/",
-            "keywords": [
-                "framework",
-                "orm",
-                "thinkphp"
-            ],
-            "time": "2019-01-11T08:04:58+00:00"
-        },
-        {
             "name": "topthink/think-captcha",
             "version": "v1.0.7",
             "source": {
