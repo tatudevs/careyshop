@@ -348,6 +348,7 @@ class Upload extends UploadBase
         if ($type === 'url') {
             $url = $urlArray['scheme'] . '://';
             $url .= $urlArray['host'];
+            isset($urlArray['port']) && $url .= ':' . $urlArray['port'];
             $url .= $fileInfo['dirname'];
             $url .= '/' . $fileName;
             $url .= '.' . $suffix;
