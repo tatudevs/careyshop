@@ -42,6 +42,8 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
     composer update dnyz520/careyshop
 
 ### 导航向导
+> CareyShop 交流一群（QQ）：714593455
+
 官方网站
 
 [https://www.careyshop.cn](https://www.careyshop.cn "CareyShop官方网站")
@@ -68,9 +70,6 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 
 [数据库词典](https://doc.careyshop.cn/docs/data_dict "数据库词典")
 
-### 帮助交流
-> CareyShop 交流一群（QQ）：714593455
-
 ### 初始数据
 **超级管理员**
 
@@ -83,3 +82,7 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 app_key：86757125
 
 app_secret：ea1bd533d001fd73b09944f04c96a6fc
+
+### 软件著作权
+证书号：软著登字第2395639号
+登记号：2018SR066544
