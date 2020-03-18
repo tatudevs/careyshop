@@ -7,13 +7,37 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 
 框架所有的业务处理逻辑存放在公共模块目录中，对于框架内的其他模块可通过面向对象的方式调用公共模块，而外部则以 API 接口进行交互，如此真正做到业务处理层的入口路径统一。具体开发使用请参见[「CareyShop 完全开发手册」](https://doc.careyshop.cn/docs/word/)
 
-### 参与开发
-我们欢迎您在 CareyShop 项目的 GitHub 上报告 issue 或者 pull request。
+### 导航向导
+> CareyShop 交流一群（QQ）：714593455
 
-如果您还不熟悉 GitHub 的 Fork and Pull 开发模式，您可以 [阅读GitHub的文档](https://help.github.com/articles/about-pull-requests/ "阅读GitHub的文档") 获得更多的信息。
+官方网站
+
+[https://www.careyshop.cn](https://www.careyshop.cn "CareyShop官方网站")
+
+后端项目
+
+[Demo API 沙盒](https://demo.careyshop.cn/api "Demo API 沙盒")
+
+[Github 仓库](https://github.com/dnyz520/careyshop "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop.git "Coding 仓库")
+
+后台项目
+
+[Demo 后台预览](https://demo.careyshop.cn/admin "Demo 后台预览")
+
+[Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-admin.git "Coding 仓库")
+
+### 文档中心
+[https://doc.careyshop.cn](https://doc.careyshop.cn "CareyShop文档中心")
+
+### 相关文档
+[客户组API 使用手册](https://doc.careyshop.cn/docs/client_api/a-61295176156 "客户组API 使用手册")
+
+[管理组API 使用手册](https://doc.careyshop.cn/docs/admin_api/a-11523287990 "管理组API 使用手册")
+
+[数据库词典](https://doc.careyshop.cn/docs/data_dict "数据库词典")
 
 ### 安装使用
-> *您除了在下方通过`Git`方式获得源代码外，还可通过`Composer`安装。注意：该方式只获得后端源码*
+*您除了在下方通过`Git`打包下载获得源代码外，还可通过`Composer`安装。数据库 SQL 导入文件位于：`install\careyshop.sql`*
 
 #### Composer
 如果还没有安装 Composer，在 Linux 和 Mac OS X 中可以运行如下命令：
@@ -30,7 +54,7 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 
     composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
-#### 安装 更新
+#### 安装&更新
 如果你是第一次安装的话，在命令行下面，切换到你的 web 根目录下面并执行下面的命令：
 
     composer create-project dnyz520/careyshop cs
@@ -40,35 +64,6 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 如果你之前已经安装过，那么切换到你的应用根目录下面，然后执行下面的命令进行更新：
 
     composer update dnyz520/careyshop
-
-### 导航向导
-> CareyShop 交流一群（QQ）：714593455
-
-官方网站
-
-[https://www.careyshop.cn](https://www.careyshop.cn "CareyShop官方网站")
-
-后端仓库
-
-[Demo API 沙盒](https://demo.careyshop.cn/api "Demo API 沙盒")
-
-[Github 仓库](https://github.com/dnyz520/careyshop "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop.git "Coding 仓库")
-
-后台仓库
-
-[Demo 预览地址](https://demo.careyshop.cn/admin "Demo 预览地址")
-
-[Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-admin.git "Coding 仓库")
-
-### 文档中心
-[https://doc.careyshop.cn](https://doc.careyshop.cn "CareyShop文档中心")
-
-### 相关文档
-[客户组API 使用手册](https://doc.careyshop.cn/docs/client_api/a-61295176156 "客户组API 使用手册")
-
-[管理组API 使用手册](https://doc.careyshop.cn/docs/admin_api/a-11523287990 "管理组API 使用手册")
-
-[数据库词典](https://doc.careyshop.cn/docs/data_dict "数据库词典")
 
 ### 初始数据
 **超级管理员**
@@ -83,7 +78,9 @@ app_key：86757125
 
 app_secret：ea1bd533d001fd73b09944f04c96a6fc
 
-#### 软件著作权
+#### 授权
+CareyShop 使用 AGPLv3 开源，请遵守 AGPLv3 的相关条款，或者与我们联系获取商业授权。
+
 证书号：软著登字第2395639号
 
 登记号：2018SR066544
