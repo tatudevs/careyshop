@@ -25,9 +25,10 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 
 #### Composer
 如果还没有安装 Composer，在 Linux 和 Mac OS X 中可以运行如下命令：
-
-    curl -sS https://getcomposer.org/installer | php
-    mv composer.phar /usr/local/bin/composer
+```shell
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+```
 
 在 Windows 中，你需要下载并运行 [Composer-Setup.exe](https://getcomposer.org/Composer-Setup.exe "Composer-Setup.exe")。
 如果遇到任何问题或者想更深入地学习 Composer，请参考 Composer 文档（[英文文档](https://getcomposer.org/doc/ "英文文档")，[中文文档](http://www.kancloud.cn/thinkphp/composer "中文文档")）。
@@ -35,19 +36,22 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 由于众所周知的原因，国外的网站连接速度很慢。因此安装的时间可能会比较长，我们建议使用国内镜像（阿里云）。
 
 打开命令行窗口（windows用户）或控制台（Linux、Mac 用户）并执行如下命令：
-
-    composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
+```shell
+composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
+```
 
 #### 安装&更新
 如果你是第一次安装的话，在命令行下面，切换到你的 web 根目录下面并执行下面的命令：
-
-    composer create-project dnyz520/careyshop cs
+```shell
+composer create-project dnyz520/careyshop cs
+```
 
 这里的`cs`目录名你可以任意更改，这个目录是应用根目录。
 
 如果你之前已经安装过，那么切换到你的应用根目录下面，然后执行下面的命令进行更新：
-
-    composer update dnyz520/careyshop
+```shell
+composer update dnyz520/careyshop
+```
 
 ### 初始数据
 **超级管理员**
