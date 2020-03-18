@@ -19,7 +19,7 @@ class Delivery extends CareyShop
     protected $rule = [
         'delivery_id'         => 'integer|gt:0',
         'delivery_item_id'    => 'require|integer|gt:0|unique:delivery,delivery_item_id,0,delivery_id',
-        'alias'               => 'max:32',
+        'alias'               => 'require|max:32',
         'content'             => 'max:150',
         'first_weight'        => 'require|float|egt:0|regex:^\d+(\.\d{1,2})?$',
         'first_weight_price'  => 'require|float|egt:0|regex:^\d+(\.\d{1,2})?$',

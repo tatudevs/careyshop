@@ -118,6 +118,18 @@ class Order extends CareyShop
     }
 
     /**
+     * 关联配送方式
+     * @access public
+     * @return mixed
+     */
+    public function getDelivery()
+    {
+        return $this
+            ->hasOne('Delivery', 'delivery_id', 'delivery_id')
+            ->field('delivery_id,alias');
+    }
+
+    /**
      * 关联操作日志
      * @access public
      * @return mixed
@@ -1457,7 +1469,7 @@ class Order extends CareyShop
         }
 
         $result = self::get(function ($query) use ($data) {
-            $with = ['getUser', 'getOrderGoods'];
+            $with = ['getUser', 'getOrderGoods', 'getDelivery'];
             empty($data['is_get_log']) ?: $with[] = 'getOrderLog';
 
             $map['order_no'] = ['eq', $data['order_no']];
@@ -1483,6 +1495,7 @@ class Order extends CareyShop
                 'get_order_log.order_id',
                 'get_order_log.order_no',
                 'get_user.user_id',
+                'get_delivery.delivery_id',
             ];
 
             return is_null($result) ? null : $result->hidden($hidden)->toArray();
@@ -2101,7 +2114,7 @@ class Order extends CareyShop
 
             // 查询数据
             $query
-                ->with('getUser,getOrderGoods')
+                ->with('getUser,getOrderGoods,getDelivery')
                 ->field($field, true)
                 ->where($map)
                 ->order([$orderField => $orderType]);
@@ -2121,6 +2134,7 @@ class Order extends CareyShop
                 'get_order_goods.order_no',
                 'get_order_goods.user_id',
                 'get_user.user_id',
+                'get_delivery.delivery_id',
             ];
 
             return ['items' => $result->hidden($hidden)->toArray(), 'total_result' => $totalResult];
