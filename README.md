@@ -12,15 +12,13 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 
 [官方网站](https://www.careyshop.cn "CareyShop官方网站") | [文档中心](https://doc.careyshop.cn "CareyShop文档中心") | [客户组 API 使用手册](https://doc.careyshop.cn/docs/client_api/a-61295176156 "客户组 API 使用手册") | [管理组 API 使用手册](https://doc.careyshop.cn/docs/admin_api/a-11523287990 "管理组 API 使用手册") | [数据库词典](https://doc.careyshop.cn/docs/data_dict "数据库词典")
 
-后端项目
+[Demo 后台预览](https://demo.careyshop.cn/admin "Demo 后台预览") | [Demo API 沙盒](https://demo.careyshop.cn/api "Demo API 沙盒")
 
-[Demo API 沙盒](https://demo.careyshop.cn/api "Demo API 沙盒")
+后端项目 Git
 
 [Github 仓库](https://github.com/dnyz520/careyshop "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop.git "Coding 仓库")
 
-后台项目
-
-[Demo 后台预览](https://demo.careyshop.cn/admin "Demo 后台预览")
+后台项目 Git
 
 [Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-admin.git "Coding 仓库")
 
