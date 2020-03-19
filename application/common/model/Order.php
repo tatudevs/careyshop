@@ -2131,7 +2131,6 @@ class Order extends CareyShop
                 'order_id',
                 'is_give',
                 'get_order_goods.order_id',
-                'get_order_goods.order_no',
                 'get_order_goods.user_id',
                 'get_user.user_id',
                 'get_delivery.delivery_id',
