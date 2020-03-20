@@ -772,7 +772,7 @@ class Order extends CareyShop
                 'user_id'      => $userId,
                 'goods_name'   => $value['goods']['name'],
                 'goods_id'     => $value['goods']['goods_id'],
-                'goods_image'  => $value['goods']['goods_image'],
+                'goods_image'  => json_encode($value['goods']['goods_image']),
                 'goods_code'   => $value['goods']['goods_code'],
                 'goods_sku'    => $value['goods']['goods_sku'],
                 'bar_code'     => $value['goods']['bar_code'],
