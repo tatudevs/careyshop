@@ -20,7 +20,10 @@ class Cart extends CareyShop
      */
     private function getGoodsImage($goods)
     {
-        $default = isset($goods['goods']['attachment'][0]) ? $goods['goods']['attachment'][0] : [];
+        $default = '';
+        if (isset($goods['goods']['attachment'][0])) {
+            $default = $goods['goods']['attachment'][0]['source'];
+        }
 
         // 不存在规格或规格不存在图集
         if (empty($goods['key_name']) || empty($goods['goods_spec_image'])) {
@@ -35,7 +38,7 @@ class Cart extends CareyShop
                 $image = pos($imageKey[$value]);
 
                 if (!empty($image) && is_array($image)) {
-                    $default = $image;
+                    $default = $image['source'];
                     break;
                 }
             }
