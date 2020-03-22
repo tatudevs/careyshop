@@ -1576,7 +1576,7 @@ class Order extends CareyShop
      * @return array|false
      * @throws
      */
-    public function pickingOrderItem($data)
+    public function pickingOrderList($data)
     {
         if (!$this->validateData($data, 'Order.picking')) {
             return false;
@@ -1859,7 +1859,7 @@ class Order extends CareyShop
      * @return bool
      * @throws
      */
-    public function completeOrderItem($data)
+    public function completeOrderList($data)
     {
         if (!$this->validateData($data, 'Order.complete')) {
             return false;

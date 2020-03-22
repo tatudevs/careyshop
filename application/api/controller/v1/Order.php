@@ -49,11 +49,11 @@ class Order extends CareyShop
             // 取消一个订单
             'cancel.order.item'       => ['cancelOrderItem'],
             // 订单批量设为配货状态
-            'picking.order.item'      => ['pickingOrderItem'],
+            'picking.order.list'      => ['pickingOrderList'],
             // 订单设为发货状态
             'delivery.order.item'     => ['deliveryOrderItem'],
             // 订单批量确认收货
-            'complete.order.item'     => ['completeOrderItem'],
+            'complete.order.list'     => ['completeOrderList'],
             // 获取一个订单商品明细
             'get.order.goods.item'    => ['getOrderGoodsItem', 'app\common\model\OrderGoods'],
         ];
