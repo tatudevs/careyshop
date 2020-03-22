@@ -62,6 +62,7 @@ class Order extends CareyShop
         'page_size'            => 'integer|gt:0',
         'order_type'           => 'in:asc,desc',
         'order_field'          => 'in:order_id,payment_time,finished_time,create_time,update_time',
+        'is_picking'           => 'in:0,1',
     ];
 
     /**
@@ -114,6 +115,7 @@ class Order extends CareyShop
         'page_size'            => '每页数量',
         'order_type'           => '排序方式',
         'order_field'          => '排序字段',
+        'is_picking'           => '是否配货',
     ];
 
     /**
@@ -181,7 +183,8 @@ class Order extends CareyShop
             'is_recycle' => 'require|in:0,1,2',
         ],
         'picking'      => [
-            'order_no' => 'require|arrayHasOnlyStrings',
+            'order_no'   => 'require|arrayHasOnlyStrings',
+            'is_picking' => 'require|in:0,1',
         ],
         'delivery'     => [
             'order_no'       => 'require|max:50',
