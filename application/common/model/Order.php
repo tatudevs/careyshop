@@ -2155,13 +2155,11 @@ class Order extends CareyShop
     {
         // 准备基础数据
         $result = [
-            'all'         => 0, // 所有
             'not_paid'    => 0, // 未付款/待付款
             'paid'        => 0, // 已付款
             'not_shipped' => 0, // 待发货/配货中
             'shipped'     => 0, // 已发货/待收货
             'complete'    => 0, // 已完成/已收货
-            'cancel'      => 0, // 已取消
             'not_comment' => 0, // 待评价
         ];
 
@@ -2175,9 +2173,9 @@ class Order extends CareyShop
         $mapGoods['status'] = ['eq', 2];
         $orderId = OrderGoods::where($mapGoods)->column('order_id');
 
+        // 通用查询条件
         is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
         $map['is_delete'] = ['eq', 0];
-        $result['all'] = $this->where($map)->count();
 
         $mapNotPaid['trade_status'] = ['eq', 0];
         $mapNotPaid['payment_status'] = ['eq', 0];
@@ -2198,9 +2196,6 @@ class Order extends CareyShop
         $mapComplete['trade_status'] = ['eq', 3];
         $mapComplete['delivery_status'] = ['eq', 1];
         $result['complete'] = $this->where($mapComplete)->where($map)->count();
-
-        $mapCancel['trade_status'] = ['eq', 4];
-        $result['cancel'] = $this->where($mapCancel)->where($map)->count();
 
         $mapNotComment['order_id'] = ['in', $orderId];
         $mapNotComment['trade_status'] = ['eq', 3];
