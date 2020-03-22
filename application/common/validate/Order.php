@@ -48,21 +48,20 @@ class Order extends CareyShop
         'logistic_code'        => 'max:50',
         'is_export'            => 'in:0,1',
         'payment_code'         => 'integer|egt:0',
-        'is_delete'            => 'in:0,1',
         'begin_time'           => 'date|betweenTime|beforeTime:end_time',
         'end_time'             => 'date|betweenTime|afterTime:begin_time',
-        'status'               => 'integer|between:0,7',
+        'status'               => 'integer|between:0,8',
         'goods_name'           => 'max:200',
         'keywords'             => 'max:200',
         'use_card'             => 'requireWith:card_number|float|egt:0|regex:^\d+(\.\d{1,2})?$',
         'card_number'          => 'requireWith:use_card|length:16',
         'comment_type'         => 'in:comment,addition',
         'account'              => 'max:80',
+        'is_picking'           => 'in:0,1',
         'page_no'              => 'integer|gt:0',
         'page_size'            => 'integer|gt:0',
         'order_type'           => 'in:asc,desc',
         'order_field'          => 'in:order_id,payment_time,finished_time,create_time,update_time',
-        'is_picking'           => 'in:0,1',
     ];
 
     /**
@@ -101,7 +100,6 @@ class Order extends CareyShop
         'logistic_code'        => '快递单号',
         'is_export'            => '是否导出',
         'payment_code'         => '支付方式',
-        'is_delete'            => '是否查看订单回收站',
         'begin_time'           => '下单开始日期',
         'end_time'             => '下单结束日期',
         'status'               => '订单状态',
@@ -111,11 +109,11 @@ class Order extends CareyShop
         'card_number'          => '购物卡卡号',
         'comment_type'         => '评价方式',
         'account'              => '账号或昵称',
+        'is_picking'           => '是否配货',
         'page_no'              => '页码',
         'page_size'            => '每页数量',
         'order_type'           => '排序方式',
         'order_field'          => '排序字段',
-        'is_picking'           => '是否配货',
     ];
 
     /**
@@ -201,7 +199,6 @@ class Order extends CareyShop
             'consignee',
             'mobile',
             'payment_code',
-            'is_delete',
             'begin_time',
             'end_time',
             'status',

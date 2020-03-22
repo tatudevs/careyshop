@@ -2032,11 +2032,11 @@ class Order extends CareyShop
         }
 
         // 搜索条件
+        $map['is_delete'] = ['eq', 0];
         is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
         empty($data['consignee']) ?: $map['consignee'] = ['eq', $data['consignee']];
         empty($data['mobile']) ?: $map['mobile'] = ['eq', $data['mobile']];
         !isset($data['payment_code']) ?: $map['payment_code'] = ['eq', $data['payment_code']];
-        $map['is_delete'] = ['eq', isset($data['is_delete']) ? $data['is_delete'] : 0];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
             $map['create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
@@ -2073,6 +2073,9 @@ class Order extends CareyShop
             case 7: // 待评价
                 $map['trade_status'] = ['eq', 3];
                 $mapGoods['is_comment'] = ['eq', 0];
+                break;
+            case 8: // 回收站
+                $map['is_delete'] = ['eq', 1];
                 break;
         }
 
