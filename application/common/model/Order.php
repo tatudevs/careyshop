@@ -1610,7 +1610,7 @@ class Order extends CareyShop
                 }
 
                 // 修改订单状态
-                $isPicking = $data['is_picking'] == 0;
+                $isPicking = $data['is_picking'] == 1;
                 if (false === $value->save(['trade_status' => $isPicking])) {
                     throw new \Exception($this->getError());
                 }
