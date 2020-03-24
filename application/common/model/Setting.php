@@ -263,7 +263,8 @@ class Setting extends CareyShop
                         break;
 
                     case 'spacer':
-                        !empty($value) ?: $value = '';
+                    case 'source':
+                        empty($value) && $value = '';
                         $this->setSettingItem($key, $value, 'system_shopping', 'Setting.string');
                         break;
 
