@@ -2159,7 +2159,6 @@ class Order extends CareyShop
             'paid'        => 0, // 已付款
             'not_shipped' => 0, // 待发货/配货中
             'shipped'     => 0, // 已发货/待收货
-            'complete'    => 0, // 已完成/已收货
             'not_comment' => 0, // 待评价
         ];
 
@@ -2192,10 +2191,6 @@ class Order extends CareyShop
         $mapShipped['trade_status'] = ['eq', 2];
         $mapShipped['delivery_status'] = ['eq', 1];
         $result['shipped'] = $this->where($mapShipped)->where($map)->count();
-
-        $mapComplete['trade_status'] = ['eq', 3];
-        $mapComplete['delivery_status'] = ['eq', 1];
-        $result['complete'] = $this->where($mapComplete)->where($map)->count();
 
         $mapNotComment['order_id'] = ['in', $orderId];
         $mapNotComment['trade_status'] = ['eq', 3];
