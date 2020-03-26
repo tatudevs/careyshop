@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 2020-03-23 00:49:04
+-- Generation Time: 2020-03-26 14:02:23
 -- 服务器版本： 5.7.27-log
 -- PHP Version: 7.1.11
 
@@ -69,9 +69,9 @@ CREATE TABLE `cs_admin` (
 --
 
 INSERT INTO `cs_admin` (`admin_id`, `username`, `password`, `group_id`, `nickname`, `head_pic`, `last_login`, `last_ip`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
-(1, 'admin', '5631c89340a5413dc8124d23c85b900a', 1, '思维空间', '', 1584884594, '127.0.0.1', 1, 0, 1530289832, 1584884594),
-(2, 'dnyz520', '5631c89340a5413dc8124d23c85b900a', 2, 'dnyz520', '', 1583943010, '127.0.0.1', 1, 0, 1530289832, 1583943010),
-(3, 'admin2', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop2', '', 1584785930, '127.0.0.1', 1, 0, 1530289832, 1584785930),
+(1, 'admin', '5631c89340a5413dc8124d23c85b900a', 1, '思维空间', '', 1585145991, '127.0.0.1', 1, 0, 1530289832, 1585145991),
+(2, 'dnyz520', '5631c89340a5413dc8124d23c85b900a', 2, 'dnyz520', '', 1585028487, '127.0.0.1', 1, 0, 1530289832, 1585028487),
+(3, 'admin2', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop2', '', 1585201216, '127.0.0.1', 1, 0, 1530289832, 1585201216),
 (4, 'admin3', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop3', '', 1576338129, '127.0.0.1', 1, 0, 1530289832, 1576338129),
 (5, 'admin4', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop4', '', 1556380966, '127.0.0.1', 1, 0, 1530289832, 1556380966),
 (6, 'admin5', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop5', '', 1551194662, '127.0.0.1', 1, 0, 1530289832, 1541576329),
@@ -467,8 +467,8 @@ CREATE TABLE `cs_app` (
 --
 
 INSERT INTO `cs_app` (`app_id`, `app_name`, `app_key`, `app_secret`, `captcha`, `status`, `is_delete`) VALUES
-(1, 'Admin(后台管理)', 86757125, 'ea1bd533d001fd73b09944f04c96a6fc', 1, 1, 0),
-(2, 'IOS(iPhone)', 26945134, '1e900e2a76da224b665c7dd0949b49e8', 0, 0, 0),
+(1, 'Admin(后台管理)', 86757125, '5bafa14d86b3ca2efc01bada7037483c', 1, 1, 0),
+(2, 'IOS(iPhone)', 26945134, 'b99cb2bdec70d20156000f664ec5ac30', 0, 0, 0),
 (3, 'Web(微信小程序)', 76472358, '36affdc58f50e1035649abc808c22b48', 0, 0, 0);
 
 -- --------------------------------------------------------
@@ -892,8 +892,8 @@ INSERT INTO `cs_auth_rule` (`rule_id`, `module`, `group_id`, `name`, `menu_auth`
 (2, 'api', 2, '普通管理员', '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,615,617,618,23,24,25,26,27,28,29,30,614,616,31,32,33,34,35,36,37,38,39,1010,1011,1012,1013,40,41,42,43,44,45,46,1009,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,619,66,67,69,70,74,76,81,84,87,88,89,90,91,92,93,94,95,96,622,97,98,99,100,101,102,103,106,107,110,130,131,132,133,134,968,135,136,137,138,141,142,144,145,146,147,150,151,152,153,154,155,156,157,158,159,160,623,161,162,163,164,165,166,169,171,172,774,168,173,174,175,176,177,178,179,180,777,181,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,624,199,200,201,202,203,204,205,206,207,208,209,210,211,212,215,216,217,957,958,959,967,232,233,234,235,236,237,238,239,240,241,242,626,246,247,249,250,251,252,253,254,255,258,259,260,261,262,265,266,267,268,269,270,271,272,273,274,218,219,220,221,222,223,224,225,226,227,228,908,229,230,231,625,965,414,415,416,417,418,419,907,962,420,421,631,281,282,283,284,734,287,290,291,292,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,628,320,321,322,323,324,325,326,327,328,329,332,333,334,335,336,337,338,341,342,343,344,345,346,347,348,349,350,353,354,355,360,361,362,363,366,367,368,372,373,374,377,379,380,383,384,385,386,387,388,389,390,391,392,393,394,395,723,724,725,726,727,396,397,398,399,400,401,402,403,404,630,406,422,423,424,425,426,427,428,429,430,431,432,433,434,435,574,641,648,664,665,956,436,437,438,439,440,441,442,443,632,444,445,446,447,448,449,450,451,452,454,455,456,457,459,461,462,463,464,465,466,467,468,469,840,470,993,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,498,499,502,503,504,505,506,507,508,509,510,511,512,575,576,577,633,634,635,636,637,638,639,640,657,658,659,660,661,662,663,64,71,79,104,139,167,182,198,243,256,263,285,330,351,369,381,405,453,460,497]', '[4,5,6,7,8,9,10,11,12,13,14,377,465,467,487,488,502,503,504,507,508,509,1,369,460,483,497,506]', 2, 1),
 (3, 'api', 3, '普通顾客', '[617,616,1011,1012,1013,46,1009,51,52,59,60,61,65,66,68,69,70,93,94,95,105,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,138,143,144,145,146,148,149,156,157,171,172,774,180,777,189,195,202,209,210,211,213,214,216,957,958,959,237,238,239,244,245,248,249,253,254,255,257,261,262,264,266,418,419,907,275,276,277,278,279,280,291,292,296,304,305,306,307,308,309,310,316,331,335,336,337,338,339,340,341,342,343,346,347,348,349,350,352,354,355,356,357,358,359,360,364,365,367,372,379,380,381,382,383,384,392,394,395,400,401,402,404,425,427,428,433,434,574,641,648,956,440,441,448,449,451,452,455,456,457,461,462,463,464,465,467,469,840,471,472,473,474,475,476,477,478,479,480,481,482,489,490,491,492,493,494,495,496,498,499,500,501,505,506,507,508,509,510,511,512,637,638,660,663,15,23,31,40,47,55,64,87,104,130,139,150,167,173,182,190,198,232,243,256,263,414,285,297,311,330,351,369,385,393,396,422,436,444,453,460,497,633,657]', '[467,500,501,507,508,509,460,497,506]', 3, 1),
 (4, 'api', 4, '游客', '[13,617,616,1011,1012,1013,46,1009,51,52,59,60,61,93,94,95,115,138,156,157,170,180,189,195,202,209,210,211,213,214,216,957,958,959,237,238,239,249,253,254,255,418,419,907,282,316,341,342,378,392,394,395,400,401,402,404,425,427,428,433,434,574,641,648,956,440,441,448,449,458,461,462,463,464,472,473,474,491,492,493,494,495,496,637,660,663,1,15,23,31,40,47,55,87,113,130,150,167,173,182,190,198,232,243,414,281,311,330,369,385,393,396,422,436,444,453,460,633,657]', '[13,170,378,458,1,167,369,453]', 4, 1),
-(5, 'admin', 1, '超级管理员', '[513,534,535,536,679,514,871,872,960,873,940,941,948,947,952,949,942,944,945,946,950,954,955,882,874,884,885,886,887,888,889,890,875,891,892,893,894,897,898,895,896,876,901,902,903,904,905,906,878,909,910,911,912,913,914,915,877,916,917,918,919,920,921,923,924,879,880,932,933,934,935,936,937,939,938,881,927,928,929,930,931,515,867,868,865,866,1007,1008,869,870,516,854,857,858,969,970,971,972,973,974,859,975,976,977,978,979,980,855,860,992,994,995,996,997,998,999,1000,1001,861,1002,1003,1004,1005,856,862,981,982,983,984,987,985,986,864,988,991,989,990,517,819,812,813,828,829,830,831,832,833,834,835,836,846,847,848,849,837,841,842,843,844,845,838,839,814,820,821,822,823,651,815,816,824,825,826,827,817,818,852,850,851,518,519,520,735,523,524,587,541,542,543,544,545,546,525,526,588,547,548,549,550,551,552,528,589,529,530,531,532,533,527,590,553,554,555,556,557,558,538,559,560,591,567,568,569,570,963,561,592,578,579,580,583,584,585,586,1014,964,562,593,594,595,596,598,599,563,564,600,601,602,603,604,605,565,606,607,608,609,610,612,613,571,572,667,668,669,670,671,672,674,673,675,676,677,678,573,642,643,644,645,646,647,539,540,686,687,688,689,690,566,680,681,682,683,684,685,652,656,706,714,715,716,717,718,719,698,707,720,721,722,653,691,692,696,693,697,694,695,654,699,700,701,702,703,704,705,655,708,728,729,730,731,521,740,712,713,733,732,741,742,743,744,745,746,747,710,748,751,752,753,754,755,756,650,709,757,764,765,766,767,768,758,769,770,771,772,773,760,778,779,780,781,785,782,786,787,788,789,790,783,784,759,804,805,711,802,806,807,808,809,810,811,522]', '[]', 1, 1),
-(6, 'admin', 2, '普通管理员', '[535,679,871,960,940,884,891,901,909,916,932,927,867,865,1007,869,870,854,969,975,992,1002,981,988,819,828,846,841,820,651,824,852,518,519,735,587,588,589,590,538,591,592,593,600,606,667,678,642,540,686,687,688,689,690,680,706,707,691,699,708,731,740,733,741,751,650,764,769,778,786,804,806,522,513,534,514,872,873,882,874,875,876,878,877,879,880,881,515,868,866,516,857,858,859,855,860,861,856,862,864,517,812,813,834,836,837,814,815,816,817,818,520,523,524,525,526,528,527,559,560,561,1014,562,563,564,565,571,572,573,539,566,652,656,698,653,654,655,521,712,732,710,748,709,757,758,760,782,759,711,802]', '[]', 2, 1),
+(5, 'admin', 1, '超级管理员', '[513,534,535,536,679,514,871,872,960,873,940,941,948,947,952,949,942,944,945,946,950,954,955,882,874,884,885,886,887,888,889,890,875,891,892,893,894,897,898,895,896,876,901,902,903,904,905,906,878,909,910,911,912,913,914,915,877,916,917,918,919,920,921,923,924,879,880,932,933,934,935,936,937,939,938,881,927,928,929,930,931,515,867,868,865,866,1007,1008,869,870,516,854,857,858,969,970,971,972,973,974,859,975,976,977,978,979,980,855,860,992,994,995,996,997,998,999,1000,1001,861,1002,1003,1004,1005,856,862,981,982,983,984,987,985,986,864,988,991,989,990,517,819,812,813,828,829,830,831,832,833,834,835,836,846,847,848,849,837,841,842,843,844,845,838,839,814,820,821,822,823,651,815,816,824,825,826,827,817,818,852,850,851,518,519,520,735,523,524,587,541,542,543,544,545,546,525,526,588,547,548,549,550,551,552,528,589,529,530,531,532,533,527,590,553,554,555,556,557,558,538,539,540,686,687,688,689,690,566,680,681,682,683,684,685,563,564,600,601,602,603,604,605,565,606,607,608,609,610,612,613,559,963,561,592,578,579,580,583,584,585,586,560,591,567,568,569,570,1014,964,562,593,594,595,596,598,599,571,572,667,668,669,670,671,672,674,673,675,676,677,678,573,642,643,644,645,646,647,652,656,706,714,715,716,717,718,719,698,707,720,721,722,653,691,692,696,693,697,694,695,654,699,700,701,702,703,704,705,655,708,728,729,730,731,521,740,712,713,1023,1015,1016,1017,1018,1019,1020,1022,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,733,732,741,742,743,744,745,746,747,710,748,751,752,753,754,755,756,650,709,757,764,765,766,767,768,758,769,770,771,772,773,760,778,779,780,781,785,782,786,787,788,789,790,783,784,759,804,805,711,802,806,807,808,809,810,811,522]', '[]', 1, 1),
+(6, 'admin', 2, '普通管理员', '[535,679,871,960,940,884,891,901,909,916,932,927,867,865,1007,869,870,854,969,975,992,1002,981,988,819,828,846,841,820,651,824,852,518,519,735,587,588,589,590,538,540,686,687,688,689,690,680,600,606,592,591,593,667,678,642,706,707,691,699,708,731,740,1015,1026,1027,733,741,751,650,764,769,778,786,804,806,522,513,534,514,872,873,882,874,875,876,878,877,879,880,881,515,868,866,516,857,858,859,855,860,861,856,862,864,517,812,813,834,836,837,814,815,816,817,818,520,523,524,525,526,528,527,539,566,563,564,565,559,561,560,1014,562,571,572,573,652,656,698,653,654,655,521,712,713,1023,732,710,748,709,757,758,760,782,759,711,802]', '[]', 2, 1),
 (27, 'home', 1, '超级管理员', '[]', '[]', 1, 0),
 (28, 'home', 2, '普通管理员', '[]', '[]', 2, 0);
 
@@ -4550,7 +4550,8 @@ INSERT INTO `cs_delivery_dist` (`delivery_dist_id`, `user_id`, `order_code`, `de
 (161, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (162, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
 (163, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
-(164, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491);
+(164, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
+(165, 1, 'PO_A3217849839847620001', 8, 'EMS', '9898385289059', '[]', 0, 1, 1584947681, 1584947681);
 
 -- --------------------------------------------------------
 
@@ -5406,7 +5407,7 @@ INSERT INTO `cs_goods` (`goods_id`, `goods_category_id`, `name`, `short_name`, `
 (196, 1, '美国正品coach女士钱包蔻驰小钱包小卡包钱夹三折搭扣零钱包新款', '', '8天超长待机 / 137g轻巧机身 / 高通骁龙处理器', 'CS99751532', '', '', '', 0, 0, 0, 0, '1.00', 0, 0, '1.00', '1.00', 0, '0.00', 1, 5, 5, '', '', '111', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\"}]', '[]', '', 0, 1, 0, 1, 50, 1, 1, 1571035796, 1571035799),
 (197, 1, '美国正品coach女士钱包蔻驰小钱包小卡包钱夹三折搭扣零钱包新款', '', '8天超长待机 / 137g轻巧机身 / 高通骁龙处理器', 'CS66293378', '', '', '', 0, 0, 0, 0, '1.00', 0, 0, '1.00', '1.00', 0, '0.00', 1, 5, 5, '', '', '111', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\"}]', '[]', '', 0, 1, 0, 1, 50, 1, 1, 1571035804, 1571035808),
 (198, 2, '美国正品coach女士钱包蔻驰小钱包小卡包钱夹三折搭扣零钱包新款', '', '8天超长待机 / 137g轻巧机身 / 高通骁龙处理器', 'CS34634283', '', '', '', 0, 62, 0, 0, '10.00', 0, 1, '150.00', '10.00', 1, '150.00', 1000000, 1, 0, '', '', '描述', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn/uploads/files/20191113/9948b1a8-d9b7-4c7d-b16f-8ffb41858a49.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn/uploads/files/20191113/9948b1a8-d9b7-4c7d-b16f-8ffb41858a49.jpg?type=aliyun\"}]', '[]', '', 0, 0, 1, 1, 50, 0, 0, 1571036211, 1571036311),
-(199, 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 'OPPO K5', '新品预定领券100元低至1799元，加赠原装耳机！', 'CS66472556', '', '', '', 0, 89, 0, 16, '0.00', 0, 1, '7000.00', '6005.00', 0, '0.00', 0, 0, 0, '', '', '内容', '[{\"name\":\"O1CN01awPGBj1Mqd7qIcu3n_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\"}]', '[]', '', 0, 0, 0, 1, 50, 1, 0, 1571202520, 1580714562),
+(199, 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 'OPPO K5', '新品预定领券100元低至1799元，加赠原装耳机！', 'CS66472556', '', '', '', 0, 93, 0, 12, '0.00', 0, 1, '7000.00', '6005.00', 0, '0.00', 0, 0, 0, '', '', '内容', '[{\"name\":\"O1CN01awPGBj1Mqd7qIcu3n_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\"}]', '[]', '', 0, 0, 0, 1, 50, 1, 0, 1571202520, 1580714562),
 (200, 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机 双卡双待', '荣耀10青春版', '此商品将于2019-10-18,00点结束闪购特卖', 'CS68961683', '', '', '', 0, 400, 0, 0, '0.00', 0, 1, '3000.00', '2000.00', 0, '0.00', 0, 0, 0, '', '', '内容', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\"}]', '', '', 0, 0, 0, 1, 50, 1, 1, 1571203431, 1571715055),
 (201, 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机 双卡双待', '荣耀10青春版', '此商品将于2019-10-18,00点结束闪购特卖', 'CS67398497', '', '', '', 0, 401, 0, 0, '0.00', 0, 1, '3000.00', '2000.00', 0, '0.00', 0, 0, 0, '', '', '内容', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\"}]', '', '', 0, 0, 0, 1, 50, 1, 1, 1571708740, 1572575399),
 (202, 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机 双卡双待', '荣耀10青春版', '此商品将于2019-10-18,00点结束闪购特卖', 'CS21772567', '', '', '', 0, 400, 0, 0, '0.00', 0, 1, '3000.00', '2000.00', 0, '0.00', 0, 0, 0, '', '', '内容', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\"}]', '[]', '', 0, 0, 0, 1, 50, 1, 1, 1571715065, 1571723459),
@@ -5438,8 +5439,8 @@ INSERT INTO `cs_goods` (`goods_id`, `goods_category_id`, `name`, `short_name`, `
 (285, 1, '66666', '', '', 'CS98541288', '', '', '', 0, 0, 0, 0, '0.00', 0, 0, '1.00', '1.00', 0, '0.00', 0, 0, 0, '', '', '66666', '[{\"name\":\"O1CN01VtX6IC1PbvFiNvskI_!!0-item_pic.jpg\",\"source\":\"careyshop.oruei.com\\/uploads\\/files\\/20191225\\/e8c9494617d265d8e0f981dc1967bc06.jpg?type=careyshop\",\"url\":\"\\/\\/careyshop.oruei.com\\/uploads\\/files\\/20191225\\/e8c9494617d265d8e0f981dc1967bc06.jpg?type=careyshop\"}]', '[]', '', 0, 0, 0, 1, 50, 1, 1, 1577284965, 1577325291),
 (286, 12, '7777', '', '', 'CS84966819', '', '', '', 0, 0, 0, 0, '0.00', 0, 0, '1.00', '1.00', 0, '0.00', 0, 0, 0, '', '', '777', '[{\"name\":\"q03.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\"}]', '[]', '', 0, 0, 0, 3, 50, 1, 1, 1577285022, 1577325288),
 (287, 194, 'Apple 2019新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡 笔记本电脑 轻薄本', 'MacBook Pro 16', '【12月钜惠】19年款MacBookAir低至8278，19年款MacBookPro低至9298！', 'CS66985572', '100005638677', '', '', 31, 120, 0, 0, '1.50', 0, 1, '21999.00', '18999.00', 0, '100.00', 1000, 0, 0, '', '', '<img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F4d141311-9184-483c-8204-11dc9253e673.jpg%3Ftype%3Daliyun\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F38f69eba-165e-475c-8b1f-824212e02afc.jpg%3Ftype%3Daliyun\" alt=\"\" />', '[{\"name\":\"68d42d66a8a9c565.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\"}]', '[]', '件', 1, 1, 1, 2, 50, 1, 0, 1577326066, 1577888630),
-(288, 194, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 'MacBook Pro 16', '【12月钜惠】19年款MacBookAir低至8278', 'CS19938733', '100005638677', '', '', 31, 145, 0, 8, '1.50', 0, 1, '21999.00', '18999.00', 1, '100.00', 1000, 0, 0, '', '', '<img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg%3Ftype%3Daliyun\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F741db4e0-1eae-423c-8de3-04a54bb102e2.gif%3Ftype%3Daliyun\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F4d141311-9184-483c-8204-11dc9253e673.jpg%3Ftype%3Daliyun\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F38f69eba-165e-475c-8b1f-824212e02afc.jpg%3Ftype%3Daliyun\" alt=\"\" />', '[{\"name\":\"O1CN01wQOP0c1RdsATKsVgU_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\"},{\"name\":\"q03.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\"},{\"name\":\"2.gif\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/741db4e0-1eae-423c-8de3-04a54bb102e2.gif?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/741db4e0-1eae-423c-8de3-04a54bb102e2.gif?type=aliyun\"},{\"name\":\"3.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4d141311-9184-483c-8204-11dc9253e673.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4d141311-9184-483c-8204-11dc9253e673.jpg?type=aliyun\"},{\"name\":\"1.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg?type=aliyun\"},{\"name\":\"4.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/38f69eba-165e-475c-8b1f-824212e02afc.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/38f69eba-165e-475c-8b1f-824212e02afc.jpg?type=aliyun\"},{\"name\":\"pdf02.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\"},{\"name\":\"pdf01.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\"},{\"name\":\"flag020.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/e4017d38-4ca8-49ef-860f-2000867b997b.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/e4017d38-4ca8-49ef-860f-2000867b997b.png?type=aliyun\"}]', '{\"url\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191113\\/959c79ed-7ecf-4a93-88ef-3f10fe2a7c7a.mp4?type=aliyun\",\"mime\":\"video\\/mp4\",\"cover\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191113\\/abafd222-9795-4623-919e-97034d1ffb32.jpg?type=aliyun\"}', '件', 1, 0, 1, 2, 50, 1, 0, 1577337570, 1580714456),
-(289, 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', '荣耀10青春版', '限量送鼠标+“新机咨询服务”，高清全面屏，轻薄便携超级快充，配合多屏协同，实现畅爽娱乐办公新体验！', 'CS61349218', '', '', '', 30, 130, 0, 16, '3.00', 0, 1, '3000.00', '2000.00', 0, '0.00', 0, 0, 0, '', '', '<div><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg%3Ftype%3Daliyun\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F741db4e0-1eae-423c-8de3-04a54bb102e2.gif%3Ftype%3Daliyun\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F4d141311-9184-483c-8204-11dc9253e673.jpg%3Ftype%3Daliyun\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F38f69eba-165e-475c-8b1f-824212e02afc.jpg%3Ftype%3Daliyun\" alt=\"\" /></div>\n<div style=\"text-align: center;\"><span style=\"color: #ff0000; font-size: 18px;\">也可以插入一些文字<br /></span><span style=\"font-size: 14px; background-color: #000000; color: #ffff99;\">之后继续插入图片<br /></span>无格式文字</div>\n<div><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F98a14249-c160-43ac-ac0b-4920ed8b75af.png%3Ftype%3Dcareyshop\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2Fe388bb89-6d3e-4d3b-a948-e71096b21530.png%3Ftype%3Dcareyshop\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2Fba732548-149f-436d-a6a3-4ba8f364293b.png%3Ftype%3Dcareyshop\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F8396ed3d-6ec4-45d5-bdd4-15a8b1c865af.png%3Ftype%3Dcareyshop\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F7d3ab2ff-3eff-4b26-a449-0e2b514ea2c4.png%3Ftype%3Dcareyshop\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F2213e588-6192-4909-ae6e-244d6c256eb0.png%3Ftype%3Dcareyshop\" alt=\"\" /></div>', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\"},{\"name\":\"68d42d66a8a9c565.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\"},{\"name\":\"O1CN01Lm14uN1yXLqqxZuXd_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/40267cb9-c022-43d8-adf2-77cdc88fa6d0.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/40267cb9-c022-43d8-adf2-77cdc88fa6d0.jpg?type=aliyun\"},{\"name\":\"O1CN01VtX6IC1PbvFiNvskI_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4aff227f-2673-45bc-81cd-8e79777dbe04.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4aff227f-2673-45bc-81cd-8e79777dbe04.jpg?type=aliyun\"},{\"name\":\"O1CN01wQOP0c1RdsATKsVgU_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\"},{\"name\":\"O1CN01awPGBj1Mqd7qIcu3n_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\"},{\"name\":\"q03.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\"},{\"name\":\"q04.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/c67cd881-6aaf-4caa-89c0-3725cb0dd33d.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/c67cd881-6aaf-4caa-89c0-3725cb0dd33d.png?type=aliyun\"},{\"name\":\"pdf02.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\"},{\"name\":\"pdf01.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\"}]', '{\"url\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191113\\/9bbf7ac9-a452-445b-8152-4443bc3505e8.mp4?type=aliyun\",\"mime\":\"video\\/mp4\",\"cover\":\"\"}', '台', 0, 0, 0, 1, 50, 1, 0, 1577897131, 1584693676),
+(288, 194, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 'MacBook Pro 16', '【12月钜惠】19年款MacBookAir低至8278', 'CS19938733', '100005638677', '', '', 31, 147, 0, 6, '1.50', 0, 1, '21999.00', '18999.00', 1, '100.00', 1000, 0, 0, '', '', '<img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg%3Ftype%3Daliyun\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F741db4e0-1eae-423c-8de3-04a54bb102e2.gif%3Ftype%3Daliyun\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F4d141311-9184-483c-8204-11dc9253e673.jpg%3Ftype%3Daliyun\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F38f69eba-165e-475c-8b1f-824212e02afc.jpg%3Ftype%3Daliyun\" alt=\"\" />', '[{\"name\":\"O1CN01wQOP0c1RdsATKsVgU_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\"},{\"name\":\"q03.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\"},{\"name\":\"2.gif\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/741db4e0-1eae-423c-8de3-04a54bb102e2.gif?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/741db4e0-1eae-423c-8de3-04a54bb102e2.gif?type=aliyun\"},{\"name\":\"3.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4d141311-9184-483c-8204-11dc9253e673.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4d141311-9184-483c-8204-11dc9253e673.jpg?type=aliyun\"},{\"name\":\"1.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg?type=aliyun\"},{\"name\":\"4.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/38f69eba-165e-475c-8b1f-824212e02afc.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/38f69eba-165e-475c-8b1f-824212e02afc.jpg?type=aliyun\"},{\"name\":\"pdf02.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\"},{\"name\":\"pdf01.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\"},{\"name\":\"flag020.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/e4017d38-4ca8-49ef-860f-2000867b997b.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/e4017d38-4ca8-49ef-860f-2000867b997b.png?type=aliyun\"}]', '{\"url\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191113\\/959c79ed-7ecf-4a93-88ef-3f10fe2a7c7a.mp4?type=aliyun\",\"mime\":\"video\\/mp4\",\"cover\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191113\\/abafd222-9795-4623-919e-97034d1ffb32.jpg?type=aliyun\"}', '件', 1, 0, 1, 2, 50, 1, 0, 1577337570, 1584975521),
+(289, 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', '荣耀10青春版', '限量送鼠标+“新机咨询服务”，高清全面屏，轻薄便携超级快充，配合多屏协同，实现畅爽娱乐办公新体验！', 'CS61349218', '', '', '', 30, 134, 0, 12, '3.00', 0, 1, '3000.00', '2000.00', 0, '0.00', 0, 0, 0, '', '', '<div><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg%3Ftype%3Daliyun\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F741db4e0-1eae-423c-8de3-04a54bb102e2.gif%3Ftype%3Daliyun\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F4d141311-9184-483c-8204-11dc9253e673.jpg%3Ftype%3Daliyun\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F38f69eba-165e-475c-8b1f-824212e02afc.jpg%3Ftype%3Daliyun\" alt=\"\" /></div>\n<div style=\"text-align: center;\"><span style=\"color: #ff0000; font-size: 18px;\">也可以插入一些文字<br /></span><span style=\"font-size: 14px; background-color: #000000; color: #ffff99;\">之后继续插入图片<br /></span>无格式文字<br />...</div>\n<div><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F98a14249-c160-43ac-ac0b-4920ed8b75af.png%3Ftype%3Dcareyshop\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2Fe388bb89-6d3e-4d3b-a948-e71096b21530.png%3Ftype%3Dcareyshop\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2Fba732548-149f-436d-a6a3-4ba8f364293b.png%3Ftype%3Dcareyshop\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F8396ed3d-6ec4-45d5-bdd4-15a8b1c865af.png%3Ftype%3Dcareyshop\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F7d3ab2ff-3eff-4b26-a449-0e2b514ea2c4.png%3Ftype%3Dcareyshop\" alt=\"\" /><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F2213e588-6192-4909-ae6e-244d6c256eb0.png%3Ftype%3Dcareyshop\" alt=\"\" /></div>', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\"},{\"name\":\"68d42d66a8a9c565.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\"},{\"name\":\"O1CN01Lm14uN1yXLqqxZuXd_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/40267cb9-c022-43d8-adf2-77cdc88fa6d0.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/40267cb9-c022-43d8-adf2-77cdc88fa6d0.jpg?type=aliyun\"},{\"name\":\"O1CN01VtX6IC1PbvFiNvskI_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4aff227f-2673-45bc-81cd-8e79777dbe04.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4aff227f-2673-45bc-81cd-8e79777dbe04.jpg?type=aliyun\"},{\"name\":\"O1CN01wQOP0c1RdsATKsVgU_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\"},{\"name\":\"O1CN01awPGBj1Mqd7qIcu3n_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\"},{\"name\":\"q03.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\"},{\"name\":\"q04.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/c67cd881-6aaf-4caa-89c0-3725cb0dd33d.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/c67cd881-6aaf-4caa-89c0-3725cb0dd33d.png?type=aliyun\"},{\"name\":\"pdf02.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\"},{\"name\":\"pdf01.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\"}]', '{\"url\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191113\\/9bbf7ac9-a452-445b-8152-4443bc3505e8.mp4?type=aliyun\",\"mime\":\"video\\/mp4\",\"cover\":\"\"}', '台', 0, 0, 0, 1, 50, 1, 0, 1577897131, 1585186988),
 (290, 1, '规格测试', '', '', 'CS68277836', '', '', '', 0, 4500, 28, 1024, '0.00', 0, 0, '1.00', '2.00', 0, '0.00', 0, 0, 0, '', '', '规格测试', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\"}]', '[]', '', 0, 0, 0, 1, 50, 1, 1, 1578056068, 1578385000),
 (291, 1, '规格测试2', '', '', 'CS74913287', '', '', '', 0, 8, 0, 0, '0.00', 0, 0, '1.00', '1.00', 0, '0.00', 0, 0, 0, '', '', '&nbsp;', '[{\"name\":\"O1CN01Lm14uN1yXLqqxZuXd_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/40267cb9-c022-43d8-adf2-77cdc88fa6d0.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/40267cb9-c022-43d8-adf2-77cdc88fa6d0.jpg?type=aliyun\"}]', '[]', '', 0, 0, 0, 1, 50, 1, 1, 1578061407, 1578384998);
 
@@ -5514,10 +5515,6 @@ INSERT INTO `cs_goods_attr` (`goods_id`, `goods_attribute_id`, `parent_id`, `is_
 (291, 19, 18, 1, '', 0),
 (291, 21, 20, 1, '', 0),
 (291, 26, 20, 1, '', 5),
-(288, 5, 4, 1, '支持', 0),
-(288, 29, 4, 1, '1 2', 1),
-(288, 31, 4, 0, '这是手写的', 2),
-(288, 33, 4, 0, '这是默认值1a\n这是默认值2a\n这是默认值3a', 3),
 (185, 19, 18, 1, '', 0),
 (185, 21, 20, 1, '', 0),
 (185, 26, 20, 1, 'test', 5),
@@ -5533,7 +5530,11 @@ INSERT INTO `cs_goods_attr` (`goods_id`, `goods_attribute_id`, `parent_id`, `is_
 (289, 24, 20, 0, '7.95mm', 4),
 (289, 26, 20, 1, '合金', 5),
 (289, 15, 12, 1, '外包装采用贴防拆标签，彩盒内标配：\n1）手机 x 1； \n2）电池（内置）x 1； \n3）充电器 x 1； \n4） 数据线 x 1； \n5）快速指南 x 1； \n6）三包凭证 x 1； \n7）取卡针 x 1； \n8）保护壳 x 1；', 0),
-(289, 27, 12, 1, '其它', 1);
+(289, 27, 12, 1, '其它', 1),
+(288, 5, 4, 1, '支持', 0),
+(288, 29, 4, 1, '1 2', 1),
+(288, 31, 4, 0, '这是手写的', 2),
+(288, 33, 4, 0, '这是默认值1a\n这是默认值2a\n这是默认值3a', 3);
 
 -- --------------------------------------------------------
 
@@ -7346,7 +7347,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (511, 506, '获取指定账号的提现账号列表', '', '', '', 'api', 0, 'api/v1/withdraw_user/get.withdraw.user.list', '', '_self', 0, 50, 1),
 (512, 506, '检测是否超出最大添加数量', '', '', '', 'api', 0, 'api/v1/withdraw_user/is.withdraw.user.maximum', '', '_self', 0, 50, 1),
 (513, 0, '首页', '', 'shouye', '', 'admin', 0, '/index', '', '_self', 1, 1, 1),
-(514, 0, '商品', '', 'bangongbao', '', 'admin', 0, '/goods', '', '_self', 1, 2, 1),
+(514, 0, '商品', '', 'gouwu', '', 'admin', 0, '/goods', '', '_self', 1, 2, 1),
 (515, 0, '订单', '', 'yemianliu', '', 'admin', 0, '/order', '', '_self', 1, 3, 1),
 (516, 0, '营销', '', 'liwu', '', 'admin', 0, '/marketing', '', '_self', 1, 4, 1),
 (517, 0, '会员', '', 'CPhezuo', '', 'admin', 0, '/member', '', '_self', 1, 5, 1),
@@ -7538,7 +7539,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (710, 521, '支付系统', '', 'jinbi_o', '', 'admin', 0, '/setting/payment', '', '_self', 1, 3, 1),
 (711, 521, '消息通知', '', 'tongzhizhongxin_o', '', 'admin', 0, '/setting/notice', '', '_self', 1, 5, 1),
 (712, 521, '店铺设置', '', 'kongzhizhongxin_o', '', 'admin', 0, '/setting/setting', '', '_self', 1, 2, 1),
-(713, 712, '系统设置', '', 'quanjushezhi_o', '系统基础的参数设置', 'admin', 0, '/setting/setting/system', '', '_self', 1, 1, 1),
+(713, 712, '系统管理', '', 'quanjushezhi_o', '系统基础的参数设置', 'admin', 0, '/setting/setting/system', '', '_self', 1, 1, 1),
 (714, 656, '新增应用', '', '', '', 'admin', 0, '/system/aided/app/add', '', '_self', 0, 50, 1),
 (715, 656, '编辑应用', '', '', '', 'admin', 0, '/system/aided/app/set', '', '_self', 0, 50, 1),
 (716, 656, '删除应用', '', '', '', 'admin', 0, '/system/aided/app/del', '', '_self', 0, 50, 1),
@@ -7672,7 +7673,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (869, 515, '售后中心', '', 'RectangleCopy254', '', 'admin', 0, '', '', '_self', 1, 50, 1),
 (870, 869, '售后列表', '', 'fuwu_o', '买家申请售后服务', 'admin', 0, '', '', '_self', 1, 50, 1),
 (871, 514, '商品首页', '', 'shouye_o', '', 'admin', 0, '/goods/index', '', '_self', 1, 1, 1),
-(872, 514, '商品管理', '', 'bangongbao_o', '', 'admin', 0, '/goods/admin', '', '_self', 1, 2, 1),
+(872, 514, '商品管理', '', 'gouwu_o', '', 'admin', 0, '/goods/admin', '', '_self', 1, 2, 1),
 (873, 872, '商品列表', '', 'RectangleCopy75', '商品的常规管理', 'admin', 0, '/goods/admin/list', '', '_self', 1, 2, 1),
 (874, 882, '商品分类', '', 'cengji_o', '商品分类的常规管理', 'admin', 0, '/goods/setting/category', '', '_self', 1, 1, 1),
 (875, 882, '商品品牌', '', 'RectangleCopy175', '商品品牌的常规管理', 'admin', 0, '/goods/setting/brand', '', '_self', 1, 2, 1),
@@ -7803,7 +7804,29 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (1011, 31, '查询应用验证码状态', '', '', '', 'api', 0, 'api/v1/app/get.app.captcha', '', '_self', 0, 10, 1),
 (1012, 31, '获取应用验证码', '', '', '', 'api', 0, 'api/v1/app/image.app.captcha', '', '_self', 0, 12, 1),
 (1013, 31, '获取应用验证码调用地址', '', '', '', 'api', 0, 'api/v1/app/get.app.captcha.callurl', '', '_self', 0, 11, 1),
-(1014, 520, '专题发布', '', 'baoguo_dabao_o', '', 'admin', 0, '/system/topic', '', '_self', 1, 7, 1);
+(1014, 520, '专题发布', '', 'baoguo_dabao_o', '', 'admin', 0, '/system/topic', '', '_self', 1, 7, 1),
+(1015, 1023, '基础设置', '', '', '', 'admin', 0, '/setting/setting/system/info/basis', '', '_self', 0, 1, 1),
+(1016, 1023, '备案许可', '', '', '', 'admin', 0, '/setting/setting/system/info/record', '', '_self', 0, 2, 1),
+(1017, 1023, '状态设置', '', '', '', 'admin', 0, '/setting/setting/system/info/status', '', '_self', 0, 3, 1),
+(1018, 1023, '定义平台', '', '', '', 'admin', 0, '/setting/setting/system/info/platform', '', '_self', 0, 4, 1),
+(1019, 1023, '跨域访问', '', '', '', 'admin', 0, '/setting/setting/system/info/cors', '', '_self', 0, 5, 1),
+(1020, 1023, '其他设置', '', '', '', 'admin', 0, '/setting/setting/system/info/other', '', '_self', 0, 6, 1),
+(1022, 713, '购物系统', '', '', '', 'admin', 0, '/setting/setting/system/shopping', '', '_self', 0, 2, 1),
+(1023, 713, '系统配置', '', '', '', 'admin', 0, '/setting/setting/system/info', '', '_self', 0, 1, 1),
+(1024, 1022, '基础设置', '', '', '', 'admin', 0, '/setting/setting/system/shopping/basis', '', '_self', 0, 50, 1),
+(1025, 1022, '订单来源', '', '', '', 'admin', 0, '/setting/setting/system/shopping/source', '', '_self', 0, 50, 1),
+(1026, 713, '售后服务', '', '', '', 'admin', 0, '/setting/setting/system/service', '', '_self', 0, 50, 1),
+(1027, 713, '支付页面', '', '', '', 'admin', 0, '/setting/setting/system/payment', '', '_self', 0, 50, 1),
+(1028, 713, '配送优惠', '', '', '', 'admin', 0, '/setting/setting/system/delivery', '', '_self', 0, 50, 1),
+(1029, 1028, '满额设置', '', '', '', 'admin', 0, '/setting/setting/system/delivery/money', '', '_self', 0, 50, 1),
+(1030, 1028, '满件设置', '', '', '', 'admin', 0, '/setting/setting/system/delivery/amount', '', '_self', 0, 50, 1),
+(1031, 1028, '满额减设置', '', '', '', 'admin', 0, '/setting/setting/system/delivery/lower', '', '_self', 0, 50, 1),
+(1032, 713, '配送轨迹', '', '', '', 'admin', 0, '/setting/setting/system/dist', '', '_self', 0, 50, 1),
+(1033, 713, '上传配置', '', '', '', 'admin', 0, '/setting/setting/system/upload', '', '_self', 0, 50, 1),
+(1034, 1033, '基础设置', '', '', '', 'admin', 0, '/setting/setting/system/upload/basis', '', '_self', 0, 50, 1),
+(1035, 1033, 'CareyShop(本地上传)', '', '', '', 'admin', 0, '/setting/setting/system/upload/careyshop', '', '_self', 0, 50, 1),
+(1036, 1033, '七牛云 KODO', '', '', '', 'admin', 0, '/setting/setting/system/upload/qiniu', '', '_self', 0, 50, 1),
+(1037, 1033, '阿里云 OSS', '', '', '', 'admin', 0, '/setting/setting/system/upload/aliyun', '', '_self', 0, 50, 1);
 
 -- --------------------------------------------------------
 
@@ -7896,7 +7919,7 @@ INSERT INTO `cs_message` (`message_id`, `type`, `member`, `title`, `content`, `u
 (62, 0, 2, '免费商标数据监控已发布，开启注册/续展/监控等一站式服务！', 'test', '', '_blank', 0, 0, 0, 1, 1555395705, 1555403694),
 (63, 3, 2, '免费商标数据监控已发布，开启注册/续展/监控等一站式服务！', 'test', '', '_blank', 0, 1, 1, 1, 1555395784, 1555403694),
 (64, 0, 2, '免费商标数据监控已发布，开启注册/续展/监控等一站式服务！', 'test', '', '_blank', 1, 0, 1, 0, 1555395987, 1555402737),
-(65, 3, 2, '【0元体验】企业级分布式应用服务EDAS Serverless版，邀你免费公测！', 'CCC', '', '_blank', 7, 0, 1, 0, 1555396240, 1555427080),
+(65, 3, 2, '【0元体验】企业级分布式应用服务EDAS Serverless版，邀你免费公测！', 'CCC', '', '_blank', 8, 0, 1, 0, 1555396240, 1555427080),
 (66, 2, 1, '纳网13周年庆钜惠来袭，域名享1元，主机建站1折起', '<img src=\"http://image.idosend.com/fkImages/13082/Image/137_01.jpg\" width=\"700\" height=\"284\" />&nbsp;<a href=\"http://image.idosend.com/t/dd71037f/9f7e/4cc8/b57a/82ed895aa9a6/2954558-564378.html\" target=\"_blank\" rel=\"noopener\"><img src=\"http://image.idosend.com/fkImages/13082/Image/137_03.jpg\" width=\"651\" height=\"319\" /></a>&nbsp;&nbsp;<a href=\"http://image.idosend.com/t/1722ba26/fc65/4fee/aba9/af2a49cd95fc/2954558-564378.html\" target=\"_blank\" rel=\"noopener\"><img src=\"http://image.idosend.com/fkImages/13082/Image/137_06.jpg\" width=\"651\" height=\"290\" /></a>&nbsp;<a href=\"http://image.idosend.com/t/16cb48d1/9806/4c3e/b4f3/32ef01c8afbc/2954558-564378.html\" target=\"_blank\" rel=\"noopener\"><img src=\"http://image.idosend.com/fkImages/13082/Image/137_08.jpg\" width=\"651\" height=\"250\" /></a>&nbsp;<img src=\"http://image.idosend.com/fkImages/13082/Image/137_10.jpg\" width=\"700\" height=\"111\" />', '', '_blank', 0, 0, 0, 1, 1555470096, 1555470247),
 (67, 0, 2, '奔驰维权女车主和西安利之星4S店达成和解协议', '<p>【消费者购买奔驰新车遭遇发动机漏油最新进展：当事双方已达成和解】4月16日晚， W女士（化名）和西安利之星汽车有限公司达成换车补偿等和解协议。</p>\n<p>此外，记者从西安高新区市场监管部门了解到，涉事车辆有关质量问题已进入鉴定程序，该事件涉及的涉嫌违法违规问题，仍将依法依规进行调查处理，结果将及时向社会公布。同时，根据省市部署，将继续开展汽车销售市场经营行为专项整治工作，依法依规净化市场环境、保护消费者合法权益。</p>\n<p><a href=\"https://c.m.163.com/news/s/S1555048489505.html\" target=\"_blank\" rel=\"noopener\">进入专题&gt;&gt;</a></p>\n<p>&nbsp;</p>\n<div class=\"special_tag_wrap\">\n<div class=\"special_tag special_tag_tj\">\n<div class=\"special_tag_ttl\">延伸 &middot; 推荐</div>\n<div class=\"special_tag_cnt\">\n<p><a href=\"https://news.163.com/19/0417/00/ECU57GGU0001899O.html\" target=\"_blank\" rel=\"noopener\">奔驰女车主与4s店和解：换新车退还金融服务费</a></p>\n<p>16日晚，北青报记者从西安市市场监督管理局高新分局刘副局长处获悉，当晚，维权的奔驰车主王女士和西安利之星汽车有限公司已达成换车、补偿等和解协议。</p>\n</div>\n</div>\n</div>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<div class=\"special_tag_wrap\">\n<div class=\"special_tag special_tag_hg\">\n<div class=\"special_tag_ttl\">延伸 &middot; 回顾</div>\n<div class=\"special_tag_cnt\">\n<p><a href=\"https://news.163.com/19/0416/21/ECTORA1F0001899O.html\" target=\"_blank\" rel=\"noopener\">奔驰车主维权调查:利之星收3%服务费获利2/3</a></p>\n<p>据税务部门的工作人员介绍，车主所交的&ldquo;金融服务费&rdquo;，实际上是第三方陕西元胜公司派驻在西安利之星4S店的工作人员收取的。</p>\n<p><a href=\"https://news.163.com/19/0416/18/ECTGEMV40001899O.html\" target=\"_self\">奔驰公司:已与车主沟通 将暂停涉事授权店销售运营</a></p>\n<p>针对西安奔驰车漏油、车主维权一事，4月16日下午，北京梅赛德斯-奔驰销售服务有限公司发布情况说明。表示将对相关经销商的经营合规性展开调查。结果明确前，该授权店的销售运营将暂停，立即执行。</p>\n</div>\n</div>\n</div>\n<p class=\"f_center\"><img src=\"http://cms-bucket.ws.126.net/2019/04/17/1f7692db33f6484696660f9d5de82808.jpeg?imageView&amp;thumbnail=550x0\" alt=\"奔驰维权女车主和西安利之星4S店达成和解协议\" /></p>', '', '_blank', 0, 0, 1, 0, 1555470175, 1555678321),
 (68, 0, 2, '年后开干！看看同行在悄悄做哪些业务布局？', 'content', 'http://www.baidu.com', '_self', 30, 0, 1, 0, 1511763412, 1555427098),
@@ -7989,7 +8012,8 @@ INSERT INTO `cs_message_user` (`message_user_id`, `message_id`, `user_id`, `admi
 (18, 95, NULL, 1, 1, 0, 1564499102),
 (19, 81, NULL, 1, 1, 0, 1571102846),
 (20, 88, NULL, 1, 1, 0, 1575251025),
-(21, 114, NULL, 1, 1, 0, 1577623699);
+(21, 114, NULL, 1, 1, 0, 1577623699),
+(22, 65, NULL, 1, 1, 0, 1585147172);
 
 -- --------------------------------------------------------
 
@@ -8121,7 +8145,7 @@ CREATE TABLE `cs_order` (
   `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父订单Id',
   `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
   `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
-  `source` tinyint(1) NOT NULL COMMENT '订单来源(自定义)',
+  `source` tinyint(3) NOT NULL COMMENT '订单来源(自定义)',
   `pay_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '订单金额',
   `goods_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品金额',
   `total_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '应付金额(含运费)',
@@ -8174,7 +8198,7 @@ CREATE TABLE `cs_order` (
 --
 
 INSERT INTO `cs_order` (`order_id`, `parent_id`, `order_no`, `user_id`, `source`, `pay_amount`, `goods_amount`, `total_amount`, `use_money`, `use_level`, `use_integral`, `use_coupon`, `use_discount`, `use_promotion`, `use_card`, `delivery_fee`, `payment_no`, `payment_code`, `card_number`, `delivery_id`, `consignee`, `country`, `province`, `city`, `district`, `address`, `complete_address`, `zipcode`, `tel`, `mobile`, `buyer_remark`, `invoice_title`, `tax_number`, `invoice_amount`, `trade_status`, `delivery_status`, `payment_status`, `create_user_id`, `is_give`, `sellers_remark`, `adjustment`, `integral_pct`, `give_integral`, `give_coupon`, `payment_time`, `delivery_time`, `finished_time`, `create_time`, `update_time`, `is_delete`) VALUES
-(1, 0, 'PO_I1049550470892670001', 1, 0, '290.00', '300.00', '0.10', '694.89', '0.00', '10.01', '10.00', '0.00', '0.00', '780.00', '1195.00', 'ZF_I1049554124677490001', '3', '9971564621172962', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江省 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 3, 1, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 1483509865, 1515050273, 1514995504, 1515050273, 0),
+(1, 0, 'PO_A1049550470892670001', 1, 0, '290.01', '300.00', '0.10', '694.89', '0.00', '10.01', '10.00', '0.00', '0.00', '780.00', '1195.00', 'ZF_I1049554124677490001', '3', '9971564621172962', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江省 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 3, 1, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 1483509865, 1515050273, 1514995504, 1584978396, 1),
 (2, 0, 'PO_I1049550470892680001', 1, 0, '290.00', '300.00', '0.10', '694.89', '0.00', '10.01', '10.00', '0.00', '0.00', '780.00', '1195.00', '', '', '9971564621172962', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江省 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 4, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1514995504, 1515050273, 0),
 (3, 0, 'PO_I1049550470892670001', 1, 0, '290.00', '300.00', '0.10', '694.89', '0.00', '10.01', '10.00', '0.00', '0.00', '780.00', '1195.00', 'ZF_I1049554124677490001', '3', '9971564621172962', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江省 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 3, 1, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 1483509865, 1515050273, 1514995504, 1515050273, 0),
 (4, 0, 'PO_I1049550470892680001', 1, 0, '290.00', '300.00', '0.10', '694.89', '0.00', '10.01', '10.00', '0.00', '0.00', '780.00', '1195.00', '', '', '9971564621172962', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江省 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 4, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1514995504, 1515050273, 0),
@@ -8288,14 +8312,14 @@ INSERT INTO `cs_order` (`order_id`, `parent_id`, `order_no`, `user_id`, `source`
 (112, 0, 'PO_I1049550470892680003', 1, 0, '290.00', '300.00', '0.10', '694.89', '0.00', '10.01', '10.00', '0.00', '0.00', '780.00', '1195.00', '', '', '9971564621172962', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江省 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 4, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1514995504, 1584895045, 1),
 (113, 0, 'PO_I1049550470892670001', 1, 0, '290.00', '300.00', '0.10', '694.89', '0.00', '10.01', '10.00', '0.00', '0.00', '780.00', '1195.00', 'ZF_I1049554124677490001', '3', '9971564621172962', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江省 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 3, 1, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 1483509865, 1515050273, 1514995504, 1515050273, 0),
 (114, 0, 'PO_I1049550470892680002', 1, 0, '290.00', '300.00', '0.10', '694.89', '0.00', '10.01', '10.00', '0.00', '0.00', '780.00', '1195.00', '', '', '9971564621172962', 5, 'consignee', 0, 12, 124, 4044, 'address', '浙江省 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 4, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1514995504, 1584895039, 1),
-(115, 0, 'PO_A3150167102016240001', 1, 0, '30398.62', '31019.00', '30398.62', '0.00', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '', '15867430322', '买家备注', '', '', '0.00', 0, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1584201671, 1584201671, 0),
-(116, 0, 'PO_A3150263011275460001', 1, 0, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3150283573103810001', '1', '', 1, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '', '15867430322', '买家备注', '', '', '0.00', 0, 0, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 1584202835, 0, 0, 1584202630, 1584202835, 0),
-(117, 0, 'PO_A3209322451800150001', 1, 0, '30398.62', '31019.00', '30398.62', '0.00', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 0, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1584693224, 1584693224, 0),
+(115, 0, 'PO_A3150167102016240001', 1, 0, '30398.62', '31019.00', '30398.62', '0.00', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '', '15867430322', '买家备注', '', '', '0.00', 4, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1584201671, 1584950087, 0),
+(116, 0, 'PO_A3150263011275460001', 1, 0, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3150283573103810001', '1', '', 1, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '', '15867430322', '买家备注', '', '', '0.00', 1, 0, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 1584202835, 0, 0, 1584202630, 1584947039, 0),
+(117, 0, 'PO_A3209322451800150001', 1, 0, '30398.62', '31019.00', '30398.62', '0.00', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 4, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1584693224, 1584950155, 1),
 (118, 0, 'PO_A3209335861100200001', 1, 0, '30398.62', '31019.00', '30398.62', '0.00', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 0, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1584693358, 1584693358, 0),
-(120, 0, 'PO_A3209352609300860001', 1, 0, '30398.62', '31019.00', '30398.62', '0.00', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 0, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1584693526, 1584693526, 0),
-(123, 0, 'PO_A3209397421200030001', 1, 0, '30398.62', '31019.00', '30398.62', '0.00', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 0, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1584693974, 1584693974, 0),
-(124, 0, 'PO_A3217849839847620001', 1, 0, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '', '15867430322', '买家备注', '宁波XXX有限公司', '0001111', '0.00', 0, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1584778498, 1584778498, 0),
-(125, 0, 'PO_A3217852987257470001', 1, 0, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3210230912348670001', '0', '', 20, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '', '15867430322', '买家备注', '个人', '', '0.00', 0, 0, 1, 1, 1, '卖家备注', '0.00', '100.00', 100, '[]', 1584802309, 0, 0, 1584778529, 1584802309, 0);
+(120, 0, 'PO_A3209352609300860001', 1, 3, '30398.62', '31019.00', '30398.62', '0.00', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江 宁波市 江北区 address', '', '', '15867430425', '', '', '', '0.00', 0, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 1584693526, 1584693526, 0),
+(123, 0, 'PO_A3209397421200030001', 1, 2, '30398.62', '31019.00', '30399.62', '0.00', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, 12, 124, 4044, 'address', '浙江 宁波市 江北区 address', '315000', '87487585', '15867430425', '', '', '', '0.00', 0, 0, 0, 1, 1, '', '1.00', '100.00', 100, '[]', 0, 0, 0, 1584693974, 1585200137, 0),
+(124, 0, 'PO_A3217849839847620001', 1, 1, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3234729294500560001', '0', '', 20, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '87487585', '15867430322', '买家备注', '宁波XXX有限公司', '0001111', '0.00', 2, 1, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 1584947293, 1584947680, 0, 1584778498, 1585190982, 0),
+(125, 0, 'PO_A3217852987257470001', 1, 0, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3210230912348670001', '0', '', 20, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '315000', '', '15867430322', '买家备注', '个人', '', '0.00', 0, 0, 1, 1, 1, '卖家备注', '0.00', '100.00', 100, '[]', 1584802309, 0, 0, 1584778529, 1585189980, 0);
 
 -- --------------------------------------------------------
 
@@ -8333,15 +8357,15 @@ INSERT INTO `cs_order_goods` (`order_goods_id`, `order_id`, `order_no`, `user_id
 (2, 1, 'PO_I1049550470892670001', 1, '启蒙积木军舰海军军事航母积木113儿童小颗粒积木玩具春节礼物', 89, '', 'CS27981253', '', '', '1_2', '颜色分类：E14小螺口【单只装】功率：3.5发光颜色：白', '500.00', '100.00', 1, 0, 1, 2),
 (4, 2, 'PO_I1049550470892680001', 1, '乐基乌龟饲料高钙幼龟粮 鱼干虾干面包虫巴西龟鳄龟粮食 龟粮通用', 89, '', 'CS27981253', '', '', '1_3', '颜色分类：【E27】5瓦功率：5W发光颜色：白', '500.00', '200.00', 1, 0, 0, 3),
 (5, 2, 'PO_I1049550470892680001', 1, '添加一条数据添加一条数据', 89, '', 'CS27981253', '', '', '1_2', '规格A', '500.00', '100.00', 1, 0, 0, 3),
-(6, 115, 'PO_A3150167102016240001', 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 199, 'aliyun.oss.careyshop.cn/uploads/files/20191230/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun', 'CS66472556', '', '', '', '', '7000.00', '6005.00', 2, 0, 0, 0),
-(7, 115, 'PO_A3150167102016240001', 1, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 288, 'https://aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun', 'CS19938733', '', '', '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '21999.00', '18999.00', 1, 0, 0, 0),
-(8, 115, 'PO_A3150167102016240001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 0),
+(6, 115, 'PO_A3150167102016240001', 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 199, 'aliyun.oss.careyshop.cn/uploads/files/20191230/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun', 'CS66472556', '', '', '', '', '7000.00', '6005.00', 2, 0, 0, 3),
+(7, 115, 'PO_A3150167102016240001', 1, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 288, 'https://aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun', 'CS19938733', '', '', '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '21999.00', '18999.00', 1, 0, 0, 3),
+(8, 115, 'PO_A3150167102016240001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 3),
 (9, 116, 'PO_A3150263011275460001', 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 199, 'aliyun.oss.careyshop.cn/uploads/files/20191230/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun', 'CS66472556', '', '', '', '', '7000.00', '6005.00', 2, 0, 0, 0),
 (10, 116, 'PO_A3150263011275460001', 1, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 288, 'https://aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun', 'CS19938733', '', '', '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '21999.00', '18999.00', 1, 0, 0, 0),
 (11, 116, 'PO_A3150263011275460001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 0),
-(12, 117, 'PO_A3209322451800150001', 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 199, 'aliyun.oss.careyshop.cn/uploads/files/20191230/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun', 'CS66472556', '', '', '', '', '7000.00', '6005.00', 2, 0, 0, 0),
-(13, 117, 'PO_A3209322451800150001', 1, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 288, 'https://aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun', 'CS19938733', '', '', '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '21999.00', '18999.00', 1, 0, 0, 0),
-(14, 117, 'PO_A3209322451800150001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 0),
+(12, 117, 'PO_A3209322451800150001', 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 199, 'aliyun.oss.careyshop.cn/uploads/files/20191230/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun', 'CS66472556', '', '', '', '', '7000.00', '6005.00', 2, 0, 0, 3),
+(13, 117, 'PO_A3209322451800150001', 1, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 288, 'https://aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun', 'CS19938733', '', '', '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '21999.00', '18999.00', 1, 0, 0, 3),
+(14, 117, 'PO_A3209322451800150001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 3),
 (15, 118, 'PO_A3209335861100200001', 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 199, 'aliyun.oss.careyshop.cn/uploads/files/20191230/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun', 'CS66472556', '', '', '', '', '7000.00', '6005.00', 2, 0, 0, 0),
 (16, 118, 'PO_A3209335861100200001', 1, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 288, 'https://aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun', 'CS19938733', '', '', '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '21999.00', '18999.00', 1, 0, 0, 0),
 (17, 118, 'PO_A3209335861100200001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 0),
@@ -8351,7 +8375,7 @@ INSERT INTO `cs_order_goods` (`order_goods_id`, `order_id`, `order_no`, `user_id
 (21, 123, 'PO_A3209397421200030001', 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 199, 'aliyun.oss.careyshop.cn/uploads/files/20191230/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun', 'CS66472556', '', '', '', '', '7000.00', '6005.00', 2, 0, 0, 0),
 (22, 123, 'PO_A3209397421200030001', 1, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 288, 'https://aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun', 'CS19938733', '', '', '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '21999.00', '18999.00', 1, 0, 0, 0),
 (23, 123, 'PO_A3209397421200030001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 0),
-(26, 124, 'PO_A3217849839847620001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 0),
+(26, 124, 'PO_A3217849839847620001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 1, 1),
 (27, 125, 'PO_A3217852987257470001', 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 199, 'aliyun.oss.careyshop.cn/uploads/files/20191230/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun', 'CS66472556', '', '', '', '', '7000.00', '6005.00', 2, 0, 0, 0),
 (28, 125, 'PO_A3217852987257470001', 1, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 288, 'https://aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun', 'CS19938733', '', '', '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '21999.00', '18999.00', 1, 0, 0, 0),
 (29, 125, 'PO_A3217852987257470001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 0);
@@ -8395,7 +8419,22 @@ INSERT INTO `cs_order_log` (`order_log_id`, `order_id`, `order_no`, `trade_statu
 (12, 125, 'PO_A3217852987257470001', 0, 0, 1, 'CareyShop', 1, '订单付款成功', '订单付款', 1584802309),
 (13, 114, 'PO_I1049550470892680002', 4, 0, 0, 'CareyShop', 1, '删除订单', '订单回收站', 1584895039),
 (14, 112, 'PO_I1049550470892680003', 4, 0, 0, 'CareyShop', 1, '删除订单', '订单回收站', 1584895045),
-(15, 110, 'PO_I1049550470892680004', 4, 0, 0, 'CareyShop', 1, '删除订单', '订单回收站', 1584895051);
+(15, 110, 'PO_I1049550470892680004', 4, 0, 0, 'CareyShop', 1, '删除订单', '订单回收站', 1584895051),
+(19, 116, 'PO_A3150263011275460001', 0, 0, 1, 'CareyShop', 1, '订单取消配货', '订单配货', 1584946983),
+(20, 116, 'PO_A3150263011275460001', 1, 0, 1, 'CareyShop', 1, '订单开始配货', '订单配货', 1584946994),
+(21, 116, 'PO_A3150263011275460001', 0, 0, 1, 'CareyShop', 1, '订单取消配货', '订单配货', 1584947025),
+(22, 116, 'PO_A3150263011275460001', 1, 0, 1, 'CareyShop', 1, '订单开始配货', '订单配货', 1584947039),
+(23, 124, 'PO_A3217849839847620001', 0, 0, 1, 'CareyShop', 1, '订单付款成功', '订单付款', 1584947293),
+(24, 124, 'PO_A3217849839847620001', 1, 0, 1, 'CareyShop', 1, '订单开始配货', '订单配货', 1584947319),
+(25, 124, 'PO_A3217849839847620001', 2, 1, 1, 'CareyShop', 1, '订单完成发货', '订单发货', 1584947680),
+(26, 115, 'PO_A3150167102016240001', 4, 0, 0, 'CareyShop', 1, '订单已取消', '取消订单', 1584950087),
+(27, 117, 'PO_A3209322451800150001', 4, 0, 0, 'CareyShop', 1, '订单已取消', '取消订单', 1584950099),
+(28, 117, 'PO_A3209322451800150001', 4, 0, 0, 'CareyShop', 1, '删除订单', '订单回收站', 1584950155),
+(29, 1, 'PO_A1049550470892670001', 3, 1, 1, 'CareyShop', 1, '删除订单', '订单回收站', 1584978396),
+(30, 123, 'PO_A3209397421200030001', 0, 0, 0, 'admin', 1, '应付金额调整：+0.02', '金额调整', 1585200033),
+(31, 123, 'PO_A3209397421200030001', 0, 0, 0, 'admin', 1, '应付金额调整：-30398.64', '金额调整', 1585200071),
+(32, 123, 'PO_A3209397421200030001', 0, 0, 0, 'admin', 1, '应付金额调整：+1.00', '金额调整', 1585200112),
+(33, 123, 'PO_A3209397421200030001', 0, 0, 0, 'admin', 1, '应付金额调整：+30398.62', '金额调整', 1585200137);
 
 -- --------------------------------------------------------
 
@@ -8833,7 +8872,8 @@ INSERT INTO `cs_payment_log` (`payment_log_id`, `payment_no`, `out_trade_no`, `o
 (201, 'ZF_A3150450838402040001', '', 'PO_A3150167102016240001', 1, '30398.62', '', '', 1, 1584204508, 1584204508, 0),
 (202, 'ZF_A3150454416939320001', '', 'PO_A3150167102016240001', 1, '30398.62', '', '', 1, 1584204544, 1584204544, 0),
 (203, 'ZF_A3150455907235890001', '', 'PO_A3150167102016240001', 1, '30398.62', '', '', 1, 1584204559, 1584204559, 0),
-(204, 'ZF_A3210230912348670001', '4421588861322852167482489119', 'PO_A3217852987257470001', 1, '0.00', '2020-03-21 22:51:49', '0', 1, 1584802309, 1584802309, 1);
+(204, 'ZF_A3210230912348670001', '4421588861322852167482489119', 'PO_A3217852987257470001', 1, '0.00', '2020-03-21 22:51:49', '0', 1, 1584802309, 1584802309, 1),
+(205, 'ZF_A3234729294500560001', '1865591386848881939734185234', 'PO_A3217849839847620001', 1, '0.00', '2020-03-23 15:08:13', '0', 1, 1584947292, 1584947293, 1);
 
 -- --------------------------------------------------------
 
@@ -13127,48 +13167,49 @@ INSERT INTO `cs_setting` (`setting_id`, `code`, `value`, `module`, `description`
 (22, 'is_country', '0', 'system_shopping', '完整地址是否包含国籍', '生成完整地址时是否包含国籍'),
 (23, 'spacer', ' ', 'system_shopping', '完整地址分隔符', '生成完整地址时省市区之间的分隔符，例如 浙江省<span style=\"color:#F56C6C;\">-</span>宁波市'),
 (24, 'invoice', '3', 'system_shopping', '开票收取多少税率(%)', '开票收取多少税率，按票面总金额的百分比换算'),
-(25, 'days', '15', 'service', '有效维权期天数(天)', '订单完成后多少天内允许申请售后服务，单位：天'),
-(26, 'address', '浙江省 宁波市 江北区 XXX路', 'service', '退换货地址', '售后服务退换货的详细地址'),
-(27, 'consignee', 'carey', 'service', '退换货收件人', '售后服务退换货的收件人姓名'),
-(28, 'zipcode', '315000', 'service', '退换货邮编', '售后服务退换货地址的邮编'),
-(29, 'mobile', '87487585', 'service', '退换货联系电话', '售后服务退换货收件人的联系电话'),
-(30, 'platform', '{\"0\":\"all\",\"1\":\"pc\",\"2\":\"mobile\",\"3\":\"ios\",\"4\":\"android\"}', 'system_info', '平台自定义值', ''),
-(31, 'open_index', '0', 'system_info', '是否开启首页', ''),
-(32, 'open_api', '1', 'system_info', '是否开启API接口', ''),
-(33, 'open_mobile', '0', 'system_info', '是否开启移动页', ''),
-(34, 'close_reason', '系统维护中，请稍后访问！', 'system_info', 'API接口关闭原因', ''),
-(35, 'allow_origin', '[\"*\"]', 'system_info', '允许跨域访问的域名', ''),
-(36, 'name', 'CarayShop', 'system_info', '商城名称', '商城名称，将显示在前台顶部欢迎信息等位置'),
-(37, 'title', 'CarayShop商城框架系统', 'system_info', '商城标题', '商城标题，将显示在前台顶部欢迎信息等位置'),
-(38, 'keywords', '开源新零售，开源小程序，开源微商城，开源商城，商城系统，免费商城', 'system_info', '商城关键词', '商城关键词，有利于对整站的SEO优化'),
-(39, 'description', 'CareyShop（简称CS）是一套基于ThinkPHP5框架开发的高性能商城框架系统，秉承简洁、快速、极致的开发理念，对内使用面向对象模块化调用，多终端、跨平台采用REST API构架来面向移动网络趋势，可直接对接PC、移动设备、小程序、云部署，构建Android、IOS的APP。', 'system_info', '商城描述', '商城描述，将显示在前台顶部欢迎信息等位置'),
-(40, 'logo', '', 'system_info', '商城LOGO', '默认商城LOGO,通用头部显示，最佳显示尺寸为240*60像素'),
-(41, 'third_count', '<script>\r\nvar _hmt = _hmt || [];\r\n(function() {\r\n  var hm = document.createElement(\"script\");\r\n  hm.src = \"https://hm.baidu.com/hm.js?e325e60ca4cd358f2b424f5aecb8021a\";\r\n  var s = document.getElementsByTagName(\"script\")[0]; \r\n  s.parentNode.insertBefore(hm, s);\r\n})();</script>', 'system_info', '第三方统计代码', '第三方统计的脚本代码'),
-(42, 'miitbeian', '', 'system_info', 'ICP备案许可证号', 'ICP备案许可证号，将显示在前台底部等位置'),
-(43, 'miitbeian_url', 'http://www.beian.miit.gov.cn', 'system_info', 'ICP备案链接地址', 'ICP备案链接地址，点击后将引导到该网站'),
-(44, 'miitbeian_ico', '', 'system_info', 'ICP备案图标', 'ICP备案图标，将显示在前台底部等位置'),
-(45, 'beian', '', 'system_info', '公安机关备案号', '公安机关备案号，将显示在前台底部等位置'),
-(46, 'beian_url', 'http://www.beian.gov.cn', 'system_info', '公安机关备案链接', '公安机关备案链接，点击后将引导到该网站'),
-(47, 'beian_ico', '', 'system_info', '公安机关备案图标', '公安机关备案图标，将显示在前台底部等位置'),
-(48, 'weixin_url', 'http://www.careyshop.cn/', 'system_info', '移动中间页地址', '例如微信中无法访问实际地址，可通过该地址进行跳转'),
-(49, 'qrcode_logo', 'static/api/images/qrcode_logo.png', 'system_info', '二维码LOGO', '生成二维码时默认的LOGO，可使用 <span style=\"color:#F56C6C;\">路径</span> 或 <span style=\"color:#F56C6C;\">网址</span>'),
-(50, 'default', 'careyshop', 'upload', '默认资源上传模块', '在不指定上传模块时，系统默认启用的上传模块'),
-(51, 'oss', 'careyshop.cn/oss?url=', 'upload', '资源获取短地址', '可启用短地址获取资源，避免原地址冗长'),
-(52, 'image_ext', 'jpg,png,svg,gif,bmp,tiff,webp', 'upload', '允许上传的图片后缀', ''),
-(53, 'file_ext', 'doc,docx,xls,xlsx,ppt,pptx,pdf,wps,txt,rar,zip,gz,bz2,7z,pem,mp4,ogg,webm,ico', 'upload', '允许上传的文件后缀', ''),
-(54, 'file_size', '3M', 'upload', '附件上传大小限制', ''),
-(55, 'token_expires', '300', 'upload', '上传令牌有效时长(秒)', '获得上传令牌后多少秒后视为无效'),
-(56, 'careyshop_url', '', 'upload', '资源绑定域名别名', 'CareyShop(本地上传)自定义绑定域名'),
-(57, 'qiniu_access_key', '-eibVM1dkuOQU9vbF9oMRbiMtw4t_-QUMQJgPPDJ', 'upload', 'AccessKey(AK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">AK</span>'),
-(58, 'qiniu_secret_key', 'pcDGWPh8eOvnvcWBKbBhAod0R6MiC3_OU-V4hayZ', 'upload', 'SecretKey(SK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">SK</span>'),
-(59, 'qiniu_bucket', 'careyshop', 'upload', '存储空间名称', '选择一个存储空间，请保证访问控制为 <span style=\"color:#F56C6C;\">公开空间</span>'),
-(60, 'qiniu_url', 'poask1ml1.bkt.clouddn.com', 'upload', '外链域名', '存储空间 <span style=\"color:#F56C6C;\">对外访问域名</span>，也支持填写 <span style=\"color:#F56C6C;\">自定义域名</span>'),
-(61, 'aliyun_access_key', 'LTAIiZASEnhdoDWO', 'upload', 'AccessKey ID', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey ID</span> 值'),
-(62, 'aliyun_secret_key', 'wpEQEFZRHVRgTy87MjYy7bFTKBWgXA', 'upload', 'AccessKey Secret', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey Secret</span> 值'),
-(63, 'aliyun_bucket', 'careyshop', 'upload', 'Bucket 名称', '选择一个Bucket，请保证读写权限为 <span style=\"color:#F56C6C;\">公共读</span>'),
-(64, 'aliyun_url', 'aliyun.oss.careyshop.cn', 'upload', 'Bucket 域名', '外网访问 <span style=\"color:#F56C6C;\">Bucket域名</span>，也支持填写 <span style=\"color:#F56C6C;\">用户域名</span>'),
-(65, 'aliyun_endpoint', 'oss-cn-hangzhou.aliyuncs.com', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
-(66, 'aliyun_rolearn', 'acs:ram::1763866338345155:role/aliyunosstokengeneratorrole', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>');
+(25, 'source', '{\"0\":{\"name\":\"电脑端\",\"icon\":\"diannao_o\"},\"1\":{\"name\":\"移动端\",\"icon\":\"shouji1_o\"},\"2\":{\"name\":\"小程序\",\"icon\":\"xiaochengxu_o\"},\"3\":{\"name\":\"微信\",\"icon\":\"weixin_o\"}}', 'system_shopping', '订单来源自定义', ''),
+(26, 'days', '15', 'service', '有效维权期天数(天)', '订单完成后多少天内允许申请售后服务，单位：天'),
+(27, 'address', '浙江省 宁波市 江北区 XXX路', 'service', '退换货地址', '售后服务退换货的详细地址'),
+(28, 'consignee', 'carey', 'service', '退换货收件人', '售后服务退换货的收件人姓名'),
+(29, 'zipcode', '315000', 'service', '退换货邮编', '售后服务退换货地址的邮编'),
+(30, 'mobile', '87487585', 'service', '退换货联系电话', '售后服务退换货收件人的联系电话'),
+(31, 'platform', '{\"0\":\"all\",\"1\":\"pc\",\"2\":\"mobile\",\"3\":\"ios\",\"4\":\"android\"}', 'system_info', '平台自定义值', ''),
+(32, 'open_index', '0', 'system_info', '是否开启首页', ''),
+(33, 'open_api', '1', 'system_info', '是否开启API接口', ''),
+(34, 'open_mobile', '0', 'system_info', '是否开启移动页', ''),
+(35, 'close_reason', '系统维护中，请稍后访问！', 'system_info', 'API接口关闭原因', ''),
+(36, 'allow_origin', '[\"*\"]', 'system_info', '允许跨域访问的域名', ''),
+(37, 'name', 'CarayShop', 'system_info', '商城名称', '商城名称，将显示在前台顶部欢迎信息等位置'),
+(38, 'title', 'CarayShop商城框架系统', 'system_info', '商城标题', '商城标题，将显示在前台顶部欢迎信息等位置'),
+(39, 'keywords', '开源新零售，开源小程序，开源微商城，开源商城，商城系统，免费商城', 'system_info', '商城关键词', '商城关键词，有利于对整站的SEO优化'),
+(40, 'description', 'CareyShop（简称CS）是一套基于ThinkPHP5框架开发的高性能商城框架系统，秉承简洁、快速、极致的开发理念，对内使用面向对象模块化调用，多终端、跨平台采用REST API构架来面向移动网络趋势，可直接对接PC、移动设备、小程序、云部署，构建Android、IOS的APP。', 'system_info', '商城描述', '商城描述，将显示在前台顶部欢迎信息等位置'),
+(41, 'logo', '', 'system_info', '商城LOGO', '默认商城LOGO,通用头部显示，最佳显示尺寸为240*60像素'),
+(42, 'third_count', '<script>\r\nvar _hmt = _hmt || [];\r\n(function() {\r\n  var hm = document.createElement(\"script\");\r\n  hm.src = \"https://hm.baidu.com/hm.js?e325e60ca4cd358f2b424f5aecb8021a\";\r\n  var s = document.getElementsByTagName(\"script\")[0]; \r\n  s.parentNode.insertBefore(hm, s);\r\n})();</script>', 'system_info', '第三方统计代码', '第三方统计的脚本代码'),
+(43, 'miitbeian', '', 'system_info', 'ICP备案许可证号', 'ICP备案许可证号，将显示在前台底部等位置'),
+(44, 'miitbeian_url', 'http://www.beian.miit.gov.cn', 'system_info', 'ICP备案链接地址', 'ICP备案链接地址，点击后将引导到该网站'),
+(45, 'miitbeian_ico', '', 'system_info', 'ICP备案图标', 'ICP备案图标，将显示在前台底部等位置'),
+(46, 'beian', '', 'system_info', '公安机关备案号', '公安机关备案号，将显示在前台底部等位置'),
+(47, 'beian_url', 'http://www.beian.gov.cn', 'system_info', '公安机关备案链接', '公安机关备案链接，点击后将引导到该网站'),
+(48, 'beian_ico', '', 'system_info', '公安机关备案图标', '公安机关备案图标，将显示在前台底部等位置'),
+(49, 'weixin_url', 'http://www.careyshop.cn/', 'system_info', '移动中间页地址', '例如微信中无法访问实际地址，可通过该地址进行跳转'),
+(50, 'qrcode_logo', 'static/api/images/qrcode_logo.png', 'system_info', '二维码LOGO', '生成二维码时默认的LOGO，可使用 <span style=\"color:#F56C6C;\">路径</span> 或 <span style=\"color:#F56C6C;\">网址</span>'),
+(51, 'default', 'careyshop', 'upload', '默认资源上传模块', '在不指定上传模块时，系统默认启用的上传模块'),
+(52, 'oss', 'careyshop.cn/oss?url=', 'upload', '资源获取短地址', '可启用短地址获取资源，避免原地址冗长'),
+(53, 'image_ext', 'jpg,png,svg,gif,bmp,tiff,webp', 'upload', '允许上传的图片后缀', ''),
+(54, 'file_ext', 'doc,docx,xls,xlsx,ppt,pptx,pdf,wps,txt,rar,zip,gz,bz2,7z,pem,mp4,ogg,webm,ico', 'upload', '允许上传的文件后缀', ''),
+(55, 'file_size', '3M', 'upload', '附件上传大小限制', ''),
+(56, 'token_expires', '300', 'upload', '上传令牌有效时长(秒)', '获得上传令牌后多少秒后视为无效'),
+(57, 'careyshop_url', '', 'upload', '资源绑定域名别名', 'CareyShop(本地上传)自定义绑定域名'),
+(58, 'qiniu_access_key', '-eibVM1dkuOQU9vbF9oMRbiMtw4t_-QUMQJgPPDJ', 'upload', 'AccessKey(AK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">AK</span>'),
+(59, 'qiniu_secret_key', 'pcDGWPh8eOvnvcWBKbBhAod0R6MiC3_OU-V4hayZ', 'upload', 'SecretKey(SK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">SK</span>'),
+(60, 'qiniu_bucket', 'careyshop', 'upload', '存储空间名称', '选择一个存储空间，请保证访问控制为 <span style=\"color:#F56C6C;\">公开空间</span>'),
+(61, 'qiniu_url', 'poask1ml1.bkt.clouddn.com', 'upload', '外链域名', '存储空间 <span style=\"color:#F56C6C;\">对外访问域名</span>，也支持填写 <span style=\"color:#F56C6C;\">自定义域名</span>'),
+(62, 'aliyun_access_key', 'LTAIiZASEnhdoDWO', 'upload', 'AccessKey ID', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey ID</span> 值'),
+(63, 'aliyun_secret_key', 'wpEQEFZRHVRgTy87MjYy7bFTKBWgXA', 'upload', 'AccessKey Secret', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey Secret</span> 值'),
+(64, 'aliyun_bucket', 'careyshop', 'upload', 'Bucket 名称', '选择一个Bucket，请保证读写权限为 <span style=\"color:#F56C6C;\">公共读</span>'),
+(65, 'aliyun_url', 'aliyun.oss.careyshop.cn', 'upload', 'Bucket 域名', '外网访问 <span style=\"color:#F56C6C;\">Bucket域名</span>，也支持填写 <span style=\"color:#F56C6C;\">用户域名</span>'),
+(66, 'aliyun_endpoint', 'oss-cn-hangzhou.aliyuncs.com', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
+(67, 'aliyun_rolearn', 'acs:ram::1763866338345155:role/aliyunosstokengeneratorrole', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>');
 
 -- --------------------------------------------------------
 
@@ -13601,15 +13642,7 @@ INSERT INTO `cs_spec_goods` (`goods_id`, `key_name`, `key_value`, `price`, `stor
 (291, '237', '星期:周四', '3.00', 2, '', ''),
 (291, '239', '星期:周五', '4.40', 2, '', ''),
 (291, '241', '星期:周六', '5.89', 2, '', ''),
-(288, '208_411_413', '颜色:黑色 CPU:I5 屏幕:13寸', '18999.00', 9, '', ''),
-(288, '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '18999.00', 82, '', ''),
-(288, '208_412_413', '颜色:黑色 CPU:I7 屏幕:13寸', '18999.00', 9, '', ''),
-(288, '208_412_414', '颜色:黑色 CPU:I7 屏幕:15寸', '18999.00', 9, '', ''),
-(288, '209_411_413', '颜色:白色 CPU:I5 屏幕:13寸', '18999.00', 9, '', ''),
-(288, '209_411_414', '颜色:白色 CPU:I5 屏幕:15寸', '18999.00', 9, '', ''),
-(288, '209_412_413', '颜色:白色 CPU:I7 屏幕:13寸', '18999.00', 9, '', ''),
-(288, '209_412_414', '颜色:白色 CPU:I7 屏幕:15寸', '18999.00', 9, '', ''),
-(289, '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '5.00', 94, '', ''),
+(289, '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '5.00', 98, '', ''),
 (289, '151_158_223_211', '内存:4G 网络:4G 尺码:M 颜色:灰色', '1.00', 1, '', ''),
 (289, '151_158_224_212', '内存:4G 网络:4G 尺码:X 颜色:银色', '1.00', 1, '', ''),
 (289, '151_158_224_211', '内存:4G 网络:4G 尺码:X 颜色:灰色', '1.00', 1, '', ''),
@@ -13656,7 +13689,15 @@ INSERT INTO `cs_spec_goods` (`goods_id`, `key_name`, `key_value`, `price`, `stor
 (289, '450_417_223_212', '内存:32G 网络:3G 尺码:M 颜色:银色', '1.00', 0, '', ''),
 (289, '450_417_223_211', '内存:32G 网络:3G 尺码:M 颜色:灰色', '1.00', 0, '', ''),
 (289, '450_417_224_212', '内存:32G 网络:3G 尺码:X 颜色:银色', '1.00', 0, '', ''),
-(289, '450_417_224_211', '内存:32G 网络:3G 尺码:X 颜色:灰色', '1.00', 0, '', '');
+(289, '450_417_224_211', '内存:32G 网络:3G 尺码:X 颜色:灰色', '1.00', 0, '', ''),
+(288, '208_411_413', '颜色:黑色 CPU:I5 屏幕:13寸', '18999.00', 9, '', ''),
+(288, '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '18999.00', 84, '', ''),
+(288, '208_412_413', '颜色:黑色 CPU:I7 屏幕:13寸', '18999.00', 9, '', ''),
+(288, '208_412_414', '颜色:黑色 CPU:I7 屏幕:15寸', '18999.00', 9, '', ''),
+(288, '209_411_413', '颜色:白色 CPU:I5 屏幕:13寸', '18999.00', 9, '', ''),
+(288, '209_411_414', '颜色:白色 CPU:I5 屏幕:15寸', '18999.00', 9, '', ''),
+(288, '209_412_413', '颜色:白色 CPU:I7 屏幕:13寸', '18999.00', 9, '', ''),
+(288, '209_412_414', '颜色:白色 CPU:I7 屏幕:15寸', '18999.00', 9, '', '');
 
 -- --------------------------------------------------------
 
@@ -13751,14 +13792,14 @@ INSERT INTO `cs_spec_image` (`goods_id`, `spec_item_id`, `spec_type`, `image`, `
 (287, 412, 1, '[{\"name\":\"q03.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/008df859-3318-4b5e-8df3-4193420a3cfd.png?type=aliyun\"}]', ''),
 (267, 151, 1, '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\"},{\"name\":\"1.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg?type=aliyun\"}]', ''),
 (267, 152, 1, '[{\"name\":\"O1CN01VtX6IC1PbvFiNvskI_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4aff227f-2673-45bc-81cd-8e79777dbe04.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4aff227f-2673-45bc-81cd-8e79777dbe04.jpg?type=aliyun\"},{\"name\":\"3.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4d141311-9184-483c-8204-11dc9253e673.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4d141311-9184-483c-8204-11dc9253e673.jpg?type=aliyun\"}]', ''),
-(288, 208, 2, '[]', '#000000'),
-(288, 209, 2, '[]', '#FFFFFF'),
-(288, 411, 1, '[{\"name\":\"pdf02.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\"}]', ''),
-(288, 412, 1, '[{\"name\":\"pdf01.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\"}]', ''),
 (289, 151, 1, '[{\"name\":\"O1CN01wQOP0c1RdsATKsVgU_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\"},{\"name\":\"pdf02.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\"},{\"name\":\"pdf01.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\"}]', ''),
 (289, 152, 1, '[{\"name\":\"68d42d66a8a9c565.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\"},{\"name\":\"index7-3.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/4d69f805-93cb-40ff-894a-949d9da08690.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/4d69f805-93cb-40ff-894a-949d9da08690.png?type=aliyun\"}]', ''),
 (289, 158, 2, '[]', '#FF0000'),
-(289, 149, 2, '[]', '#ECF80B');
+(289, 149, 2, '[]', '#ECF80B'),
+(288, 208, 2, '[]', '#000000'),
+(288, 209, 2, '[]', '#FFFFFF'),
+(288, 411, 1, '[{\"name\":\"pdf02.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\"}]', ''),
+(288, 412, 1, '[{\"name\":\"pdf01.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\"}]', '');
 
 -- --------------------------------------------------------
 
@@ -14282,8 +14323,8 @@ CREATE TABLE `cs_token` (
 
 INSERT INTO `cs_token` (`token_id`, `client_id`, `group_id`, `username`, `client_type`, `platform`, `code`, `token`, `token_expires`, `refresh`, `refresh_expires`) VALUES
 (137, 58, 9, 'admin70', 1, 'admin', 'd1da22c53fd316c99b426116a4b7333f', '35cfcd85a881dd8f0dd89551f20e593f', 1586420390, 'da00b3f0830bee7dece967e1cf2d9a22', 1586506790),
-(161, 3, 1, 'admin2', 1, 'admin', 'e992559013a49b52669c22d062324474', '7fb0be36e999666bb63c860a20a77d36', 1587377930, 'a39a9f0b436d07a3bb2ffc00b2517e71', 1587464330),
-(162, 1, 1, 'admin', 1, 'admin', '65212f4fd76b8c4a11d0d44ba8e5407b', '3aac9fea31e5660eac3d09629ff238c4', 1587476594, '2f4c0ed3205c7b19b1c869acb6f45bbb', 1587562994);
+(161, 3, 1, 'admin2', 1, 'admin', '5d0d07f71b3fab42ce293505ee717022', '2ba5a57b9e341749f151c0c874db7f90', 1587793216, '6128628854383b91e6763dc310d3b091', 1587879616),
+(181, 1, 1, 'admin', 1, 'admin', '2c0e635ae6193b36f706ae540d4f0808', '6f73166e3a8c8687b239a09860373742', 1587737991, '2af88c469462e892271191cd7e43da81', 1587824391);
 
 -- --------------------------------------------------------
 
@@ -15778,7 +15819,7 @@ ALTER TABLE `cs_withdraw_user`
 -- 使用表AUTO_INCREMENT `cs_action_log`
 --
 ALTER TABLE `cs_action_log`
-  MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=183;
+  MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=307;
 --
 -- 使用表AUTO_INCREMENT `cs_admin`
 --
@@ -15878,7 +15919,7 @@ ALTER TABLE `cs_delivery_area`
 -- 使用表AUTO_INCREMENT `cs_delivery_dist`
 --
 ALTER TABLE `cs_delivery_dist`
-  MODIFY `delivery_dist_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
+  MODIFY `delivery_dist_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
 --
 -- 使用表AUTO_INCREMENT `cs_delivery_item`
 --
@@ -15948,7 +15989,7 @@ ALTER TABLE `cs_history`
 -- 使用表AUTO_INCREMENT `cs_menu`
 --
 ALTER TABLE `cs_menu`
-  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1015;
+  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1038;
 --
 -- 使用表AUTO_INCREMENT `cs_message`
 --
@@ -15958,7 +15999,7 @@ ALTER TABLE `cs_message`
 -- 使用表AUTO_INCREMENT `cs_message_user`
 --
 ALTER TABLE `cs_message_user`
-  MODIFY `message_user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `message_user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- 使用表AUTO_INCREMENT `cs_navigation`
 --
@@ -15988,7 +16029,7 @@ ALTER TABLE `cs_order_goods`
 -- 使用表AUTO_INCREMENT `cs_order_log`
 --
 ALTER TABLE `cs_order_log`
-  MODIFY `order_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `order_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 --
 -- 使用表AUTO_INCREMENT `cs_order_refund`
 --
@@ -16008,7 +16049,7 @@ ALTER TABLE `cs_payment`
 -- 使用表AUTO_INCREMENT `cs_payment_log`
 --
 ALTER TABLE `cs_payment_log`
-  MODIFY `payment_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `payment_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
 --
 -- 使用表AUTO_INCREMENT `cs_praise`
 --
@@ -16038,7 +16079,7 @@ ALTER TABLE `cs_service_log`
 -- 使用表AUTO_INCREMENT `cs_setting`
 --
 ALTER TABLE `cs_setting`
-  MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 --
 -- 使用表AUTO_INCREMENT `cs_spec`
 --
@@ -16073,7 +16114,7 @@ ALTER TABLE `cs_support`
 -- 使用表AUTO_INCREMENT `cs_token`
 --
 ALTER TABLE `cs_token`
-  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=163;
+  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
 --
 -- 使用表AUTO_INCREMENT `cs_topic`
 --
