@@ -52,7 +52,6 @@ class Order extends CareyShop
     protected $hidden = [
         'parent_id',
         'create_user_id',
-        'is_delete',
     ];
 
     /**
@@ -1081,7 +1080,7 @@ class Order extends CareyShop
         if (!empty($data['total_amount'])) {
             $totalAmount = $result->getAttr('total_amount');
             if (bcadd($totalAmount, $data['total_amount'], 2) < 0) {
-                return $this->setError('应付金额最多可减' . $totalAmount);
+                return $this->setError('修改额度最多可减 ' . $totalAmount);
             }
 
             $result->setAttr('total_amount', $totalAmount + $data['total_amount']);
@@ -1244,7 +1243,7 @@ class Order extends CareyShop
      * 取消一个订单
      * @access public
      * @param  array $data 外部数据
-     * @return bool
+     * @return mixed
      * @throws
      */
     public function cancelOrderItem($data)
@@ -1275,7 +1274,8 @@ class Order extends CareyShop
 
         try {
             // 修改订单状态
-            if (false === $result->save(['trade_status' => 4, 'payment_status' => 0])) {
+            $saveData = ['trade_status' => 4, 'payment_status' => 0];
+            if (false === $result->save($saveData)) {
                 throw new \Exception($this->getError());
             }
 
@@ -1306,7 +1306,7 @@ class Order extends CareyShop
             }
 
             self::commit();
-            return true;
+            return $saveData;
         } catch (\Exception $e) {
             self::rollback();
             return $this->setError($e->getMessage());

@@ -155,8 +155,8 @@ class Order extends CareyShop
             'order_no' => 'require|max:50',
         ],
         'remark'       => [
-            'order_no'       => 'require|max:50',
-            'sellers_remark' => 'require|max:255',
+            'order_no' => 'require|max:50',
+            'sellers_remark',
         ],
         'set'          => [
             'order_no'  => 'require|max:50',
