@@ -91,6 +91,7 @@ class Order extends CareyShop
         'province'        => 'integer',
         'city'            => 'integer',
         'district'        => 'integer',
+        'invoice_type'    => 'integer',
         'invoice_amount'  => 'float',
         'trade_status'    => 'integer',
         'delivery_status' => 'integer',
@@ -749,6 +750,7 @@ class Order extends CareyShop
                 unset($invoiceData['invoice_title'], $invoiceData['tax_number']);
         }
 
+        $invoiceData['invoice_type'] = $invoiceType;
         return true;
     }
 
@@ -1438,13 +1440,14 @@ class Order extends CareyShop
             return $this->setError('订单状态已不允许修改');
         }
 
-        // 允许修改的字段
+        // 设置允许修改的字段及避免无关字段
+        unset($data['create_time'], $data['update_time']);
         $field = [
             'consignee', 'country', 'province', 'city', 'district', 'address', 'zipcode',
             'tel', 'mobile', 'invoice_title', 'tax_number', 'complete_address',
         ];
 
-        // 完整收货地址处理
+        // 处理完整收货地址
         $data['complete_address'] = $this->getCompleteAddress($data) . $data['address'];
 
         if (false !== $result->allowField($field)->save($data)) {
@@ -2112,13 +2115,13 @@ class Order extends CareyShop
             $orderField = !empty($data['order_field']) ? $data['order_field'] : 'order_id';
 
             // 过滤字段
-            $field = ['country', 'province', 'city', 'district', 'address'];
-            is_client_admin() ?: $field[] = 'sellers_remark';
+            if (!is_client_admin()) {
+                $query->field('sellers_remark', true);
+            }
 
             // 查询数据
             $query
                 ->with('getUser,getOrderGoods,getDelivery')
-                ->field($field, true)
                 ->where($map)
                 ->order([$orderField => $orderType]);
 
