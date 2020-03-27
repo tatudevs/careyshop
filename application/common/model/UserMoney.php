@@ -335,6 +335,7 @@ class UserMoney extends CareyShop
      * @param  float $totalMoney 累计消费金额
      * @param  int   $clientId   账号编号
      * @return void
+     * @throws
      */
     private function setUserLevel($totalMoney, $clientId)
     {
@@ -349,7 +350,7 @@ class UserMoney extends CareyShop
         $data['level_icon'] = $result->getAttr('icon');
         $data['user_level_id'] = $result->getAttr('user_level_id');
 
-        User::where(['user_id' => ['eq', $clientId]])->save($data);
+        User::where(['user_id' => ['eq', $clientId]])->update($data);
     }
 
     /**

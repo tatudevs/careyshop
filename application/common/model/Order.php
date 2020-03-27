@@ -1601,7 +1601,6 @@ class Order extends CareyShop
         self::startTrans();
 
         try {
-            $tradeStatus = [];
             foreach ($result as $value) {
                 $orderNo = $value->getAttr('order_no');
                 if ($value->getAttr('payment_status') !== 1) {
@@ -1623,13 +1622,10 @@ class Order extends CareyShop
                 if (!$this->addOrderLog($value->toArray(), $info, '订单配货')) {
                     throw new \Exception($this->getError());
                 }
-
-                // 待返回交易状态
-                $tradeStatus[$orderNo] = $value->getAttr('trade_status');
             }
 
             self::commit();
-            return ['trade_status' => $tradeStatus];
+            return ['trade_status' => $data['is_picking']];
         } catch (\Exception $e) {
             self::rollback();
             return $this->setError($e->getMessage());
@@ -1640,7 +1636,7 @@ class Order extends CareyShop
      * 订单设为发货状态
      * @access public
      * @param  array $data 外部数据
-     * @return bool
+     * @return mixed
      * @throws
      */
     public function deliveryOrderItem($data)
@@ -1749,7 +1745,7 @@ class Order extends CareyShop
             }
 
             self::commit();
-            return true;
+            return $this->orderData;
         } catch (\Exception $e) {
             self::rollback();
             return $this->setError($e->getMessage());
@@ -1859,7 +1855,7 @@ class Order extends CareyShop
      * 订单批量确认收货
      * @access public
      * @param  array $data 外部数据
-     * @return bool
+     * @return mixed
      * @throws
      */
     public function completeOrderList($data)
@@ -1884,6 +1880,11 @@ class Order extends CareyShop
         self::startTrans();
 
         try {
+            $saveData = [
+                'trade_status'  => 3,
+                'finished_time' => $this->formatDateTime(time(), $this->dateFormat),
+            ];
+
             foreach ($result as $value) {
                 $orderNo = $value->getAttr('order_no');
                 if ($value->getAttr('delivery_status') !== 1) {
@@ -1899,7 +1900,7 @@ class Order extends CareyShop
                 }
 
                 // 修改订单状态
-                if (false === $value->save(['trade_status' => 3, 'finished_time' => time()])) {
+                if (false === $value->save($saveData)) {
                     throw new \Exception($this->getError());
                 }
 
@@ -1935,7 +1936,7 @@ class Order extends CareyShop
             }
 
             self::commit();
-            return true;
+            return $saveData;
         } catch (\Exception $e) {
             self::rollback();
             return $this->setError($e->getMessage());
