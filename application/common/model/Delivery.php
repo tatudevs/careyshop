@@ -234,7 +234,7 @@ class Delivery extends CareyShop
         $result = self::all(function ($query) {
             $query
                 ->alias('d')
-                ->field('d.delivery_id,i.name,i.code')
+                ->field('d.delivery_id,i.name,d.alias,i.code')
                 ->join('delivery_item i', 'i.delivery_item_id = d.delivery_item_id', 'inner')
                 ->where(['d.status' => ['eq', 1], 'i.is_delete' => ['eq', 0]])
                 ->order('d.sort asc');
