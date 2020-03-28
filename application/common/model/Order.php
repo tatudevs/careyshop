@@ -1751,7 +1751,7 @@ class Order extends CareyShop
                 throw new \Exception($orderGoodsDb->getError());
             }
 
-//            self::commit();
+            self::commit();
             return $this->orderData;
         } catch (\Exception $e) {
             self::rollback();
