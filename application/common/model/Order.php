@@ -1720,13 +1720,20 @@ class Order extends CareyShop
             }
 
             // 添加一条配送记录
-            if (!empty($data['logistic_code']) && $this->orderData['delivery_id'] != 0) {
+            if (!empty($data['logistic_code'])) {
                 $deliveryData = [
-                    'client_id'     => $this->orderData['user_id'],
-                    'order_code'    => $this->orderData['order_no'],
-                    'delivery_id'   => $this->orderData['delivery_id'],
-                    'logistic_code' => $data['logistic_code'],
+                    'client_id'        => $this->orderData['user_id'],
+                    'order_code'       => $this->orderData['order_no'],
+                    'logistic_code'    => $data['logistic_code'],
                 ];
+
+                if (!is_empty_parm($data['delivery_id'])) {
+                    $deliveryData['delivery_id'] = $data['delivery_id'];
+                }
+
+                if (!is_empty_parm($data['delivery_item_id'])) {
+                    $deliveryData['delivery_item_id'] = $data['delivery_item_id'];
+                }
 
                 $deliveryDb = new DeliveryDist();
                 if (false === $deliveryDb->addDeliveryDistItem($deliveryData)) {
@@ -1744,7 +1751,7 @@ class Order extends CareyShop
                 throw new \Exception($orderGoodsDb->getError());
             }
 
-            self::commit();
+//            self::commit();
             return $this->orderData;
         } catch (\Exception $e) {
             self::rollback();

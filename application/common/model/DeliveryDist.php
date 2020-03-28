@@ -103,19 +103,34 @@ class DeliveryDist extends CareyShop
             return false;
         }
 
+        if (empty($data['delivery_id']) && empty($data['delivery_item_id'])) {
+            return $this->setError('配送方式编号或快递公司编号不能为空');
+        }
+
+        if (!empty($data['delivery_id']) && !empty($data['delivery_item_id'])) {
+            return $this->setError('配送方式编号与快递公司编号不能同时存在');
+        }
+
         // 避免无关字段及设置部分字段
         $data['trace'] = [];
         $data['user_id'] = is_client_admin() ? $data['client_id'] : get_client_id();
         unset($data['delivery_dist_id'], $data['delivery_code'], $data['state']);
 
-        // 根据配送方式编号获取快递公司编码
-        $deliveryResult = Delivery::get(function ($query) use ($data) {
-            $query
-                ->alias('d')
-                ->field('i.delivery_item_id,i.code')
-                ->join('delivery_item i', 'i.delivery_item_id = d.delivery_item_id')
-                ->where(['d.delivery_id' => ['eq', $data['delivery_id']]]);
-        });
+        $deliveryResult = null;
+        if (!empty($data['delivery_id'])) {
+            // 根据配送方式编号获取快递公司编码
+            $deliveryResult = Delivery::get(function ($query) use ($data) {
+                $query
+                    ->alias('d')
+                    ->field('i.delivery_item_id,i.code')
+                    ->join('delivery_item i', 'i.delivery_item_id = d.delivery_item_id')
+                    ->where(['d.delivery_id' => ['eq', $data['delivery_id']]]);
+            });
+        } else if (!empty($data['delivery_item_id'])) {
+            $deliveryResult = DeliveryItem
+                ::where(['delivery_item_id' => ['eq', $data['delivery_item_id']]])
+                ->find();
+        }
 
         if (!$deliveryResult) {
             return $this->setError('配送方式数据不存在');

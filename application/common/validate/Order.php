@@ -22,6 +22,7 @@ class Order extends CareyShop
         'type'                 => 'require|in:buynow,cart',
         'is_submit'            => 'in:0,1',
         'delivery_id'          => 'integer|egt:0',
+        'delivery_item_id'     => 'integer|egt:0',
         'use_money'            => 'float|egt:0|regex:^\d+(\.\d{1,2})?$',
         'use_integral'         => 'integer|egt:0',
         'coupon_give_id'       => 'integer|gt:0',
@@ -74,6 +75,7 @@ class Order extends CareyShop
         'type'                 => '立即购买或购物车结算',
         'is_submit'            => '是否提交订单',
         'delivery_id'          => '配送方式编号',
+        'delivery_item_id'     => '快递公司编号',
         'use_money'            => '余额支付',
         'use_integral'         => '积分支付',
         'coupon_give_id'       => '优惠劵发放编号',
@@ -189,6 +191,7 @@ class Order extends CareyShop
             'order_goods_id' => 'require|arrayHasOnlyInts',
             'logistic_code',
             'delivery_id',
+            'delivery_item_id',
         ],
         'complete'     => [
             'order_no' => 'require|arrayHasOnlyStrings',
