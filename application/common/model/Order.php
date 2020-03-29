@@ -1751,8 +1751,15 @@ class Order extends CareyShop
                 throw new \Exception($orderGoodsDb->getError());
             }
 
+            // 数据返回前删除不必要字段
+            $orderData = $this->orderData;
+            unset($orderData['order_id']);
+            unset($orderData['order_goods_id']);
+            unset($orderData['logistic_code']);
+            unset($orderData['get_order_goods']);
+
             self::commit();
-            return $this->orderData;
+            return $orderData;
         } catch (\Exception $e) {
             self::rollback();
             return $this->setError($e->getMessage());
