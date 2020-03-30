@@ -12,6 +12,7 @@ namespace app\common\model;
 
 use app\common\service\Cart as CartSer;
 use think\Config;
+use think\helper\Time;
 
 class Order extends CareyShop
 {
@@ -2141,8 +2142,10 @@ class Order extends CareyShop
                 ->order([$orderField => $orderType]);
 
             // 区分是否为数据导出
-            if (empty($data['is_export']) || !is_client_admin()) {
+            if (empty($data['is_export'])) {
                 $query->page($pageNo, $pageSize);
+            } else {
+                $query->whereTime('create_time', '>=', Time::daysAgo(90));
             }
         });
 
