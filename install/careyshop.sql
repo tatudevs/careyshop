@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 2020-03-30 01:10:25
+-- Generation Time: 2020-03-30 15:56:08
 -- 服务器版本： 5.7.27-log
 -- PHP Version: 7.1.11
 
@@ -69,7 +69,7 @@ CREATE TABLE `cs_admin` (
 --
 
 INSERT INTO `cs_admin` (`admin_id`, `username`, `password`, `group_id`, `nickname`, `head_pic`, `last_login`, `last_ip`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
-(1, 'admin', '5631c89340a5413dc8124d23c85b900a', 1, '思维空间', '', 1585409284, '127.0.0.1', 1, 0, 1530289832, 1585409284),
+(1, 'admin', '5631c89340a5413dc8124d23c85b900a', 1, '思维空间', '', 1585532557, '127.0.0.1', 1, 0, 1530289832, 1585532557),
 (2, 'dnyz520', '5631c89340a5413dc8124d23c85b900a', 2, 'dnyz520', '', 1585028487, '127.0.0.1', 1, 0, 1530289832, 1585028487),
 (3, 'admin2', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop2', '', 1585201216, '127.0.0.1', 1, 0, 1530289832, 1585201216),
 (4, 'admin3', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop3', '', 1576338129, '127.0.0.1', 1, 0, 1530289832, 1576338129),
@@ -8343,7 +8343,7 @@ INSERT INTO `cs_order` (`order_id`, `parent_id`, `order_no`, `user_id`, `source`
 (140, 0, 'PO_A3217849839847620006', 1, 1, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3234729294500560001', '0', '', 20, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '87487585', '15867430322', '买家备注', 2, '宁波XXX有限公司', '0001111', '0.00', 2, 1, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 1584947293, 1584947680, 0, 1584778498, 1585234448, 0),
 (141, 0, 'PO_A3217849839847620007', 1, 1, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3234729294500560001', '0', '', 20, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '87487585', '15867430322', '买家备注', 2, '宁波XXX有限公司', '0001111', '0.00', 3, 1, 1, 1, 1, '售后状态为测试使用,并非实际关联售后数据', '0.00', '100.00', 100, '[]', 1584947293, 1584947680, 1585337048, 1584778498, 1585337049, 0),
 (142, 0, 'PO_A3217849839847620008', 1, 1, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3234729294500560001', '0', '', 20, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '87487585', '15867430322', '买家备注', 2, '宁波XXX有限公司', '0001111', '0.00', 3, 1, 1, 1, 1, '售后状态为测试使用,并非实际关联售后数据', '0.00', '100.00', 100, '[]', 1584947293, 1584947680, 1585335945, 1584778498, 1585335945, 0),
-(143, 0, 'PO_A3217849839847620009', 1, 1, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3234729294500560001', '0', '', 20, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '87487585', '15867430322', '买家备注', 2, '宁波XXX有限公司', '0001111', '0.00', 2, 1, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 1584947293, 1584947680, 0, 1584778498, 1585234448, 0);
+(143, 0, 'PO_A3217849839847620009', 1, 1, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3234729294500560001', '0', '', 20, '赵四', 0, 12, 124, 4044, 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '87487585', '15867430322', '买家备注', 2, '宁波XXX有限公司', '0001111', '0.00', 3, 1, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 1584947293, 1584947680, 1585502045, 1584778498, 1585502045, 0);
 
 -- --------------------------------------------------------
 
@@ -8422,7 +8422,7 @@ INSERT INTO `cs_order_goods` (`order_goods_id`, `order_id`, `order_no`, `user_id
 (46, 140, 'PO_A3217849839847620006', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 1),
 (47, 141, 'PO_A3217849839847620007', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 1, 2),
 (48, 142, 'PO_A3217849839847620008', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 1, 2),
-(49, 143, 'PO_A3217849839847620009', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 1);
+(49, 143, 'PO_A3217849839847620009', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -8612,7 +8612,8 @@ INSERT INTO `cs_order_log` (`order_log_id`, `order_id`, `order_no`, `trade_statu
 (254, 116, 'PO_A3150263011275460001', 2, 1, 1, 'admin', 1, '订单完成发货', '订单发货', 1585492746),
 (255, 125, 'PO_A3217852987257470001', 1, 0, 1, 'CareyShop', 1, '订单开始配货', '订单配货', 1585494196),
 (256, 125, 'PO_A3217852987257470001', 2, 2, 1, 'CareyShop', 1, '订单部分发货', '订单发货', 1585494256),
-(257, 125, 'PO_A3217852987257470001', 2, 1, 1, 'CareyShop', 1, '订单完成发货', '订单发货', 1585494274);
+(257, 125, 'PO_A3217852987257470001', 2, 1, 1, 'CareyShop', 1, '订单完成发货', '订单发货', 1585494274),
+(258, 143, 'PO_A3217849839847620009', 3, 1, 1, 'admin', 1, '确认收货，交易已完成', '确认收货', 1585502045);
 
 -- --------------------------------------------------------
 
@@ -13364,7 +13365,7 @@ INSERT INTO `cs_setting` (`setting_id`, `code`, `value`, `module`, `description`
 (38, 'title', 'CarayShop商城框架系统', 'system_info', '商城标题', '商城标题，将显示在前台顶部欢迎信息等位置'),
 (39, 'keywords', '开源新零售，开源小程序，开源微商城，开源商城，商城系统，免费商城', 'system_info', '商城关键词', '商城关键词，有利于对整站的SEO优化'),
 (40, 'description', 'CareyShop（简称CS）是一套基于ThinkPHP5框架开发的高性能商城框架系统，秉承简洁、快速、极致的开发理念，对内使用面向对象模块化调用，多终端、跨平台采用REST API构架来面向移动网络趋势，可直接对接PC、移动设备、小程序、云部署，构建Android、IOS的APP。', 'system_info', '商城描述', '商城描述，将显示在前台顶部欢迎信息等位置'),
-(41, 'logo', '', 'system_info', '商城LOGO', '默认商城LOGO,通用头部显示，最佳显示尺寸为240*60像素'),
+(41, 'logo', 'aliyun.oss.careyshop.cn/uploads/files/20200330/4dd3960b-486c-4dfb-8c86-0e424ac61c32.png?type=aliyun', 'system_info', '商城LOGO', '默认商城LOGO,通用头部显示，最佳显示尺寸为240*60像素'),
 (42, 'third_count', '<script>\r\nvar _hmt = _hmt || [];\r\n(function() {\r\n  var hm = document.createElement(\"script\");\r\n  hm.src = \"https://hm.baidu.com/hm.js?e325e60ca4cd358f2b424f5aecb8021a\";\r\n  var s = document.getElementsByTagName(\"script\")[0]; \r\n  s.parentNode.insertBefore(hm, s);\r\n})();</script>', 'system_info', '第三方统计代码', '第三方统计的脚本代码'),
 (43, 'miitbeian', '', 'system_info', 'ICP备案许可证号', 'ICP备案许可证号，将显示在前台底部等位置'),
 (44, 'miitbeian_url', 'http://www.beian.miit.gov.cn', 'system_info', 'ICP备案链接地址', 'ICP备案链接地址，点击后将引导到该网站'),
@@ -14410,9 +14411,7 @@ INSERT INTO `cs_storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `siz
 (538, 2, 'trailer.mp4', 'video/mp4', 'mp4', 4372373, '[]', 'DF6ED4BBC93613C68C8525E21BBDDF98', 'uploads/files/20191230/0eabf256-cc58-42b4-82b4-98e1b710817b.mp4', 'aliyun.oss.careyshop.cn/uploads/files/20191230/0eabf256-cc58-42b4-82b4-98e1b710817b.mp4?type=aliyun', 'aliyun', 3, 1, '', 50, 0, 1577674135, 1577674135),
 (539, 2, '微信图片_20191218155134.png', 'image/png', 'png', 62543, '{\"width\":1404,\"height\":668}', 'FC6D7D3AAFA909420BFFCB9E9B55FA92', 'uploads/files/20191230/d95f096e-ffd2-4a5b-a6d7-b4bb00335e37.png', 'aliyun.oss.careyshop.cn/uploads/files/20191230/d95f096e-ffd2-4a5b-a6d7-b4bb00335e37.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1577675764, 1577675764),
 (540, 2, '139239-20191205105026444-823399952.png', 'image/png', 'png', 55610, '{\"width\":554,\"height\":288}', 'A5F4F98690D5BCF8F6FF61F922DF622D', 'uploads/files/20191230/ebafd330-cb20-4ead-8af5-54ca56c5d5d2.png', 'aliyun.oss.careyshop.cn/uploads/files/20191230/ebafd330-cb20-4ead-8af5-54ca56c5d5d2.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1577686073, 1577686073),
-(664, 2, '68d42d66a8a9c565.jpg', 'image/jpeg', 'jpg', 196421, '{\"width\":450,\"height\":450}', '77cc4c05fdf8c64d5b4751658c29a674accae7d4', '/uploads/files/acec1157-58b8-4fee-8eac-5706c65daacd.jpg', '127.0.0.1:8080/uploads/files/acec1157-58b8-4fee-8eac-5706c65daacd.jpg?type=careyshop', 'careyshop', 0, 1, '', 50, 0, 1584370124, 1584370124),
-(665, 2, 'O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg', 'image/jpeg', 'jpg', 469566, '{\"width\":800,\"height\":800}', '19b22a20d39cc6b283acf20694c72963f4ace2cd', '/uploads/files/60d02afa-9d47-4c15-8820-fdad48b1a6aa.jpg', '127.0.0.1:8080/uploads/files/60d02afa-9d47-4c15-8820-fdad48b1a6aa.jpg?type=careyshop', 'careyshop', 0, 1, '', 50, 0, 1584370376, 1584370376),
-(666, 2, '68d42d66a8a9c565.jpg', 'image/jpeg', 'jpg', 196421, '{\"width\":450,\"height\":450}', '77cc4c05fdf8c64d5b4751658c29a674accae7d4', '/uploads/files/387eabc8-547c-4a39-bd31-d18b10e35642.jpg', '127.0.0.1:8080/uploads/files/387eabc8-547c-4a39-bd31-d18b10e35642.jpg?type=careyshop', 'careyshop', 0, 1, '', 50, 0, 1584370447, 1584370447);
+(668, 0, 'careyshop_logo.png', 'image/png', 'png', 9439, '{\"width\":240,\"height\":120}', '5F89E2F349ED11E4214DBB2E8C6A7FDB', 'uploads/files/20200330/4dd3960b-486c-4dfb-8c86-0e424ac61c32.png', 'aliyun.oss.careyshop.cn/uploads/files/20200330/4dd3960b-486c-4dfb-8c86-0e424ac61c32.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1585554379, 1585554469);
 
 -- --------------------------------------------------------
 
@@ -14505,7 +14504,7 @@ CREATE TABLE `cs_token` (
 INSERT INTO `cs_token` (`token_id`, `client_id`, `group_id`, `username`, `client_type`, `platform`, `code`, `token`, `token_expires`, `refresh`, `refresh_expires`) VALUES
 (137, 58, 9, 'admin70', 1, 'admin', 'd1da22c53fd316c99b426116a4b7333f', '35cfcd85a881dd8f0dd89551f20e593f', 1586420390, 'da00b3f0830bee7dece967e1cf2d9a22', 1586506790),
 (161, 3, 1, 'admin2', 1, 'admin', '5d0d07f71b3fab42ce293505ee717022', '2ba5a57b9e341749f151c0c874db7f90', 1587793216, '6128628854383b91e6763dc310d3b091', 1587879616),
-(182, 1, 1, 'admin', 1, 'admin', '5666c66957e4a7f965cd1390b7f5eda1', '42504af537813c5745c9ac742359368d', 1588001284, 'c1e600e8a5e068f52f591f98ac351431', 1588087684);
+(182, 1, 1, 'admin', 1, 'admin', '41ec38c79d91fe6a31081d45eae2e8de', '43d6e76cb652a310c5d88decdda1f54c', 1588124557, 'c4be9e7bd8db29009c189c6b56aec2a2', 1588210957);
 
 -- --------------------------------------------------------
 
@@ -14945,7 +14944,8 @@ INSERT INTO `cs_transaction` (`transaction_id`, `user_id`, `action`, `type`, `am
 (284, 1, 'admin', 0, '100.00', '300.00', 'PO_A3217849839847620004', '赠送积分', '', 'points', 0, '', 1585332604),
 (304, 1, 'admin', 0, '100.00', '400.00', 'PO_A3217849839847620008', '赠送积分', '', 'points', 0, '', 1585335945),
 (305, 1, 'admin', 0, '100.00', '500.00', 'PO_A3217849839847620005', '赠送积分', '', 'points', 0, '', 1585337049),
-(306, 1, 'admin', 0, '100.00', '600.00', 'PO_A3217849839847620007', '赠送积分', '', 'points', 0, '', 1585337049);
+(306, 1, 'admin', 0, '100.00', '600.00', 'PO_A3217849839847620007', '赠送积分', '', 'points', 0, '', 1585337049),
+(307, 1, 'admin', 0, '100.00', '700.00', 'PO_A3217849839847620009', '赠送积分', '', 'points', 0, '', 1585502045);
 
 -- --------------------------------------------------------
 
@@ -14982,7 +14982,7 @@ CREATE TABLE `cs_user` (
 --
 
 INSERT INTO `cs_user` (`user_id`, `username`, `password`, `mobile`, `is_mobile`, `email`, `is_email`, `nickname`, `head_pic`, `sex`, `birthday`, `level_icon`, `user_level_id`, `user_address_id`, `group_id`, `last_login`, `last_ip`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
-(1, 'dnyz520', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430425', 0, '', 0, 'CareyShop', 'careyshop.oruei.com/uploads/files/20190703/8aa5ca5886378861f768219c8539a20b.jpg?type=careyshop', 1, '1997-11-20', 'image/level/level5.png', 5, 10, 3, 1501751876, '127.0.0.1', 1, 0, 1490945016, 1565231779),
+(1, 'dnyz520', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430425', 0, '', 0, 'CareyShop', 'careyshop.oruei.com/uploads/files/20190703/8aa5ca5886378861f768219c8539a20b.jpg?type=careyshop', 1, '1997-11-20', 'image/level/level6.png', 6, 10, 3, 1501751876, '127.0.0.1', 1, 0, 1490945016, 1565231779),
 (5, 'dnyz521', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430425', 0, '', 0, '思维空间', '', 0, '0000-00-00', 'image/level/level2.png', 2, 0, 3, 1501741634, '127.0.0.1', 1, 1, 1490945016, 1565231779),
 (6, 'dnyz522', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430425', 0, '', 0, '思维空间', '', 0, '0000-00-00', 'image/level/level2.png', 2, 0, 3, 1490977294, '', 1, 1, 1490945016, 1565231779),
 (7, 'dnyz520_A', '1729c0c36d336144af763b6889057409', '15867430421', 0, '', 0, '', '', 0, '1986-11-26', 'image/level/level1.png', 1, 0, 3, 0, '', 1, 1, 1496913131, 1565231646),
@@ -15169,7 +15169,7 @@ CREATE TABLE `cs_user_money` (
 --
 
 INSERT INTO `cs_user_money` (`user_money_id`, `user_id`, `total_money`, `balance`, `lock_balance`, `points`, `lock_points`) VALUES
-(1, 1, '182391.72', '900024.68', '445.15', 600, 0),
+(1, 1, '212790.34', '900024.68', '445.15', 700, 0),
 (2, 73, '0.00', '0.00', '0.00', 0, 0),
 (3, 74, '0.00', '0.00', '0.00', 0, 0),
 (4, 75, '0.00', '0.00', '0.00', 0, 0),
@@ -16006,7 +16006,7 @@ ALTER TABLE `cs_withdraw_user`
 -- 使用表AUTO_INCREMENT `cs_action_log`
 --
 ALTER TABLE `cs_action_log`
-  MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=315;
+  MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=316;
 --
 -- 使用表AUTO_INCREMENT `cs_admin`
 --
@@ -16216,7 +16216,7 @@ ALTER TABLE `cs_order_goods`
 -- 使用表AUTO_INCREMENT `cs_order_log`
 --
 ALTER TABLE `cs_order_log`
-  MODIFY `order_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=258;
+  MODIFY `order_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=259;
 --
 -- 使用表AUTO_INCREMENT `cs_order_refund`
 --
@@ -16286,7 +16286,7 @@ ALTER TABLE `cs_spec_item`
 -- 使用表AUTO_INCREMENT `cs_storage`
 --
 ALTER TABLE `cs_storage`
-  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=667;
+  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=669;
 --
 -- 使用表AUTO_INCREMENT `cs_storage_style`
 --
@@ -16311,7 +16311,7 @@ ALTER TABLE `cs_topic`
 -- 使用表AUTO_INCREMENT `cs_transaction`
 --
 ALTER TABLE `cs_transaction`
-  MODIFY `transaction_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=307;
+  MODIFY `transaction_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=308;
 --
 -- 使用表AUTO_INCREMENT `cs_user`
 --
