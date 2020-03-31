@@ -44,13 +44,27 @@ class App extends CareyShop
             'bg'       => [255, 255, 255],
         ];
 
+        $request = Request::instance();
+        $id = $request->param('session_id');
+        $generate = $request->param('generate');
+
         $captcha = new Captcha($config);
-        $id = Request::instance()->param('session_id');
+        $image = $captcha->getImage($id);
 
-        $data['callback_return_type'] = 'response';
-        $data['is_callback'] = $captcha->entry($id);
+        if ($generate == 'base64') {
+            return [
+                'content_type' => 'image/png',
+                'base64'       => base64_encode($image),
+            ];
+        } else {
+            $result = response($image, 200, ['Content-Length' => strlen($image)])
+                ->contentType('image/png');
 
-        return $data;
+            return [
+                'callback_return_type' => 'response',
+                'is_callback'          => $result,
+            ];
+        }
     }
 
     /**
