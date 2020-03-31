@@ -48,17 +48,17 @@
     },
     {
         "name": "aliyuncs/oss-sdk-php",
-        "version": "v2.3.0",
-        "version_normalized": "2.3.0.0",
+        "version": "v2.3.1",
+        "version_normalized": "2.3.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/aliyun/aliyun-oss-php-sdk.git",
-            "reference": "e69f57916678458642ac9d2fd341ae78a56996c8"
+            "reference": "053d7ba9e798e4c09b9c5c1edab153d25ea9643a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/aliyun/aliyun-oss-php-sdk/zipball/e69f57916678458642ac9d2fd341ae78a56996c8",
-            "reference": "e69f57916678458642ac9d2fd341ae78a56996c8",
+            "url": "https://api.github.com/repos/aliyun/aliyun-oss-php-sdk/zipball/053d7ba9e798e4c09b9c5c1edab153d25ea9643a",
+            "reference": "053d7ba9e798e4c09b9c5c1edab153d25ea9643a",
             "shasum": ""
         },
         "require": {
@@ -68,7 +68,7 @@
             "phpunit/phpunit": "~4.0",
             "satooshi/php-coveralls": "~1.0"
         },
-        "time": "2018-01-08T06:59:35+00:00",
+        "time": "2019-11-15T11:05:42+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -91,17 +91,17 @@
     },
     {
         "name": "phpmailer/phpmailer",
-        "version": "v6.0.6",
-        "version_normalized": "6.0.6.0",
+        "version": "v6.1.5",
+        "version_normalized": "6.1.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/PHPMailer/PHPMailer.git",
-            "reference": "8190d73eb5def11a43cfb020b7f36db65330698c"
+            "reference": "a8bf068f64a580302026e484ee29511f661b2ad3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/8190d73eb5def11a43cfb020b7f36db65330698c",
-            "reference": "8190d73eb5def11a43cfb020b7f36db65330698c",
+            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/a8bf068f64a580302026e484ee29511f661b2ad3",
+            "reference": "a8bf068f64a580302026e484ee29511f661b2ad3",
             "shasum": ""
         },
         "require": {
@@ -110,13 +110,9 @@
             "php": ">=5.5.0"
         },
         "require-dev": {
-            "doctrine/annotations": "1.2.*",
+            "doctrine/annotations": "^1.2",
             "friendsofphp/php-cs-fixer": "^2.2",
-            "phpdocumentor/phpdocumentor": "2.*",
-            "phpunit/phpunit": "^4.8 || ^5.7",
-            "zendframework/zend-eventmanager": "3.0.*",
-            "zendframework/zend-i18n": "2.7.3",
-            "zendframework/zend-serializer": "2.7.*"
+            "phpunit/phpunit": "^4.8 || ^5.7"
         },
         "suggest": {
             "ext-mbstring": "Needed to send email in multibyte encoding charset",
@@ -126,7 +122,7 @@
             "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
             "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
         },
-        "time": "2018-11-16T00:41:32+00:00",
+        "time": "2020-03-14T14:23:48+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -136,16 +132,16 @@
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "LGPL-2.1"
+            "LGPL-2.1-only"
         ],
         "authors": [
             {
-                "name": "Jim Jagielski",
-                "email": "jimjag@gmail.com"
-            },
-            {
                 "name": "Marcus Bointon",
                 "email": "phpmailer@synchromedia.co.uk"
+            },
+            {
+                "name": "Jim Jagielski",
+                "email": "jimjag@gmail.com"
             },
             {
                 "name": "Andy Prevost",
@@ -159,17 +155,17 @@
     },
     {
         "name": "qiniu/php-sdk",
-        "version": "v7.2.7",
-        "version_normalized": "7.2.7.0",
+        "version": "v7.2.10",
+        "version_normalized": "7.2.10.0",
         "source": {
             "type": "git",
             "url": "https://github.com/qiniu/php-sdk.git",
-            "reference": "88d11a5857ebc6871204e9be6ceec54bf5f381e6"
+            "reference": "d89987163f560ebf9dfa5bb25de9bd9b1a3b2bd8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/qiniu/php-sdk/zipball/88d11a5857ebc6871204e9be6ceec54bf5f381e6",
-            "reference": "88d11a5857ebc6871204e9be6ceec54bf5f381e6",
+            "url": "https://api.github.com/repos/qiniu/php-sdk/zipball/d89987163f560ebf9dfa5bb25de9bd9b1a3b2bd8",
+            "reference": "d89987163f560ebf9dfa5bb25de9bd9b1a3b2bd8",
             "shasum": ""
         },
         "require": {
@@ -179,7 +175,7 @@
             "phpunit/phpunit": "~4.0",
             "squizlabs/php_codesniffer": "~2.3"
         },
-        "time": "2018-11-06T13:34:32+00:00",
+        "time": "2019-10-28T10:23:23+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -265,20 +261,24 @@
     },
     {
         "name": "topthink/think-captcha",
-        "version": "v1.0.7",
-        "version_normalized": "1.0.7.0",
+        "version": "v1.0.8",
+        "version_normalized": "1.0.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/top-think/think-captcha.git",
-            "reference": "0c55455df26a1626a60d0dc35d2d89002b741d44"
+            "reference": "1d64363c814c92f6086c4fa5e3223fe7e23db09d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/top-think/think-captcha/zipball/0c55455df26a1626a60d0dc35d2d89002b741d44",
-            "reference": "0c55455df26a1626a60d0dc35d2d89002b741d44",
+            "url": "https://api.github.com/repos/top-think/think-captcha/zipball/1d64363c814c92f6086c4fa5e3223fe7e23db09d",
+            "reference": "1d64363c814c92f6086c4fa5e3223fe7e23db09d",
             "shasum": ""
         },
-        "time": "2016-07-06T01:47:11+00:00",
+        "require": {
+            "topthink/framework": "~5.0.0",
+            "topthink/think-installer": ">=1.0.10"
+        },
+        "time": "2019-01-28T04:48:36+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

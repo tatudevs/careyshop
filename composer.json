@@ -37,6 +37,9 @@
             "app\\": "application"
         }
     },
+    "extra": {
+        "think-path": "thinkphp"
+    },
     "config": {
         "preferred-install": "dist"
     },
