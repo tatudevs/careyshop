@@ -42,18 +42,64 @@ class Qrcode extends CareyShop
             return false;
         }
 
+        // 默认参数初始化
+        empty($data['text']) && $data['text'] = base64_decode('5Z+65LqOQ2FyZXlTaG9w5ZWG5Z+O5qGG5p6257O757uf');
+        empty($data['size']) && $data['size'] = 100;
+        empty($data['logo']) && $data['logo'] = config('qrcode_logo.value', null, 'system_info');
+        empty($data['suffix']) && $data['suffix'] = 'png';
+        $data['suffix'] == 'jpg' && $data['suffix'] = 'jpeg';
+
         if (isset($data['qrcode_id'])) {
             $result = self::get($data['qrcode_id']);
             if ($result) {
-                unset($data);
-                $data = $result->toArray();
+                $data = array_merge($result->toArray(), $data);
             }
         }
 
-        return [
-            'callback_return_type' => 'response',
-            'is_callback'          => \app\common\service\Qrcode::getQrcodeItem($data),
-        ];
+        // 保留参数
+        empty($data['generate']) && $data['generate'] = 'image';
+        $data['logo'] = \app\common\service\Qrcode::getQrcodeLogoPath($data['logo']);
+
+        // 生成二维码
+        $qrCode = new \CodeItNow\BarcodeBundle\Utils\QrCode();
+        $qrCode
+            ->setText($data['text'])
+            ->setSize($data['size'])
+            ->setPadding(3)
+            ->setErrorCorrection('high')
+            ->setImageType($data['suffix']);
+
+        // 添加 LOGO
+        $image = $qrCode->getImage();
+        $logo = imagecreatefromstring(file_get_contents(urldecode($data['logo'])));
+
+        $qrWidth = imagesx($image);
+        $logoWidth = imagesx($logo);
+        $logoHeight = imagesy($logo);
+        $logoQrWidth = $qrWidth / 5;
+        $scale = $logoWidth / $logoQrWidth;
+        $logoQrHeight = $logoHeight / $scale;
+        $fromWidth = ($qrWidth - $logoQrWidth) / 2;
+        imagecopyresampled($image, $logo, $fromWidth, $fromWidth, 0, 0, $logoQrWidth, $logoQrHeight, $logoWidth, $logoHeight);
+
+        call_user_func('image' . $data['suffix'], $image);
+        $content = ob_get_clean();
+        imagedestroy($image);
+
+        if ($data['generate'] == 'base64') {
+            return [
+                'content_type' => $qrCode->getContentType(),
+                'base64'       => base64_encode($content),
+            ];
+        } else {
+            $result = response($content, 200, ['Content-Length' => strlen($content)])
+                ->contentType($qrCode->getContentType());
+
+            return [
+                'callback_return_type' => 'response',
+                'is_callback'          => $result,
+            ];
+        }
     }
 
     /**

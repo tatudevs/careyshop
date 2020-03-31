@@ -33,7 +33,7 @@ class Qrcode extends CareyShop
      * @param  string $path 路径
      * @return string
      */
-    private static function getQrcodeLogoPath($path)
+    public static function getQrcodeLogoPath($path)
     {
         // 如果是网络文件直接返回
         if (filter_var($path, FILTER_VALIDATE_URL)) {
@@ -49,43 +49,5 @@ class Qrcode extends CareyShop
 
         $path = ROOT_PATH . 'public' . DS . 'static' . DS . 'api' . DS . 'images' . DS . 'qrcode_logo.png';
         return $path;
-    }
-
-    /**
-     * 动态生成一个二维码
-     * @access public
-     * @param  array $data 外部数据
-     * @return mixed
-     */
-    public static function getQrcodeItem($data)
-    {
-        // 参数值处理
-        !empty($data['text']) ?: $data['text'] = base64_decode('5Z+65LqOQ2FyZXlTaG9w5ZWG5Z+O5qGG5p6257O757uf');
-        $size = !empty($data['size']) ? (int)$data['size'] : 3;
-        $logo = !empty($data['logo']) ? $data['logo'] : config('qrcode_logo.value', null, 'system_info');
-        $logo = self::getQrcodeLogoPath($logo);
-
-        ob_start();
-        \PHPQRCode\QRcode::png(urldecode($data['text']), false, 'M', $size, 1);
-        $imageData = ob_get_contents();
-        ob_end_clean();
-
-        $qr = imagecreatefromstring($imageData);
-        $logo = imagecreatefromstring(file_get_contents(urldecode($logo)));
-
-        $qrWidth = imagesx($qr);
-        $logoWidth = imagesx($logo);
-        $logoHeight = imagesy($logo);
-        $logoQrWidth = $qrWidth / 5;
-        $scale = $logoWidth / $logoQrWidth;
-        $logoQrHeight = $logoHeight / $scale;
-        $fromWidth = ($qrWidth - $logoQrWidth) / 2;
-        imagecopyresampled($qr, $logo, $fromWidth, $fromWidth, 0, 0, $logoQrWidth, $logoQrHeight, $logoWidth, $logoHeight);
-
-        imagepng($qr);
-        $content = ob_get_clean();
-        imagedestroy($qr);
-
-        return response($content, 200, ['Content-Length' => strlen($content)])->contentType('image/png');
     }
 }
