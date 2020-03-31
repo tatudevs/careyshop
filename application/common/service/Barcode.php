@@ -95,9 +95,9 @@ class Barcode extends CareyShop
         $barcode->setFormat($data['suffix']);
 
         $code = $barcode->generate();
-//        if ($data['generate'] == 'base64') {
-//            return $code;
-//        }
+        if ($data['generate'] == 'base64') {
+            return $code;
+        }
 
         header('Content-type: image/png');
         $code = base64_decode($code);
