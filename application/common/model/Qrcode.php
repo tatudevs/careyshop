@@ -44,19 +44,19 @@ class Qrcode extends CareyShop
 
         // 默认参数初始化
         empty($data['text']) && $data['text'] = base64_decode('5Z+65LqOQ2FyZXlTaG9w5ZWG5Z+O5qGG5p6257O757uf');
-        empty($data['size']) && $data['size'] = 100;
+        empty($data['size']) && $data['size'] = 90;
         empty($data['logo']) && $data['logo'] = config('qrcode_logo.value', null, 'system_info');
         empty($data['suffix']) && $data['suffix'] = 'png';
-        $data['suffix'] == 'jpg' && $data['suffix'] = 'jpeg';
 
         if (isset($data['qrcode_id'])) {
             $result = self::get($data['qrcode_id']);
             if ($result) {
-                $data = array_merge($result->toArray(), $data);
+                $data = array_merge($data, $result->toArray());
             }
         }
 
         // 保留参数
+        $data['suffix'] == 'jpg' && $data['suffix'] = 'jpeg';
         empty($data['generate']) && $data['generate'] = 'image';
         $data['logo'] = \app\common\service\Qrcode::getQrcodeLogoPath($data['logo']);
 
@@ -200,7 +200,6 @@ class Qrcode extends CareyShop
         // 搜索条件
         $map = [];
         empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-        is_empty_parm($data['size']) ?: $map['size'] = ['eq', $data['size']];
 
         $totalResult = $this->where($map)->count();
         if ($totalResult <= 0) {
