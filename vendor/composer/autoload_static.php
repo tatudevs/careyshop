@@ -36,6 +36,10 @@ class ComposerStaticInit2bc4f313dba415539e266f7ac2c87dcd
         array (
             'OSS\\' => 4,
         ),
+        'C' => 
+        array (
+            'CodeItNow\\' => 10,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -71,6 +75,10 @@ class ComposerStaticInit2bc4f313dba415539e266f7ac2c87dcd
         'OSS\\' => 
         array (
             0 => __DIR__ . '/..' . '/aliyuncs/oss-sdk-php/src/OSS',
+        ),
+        'CodeItNow\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeitnowin/barcode/CodeItNow',
         ),
     );
 
