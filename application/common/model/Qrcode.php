@@ -44,7 +44,7 @@ class Qrcode extends CareyShop
 
         // 默认参数初始化
         empty($data['text']) && $data['text'] = pack('H*', 'E59FBAE4BA8E436172657953686F70E59586E59F8EE6A186E69EB6E7B3BBE7BB9F');
-        empty($data['size']) && $data['size'] = 90;
+        empty($data['size']) && $data['size'] = 75;
         empty($data['logo']) && $data['logo'] = config('qrcode_logo.value', null, 'system_info');
         empty($data['suffix']) && $data['suffix'] = 'png';
 
