@@ -29,7 +29,13 @@ class Barcode extends CareyShop
         return $data;
     }
 
-    public function getBarcodeItem($data)
+    /**
+     * 获取一个条形码
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|false
+     */
+    public function getBarcodeItem($data = [])
     {
         $validate = Loader::validate('Barcode');
         if (!$validate->check($data)) {
@@ -37,13 +43,14 @@ class Barcode extends CareyShop
         }
 
         // 设置默认值
-        empty($data['text']) && $data['text'] = base64_decode('Q2FyZXlTaG9w');
+        empty($data['text']) && $data['text'] = pack('H*', '436172657953686F70');
         empty($data['type']) && $data['type'] = 'code128';
-        empty($data['scale']) && $data['scale'] = 2;
-        empty($data['thickness']) && $data['thickness'] = 25;
+        empty($data['scale']) && $data['scale'] = 1;
+        empty($data['thickness']) && $data['thickness'] = 40;
         empty($data['font_size']) && $data['font_size'] = 10;
         empty($data['generate']) && $data['generate'] = 'image';
         empty($data['suffix']) && $data['suffix'] = 'png';
+        $data['suffix'] == 'jpg' && $data['suffix'] = 'jpeg';
 
         switch ($data['type']) {
             case 'codabar':
@@ -94,15 +101,21 @@ class Barcode extends CareyShop
         $barcode->setFontSize($data['font_size']);
         $barcode->setFormat($data['suffix']);
 
-        $code = $barcode->generate();
+        $content = $barcode->generate();
         if ($data['generate'] == 'base64') {
-            return $code;
-        }
+            return [
+                'content_type' => 'image/' . $data['suffix'],
+                'base64'       => $content,
+            ];
+        } else {
+            $content = base64_decode($content);
+            $result = response($content, 200, ['Content-Length' => strlen($content)])
+                ->contentType('image/' . $data['suffix']);
 
-        header('Content-type: image/png');
-        $code = base64_decode($code);
-        print $code;
-        exit();
-////        return $code;
+            return [
+                'callback_return_type' => 'response',
+                'is_callback'          => $result,
+            ];
+        }
     }
 }

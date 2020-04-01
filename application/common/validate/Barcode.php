@@ -23,7 +23,7 @@ class Barcode extends CareyShop
         'thickness' => 'integer',
         'font_size' => 'integer',
         'generate'  => 'in:image,base64',
-        'suffix'    => 'in:png,jpeg,gif',
+        'suffix'    => 'in:png,jpg,gif',
     ];
 
     /**

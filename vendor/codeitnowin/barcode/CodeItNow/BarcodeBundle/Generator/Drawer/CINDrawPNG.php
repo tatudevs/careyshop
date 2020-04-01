@@ -75,7 +75,7 @@ class CINDrawPNG extends CINDraw {
             $chunks = $this->detectChunks($bin);
 
             $this->internalSetDPI($bin, $chunks);
-//            $this->internalSetC($bin, $chunks);
+            $this->internalSetC($bin, $chunks);
         }
     }
 
@@ -140,18 +140,18 @@ class CINDrawPNG extends CINDraw {
         }
     }
 
-//    private function internalSetC(&$bin, &$chunks) {
-//        if (count($chunks) >= 2 && $chunks[0]['chunk'] === 'IHDR') {
-//            $firstPart = substr($bin, 0, 33);
-//            $secondPart = substr($bin, 33);
-//            $cr = pack('H*', '0000004C74455874436F707972696768740047656E657261746564207769746820426172636F64652047656E657261746F7220666F722050485020687474703A2F2F7777772E626172636F64657068702E636F6D597F70B8');
-//            $bin = $firstPart;
-//            $bin .= $cr;
-//            $bin .= $secondPart;
-//        }
-//
-//        // Chunks is dirty!! But we are done.
-//    }
+    private function internalSetC(&$bin, &$chunks) {
+        if (count($chunks) >= 2 && $chunks[0]['chunk'] === 'IHDR') {
+            $firstPart = substr($bin, 0, 33);
+            $secondPart = substr($bin, 33);
+            $cr = pack('H*', '0000004C74455874E69CACE7B3BBE7BB9FE59FBAE4BA8E20436172657953686F7020E59586E59F8EE6A186E69EB6E7B3BBE7BB9F20E69CAAE7BB8FE68E88E69D83E4B88DE5BE97E4BDBFE794A800000000000000597F70B8');
+            $bin = $firstPart;
+            $bin .= $cr;
+            $bin .= $secondPart;
+        }
+
+        // Chunks is dirty!! But we are done.
+    }
 
     private static $crc_table = array();
     private static $crc_table_computed = false;
