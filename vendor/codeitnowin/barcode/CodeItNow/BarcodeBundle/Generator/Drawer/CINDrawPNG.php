@@ -144,13 +144,11 @@ class CINDrawPNG extends CINDraw {
         if (count($chunks) >= 2 && $chunks[0]['chunk'] === 'IHDR') {
             $firstPart = substr($bin, 0, 33);
             $secondPart = substr($bin, 33);
-            $cr = pack('H*', '0000004C74455874E69CACE7B3BBE7BB9FE59FBAE4BA8E20436172657953686F7020E59586E59F8EE6A186E69EB6E7B3BBE7BB9F20E69CAAE7BB8FE68E88E69D83E4B88DE5BE97E4BDBFE794A800000000000000597F70B8');
+            $cr = pack('H*', '0000004C74455874000000000000000000000000204261736564206F6E20436172657953686F7020436F707972696768742028632920436172657953686F7020416C6C2072696768747320726573657276656420597F70B8');
             $bin = $firstPart;
             $bin .= $cr;
             $bin .= $secondPart;
         }
-
-        // Chunks is dirty!! But we are done.
     }
 
     private static $crc_table = array();

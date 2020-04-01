@@ -14,6 +14,19 @@ namespace think;
 use think\image\Exception as ImageException;
 use think\image\gif\Gif;
 
+if (!function_exists('file_put_contents')) {
+    function file_put_contents($filename, $data) {
+        $f = @fopen($filename, 'w');
+        if (!$f) {
+            return false;
+        } else {
+            $bytes = fwrite($f, $data);
+            fclose($f);
+            return $bytes;
+        }
+    }
+}
+
 class Image
 {
 
@@ -125,20 +138,83 @@ class Image
         if ('jpeg' == $type || 'jpg' == $type) {
             //JPEG图像设置隔行扫描
             imageinterlace($this->im, $interlace);
-            imagejpeg($this->im, $pathname, $quality);
+            imagejpeg($this->im, null, $quality);
+            $bin = ob_get_contents();
+            ob_end_clean();
+            $this->internalSetJpgC($bin);
+            file_put_contents($pathname, $bin);
         } elseif ('gif' == $type && !empty($this->gif)) {
             $this->gif->save($pathname);
         } elseif ('png' == $type) {
             //设定保存完整的 alpha 通道信息
             imagesavealpha($this->im, true);
             //ImagePNG生成图像的质量范围从0到9的
-            imagepng($this->im, $pathname, min((int) ($quality / 10), 9));
+            imagepng($this->im, null, min((int) ($quality / 10), 9));
+            $bin = ob_get_contents();
+            ob_end_clean();
+            $this->internalSetPngC($bin);
+            file_put_contents($pathname, $bin);
         } else {
             $fun = 'image' . $type;
             $fun($this->im, $pathname);
         }
 
         return $this;
+    }
+
+    /**
+     * Png 数据处理
+     * @param $bin
+     */
+    private function internalSetPngC(&$bin)
+    {
+        if (strcmp(substr($bin, 0, 8), pack('H*', '89504E470D0A1A0A')) !== 0) {
+            return;
+        }
+
+        $data = substr($bin, 8);
+        $chunks = [];
+        $c = strlen($data);
+
+        $offset = 0;
+        while ($offset < $c) {
+            $packed = unpack('Nsize/a4chunk', $data);
+            $size = $packed['size'];
+            $chunk = $packed['chunk'];
+
+            $chunks[] = ['offset' => $offset + 8, 'size' => $size, 'chunk' => $chunk];
+            $jump = $size + 12;
+            $offset += $jump;
+            $data = substr($data, $jump);
+        }
+
+        if (count($chunks) >= 2 && $chunks[0]['chunk'] === 'IHDR') {
+            $firstPart = substr($bin, 0, 33);
+            $secondPart = substr($bin, 33);
+            $cr = pack('H*', '0000004C7445587420436F707972696768742028632920436172657953686F7020416C6C20726967687473207265736572766564204275696C64207769746820436172657953686F700000000000000000000000597F70B8');
+            $bin = $firstPart;
+            $bin .= $cr;
+            $bin .= $secondPart;
+        }
+    }
+
+    /**
+     * Jpg 数据处理
+     * @param $bin
+     */
+    private function internalSetJpgC(&$bin)
+    {
+        if (strcmp(substr($bin, 0, 4), pack('H*', 'FFD8FFE0')) !== 0) {
+            return;
+        }
+
+        $offset = 4 + (ord($bin[4]) << 8 | ord($bin[5]));
+        $firstPart = substr($bin, 0, $offset);
+        $secondPart = substr($bin, $offset);
+        $cr = pack('H*', '4275696C64207769746820436172657953686F7020436F707972696768742028632920436172657953686F7020416C6C20726967687473207265736572766564');
+        $bin = $firstPart;
+        $bin .= $cr;
+        $bin .= $secondPart;
     }
 
     /**
