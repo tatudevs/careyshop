@@ -94,7 +94,7 @@ class CINDrawJPG extends CINDraw {
             $offset = 4 + (ord($bin[4]) << 8 | ord($bin[5]));
             $firstPart = substr($bin, 0, $offset);
             $secondPart = substr($bin, $offset);
-            $cr = pack('H*', '436F707972696768742028632920436172657953686F7020416C6C20726967687473207265736572766564204261736564206F6E20436172657953686F70');
+            $cr = pack('H*', 'FFFE004420436F707972696768742028632920436172657953686F7020416C6C20726967687473207265736572766564204261736564206F6E20436172657953686F70000000');
             $bin = $firstPart;
             $bin .= $cr;
             $bin .= $secondPart;
