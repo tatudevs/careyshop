@@ -59,7 +59,7 @@ class Upload extends UploadBase
     /**
      * 获取上传地址
      * @access public
-     * @return array
+     * @return array|false
      */
     public function getUploadUrl()
     {
@@ -87,7 +87,7 @@ class Upload extends UploadBase
 
         if (false === $location) {
             Cache::rm('aliyunLocation');
-            return [];
+            return false;
         }
 
         $uploadUrl = Url::bUild('/', '', false, $location);
@@ -116,18 +116,15 @@ class Upload extends UploadBase
     public function getToken($replace = '')
     {
         empty($replace) ?: $this->replace = $replace;
+        $token = $this->request->param('type') === 'app' ? $this->getAppToken() : $this->getWebToken();
 
-        if ($this->request->param('type') === 'app') {
-            return $this->getAppToken();
-        }
-
-        return $this->getWebToken();
+        return $token;
     }
 
     /**
      * 获取表单上传所需Token
      * @access private
-     * @return array
+     * @return array|false
      */
     private function getWebToken()
     {
@@ -157,7 +154,12 @@ class Upload extends UploadBase
         $stringToSign = $policyBase64;
         $signature = base64_encode(hash_hmac('sha1', $stringToSign, $accessKeySecret, true));
 
-        $response['upload_url'] = $this->getUploadUrl();
+        $uploadUrl = $this->getUploadUrl();
+        if (false === $uploadUrl) {
+            return false;
+        }
+
+        $response['upload_url'] = $uploadUrl;
         $response['OSSAccessKeyId'] = $accessKeyId;
         $response['policy'] = $policyBase64;
         $response['Signature'] = $signature;
@@ -201,6 +203,7 @@ class Upload extends UploadBase
         $roleArn = Config::get('aliyun_rolearn.value', 'upload');
         $bucket = Config::get('aliyun_bucket.value', 'upload');
         $tokenExpires = Config::get('token_expires.value', 'upload');
+        $tokenExpires < 900 && $tokenExpires = 900;
 
         // 加载区域结点配置
         AliyunConfig::load();

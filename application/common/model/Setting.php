@@ -480,7 +480,7 @@ class Setting extends CareyShop
                         break;
 
                     case 'token_expires':
-                        !empty($value) ?: $value = 0;
+                        empty($value) && $value = 0;
                         $this->setSettingItem($key, $value, 'upload', 'Setting.integer');
                         break;
 

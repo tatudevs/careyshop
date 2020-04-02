@@ -13,6 +13,7 @@ namespace oss\qiniu;
 use app\common\model\Storage;
 use oss\Upload as UploadBase;
 use Qiniu\Auth;
+use Qiniu\Region;
 use Qiniu\Storage\BucketManager;
 use Qiniu\Zone;
 use think\Cache;
@@ -61,7 +62,7 @@ class Upload extends UploadBase
             return Zone::queryZone($accessKey, $bucket);
         }, 7200);
 
-        if (!$zone instanceof Zone) {
+        if (!$zone instanceof Region) {
             Cache::rm('qiniuZone');
             return $this->setError($zone[1]->message());
         }
@@ -85,7 +86,7 @@ class Upload extends UploadBase
      * 获取上传Token
      * @access public
      * @param  string $replace 替换资源(path)
-     * @return array
+     * @return array|false
      */
     public function getToken($replace = '')
     {
@@ -127,7 +128,12 @@ class Upload extends UploadBase
         $auth = new Auth($accessKey, $secretKey);
         $upToken = $auth->uploadToken($bucket, $dir . $key, $tokenExpires, $policy, true);
 
-        $response['upload_url'] = $this->getUploadUrl();
+        $uploadUrl = $this->getUploadUrl();
+        if (false === $uploadUrl) {
+            return false;
+        }
+
+        $response['upload_url'] = $uploadUrl;
         $response['token'] = $upToken;
         $response['dir'] = $dir;
 
