@@ -481,7 +481,7 @@ class Upload extends UploadBase
             }
 
             // 处理图片质量
-            $quality = 90;
+            $quality = 100;
             if (!empty($param['quality'])) {
                 $quality = $param['quality'] > 100 ? 100 : $param['quality'];
             }

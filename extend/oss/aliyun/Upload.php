@@ -490,7 +490,7 @@ class Upload extends UploadBase
 
         // 处理图片质量
         if (empty($param['quality'])) {
-            $options .= 'quality,Q_90/';
+            $options .= 'quality,Q_100/';
         } else {
             $options .= sprintf('quality,Q_%d/', (int)$param['quality'] > 100 ? 100 : $param['quality']);
         }
