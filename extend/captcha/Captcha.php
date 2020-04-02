@@ -23,6 +23,7 @@ use think\Cache;
  * @property mixed           codeSet
  * @property mixed           reset
  * @property mixed           fontttf
+ * @property array           bg
  * @property mixed           useZh
  * @property mixed           useNoise
  * @property mixed           useCurve
