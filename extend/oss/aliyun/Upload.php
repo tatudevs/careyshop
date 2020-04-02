@@ -427,7 +427,7 @@ class Upload extends UploadBase
         // 初始化数据并拼接不带查询条件的URL
         $fileInfo = pathinfo($urlArray['path']);
         $param = $this->request->param();
-        $extension = ['jpg', 'png', 'bmp', 'webp', 'gif', 'tiff'];
+        $extension = ['jpg', 'png', 'bmp', 'webp', 'gif', 'tiff', 'svg'];
 
         // 是否带有随机值,用于强制刷新
         $query = [];
