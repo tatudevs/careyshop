@@ -57,11 +57,13 @@ class Setting extends CareyShop
         unset($value);
 
         if (!is_empty_parm($data['code'])) {
-            if (array_key_exists($data['code'], $result)) {
-                return [$data['code'] => $result[$data['code']]];
-            } else {
-                return $this->setError('键名 '. $data['code'] . ' 不存在');
+            foreach ($result as $key => $value) {
+                if (!in_array($key, $data['code'])) {
+                    unset($result[$key]);
+                }
             }
+
+            unset($key, $value);
         }
 
         return $result;
@@ -366,6 +368,8 @@ class Setting extends CareyShop
                     case 'keywords':
                     case 'description':
                     case 'logo':
+                    case 'square_logo':
+                    case 'information':
                     case 'miitbeian':
                     case 'miitbeian_url':
                     case 'miitbeian_ico':
