@@ -56,7 +56,7 @@ class Setting extends CareyShop
 
         unset($value);
 
-        if (!is_empty_parm($data['code'])) {
+        if (!empty($data['code'])) {
             foreach ($result as $key => $value) {
                 if (!in_array($key, $data['code'])) {
                     unset($result[$key]);
