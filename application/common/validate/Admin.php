@@ -85,6 +85,7 @@ class Admin extends CareyShop
             'client_id' => 'require|integer|gt:0',
         ],
         'list'    => [
+            'client_id' => 'arrayHasOnlyInts',
             'account',
             'group_id' => 'integer|gt:0',
             'status',

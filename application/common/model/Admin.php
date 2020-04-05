@@ -326,6 +326,7 @@ class Admin extends CareyShop
 
         // 搜索条件
         $map = [];
+        !isset($data['client_id']) ?: $map['admin.user_id'] = ['in', $data['client_id']];
         empty($data['account']) ?: $map['admin.username|admin.nickname'] = ['eq', $data['account']];
         is_empty_parm($data['group_id']) ?: $map['admin.group_id'] = ['eq', $data['group_id']];
         is_empty_parm($data['status']) ?: $map['admin.status'] = ['eq', $data['status']];
