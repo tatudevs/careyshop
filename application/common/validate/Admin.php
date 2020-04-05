@@ -93,6 +93,9 @@ class Admin extends CareyShop
             'order_type',
             'order_field',
         ],
+        'select'  => [
+            'client_id' => 'require|arrayHasOnlyInts',
+        ],
         'login'   => [
             'username' => 'require|alphaDash|length:4,20',
             'password' => 'require|min:6',

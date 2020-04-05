@@ -42,6 +42,8 @@ class Admin extends CareyShop
             'get.admin.item'       => ['getAdminItem'],
             // 获取账号列表
             'get.admin.list'       => ['getAdminList'],
+            // 获取指定账号的基础数据
+            'get.admin.select'     => ['getAdminSelect'],
             // 注销账号
             'logout.admin.user'    => ['logoutAdmin'],
             // 登录账号

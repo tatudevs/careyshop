@@ -366,6 +366,34 @@ class Admin extends CareyShop
     }
 
     /**
+     * 获取指定账号的基础数据
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|bool
+     */
+    public function getAdminSelect($data)
+    {
+        if (!$this->validateData($data, 'Admin.select')) {
+            return false;
+        }
+
+        $map['admin_id'] = ['in', $data['client_id']];
+        $field = 'admin_id,username,nickname,status';
+
+        $order = [];
+        $result = $this->where($map)->column($field, 'admin_id');
+
+        // 根据传入顺序返回列表
+        foreach ($data['client_id'] as $value) {
+            if (array_key_exists($value, $result)) {
+                $order[] = $result[$value];
+            }
+        }
+
+        return $order;
+    }
+
+    /**
      * 注销账号
      * @access public
      * @return bool
