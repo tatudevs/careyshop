@@ -10,6 +10,8 @@
 
 namespace app\common\model;
 
+use think\Config;
+
 class CardUse extends CareyShop
 {
     /**
@@ -154,32 +156,6 @@ class CardUse extends CareyShop
 
         if (false !== $this->allowField(['is_invalid', 'remark'])->save($data, $map)) {
             return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * 导出生成的购物卡
-     * @access public
-     * @param  array $data 外部数据
-     * @return array|false
-     * @throws
-     */
-    public function getCardUseExport($data)
-    {
-        if (!$this->validateData($data, 'CardUse.export')) {
-            return false;
-        }
-
-        $result = self::all(function ($query) use ($data) {
-            $query
-                ->field('card_id,user_id', true)
-                ->where(['card_id' => ['eq', $data['card_id']]]);
-        });
-
-        if ($result !== false) {
-            return $result->toArray();
         }
 
         return false;
@@ -381,6 +357,52 @@ class CardUse extends CareyShop
     }
 
     /**
+     * 隐藏购物卡卡密
+     * @access private
+     * @param array $data 购物卡数据
+     * @return mixed
+     */
+    private function hidePassword($data)
+    {
+        $cardAuth = json_decode(Config::get('card_auth.value', 'system_info'), true);
+        if (!is_client_admin() || in_array(get_client_id(), $cardAuth)) {
+            return $data;
+        }
+
+        foreach ($data as &$value) {
+            $value['password'] = auto_hid_substr($value['password'], 6);
+        }
+
+        return $data;
+    }
+
+    /**
+     * 导出生成的购物卡
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|false
+     * @throws
+     */
+    public function getCardUseExport($data)
+    {
+        if (!$this->validateData($data, 'CardUse.export')) {
+            return false;
+        }
+
+        $result = self::all(function ($query) use ($data) {
+            $query
+                ->field('card_id,user_id', true)
+                ->where(['card_id' => ['eq', $data['card_id']]]);
+        });
+
+        if ($result !== false) {
+            return $this->hidePassword($result->toArray());
+        }
+
+        return false;
+    }
+
+    /**
      * 获取已绑定的购物卡
      * @access public
      * @param  array $data 外部数据
@@ -461,7 +483,7 @@ class CardUse extends CareyShop
         });
 
         if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
+            return ['items' => $this->hidePassword($result->toArray()), 'total_result' => $totalResult];
         }
 
         return false;

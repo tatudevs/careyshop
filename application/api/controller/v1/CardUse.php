@@ -24,10 +24,10 @@ class CardUse extends CareyShop
         return [
             // 批量设置购物卡是否有效
             'set.card.use.invalid' => ['setCardUseInvalid'],
-            // 导出生成的购物卡
-            'get.card.use.export'  => ['getCardUseExport'],
             // 绑定购物卡
             'bind.card.use.item'   => ['bindCardUseItem'],
+            // 导出生成的购物卡
+            'get.card.use.export'  => ['getCardUseExport'],
             // 获取已绑定的购物卡
             'get.card.use.list'    => ['getCardUseList'],
             // 获取可合并的购物卡列表

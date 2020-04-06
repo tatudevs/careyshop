@@ -384,6 +384,7 @@ class Setting extends CareyShop
                         break;
 
                     case 'allow_origin':
+                    case 'card_auth':
                         !empty($value) ?: $value = [];
                         $this->setSettingItem($key, $value, 'system_info', 'Setting.array', true);
                         break;
