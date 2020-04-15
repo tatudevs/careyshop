@@ -11,8 +11,8 @@
 namespace app\common\model;
 
 use app\common\service\Cart as CartSer;
-use think\Config;
 use think\helper\Time;
+use think\Config;
 
 class Order extends CareyShop
 {
@@ -103,6 +103,7 @@ class Order extends CareyShop
         'give_integral'   => 'integer',
         'give_coupon'     => 'array',
         'payment_time'    => 'timestamp',
+        'picking_time'    => 'timestamp',
         'delivery_time'   => 'timestamp',
         'finished_time'   => 'timestamp',
         'is_delete'       => 'integer',
@@ -1617,13 +1618,15 @@ class Order extends CareyShop
                 }
 
                 // 修改订单状态
-                $isPicking = $data['is_picking'] == 1;
-                if (false === $value->save(['trade_status' => $isPicking])) {
+                $orderData['trade_status'] = $data['is_picking'];
+                $orderData['picking_time'] = $data['is_picking'] == 1 ? time() : 0;
+
+                if (false === $value->save($orderData)) {
                     throw new \Exception($this->getError());
                 }
 
                 // 写入订单操作日志
-                $info = $isPicking ? '订单开始配货' : '订单取消配货';
+                $info = $data['is_picking'] == 1 ? '订单开始配货' : '订单取消配货';
                 if (!$this->addOrderLog($value->toArray(), $info, '订单配货')) {
                     throw new \Exception($this->getError());
                 }
