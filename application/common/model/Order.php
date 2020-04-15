@@ -1474,7 +1474,11 @@ class Order extends CareyShop
 
         $result = self::get(function ($query) use ($data) {
             $with = ['getUser', 'getOrderGoods', 'getDelivery'];
-            empty($data['is_get_log']) ?: $with[] = 'getOrderLog';
+            if (!empty($data['is_get_log'])) {
+                $with['getOrderLog'] = function ($query) {
+                    $query->order(['order_log_id' => 'desc']);
+                };
+            }
 
             $map['order_no'] = ['eq', $data['order_no']];
             $map['is_delete'] = ['neq', 2];
