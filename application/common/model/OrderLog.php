@@ -70,4 +70,40 @@ class OrderLog extends CareyShop
 
         return false;
     }
+
+    /**
+     * 获取一个订单操作日志
+     * @access public
+     * @param $data
+     * @return array|bool
+     * @throws
+     */
+    public function getOrderLog($data)
+    {
+        if (!$this->validateData($data, 'OrderLog.log')) {
+            return false;
+        }
+
+        // 判断订单所属
+        if (!is_client_admin()) {
+            $orderMap['user_id'] = ['eq', get_client_id()];
+            $orderMap['order_no'] = ['eq', $data['order_no']];
+
+            if (Order::where($orderMap)->count() <= 0) {
+                return [];
+            }
+        }
+
+        $result = self::all(function ($query) use ($data) {
+            $query
+                ->where(['order_no' => ['eq', $data['order_no']]])
+                ->order(['order_log_id' => 'desc']);
+        });
+
+        if (false !== $result) {
+            return $result->toArray();
+        }
+
+        return false;
+    }
 }

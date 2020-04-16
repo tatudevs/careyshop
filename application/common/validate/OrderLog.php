@@ -39,4 +39,14 @@ class OrderLog extends CareyShop
         'comment'         => '订单日志备注',
         'description'     => '订单日志描述',
     ];
+
+    /**
+     * 场景规则
+     * @var array
+     */
+    protected $scene = [
+        'log' => [
+            'order_no',
+        ],
+    ];
 }

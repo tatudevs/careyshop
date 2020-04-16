@@ -56,6 +56,8 @@ class Order extends CareyShop
             'complete.order.list'     => ['completeOrderList'],
             // 获取一个订单商品明细
             'get.order.goods.item'    => ['getOrderGoodsItem', 'app\common\model\OrderGoods'],
+            // 获取一个订单操作日志
+            'get.order.log'           => ['getOrderLog', 'app\common\model\OrderLog'],
         ];
     }
 }
