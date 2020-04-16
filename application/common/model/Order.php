@@ -1057,7 +1057,7 @@ class Order extends CareyShop
      * 调整订单应付金额
      * @access public
      * @param  array $data 外部数据
-     * @return bool
+     * @return false|array
      * @throws
      */
     public function changePriceOrderItem($data)
@@ -1109,7 +1109,21 @@ class Order extends CareyShop
             }
 
             self::commit();
-            return true;
+            return [
+                'pay_amount'     => $result->getAttr('pay_amount'),
+                'goods_amount'   => $result->getAttr('goods_amount'),
+                'total_amount'   => $result->getAttr('total_amount'),
+                'use_money'      => $result->getAttr('use_money'),
+                'use_level'      => $result->getAttr('use_level'),
+                'use_integral'   => $result->getAttr('use_integral'),
+                'use_coupon'     => $result->getAttr('use_coupon'),
+                'use_discount'   => $result->getAttr('use_discount'),
+                'use_promotion'  => $result->getAttr('use_promotion'),
+                'use_card'       => $result->getAttr('use_card'),
+                'delivery_fee'   => $result->getAttr('delivery_fee'),
+                'invoice_amount' => $result->getAttr('invoice_amount'),
+                'adjustment'     => $result->getAttr('adjustment'),
+            ];
         } catch (\Exception $e) {
             self::rollback();
             return $this->setError($e->getMessage());
