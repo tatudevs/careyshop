@@ -475,7 +475,7 @@ class Message extends CareyShop
             ->count();
 
         $message = ['total_result' => $totalResult];
-        if (!empty($data['is_unread'])) {
+        if (!empty($data['is_unread']) && empty($data['is_read'])) {
             $unread = $this->getMessageUserUnread([]);
             if (false !== $unread) {
                 $message['unread_count'] = $unread;

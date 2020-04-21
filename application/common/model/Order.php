@@ -2076,7 +2076,7 @@ class Order extends CareyShop
         is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
         empty($data['consignee']) ?: $map['consignee'] = ['eq', $data['consignee']];
         empty($data['mobile']) ?: $map['mobile'] = ['eq', $data['mobile']];
-        !isset($data['payment_code']) ?: $map['payment_code'] = ['eq', $data['payment_code']];
+        empty($data['payment_code']) ?: $map['payment_code'] = ['eq', $data['payment_code']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
             $map['create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
@@ -2189,11 +2189,12 @@ class Order extends CareyShop
 
     /**
      * 获取订单各个状态合计数
+     * @param  array $data 外部数据
      * @access public
      * @return array
      * @throws
      */
-    public function getOrderStatusTotal()
+    public function getOrderStatusTotal($data)
     {
         // 准备基础数据
         $result = [
@@ -2208,15 +2209,29 @@ class Order extends CareyShop
             return $result;
         }
 
-        // 获取未评价订单商品
-        is_client_admin() ?: $mapGoods['user_id'] = ['eq', get_client_id()];
-        $mapGoods['is_comment'] = ['eq', 0];
-        $mapGoods['status'] = ['eq', 2];
-        $orderId = OrderGoods::where($mapGoods)->column('order_id');
-
         // 通用查询条件
-        is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
         $map['is_delete'] = ['eq', 0];
+        empty($data['consignee']) ?: $map['consignee'] = ['eq', $data['consignee']];
+        empty($data['mobile']) ?: $map['mobile'] = ['eq', $data['mobile']];
+        empty($data['payment_code']) ?: $map['payment_code'] = ['eq', $data['payment_code']];
+
+        if (!empty($data['begin_time']) && !empty($data['end_time'])) {
+            $map['create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
+        }
+
+        // 通过账号或昵称查询
+        if (is_client_admin() && !empty($data['account'])) {
+            $mapUser['username|nickname'] = ['eq', $data['account']];
+            $userId = User::where($mapUser)->value('user_id', 0, true);
+            $map['user_id'] = ['eq', $userId];
+        }
+
+        // 通过关键词查询
+        if (!empty($data['keywords'])) {
+            $mapKeywords['order_no|goods_name'] = ['like', '%' . $data['keywords'] . '%'];
+            $idList = OrderGoods::where($mapKeywords)->column('order_id');
+            $map['order_id'] = ['in', $idList];
+        }
 
         $mapNotPaid['trade_status'] = ['eq', 0];
         $mapNotPaid['payment_status'] = ['eq', 0];
@@ -2233,6 +2248,12 @@ class Order extends CareyShop
         $mapShipped['trade_status'] = ['eq', 2];
         $mapShipped['delivery_status'] = ['eq', 1];
         $result['shipped'] = $this->where($mapShipped)->where($map)->count();
+
+        // 获取未评价订单商品
+        is_client_admin() ?: $mapGoods['user_id'] = ['eq', get_client_id()];
+        $mapGoods['is_comment'] = ['eq', 0];
+        $mapGoods['status'] = ['eq', 2];
+        $orderId = OrderGoods::where($mapGoods)->column('order_id');
 
         $mapNotComment['order_id'] = ['in', $orderId];
         $mapNotComment['trade_status'] = ['eq', 3];
