@@ -50,7 +50,6 @@ class OrderService extends CareyShop
         'type'             => 'integer',
         'goods_status'     => 'integer',
         'image'            => 'array',
-        'goods_image'      => 'array',
         'status'           => 'integer',
         'is_return'        => 'integer',
         'refund_fee'       => 'float',
