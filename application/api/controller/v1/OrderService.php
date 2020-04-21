@@ -30,6 +30,8 @@ class OrderService extends CareyShop
             'get.order.service.item'     => ['getOrderServiceItem'],
             // 获取售后服务单列表
             'get.order.service.list'     => ['getOrderServiceList'],
+            // 获取待处理售后合计数
+            'get.order.service.total'    => ['getOrderServiceTotal'],
             // 添加一个维修售后服务单
             'add.order.service.maintain' => ['addOrderServiceMaintain'],
             // 添加一个换货售后服务单

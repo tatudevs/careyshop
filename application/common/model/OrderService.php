@@ -450,7 +450,7 @@ class OrderService extends CareyShop
             }
 
             if (!empty($data['my_service'])) {
-                $map['admin_id'] = ['eq', get_client_id()];
+                $map['admin_id'] = ['eq', $data['my_service'] == 1 ? 0 : get_client_id()];
             }
         }
 
@@ -507,6 +507,53 @@ class OrderService extends CareyShop
         }
 
         return false;
+    }
+
+    /**
+     * 获取待处理售后合计数
+     * @access public
+     * @param  array $data 外部数据
+     * @return array
+     * @throws
+     */
+    public function getOrderServiceTotal($data)
+    {
+        $result = [
+            'unclaimed'  => 0,
+            'my_service' => 0,
+        ];
+
+        if (!is_client_admin() && get_client_id() == 0) {
+            return $result;
+        }
+
+        $map = [];
+        is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
+        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+
+        if (!empty($data['order_code'])) {
+            $map['service_no|order_no'] = ['eq', $data['order_code']];
+        }
+
+        if (!empty($data['begin_time']) && !empty($data['end_time'])) {
+            $map['create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
+        }
+
+        if (is_client_admin()) {
+            if (!empty($data['account'])) {
+                $mapUser['username|nickname'] = ['eq', $data['account']];
+                $userId = User::where($mapUser)->value('user_id', 0, true);
+                $map['user_id'] = ['eq', $userId];
+            }
+        }
+
+        $unclaimedMap['admin_id'] = ['eq', 0];
+        $result['unclaimed'] = $this->where($unclaimedMap)->where($map)->count();
+
+        $myServiceMap['admin_id'] = ['eq', get_client_id()];
+        $result['my_service'] = $this->where($myServiceMap)->where($map)->count();
+
+        return $result;
     }
 
     /**
