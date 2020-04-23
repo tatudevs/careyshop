@@ -510,7 +510,7 @@ class OrderService extends CareyShop
     }
 
     /**
-     * 获取待处理售后合计数
+     * 获取"未接收"与"我的售后"的售后单计数(管理组)
      * @access public
      * @param  array $data 外部数据
      * @return array
