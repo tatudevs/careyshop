@@ -59,8 +59,8 @@ class OrderService extends CareyShop
         'refund_fee'       => 'float',
         'refund_detail'    => 'array',
         'delivery_fee'     => 'float',
-        'admin_new'        => 'integer',
-        'user_new'         => 'integer',
+        'admin_event'      => 'integer',
+        'user_event'       => 'integer',
     ];
 
     /**
@@ -169,7 +169,7 @@ class OrderService extends CareyShop
             'description'      => $desc,
         ];
 
-        $is_new = is_client_admin() ? 'user_new' : 'admin_new';
+        $is_new = is_client_admin() ? 'user_event' : 'admin_event';
         $this->isUpdate(true)->save([$is_new => 1], ['service_no' => ['eq', $data['service_no']]]);
 
         $serviceDb = new ServiceLog();
@@ -397,7 +397,7 @@ class OrderService extends CareyShop
 
             if (!is_client_admin()) {
                 $map['user_id'] = ['eq', get_client_id()];
-                $query->field('admin_id,remark,admin_new', true);
+                $query->field('admin_id,remark,admin_event', true);
             }
 
             $query->with('getUser,getOrderGoods,getServiceLog')->where($map);
@@ -414,7 +414,7 @@ class OrderService extends CareyShop
                 'get_service_log.service_no',
             ];
 
-            $result->isUpdate(true)->save([is_client_admin() ? 'admin_new' : 'user_new' => 0]);
+            $result->isUpdate(true)->save([is_client_admin() ? 'admin_event' : 'user_event' => 0]);
             return $result->hidden($hidden)->toArray();
         }
 
@@ -455,8 +455,12 @@ class OrderService extends CareyShop
             }
 
             if (!empty($data['my_service'])) {
-                $map['admin_id'] = ['eq', $data['my_service'] == 1 ? 0 : get_client_id()];
+                $map['admin_id'] = ['eq', get_client_id()];
             }
+        }
+
+        if (!empty($data['new_event'])) {
+            $map[is_client_admin() ? 'admin_event' : 'user_event'] = ['eq', 1];
         }
 
         $totalResult = $this->where($map)->count();
@@ -488,7 +492,7 @@ class OrderService extends CareyShop
             ];
 
             if (!is_client_admin()) {
-                array_push($field, 'admin_id', 'remark', 'admin_new');
+                array_push($field, 'admin_id', 'remark', 'admin_event');
             } else {
                 array_push($with, 'getUser', 'getAdmin');
             }
@@ -514,53 +518,6 @@ class OrderService extends CareyShop
         }
 
         return false;
-    }
-
-    /**
-     * 获取"未接收"与"我的售后"的售后单计数(管理组)
-     * @access public
-     * @param  array $data 外部数据
-     * @return array
-     * @throws
-     */
-    public function getOrderServiceTotal($data)
-    {
-        $result = [
-            'unclaimed'  => 0,
-            'my_service' => 0,
-        ];
-
-        if (!is_client_admin() && get_client_id() == 0) {
-            return $result;
-        }
-
-        $map = [];
-        is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
-        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
-
-        if (!empty($data['order_code'])) {
-            $map['service_no|order_no'] = ['eq', $data['order_code']];
-        }
-
-        if (!empty($data['begin_time']) && !empty($data['end_time'])) {
-            $map['create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
-        }
-
-        if (is_client_admin()) {
-            if (!empty($data['account'])) {
-                $mapUser['username|nickname'] = ['eq', $data['account']];
-                $userId = User::where($mapUser)->value('user_id', 0, true);
-                $map['user_id'] = ['eq', $userId];
-            }
-        }
-
-        $unclaimedMap['admin_id'] = ['eq', 0];
-        $result['unclaimed'] = $this->where($unclaimedMap)->where($map)->count();
-
-        $myServiceMap['admin_id'] = ['eq', get_client_id()];
-        $result['my_service'] = $this->where($myServiceMap)->where($map)->count();
-
-        return $result;
     }
 
     /**
@@ -712,7 +669,7 @@ class OrderService extends CareyShop
             }
 
             self::commit();
-            return $this->hidden(['order_service_id', 'admin_new'])->toArray();
+            return $this->hidden(['order_service_id', 'admin_event'])->toArray();
         } catch (\Exception $e) {
             self::rollback();
             return $this->setError($e->getMessage());
@@ -822,7 +779,7 @@ class OrderService extends CareyShop
             }
 
             self::commit();
-            return $this->hidden(['order_service_id', 'admin_new'])->toArray();
+            return $this->hidden(['order_service_id', 'admin_event'])->toArray();
         } catch (\Exception $e) {
             self::rollback();
             return $this->setError($e->getMessage());
