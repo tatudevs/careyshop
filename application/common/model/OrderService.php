@@ -15,6 +15,12 @@ use think\Config;
 class OrderService extends CareyShop
 {
     /**
+     * hasOne 的关联方式
+     * @var int
+     */
+    private static $hasOneType = 0;
+
+    /**
      * 是否需要自动写入时间戳
      * @var bool
      */
@@ -80,7 +86,7 @@ class OrderService extends CareyShop
         return $this
             ->belongsTo('OrderGoods')
             ->field('order_goods_id,goods_name,goods_id,goods_image,key_value,qty,is_service,status')
-            ->setEagerlyType(0);
+            ->setEagerlyType(self::$hasOneType);
     }
 
     /**
@@ -394,17 +400,18 @@ class OrderService extends CareyShop
                 $query->field('admin_id,remark,admin_new', true);
             }
 
-            $query->with('getUser,getServiceLog')->where($map);
+            $query->with('getUser,getOrderGoods,getServiceLog')->where($map);
         });
 
         if (false !== $result && !is_null($result)) {
             // 隐藏不需要输出的字段
             $hidden = [
                 'order_service_id',
+                'get_user.user_id',
+                'get_order_goods.order_goods_id',
                 'get_service_log.service_log_id',
                 'get_service_log.order_service_id',
                 'get_service_log.service_no',
-                'get_user.user_id',
             ];
 
             $result->isUpdate(true)->save([is_client_admin() ? 'admin_new' : 'user_new' => 0]);
@@ -471,7 +478,8 @@ class OrderService extends CareyShop
             $orderField = !empty($data['order_field']) ? $data['order_field'] : 'order_service_id';
 
             // 关联查询
-            $with = [];
+            self::$hasOneType = 1;
+            $with = ['getOrderGoods'];
 
             // 过滤字段
             $field = [
@@ -482,7 +490,7 @@ class OrderService extends CareyShop
             if (!is_client_admin()) {
                 array_push($field, 'admin_id', 'remark', 'admin_new');
             } else {
-                $with = ['getUser', 'getAdmin'];
+                array_push($with, 'getUser', 'getAdmin');
             }
 
             $query
@@ -499,6 +507,7 @@ class OrderService extends CareyShop
                 'order_service_id',
                 'get_user.user_id',
                 'get_admin.admin_id',
+                'get_order_goods.order_goods_id',
             ];
 
             return ['items' => $result->hidden($hidden)->toArray(), 'total_result' => $totalResult];
