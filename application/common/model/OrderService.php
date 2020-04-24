@@ -28,8 +28,6 @@ class OrderService extends CareyShop
         'order_service_id',
         'order_no',
         'order_goods_id',
-        'key_name',
-        'key_value',
         'user_id',
         'qty',
         'type',
@@ -192,8 +190,8 @@ class OrderService extends CareyShop
 
             // 过滤不需要的字段
             $field = [
-                'goods_image', 'key_name', 'key_value', 'reason', 'description',
-                'image', 'address', 'consignee', 'zipcode', 'mobile', 'logistic_code',
+                'reason', 'description', 'image', 'address', 'consignee',
+                'zipcode', 'mobile', 'logistic_code',
             ];
 
             $query->field($field, true)->with('getOrderGoods,getOrderRefund')->where($map);
@@ -311,7 +309,7 @@ class OrderService extends CareyShop
         }
 
         // 获取订单商品需要的字段
-        $visible = ['order_no', 'goods_name', 'goods_id', 'goods_image', 'key_name', 'key_value', 'qty'];
+        $visible = ['order_no', 'goods_name', 'goods_id', 'qty'];
         $service['order_goods'] = array_merge($orderGoodsDb->visible($visible)->toArray(), $refund);
 
         // 检测订单商品是否允许申请售后(可申请、已售后)
@@ -676,9 +674,6 @@ class OrderService extends CareyShop
             'service_no'     => $this->getServiceNo(),
             'order_no'       => $result['order_goods']['order_no'],
             'order_goods_id' => $data['order_goods_id'],
-            'goods_image'    => $result['order_goods']['goods_image'],
-            'key_name'       => $result['order_goods']['key_name'],
-            'key_value'      => $result['order_goods']['key_value'],
             'user_id'        => get_client_id(),
             'qty'            => $result['order_goods']['qty'],
             'type'           => $type === 'maintain' ? 3 : 2,
@@ -787,9 +782,6 @@ class OrderService extends CareyShop
             'service_no'     => $this->getServiceNo(),
             'order_no'       => $result['order_goods']['order_no'],
             'order_goods_id' => $data['order_goods_id'],
-            'goods_image'    => $result['order_goods']['goods_image'],
-            'key_name'       => $result['order_goods']['key_name'],
-            'key_value'      => $result['order_goods']['key_value'],
             'user_id'        => get_client_id(),
             'type'           => $type === 'refund' ? 0 : 1,
             'reason'         => $data['reason'],
