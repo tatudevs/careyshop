@@ -169,14 +169,19 @@ class OrderService extends CareyShop
             'description'      => $desc,
         ];
 
-        $is_new = is_client_admin() ? 'user_event' : 'admin_event';
-        $this->isUpdate(true)->save([$is_new => 1], ['service_no' => ['eq', $data['service_no']]]);
-
         $serviceDb = new ServiceLog();
         if (!$serviceDb->addServiceLogItem($data)) {
             return $this->setError($serviceDb->getError());
         }
 
+        if (is_client_admin()) {
+            $saveData['user_event'] = 1;
+            $saveData['admin_event'] = 0;
+        } else {
+            $saveData['admin_event'] = 1;
+        }
+
+        $this->isUpdate(true)->save($saveData, ['service_no' => ['eq', $data['service_no']]]);
         return true;
     }
 
@@ -414,7 +419,15 @@ class OrderService extends CareyShop
                 'get_service_log.service_no',
             ];
 
-            $result->isUpdate(true)->save([is_client_admin() ? 'admin_event' : 'user_event' => 0]);
+            if (is_client_admin()) {
+                if ($result->getAttr('admin_id') == get_client_id()) {
+                    $saveData['admin_event'] = 1;
+                }
+            } else {
+                $saveData['user_event'] = 1;
+            }
+
+            $result->isUpdate(true)->save($saveData);
             return $result->hidden($hidden)->toArray();
         }
 
