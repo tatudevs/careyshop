@@ -855,7 +855,7 @@ class OrderService extends CareyShop
      * 同意(接收)一个售后服务单
      * @access public
      * @param  array $data 外部数据
-     * @return bool
+     * @return bool|array
      * @throws
      */
     public function setOrderServiceAgree($data)
@@ -888,14 +888,17 @@ class OrderService extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            // 写入售后服务单日志
+            $returnData = $result->toArray();
+            $returnData['admin_event'] = 0;
             $comment = '商家已同意处理此笔售后服务单。';
-            if (!$this->addServiceLog($result->toArray(), $comment, '同意售后')) {
+
+            // 写入售后服务单日志
+            if (!$this->addServiceLog($returnData, $comment, '同意售后')) {
                 throw new \Exception($this->getError());
             }
 
             $result::commit();
-            return true;
+            return $returnData;
         } catch (\Exception $e) {
             $result::rollback();
             return $this->setError($e->getMessage());
@@ -906,7 +909,7 @@ class OrderService extends CareyShop
      * 拒绝一个售后服务单
      * @access public
      * @param  array $data 外部数据
-     * @return bool
+     * @return bool|array
      * @throws
      */
     public function setOrderServiceRefused($data)
@@ -943,14 +946,17 @@ class OrderService extends CareyShop
                 throw new \Exception($goodsDb->getError());
             }
 
-            // 写入售后服务单日志
+            $returnData = $result->toArray();
+            $returnData['admin_event'] = 0;
             $comment = '商家已拒绝售后服务，如有需要您可以再次申请。';
-            if (!$this->addServiceLog($result->toArray(), $comment, '拒绝售后')) {
+
+            // 写入售后服务单日志
+            if (!$this->addServiceLog($returnData, $comment, '拒绝售后')) {
                 throw new \Exception($this->getError());
             }
 
             $result::commit();
-            return true;
+            return $returnData;
         } catch (\Exception $e) {
             $result::rollback();
             return $this->setError($e->getMessage());
