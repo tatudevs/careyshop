@@ -499,10 +499,7 @@ class OrderService extends CareyShop
             $with = ['getOrderGoods'];
 
             // 过滤字段
-            $field = [
-                'description', 'image', 'is_return', 'result', 'refund_detail',
-                'refund_no', 'address', 'consignee', 'zipcode', 'mobile', 'logistic_code',
-            ];
+            $field = ['description', 'image', 'refund_detail', 'refund_no', 'logistic_code'];
 
             if (!is_client_admin()) {
                 array_push($field, 'admin_id', 'remark', 'admin_event');
@@ -1065,10 +1062,10 @@ class OrderService extends CareyShop
         try {
             // 添加一条配送记录
             $distData = [
-                'client_id'     => $result->getAttr('user_id'),
-                'order_code'    => $result->getAttr('service_no'),
-                'delivery_id'   => $data['delivery_id'],
-                'logistic_code' => $data['logistic_code'],
+                'client_id'        => $result->getAttr('user_id'),
+                'order_code'       => $result->getAttr('service_no'),
+                'delivery_item_id' => $data['delivery_item_id'],
+                'logistic_code'    => $data['logistic_code'],
             ];
 
             $distDb = new DeliveryDist();
@@ -1607,10 +1604,10 @@ class OrderService extends CareyShop
             // 添加一条配送记录
             if ($serviceDb->getAttr('is_return') === 1) {
                 $distData = [
-                    'client_id'     => $serviceDb->getAttr('user_id'),
-                    'order_code'    => $serviceDb->getAttr('service_no'),
-                    'delivery_id'   => $data['delivery_id'],
-                    'logistic_code' => $data['logistic_code'],
+                    'client_id'        => $serviceDb->getAttr('user_id'),
+                    'order_code'       => $serviceDb->getAttr('service_no'),
+                    'delivery_item_id' => $data['delivery_item_id'],
+                    'logistic_code'    => $data['logistic_code'],
                 ];
 
                 $distDb = new DeliveryDist();
