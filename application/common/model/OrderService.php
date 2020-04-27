@@ -419,6 +419,7 @@ class OrderService extends CareyShop
                 'get_service_log.service_no',
             ];
 
+            $saveData = [];
             if (is_client_admin()) {
                 if ($result->getAttr('admin_id') == get_client_id()) {
                     $saveData['admin_event'] = 1;
@@ -427,7 +428,7 @@ class OrderService extends CareyShop
                 $saveData['user_event'] = 1;
             }
 
-            $result->isUpdate(true)->save($saveData);
+            !empty($saveData) && $result->isUpdate(true)->save($saveData);
             return $result->hidden($hidden)->toArray();
         }
 
@@ -889,7 +890,6 @@ class OrderService extends CareyShop
             }
 
             $returnData = $result->toArray();
-            $returnData['admin_event'] = 0;
             $comment = '商家已同意处理此笔售后服务单。';
 
             // 写入售后服务单日志
@@ -947,7 +947,6 @@ class OrderService extends CareyShop
             }
 
             $returnData = $result->toArray();
-            $returnData['admin_event'] = 0;
             $comment = '商家已拒绝售后服务，如有需要您可以再次申请。';
 
             // 写入售后服务单日志
@@ -1139,7 +1138,7 @@ class OrderService extends CareyShop
      * 设置一个售后服务单状态为"售后中"
      * @access public
      * @param  array $data 外部数据
-     * @return bool
+     * @return bool|array
      * @throws
      */
     public function setOrderServiceAfter($data)
@@ -1166,14 +1165,16 @@ class OrderService extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            // 写入售后服务单日志
+            $returnData = $result->toArray();
             $comment = '商家对该售后服务单正在进行售后服务。';
-            if (!$this->addServiceLog($result->toArray(), $comment, '售后服务')) {
+
+            // 写入售后服务单日志
+            if (!$this->addServiceLog($returnData, $comment, '售后服务')) {
                 throw new \Exception($this->getError());
             }
 
             $result::commit();
-            return true;
+            return $returnData;
         } catch (\Exception $e) {
             $result::rollback();
             return $this->setError($e->getMessage());
@@ -1184,7 +1185,7 @@ class OrderService extends CareyShop
      * 撤销一个售后服务单
      * @access public
      * @param  array $data 外部数据
-     * @return bool
+     * @return bool|array
      * @throws
      */
     public function setOrderServiceCancel($data)
@@ -1242,7 +1243,7 @@ class OrderService extends CareyShop
             }
 
             $result::commit();
-            return true;
+            return $result->toArray();
         } catch (\Exception $e) {
             $result::rollback();
             return $this->setError($e->getMessage());
@@ -1653,7 +1654,7 @@ class OrderService extends CareyShop
      * 完成一个售后服务单
      * @access public
      * @param  array $data 外部数据
-     * @return bool
+     * @return bool|array
      * @throws
      */
     public function setOrderServiceComplete($data)
@@ -1683,6 +1684,10 @@ class OrderService extends CareyShop
                 break;
         }
 
-        return $isSuccess;
+        if (true === $isSuccess) {
+            return $result->toArray();
+        }
+
+        return false;
     }
 }
