@@ -422,10 +422,10 @@ class OrderService extends CareyShop
             $saveData = [];
             if (is_client_admin()) {
                 if ($result->getAttr('admin_id') == get_client_id()) {
-                    $saveData['admin_event'] = 1;
+                    $saveData['admin_event'] = 0;
                 }
             } else {
-                $saveData['user_event'] = 1;
+                $saveData['user_event'] = 0;
             }
 
             !empty($saveData) && $result->isUpdate(true)->save($saveData);
