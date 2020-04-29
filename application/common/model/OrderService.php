@@ -405,7 +405,7 @@ class OrderService extends CareyShop
                 $query->field('admin_id,remark,admin_event', true);
             }
 
-            $query->with('getUser,getOrderGoods,getServiceLog')->where($map);
+            $query->with('getUser,getAdmin,getOrderGoods,getServiceLog')->where($map);
         });
 
         if (false !== $result && !is_null($result)) {
@@ -413,6 +413,7 @@ class OrderService extends CareyShop
             $hidden = [
                 'order_service_id',
                 'get_user.user_id',
+                'get_admin.admin_id',
                 'get_order_goods.order_goods_id',
                 'get_service_log.service_log_id',
                 'get_service_log.order_service_id',
