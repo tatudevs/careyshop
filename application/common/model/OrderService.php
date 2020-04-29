@@ -501,7 +501,7 @@ class OrderService extends CareyShop
             $with = ['getOrderGoods'];
 
             // 过滤字段
-            $field = ['description', 'image', 'refund_detail', 'refund_no', 'logistic_code'];
+            $field = ['description', 'image', 'refund_detail', 'refund_no'];
 
             if (!is_client_admin()) {
                 array_push($field, 'admin_id', 'remark', 'admin_event');
