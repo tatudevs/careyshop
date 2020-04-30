@@ -937,7 +937,14 @@ class OrderService extends CareyShop
 
         try {
             // 更新主数据
-            if (false === $result->isUpdate(true)->save(['status' => 2, 'result' => $data['result']])) {
+            $saveData = ['status' => 2, 'result' => $data['result']];
+            $adminId = $result->getAttr('admin_id');
+
+            if ($adminId <= 0) {
+                $saveData['admin_id'] = get_client_id();
+            }
+
+            if (false === $result->isUpdate(true)->save($saveData)) {
                 throw new \Exception($this->getError());
             }
 
