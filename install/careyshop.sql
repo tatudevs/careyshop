@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 2020-04-30 16:21:27
+-- Generation Time: 2020-05-06 10:16:20
 -- 服务器版本： 5.7.27-log
 -- PHP Version: 7.1.11
 
@@ -19,8 +19,54 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `careyshop`
+-- Database: `careyshop_dev`
 --
+
+DELIMITER $$
+--
+-- 函数
+--
+CREATE DEFINER=`careyshop`@`%` FUNCTION `getRegionChildrenList` (`rootId` TEXT) RETURNS VARCHAR(4000) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci NO SQL
+    COMMENT '根据父ID获取区域所有子级'
+BEGIN
+DECLARE sTemp VARCHAR(4000);
+DECLARE sTempChd VARCHAR(4000);
+
+SET sTemp = null;
+SET sTempChd = cast(rootId as CHAR);
+
+WHILE sTempChd is not null DO
+IF (sTemp is not null) THEN
+SET sTemp = concat(sTemp,',',sTempChd);
+ELSE
+SET sTemp = concat(sTempChd);
+END IF;
+SELECT group_concat(region_id) INTO sTempChd FROM cs_region where FIND_IN_SET(parent_id,sTempChd)>0;
+END WHILE;
+RETURN sTemp;
+END$$
+
+CREATE DEFINER=`careyshop`@`%` FUNCTION `getStorageChildrenList` (`rootId` TEXT) RETURNS VARCHAR(4000) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci NO SQL
+    COMMENT '根据父ID获取资源管理器所有子级'
+BEGIN
+DECLARE sTemp VARCHAR(4000);
+DECLARE sTempChd VARCHAR(4000);
+
+SET sTemp = null;
+SET sTempChd = cast(rootId as CHAR);
+
+WHILE sTempChd is not null DO
+IF (sTemp is not null) THEN
+SET sTemp = concat(sTemp,',',sTempChd);
+ELSE
+SET sTemp = concat(sTempChd);
+END IF;
+SELECT group_concat(storage_id) INTO sTempChd FROM cs_storage where FIND_IN_SET(parent_id,sTempChd)>0;
+END WHILE;
+RETURN sTemp;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -69,9 +115,9 @@ CREATE TABLE `cs_admin` (
 --
 
 INSERT INTO `cs_admin` (`admin_id`, `username`, `password`, `group_id`, `nickname`, `head_pic`, `last_login`, `last_ip`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
-(1, 'admin', '5631c89340a5413dc8124d23c85b900a', 1, '思维空间', '', 1588234267, '127.0.0.1', 1, 0, 1530289832, 1588234267),
+(1, 'admin', '5631c89340a5413dc8124d23c85b900a', 1, '思维空间', '', 1588429710, '127.0.0.1', 1, 0, 1530289832, 1588429710),
 (2, 'dnyz520', '5631c89340a5413dc8124d23c85b900a', 2, 'dnyz520', '', 1587192900, '127.0.0.1', 1, 0, 1530289832, 1587192900),
-(3, 'admin2', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop2', '', 1588229725, '127.0.0.1', 1, 0, 1530289832, 1588229725),
+(3, 'admin2', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop2', '', 1588429701, '127.0.0.1', 1, 0, 1530289832, 1588429701),
 (4, 'admin3', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop3', '', 1587021502, '127.0.0.1', 1, 0, 1530289832, 1587021502),
 (5, 'admin4', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop4', '', 1556380966, '127.0.0.1', 1, 0, 1530289832, 1556380966),
 (6, 'admin5', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop5', '', 1551194662, '127.0.0.1', 1, 0, 1530289832, 1541576329),
@@ -467,7 +513,7 @@ CREATE TABLE `cs_app` (
 --
 
 INSERT INTO `cs_app` (`app_id`, `app_name`, `app_key`, `app_secret`, `captcha`, `status`, `is_delete`) VALUES
-(1, 'Admin(后台管理)', 86757125, 'ea1bd533d001fd73b09944f04c96a6fc', 0, 1, 0),
+(1, 'Admin(后台管理)', 86757125, 'ea1bd533d001fd73b09944f04c96a6fc', 1, 1, 0),
 (2, 'IOS(iPhone)', 26945134, 'b99cb2bdec70d20156000f664ec5ac30', 0, 0, 0),
 (3, 'Web(微信小程序)', 76472358, '36affdc58f50e1035649abc808c22b48', 0, 0, 0);
 
@@ -7890,7 +7936,8 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (1076, 870, '撤销售后', '', '', '', 'admin', 0, '/order/service/list/cancel', '', '_self', 0, 50, 1),
 (1077, 870, '售后完成', '', '', '', 'admin', 0, '/order/service/list/complete', '', '_self', 0, 50, 1),
 (1078, 870, '设置备注', '', '', '', 'admin', 0, '/order/service/list/remark', '', '_self', 0, 50, 1),
-(1079, 870, '物流信息', '', '', '', 'admin', 0, '/order/service/list/dist', '', '_self', 0, 50, 1);
+(1079, 870, '物流信息', '', '', '', 'admin', 0, '/order/service/list/dist', '', '_self', 0, 50, 1),
+(1080, 534, '调试日志', '', '', '', 'admin', 0, '/log', '', '_self', 0, 50, 1);
 
 -- --------------------------------------------------------
 
@@ -14885,7 +14932,7 @@ CREATE TABLE `cs_token` (
 
 INSERT INTO `cs_token` (`token_id`, `client_id`, `group_id`, `username`, `client_type`, `platform`, `code`, `token`, `token_expires`, `refresh`, `refresh_expires`) VALUES
 (137, 58, 9, 'admin70', 1, 'admin', 'd1da22c53fd316c99b426116a4b7333f', '35cfcd85a881dd8f0dd89551f20e593f', 1586420390, 'da00b3f0830bee7dece967e1cf2d9a22', 1586506790),
-(320, 1, 1, 'admin', 1, 'admin', '77c5e2d8f520f127c81042c722da92af', 'b18bc011d1ac8963a032fee79d93113a', 1590826267, 'cd55e5525b5cabb4e408cc70e7d930c7', 1590912667);
+(322, 1, 1, 'admin', 1, 'admin', 'df189d07d0364b793aaee5ef4c955b8a', '2387736128e7765f6c82cc2c97d9fe2f', 1591021710, '59bff36fd3dd7b1dac408a33e53d9424', 1591108110);
 
 -- --------------------------------------------------------
 
@@ -16396,7 +16443,7 @@ ALTER TABLE `cs_withdraw_user`
 -- 使用表AUTO_INCREMENT `cs_action_log`
 --
 ALTER TABLE `cs_action_log`
-  MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=484;
+  MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- 使用表AUTO_INCREMENT `cs_admin`
 --
@@ -16566,7 +16613,7 @@ ALTER TABLE `cs_history`
 -- 使用表AUTO_INCREMENT `cs_menu`
 --
 ALTER TABLE `cs_menu`
-  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1080;
+  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1081;
 --
 -- 使用表AUTO_INCREMENT `cs_message`
 --
@@ -16691,7 +16738,7 @@ ALTER TABLE `cs_support`
 -- 使用表AUTO_INCREMENT `cs_token`
 --
 ALTER TABLE `cs_token`
-  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=321;
+  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=323;
 --
 -- 使用表AUTO_INCREMENT `cs_topic`
 --
