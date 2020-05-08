@@ -10,10 +10,12 @@
 
 namespace app\admin\controller;
 
-class Index
+use think\Controller;
+
+class Index extends Controller
 {
     public function index()
     {
-        return '欢迎使用CareyShop商城框架系统 - Admin';
+        return $this->fetch();
     }
 }
