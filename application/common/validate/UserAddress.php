@@ -38,7 +38,7 @@ class UserAddress extends CareyShop
         'user_address_id' => '收货地址编号',
         'consignee'       => '姓名',
         'country'         => '国家',
-        'region_list'     => '区域列表',
+        'region_list'     => '所在地区',
         'address'         => '详细地址',
         'zipcode'         => '邮编',
         'tel'             => '电话',

@@ -202,7 +202,7 @@ class UserAddress extends CareyShop
         }
 
         // 处理区域
-        $country = empty($data['country']) ? $result->getAttr('country') : $data['country'];
+        $country = !isset($data['country']) ? $result->getAttr('country') : $data['country'];
         $region = empty($data['region_list']) ? $result->getAttr('region_list') : $data['region_list'];
 
         if (!empty($country)) {
