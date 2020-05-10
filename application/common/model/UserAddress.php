@@ -43,9 +43,7 @@ class UserAddress extends CareyShop
     protected $type = [
         'user_address_id' => 'integer',
         'country'         => 'integer',
-        'province'        => 'integer',
-        'city'            => 'integer',
-        'district'        => 'integer',
+        'region_list'     => 'array',
         'is_delete'       => 'integer',
     ];
 
@@ -153,21 +151,14 @@ class UserAddress extends CareyShop
         }
 
         // 处理部分数据
-        $region = [];
+        $region = $data['region_list'];
         unset($data['user_address_id'], $data['is_delete']);
         !isset($data['is_default']) ?: $data['is_default'] = (int)$data['is_default'];
         $data['user_id'] = is_client_admin() ? $data['client_id'] : get_client_id();
 
         // 根据区域编号查询所在区域
         if (!empty($data['country'])) {
-            array_push($region, $data['country']);
-        }
-
-        array_push($region, $data['province']);
-        array_push($region, $data['city']);
-
-        if (!empty($data['district'])) {
-            array_push($region, $data['district']);
+            array_unshift($region, $data['country']);
         }
 
         $regionDb = new Region();
@@ -210,12 +201,13 @@ class UserAddress extends CareyShop
             return is_null($result) ? $this->setError('数据不存在') : false;
         }
 
-        // 所在区域重新组合,如果数据不存在则取原编号
-        $region = [];
-        array_push($region, empty($data['country']) ? $result->getAttr('country') : $data['country']);
-        array_push($region, empty($data['province']) ? $result->getAttr('province') : $data['province']);
-        array_push($region, empty($data['city']) ? $result->getAttr('city') : $data['city']);
-        array_push($region, empty($data['district']) ? $result->getAttr('district') : $data['district']);
+        // 处理区域
+        $country = empty($data['country']) ? $result->getAttr('country') : $data['country'];
+        $region = empty($data['region_list']) ? $result->getAttr('region_list') : $data['region_list'];
+
+        if (!empty($country)) {
+            array_unshift($region, $country);
+        }
 
         $regionDb = new Region();
         $data['region'] = $regionDb->getRegionName(['region_id' => $region]);
