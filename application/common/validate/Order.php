@@ -80,7 +80,7 @@ class Order extends CareyShop
         'coupon_exchange_code' => '优惠劵兑换码',
         'consignee'            => '收货人姓名',
         'country'              => '收货国家',
-        'region_list'          => '收货所在地区',
+        'region_list'          => '收货区域',
         'address'              => '收货详细地址',
         'zipcode'              => '收货人邮编',
         'tel'                  => '收货人电话',
