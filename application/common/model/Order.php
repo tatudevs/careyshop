@@ -89,9 +89,7 @@ class Order extends CareyShop
         'integral_pct'    => 'float',
         'delivery_id'     => 'integer',
         'country'         => 'integer',
-        'province'        => 'integer',
-        'city'            => 'integer',
-        'district'        => 'integer',
+        'region_list'     => 'array',
         'invoice_type'    => 'integer',
         'invoice_amount'  => 'float',
         'trade_status'    => 'integer',
@@ -312,10 +310,7 @@ class Order extends CareyShop
         $isWeight = $isItem = $isVolume = false;        // 某一个计量是否包邮
         $weightTotal = $itemTotal = $volumeTotal = 0;   // 所有计量总合数值
         $goodsIdList = array_unique(array_column($this->cartData['goods_list'], 'goods_id'));
-
-        $region['province'] = isset($this->dataParams['province']) ? $this->dataParams['province'] : 0;
-        $region['city'] = isset($this->dataParams['city']) ? $this->dataParams['city'] : 0;
-        $region['district'] = isset($this->dataParams['district']) ? $this->dataParams['district'] : 0;
+        $region = !empty($this->dataParams['region_list']) ? $this->dataParams['region_list'] : [];
 
         // 获取商品折扣数据
         $discountDb = new DiscountGoods();
@@ -418,13 +413,13 @@ class Order extends CareyShop
             $deliveryData['item_total'] = $itemTotal;
             $deliveryData['volume_total'] = $volumeTotal;
 
-            // 县区、城市、省份往上推,直到区域编号不为空(或不为0)
-            if (!empty($region['district'])) {
-                $deliveryData['region_id'] = $region['district'];
-            } else if (!empty($region['city'])) {
-                $deliveryData['region_id'] = $region['city'];
-            } else if (!empty($region['province'])) {
-                $deliveryData['region_id'] = $region['province'];
+            // 反向取区、市、省中某个不为空的值
+            $regionID = array_reverse($region);
+            foreach ($regionID as $value) {
+                if (!empty($value)) {
+                    $deliveryData['region_id'] = $value;
+                    break;
+                }
             }
 
             if ($deliveryData['delivery_id'] > 0 && !empty($deliveryData['region_id'])) {
@@ -643,10 +638,10 @@ class Order extends CareyShop
 
         // 订单区域编号组合
         $country = isset($this->dataParams['country']) ? $this->dataParams['country'] : 0;
-        $regionId = [$this->dataParams['province'], $this->dataParams['city']];
+        $regionList = $this->dataParams['region_list'];
 
-        if (!empty($this->dataParams['district'])) {
-            $regionId[] = $this->dataParams['district'];
+        if (!empty($country)) {
+            array_unshift($regionList, $country);
         }
 
         // 判断完整收货地址是否需要包含国籍
@@ -655,7 +650,7 @@ class Order extends CareyShop
         }
 
         $regionDb = new Region();
-        $completeAddress = $regionDb->getRegionName(['region_id' => $regionId]);
+        $completeAddress = $regionDb->getRegionName(['region_id' => $regionList]);
 
         // 如区域地址存在,则需要添加分隔符用于增加详细地址
         if ($completeAddress != '') {
@@ -690,12 +685,10 @@ class Order extends CareyShop
             'use_card'         => $this->cartData['order_price']['use_card'],
             'delivery_fee'     => $this->cartData['order_price']['delivery_fee'],
             'delivery_id'      => $this->dataParams['delivery_id'],
+            'card_number'      => isset($this->dataParams['card_number']) ? $this->dataParams['card_number'] : '',
             'consignee'        => $this->dataParams['consignee'],
             'country'          => isset($this->dataParams['country']) ? $this->dataParams['country'] : 0,
-            'province'         => $this->dataParams['province'],
-            'city'             => $this->dataParams['city'],
-            'card_number'      => isset($this->dataParams['card_number']) ? $this->dataParams['card_number'] : '',
-            'district'         => isset($this->dataParams['district']) ? $this->dataParams['district'] : 0,
+            'region_list'      => $this->dataParams['region_list'],
             'address'          => $this->dataParams['address'],
             'complete_address' => $this->getCompleteAddress() . $this->dataParams['address'],
             'zipcode'          => isset($this->dataParams['zipcode']) ? $this->dataParams['zipcode'] : '',
@@ -1459,7 +1452,7 @@ class Order extends CareyShop
         // 设置允许修改的字段及避免无关字段
         unset($data['create_time'], $data['update_time']);
         $field = [
-            'consignee', 'country', 'province', 'city', 'district', 'address', 'zipcode',
+            'consignee', 'country', 'region_list', 'address', 'zipcode',
             'tel', 'mobile', 'invoice_title', 'tax_number', 'complete_address',
         ];
 
