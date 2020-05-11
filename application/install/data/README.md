@@ -9,3 +9,6 @@ careyshop_demo.sql  可选择导入演示数据
 cs_region_full.sql  cs_region 表全区域数据(相比较初始化数据会更详细，但同样也会增加资源消耗)
 install.lock        文件存在则表示已安装，删除后可重新执行“安装向导”
 ```
+
+###
+备注：安装完成之后，您可以移除整个 install 模块

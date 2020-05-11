@@ -16,6 +16,7 @@ define('ADMIN_MODULE', 'admin');
  * 检查是否安装
  * 在未安装完成之前,除"index"模块外,访问其他模块都会报错
  */
-if (!is_file(APP_PATH . 'install/data/install.lock')) {
+$path = APP_PATH . 'install/data';
+if (file_exists($path) && !is_file($path . '/install.lock')) {
     define('BIND_MODULE', 'install');
 }
