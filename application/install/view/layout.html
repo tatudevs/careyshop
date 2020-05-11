@@ -2,9 +2,25 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link href="static/install/css/install.css" rel="preload" as="style"/>
+    <link href="static/install/css/install.css" rel="stylesheet"/>
+    <link href="static/index/js/stats.min.js" rel="preload" as="script"/>
+    <title>CareyShop 安装向导</title>
 </head>
 <body>
+<div class="wrap">
+    <div class="header">
+        <h1 class="logo">logo</h1>
+        <div class="icon_install">安装向导</div>
+        <div class="version"></div>
+    </div>
 
+    {block name="content"}{/block}
+</div>
+
+<div class="footer">
+    &copy; Copyright 2020-2025 <a href="https://careyshop.cn" target="_blank">CAREYSHOP.CN</a>, Inc.All Rights Reserved.
+</div>
+<script src="static/index/js/stats.min.js"></script>
 </body>
 </html>

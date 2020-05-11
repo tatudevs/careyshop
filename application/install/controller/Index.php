@@ -29,7 +29,7 @@ class Index extends Controller
             $this->assign('next', '重新安装');
         } else {
             session('reinstall', false);
-            $this->assign('next', '下一步');
+            $this->assign('next', '接 收');
         }
 
         session('step', 1);
