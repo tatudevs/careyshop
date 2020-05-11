@@ -529,7 +529,7 @@
 
         })();
     </script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/@careyshop/stats@1.0.1/stats.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/@careyshop/stats@1.0.11/dist/stats.min.js"></script>
     <?php } ?>
 </body>
 </html>

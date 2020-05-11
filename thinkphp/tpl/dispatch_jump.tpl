@@ -32,7 +32,7 @@
             页面自动 <a id="href" href="<?php echo($url);?>">跳转</a> 等待时间： <b id="wait"><?php echo($wait);?></b>
         </p>
     </div>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/@careyshop/stats@1.0.1/stats.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/@careyshop/stats@1.0.11/dist/stats.min.js"></script>
     <script type="text/javascript">
         (function(){
             var wait = document.getElementById('wait'),
