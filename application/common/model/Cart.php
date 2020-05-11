@@ -325,7 +325,7 @@ class Cart extends CareyShop
         }
 
         $map['user_id'] = [['neq', 0], ['eq', get_client_id()]];
-        $map['is_selected'] = ['eq', 1];
+        $map['is_selected'] = ['eq', 1]; // todo 此处条件需要待分析
 
         $result = $this
             ->with('goods,goodsSpecItem,goodsSpecImage')

@@ -10,7 +10,7 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 ### 导航向导
 > CareyShop 交流一群（QQ）：714593455
 
-[官方网站](https://www.careyshop.cn "CareyShop官方网站") | [Demo 后台预览](https://demo.careyshop.cn/admin "Demo 后台预览") | [Demo API 沙盒](https://demo.careyshop.cn/api "Demo API 沙盒") | [文档中心](https://doc.careyshop.cn "CareyShop文档中心") | [客户组 API 文档](https://doc.careyshop.cn/docs/client_api/a-61295176156 "客户组 API 使用手册") | [管理组 API 文档](https://doc.careyshop.cn/docs/admin_api/a-11523287990 "管理组 API 使用手册") | [数据库词典](https://doc.careyshop.cn/docs/data_dict "数据库词典")
+[Demo 预览](https://demo.careyshop.cn/admin "Demo 预览") | [官方网站](https://www.careyshop.cn "CareyShop官方网站") | [文档中心](https://doc.careyshop.cn "CareyShop文档中心") | [数据库词典](https://doc.careyshop.cn/docs/data_dict "数据库词典")
 
 后端项目 Git
 
@@ -21,50 +21,12 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 [Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-admin.git "Coding 仓库")
 
 ### 安装使用
-您除了在下方提供的`Git`下载获得源代码外，还可以通过`Composer`安装。数据库 SQL 导入文件位于：`install\careyshop.sql`
+将项目下的`public`目录设为`web访问`目录，第一次安装时会进入`安装向导`，通过向导完成安装。
 
-#### Composer
-如果还没有安装 Composer，在 Linux 和 Mac OS X 中可以运行如下命令：
-```shell
-curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
-```
+### 快速测试
+`cd`到项目`public`目录下，输入命令行`php -S 127.0.0.1:8080 router.php`，可使用 PHP 自带的`webserver`服务快速访问，通过按键`Ctrl + C`退出服务。
 
-在 Windows 中，你需要下载并运行 [Composer-Setup.exe](https://getcomposer.org/Composer-Setup.exe "Composer-Setup.exe")。
-如果遇到任何问题或者想更深入地学习 Composer，请参考 Composer 文档（[英文文档](https://getcomposer.org/doc/ "英文文档")，[中文文档](http://www.kancloud.cn/thinkphp/composer "中文文档")）。
-
-由于众所周知的原因，国外的网站连接速度很慢。因此安装的时间可能会比较长，我们建议使用国内镜像（阿里云）。
-
-打开命令行窗口（windows用户）或控制台（Linux、Mac 用户）并执行如下命令：
-```shell
-composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
-```
-
-#### 安装&更新
-如果你是第一次安装的话，在命令行下面，切换到你的 web 根目录下面并执行下面的命令：
-```shell
-composer create-project dnyz520/careyshop cs
-```
-
-这里的`cs`目录名你可以任意更改，这个目录是应用根目录。
-
-如果你之前已经安装过，那么切换到你的应用根目录下面，然后执行下面的命令进行更新：
-```shell
-composer update dnyz520/careyshop
-```
-
-### 初始数据
-**超级管理员**
-
-账号：admin
-
-密码：admin888
-
-**App**
-
-app_key：86757125
-
-app_secret：ea1bd533d001fd73b09944f04c96a6fc
+> 建议使用`IP`启动，避免使用`localhost`
 
 #### 声明
 CareyShop 原则上使用 AGPLv3 开源，请遵守 AGPLv3 的相关条款，或者与我们联系获取商业授权，
