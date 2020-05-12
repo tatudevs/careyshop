@@ -521,8 +521,8 @@ a.btn_old:visited {
 正确错误
 ===================
 */
-.correct_span,
-.error_span {
+.icon_check,
+.icon_error {
     display: block;
     float: left;
     width: 20px;
@@ -533,7 +533,7 @@ a.btn_old:visited {
     margin-right: 5px;
 }
 
-.error_span {
+.icon_error {
     background-position: 0 -23px;
 }
 
