@@ -12,6 +12,8 @@ namespace app\install\controller;
 
 use think\Controller;
 
+define('INSTALL_APP_PATH', realpath('./') . '/');
+
 class Index extends Controller
 {
     /**
@@ -34,6 +36,35 @@ class Index extends Controller
 
         session('step', 1);
         session('error', false);
+
+        return $this->fetch();
+    }
+
+    /**
+     * 步骤二，检查环境
+     * @return mixed
+     */
+    public function step2()
+    {
+        session('step', 2);
+        session('error', false);
+
+        if (session('reinstall')) {
+            $this->redirect($this->request->baseFile() . '?s=/index/step4.html');
+        }
+
+        // 环境检测
+        $env = check_env();
+        $this->assign('env', $env);
+
+        // 目录文件读写检测
+        $dirFile = check_dirfile();
+        $this->assign('dirFile', $dirFile);
+
+        // 函数检测
+        $func = check_func();
+        $this->assign('func', $func);
+
         return $this->fetch();
     }
 }
