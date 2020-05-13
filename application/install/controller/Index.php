@@ -188,4 +188,30 @@ class Index extends Controller
         session('step', 4);
         return $this->fetch();
     }
+
+    /**
+     * 完成安装
+     * @return mixed
+     */
+    public function complete()
+    {
+        if (session('step') != 4) {
+            $this->error('请按步骤安装系统', $this->request->baseFile());
+        }
+
+        if (session('error')) {
+            $this->error('安装出错，请重新安装！', $this->request->baseFile());
+        }
+
+        // 写入安装锁定文件
+        $lockPath = APP_PATH . 'install' . DS . 'data' . DS . 'install.lock';
+        file_put_contents($lockPath, 'lock');
+
+        session('step', null);
+        session('error', null);
+        session('reinstall', null);
+        session('installData', null);
+
+        return $this->fetch();
+    }
 }

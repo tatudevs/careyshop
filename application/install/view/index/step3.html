@@ -32,13 +32,13 @@
 
                 <tr>
                     <td class="tar">数据库用户名</td>
-                    <td><label><input type="text" name="username" value="" class="input"></label></td>
+                    <td><label><input type="text" name="username" value="root" class="input"></label></td>
                     <td></td>
                 </tr>
 
                 <tr>
                     <td class="tar">数据库密码</td>
-                    <td><label><input type="password" name="password" value="" class="input"></label></td>
+                    <td><label><input type="password" name="password" value="root" class="input"></label></td>
                     <td></td>
                 </tr>
 
@@ -70,13 +70,13 @@
 
                 <tr>
                     <td class="tar">管理员密码</td>
-                    <td><label><input type="password" name="admin_password" value="" class="input"></label></td>
+                    <td><label><input type="password" name="admin_password" value="admin888" class="input"></label></td>
                     <td></td>
                 </tr>
 
                 <tr>
                     <td class="tar">确认密码</td>
-                    <td><label><input type="password" name="admin_password_confirm" value="" class="input"></label></td>
+                    <td><label><input type="password" name="admin_password_confirm" value="admin888" class="input"></label></td>
                     <td></td>
                 </tr>
             </table>
@@ -90,8 +90,8 @@
                 <tr>
                     <td class="tar">覆盖同名数据库</td>
                     <td>
-                        <label class="radio"><input type="radio" name="is_cover" value="1"><span>覆盖</span></label>
-                        <label class="radio"><input type="radio" name="is_cover" value="0" checked><span>不覆盖</span></label>
+                        <label class="radio"><input type="radio" name="is_cover" value="1" checked><span>覆盖</span></label>
+                        <label class="radio"><input type="radio" name="is_cover" value="0"><span>不覆盖</span></label>
                     </td>
                 </tr>
 
@@ -135,19 +135,19 @@
             data: data,
             dataType: 'json',
             beforeSend: function () {
-                $('#submit').hide();
                 $('.loading').show();
+                $('#submit').attr('disabled', true).addClass('btn_old');
             },
             success: function (data) {
                 if (data.code === 1) {
-                    window.location.href = data.url;
+                    self.location.href = data.url;
                 } else {
                     $('#response_tips').show().html('<span class="tips_error">' + data.msg +'</span>');
                 }
             },
             complete: function () {
-                $('#submit').show();
                 $('.loading').hide();
+                $('#submit').removeAttr('disabled').removeClass('btn_old');
             },
             error: function (data) {
                 $('#response_tips').show().html('<span class="tips_error">网络请求错误</span>');
