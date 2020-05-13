@@ -614,15 +614,12 @@ a.btn_old:visited {
 .tips_error,
 .tips_success {
     color: #cc3333;
-    padding-left: 16px;
-    background: url(../images/tips_system.png) -20px 2px no-repeat;
     display: inline-block;
     line-height: 18px;
 }
 
 .tips_success {
     color: #008800;
-    background-position: 0 -19px;
 }
 
 .tips_loading {

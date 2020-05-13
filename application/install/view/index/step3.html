@@ -44,7 +44,7 @@
 
                 <tr>
                     <td class="tar">数据库端口</td>
-                    <td><label><input type="text" name="port" value="3306" class="input"></label></td>
+                    <td><label><input type="text" name="hostport" value="3306" class="input"></label></td>
                     <td><span class="gray">数据库服务连接端口，一般为3306</span></td>
                 </tr>
 
@@ -75,8 +75,8 @@
                 </tr>
 
                 <tr>
-                    <td class="tar">重复密码</td>
-                    <td><label><input type="password" name="admin_confirm" value="" class="input"></label></td>
+                    <td class="tar">确认密码</td>
+                    <td><label><input type="password" name="admin_password_confirm" value="" class="input"></label></td>
                     <td></td>
                 </tr>
             </table>
@@ -111,9 +111,9 @@
                     </td>
                 </tr>
             </table>
-
-            <div id="response_tips" style="display: none;"></div>
         </div>
+
+        <div id="response_tips" style="display: none; text-align: center; margin-bottom: 10px;"></div>
 
         <div class="bottom tac">
             <a href="{$Request.baseFile}?s=/index/step2.html" class="btn">上一步</a>
@@ -124,10 +124,11 @@
 
 <div class="loading" style="display: none;"><span>请稍后...</span></div>
 <script src="static/install/js/jquery.js"></script>
-<script src="static/install/js/ajaxForm.js"></script>
 <script>
     $('#submit').click(function () {
+        $('#response_tips').hide();
         const data = $('form').serializeArray();
+
         $.ajax({
             type: 'post',
             url: "{:url('step4')}",
@@ -138,13 +139,18 @@
                 $('.loading').show();
             },
             success: function (data) {
-                console.log(data)
+                if (data.code === 1) {
+                    window.location.href = data.url;
+                } else {
+                    $('#response_tips').show().html('<span class="tips_error">' + data.msg +'</span>');
+                }
             },
             complete: function () {
                 $('#submit').show();
                 $('.loading').hide();
             },
             error: function (data) {
+                $('#response_tips').show().html('<span class="tips_error">网络请求错误</span>');
                 console.info('error：' + data.responseText);
             }
         })
