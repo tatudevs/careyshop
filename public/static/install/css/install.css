@@ -149,7 +149,7 @@ section {
 }
 
 .tar {
-    text-align: right !important;
+    padding-left: 20px !important;
 }
 
 .fl {
@@ -491,6 +491,12 @@ a.btn_old:visited {
     width: 200px;
 }
 
+.server .radio {
+    display: inline-block;
+    width: 100px;
+    cursor: pointer;
+}
+
 .server .input:hover,
 .server .input:focus {
     border: 1px solid #0e85d5;
@@ -499,10 +505,6 @@ a.btn_old:visited {
 
 .gray {
     color: #bbb;
-}
-
-.server tr:hover .gray {
-    color: #333;
 }
 
 /*
@@ -624,7 +626,6 @@ a.btn_old:visited {
 }
 
 .tips_loading {
-    color: #cc3333;
     color: #333333;
     display: inline-block;
     line-height: 20px;
@@ -653,7 +654,7 @@ loading
 }
 
 .loading span {
-    background: url(../images/pop_loading.gif) 0 center no-repeat;
+    background: url(../images/install_loading.gif) 0 center no-repeat;
     padding-left: 24px;
 }
 

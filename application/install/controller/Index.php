@@ -70,4 +70,29 @@ class Index extends Controller
 
         return $this->fetch();
     }
+
+    /**
+     * 步骤三，设置数据
+     * @return mixed
+     */
+    public function step3()
+    {
+        if (session('step') != 2) {
+            $this->redirect($this->request->baseFile());
+        }
+
+        session('step', 3);
+        session('error', false);
+
+        return $this->fetch();
+    }
+
+    public function step4()
+    {
+        if ($this->request->isPost()) {
+            return json(['code' => 1, 'message' => 'post']);
+        }
+
+        return json(['code' => 1, 'message' => 'get']);
+    }
 }
