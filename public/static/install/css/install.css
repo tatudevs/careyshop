@@ -222,7 +222,7 @@ section {
 ===================
 */
 body {
-    font: 12px/1.5 Arial, Microsoft Yahei, Simsun;
+    font: 12px/1.5 "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     color: #333;
     background-image: url(../images/bg.jpg);
     background-repeat: no-repeat;
@@ -355,20 +355,9 @@ LOGO
 */
 .icon_install,
 .icon_update {
+    font-size: 20px;
     float: left;
     margin-top: 35px;
-    width: 90px;
-    height: 30px;
-    overflow: hidden;
-    text-indent: -2000em;
-}
-
-.icon_install {
-    background: url(../images/icon_install.png) no-repeat;
-}
-
-.icon_update {
-    background: url(../images/icon_update.png) no-repeat;
 }
 
 /*

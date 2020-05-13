@@ -115,8 +115,9 @@ function check_func()
         ['openssl', '支持', 'check', '模块'],
         ['fileinfo', '支持', 'check', '模块'],
         ['curl', '支持', 'check', '模块'],
+        ['bcmath', '支持', 'check', '模块'],
+        ['mbstring', '支持', 'check', '模块'],
         ['file_get_contents', '支持', 'check', '函数'],
-        ['mb_strlen', '支持', 'check', '函数'],
     ];
 
     foreach ($items as &$val) {

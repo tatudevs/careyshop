@@ -25,11 +25,45 @@
             </tr>
             {/volist}
         </table>
+
+        <table width="100%">
+            <tr>
+                <td class="td1">目录/文件</td>
+                <td class="td1" width="30%">所需状态</td>
+                <td class="td1" width="40%">当前状态</td>
+            </tr>
+
+            {volist name="dirFile" id="item"}
+            <tr>
+                <td>{$item[3]}</td>
+                <td>可写</td>
+                <td><i class="icon_{$item[2]}"></i>{$item[1]}</td>
+            </tr>
+            {/volist}
+        </table>
+
+        <table width="100%">
+            <tr>
+                <td class="td1">扩展依赖</td>
+                <td class="td1" width="30%">类型</td>
+                <td class="td1" width="40%">检查结果</td>
+            </tr>
+
+            {volist name="func" id="item"}
+            <tr>
+                <td>{$item[0]}</td>
+                <td>{$item[3]}</td>
+                <td><i class="icon_{$item[2]}"></i>{$item[1]}</td>
+            </tr>
+            {/volist}
+        </table>
     </div>
 
     <div class="bottom tac">
         <a href="{$Request.baseFile}?s=/index/step2.html" class="btn">重新检测</a>
+        {eq name="isNext" value="true"}
         <a href="{$Request.baseFile}?s=/index/step3.html" class="btn">下一步</a>
+        {/eq}
     </div>
 </section>
 {/block}

@@ -57,8 +57,6 @@ class Index extends Controller
         $env = check_env();
         $this->assign('env', $env);
 
-//        dump($env);exit();
-
         // 目录文件读写检测
         $dirFile = check_dirfile();
         $this->assign('dirFile', $dirFile);
@@ -66,6 +64,9 @@ class Index extends Controller
         // 函数检测
         $func = check_func();
         $this->assign('func', $func);
+
+        // 是否可执行下一步
+        $this->assign('isNext', false === session('error'));
 
         return $this->fetch();
     }
