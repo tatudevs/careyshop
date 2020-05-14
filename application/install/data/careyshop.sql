@@ -1,80 +1,14 @@
--- phpMyAdmin SQL Dump
--- version 4.7.0
--- https://www.phpmyadmin.net/
---
--- Host: localhost:3306
--- Generation Time: 2020-05-11 09:16:40
--- 服务器版本： 5.7.27-log
--- PHP Version: 7.1.11
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `careyshop`
---
 
-DELIMITER $$
---
--- 函数
---
-CREATE DEFINER=`careyshop`@`%` FUNCTION `getRegionChildrenList` (`rootId` TEXT) RETURNS VARCHAR(4000) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci NO SQL
-    COMMENT '根据父ID获取区域所有子级'
-BEGIN
-DECLARE sTemp VARCHAR(4000);
-DECLARE sTempChd VARCHAR(4000);
-
-SET sTemp = null;
-SET sTempChd = cast(rootId as CHAR);
-
-WHILE sTempChd is not null DO
-IF (sTemp is not null) THEN
-SET sTemp = concat(sTemp,',',sTempChd);
-ELSE
-SET sTemp = concat(sTempChd);
-END IF;
-SELECT group_concat(region_id) INTO sTempChd FROM cs_region where FIND_IN_SET(parent_id,sTempChd)>0;
-END WHILE;
-RETURN sTemp;
-END$$
-
-CREATE DEFINER=`careyshop`@`%` FUNCTION `getStorageChildrenList` (`rootId` TEXT) RETURNS VARCHAR(4000) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci NO SQL
-    COMMENT '根据父ID获取资源管理器所有子级'
-BEGIN
-DECLARE sTemp VARCHAR(4000);
-DECLARE sTempChd VARCHAR(4000);
-
-SET sTemp = null;
-SET sTempChd = cast(rootId as CHAR);
-
-WHILE sTempChd is not null DO
-IF (sTemp is not null) THEN
-SET sTemp = concat(sTemp,',',sTempChd);
-ELSE
-SET sTemp = concat(sTempChd);
-END IF;
-SELECT group_concat(storage_id) INTO sTempChd FROM cs_storage where FIND_IN_SET(parent_id,sTempChd)>0;
-END WHILE;
-RETURN sTemp;
-END$$
-
-DELIMITER ;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_action_log`
---
-
-CREATE TABLE `cs_action_log` (
+DROP TABLE IF EXISTS `{prefix}action_log`;
+CREATE TABLE `{prefix}action_log` (
   `action_log_id` int(11) UNSIGNED NOT NULL,
   `client_type` tinyint(1) DEFAULT '-1' COMMENT '-1=游客 0=顾客组 1=管理组',
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '账号编号',
@@ -89,18 +23,8 @@ CREATE TABLE `cs_action_log` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志';
 
---
--- 插入之前先把表清空（truncate） `cs_action_log`
---
-
-TRUNCATE TABLE `cs_action_log`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_admin`
---
-
-CREATE TABLE `cs_admin` (
+DROP TABLE IF EXISTS `{prefix}admin`;
+CREATE TABLE `{prefix}admin` (
   `admin_id` int(11) UNSIGNED NOT NULL,
   `username` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号',
   `password` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码',
@@ -115,18 +39,8 @@ CREATE TABLE `cs_admin` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='管理组账号';
 
---
--- 插入之前先把表清空（truncate） `cs_admin`
---
-
-TRUNCATE TABLE `cs_admin`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_ads`
---
-
-CREATE TABLE `cs_ads` (
+DROP TABLE IF EXISTS `{prefix}ads`;
+CREATE TABLE `{prefix}ads` (
   `ads_id` int(11) UNSIGNED NOT NULL,
   `ads_position_id` smallint(5) UNSIGNED NOT NULL COMMENT '对应ads_position表',
   `code` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '编码',
@@ -143,18 +57,8 @@ CREATE TABLE `cs_ads` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='广告列表';
 
---
--- 插入之前先把表清空（truncate） `cs_ads`
---
-
-TRUNCATE TABLE `cs_ads`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_ads_position`
---
-
-CREATE TABLE `cs_ads_position` (
+DROP TABLE IF EXISTS `{prefix}ads_position`;
+CREATE TABLE `{prefix}ads_position` (
   `ads_position_id` smallint(5) UNSIGNED NOT NULL,
   `code` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '编码',
   `platform` tinyint(3) NOT NULL COMMENT '平台(自定义)',
@@ -169,18 +73,8 @@ CREATE TABLE `cs_ads_position` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用 	'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='广告位';
 
---
--- 插入之前先把表清空（truncate） `cs_ads_position`
---
-
-TRUNCATE TABLE `cs_ads_position`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_app`
---
-
-CREATE TABLE `cs_app` (
+DROP TABLE IF EXISTS `{prefix}app`;
+CREATE TABLE `{prefix}app` (
   `app_id` smallint(5) UNSIGNED NOT NULL,
   `app_name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
   `app_key` int(8) UNSIGNED NOT NULL COMMENT '钥匙',
@@ -190,18 +84,8 @@ CREATE TABLE `cs_app` (
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='应用列表';
 
---
--- 插入之前先把表清空（truncate） `cs_app`
---
-
-TRUNCATE TABLE `cs_app`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_app_install`
---
-
-CREATE TABLE `cs_app_install` (
+DROP TABLE IF EXISTS `{prefix}app_install`;
+CREATE TABLE `{prefix}app_install` (
   `app_install_id` smallint(5) UNSIGNED NOT NULL,
   `user_agent` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '系统标识',
   `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '应用名称',
@@ -212,18 +96,8 @@ CREATE TABLE `cs_app_install` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='应用安装包';
 
---
--- 插入之前先把表清空（truncate） `cs_app_install`
---
-
-TRUNCATE TABLE `cs_app_install`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_article`
---
-
-CREATE TABLE `cs_article` (
+DROP TABLE IF EXISTS `{prefix}article`;
+CREATE TABLE `{prefix}article` (
   `article_id` int(11) UNSIGNED NOT NULL,
   `article_cat_id` smallint(5) UNSIGNED NOT NULL COMMENT '对应article_cat表',
   `title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
@@ -242,18 +116,8 @@ CREATE TABLE `cs_article` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文章管理';
 
---
--- 插入之前先把表清空（truncate） `cs_article`
---
-
-TRUNCATE TABLE `cs_article`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_article_cat`
---
-
-CREATE TABLE `cs_article_cat` (
+DROP TABLE IF EXISTS `{prefix}article_cat`;
+CREATE TABLE `{prefix}article_cat` (
   `article_cat_id` smallint(5) UNSIGNED NOT NULL,
   `parent_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
   `cat_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '分类名称',
@@ -264,16 +128,7 @@ CREATE TABLE `cs_article_cat` (
   `is_navi` tinyint(1) NOT NULL DEFAULT '0' COMMENT '导航 0=否 1=是'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文章分类';
 
---
--- 插入之前先把表清空（truncate） `cs_article_cat`
---
-
-TRUNCATE TABLE `cs_article_cat`;
---
--- 转存表中的数据 `cs_article_cat`
---
-
-INSERT INTO `cs_article_cat` (`article_cat_id`, `parent_id`, `cat_name`, `cat_type`, `keywords`, `description`, `sort`, `is_navi`) VALUES
+INSERT INTO `{prefix}article_cat` (`article_cat_id`, `parent_id`, `cat_name`, `cat_type`, `keywords`, `description`, `sort`, `is_navi`) VALUES
 (1, 0, '物流配送', 0, '', '', 50, 1),
 (2, 1, '配送查询', 0, '', '', 50, 1),
 (3, 1, '配送服务', 0, '', '', 50, 1),
@@ -303,13 +158,8 @@ INSERT INTO `cs_article_cat` (`article_cat_id`, `parent_id`, `cat_name`, `cat_ty
 (27, 23, '焦点问题', 0, '', '', 50, 1),
 (28, 23, '联系我们', 0, '', '', 50, 1);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_ask`
---
-
-CREATE TABLE `cs_ask` (
+DROP TABLE IF EXISTS `{prefix}ask`;
+CREATE TABLE `{prefix}ask` (
   `ask_id` int(11) UNSIGNED NOT NULL,
   `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
   `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
@@ -323,18 +173,8 @@ CREATE TABLE `cs_ask` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='咨询问答';
 
---
--- 插入之前先把表清空（truncate） `cs_ask`
---
-
-TRUNCATE TABLE `cs_ask`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_auth_group`
---
-
-CREATE TABLE `cs_auth_group` (
+DROP TABLE IF EXISTS `{prefix}auth_group`;
+CREATE TABLE `{prefix}auth_group` (
   `group_id` mediumint(8) UNSIGNED NOT NULL,
   `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
@@ -343,16 +183,7 @@ CREATE TABLE `cs_auth_group` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户组';
 
---
--- 插入之前先把表清空（truncate） `cs_auth_group`
---
-
-TRUNCATE TABLE `cs_auth_group`;
---
--- 转存表中的数据 `cs_auth_group`
---
-
-INSERT INTO `cs_auth_group` (`group_id`, `name`, `description`, `system`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}auth_group` (`group_id`, `name`, `description`, `system`, `sort`, `status`) VALUES
 (1, '超级管理员', '系统保留，拥有最高权限', 1, 50, 1),
 (2, '普通管理员', '系统保留，拥有较高权限', 1, 50, 1),
 (3, '普通顾客', '系统保留，前台普通顾客', 1, 50, 1),
@@ -362,13 +193,8 @@ INSERT INTO `cs_auth_group` (`group_id`, `name`, `description`, `system`, `sort`
 (7, '客服', '这是一段描述', 0, 50, 1),
 (8, '财务', '这是一段描述', 0, 50, 1);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_auth_rule`
---
-
-CREATE TABLE `cs_auth_rule` (
+DROP TABLE IF EXISTS `{prefix}auth_rule`;
+CREATE TABLE `{prefix}auth_rule` (
   `rule_id` mediumint(8) UNSIGNED NOT NULL,
   `module` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '所属模块',
   `group_id` mediumint(8) UNSIGNED NOT NULL COMMENT '用户组Id',
@@ -379,16 +205,7 @@ CREATE TABLE `cs_auth_rule` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='权限规则';
 
---
--- 插入之前先把表清空（truncate） `cs_auth_rule`
---
-
-TRUNCATE TABLE `cs_auth_rule`;
---
--- 转存表中的数据 `cs_auth_rule`
---
-
-INSERT INTO `cs_auth_rule` (`rule_id`, `module`, `group_id`, `name`, `menu_auth`, `log_auth`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}auth_rule` (`rule_id`, `module`, `group_id`, `name`, `menu_auth`, `log_auth`, `sort`, `status`) VALUES
 (1, 'api', 1, '超级管理员', '[1,2,3,4,5,6,7,8,9,10,11,1049,12,13,14,15,16,17,18,19,20,21,22,615,617,618,23,24,25,26,27,28,29,30,614,616,31,32,33,34,35,36,37,38,39,1010,1011,1013,1012,40,41,42,43,44,45,46,1009,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,619,66,67,69,70,71,72,73,74,75,76,77,78,620,79,80,81,82,83,84,85,86,621,87,88,89,90,91,92,93,94,95,96,622,97,98,99,100,101,102,103,106,107,110,130,131,132,133,134,968,135,136,137,138,141,142,144,145,146,147,150,151,152,153,154,155,156,157,158,159,160,623,161,162,163,164,165,166,169,171,172,774,168,173,174,175,176,177,178,179,180,777,181,182,183,184,185,186,187,188,189,966,190,191,192,193,194,195,196,197,624,199,200,201,202,203,204,205,206,207,208,209,210,211,212,215,216,217,957,958,959,967,232,233,234,235,236,237,238,239,240,241,242,626,246,247,249,250,251,252,253,254,255,258,259,260,261,262,265,266,267,268,269,270,271,272,273,274,218,219,220,221,222,223,224,225,226,227,228,908,229,230,231,625,965,414,415,416,417,418,419,907,962,420,421,631,281,282,283,284,734,285,286,287,288,289,290,291,292,293,294,295,296,627,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,628,320,321,322,323,324,325,326,327,328,329,332,333,334,335,336,337,338,341,342,343,344,345,346,347,1054,348,349,350,353,354,355,360,361,362,363,366,367,368,370,371,372,373,374,375,376,377,379,380,629,383,384,385,386,387,388,389,390,391,392,393,394,395,723,724,725,726,727,396,397,398,399,400,401,402,403,404,630,405,406,407,408,409,410,411,412,413,422,423,424,425,426,427,428,429,430,431,432,433,434,435,574,641,648,664,665,956,436,437,438,439,440,441,442,443,632,444,445,446,447,448,449,450,1038,1039,1040,451,452,454,455,456,457,459,461,462,463,464,465,466,467,468,469,840,470,993,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,498,499,502,503,504,505,506,507,508,509,510,511,512,575,576,577,633,634,635,636,637,638,639,640,657,658,659,660,661,662,663,64,104,139,167,198,243,256,263,330,351,369,381,453,460,497]', '[4,5,6,7,8,9,12,13,14,72,73,74,75,77,78,80,81,82,83,85,86,107,200,201,203,204,205,206,207,208,215,217,283,284,286,287,288,289,293,294,295,377,464,465,466,467,468,487,488,502,503,504,507,508,509,1,71,79,104,198,281,285,369,460,483,497,506]', 1, 1),
 (2, 'api', 2, '普通管理员', '[1,2,3,4,5,6,7,8,9,10,11,1049,12,13,14,15,16,17,18,19,20,21,22,615,617,618,23,24,25,26,27,28,29,30,614,616,31,32,33,34,35,36,37,38,39,1010,1011,1013,1012,40,41,42,43,44,45,46,1009,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,619,66,67,69,70,74,76,81,84,87,88,89,90,91,92,93,94,95,96,622,97,98,99,100,101,102,103,106,107,110,130,131,132,133,134,968,135,136,137,138,141,142,144,145,146,147,150,151,152,153,154,155,156,157,158,159,160,623,161,162,163,164,165,166,169,171,172,774,168,173,174,175,176,177,178,179,180,777,181,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,624,199,200,201,202,203,204,205,206,207,208,209,210,211,212,215,216,217,957,958,959,967,232,233,234,235,236,237,238,239,240,241,242,626,246,247,249,250,251,252,253,254,255,258,259,260,261,262,265,266,267,268,269,270,271,272,273,274,218,219,220,221,222,223,224,225,226,227,228,908,229,230,231,625,965,414,415,416,417,418,419,907,962,420,421,631,281,282,283,284,734,287,290,291,292,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,628,320,321,322,323,324,325,326,327,328,329,332,333,334,335,336,337,338,341,342,343,344,345,346,347,1054,348,349,350,353,354,355,360,361,362,363,366,367,368,372,373,374,377,379,380,383,384,385,386,387,388,389,390,391,392,393,394,395,723,724,725,726,727,396,397,398,399,400,401,402,403,404,630,406,422,423,424,425,426,427,428,429,430,431,432,433,434,435,574,641,648,664,665,956,436,437,438,439,440,441,442,443,632,444,445,446,447,448,449,450,1038,1039,1040,451,452,454,455,456,457,459,461,462,463,464,465,466,467,468,469,840,470,993,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,498,499,502,503,504,505,506,507,508,509,510,511,512,575,576,577,633,634,635,636,637,638,639,640,657,658,659,660,661,662,663,64,71,79,104,139,167,182,198,243,256,263,285,330,351,369,381,405,453,460,497]', '[4,5,6,7,8,9,10,11,12,13,14,377,465,467,487,488,502,503,504,507,508,509,1,369,460,483,497,506]', 2, 1),
 (3, 'api', 3, '普通顾客', '[617,616,1011,1013,1012,46,1009,51,52,59,60,61,65,66,68,69,70,93,94,95,105,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,138,143,144,145,146,148,149,156,157,171,172,774,180,777,189,195,202,209,210,211,213,214,216,957,958,959,237,238,239,244,245,248,249,253,254,255,257,261,262,264,266,418,419,907,275,276,277,278,279,280,282,734,291,292,296,304,305,306,307,308,309,310,316,331,335,336,337,338,339,340,341,342,343,346,347,1054,348,349,350,352,354,355,356,357,358,359,360,364,365,367,372,379,380,381,382,383,384,392,394,395,400,401,402,404,425,427,428,433,434,574,641,648,956,440,441,448,449,1038,1039,1040,451,452,455,456,457,461,462,463,464,465,467,469,840,471,472,473,474,475,476,477,478,479,480,481,482,489,490,491,492,493,494,495,496,498,499,500,501,505,506,507,508,509,510,511,512,637,638,660,663,15,23,31,40,47,55,64,87,104,130,139,150,167,173,182,190,198,232,243,256,263,414,281,285,297,311,330,351,369,385,393,396,422,436,444,453,460,497,633,657]', '[467,500,501,507,508,509,460,497,506]', 3, 1),
@@ -398,13 +215,8 @@ INSERT INTO `cs_auth_rule` (`rule_id`, `module`, `group_id`, `name`, `menu_auth`
 (7, 'home', 1, '超级管理员', '[]', '[]', 1, 0),
 (8, 'home', 2, '普通管理员', '[]', '[]', 2, 0);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_brand`
---
-
-CREATE TABLE `cs_brand` (
+DROP TABLE IF EXISTS `{prefix}brand`;
+CREATE TABLE `{prefix}brand` (
   `brand_id` smallint(5) UNSIGNED NOT NULL,
   `goods_category_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods_category表',
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '品牌名称',
@@ -417,18 +229,8 @@ CREATE TABLE `cs_brand` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品品牌';
 
---
--- 插入之前先把表清空（truncate） `cs_brand`
---
-
-TRUNCATE TABLE `cs_brand`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_card`
---
-
-CREATE TABLE `cs_card` (
+DROP TABLE IF EXISTS `{prefix}card`;
+CREATE TABLE `{prefix}card` (
   `card_id` int(11) UNSIGNED NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '卡名',
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
@@ -443,18 +245,8 @@ CREATE TABLE `cs_card` (
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='购物卡';
 
---
--- 插入之前先把表清空（truncate） `cs_card`
---
-
-TRUNCATE TABLE `cs_card`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_card_use`
---
-
-CREATE TABLE `cs_card_use` (
+DROP TABLE IF EXISTS `{prefix}card_use`;
+CREATE TABLE `{prefix}card_use` (
   `card_use_id` int(11) UNSIGNED NOT NULL,
   `card_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应card表',
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
@@ -467,18 +259,8 @@ CREATE TABLE `cs_card_use` (
   `active_time` int(11) NOT NULL DEFAULT '0' COMMENT '激活日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='购物卡使用';
 
---
--- 插入之前先把表清空（truncate） `cs_card_use`
---
-
-TRUNCATE TABLE `cs_card_use`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_cart`
---
-
-CREATE TABLE `cs_cart` (
+DROP TABLE IF EXISTS `{prefix}cart`;
+CREATE TABLE `{prefix}cart` (
   `cart_id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
   `goods_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods表',
@@ -490,18 +272,8 @@ CREATE TABLE `cs_cart` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='购物车';
 
---
--- 插入之前先把表清空（truncate） `cs_cart`
---
-
-TRUNCATE TABLE `cs_cart`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_collect`
---
-
-CREATE TABLE `cs_collect` (
+DROP TABLE IF EXISTS `{prefix}collect`;
+CREATE TABLE `{prefix}collect` (
   `collect_id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
   `goods_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods表',
@@ -509,18 +281,8 @@ CREATE TABLE `cs_collect` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品收藏夹';
 
---
--- 插入之前先把表清空（truncate） `cs_collect`
---
-
-TRUNCATE TABLE `cs_collect`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_coupon`
---
-
-CREATE TABLE `cs_coupon` (
+DROP TABLE IF EXISTS `{prefix}coupon`;
+CREATE TABLE `{prefix}coupon` (
   `coupon_id` smallint(5) UNSIGNED NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '优惠劵名称',
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
@@ -545,18 +307,8 @@ CREATE TABLE `cs_coupon` (
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删 '
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='优惠劵';
 
---
--- 插入之前先把表清空（truncate） `cs_coupon`
---
-
-TRUNCATE TABLE `cs_coupon`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_coupon_give`
---
-
-CREATE TABLE `cs_coupon_give` (
+DROP TABLE IF EXISTS `{prefix}coupon_give`;
+CREATE TABLE `{prefix}coupon_give` (
   `coupon_give_id` int(11) UNSIGNED NOT NULL,
   `coupon_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应coupon表',
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
@@ -568,18 +320,8 @@ CREATE TABLE `cs_coupon_give` (
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删 '
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='优惠劵发放';
 
---
--- 插入之前先把表清空（truncate） `cs_coupon_give`
---
-
-TRUNCATE TABLE `cs_coupon_give`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_delivery`
---
-
-CREATE TABLE `cs_delivery` (
+DROP TABLE IF EXISTS `{prefix}delivery`;
+CREATE TABLE `{prefix}delivery` (
   `delivery_id` smallint(5) UNSIGNED NOT NULL,
   `delivery_item_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应delivery_item表',
   `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '别名',
@@ -600,18 +342,8 @@ CREATE TABLE `cs_delivery` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='配送方式';
 
---
--- 插入之前先把表清空（truncate） `cs_delivery`
---
-
-TRUNCATE TABLE `cs_delivery`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_delivery_area`
---
-
-CREATE TABLE `cs_delivery_area` (
+DROP TABLE IF EXISTS `{prefix}delivery_area`;
+CREATE TABLE `{prefix}delivery_area` (
   `delivery_area_id` smallint(5) UNSIGNED NOT NULL,
   `delivery_id` smallint(5) UNSIGNED NOT NULL COMMENT '对应delivery表',
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '区域名称',
@@ -624,18 +356,8 @@ CREATE TABLE `cs_delivery_area` (
   `second_volume_price` decimal(10,2) NOT NULL COMMENT '续体积运费'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='配送区域';
 
---
--- 插入之前先把表清空（truncate） `cs_delivery_area`
---
-
-TRUNCATE TABLE `cs_delivery_area`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_delivery_dist`
---
-
-CREATE TABLE `cs_delivery_dist` (
+DROP TABLE IF EXISTS `{prefix}delivery_dist`;
+CREATE TABLE `{prefix}delivery_dist` (
   `delivery_dist_id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
   `order_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '流水号',
@@ -649,18 +371,8 @@ CREATE TABLE `cs_delivery_dist` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='配送轨迹';
 
---
--- 插入之前先把表清空（truncate） `cs_delivery_dist`
---
-
-TRUNCATE TABLE `cs_delivery_dist`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_delivery_item`
---
-
-CREATE TABLE `cs_delivery_item` (
+DROP TABLE IF EXISTS `{prefix}delivery_item`;
+CREATE TABLE `{prefix}delivery_item` (
   `delivery_item_id` smallint(5) UNSIGNED NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '快递公司',
   `phonetic` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '首拼',
@@ -669,16 +381,7 @@ CREATE TABLE `cs_delivery_item` (
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='快递公司列表';
 
---
--- 插入之前先把表清空（truncate） `cs_delivery_item`
---
-
-TRUNCATE TABLE `cs_delivery_item`;
---
--- 转存表中的数据 `cs_delivery_item`
---
-
-INSERT INTO `cs_delivery_item` (`delivery_item_id`, `name`, `phonetic`, `code`, `type`, `is_delete`) VALUES
+INSERT INTO `{prefix}delivery_item` (`delivery_item_id`, `name`, `phonetic`, `code`, `type`, `is_delete`) VALUES
 (1, '顺丰速运', 's', 'SF', 0, 0),
 (2, '百世快递', 'b', 'HTKY', 0, 0),
 (3, '中通快递', 'z', 'ZTO', 0, 0),
@@ -1191,13 +894,8 @@ INSERT INTO `cs_delivery_item` (`delivery_item_id`, `name`, `phonetic`, `code`, 
 (510, '买家自提', 'm', 'ZT', 0, 0),
 (511, '同城配送', 't', 'TC', 0, 0);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_discount`
---
-
-CREATE TABLE `cs_discount` (
+DROP TABLE IF EXISTS `{prefix}discount`;
+CREATE TABLE `{prefix}discount` (
   `discount_id` int(11) UNSIGNED NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '折扣名称',
   `type` tinyint(1) NOT NULL COMMENT '0=打折 1=减价 2=固定价格 3=送优惠劵',
@@ -1206,36 +904,16 @@ CREATE TABLE `cs_discount` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品折扣';
 
---
--- 插入之前先把表清空（truncate） `cs_discount`
---
-
-TRUNCATE TABLE `cs_discount`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_discount_goods`
---
-
-CREATE TABLE `cs_discount_goods` (
+DROP TABLE IF EXISTS `{prefix}discount_goods`;
+CREATE TABLE `{prefix}discount_goods` (
   `discount_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应discount表',
   `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
   `discount` decimal(10,2) NOT NULL COMMENT '折扣额',
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '描述'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='折扣商品';
 
---
--- 插入之前先把表清空（truncate） `cs_discount_goods`
---
-
-TRUNCATE TABLE `cs_discount_goods`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_friend_link`
---
-
-CREATE TABLE `cs_friend_link` (
+DROP TABLE IF EXISTS `{prefix}friend_link`;
+CREATE TABLE `{prefix}friend_link` (
   `friend_link_id` smallint(5) UNSIGNED NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '链接名称',
   `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '链接地址',
@@ -1245,18 +923,8 @@ CREATE TABLE `cs_friend_link` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='友情链接';
 
---
--- 插入之前先把表清空（truncate） `cs_friend_link`
---
-
-TRUNCATE TABLE `cs_friend_link`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_goods`
---
-
-CREATE TABLE `cs_goods` (
+DROP TABLE IF EXISTS `{prefix}goods`;
+CREATE TABLE `{prefix}goods` (
   `goods_id` int(11) UNSIGNED NOT NULL,
   `goods_category_id` smallint(5) UNSIGNED NOT NULL COMMENT '对应goods_category表',
   `name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '商品名称',
@@ -1297,18 +965,8 @@ CREATE TABLE `cs_goods` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品表';
 
---
--- 插入之前先把表清空（truncate） `cs_goods`
---
-
-TRUNCATE TABLE `cs_goods`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_goods_attr`
---
-
-CREATE TABLE `cs_goods_attr` (
+DROP TABLE IF EXISTS `{prefix}goods_attr`;
+CREATE TABLE `{prefix}goods_attr` (
   `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
   `goods_attribute_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods_attribute表',
   `parent_id` int(11) UNSIGNED NOT NULL COMMENT '父id',
@@ -1317,18 +975,8 @@ CREATE TABLE `cs_goods_attr` (
   `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品属性列表';
 
---
--- 插入之前先把表清空（truncate） `cs_goods_attr`
---
-
-TRUNCATE TABLE `cs_goods_attr`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_goods_attribute`
---
-
-CREATE TABLE `cs_goods_attribute` (
+DROP TABLE IF EXISTS `{prefix}goods_attribute`;
+CREATE TABLE `{prefix}goods_attribute` (
   `goods_attribute_id` int(11) UNSIGNED NOT NULL,
   `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
   `attr_name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '属性名称',
@@ -1343,35 +991,15 @@ CREATE TABLE `cs_goods_attribute` (
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品属性';
 
---
--- 插入之前先把表清空（truncate） `cs_goods_attribute`
---
-
-TRUNCATE TABLE `cs_goods_attribute`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_goods_attr_config`
---
-
-CREATE TABLE `cs_goods_attr_config` (
+DROP TABLE IF EXISTS `{prefix}goods_attr_config`;
+CREATE TABLE `{prefix}goods_attr_config` (
   `goods_attr_config_id` int(11) UNSIGNED NOT NULL,
   `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
   `config_data` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '配置数据'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品属性配置';
 
---
--- 插入之前先把表清空（truncate） `cs_goods_attr_config`
---
-
-TRUNCATE TABLE `cs_goods_attr_config`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_goods_category`
---
-
-CREATE TABLE `cs_goods_category` (
+DROP TABLE IF EXISTS `{prefix}goods_category`;
+CREATE TABLE `{prefix}goods_category` (
   `goods_category_id` smallint(5) UNSIGNED NOT NULL,
   `parent_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
@@ -1388,16 +1016,7 @@ CREATE TABLE `cs_goods_category` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品分类';
 
---
--- 插入之前先把表清空（truncate） `cs_goods_category`
---
-
-TRUNCATE TABLE `cs_goods_category`;
---
--- 转存表中的数据 `cs_goods_category`
---
-
-INSERT INTO `cs_goods_category` (`goods_category_id`, `parent_id`, `name`, `name_phonetic`, `alias`, `alias_phonetic`, `category_pic`, `category_ico`, `keywords`, `description`, `category_type`, `sort`, `is_navi`, `status`) VALUES
+INSERT INTO `{prefix}goods_category` (`goods_category_id`, `parent_id`, `name`, `name_phonetic`, `alias`, `alias_phonetic`, `category_pic`, `category_ico`, `keywords`, `description`, `category_type`, `sort`, `is_navi`, `status`) VALUES
 (1, 0, '手机 、 数码 、 通信', 's', '数码产品', 's', '', '', '', '', 0, 50, 0, 1),
 (2, 0, '家用电器', 'j', '家用电器', 'j', '', '', '', '', 0, 50, 0, 1),
 (3, 0, '电脑、办公', 'd', '电脑', 'd', '', '', '', '', 0, 50, 0, 1),
@@ -2188,7 +1807,7 @@ INSERT INTO `cs_goods_category` (`goods_category_id`, `parent_id`, `name`, `name
 (788, 87, '畅读VIP', 'c', '畅读VIP', 'c', '', '', '', '', 0, 50, 0, 1),
 (789, 87, '免费', 'm', '免费', 'm', '', '', '', '', 0, 50, 0, 1),
 (790, 87, '小说', 'x', '小说', 'x', '', '', '', '', 0, 50, 0, 1);
-INSERT INTO `cs_goods_category` (`goods_category_id`, `parent_id`, `name`, `name_phonetic`, `alias`, `alias_phonetic`, `category_pic`, `category_ico`, `keywords`, `description`, `category_type`, `sort`, `is_navi`, `status`) VALUES
+INSERT INTO `{prefix}goods_category` (`goods_category_id`, `parent_id`, `name`, `name_phonetic`, `alias`, `alias_phonetic`, `category_pic`, `category_ico`, `keywords`, `description`, `category_type`, `sort`, `is_navi`, `status`) VALUES
 (791, 87, '励志与成功', 'l', '励志与成功', 'l', '', '', '', '', 0, 50, 0, 1),
 (792, 87, '经济金融', 'j', '经济金融', 'j', '', '', '', '', 0, 50, 0, 1),
 (793, 87, '文学', 'w', '文学', 'w', '', '', '', '', 0, 50, 0, 1),
@@ -2243,13 +1862,8 @@ INSERT INTO `cs_goods_category` (`goods_category_id`, `parent_id`, `name`, `name
 (842, 94, '计算机与互联网', 'j', '计算机与互联网', 'j', '', '', '', '', 0, 50, 0, 1),
 (843, 94, '科普', 'k', '科普', 'k', '', '', '', '', 0, 50, 0, 1);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_goods_comment`
---
-
-CREATE TABLE `cs_goods_comment` (
+DROP TABLE IF EXISTS `{prefix}goods_comment`;
+CREATE TABLE `{prefix}goods_comment` (
   `goods_comment_id` int(11) UNSIGNED NOT NULL,
   `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id(回复) ',
   `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
@@ -2273,18 +1887,8 @@ CREATE TABLE `cs_goods_comment` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品评价';
 
---
--- 插入之前先把表清空（truncate） `cs_goods_comment`
---
-
-TRUNCATE TABLE `cs_goods_comment`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_goods_consult`
---
-
-CREATE TABLE `cs_goods_consult` (
+DROP TABLE IF EXISTS `{prefix}goods_consult`;
+CREATE TABLE `{prefix}goods_consult` (
   `goods_consult_id` int(11) UNSIGNED NOT NULL,
   `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id(回复)',
   `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
@@ -2298,18 +1902,8 @@ CREATE TABLE `cs_goods_consult` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品咨询';
 
---
--- 插入之前先把表清空（truncate） `cs_goods_consult`
---
-
-TRUNCATE TABLE `cs_goods_consult`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_goods_reply`
---
-
-CREATE TABLE `cs_goods_reply` (
+DROP TABLE IF EXISTS `{prefix}goods_reply`;
+CREATE TABLE `{prefix}goods_reply` (
   `goods_reply_id` int(11) UNSIGNED NOT NULL,
   `goods_comment_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods_comment表',
   `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
@@ -2319,34 +1913,14 @@ CREATE TABLE `cs_goods_reply` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品评价回复';
 
---
--- 插入之前先把表清空（truncate） `cs_goods_reply`
---
-
-TRUNCATE TABLE `cs_goods_reply`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_goods_type`
---
-
-CREATE TABLE `cs_goods_type` (
+DROP TABLE IF EXISTS `{prefix}goods_type`;
+CREATE TABLE `{prefix}goods_type` (
   `goods_type_id` smallint(5) UNSIGNED NOT NULL,
   `type_name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '类型名称'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品模型';
 
---
--- 插入之前先把表清空（truncate） `cs_goods_type`
---
-
-TRUNCATE TABLE `cs_goods_type`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_help`
---
-
-CREATE TABLE `cs_help` (
+DROP TABLE IF EXISTS `{prefix}help`;
+CREATE TABLE `{prefix}help` (
   `help_id` int(11) UNSIGNED NOT NULL,
   `router` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '路由',
   `ver` char(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '版本号',
@@ -2355,16 +1929,7 @@ CREATE TABLE `cs_help` (
   `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '外部链接'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- 插入之前先把表清空（truncate） `cs_help`
---
-
-TRUNCATE TABLE `cs_help`;
---
--- 转存表中的数据 `cs_help`
---
-
-INSERT INTO `cs_help` (`help_id`, `router`, `ver`, `module`, `content`, `url`) VALUES
+INSERT INTO `{prefix}help` (`help_id`, `router`, `ver`, `module`, `content`, `url`) VALUES
 (1, '/marketing/card/list', '1.0.1', 'admin', '<span>1、购物卡&ldquo;禁用&rdquo;后，未绑定但已生成的购物卡将无法绑定</span></br>\r\n<span>2、购物卡&ldquo;禁用&rdquo;后，已绑定的购物卡不影响消费使用</span></br>\r\n<span>3、删除购物卡后未绑定的将无法绑定，但已绑定的不影响消费</span></br>\r\n<span>4、删除购物卡将失去对已生成卡的管理</span>', ''),
 (2, '/marketing/card/use', '1.0.1', 'admin', '<p>购物卡生成，客户绑定后以下几种情况将影响消费：</p>\r\n<span>1、生成的购物卡被禁用</span></br>\r\n<span>2、可用余额不足</span></br>\r\n<span>3、截至日期已到期</span></br>\r\n<span>4、生成的购物卡未激活</span></br>\r\n<span>5、卡密默认不可见，可在\"<a href=\"./#/setting/setting/system\">系统管理</a>\"中添加可见名单</span>', ''),
 (3, '/system/auth/menu', '1.0.1', 'admin', '<span>任何操作完成后涉及到的账号都需要注销，重新登录才会生效</span>', ''),
@@ -2375,31 +1940,16 @@ INSERT INTO `cs_help` (`help_id`, `router`, `ver`, `module`, `content`, `url`) V
 (9, '/marketing/coupon/list', '1.0.1', 'admin', '<span>1、优惠劵&ldquo;禁用(或删除)&rdquo;后，将不再发放优惠劵</span></br> <span>2、优惠劵&ldquo;禁用(或删除)&rdquo;后，已发放的不影响使用</span></br> <span>3、优惠劵&ldquo;作废&rdquo;后，将不再发放优惠劵</span></br> <span>4、优惠劵&ldquo;作废&rdquo;后，已发放的也将不可使用</span></br> <span>5、删除优惠劵将失去对已发放优惠劵的管理</span></br> <span>6、提示发放数不足时可通过编辑&ldquo;发放数&rdquo;数量进行修改</span>', ''),
 (10, '/marketing/coupon/give', '1.0.1', 'admin', '<span>1、管理员删除优惠劵时对&ldquo;已发放未使用&rdquo;的优惠劵会永久删除</span></br> <span>2、管理员删除优惠劵时对&ldquo;已使用&rdquo;的优惠劵会放入&ldquo;回收站&rdquo;</span></br> <span>3、顾客删除优惠劵时无论是否使用都会放入&ldquo;回收站&rdquo;</span></br> <span>4、回收站里的优惠劵都可以&ldquo;恢复&rdquo;</span></br></br> <b>以下几种情况将视优惠劵无效：</b></br> <span>1、优惠劵已作废</span></br> <span>2、使用截至日期已到期</span>', '');
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_history`
---
-
-CREATE TABLE `cs_history` (
+DROP TABLE IF EXISTS `{prefix}history`;
+CREATE TABLE `{prefix}history` (
   `history_id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
   `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '对应goods表',
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='浏览历史';
 
---
--- 插入之前先把表清空（truncate） `cs_history`
---
-
-TRUNCATE TABLE `cs_history`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_menu`
---
-
-CREATE TABLE `cs_menu` (
+DROP TABLE IF EXISTS `{prefix}menu`;
+CREATE TABLE `{prefix}menu` (
   `menu_id` smallint(5) UNSIGNED NOT NULL,
   `parent_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
   `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
@@ -2416,16 +1966,7 @@ CREATE TABLE `cs_menu` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='菜单管理';
 
---
--- 插入之前先把表清空（truncate） `cs_menu`
---
-
-TRUNCATE TABLE `cs_menu`;
---
--- 转存表中的数据 `cs_menu`
---
-
-INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
 (1, 0, '管理组账户', '', '', '', 'api', 0, '', '', '_self', 0, 1, 1),
 (2, 1, '验证账号是否合法', '', '', '', 'api', 0, 'api/v1/admin/check.admin.username', '', '_self', 0, 1, 1),
 (3, 1, '验证账号昵称是否合法', '', '', '', 'api', 0, 'api/v1/admin/check.admin.nickname', '', '_self', 0, 2, 1),
@@ -2919,7 +2460,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (491, 0, '验证码', '', '', '', 'api', 0, '', '', '_self', 0, 57, 1),
 (492, 491, '使用验证码', '', '', '', 'api', 0, 'api/v1/verification/use.verification.item', '', '_self', 0, 50, 1),
 (493, 491, '发送短信验证码', '', '', '', 'api', 0, 'api/v1/verification/send.verification.sms', '', '_self', 0, 50, 1);
-INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
 (494, 491, '发送邮件验证码', '', '', '', 'api', 0, 'api/v1/verification/send.verification.email', '', '_self', 0, 50, 1),
 (495, 491, '验证短信验证码', '', '', '', 'api', 0, 'api/v1/verification/ver.verification.sms', '', '_self', 0, 50, 1),
 (496, 491, '验证邮件验证码', '', '', '', 'api', 0, 'api/v1/verification/ver.verification.email', '', '_self', 0, 50, 1),
@@ -3424,7 +2965,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (1039, 1038, '获取条形码调用地址', '', '', '', 'api', 0, 'api/v1/barcode/get.barcode.callurl', '', '_self', 0, 50, 1),
 (1040, 1038, '动态生成一个二维码', '', '', '', 'api', 0, 'api/v1/barcode/get.barcode.item', '', '_self', 0, 50, 1),
 (1041, 0, '财务', '', 'jinbi', '', 'admin', 0, '/finance', '', '_self', 1, 6, 1);
-INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
 (1042, 1041, '财务首页', '', 'shouye_o', '', 'admin', 0, '/finance/index', '', '_self', 1, 50, 1),
 (1043, 1041, '快捷向导', '', 'ding_o', '', 'admin', 0, '/finance/navi', '', '_self', 1, 50, 1),
 (1044, 1043, '退款日志', '', 'cunkuan_o', '订单生成退款后的日志', 'admin', 1, '/order/admin/refund', '', '_self', 1, 4, 1),
@@ -3468,13 +3009,8 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (1085, 540, '消息预览', '', '', '', 'admin', 0, '/system/message/user/view', '', '_self', 0, 50, 1),
 (1086, 711, '商业授权', '', 'careyshop', '商业授权信息查询', 'admin', 0, '/setting/app/authorize', '', '_self', 1, 50, 1);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_message`
---
-
-CREATE TABLE `cs_message` (
+DROP TABLE IF EXISTS `{prefix}message`;
+CREATE TABLE `{prefix}message` (
   `message_id` int(11) UNSIGNED NOT NULL,
   `type` tinyint(1) NOT NULL COMMENT '消息类型(自定义)',
   `member` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=私有函 1=顾客组 2=管理组',
@@ -3490,18 +3026,8 @@ CREATE TABLE `cs_message` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='消息管理';
 
---
--- 插入之前先把表清空（truncate） `cs_message`
---
-
-TRUNCATE TABLE `cs_message`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_message_user`
---
-
-CREATE TABLE `cs_message_user` (
+DROP TABLE IF EXISTS `{prefix}message_user`;
+CREATE TABLE `{prefix}message_user` (
   `message_user_id` int(11) UNSIGNED NOT NULL,
   `message_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应message表',
   `user_id` int(11) UNSIGNED DEFAULT NULL COMMENT '对应user表',
@@ -3511,18 +3037,8 @@ CREATE TABLE `cs_message_user` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户消息通知';
 
---
--- 插入之前先把表清空（truncate） `cs_message_user`
---
-
-TRUNCATE TABLE `cs_message_user`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_navigation`
---
-
-CREATE TABLE `cs_navigation` (
+DROP TABLE IF EXISTS `{prefix}navigation`;
+CREATE TABLE `{prefix}navigation` (
   `navigation_id` smallint(5) UNSIGNED NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
   `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '链接',
@@ -3531,34 +3047,15 @@ CREATE TABLE `cs_navigation` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='导航';
 
---
--- 插入之前先把表清空（truncate） `cs_navigation`
---
-
-TRUNCATE TABLE `cs_navigation`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_notice_item`
---
-
-CREATE TABLE `cs_notice_item` (
+DROP TABLE IF EXISTS `{prefix}notice_item`;
+CREATE TABLE `{prefix}notice_item` (
   `notice_item_id` smallint(5) UNSIGNED NOT NULL,
   `item_name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
   `replace_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '替换变量',
   `type` tinyint(1) UNSIGNED NOT NULL COMMENT '通知类型'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='通知系统可用变量';
 
---
--- 插入之前先把表清空（truncate） `cs_notice_item`
---
-
-TRUNCATE TABLE `cs_notice_item`;
---
--- 转存表中的数据 `cs_notice_item`
---
-
-INSERT INTO `cs_notice_item` (`notice_item_id`, `item_name`, `replace_name`, `type`) VALUES
+INSERT INTO `{prefix}notice_item` (`notice_item_id`, `item_name`, `replace_name`, `type`) VALUES
 (1, '{验证码}', 'number', 0),
 (2, '{商城名称}', 'shop_name', 1),
 (3, '{用户账号}', 'user_name', 1),
@@ -3594,13 +3091,8 @@ INSERT INTO `cs_notice_item` (`notice_item_id`, `item_name`, `replace_name`, `ty
 (33, '{快递公司}', 'delivery_name', 6),
 (34, '{快递单号}', 'logistic_code', 6);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_notice_tpl`
---
-
-CREATE TABLE `cs_notice_tpl` (
+DROP TABLE IF EXISTS `{prefix}notice_tpl`;
+CREATE TABLE `{prefix}notice_tpl` (
   `notice_tpl_id` smallint(5) UNSIGNED NOT NULL,
   `name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '模板名称',
   `code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '通知系统编码',
@@ -3611,16 +3103,7 @@ CREATE TABLE `cs_notice_tpl` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='通知系统模板';
 
---
--- 插入之前先把表清空（truncate） `cs_notice_tpl`
---
-
-TRUNCATE TABLE `cs_notice_tpl`;
---
--- 转存表中的数据 `cs_notice_tpl`
---
-
-INSERT INTO `cs_notice_tpl` (`notice_tpl_id`, `name`, `code`, `type`, `sms_code`, `title`, `template`, `status`) VALUES
+INSERT INTO `{prefix}notice_tpl` (`notice_tpl_id`, `name`, `code`, `type`, `sms_code`, `title`, `template`, `status`) VALUES
 (1, '通用验证', 'sms', 0, '', '', '', 1),
 (2, '注册成功', 'sms', 1, '', '', '', 1),
 (3, '充值成功', 'sms', 2, '', '', '', 1),
@@ -3636,13 +3119,8 @@ INSERT INTO `cs_notice_tpl` (`notice_tpl_id`, `name`, `code`, `type`, `sms_code`
 (13, '下单成功', 'email', 5, '', '', '', 1),
 (14, '订单发货', 'email', 6, '', '', '', 1);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_order`
---
-
-CREATE TABLE `cs_order` (
+DROP TABLE IF EXISTS `{prefix}order`;
+CREATE TABLE `{prefix}order` (
   `order_id` int(11) UNSIGNED NOT NULL,
   `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父订单Id',
   `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
@@ -3695,18 +3173,8 @@ CREATE TABLE `cs_order` (
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=回收站 2=删除'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单管理';
 
---
--- 插入之前先把表清空（truncate） `cs_order`
---
-
-TRUNCATE TABLE `cs_order`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_order_goods`
---
-
-CREATE TABLE `cs_order_goods` (
+DROP TABLE IF EXISTS `{prefix}order_goods`;
+CREATE TABLE `{prefix}order_goods` (
   `order_goods_id` int(11) UNSIGNED NOT NULL,
   `order_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应order表',
   `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
@@ -3727,18 +3195,8 @@ CREATE TABLE `cs_order_goods` (
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未发 1=已发 2=收货 3=取消'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单商品';
 
---
--- 插入之前先把表清空（truncate） `cs_order_goods`
---
-
-TRUNCATE TABLE `cs_order_goods`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_order_log`
---
-
-CREATE TABLE `cs_order_log` (
+DROP TABLE IF EXISTS `{prefix}order_log`;
+CREATE TABLE `{prefix}order_log` (
   `order_log_id` int(11) UNSIGNED NOT NULL,
   `order_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应order表',
   `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
@@ -3752,18 +3210,8 @@ CREATE TABLE `cs_order_log` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单日志';
 
---
--- 插入之前先把表清空（truncate） `cs_order_log`
---
-
-TRUNCATE TABLE `cs_order_log`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_order_refund`
---
-
-CREATE TABLE `cs_order_refund` (
+DROP TABLE IF EXISTS `{prefix}order_refund`;
+CREATE TABLE `{prefix}order_refund` (
   `order_refund_id` int(11) UNSIGNED NOT NULL,
   `refund_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '退款单号(流水号)',
   `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
@@ -3779,18 +3227,8 @@ CREATE TABLE `cs_order_refund` (
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=待处理 1=已处理 2=失败 3=撤销'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单退款';
 
---
--- 插入之前先把表清空（truncate） `cs_order_refund`
---
-
-TRUNCATE TABLE `cs_order_refund`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_order_service`
---
-
-CREATE TABLE `cs_order_service` (
+DROP TABLE IF EXISTS `{prefix}order_service`;
+CREATE TABLE `{prefix}order_service` (
   `order_service_id` int(11) UNSIGNED NOT NULL,
   `service_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '售后单号(流水号)',
   `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
@@ -3822,18 +3260,8 @@ CREATE TABLE `cs_order_service` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='售后服务';
 
---
--- 插入之前先把表清空（truncate） `cs_order_service`
---
-
-TRUNCATE TABLE `cs_order_service`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_payment`
---
-
-CREATE TABLE `cs_payment` (
+DROP TABLE IF EXISTS `{prefix}payment`;
+CREATE TABLE `{prefix}payment` (
   `payment_id` smallint(5) UNSIGNED NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '支付名称',
   `code` tinyint(1) NOT NULL COMMENT '支付编码',
@@ -3848,16 +3276,7 @@ CREATE TABLE `cs_payment` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='支付配置';
 
---
--- 插入之前先把表清空（truncate） `cs_payment`
---
-
-TRUNCATE TABLE `cs_payment`;
---
--- 转存表中的数据 `cs_payment`
---
-
-INSERT INTO `cs_payment` (`payment_id`, `name`, `code`, `image`, `is_deposit`, `is_inpour`, `is_payment`, `is_refund`, `setting`, `model`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}payment` (`payment_id`, `name`, `code`, `image`, `is_deposit`, `is_inpour`, `is_payment`, `is_refund`, `setting`, `model`, `sort`, `status`) VALUES
 (1, '账户资金', 0, 'aliyun.oss.careyshop.cn/支付图标/yezf.gif?type=aliyun', 1, 0, 0, 0, '[]', '', 50, 1),
 (2, '货到付款', 1, 'aliyun.oss.careyshop.cn/支付图标/hdfk.gif?type=aliyun', 0, 0, 1, 0, '[]', 'cod', 50, 1),
 (3, '支付宝', 2, 'aliyun.oss.careyshop.cn/支付图标/zhifubao.png?type=aliyun', 1, 1, 1, 1, '{\"appId\":{\"name\":\"APPID\",\"value\":\"\",\"remark\":\"支付宝应用中的 <span style=\\\"color:#F56C6C;\\\">APPID<\\/span>\"},\"merchantPrivateKey\":{\"name\":\"商户私钥\",\"value\":\"\",\"remark\":\"支付宝应用中的 <span style=\\\"color:#F56C6C;\\\">商户私钥<\\/span>\"},\"alipayPublicKey\":{\"name\":\"支付宝公钥\",\"value\":\"\",\"remark\":\"支付宝应用中的 <span style=\\\"color:#F56C6C;\\\">支付宝公钥<\\/span>\"},\"signType\":{\"name\":\"签名方式\",\"value\":\"\",\"remark\":\"可使用RSA2、SHA256等签名方式，推荐使用 <span style=\\\"color:#F56C6C;\\\">RSA2<\\/span>\"},\"httpMethod\":{\"name\":\"页面接口方式\",\"value\":\"\",\"remark\":\"推荐使用 <span style=\\\"color:#F56C6C;\\\">post<\\/span>\"}}', 'alipay', 50, 1),
@@ -3866,13 +3285,8 @@ INSERT INTO `cs_payment` (`payment_id`, `name`, `code`, `image`, `is_deposit`, `
 (6, '购物卡', 5, '', 0, 0, 0, 0, '[]', '', 50, 1),
 (7, '其他', 6, '', 1, 0, 0, 0, '[]', '', 50, 1);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_payment_log`
---
-
-CREATE TABLE `cs_payment_log` (
+DROP TABLE IF EXISTS `{prefix}payment_log`;
+CREATE TABLE `{prefix}payment_log` (
   `payment_log_id` int(11) UNSIGNED NOT NULL,
   `payment_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '流水号',
   `out_trade_no` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '交易号',
@@ -3887,35 +3301,15 @@ CREATE TABLE `cs_payment_log` (
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=待付款 1=已完成 2=已关闭'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='支付日志';
 
---
--- 插入之前先把表清空（truncate） `cs_payment_log`
---
-
-TRUNCATE TABLE `cs_payment_log`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_praise`
---
-
-CREATE TABLE `cs_praise` (
+DROP TABLE IF EXISTS `{prefix}praise`;
+CREATE TABLE `{prefix}praise` (
   `praise_id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
   `goods_comment_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods_comment表'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='点赞记录';
 
---
--- 插入之前先把表清空（truncate） `cs_praise`
---
-
-TRUNCATE TABLE `cs_praise`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_promotion`
---
-
-CREATE TABLE `cs_promotion` (
+DROP TABLE IF EXISTS `{prefix}promotion`;
+CREATE TABLE `{prefix}promotion` (
   `promotion_id` int(11) UNSIGNED NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '促销名称',
   `begin_time` int(11) NOT NULL DEFAULT '0' COMMENT '开始日期',
@@ -3923,36 +3317,16 @@ CREATE TABLE `cs_promotion` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单促销';
 
---
--- 插入之前先把表清空（truncate） `cs_promotion`
---
-
-TRUNCATE TABLE `cs_promotion`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_promotion_item`
---
-
-CREATE TABLE `cs_promotion_item` (
+DROP TABLE IF EXISTS `{prefix}promotion_item`;
+CREATE TABLE `{prefix}promotion_item` (
   `promotion_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应promotion表',
   `quota` decimal(10,2) NOT NULL COMMENT '限额',
   `settings` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '0=减价 1=打折 2=免邮 3=送积分 4=送优惠劵',
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单促销项';
 
---
--- 插入之前先把表清空（truncate） `cs_promotion_item`
---
-
-TRUNCATE TABLE `cs_promotion_item`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_qrcode`
---
-
-CREATE TABLE `cs_qrcode` (
+DROP TABLE IF EXISTS `{prefix}qrcode`;
+CREATE TABLE `{prefix}qrcode` (
   `qrcode_id` mediumint(8) UNSIGNED NOT NULL,
   `name` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '名称',
   `text` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '内容',
@@ -3961,18 +3335,8 @@ CREATE TABLE `cs_qrcode` (
   `logo` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'logo'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='二维码管理';
 
---
--- 插入之前先把表清空（truncate） `cs_qrcode`
---
-
-TRUNCATE TABLE `cs_qrcode`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_region`
---
-
-CREATE TABLE `cs_region` (
+DROP TABLE IF EXISTS `{prefix}region`;
+CREATE TABLE `{prefix}region` (
   `region_id` smallint(5) UNSIGNED NOT NULL,
   `parent_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父节点id',
   `region_name` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '区域名称',
@@ -3980,16 +3344,7 @@ CREATE TABLE `cs_region` (
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='区域';
 
---
--- 插入之前先把表清空（truncate） `cs_region`
---
-
-TRUNCATE TABLE `cs_region`;
---
--- 转存表中的数据 `cs_region`
---
-
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+INSERT INTO `{prefix}region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
 (1, 0, '中国', 50, 0),
 (2, 1, '北京', 1, 0),
 (3, 1, '天津', 3, 0),
@@ -6061,7 +5416,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (2070, 197, '其它区', 60, 0),
 (2071, 198, '湖滨区', 50, 0),
 (2072, 198, '渑池县', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+INSERT INTO `{prefix}region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
 (2073, 198, '陕州区', 50, 0),
 (2074, 198, '卢氏县', 50, 0),
 (2075, 198, '义马市', 50, 0),
@@ -8036,17 +7391,12 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (4044, 124, '江北区', 49, 0),
 (4080, 1, '钓鱼岛', 35, 0),
 (4081, 4080, '钓鱼岛', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+INSERT INTO `{prefix}region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
 (4083, 1, '海外', 36, 0),
 (4084, 4083, '海外', 50, 0);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_service_log`
---
-
-CREATE TABLE `cs_service_log` (
+DROP TABLE IF EXISTS `{prefix}service_log`;
+CREATE TABLE `{prefix}service_log` (
   `service_log_id` int(11) UNSIGNED NOT NULL,
   `order_service_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应order_service表',
   `service_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '售后单号',
@@ -8057,18 +7407,8 @@ CREATE TABLE `cs_service_log` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='售后日志';
 
---
--- 插入之前先把表清空（truncate） `cs_service_log`
---
-
-TRUNCATE TABLE `cs_service_log`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_setting`
---
-
-CREATE TABLE `cs_setting` (
+DROP TABLE IF EXISTS `{prefix}setting`;
+CREATE TABLE `{prefix}setting` (
   `setting_id` smallint(5) UNSIGNED NOT NULL,
   `code` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '变量名',
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '变量值',
@@ -8077,16 +7417,7 @@ CREATE TABLE `cs_setting` (
   `help_text` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '帮助'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统配置';
 
---
--- 插入之前先把表清空（truncate） `cs_setting`
---
-
-TRUNCATE TABLE `cs_setting`;
---
--- 转存表中的数据 `cs_setting`
---
-
-INSERT INTO `cs_setting` (`setting_id`, `code`, `value`, `module`, `description`, `help_text`) VALUES
+INSERT INTO `{prefix}setting` (`setting_id`, `code`, `value`, `module`, `description`, `help_text`) VALUES
 (1, 'api_id', '', 'delivery_dist', '快递鸟商户ID', '填写快递鸟 <span style=\"color:#F56C6C;\">商户ID</span>'),
 (2, 'api_key', '', 'delivery_dist', '快递鸟ApiKey', '填写快递鸟 <span style=\"color:#F56C6C;\">API key</span>'),
 (3, 'is_sub', '1', 'delivery_dist', '是否启用订阅', '开启订阅后快递鸟会主动将配送轨迹推送到系统'),
@@ -8158,13 +7489,8 @@ INSERT INTO `cs_setting` (`setting_id`, `code`, `value`, `module`, `description`
 (69, 'aliyun_endpoint', '', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
 (70, 'aliyun_rolearn', '', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>');
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_spec`
---
-
-CREATE TABLE `cs_spec` (
+DROP TABLE IF EXISTS `{prefix}spec`;
+CREATE TABLE `{prefix}spec` (
   `spec_id` int(11) UNSIGNED NOT NULL,
   `goods_type_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods_type表 0=自定义',
   `name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '规格名称',
@@ -8173,35 +7499,15 @@ CREATE TABLE `cs_spec` (
   `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品规格';
 
---
--- 插入之前先把表清空（truncate） `cs_spec`
---
-
-TRUNCATE TABLE `cs_spec`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_spec_config`
---
-
-CREATE TABLE `cs_spec_config` (
+DROP TABLE IF EXISTS `{prefix}spec_config`;
+CREATE TABLE `{prefix}spec_config` (
   `spec_config_id` int(11) UNSIGNED NOT NULL,
   `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
   `config_data` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '配置数据'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品规格配置';
 
---
--- 插入之前先把表清空（truncate） `cs_spec_config`
---
-
-TRUNCATE TABLE `cs_spec_config`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_spec_goods`
---
-
-CREATE TABLE `cs_spec_goods` (
+DROP TABLE IF EXISTS `{prefix}spec_goods`;
+CREATE TABLE `{prefix}spec_goods` (
   `goods_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods表',
   `key_name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '规格键名',
   `key_value` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '规格值',
@@ -8211,18 +7517,8 @@ CREATE TABLE `cs_spec_goods` (
   `goods_sku` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品SKU'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品规格列表';
 
---
--- 插入之前先把表清空（truncate） `cs_spec_goods`
---
-
-TRUNCATE TABLE `cs_spec_goods`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_spec_image`
---
-
-CREATE TABLE `cs_spec_image` (
+DROP TABLE IF EXISTS `{prefix}spec_image`;
+CREATE TABLE `{prefix}spec_image` (
   `goods_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods表',
   `spec_item_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应spec_item表',
   `spec_type` tinyint(1) UNSIGNED NOT NULL COMMENT '1=图片 2=颜色',
@@ -8230,18 +7526,8 @@ CREATE TABLE `cs_spec_image` (
   `color` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品规格颜色'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品规格图片';
 
---
--- 插入之前先把表清空（truncate） `cs_spec_image`
---
-
-TRUNCATE TABLE `cs_spec_image`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_spec_item`
---
-
-CREATE TABLE `cs_spec_item` (
+DROP TABLE IF EXISTS `{prefix}spec_item`;
+CREATE TABLE `{prefix}spec_item` (
   `spec_item_id` int(11) UNSIGNED NOT NULL,
   `spec_id` int(11) UNSIGNED NOT NULL COMMENT '对应spec表',
   `item_name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '项名',
@@ -8249,18 +7535,8 @@ CREATE TABLE `cs_spec_item` (
   `sort` tinyint(3) NOT NULL DEFAULT '50' COMMENT '排序'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品规格项';
 
---
--- 插入之前先把表清空（truncate） `cs_spec_item`
---
-
-TRUNCATE TABLE `cs_spec_item`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_storage`
---
-
-CREATE TABLE `cs_storage` (
+DROP TABLE IF EXISTS `{prefix}storage`;
+CREATE TABLE `{prefix}storage` (
   `storage_id` int(11) UNSIGNED NOT NULL,
   `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '名称',
@@ -8281,16 +7557,7 @@ CREATE TABLE `cs_storage` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='资源管理器';
 
---
--- 插入之前先把表清空（truncate） `cs_storage`
---
-
-TRUNCATE TABLE `cs_storage`;
---
--- 转存表中的数据 `cs_storage`
---
-
-INSERT INTO `cs_storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `size`, `pixel`, `hash`, `path`, `url`, `protocol`, `type`, `priority`, `cover`, `sort`, `is_default`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `size`, `pixel`, `hash`, `path`, `url`, `protocol`, `type`, `priority`, `cover`, `sort`, `is_default`, `create_time`, `update_time`) VALUES
 (1, 0, '会员等级', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1588922794, 1588926835),
 (2, 0, '支付图标', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1588922800, 1588926835),
 (3, 1, 'level1.png', 'image/png', 'png', 417, '{\"width\":16,\"height\":16}', 'F41831546A34BE42C34343FD92492C67', '会员等级/level1.png', 'aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
@@ -8315,13 +7582,8 @@ INSERT INTO `cs_storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `siz
 (22, 2, 'yinlian.png', 'image/png', 'png', 3263, '{\"width\":86,\"height\":50}', 'EA74308D5EA06E0B7AB9A68DD06522A6', '支付图标/yinlian.png', 'aliyun.oss.careyshop.cn/支付图标/yinlian.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
 (23, 2, 'zhifubao.png', 'image/png', 'png', 1751, '{\"width\":86,\"height\":50}', '444B8960B1A5205DD3A3F10C7CE96621', '支付图标/zhifubao.png', 'aliyun.oss.careyshop.cn/支付图标/zhifubao.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_storage_style`
---
-
-CREATE TABLE `cs_storage_style` (
+DROP TABLE IF EXISTS `{prefix}storage_style`;
+CREATE TABLE `{prefix}storage_style` (
   `storage_style_id` int(11) UNSIGNED NOT NULL,
   `name` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
   `code` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '编码',
@@ -8334,16 +7596,7 @@ CREATE TABLE `cs_storage_style` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='资源样式';
 
---
--- 插入之前先把表清空（truncate） `cs_storage_style`
---
-
-TRUNCATE TABLE `cs_storage_style`;
---
--- 转存表中的数据 `cs_storage_style`
---
-
-INSERT INTO `cs_storage_style` (`storage_style_id`, `name`, `code`, `platform`, `scale`, `resize`, `quality`, `suffix`, `style`, `status`) VALUES
+INSERT INTO `{prefix}storage_style` (`storage_style_id`, `name`, `code`, `platform`, `scale`, `resize`, `quality`, `suffix`, `style`, `status`) VALUES
 (1, '正文内容图片 790*0', 'inside_content', 0, '{\"pc\":{\"size\":[790,0],\"crop\":[0,0],\"slider\":0,\"order\":true},\"mobile\":{\"size\":[480,0],\"crop\":[0,0],\"slider\":0,\"order\":true}}', 'scaling', 100, '', '', 1),
 (2, '文章列表封面 150*0', 'article_lists', 0, '{\"pc\":{\"size\":[150,0],\"crop\":[0,0],\"slider\":0,\"order\":true},\"mobile\":{\"size\":[150,0],\"crop\":[0,0],\"slider\":0,\"order\":true}}', 'scaling', 100, '', '', 1),
 (3, '资源管理列表 158*158', 'storage_lists', 0, '{\"pc\":{\"size\":[158,158],\"crop\":[0,0],\"slider\":0,\"order\":true},\"mobile\":{\"size\":[158,158],\"crop\":[0,0],\"slider\":0,\"order\":true}}', 'scaling', 100, '', '', 1),
@@ -8357,13 +7610,8 @@ INSERT INTO `cs_storage_style` (`storage_style_id`, `name`, `code`, `platform`, 
 (12, '商品缩略图 480*480', 'goods_image_x480', 0, '{\"pc\":{\"size\":[480,480],\"crop\":[0,0],\"slider\":0,\"order\":true},\"mobile\":{\"size\":[480,480],\"crop\":[0,0],\"slider\":0,\"order\":true}}', 'scaling', 100, '', '', 1),
 (13, '商品缩略图 800*800', 'goods_image_x800', 0, '{\"pc\":{\"size\":[800,800],\"crop\":[0,0],\"slider\":0,\"order\":true},\"mobile\":{\"size\":[800,800],\"crop\":[0,0],\"slider\":0,\"order\":true}}', 'scaling', 100, '', '', 1);
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_support`
---
-
-CREATE TABLE `cs_support` (
+DROP TABLE IF EXISTS `{prefix}support`;
+CREATE TABLE `{prefix}support` (
   `support_id` smallint(5) UNSIGNED NOT NULL,
   `type_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '客服组名称',
   `nick_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '昵称',
@@ -8372,18 +7620,8 @@ CREATE TABLE `cs_support` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='客服';
 
---
--- 插入之前先把表清空（truncate） `cs_support`
---
-
-TRUNCATE TABLE `cs_support`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_token`
---
-
-CREATE TABLE `cs_token` (
+DROP TABLE IF EXISTS `{prefix}token`;
+CREATE TABLE `{prefix}token` (
   `token_id` int(11) UNSIGNED NOT NULL,
   `client_id` int(11) UNSIGNED NOT NULL COMMENT '编号',
   `group_id` mediumint(8) UNSIGNED NOT NULL COMMENT '用户组Id',
@@ -8397,18 +7635,8 @@ CREATE TABLE `cs_token` (
   `refresh_expires` int(11) NOT NULL COMMENT '刷新授权码过期时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='token';
 
---
--- 插入之前先把表清空（truncate） `cs_token`
---
-
-TRUNCATE TABLE `cs_token`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_topic`
---
-
-CREATE TABLE `cs_topic` (
+DROP TABLE IF EXISTS `{prefix}topic`;
+CREATE TABLE `{prefix}topic` (
   `topic_id` int(11) UNSIGNED NOT NULL,
   `title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
   `alias` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '别名',
@@ -8420,18 +7648,8 @@ CREATE TABLE `cs_topic` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='专题';
 
---
--- 插入之前先把表清空（truncate） `cs_topic`
---
-
-TRUNCATE TABLE `cs_topic`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_transaction`
---
-
-CREATE TABLE `cs_transaction` (
+DROP TABLE IF EXISTS `{prefix}transaction`;
+CREATE TABLE `{prefix}transaction` (
   `transaction_id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED DEFAULT '0' COMMENT '对应user表',
   `action` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '操作者',
@@ -8447,18 +7665,8 @@ CREATE TABLE `cs_transaction` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='交易结算日志';
 
---
--- 插入之前先把表清空（truncate） `cs_transaction`
---
-
-TRUNCATE TABLE `cs_transaction`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_user`
---
-
-CREATE TABLE `cs_user` (
+DROP TABLE IF EXISTS `{prefix}user`;
+CREATE TABLE `{prefix}user` (
   `user_id` int(11) UNSIGNED NOT NULL,
   `username` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号',
   `password` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码',
@@ -8482,18 +7690,8 @@ CREATE TABLE `cs_user` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='顾客组账号';
 
---
--- 插入之前先把表清空（truncate） `cs_user`
---
-
-TRUNCATE TABLE `cs_user`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_user_address`
---
-
-CREATE TABLE `cs_user_address` (
+DROP TABLE IF EXISTS `{prefix}user_address`;
+CREATE TABLE `{prefix}user_address` (
   `user_address_id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
   `consignee` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '姓名',
@@ -8507,18 +7705,8 @@ CREATE TABLE `cs_user_address` (
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='账号收货地址';
 
---
--- 插入之前先把表清空（truncate） `cs_user_address`
---
-
-TRUNCATE TABLE `cs_user_address`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_user_level`
---
-
-CREATE TABLE `cs_user_level` (
+DROP TABLE IF EXISTS `{prefix}user_level`;
+CREATE TABLE `{prefix}user_level` (
   `user_level_id` smallint(5) UNSIGNED NOT NULL,
   `name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '等级名称',
   `icon` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '图标',
@@ -8527,16 +7715,7 @@ CREATE TABLE `cs_user_level` (
   `description` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '等级描述'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='账号等级';
 
---
--- 插入之前先把表清空（truncate） `cs_user_level`
---
-
-TRUNCATE TABLE `cs_user_level`;
---
--- 转存表中的数据 `cs_user_level`
---
-
-INSERT INTO `cs_user_level` (`user_level_id`, `name`, `icon`, `amount`, `discount`, `description`) VALUES
+INSERT INTO `{prefix}user_level` (`user_level_id`, `name`, `icon`, `amount`, `discount`, `description`) VALUES
 (1, '青铜会员', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', '0.00', 100, '青铜会员'),
 (2, '白银会员', 'http://aliyun.oss.careyshop.cn/会员等级/level2.png?type=aliyun', '10000.00', 98, '白银会员累计消费满10000，全场享9.8折优惠'),
 (3, '黄金会员', 'http://aliyun.oss.careyshop.cn/会员等级/level3.png?type=aliyun', '30000.00', 95, '黄金会员累计消费满30000，全场享9.5折优惠'),
@@ -8544,13 +7723,8 @@ INSERT INTO `cs_user_level` (`user_level_id`, `name`, `icon`, `amount`, `discoun
 (5, '钻石会员', 'http://aliyun.oss.careyshop.cn/会员等级/level5.png?type=aliyun', '100000.00', 90, '钻石会员累计消费满100000，全场享9折优惠'),
 (6, '至尊 VIP', 'http://aliyun.oss.careyshop.cn/会员等级/level6.png?type=aliyun', '200000.00', 88, '至尊VIP累计消费满200000，全场享8.8折优惠');
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_user_money`
---
-
-CREATE TABLE `cs_user_money` (
+DROP TABLE IF EXISTS `{prefix}user_money`;
+CREATE TABLE `{prefix}user_money` (
   `user_money_id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
   `total_money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '累计消费',
@@ -8560,18 +7734,8 @@ CREATE TABLE `cs_user_money` (
   `lock_points` int(11) NOT NULL DEFAULT '0' COMMENT '锁定积分'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='账号资金表';
 
---
--- 插入之前先把表清空（truncate） `cs_user_money`
---
-
-TRUNCATE TABLE `cs_user_money`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_verification`
---
-
-CREATE TABLE `cs_verification` (
+DROP TABLE IF EXISTS `{prefix}verification`;
+CREATE TABLE `{prefix}verification` (
   `verification_id` int(11) UNSIGNED NOT NULL,
   `number` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '号码',
   `code` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '验证码',
@@ -8580,18 +7744,8 @@ CREATE TABLE `cs_verification` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='验证码';
 
---
--- 插入之前先把表清空（truncate） `cs_verification`
---
-
-TRUNCATE TABLE `cs_verification`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_withdraw`
---
-
-CREATE TABLE `cs_withdraw` (
+DROP TABLE IF EXISTS `{prefix}withdraw`;
+CREATE TABLE `{prefix}withdraw` (
   `withdraw_id` int(11) UNSIGNED NOT NULL,
   `withdraw_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '提现单号',
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
@@ -8608,18 +7762,8 @@ CREATE TABLE `cs_withdraw` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='提现申请';
 
---
--- 插入之前先把表清空（truncate） `cs_withdraw`
---
-
-TRUNCATE TABLE `cs_withdraw`;
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_withdraw_user`
---
-
-CREATE TABLE `cs_withdraw_user` (
+DROP TABLE IF EXISTS `{prefix}withdraw_user`;
+CREATE TABLE `{prefix}withdraw_user` (
   `withdraw_user_id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
   `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '收款人姓名',
@@ -8629,28 +7773,14 @@ CREATE TABLE `cs_withdraw_user` (
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='提现账号';
 
---
--- 插入之前先把表清空（truncate） `cs_withdraw_user`
---
 
-TRUNCATE TABLE `cs_withdraw_user`;
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `cs_action_log`
---
-ALTER TABLE `cs_action_log`
+ALTER TABLE `{prefix}action_log`
   ADD PRIMARY KEY (`action_log_id`),
   ADD KEY `client_type` (`client_type`),
   ADD KEY `path` (`path`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `cs_admin`
---
-ALTER TABLE `cs_admin`
+ALTER TABLE `{prefix}admin`
   ADD PRIMARY KEY (`admin_id`),
   ADD KEY `username` (`username`),
   ADD KEY `status` (`status`),
@@ -8658,10 +7788,7 @@ ALTER TABLE `cs_admin`
   ADD KEY `nickname` (`nickname`),
   ADD KEY `group_id` (`group_id`);
 
---
--- Indexes for table `cs_ads`
---
-ALTER TABLE `cs_ads`
+ALTER TABLE `{prefix}ads`
   ADD PRIMARY KEY (`ads_id`),
   ADD KEY `ads_position_id` (`ads_position_id`),
   ADD KEY `start_time` (`begin_time`),
@@ -8671,56 +7798,38 @@ ALTER TABLE `cs_ads`
   ADD KEY `code` (`code`),
   ADD KEY `platform` (`platform`);
 
---
--- Indexes for table `cs_ads_position`
---
-ALTER TABLE `cs_ads_position`
+ALTER TABLE `{prefix}ads_position`
   ADD PRIMARY KEY (`ads_position_id`),
   ADD KEY `status` (`status`),
   ADD KEY `name` (`name`) USING BTREE,
   ADD KEY `code` (`code`),
   ADD KEY `platform` (`platform`);
 
---
--- Indexes for table `cs_app`
---
-ALTER TABLE `cs_app`
+ALTER TABLE `{prefix}app`
   ADD PRIMARY KEY (`app_id`),
   ADD KEY `app_key` (`app_key`),
   ADD KEY `status` (`status`),
   ADD KEY `is_delete` (`is_delete`);
 
---
--- Indexes for table `cs_app_install`
---
-ALTER TABLE `cs_app_install`
+ALTER TABLE `{prefix}app_install`
   ADD PRIMARY KEY (`app_install_id`),
   ADD KEY `user_agent` (`user_agent`),
   ADD KEY `name` (`name`);
 
---
--- Indexes for table `cs_article`
---
-ALTER TABLE `cs_article`
+ALTER TABLE `{prefix}article`
   ADD PRIMARY KEY (`article_id`),
   ADD KEY `article_cat_id` (`article_cat_id`),
   ADD KEY `is_top` (`is_top`),
   ADD KEY `status` (`status`) USING BTREE;
 
---
--- Indexes for table `cs_article_cat`
---
-ALTER TABLE `cs_article_cat`
+ALTER TABLE `{prefix}article_cat`
   ADD PRIMARY KEY (`article_cat_id`),
   ADD KEY `parent_id` (`parent_id`),
   ADD KEY `cat_type` (`cat_type`),
   ADD KEY `sort` (`sort`),
   ADD KEY `is_navi` (`is_navi`) USING BTREE;
 
---
--- Indexes for table `cs_ask`
---
-ALTER TABLE `cs_ask`
+ALTER TABLE `{prefix}ask`
   ADD PRIMARY KEY (`ask_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `status` (`status`),
@@ -8728,47 +7837,32 @@ ALTER TABLE `cs_ask`
   ADD KEY `ask_type` (`ask_type`) USING BTREE,
   ADD KEY `is_delete` (`is_delete`);
 
---
--- Indexes for table `cs_auth_group`
---
-ALTER TABLE `cs_auth_group`
+ALTER TABLE `{prefix}auth_group`
   ADD PRIMARY KEY (`group_id`),
   ADD KEY `sort` (`sort`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `cs_auth_rule`
---
-ALTER TABLE `cs_auth_rule`
+ALTER TABLE `{prefix}auth_rule`
   ADD PRIMARY KEY (`rule_id`),
   ADD KEY `module` (`module`),
   ADD KEY `status` (`status`),
   ADD KEY `group_id` (`group_id`),
   ADD KEY `sort` (`sort`);
 
---
--- Indexes for table `cs_brand`
---
-ALTER TABLE `cs_brand`
+ALTER TABLE `{prefix}brand`
   ADD PRIMARY KEY (`brand_id`),
   ADD KEY `is_show` (`status`),
   ADD KEY `name` (`name`),
   ADD KEY `goods_category_id` (`goods_category_id`),
   ADD KEY `sort` (`sort`);
 
---
--- Indexes for table `cs_card`
---
-ALTER TABLE `cs_card`
+ALTER TABLE `{prefix}card`
   ADD PRIMARY KEY (`card_id`),
   ADD KEY `name` (`name`),
   ADD KEY `status` (`status`),
   ADD KEY `is_delete` (`is_delete`);
 
---
--- Indexes for table `cs_card_use`
---
-ALTER TABLE `cs_card_use`
+ALTER TABLE `{prefix}card_use`
   ADD PRIMARY KEY (`card_use_id`) USING BTREE,
   ADD KEY `card_id` (`card_id`),
   ADD KEY `user_id` (`user_id`),
@@ -8776,10 +7870,7 @@ ALTER TABLE `cs_card_use`
   ADD KEY `money` (`money`),
   ADD KEY `is_invalid` (`is_invalid`) USING BTREE;
 
---
--- Indexes for table `cs_cart`
---
-ALTER TABLE `cs_cart`
+ALTER TABLE `{prefix}cart`
   ADD PRIMARY KEY (`cart_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `goods_id` (`goods_id`),
@@ -8787,19 +7878,13 @@ ALTER TABLE `cs_cart`
   ADD KEY `update_time` (`update_time`),
   ADD KEY `is_show` (`is_show`);
 
---
--- Indexes for table `cs_collect`
---
-ALTER TABLE `cs_collect`
+ALTER TABLE `{prefix}collect`
   ADD PRIMARY KEY (`collect_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `is_top` (`is_top`),
   ADD KEY `goods_id` (`goods_id`);
 
---
--- Indexes for table `cs_coupon`
---
-ALTER TABLE `cs_coupon`
+ALTER TABLE `{prefix}coupon`
   ADD PRIMARY KEY (`coupon_id`),
   ADD KEY `name` (`name`),
   ADD KEY `is_delete` (`is_delete`),
@@ -8809,10 +7894,7 @@ ALTER TABLE `cs_coupon`
   ADD KEY `use_end_time` (`use_end_time`),
   ADD KEY `give_code` (`give_code`) USING BTREE;
 
---
--- Indexes for table `cs_coupon_give`
---
-ALTER TABLE `cs_coupon_give`
+ALTER TABLE `{prefix}coupon_give`
   ADD PRIMARY KEY (`coupon_give_id`),
   ADD KEY `coupon_id` (`coupon_id`),
   ADD KEY `user_id` (`user_id`),
@@ -8820,26 +7902,17 @@ ALTER TABLE `cs_coupon_give`
   ADD KEY `is_delete` (`is_delete`),
   ADD KEY `exchange_code` (`exchange_code`) USING BTREE;
 
---
--- Indexes for table `cs_delivery`
---
-ALTER TABLE `cs_delivery`
+ALTER TABLE `{prefix}delivery`
   ADD PRIMARY KEY (`delivery_id`),
   ADD KEY `status` (`status`),
   ADD KEY `sort` (`sort`),
   ADD KEY `delivery_item_id` (`delivery_item_id`);
 
---
--- Indexes for table `cs_delivery_area`
---
-ALTER TABLE `cs_delivery_area`
+ALTER TABLE `{prefix}delivery_area`
   ADD PRIMARY KEY (`delivery_area_id`),
   ADD KEY `delivery_id` (`delivery_id`);
 
---
--- Indexes for table `cs_delivery_dist`
---
-ALTER TABLE `cs_delivery_dist`
+ALTER TABLE `{prefix}delivery_dist`
   ADD PRIMARY KEY (`delivery_dist_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `state` (`state`),
@@ -8848,42 +7921,27 @@ ALTER TABLE `cs_delivery_dist`
   ADD KEY `order_code` (`order_code`) USING BTREE,
   ADD KEY `is_sub` (`is_sub`);
 
---
--- Indexes for table `cs_delivery_item`
---
-ALTER TABLE `cs_delivery_item`
+ALTER TABLE `{prefix}delivery_item`
   ADD PRIMARY KEY (`delivery_item_id`),
   ADD KEY `type` (`type`),
   ADD KEY `is_delete` (`is_delete`) USING BTREE;
 
---
--- Indexes for table `cs_discount`
---
-ALTER TABLE `cs_discount`
+ALTER TABLE `{prefix}discount`
   ADD PRIMARY KEY (`discount_id`),
   ADD KEY `begin_time` (`begin_time`),
   ADD KEY `end_time` (`end_time`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `cs_discount_goods`
---
-ALTER TABLE `cs_discount_goods`
+ALTER TABLE `{prefix}discount_goods`
   ADD KEY `discount_id` (`discount_id`),
   ADD KEY `goods_id` (`goods_id`);
 
---
--- Indexes for table `cs_friend_link`
---
-ALTER TABLE `cs_friend_link`
+ALTER TABLE `{prefix}friend_link`
   ADD PRIMARY KEY (`friend_link_id`),
   ADD KEY `is_show` (`status`),
   ADD KEY `sort` (`sort`);
 
---
--- Indexes for table `cs_goods`
---
-ALTER TABLE `cs_goods`
+ALTER TABLE `{prefix}goods`
   ADD PRIMARY KEY (`goods_id`),
   ADD KEY `goods_code` (`goods_code`),
   ADD KEY `name` (`name`(191)),
@@ -8901,10 +7959,7 @@ ALTER TABLE `cs_goods`
   ADD KEY `is_postage` (`is_postage`),
   ADD KEY `bar_code` (`bar_code`);
 
---
--- Indexes for table `cs_goods_attr`
---
-ALTER TABLE `cs_goods_attr`
+ALTER TABLE `{prefix}goods_attr`
   ADD KEY `goods_id` (`goods_id`),
   ADD KEY `is_important` (`is_important`),
   ADD KEY `parent_id` (`parent_id`),
@@ -8912,10 +7967,7 @@ ALTER TABLE `cs_goods_attr`
   ADD KEY `goods_attribute_id` (`goods_attribute_id`),
   ADD KEY `sort` (`sort`);
 
---
--- Indexes for table `cs_goods_attribute`
---
-ALTER TABLE `cs_goods_attribute`
+ALTER TABLE `{prefix}goods_attribute`
   ADD PRIMARY KEY (`goods_attribute_id`),
   ADD KEY `goods_type_id` (`goods_type_id`),
   ADD KEY `sort` (`sort`),
@@ -8923,17 +7975,11 @@ ALTER TABLE `cs_goods_attribute`
   ADD KEY `is_delete` (`is_delete`),
   ADD KEY `attr_index` (`attr_index`);
 
---
--- Indexes for table `cs_goods_attr_config`
---
-ALTER TABLE `cs_goods_attr_config`
+ALTER TABLE `{prefix}goods_attr_config`
   ADD PRIMARY KEY (`goods_attr_config_id`),
   ADD KEY `goods_id` (`goods_id`);
 
---
--- Indexes for table `cs_goods_category`
---
-ALTER TABLE `cs_goods_category`
+ALTER TABLE `{prefix}goods_category`
   ADD PRIMARY KEY (`goods_category_id`),
   ADD KEY `parent_id` (`parent_id`),
   ADD KEY `category_type` (`category_type`),
@@ -8941,10 +7987,7 @@ ALTER TABLE `cs_goods_category`
   ADD KEY `sort` (`sort`),
   ADD KEY `is_navi` (`is_navi`) USING BTREE;
 
---
--- Indexes for table `cs_goods_comment`
---
-ALTER TABLE `cs_goods_comment`
+ALTER TABLE `{prefix}goods_comment`
   ADD PRIMARY KEY (`goods_comment_id`),
   ADD KEY `type` (`type`),
   ADD KEY `parent_id` (`parent_id`),
@@ -8959,50 +8002,32 @@ ALTER TABLE `cs_goods_comment`
   ADD KEY `order_goods_id` (`order_goods_id`),
   ADD KEY `is_append` (`is_append`);
 
---
--- Indexes for table `cs_goods_consult`
---
-ALTER TABLE `cs_goods_consult`
+ALTER TABLE `{prefix}goods_consult`
   ADD PRIMARY KEY (`goods_consult_id`),
   ADD KEY `parent_id` (`parent_id`),
   ADD KEY `is_delete` (`is_delete`),
   ADD KEY `is_show` (`is_show`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `cs_goods_reply`
---
-ALTER TABLE `cs_goods_reply`
+ALTER TABLE `{prefix}goods_reply`
   ADD PRIMARY KEY (`goods_reply_id`),
   ADD KEY `goods_comment_id` (`goods_comment_id`);
 
---
--- Indexes for table `cs_goods_type`
---
-ALTER TABLE `cs_goods_type`
+ALTER TABLE `{prefix}goods_type`
   ADD PRIMARY KEY (`goods_type_id`);
 
---
--- Indexes for table `cs_help`
---
-ALTER TABLE `cs_help`
+ALTER TABLE `{prefix}help`
   ADD PRIMARY KEY (`help_id`),
   ADD KEY `router` (`router`),
   ADD KEY `module` (`module`);
 
---
--- Indexes for table `cs_history`
---
-ALTER TABLE `cs_history`
+ALTER TABLE `{prefix}history`
   ADD PRIMARY KEY (`history_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `goods_id` (`goods_id`),
   ADD KEY `update_time` (`update_time`);
 
---
--- Indexes for table `cs_menu`
---
-ALTER TABLE `cs_menu`
+ALTER TABLE `{prefix}menu`
   ADD PRIMARY KEY (`menu_id`),
   ADD KEY `parent_id` (`parent_id`),
   ADD KEY `sort` (`sort`),
@@ -9010,10 +8035,7 @@ ALTER TABLE `cs_menu`
   ADD KEY `module` (`module`) USING BTREE,
   ADD KEY `is_navi` (`is_navi`);
 
---
--- Indexes for table `cs_message`
---
-ALTER TABLE `cs_message`
+ALTER TABLE `{prefix}message`
   ADD PRIMARY KEY (`message_id`),
   ADD KEY `type` (`type`),
   ADD KEY `is_top` (`is_top`),
@@ -9022,10 +8044,7 @@ ALTER TABLE `cs_message`
   ADD KEY `member` (`member`) USING BTREE,
   ADD KEY `create_time` (`create_time`);
 
---
--- Indexes for table `cs_message_user`
---
-ALTER TABLE `cs_message_user`
+ALTER TABLE `{prefix}message_user`
   ADD PRIMARY KEY (`message_user_id`),
   ADD KEY `message_id` (`message_id`),
   ADD KEY `user_id` (`user_id`),
@@ -9033,32 +8052,20 @@ ALTER TABLE `cs_message_user`
   ADD KEY `is_read` (`is_read`),
   ADD KEY `admin_id` (`admin_id`);
 
---
--- Indexes for table `cs_navigation`
---
-ALTER TABLE `cs_navigation`
+ALTER TABLE `{prefix}navigation`
   ADD PRIMARY KEY (`navigation_id`);
 
---
--- Indexes for table `cs_notice_item`
---
-ALTER TABLE `cs_notice_item`
+ALTER TABLE `{prefix}notice_item`
   ADD PRIMARY KEY (`notice_item_id`),
   ADD KEY `type` (`type`);
 
---
--- Indexes for table `cs_notice_tpl`
---
-ALTER TABLE `cs_notice_tpl`
+ALTER TABLE `{prefix}notice_tpl`
   ADD PRIMARY KEY (`notice_tpl_id`),
   ADD KEY `status` (`status`),
   ADD KEY `code` (`code`),
   ADD KEY `type` (`type`);
 
---
--- Indexes for table `cs_order`
---
-ALTER TABLE `cs_order`
+ALTER TABLE `{prefix}order`
   ADD PRIMARY KEY (`order_id`),
   ADD KEY `parent_id` (`parent_id`),
   ADD KEY `order_no` (`order_no`),
@@ -9071,10 +8078,7 @@ ALTER TABLE `cs_order`
   ADD KEY `create_time` (`create_time`),
   ADD KEY `delivery_time` (`delivery_time`);
 
---
--- Indexes for table `cs_order_goods`
---
-ALTER TABLE `cs_order_goods`
+ALTER TABLE `{prefix}order_goods`
   ADD PRIMARY KEY (`order_goods_id`),
   ADD KEY `order_id` (`order_id`),
   ADD KEY `order_no` (`order_no`),
@@ -9086,28 +8090,19 @@ ALTER TABLE `cs_order_goods`
   ADD KEY `status` (`status`) USING BTREE,
   ADD KEY `is_service` (`is_service`);
 
---
--- Indexes for table `cs_order_log`
---
-ALTER TABLE `cs_order_log`
+ALTER TABLE `{prefix}order_log`
   ADD PRIMARY KEY (`order_log_id`),
   ADD KEY `order_id` (`order_id`),
   ADD KEY `order_no` (`order_no`);
 
---
--- Indexes for table `cs_order_refund`
---
-ALTER TABLE `cs_order_refund`
+ALTER TABLE `{prefix}order_refund`
   ADD PRIMARY KEY (`order_refund_id`),
   ADD KEY `refund_no` (`refund_no`),
   ADD KEY `order_no` (`order_no`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `cs_order_service`
---
-ALTER TABLE `cs_order_service`
+ALTER TABLE `{prefix}order_service`
   ADD PRIMARY KEY (`order_service_id`),
   ADD KEY `service_no` (`service_no`),
   ADD KEY `user_id` (`user_id`),
@@ -9119,19 +8114,13 @@ ALTER TABLE `cs_order_service`
   ADD KEY `user_event` (`user_event`) USING BTREE,
   ADD KEY `admin_id` (`admin_id`) USING BTREE;
 
---
--- Indexes for table `cs_payment`
---
-ALTER TABLE `cs_payment`
+ALTER TABLE `{prefix}payment`
   ADD PRIMARY KEY (`payment_id`),
   ADD KEY `code` (`code`),
   ADD KEY `sort` (`sort`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `cs_payment_log`
---
-ALTER TABLE `cs_payment_log`
+ALTER TABLE `{prefix}payment_log`
   ADD PRIMARY KEY (`payment_log_id`),
   ADD KEY `payment_no` (`payment_no`),
   ADD KEY `user_id` (`user_id`),
@@ -9140,104 +8129,65 @@ ALTER TABLE `cs_payment_log`
   ADD KEY `status` (`status`),
   ADD KEY `trade_no` (`out_trade_no`);
 
---
--- Indexes for table `cs_praise`
---
-ALTER TABLE `cs_praise`
+ALTER TABLE `{prefix}praise`
   ADD PRIMARY KEY (`praise_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `goods_comment_id` (`goods_comment_id`);
 
---
--- Indexes for table `cs_promotion`
---
-ALTER TABLE `cs_promotion`
+ALTER TABLE `{prefix}promotion`
   ADD PRIMARY KEY (`promotion_id`),
   ADD KEY `begin_time` (`begin_time`),
   ADD KEY `end_time` (`end_time`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `cs_promotion_item`
---
-ALTER TABLE `cs_promotion_item`
+ALTER TABLE `{prefix}promotion_item`
   ADD KEY `promotion_id` (`promotion_id`),
   ADD KEY `quota` (`quota`);
 
---
--- Indexes for table `cs_qrcode`
---
-ALTER TABLE `cs_qrcode`
+ALTER TABLE `{prefix}qrcode`
   ADD PRIMARY KEY (`qrcode_id`);
 
---
--- Indexes for table `cs_region`
---
-ALTER TABLE `cs_region`
+ALTER TABLE `{prefix}region`
   ADD PRIMARY KEY (`region_id`),
   ADD KEY `parent_id` (`parent_id`),
   ADD KEY `is_delete` (`is_delete`),
   ADD KEY `sort` (`sort`);
 
---
--- Indexes for table `cs_service_log`
---
-ALTER TABLE `cs_service_log`
+ALTER TABLE `{prefix}service_log`
   ADD PRIMARY KEY (`service_log_id`),
   ADD KEY `order_service_id` (`order_service_id`),
   ADD KEY `service_no` (`service_no`);
 
---
--- Indexes for table `cs_setting`
---
-ALTER TABLE `cs_setting`
+ALTER TABLE `{prefix}setting`
   ADD PRIMARY KEY (`setting_id`) USING BTREE,
   ADD KEY `code` (`code`),
   ADD KEY `module` (`module`);
 
---
--- Indexes for table `cs_spec`
---
-ALTER TABLE `cs_spec`
+ALTER TABLE `{prefix}spec`
   ADD PRIMARY KEY (`spec_id`) USING BTREE,
   ADD KEY `goods_type_id` (`goods_type_id`),
   ADD KEY `sort` (`sort`),
   ADD KEY `spec_index` (`spec_index`);
 
---
--- Indexes for table `cs_spec_config`
---
-ALTER TABLE `cs_spec_config`
+ALTER TABLE `{prefix}spec_config`
   ADD PRIMARY KEY (`spec_config_id`),
   ADD KEY `goods_id` (`goods_id`);
 
---
--- Indexes for table `cs_spec_goods`
---
-ALTER TABLE `cs_spec_goods`
+ALTER TABLE `{prefix}spec_goods`
   ADD KEY `goods_id` (`goods_id`),
   ADD KEY `key_name` (`key_name`);
 
---
--- Indexes for table `cs_spec_image`
---
-ALTER TABLE `cs_spec_image`
+ALTER TABLE `{prefix}spec_image`
   ADD KEY `goods_id` (`goods_id`),
   ADD KEY `spec_item_id` (`spec_item_id`);
 
---
--- Indexes for table `cs_spec_item`
---
-ALTER TABLE `cs_spec_item`
+ALTER TABLE `{prefix}spec_item`
   ADD PRIMARY KEY (`spec_item_id`),
   ADD KEY `spec_id` (`spec_id`),
   ADD KEY `is_contact` (`is_contact`) USING BTREE,
   ADD KEY `sort` (`sort`) USING BTREE;
 
---
--- Indexes for table `cs_storage`
---
-ALTER TABLE `cs_storage`
+ALTER TABLE `{prefix}storage`
   ADD PRIMARY KEY (`storage_id`),
   ADD KEY `parent_id` (`parent_id`),
   ADD KEY `type` (`type`),
@@ -9248,44 +8198,29 @@ ALTER TABLE `cs_storage`
   ADD KEY `protocol` (`protocol`),
   ADD KEY `priority` (`priority`);
 
---
--- Indexes for table `cs_storage_style`
---
-ALTER TABLE `cs_storage_style`
+ALTER TABLE `{prefix}storage_style`
   ADD PRIMARY KEY (`storage_style_id`) USING BTREE,
   ADD KEY `code` (`code`),
   ADD KEY `platform` (`platform`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `cs_support`
---
-ALTER TABLE `cs_support`
+ALTER TABLE `{prefix}support`
   ADD PRIMARY KEY (`support_id`),
   ADD KEY `status` (`status`),
   ADD KEY `sort` (`sort`);
 
---
--- Indexes for table `cs_token`
---
-ALTER TABLE `cs_token`
+ALTER TABLE `{prefix}token`
   ADD PRIMARY KEY (`token_id`),
   ADD KEY `user_id` (`client_id`),
   ADD KEY `admin_id` (`platform`),
   ADD KEY `client_type` (`client_type`),
   ADD KEY `token` (`token`);
 
---
--- Indexes for table `cs_topic`
---
-ALTER TABLE `cs_topic`
+ALTER TABLE `{prefix}topic`
   ADD PRIMARY KEY (`topic_id`),
   ADD KEY `is_show` (`status`);
 
---
--- Indexes for table `cs_transaction`
---
-ALTER TABLE `cs_transaction`
+ALTER TABLE `{prefix}transaction`
   ADD PRIMARY KEY (`transaction_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `type` (`type`),
@@ -9294,10 +8229,7 @@ ALTER TABLE `cs_transaction`
   ADD KEY `create_time` (`create_time`),
   ADD KEY `card_number` (`card_number`);
 
---
--- Indexes for table `cs_user`
---
-ALTER TABLE `cs_user`
+ALTER TABLE `{prefix}user`
   ADD PRIMARY KEY (`user_id`),
   ADD KEY `username` (`username`),
   ADD KEY `mobile` (`mobile`),
@@ -9307,404 +8239,175 @@ ALTER TABLE `cs_user`
   ADD KEY `status` (`status`),
   ADD KEY `is_delete` (`is_delete`);
 
---
--- Indexes for table `cs_user_address`
---
-ALTER TABLE `cs_user_address`
+ALTER TABLE `{prefix}user_address`
   ADD PRIMARY KEY (`user_address_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `is_delete` (`is_delete`);
 
---
--- Indexes for table `cs_user_level`
---
-ALTER TABLE `cs_user_level`
+ALTER TABLE `{prefix}user_level`
   ADD PRIMARY KEY (`user_level_id`),
   ADD KEY `amount` (`amount`);
 
---
--- Indexes for table `cs_user_money`
---
-ALTER TABLE `cs_user_money`
+ALTER TABLE `{prefix}user_money`
   ADD PRIMARY KEY (`user_money_id`),
   ADD KEY `user_id` (`user_id`);
 
---
--- Indexes for table `cs_verification`
---
-ALTER TABLE `cs_verification`
+ALTER TABLE `{prefix}verification`
   ADD PRIMARY KEY (`verification_id`),
   ADD KEY `number` (`number`),
   ADD KEY `code` (`code`);
 
---
--- Indexes for table `cs_withdraw`
---
-ALTER TABLE `cs_withdraw`
+ALTER TABLE `{prefix}withdraw`
   ADD PRIMARY KEY (`withdraw_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `status` (`status`),
   ADD KEY `withdraw_no` (`withdraw_no`),
   ADD KEY `create_time` (`create_time`);
 
---
--- Indexes for table `cs_withdraw_user`
---
-ALTER TABLE `cs_withdraw_user`
+ALTER TABLE `{prefix}withdraw_user`
   ADD PRIMARY KEY (`withdraw_user_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `is_delete` (`is_delete`);
 
---
--- 在导出的表使用AUTO_INCREMENT
---
 
---
--- 使用表AUTO_INCREMENT `cs_action_log`
---
-ALTER TABLE `cs_action_log`
+ALTER TABLE `{prefix}action_log`
   MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_admin`
---
-ALTER TABLE `cs_admin`
-  MODIFY `admin_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- 使用表AUTO_INCREMENT `cs_ads`
---
-ALTER TABLE `cs_ads`
+ALTER TABLE `{prefix}admin`
+  MODIFY `admin_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `{prefix}ads`
   MODIFY `ads_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_ads_position`
---
-ALTER TABLE `cs_ads_position`
+ALTER TABLE `{prefix}ads_position`
   MODIFY `ads_position_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_app`
---
-ALTER TABLE `cs_app`
-  MODIFY `app_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- 使用表AUTO_INCREMENT `cs_app_install`
---
-ALTER TABLE `cs_app_install`
+ALTER TABLE `{prefix}app`
+  MODIFY `app_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `{prefix}app_install`
   MODIFY `app_install_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_article`
---
-ALTER TABLE `cs_article`
+ALTER TABLE `{prefix}article`
   MODIFY `article_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_article_cat`
---
-ALTER TABLE `cs_article_cat`
+ALTER TABLE `{prefix}article_cat`
   MODIFY `article_cat_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
---
--- 使用表AUTO_INCREMENT `cs_ask`
---
-ALTER TABLE `cs_ask`
+ALTER TABLE `{prefix}ask`
   MODIFY `ask_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_auth_group`
---
-ALTER TABLE `cs_auth_group`
+ALTER TABLE `{prefix}auth_group`
   MODIFY `group_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
---
--- 使用表AUTO_INCREMENT `cs_auth_rule`
---
-ALTER TABLE `cs_auth_rule`
+ALTER TABLE `{prefix}auth_rule`
   MODIFY `rule_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
---
--- 使用表AUTO_INCREMENT `cs_brand`
---
-ALTER TABLE `cs_brand`
+ALTER TABLE `{prefix}brand`
   MODIFY `brand_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_card`
---
-ALTER TABLE `cs_card`
+ALTER TABLE `{prefix}card`
   MODIFY `card_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_card_use`
---
-ALTER TABLE `cs_card_use`
+ALTER TABLE `{prefix}card_use`
   MODIFY `card_use_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_cart`
---
-ALTER TABLE `cs_cart`
+ALTER TABLE `{prefix}cart`
   MODIFY `cart_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_collect`
---
-ALTER TABLE `cs_collect`
+ALTER TABLE `{prefix}collect`
   MODIFY `collect_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_coupon`
---
-ALTER TABLE `cs_coupon`
+ALTER TABLE `{prefix}coupon`
   MODIFY `coupon_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_coupon_give`
---
-ALTER TABLE `cs_coupon_give`
+ALTER TABLE `{prefix}coupon_give`
   MODIFY `coupon_give_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_delivery`
---
-ALTER TABLE `cs_delivery`
+ALTER TABLE `{prefix}delivery`
   MODIFY `delivery_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_delivery_area`
---
-ALTER TABLE `cs_delivery_area`
+ALTER TABLE `{prefix}delivery_area`
   MODIFY `delivery_area_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_delivery_dist`
---
-ALTER TABLE `cs_delivery_dist`
+ALTER TABLE `{prefix}delivery_dist`
   MODIFY `delivery_dist_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_delivery_item`
---
-ALTER TABLE `cs_delivery_item`
+ALTER TABLE `{prefix}delivery_item`
   MODIFY `delivery_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=512;
---
--- 使用表AUTO_INCREMENT `cs_discount`
---
-ALTER TABLE `cs_discount`
+ALTER TABLE `{prefix}discount`
   MODIFY `discount_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_friend_link`
---
-ALTER TABLE `cs_friend_link`
+ALTER TABLE `{prefix}friend_link`
   MODIFY `friend_link_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_goods`
---
-ALTER TABLE `cs_goods`
+ALTER TABLE `{prefix}goods`
   MODIFY `goods_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_goods_attribute`
---
-ALTER TABLE `cs_goods_attribute`
+ALTER TABLE `{prefix}goods_attribute`
   MODIFY `goods_attribute_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_goods_attr_config`
---
-ALTER TABLE `cs_goods_attr_config`
+ALTER TABLE `{prefix}goods_attr_config`
   MODIFY `goods_attr_config_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_goods_category`
---
-ALTER TABLE `cs_goods_category`
+ALTER TABLE `{prefix}goods_category`
   MODIFY `goods_category_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=844;
---
--- 使用表AUTO_INCREMENT `cs_goods_comment`
---
-ALTER TABLE `cs_goods_comment`
+ALTER TABLE `{prefix}goods_comment`
   MODIFY `goods_comment_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_goods_consult`
---
-ALTER TABLE `cs_goods_consult`
+ALTER TABLE `{prefix}goods_consult`
   MODIFY `goods_consult_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_goods_reply`
---
-ALTER TABLE `cs_goods_reply`
+ALTER TABLE `{prefix}goods_reply`
   MODIFY `goods_reply_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_goods_type`
---
-ALTER TABLE `cs_goods_type`
+ALTER TABLE `{prefix}goods_type`
   MODIFY `goods_type_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_help`
---
-ALTER TABLE `cs_help`
+ALTER TABLE `{prefix}help`
   MODIFY `help_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
---
--- 使用表AUTO_INCREMENT `cs_history`
---
-ALTER TABLE `cs_history`
+ALTER TABLE `{prefix}history`
   MODIFY `history_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_menu`
---
-ALTER TABLE `cs_menu`
+ALTER TABLE `{prefix}menu`
   MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1087;
---
--- 使用表AUTO_INCREMENT `cs_message`
---
-ALTER TABLE `cs_message`
+ALTER TABLE `{prefix}message`
   MODIFY `message_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_message_user`
---
-ALTER TABLE `cs_message_user`
+ALTER TABLE `{prefix}message_user`
   MODIFY `message_user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_navigation`
---
-ALTER TABLE `cs_navigation`
+ALTER TABLE `{prefix}navigation`
   MODIFY `navigation_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_notice_item`
---
-ALTER TABLE `cs_notice_item`
+ALTER TABLE `{prefix}notice_item`
   MODIFY `notice_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
---
--- 使用表AUTO_INCREMENT `cs_notice_tpl`
---
-ALTER TABLE `cs_notice_tpl`
+ALTER TABLE `{prefix}notice_tpl`
   MODIFY `notice_tpl_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
---
--- 使用表AUTO_INCREMENT `cs_order`
---
-ALTER TABLE `cs_order`
+ALTER TABLE `{prefix}order`
   MODIFY `order_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_order_goods`
---
-ALTER TABLE `cs_order_goods`
+ALTER TABLE `{prefix}order_goods`
   MODIFY `order_goods_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_order_log`
---
-ALTER TABLE `cs_order_log`
+ALTER TABLE `{prefix}order_log`
   MODIFY `order_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_order_refund`
---
-ALTER TABLE `cs_order_refund`
+ALTER TABLE `{prefix}order_refund`
   MODIFY `order_refund_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_order_service`
---
-ALTER TABLE `cs_order_service`
+ALTER TABLE `{prefix}order_service`
   MODIFY `order_service_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_payment`
---
-ALTER TABLE `cs_payment`
+ALTER TABLE `{prefix}payment`
   MODIFY `payment_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
---
--- 使用表AUTO_INCREMENT `cs_payment_log`
---
-ALTER TABLE `cs_payment_log`
+ALTER TABLE `{prefix}payment_log`
   MODIFY `payment_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_praise`
---
-ALTER TABLE `cs_praise`
+ALTER TABLE `{prefix}praise`
   MODIFY `praise_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_promotion`
---
-ALTER TABLE `cs_promotion`
+ALTER TABLE `{prefix}promotion`
   MODIFY `promotion_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_qrcode`
---
-ALTER TABLE `cs_qrcode`
+ALTER TABLE `{prefix}qrcode`
   MODIFY `qrcode_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_region`
---
-ALTER TABLE `cs_region`
+ALTER TABLE `{prefix}region`
   MODIFY `region_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4085;
---
--- 使用表AUTO_INCREMENT `cs_service_log`
---
-ALTER TABLE `cs_service_log`
+ALTER TABLE `{prefix}service_log`
   MODIFY `service_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_setting`
---
-ALTER TABLE `cs_setting`
+ALTER TABLE `{prefix}setting`
   MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
---
--- 使用表AUTO_INCREMENT `cs_spec`
---
-ALTER TABLE `cs_spec`
+ALTER TABLE `{prefix}spec`
   MODIFY `spec_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_spec_config`
---
-ALTER TABLE `cs_spec_config`
+ALTER TABLE `{prefix}spec_config`
   MODIFY `spec_config_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_spec_item`
---
-ALTER TABLE `cs_spec_item`
+ALTER TABLE `{prefix}spec_item`
   MODIFY `spec_item_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_storage`
---
-ALTER TABLE `cs_storage`
+ALTER TABLE `{prefix}storage`
   MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
---
--- 使用表AUTO_INCREMENT `cs_storage_style`
---
-ALTER TABLE `cs_storage_style`
+ALTER TABLE `{prefix}storage_style`
   MODIFY `storage_style_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
---
--- 使用表AUTO_INCREMENT `cs_support`
---
-ALTER TABLE `cs_support`
+ALTER TABLE `{prefix}support`
   MODIFY `support_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_token`
---
-ALTER TABLE `cs_token`
-  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- 使用表AUTO_INCREMENT `cs_topic`
---
-ALTER TABLE `cs_topic`
+ALTER TABLE `{prefix}token`
+  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `{prefix}topic`
   MODIFY `topic_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_transaction`
---
-ALTER TABLE `cs_transaction`
+ALTER TABLE `{prefix}transaction`
   MODIFY `transaction_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_user`
---
-ALTER TABLE `cs_user`
+ALTER TABLE `{prefix}user`
   MODIFY `user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_user_address`
---
-ALTER TABLE `cs_user_address`
+ALTER TABLE `{prefix}user_address`
   MODIFY `user_address_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_user_level`
---
-ALTER TABLE `cs_user_level`
+ALTER TABLE `{prefix}user_level`
   MODIFY `user_level_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
---
--- 使用表AUTO_INCREMENT `cs_user_money`
---
-ALTER TABLE `cs_user_money`
+ALTER TABLE `{prefix}user_money`
   MODIFY `user_money_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_verification`
---
-ALTER TABLE `cs_verification`
+ALTER TABLE `{prefix}verification`
   MODIFY `verification_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_withdraw`
---
-ALTER TABLE `cs_withdraw`
+ALTER TABLE `{prefix}withdraw`
   MODIFY `withdraw_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- 使用表AUTO_INCREMENT `cs_withdraw_user`
---
-ALTER TABLE `cs_withdraw_user`
-  MODIFY `withdraw_user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;COMMIT;
-
+ALTER TABLE `{prefix}withdraw_user`
+  MODIFY `withdraw_user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

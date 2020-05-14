@@ -1,44 +1,46 @@
--- phpMyAdmin SQL Dump
--- version 4.7.0
--- https://www.phpmyadmin.net/
---
--- Host: localhost:3306
--- Generation Time: 2020-05-11 09:47:54
--- 服务器版本： 5.7.27-log
--- PHP Version: 7.1.11
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `careyshop`
---
 
---
--- 插入之前先把表清空（truncate） `cs_action_log`
---
+DROP TABLE IF EXISTS `{prefix}action_log`;
+CREATE TABLE `{prefix}action_log` (
+  `action_log_id` int(11) UNSIGNED NOT NULL,
+  `client_type` tinyint(1) DEFAULT '-1' COMMENT '-1=游客 0=顾客组 1=管理组',
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '账号编号',
+  `username` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '用户名',
+  `path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '访问路径',
+  `module` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '模型',
+  `header` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '请求头部',
+  `params` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '请求参数',
+  `result` longtext COLLATE utf8mb4_unicode_ci COMMENT '处理结果',
+  `ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'IP地址',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=成功 1=错误',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志';
 
-TRUNCATE TABLE `cs_action_log`;
---
--- 插入之前先把表清空（truncate） `cs_admin`
---
+DROP TABLE IF EXISTS `{prefix}admin`;
+CREATE TABLE `{prefix}admin` (
+  `admin_id` int(11) UNSIGNED NOT NULL,
+  `username` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号',
+  `password` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码',
+  `group_id` mediumint(8) UNSIGNED NOT NULL COMMENT '用户组Id',
+  `nickname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '昵称',
+  `head_pic` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '头像',
+  `last_login` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录日期',
+  `last_ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '最后登录ip',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删 ',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='管理组账号';
 
-TRUNCATE TABLE `cs_admin`;
---
--- 转存表中的数据 `cs_admin`
---
-
-INSERT INTO `cs_admin` (`admin_id`, `username`, `password`, `group_id`, `nickname`, `head_pic`, `last_login`, `last_ip`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
-(1, 'admin', '5631c89340a5413dc8124d23c85b900a', 1, '思维空间', '', 1589159385, '127.0.0.1', 1, 0, 1530289832, 1589159385),
-(2, 'dnyz123', '5631c89340a5413dc8124d23c85b900a', 2, 'dnyz123', '', 1588754649, '127.0.0.1', 1, 0, 1530289832, 1588754649),
+INSERT INTO `{prefix}admin` (`admin_id`, `username`, `password`, `group_id`, `nickname`, `head_pic`, `last_login`, `last_ip`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
+(2, 'dnyz520', '5631c89340a5413dc8124d23c85b900a', 2, 'dnyz520', '', 1588754649, '127.0.0.1', 1, 0, 1530289832, 1588754649),
 (3, 'admin2', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop2', '', 1588429701, '127.0.0.1', 1, 0, 1530289832, 1588429701),
 (4, 'admin3', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop3', '', 1587021502, '127.0.0.1', 1, 0, 1530289832, 1587021502),
 (5, 'admin4', '5631c89340a5413dc8124d23c85b900a', 1, 'CareyShop4', '', 1556380966, '127.0.0.1', 1, 0, 1530289832, 1556380966),
@@ -92,16 +94,25 @@ INSERT INTO `cs_admin` (`admin_id`, `username`, `password`, `group_id`, `nicknam
 (57, 'admin51', '5631c89340a5413dc8124d23c85b900a', 1, 'admin51', '', 0, '', 1, 0, 1572499187, 1579141036),
 (58, 'admin70', '5631c89340a5413dc8124d23c85b900a', 9, 'admin70', '', 1583828390, '127.0.0.1', 1, 0, 1583828378, 1583828390);
 
---
--- 插入之前先把表清空（truncate） `cs_ads`
---
+DROP TABLE IF EXISTS `{prefix}ads`;
+CREATE TABLE `{prefix}ads` (
+  `ads_id` int(11) UNSIGNED NOT NULL,
+  `ads_position_id` smallint(5) UNSIGNED NOT NULL COMMENT '对应ads_position表',
+  `code` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '编码',
+  `platform` tinyint(3) NOT NULL COMMENT '对应ads_position表',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '链接',
+  `target` enum('_self','_blank') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '_self' COMMENT '_self _blank',
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '内容(图片,代码等)',
+  `color` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '#ffffff' COMMENT '背景色',
+  `type` tinyint(1) NOT NULL COMMENT '0=图片 1=代码',
+  `begin_time` int(11) NOT NULL DEFAULT '0' COMMENT '投放日期',
+  `end_time` int(11) NOT NULL DEFAULT '0' COMMENT '结束日期',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='广告列表';
 
-TRUNCATE TABLE `cs_ads`;
---
--- 转存表中的数据 `cs_ads`
---
-
-INSERT INTO `cs_ads` (`ads_id`, `ads_position_id`, `code`, `platform`, `name`, `url`, `target`, `content`, `color`, `type`, `begin_time`, `end_time`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}ads` (`ads_id`, `ads_position_id`, `code`, `platform`, `name`, `url`, `target`, `content`, `color`, `type`, `begin_time`, `end_time`, `sort`, `status`) VALUES
 (1, 170, 'index-1', 0, 'testA', '', '_self', '', '#ffffff', 0, 1551058677, 1582594677, 50, 1),
 (2, 170, 'index-2', 0, 'testB', '', '_self', '', '#ffffff', 1, 1551058677, 1582594677, 50, 1),
 (3, 170, 'index-1', 0, 'testA', '', '_self', '', '#ffffff', 0, 1551058677, 1582594677, 50, 1),
@@ -209,16 +220,23 @@ INSERT INTO `cs_ads` (`ads_id`, `ads_position_id`, `code`, `platform`, `name`, `
 (114, 169, 'color', 2, 'color', '#', '_blank', '[{\"name\":\"68d42d66a8a9c565.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/ba1a67b3-49e2-44b3-bfe8-74ee7ff954c9.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/ba1a67b3-49e2-44b3-bfe8-74ee7ff954c9.jpg?type=aliyun\"}]', '#FF0000', 0, 1551190299, 1551283200, 50, 0),
 (115, 168, '', 1, 'test', 'sss', '_blank', '[]', '#FFFFFF', 0, 1579141182, 1580400000, 50, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_ads_position`
---
+DROP TABLE IF EXISTS `{prefix}ads_position`;
+CREATE TABLE `{prefix}ads_position` (
+  `ads_position_id` smallint(5) UNSIGNED NOT NULL,
+  `code` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '编码',
+  `platform` tinyint(3) NOT NULL COMMENT '平台(自定义)',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '位置名称',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `width` smallint(5) NOT NULL DEFAULT '0' COMMENT '位置宽度',
+  `height` smallint(5) NOT NULL DEFAULT '0' COMMENT '位置高度',
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '默认内容(图片,代码等)',
+  `color` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '#ffffff' COMMENT '背景色',
+  `type` tinyint(1) NOT NULL COMMENT '0=图片 1=代码',
+  `display` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=多个 1=单个 2=随机多个 3=随机单个',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用 	'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='广告位';
 
-TRUNCATE TABLE `cs_ads_position`;
---
--- 转存表中的数据 `cs_ads_position`
---
-
-INSERT INTO `cs_ads_position` (`ads_position_id`, `code`, `platform`, `name`, `description`, `width`, `height`, `content`, `color`, `type`, `display`, `status`) VALUES
+INSERT INTO `{prefix}ads_position` (`ads_position_id`, `code`, `platform`, `name`, `description`, `width`, `height`, `content`, `color`, `type`, `display`, `status`) VALUES
 (1, 'index-1', 0, 'testA', '123', 0, 0, '', '#ffffff', 1, 0, 1),
 (2, 'index-2', 1, 'testB', '321', 0, 0, '', '#ffffff', 0, 2, 0),
 (3, 'index-1', 0, 'testA', '123', 0, 0, '', '#ffffff', 1, 0, 1),
@@ -380,42 +398,57 @@ INSERT INTO `cs_ads_position` (`ads_position_id`, `code`, `platform`, `name`, `d
 (169, 'word', 2, 'word', 'word is ok', 100, 50, '[{\"name\":\"b02ad3879ba5135ef5dd55f72d869763.jpg\",\"source\":\"careyshop.oruei.com\\/uploads\\/files\\/20191122\\/bc4287f69d1f0c2cea88de8022fcbc37.jpg?type=careyshop\",\"url\":\"\\/\\/careyshop.oruei.com\\/uploads\\/files\\/20191122\\/bc4287f69d1f0c2cea88de8022fcbc37.jpg?type=careyshop\"},{\"name\":\"065c3b81673667e7ea512032a5b580ba.jpg\",\"source\":\"careyshop.oruei.com\\/uploads\\/files\\/20191122\\/8744bde0ec99a5fbb782ade73e7886f7.jpg?type=careyshop\",\"url\":\"\\/\\/careyshop.oruei.com\\/uploads\\/files\\/20191122\\/8744bde0ec99a5fbb782ade73e7886f7.jpg?type=careyshop\"},{\"name\":\"xueshan.jpg\",\"source\":\"careyshop.oruei.com\\/uploads\\/files\\/20191122\\/b305e6ccc27904033757e159dafcde8a.jpg?type=careyshop\",\"url\":\"\\/\\/careyshop.oruei.com\\/uploads\\/files\\/20191122\\/b305e6ccc27904033757e159dafcde8a.jpg?type=careyshop\"}]', '#08B2FB', 0, 0, 1),
 (170, 'zhao', 2, '中秋活动', '中秋活动 中秋活动 中秋活动 中秋活动\n不清不楚', 50, 99, '<img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/ads_content?url=careyshop.oruei.com/uploads/files/20190221/0adaa1ce616746bb1ec4e1ed79705938.png?type=careyshop\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/ads_content?url=careyshop.oruei.com/uploads/files/20190221/9e28cee6d0240bab931007a4be9eddff.jpg?type=careyshop\" alt=\"\" />\n<p><a href=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.download/code/ads_content?url=careyshop.oruei.com/uploads/files/20190221/4f55962d1cdf1b23fd2e750b4aed1392.txt?type=careyshop&amp;filename=666.txt\">附件：666.txt</a></p>\n<img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/ads_content?url=careyshop.oruei.com/uploads/files/20190221/006067908b5ba12796c6f8e5776c5134.jpg?type=careyshop\" alt=\"\" />', '', 1, 2, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_app`
---
+DROP TABLE IF EXISTS `{prefix}app`;
+CREATE TABLE `{prefix}app` (
+  `app_id` smallint(5) UNSIGNED NOT NULL,
+  `app_name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+  `app_key` int(8) UNSIGNED NOT NULL COMMENT '钥匙',
+  `app_secret` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密钥',
+  `captcha` tinyint(1) NOT NULL DEFAULT '0' COMMENT '启用验证码 0=否 1=是',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用 ',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='应用列表';
 
-TRUNCATE TABLE `cs_app`;
---
--- 转存表中的数据 `cs_app`
---
-
-INSERT INTO `cs_app` (`app_id`, `app_name`, `app_key`, `app_secret`, `captcha`, `status`, `is_delete`) VALUES
-(1, 'Admin(后台管理)', 86757125, 'ea1bd533d001fd73b09944f04c96a6fc', 1, 1, 0),
+INSERT INTO `{prefix}app` (`app_id`, `app_name`, `app_key`, `app_secret`, `captcha`, `status`, `is_delete`) VALUES
 (2, 'IOS(iPhone)', 26945134, 'b99cb2bdec70d20156000f664ec5ac30', 0, 0, 0),
 (3, 'Web(微信小程序)', 76472358, '36affdc58f50e1035649abc808c22b48', 0, 0, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_app_install`
---
+DROP TABLE IF EXISTS `{prefix}app_install`;
+CREATE TABLE `{prefix}app_install` (
+  `app_install_id` smallint(5) UNSIGNED NOT NULL,
+  `user_agent` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '系统标识',
+  `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '应用名称',
+  `ver` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '版本号',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '地址',
+  `count` int(11) NOT NULL DEFAULT '0' COMMENT '访问次数',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='应用安装包';
 
-TRUNCATE TABLE `cs_app_install`;
---
--- 转存表中的数据 `cs_app_install`
---
+INSERT INTO `{prefix}app_install` (`app_install_id`, `user_agent`, `name`, `ver`, `url`, `count`, `create_time`, `update_time`) VALUES
+(1, 'vue', 'CareyShop Admin', '1.6.0', 'https://github.com/dnyz520/careyshop-admin', 0, 1582526239, 1586538952);
 
-INSERT INTO `cs_app_install` (`app_install_id`, `user_agent`, `name`, `ver`, `url`, `count`, `create_time`, `update_time`) VALUES
-(1, 'vue', 'CareyShop Admin', '1.6.0', 'https://github.com/dnyz123/careyshop-admin', 0, 1582526239, 1586538952);
+DROP TABLE IF EXISTS `{prefix}article`;
+CREATE TABLE `{prefix}article` (
+  `article_id` int(11) UNSIGNED NOT NULL,
+  `article_cat_id` smallint(5) UNSIGNED NOT NULL COMMENT '对应article_cat表',
+  `title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
+  `image` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '封面',
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '内容',
+  `source` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '来源',
+  `source_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '来源地址',
+  `keywords` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '关键词',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '外部链接',
+  `target` enum('_self','_blank') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '_self' COMMENT '_self _blank',
+  `page_views` int(11) NOT NULL DEFAULT '0' COMMENT '游览量',
+  `is_top` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否置顶 0=否 1=是',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文章管理';
 
---
--- 插入之前先把表清空（truncate） `cs_article`
---
-
-TRUNCATE TABLE `cs_article`;
---
--- 转存表中的数据 `cs_article`
---
-
-INSERT INTO `cs_article` (`article_id`, `article_cat_id`, `title`, `image`, `content`, `source`, `source_url`, `keywords`, `description`, `url`, `target`, `page_views`, `is_top`, `status`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}article` (`article_id`, `article_cat_id`, `title`, `image`, `content`, `source`, `source_url`, `keywords`, `description`, `url`, `target`, `page_views`, `is_top`, `status`, `create_time`, `update_time`) VALUES
 (4, 22, '3G知识普及', '', '4c', '', '', '', '', '', '_self', 2, 1, 1, 0, 0),
 (5, 3, '3G知识普及', '', '5c', '', '', '', '', '', '_self', 0, 0, 1, 0, 0),
 (6, 3, '置顶标题', '', '置顶', '', '', '', '', '', '_self', 0, 1, 1, 0, 0),
@@ -482,11 +515,11 @@ INSERT INTO `cs_article` (`article_id`, `article_cat_id`, `title`, `image`, `con
 (67, 9, '111标题', '', '12C', '百度', 'https://www.baidu.com', '', '', '', '_self', 0, 0, 1, 1482677531, 1482715541),
 (68, 8, '测试', '', '内容', '', '', '', '', '', '_self', 0, 0, 0, 1499781644, 1499781644),
 (69, 7, '测试', '', '内容', '', '', '', '', '', '_self', 2, 0, 0, 1499781803, 1499781803),
-(70, 6, '测试', '', '内容', '', '', '', '', '', '_self', 5, 0, 0, 1499781870, 1558714530),
+(70, 6, '测试', '', '内容', '', '', '', '', '', '_self', 6, 0, 0, 1499781870, 1558714530),
 (71, 5, '测试', '', '内容', '', '', '', '', '', '_self', 30, 0, 0, 1499959652, 1558714525),
 (72, 4, '测试666', 'aliyun.oss.careyshop.cn/uploads/files/20191112/2c82bed2-233d-45e5-8752-d169b8265ee6.jpg?type=aliyun', '<code></code>\n<table class=\"highlight tab-size js-file-line-container\" data-tab-size=\"8\">\n<tbody>\n<tr>\n<td id=\"LC1\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">template</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L2\" class=\"blob-num js-line-number\" data-line-number=\"2\">&nbsp;</td>\n<td id=\"LC2\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">d2-container</span></td>\n</tr>\n<tr>\n<td id=\"L3\" class=\"blob-num js-line-number\" data-line-number=\"3\">&nbsp;</td>\n<td id=\"LC3\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">ref</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>container<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L4\" class=\"blob-num js-line-number\" data-line-number=\"4\">&nbsp;</td>\n<td id=\"LC4\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">type</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>containerType<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L5\" class=\"blob-num js-line-number\" data-line-number=\"5\">&nbsp;</td>\n<td id=\"LC5\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">better-scroll</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>betterScroll<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L6\" class=\"blob-num js-line-number\" data-line-number=\"6\">&nbsp;</td>\n<td id=\"LC6\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">scroll-delay</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>scrollDelay<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L7\" class=\"blob-num js-line-number\" data-line-number=\"7\">&nbsp;</td>\n<td id=\"LC7\" class=\"blob-code blob-code-inner js-file-line\">@<span class=\"pl-e\">scroll</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>({x, y}) <span class=\"pl-k\">=&gt;</span> { scrollTop <span class=\"pl-k\">=</span> y }<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L8\" class=\"blob-num js-line-number\" data-line-number=\"8\">&nbsp;</td>\n<td id=\"LC8\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">template</span> <span class=\"pl-e\">slot</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>header<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L9\" class=\"blob-num js-line-number\" data-line-number=\"9\">&nbsp;</td>\n<td id=\"LC9\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form</span></td>\n</tr>\n<tr>\n<td id=\"L10\" class=\"blob-num js-line-number\" data-line-number=\"10\">&nbsp;</td>\n<td id=\"LC10\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">inline</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-c1\">true</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L11\" class=\"blob-num js-line-number\" data-line-number=\"11\">&nbsp;</td>\n<td id=\"LC11\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">size</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>mini<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L12\" class=\"blob-num js-line-number\" data-line-number=\"12\">&nbsp;</td>\n<td id=\"LC12\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span></td>\n</tr>\n<tr>\n<td id=\"L13\" class=\"blob-num js-line-number\" data-line-number=\"13\">&nbsp;</td>\n<td id=\"LC13\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>布局类型<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L14\" class=\"blob-num js-line-number\" data-line-number=\"14\">&nbsp;</td>\n<td id=\"LC14\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L15\" class=\"blob-num js-line-number\" data-line-number=\"15\">&nbsp;</td>\n<td id=\"LC15\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-radio-group</span> <span class=\"pl-e\">v-model</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>containerType<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L16\" class=\"blob-num js-line-number\" data-line-number=\"16\">&nbsp;</td>\n<td id=\"LC16\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-radio-button</span> <span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>full<span class=\"pl-pds\">\"</span></span>&gt;&lt;/<span class=\"pl-ent\">el-radio-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L17\" class=\"blob-num js-line-number\" data-line-number=\"17\">&nbsp;</td>\n<td id=\"LC17\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-radio-button</span> <span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>card<span class=\"pl-pds\">\"</span></span>&gt;&lt;/<span class=\"pl-ent\">el-radio-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L18\" class=\"blob-num js-line-number\" data-line-number=\"18\">&nbsp;</td>\n<td id=\"LC18\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-radio-button</span> <span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>ghost<span class=\"pl-pds\">\"</span></span>&gt;&lt;/<span class=\"pl-ent\">el-radio-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L19\" class=\"blob-num js-line-number\" data-line-number=\"19\">&nbsp;</td>\n<td id=\"LC19\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-radio-group</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L20\" class=\"blob-num js-line-number\" data-line-number=\"20\">&nbsp;</td>\n<td id=\"LC20\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L21\" class=\"blob-num js-line-number\" data-line-number=\"21\">&nbsp;</td>\n<td id=\"LC21\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span></td>\n</tr>\n<tr>\n<td id=\"L22\" class=\"blob-num js-line-number\" data-line-number=\"22\">&nbsp;</td>\n<td id=\"LC22\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>滚动距离<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L23\" class=\"blob-num js-line-number\" data-line-number=\"23\">&nbsp;</td>\n<td id=\"LC23\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L24\" class=\"blob-num js-line-number\" data-line-number=\"24\">&nbsp;</td>\n<td id=\"LC24\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-input</span></td>\n</tr>\n<tr>\n<td id=\"L25\" class=\"blob-num js-line-number\" data-line-number=\"25\">&nbsp;</td>\n<td id=\"LC25\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">value</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>scrollTop<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L26\" class=\"blob-num js-line-number\" data-line-number=\"26\">&nbsp;</td>\n<td id=\"LC26\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">style</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>width: 130px;<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L27\" class=\"blob-num js-line-number\" data-line-number=\"27\">&nbsp;</td>\n<td id=\"LC27\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">template</span> <span class=\"pl-e\">slot</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>append<span class=\"pl-pds\">\"</span></span>&gt;px&lt;/<span class=\"pl-ent\">template</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L28\" class=\"blob-num js-line-number\" data-line-number=\"28\">&nbsp;</td>\n<td id=\"LC28\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-input</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L29\" class=\"blob-num js-line-number\" data-line-number=\"29\">&nbsp;</td>\n<td id=\"LC29\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L30\" class=\"blob-num js-line-number\" data-line-number=\"30\">&nbsp;</td>\n<td id=\"LC30\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span></td>\n</tr>\n<tr>\n<td id=\"L31\" class=\"blob-num js-line-number\" data-line-number=\"31\">&nbsp;</td>\n<td id=\"LC31\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">v-if</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-k\">!</span>betterScroll<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L32\" class=\"blob-num js-line-number\" data-line-number=\"32\">&nbsp;</td>\n<td id=\"LC32\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">label</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>事件延迟(ms)<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L33\" class=\"blob-num js-line-number\" data-line-number=\"33\">&nbsp;</td>\n<td id=\"LC33\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L34\" class=\"blob-num js-line-number\" data-line-number=\"34\">&nbsp;</td>\n<td id=\"LC34\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-input-number</span></td>\n</tr>\n<tr>\n<td id=\"L35\" class=\"blob-num js-line-number\" data-line-number=\"35\">&nbsp;</td>\n<td id=\"LC35\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">v-model</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>scrollDelay<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L36\" class=\"blob-num js-line-number\" data-line-number=\"36\">&nbsp;</td>\n<td id=\"LC36\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">min</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-c1\">10</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L37\" class=\"blob-num js-line-number\" data-line-number=\"37\">&nbsp;</td>\n<td id=\"LC37\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">max</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-c1\">2000</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L38\" class=\"blob-num js-line-number\" data-line-number=\"38\">&nbsp;</td>\n<td id=\"LC38\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">step</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-c1\">100</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L39\" class=\"blob-num js-line-number\" data-line-number=\"39\">&nbsp;</td>\n<td id=\"LC39\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">style</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>width: 110px;<span class=\"pl-pds\">\"</span></span>/&gt;</td>\n</tr>\n<tr>\n<td id=\"L40\" class=\"blob-num js-line-number\" data-line-number=\"40\">&nbsp;</td>\n<td id=\"LC40\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L41\" class=\"blob-num js-line-number\" data-line-number=\"41\">&nbsp;</td>\n<td id=\"LC41\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span> <span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L42\" class=\"blob-num js-line-number\" data-line-number=\"42\">&nbsp;</td>\n<td id=\"LC42\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-button</span></td>\n</tr>\n<tr>\n<td id=\"L43\" class=\"blob-num js-line-number\" data-line-number=\"43\">&nbsp;</td>\n<td id=\"LC43\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">v-if</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>scrollTop <span class=\"pl-k\">&gt;=</span> <span class=\"pl-c1\">55</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L44\" class=\"blob-num js-line-number\" data-line-number=\"44\">&nbsp;</td>\n<td id=\"LC44\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">type</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>primary<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L45\" class=\"blob-num js-line-number\" data-line-number=\"45\">&nbsp;</td>\n<td id=\"LC45\" class=\"blob-code blob-code-inner js-file-line\">@<span class=\"pl-e\">click</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-smi\">$refs</span>.<span class=\"pl-smi\">container</span>.<span class=\"pl-smi\">scrollToTop</span><span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L46\" class=\"blob-num js-line-number\" data-line-number=\"46\">&nbsp;</td>\n<td id=\"LC46\" class=\"blob-code blob-code-inner js-file-line\">回到顶部</td>\n</tr>\n<tr>\n<td id=\"L47\" class=\"blob-num js-line-number\" data-line-number=\"47\">&nbsp;</td>\n<td id=\"LC47\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L48\" class=\"blob-num js-line-number\" data-line-number=\"48\">&nbsp;</td>\n<td id=\"LC48\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L49\" class=\"blob-num js-line-number\" data-line-number=\"49\">&nbsp;</td>\n<td id=\"LC49\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L50\" class=\"blob-num js-line-number\" data-line-number=\"50\">&nbsp;</td>\n<td id=\"LC50\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">template</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L51\" class=\"blob-num js-line-number\" data-line-number=\"51\">&nbsp;</td>\n<td id=\"LC51\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-alert</span></td>\n</tr>\n<tr>\n<td id=\"L52\" class=\"blob-num js-line-number\" data-line-number=\"52\">&nbsp;</td>\n<td id=\"LC52\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">type</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>success<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L53\" class=\"blob-num js-line-number\" data-line-number=\"53\">&nbsp;</td>\n<td id=\"LC53\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">title</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-s\"><span class=\"pl-pds\">`</span><span class=\"pl-pse\">${</span>betterScroll <span class=\"pl-k\">?</span> <span class=\"pl-pds\">\'</span>此示例开启了 BetterScroll <span class=\"pl-pds\">\'</span> <span class=\"pl-k\">:</span> <span class=\"pl-pds\">\'</span><span class=\"pl-pds\">\'</span><span class=\"pl-pse\">}</span>请向下滚动<span class=\"pl-pds\">`</span></span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L54\" class=\"blob-num js-line-number\" data-line-number=\"54\">&nbsp;</td>\n<td id=\"LC54\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-10<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L55\" class=\"blob-num js-line-number\" data-line-number=\"55\">&nbsp;</td>\n<td id=\"LC55\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">center</span>/&gt;</td>\n</tr>\n<tr>\n<td id=\"L56\" class=\"blob-num js-line-number\" data-line-number=\"56\">&nbsp;</td>\n<td id=\"LC56\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">d2-demo-article</span></td>\n</tr>\n<tr>\n<td id=\"L57\" class=\"blob-num js-line-number\" data-line-number=\"57\">&nbsp;</td>\n<td id=\"LC57\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">v-for</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>i <span class=\"pl-k\">in</span> <span class=\"pl-c1\">10</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L58\" class=\"blob-num js-line-number\" data-line-number=\"58\">&nbsp;</td>\n<td id=\"LC58\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">key</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>i<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L59\" class=\"blob-num js-line-number\" data-line-number=\"59\">&nbsp;</td>\n<td id=\"LC59\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">style</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span>articleStyle<span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L60\" class=\"blob-num js-line-number\" data-line-number=\"60\">&nbsp;</td>\n<td id=\"LC60\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">long</span>/&gt;</td>\n</tr>\n<tr>\n<td id=\"L61\" class=\"blob-num js-line-number\" data-line-number=\"61\">&nbsp;</td>\n<td id=\"LC61\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">template</span> <span class=\"pl-e\">slot</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>footer<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L62\" class=\"blob-num js-line-number\" data-line-number=\"62\">&nbsp;</td>\n<td id=\"LC62\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form</span></td>\n</tr>\n<tr>\n<td id=\"L63\" class=\"blob-num js-line-number\" data-line-number=\"63\">&nbsp;</td>\n<td id=\"LC63\" class=\"blob-code blob-code-inner js-file-line\">:<span class=\"pl-e\">inline</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-c1\">true</span><span class=\"pl-pds\">\"</span></span></td>\n</tr>\n<tr>\n<td id=\"L64\" class=\"blob-num js-line-number\" data-line-number=\"64\">&nbsp;</td>\n<td id=\"LC64\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-e\">size</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>mini<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L65\" class=\"blob-num js-line-number\" data-line-number=\"65\">&nbsp;</td>\n<td id=\"LC65\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span> <span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L66\" class=\"blob-num js-line-number\" data-line-number=\"66\">&nbsp;</td>\n<td id=\"LC66\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-button</span> @<span class=\"pl-e\">click</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-smi\">$refs</span>.<span class=\"pl-smi\">container</span>.<span class=\"pl-c1\">scrollBy</span>(<span class=\"pl-c1\">0</span>, <span class=\"pl-c1\">30</span>)<span class=\"pl-pds\">\"</span></span>&gt;相对滚动 (0, 30) 像素&lt;/<span class=\"pl-ent\">el-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L67\" class=\"blob-num js-line-number\" data-line-number=\"67\">&nbsp;</td>\n<td id=\"LC67\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L68\" class=\"blob-num js-line-number\" data-line-number=\"68\">&nbsp;</td>\n<td id=\"LC68\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span> <span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L69\" class=\"blob-num js-line-number\" data-line-number=\"69\">&nbsp;</td>\n<td id=\"LC69\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-button</span> @<span class=\"pl-e\">click</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-smi\">$refs</span>.<span class=\"pl-smi\">container</span>.<span class=\"pl-c1\">scrollTo</span>(<span class=\"pl-c1\">0</span>, <span class=\"pl-c1\">100</span>)<span class=\"pl-pds\">\"</span></span>&gt;滚动到 (0, 100) 像素位置&lt;/<span class=\"pl-ent\">el-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L70\" class=\"blob-num js-line-number\" data-line-number=\"70\">&nbsp;</td>\n<td id=\"LC70\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L71\" class=\"blob-num js-line-number\" data-line-number=\"71\">&nbsp;</td>\n<td id=\"LC71\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-form-item</span> <span class=\"pl-e\">class</span>=<span class=\"pl-s\"><span class=\"pl-pds\">\"</span>d2-mb-0<span class=\"pl-pds\">\"</span></span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L72\" class=\"blob-num js-line-number\" data-line-number=\"72\">&nbsp;</td>\n<td id=\"LC72\" class=\"blob-code blob-code-inner js-file-line\">&lt;<span class=\"pl-ent\">el-button</span> @<span class=\"pl-e\">click</span>=<span class=\"pl-s1\"><span class=\"pl-pds\">\"</span><span class=\"pl-smi\">$refs</span>.<span class=\"pl-smi\">container</span>.<span class=\"pl-en\">scrollTop</span>(<span class=\"pl-c1\">100</span>)<span class=\"pl-pds\">\"</span></span>&gt;滚动到垂直位置 100&lt;/<span class=\"pl-ent\">el-button</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L73\" class=\"blob-num js-line-number\" data-line-number=\"73\">&nbsp;</td>\n<td id=\"LC73\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form-item</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L74\" class=\"blob-num js-line-number\" data-line-number=\"74\">&nbsp;</td>\n<td id=\"LC74\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">el-form</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L75\" class=\"blob-num js-line-number\" data-line-number=\"75\">&nbsp;</td>\n<td id=\"LC75\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">template</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L76\" class=\"blob-num js-line-number\" data-line-number=\"76\">&nbsp;</td>\n<td id=\"LC76\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">d2-container</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L77\" class=\"blob-num js-line-number\" data-line-number=\"77\">&nbsp;</td>\n<td id=\"LC77\" class=\"blob-code blob-code-inner js-file-line\">&lt;/<span class=\"pl-ent\">template</span>&gt;</td>\n</tr>\n<tr>\n<td id=\"L78\" class=\"blob-num js-line-number\" data-line-number=\"78\">&nbsp;</td>\n<td id=\"LC78\" class=\"blob-code blob-code-inner js-file-line\">&nbsp;</td>\n</tr>\n<tr>\n<td id=\"L79\" class=\"blob-num js-line-number\" data-line-number=\"79\">&nbsp;</td>\n<td id=\"LC79\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\">&lt;<span class=\"pl-ent\">script</span>&gt;</span></td>\n</tr>\n<tr>\n<td id=\"L80\" class=\"blob-num js-line-number\" data-line-number=\"80\">&nbsp;</td>\n<td id=\"LC80\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"><span class=\"pl-k\">import</span> <span class=\"pl-smi\">d2DemoArticle</span> <span class=\"pl-k\">from</span> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>./components/d2-demo-article<span class=\"pl-pds\">\'</span></span></span></td>\n</tr>\n<tr>\n<td id=\"L81\" class=\"blob-num js-line-number\" data-line-number=\"81\">&nbsp;</td>\n<td id=\"LC81\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"><span class=\"pl-k\">export</span> <span class=\"pl-c1\">default</span> {</span></td>\n</tr>\n<tr>\n<td id=\"L82\" class=\"blob-num js-line-number\" data-line-number=\"82\">&nbsp;</td>\n<td id=\"LC82\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> components<span class=\"pl-k\">:</span> {</span></td>\n</tr>\n<tr>\n<td id=\"L83\" class=\"blob-num js-line-number\" data-line-number=\"83\">&nbsp;</td>\n<td id=\"LC83\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>d2-demo-article<span class=\"pl-pds\">\'</span></span><span class=\"pl-k\">:</span> d2DemoArticle</span></td>\n</tr>\n<tr>\n<td id=\"L84\" class=\"blob-num js-line-number\" data-line-number=\"84\">&nbsp;</td>\n<td id=\"LC84\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> },</span></td>\n</tr>\n<tr>\n<td id=\"L85\" class=\"blob-num js-line-number\" data-line-number=\"85\">&nbsp;</td>\n<td id=\"LC85\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-en\">data</span> () {</span></td>\n</tr>\n<tr>\n<td id=\"L86\" class=\"blob-num js-line-number\" data-line-number=\"86\">&nbsp;</td>\n<td id=\"LC86\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-k\">return</span> {</span></td>\n</tr>\n<tr>\n<td id=\"L87\" class=\"blob-num js-line-number\" data-line-number=\"87\">&nbsp;</td>\n<td id=\"LC87\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> containerType<span class=\"pl-k\">:</span> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>full<span class=\"pl-pds\">\'</span></span>,</span></td>\n</tr>\n<tr>\n<td id=\"L88\" class=\"blob-num js-line-number\" data-line-number=\"88\">&nbsp;</td>\n<td id=\"LC88\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> scrollDelay<span class=\"pl-k\">:</span> <span class=\"pl-c1\">10</span>,</span></td>\n</tr>\n<tr>\n<td id=\"L89\" class=\"blob-num js-line-number\" data-line-number=\"89\">&nbsp;</td>\n<td id=\"LC89\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> scrollTop<span class=\"pl-k\">:</span> <span class=\"pl-c1\">0</span></span></td>\n</tr>\n<tr>\n<td id=\"L90\" class=\"blob-num js-line-number\" data-line-number=\"90\">&nbsp;</td>\n<td id=\"LC90\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> }</span></td>\n</tr>\n<tr>\n<td id=\"L91\" class=\"blob-num js-line-number\" data-line-number=\"91\">&nbsp;</td>\n<td id=\"LC91\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> },</span></td>\n</tr>\n<tr>\n<td id=\"L92\" class=\"blob-num js-line-number\" data-line-number=\"92\">&nbsp;</td>\n<td id=\"LC92\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> computed<span class=\"pl-k\">:</span> {</span></td>\n</tr>\n<tr>\n<td id=\"L93\" class=\"blob-num js-line-number\" data-line-number=\"93\">&nbsp;</td>\n<td id=\"LC93\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-c\">// 是否开启 better scroll</span></span></td>\n</tr>\n<tr>\n<td id=\"L94\" class=\"blob-num js-line-number\" data-line-number=\"94\">&nbsp;</td>\n<td id=\"LC94\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-en\">betterScroll</span> () {</span></td>\n</tr>\n<tr>\n<td id=\"L95\" class=\"blob-num js-line-number\" data-line-number=\"95\">&nbsp;</td>\n<td id=\"LC95\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-k\">return</span> <span class=\"pl-c1\">this</span>.<span class=\"pl-smi\">$route</span>.<span class=\"pl-smi\">query</span>.<span class=\"pl-smi\">bs</span> <span class=\"pl-k\">===</span> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>true<span class=\"pl-pds\">\'</span></span></span></td>\n</tr>\n<tr>\n<td id=\"L96\" class=\"blob-num js-line-number\" data-line-number=\"96\">&nbsp;</td>\n<td id=\"LC96\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> },</span></td>\n</tr>\n<tr>\n<td id=\"L97\" class=\"blob-num js-line-number\" data-line-number=\"97\">&nbsp;</td>\n<td id=\"LC97\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-c\">// 根据滚动位置返回文章的样式</span></span></td>\n</tr>\n<tr>\n<td id=\"L98\" class=\"blob-num js-line-number\" data-line-number=\"98\">&nbsp;</td>\n<td id=\"LC98\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-en\">articleStyle</span> () {</span></td>\n</tr>\n<tr>\n<td id=\"L99\" class=\"blob-num js-line-number\" data-line-number=\"99\">&nbsp;</td>\n<td id=\"LC99\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> <span class=\"pl-k\">return</span> {</span></td>\n</tr>\n<tr>\n<td id=\"L100\" class=\"blob-num js-line-number\" data-line-number=\"100\">&nbsp;</td>\n<td id=\"LC100\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> opacity<span class=\"pl-k\">:</span> <span class=\"pl-c1\">this</span>.<span class=\"pl-smi\">scrollTop</span> <span class=\"pl-k\">&gt;</span> <span class=\"pl-c1\">55</span> <span class=\"pl-k\">?</span> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>1<span class=\"pl-pds\">\'</span></span> <span class=\"pl-k\">:</span> <span class=\"pl-s\"><span class=\"pl-pds\">\'</span>.1<span class=\"pl-pds\">\'</span></span></span></td>\n</tr>\n<tr>\n<td id=\"L101\" class=\"blob-num js-line-number\" data-line-number=\"101\">&nbsp;</td>\n<td id=\"LC101\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> }</span></td>\n</tr>\n<tr>\n<td id=\"L102\" class=\"blob-num js-line-number\" data-line-number=\"102\">&nbsp;</td>\n<td id=\"LC102\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> }</span></td>\n</tr>\n<tr>\n<td id=\"L103\" class=\"blob-num js-line-number\" data-line-number=\"103\">&nbsp;</td>\n<td id=\"LC103\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\"> }</span></td>\n</tr>\n<tr>\n<td id=\"L104\" class=\"blob-num js-line-number\" data-line-number=\"104\">&nbsp;</td>\n<td id=\"LC104\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\">}</span></td>\n</tr>\n<tr>\n<td id=\"L105\" class=\"blob-num js-line-number\" data-line-number=\"105\">&nbsp;</td>\n<td id=\"LC105\" class=\"blob-code blob-code-inner js-file-line\"><span class=\"pl-s1\">&lt;/<span class=\"pl-ent\">script</span>&gt;</span></td>\n</tr>\n</tbody>\n</table>\n<code></code>', '', '', '', '', '', '_self', 105, 1, 1, 1499959656, 1573624520),
-(73, 3, '测试Zzz', 'aliyun.oss.careyshop.cn/uploads/files/20191112/968cc6c2-b121-4d4c-804e-cf828af7e1fb.jpg?type=aliyun', '<p>邮件端</p>\n<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p>序号</p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>功能</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>备注</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">1</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>自定义搜索文件夹</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">2</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>邮件与客户关联</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">3</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>客户往来邮件<span lang=\"EN-US\"><br /></span>客户往来邮件<span lang=\"EN-US\"><br /></span>客户某个邮箱往来邮件</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">4</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>新邮件创建客户</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n</tbody>\n</table>\n<p><span lang=\"EN-US\">&nbsp;</span></p>\n<p>客户资料端</p>\n<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td valign=\"top\" width=\"36\">\n<p>序号</p>\n</td>\n<td valign=\"top\" width=\"117\">\n<p>功能</p>\n</td>\n<td valign=\"top\" width=\"400\">\n<p>备注</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"36\">\n<p><span lang=\"EN-US\">1</span></p>\n</td>\n<td valign=\"top\" width=\"117\">\n<p>客户资料关联往来邮件</p>\n</td>\n<td valign=\"top\" width=\"400\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"36\">\n<p><span lang=\"EN-US\">2</span></p>\n</td>\n<td valign=\"top\" width=\"117\">\n<p>邮件地址出发动作（最好）</p>\n</td>\n<td valign=\"top\" width=\"400\">\n<p>&nbsp;</p>\n</td>\n</tr>\n</tbody>\n</table>\n<p><span lang=\"EN-US\">&nbsp;</span></p>\n<p><span lang=\"EN-US\">&nbsp;</span></p>', '', '', '', '', '', '_self', 220, 0, 0, 1499959658, 1584696141),
-(74, 2, '测试B', 'careyshop.oruei.com/uploads/files/20191206/47a84479bcfa0c379cc40a37febb4f9a.png?type=careyshop', '<p><strong> <img src=\"../api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn/uploads/files/20190511/c14c58fe-e725-4ccb-8280-e6bc59e407ff.jpg?type=aliyun\" alt=\"\" />@ClouderSky </strong> commented on this pull request.</p>\n<hr />\n<p>In <a href=\"https://github.com/overtrue/wechat/pull/1457#discussion_r249626156\" target=\"_blank\" rel=\"noopener\"> src/Payment/Sharing/Client.php </a> :</p>\n<pre style=\"color: #555;\">&gt; +     */\n\n+    public function multiSharing(\n\n+        string $transactionId,\n\n+        string $outOrderNo,\n\n+        array $receivers\n\n+    ) {\n\n+        $params = [\n\n+            \'appid\' =&gt; $this-&gt;app[\'config\']-&gt;app_id,\n\n+            \'transaction_id\' =&gt; $transactionId,\n\n+            \'out_order_no\' =&gt; $outOrderNo,\n\n+            \'receivers\' =&gt; json_encode(\n\n+                $receivers, JSON_UNESCAPED_UNICODE\n\n+            ),\n\n+        ];\n\n+\n\n+        return $this-&gt;safeRequest(\n\n</pre>\n<p>具体可参考 <a href=\"https://pay.weixin.qq.com/wiki/doc/api/allocation_sl.php?chapter=25_6&amp;index=2\" target=\"_blank\" rel=\"nofollow noopener\"> 文档 </a> 。</p>\n<p>按照个人的理解：</p>\n<ul>\n<li>\n<p>单次分账的含义是对一笔支付进行一次性的分账操作，所有该次分账未声明去处的资金都在该次分账中被认为是归入收款主体账户的，于是分账结束后所有资金都被处理完成。</p>\n</li>\n<li>\n<p>多次分账是指一次分账操作后，剩余未分配资金仍然保持未分配状态，等待下一个分账指令处理或者通过markOrderAsFinished操作一次性归入收款主体账户。</p>\n</li>\n</ul>\n<p style=\"font-size: small; -webkit-text-size-adjust: none; color: #666;\">&mdash; <br />You are receiving this because you are subscribed to this thread. <br />Reply to this email directly, <a href=\"https://github.com/overtrue/wechat/pull/1457#discussion_r249626156\" target=\"_blank\" rel=\"noopener\"> view it on GitHub </a> , or <a href=\"https://github.com/notifications/unsubscribe-auth/AclPcFh6qlZ4itE1KK4KMG2L1mZ3xcySks5vFnsPgaJpZM4aKL-7\" target=\"_blank\" rel=\"noopener\"> mute the thread </a> . <img style=\"display: none !important;\" hidden=\"\" src=\"https://github.com/notifications/beacon/AclPcIqq4UUIR3SIt0mEYzzrq2aM7MCUks5vFnsPgaJpZM4aKL-7.gif\" alt=\"\" width=\"1\" height=\"1\" /></p>', '', '', '', '', 'http://www.baidu.com', '_self', 97, 1, 1, 1499959763, 1575642594),
+(73, 3, 'el-cascader的使用以及报错解决', 'aliyun.oss.careyshop.cn/uploads/files/20191112/968cc6c2-b121-4d4c-804e-cf828af7e1fb.jpg?type=aliyun', '<p>邮件端</p>\n<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p>序号</p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>功能</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>备注</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">1</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>自定义搜索文件夹</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">2</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>邮件与客户关联</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">3</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>客户往来邮件<span lang=\"EN-US\"><br /></span>客户往来邮件<span lang=\"EN-US\"><br /></span>客户某个邮箱往来邮件</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"56\">\n<p><span lang=\"EN-US\">4</span></p>\n</td>\n<td valign=\"top\" width=\"312\">\n<p>新邮件创建客户</p>\n</td>\n<td valign=\"top\" width=\"184\">\n<p>&nbsp;</p>\n</td>\n</tr>\n</tbody>\n</table>\n<p><span lang=\"EN-US\">&nbsp;</span></p>\n<p>客户资料端</p>\n<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td valign=\"top\" width=\"36\">\n<p>序号</p>\n</td>\n<td valign=\"top\" width=\"117\">\n<p>功能</p>\n</td>\n<td valign=\"top\" width=\"400\">\n<p>备注</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"36\">\n<p><span lang=\"EN-US\">1</span></p>\n</td>\n<td valign=\"top\" width=\"117\">\n<p>客户资料关联往来邮件</p>\n</td>\n<td valign=\"top\" width=\"400\">\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"36\">\n<p><span lang=\"EN-US\">2</span></p>\n</td>\n<td valign=\"top\" width=\"117\">\n<p>邮件地址出发动作（最好）</p>\n</td>\n<td valign=\"top\" width=\"400\">\n<p>&nbsp;</p>\n</td>\n</tr>\n</tbody>\n</table>\n<p><span lang=\"EN-US\">&nbsp;</span></p>\n<p><span lang=\"EN-US\">&nbsp;</span></p>', '', '', '', '', '', '_self', 224, 0, 0, 1499959658, 1589262730),
+(74, 2, '测试B', 'careyshop.oruei.com/uploads/files/20191206/47a84479bcfa0c379cc40a37febb4f9a.png?type=careyshop', '<p><strong> <img src=\"../api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn/uploads/files/20190511/c14c58fe-e725-4ccb-8280-e6bc59e407ff.jpg?type=aliyun\" alt=\"\" />@ClouderSky </strong> commented on this pull request.</p>\n<hr />\n<p>In <a href=\"https://github.com/overtrue/wechat/pull/1457#discussion_r249626156\" target=\"_blank\" rel=\"noopener\"> src/Payment/Sharing/Client.php </a> :</p>\n<pre style=\"color: #555;\">&gt; +     */\n\n+    public function multiSharing(\n\n+        string $transactionId,\n\n+        string $outOrderNo,\n\n+        array $receivers\n\n+    ) {\n\n+        $params = [\n\n+            \'appid\' =&gt; $this-&gt;app[\'config\']-&gt;app_id,\n\n+            \'transaction_id\' =&gt; $transactionId,\n\n+            \'out_order_no\' =&gt; $outOrderNo,\n\n+            \'receivers\' =&gt; json_encode(\n\n+                $receivers, JSON_UNESCAPED_UNICODE\n\n+            ),\n\n+        ];\n\n+\n\n+        return $this-&gt;safeRequest(\n\n</pre>\n<p>具体可参考 <a href=\"https://pay.weixin.qq.com/wiki/doc/api/allocation_sl.php?chapter=25_6&amp;index=2\" target=\"_blank\" rel=\"nofollow noopener\"> 文档 </a> 。</p>\n<p>按照个人的理解：</p>\n<ul>\n<li>\n<p>单次分账的含义是对一笔支付进行一次性的分账操作，所有该次分账未声明去处的资金都在该次分账中被认为是归入收款主体账户的，于是分账结束后所有资金都被处理完成。</p>\n</li>\n<li>\n<p>多次分账是指一次分账操作后，剩余未分配资金仍然保持未分配状态，等待下一个分账指令处理或者通过markOrderAsFinished操作一次性归入收款主体账户。</p>\n</li>\n</ul>\n<p style=\"font-size: small; -webkit-text-size-adjust: none; color: #666;\">&mdash; <br />You are receiving this because you are subscribed to this thread. <br />Reply to this email directly, <a href=\"https://github.com/overtrue/wechat/pull/1457#discussion_r249626156\" target=\"_blank\" rel=\"noopener\"> view it on GitHub </a> , or <a href=\"https://github.com/notifications/unsubscribe-auth/AclPcFh6qlZ4itE1KK4KMG2L1mZ3xcySks5vFnsPgaJpZM4aKL-7\" target=\"_blank\" rel=\"noopener\"> mute the thread </a> . <img style=\"display: none !important;\" hidden=\"\" src=\"https://github.com/notifications/beacon/AclPcIqq4UUIR3SIt0mEYzzrq2aM7MCUks5vFnsPgaJpZM4aKL-7.gif\" alt=\"\" width=\"1\" height=\"1\" /></p>', '', '', '', '', 'http://www.baidu.com', '_self', 105, 1, 1, 1499959763, 1575642594),
 (83, 29, '标题', '', '内容11', '百度', 'http://www.baidu.com', '', '', '', '_self', 0, 0, 1, 1482677507, 1482677507),
 (101, 29, '标题', '', '内容11', '百度', 'http://www.baidu.com', '', '', '', '_self', 0, 0, 1, 1482677507, 1482677507),
 (119, 29, '标题', '', '内容11', '百度', 'http://www.baidu.com', '', '', '', '_self', 0, 0, 1, 1482677507, 1482677507),
@@ -499,16 +532,19 @@ INSERT INTO `cs_article` (`article_id`, `article_cat_id`, `title`, `image`, `con
 (245, 29, '标题', '', '内容11', '百度', 'http://www.baidu.com', '', '', '', '_self', 0, 0, 1, 1482677507, 1482677507),
 (263, 29, '标题', '', '内容11', '百度', 'http://www.baidu.com', '', '', '', '_self', 0, 0, 1, 1482677507, 1482677507);
 
---
--- 插入之前先把表清空（truncate） `cs_article_cat`
---
+DROP TABLE IF EXISTS `{prefix}article_cat`;
+CREATE TABLE `{prefix}article_cat` (
+  `article_cat_id` smallint(5) UNSIGNED NOT NULL,
+  `parent_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
+  `cat_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '分类名称',
+  `cat_type` tinyint(3) NOT NULL DEFAULT '0' COMMENT '类型(自定义)',
+  `keywords` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '关键词',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '分类描述',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `is_navi` tinyint(1) NOT NULL DEFAULT '0' COMMENT '导航 0=否 1=是'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文章分类';
 
-TRUNCATE TABLE `cs_article_cat`;
---
--- 转存表中的数据 `cs_article_cat`
---
-
-INSERT INTO `cs_article_cat` (`article_cat_id`, `parent_id`, `cat_name`, `cat_type`, `keywords`, `description`, `sort`, `is_navi`) VALUES
+INSERT INTO `{prefix}article_cat` (`article_cat_id`, `parent_id`, `cat_name`, `cat_type`, `keywords`, `description`, `sort`, `is_navi`) VALUES
 (1, 0, '物流配送', 0, '', '', 50, 1),
 (2, 1, '配送查询', 0, '', '', 50, 1),
 (3, 1, '配送服务', 0, '', '', 50, 1),
@@ -538,16 +574,22 @@ INSERT INTO `cs_article_cat` (`article_cat_id`, `parent_id`, `cat_name`, `cat_ty
 (27, 23, '焦点问题', 0, '', '', 50, 1),
 (28, 23, '联系我们', 0, '', '', 50, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_ask`
---
+DROP TABLE IF EXISTS `{prefix}ask`;
+CREATE TABLE `{prefix}ask` (
+  `ask_id` int(11) UNSIGNED NOT NULL,
+  `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
+  `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
+  `ask_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=咨询 1=售后 2=投诉 3=求购',
+  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=主题 1=提问 2=回答',
+  `title` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '主题',
+  `ask` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '提问内容',
+  `answer` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '回答内容',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=待回答 1=已回答',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='咨询问答';
 
-TRUNCATE TABLE `cs_ask`;
---
--- 转存表中的数据 `cs_ask`
---
-
-INSERT INTO `cs_ask` (`ask_id`, `parent_id`, `user_id`, `ask_type`, `type`, `title`, `ask`, `answer`, `status`, `is_delete`, `create_time`) VALUES
+INSERT INTO `{prefix}ask` (`ask_id`, `parent_id`, `user_id`, `ask_type`, `type`, `title`, `ask`, `answer`, `status`, `is_delete`, `create_time`) VALUES
 (1, 0, 1, 0, 0, '咨询问答', '', '', 1, 0, 1561966946),
 (2, 1, 1, 0, 1, '', '咨询问答内容', '', 0, 0, 1561966946),
 (3, 0, 1, 0, 0, '咨询问答', '', '', 1, 0, 1561966957),
@@ -701,16 +743,17 @@ INSERT INTO `cs_ask` (`ask_id`, `parent_id`, `user_id`, `ask_type`, `type`, `tit
 (168, 154, 84, 3, 2, '', '', '远程登录端口 ： \n是否开启实例内部防火墙 ： 是\n其他操作情况说明 ： ', 0, 0, 1562134989),
 (169, 61, 1, 0, 2, '', '', 'test', 0, 0, 1564197467);
 
---
--- 插入之前先把表清空（truncate） `cs_auth_group`
---
+DROP TABLE IF EXISTS `{prefix}auth_group`;
+CREATE TABLE `{prefix}auth_group` (
+  `group_id` mediumint(8) UNSIGNED NOT NULL,
+  `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `system` tinyint(1) NOT NULL DEFAULT '0' COMMENT '系统保留',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户组';
 
-TRUNCATE TABLE `cs_auth_group`;
---
--- 转存表中的数据 `cs_auth_group`
---
-
-INSERT INTO `cs_auth_group` (`group_id`, `name`, `description`, `system`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}auth_group` (`group_id`, `name`, `description`, `system`, `sort`, `status`) VALUES
 (1, '超级管理员', '系统保留，拥有最高权限', 1, 50, 1),
 (2, '普通管理员', '系统保留，拥有较高权限', 1, 50, 1),
 (3, '普通顾客', '系统保留，前台普通顾客', 1, 50, 1),
@@ -720,16 +763,19 @@ INSERT INTO `cs_auth_group` (`group_id`, `name`, `description`, `system`, `sort`
 (9, '客服', '这是一段描述', 0, 50, 1),
 (10, '财务', '这是一段描述', 0, 50, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_auth_rule`
---
+DROP TABLE IF EXISTS `{prefix}auth_rule`;
+CREATE TABLE `{prefix}auth_rule` (
+  `rule_id` mediumint(8) UNSIGNED NOT NULL,
+  `module` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '所属模块',
+  `group_id` mediumint(8) UNSIGNED NOT NULL COMMENT '用户组Id',
+  `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '规则名称',
+  `menu_auth` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '菜单权限',
+  `log_auth` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '记录权限',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='权限规则';
 
-TRUNCATE TABLE `cs_auth_rule`;
---
--- 转存表中的数据 `cs_auth_rule`
---
-
-INSERT INTO `cs_auth_rule` (`rule_id`, `module`, `group_id`, `name`, `menu_auth`, `log_auth`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}auth_rule` (`rule_id`, `module`, `group_id`, `name`, `menu_auth`, `log_auth`, `sort`, `status`) VALUES
 (1, 'api', 1, '超级管理员', '[1,2,3,4,5,6,7,8,9,10,11,1049,12,13,14,15,16,17,18,19,20,21,22,615,617,618,23,24,25,26,27,28,29,30,614,616,31,32,33,34,35,36,37,38,39,1010,1011,1013,1012,40,41,42,43,44,45,46,1009,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,619,66,67,69,70,71,72,73,74,75,76,77,78,620,79,80,81,82,83,84,85,86,621,87,88,89,90,91,92,93,94,95,96,622,97,98,99,100,101,102,103,106,107,110,130,131,132,133,134,968,135,136,137,138,141,142,144,145,146,147,150,151,152,153,154,155,156,157,158,159,160,623,161,162,163,164,165,166,169,171,172,774,168,173,174,175,176,177,178,179,180,777,181,182,183,184,185,186,187,188,189,966,190,191,192,193,194,195,196,197,624,199,200,201,202,203,204,205,206,207,208,209,210,211,212,215,216,217,957,958,959,967,232,233,234,235,236,237,238,239,240,241,242,626,246,247,249,250,251,252,253,254,255,258,259,260,261,262,265,266,267,268,269,270,271,272,273,274,218,219,220,221,222,223,224,225,226,227,228,908,229,230,231,625,965,414,415,416,417,418,419,907,962,420,421,631,281,282,283,284,734,285,286,287,288,289,290,291,292,293,294,295,296,627,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,628,320,321,322,323,324,325,326,327,328,329,332,333,334,335,336,337,338,341,342,343,344,345,346,347,1054,348,349,350,353,354,355,360,361,362,363,366,367,368,370,371,372,373,374,375,376,377,379,380,629,383,384,385,386,387,388,389,390,391,392,393,394,395,723,724,725,726,727,396,397,398,399,400,401,402,403,404,630,405,406,407,408,409,410,411,412,413,422,423,424,425,426,427,428,429,430,431,432,433,434,435,574,641,648,664,665,956,436,437,438,439,440,441,442,443,632,444,445,446,447,448,449,450,1038,1039,1040,451,452,454,455,456,457,459,461,462,463,464,465,466,467,468,469,840,470,993,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,498,499,502,503,504,505,506,507,508,509,510,511,512,575,576,577,633,634,635,636,637,638,639,640,657,658,659,660,661,662,663,64,104,139,167,198,243,256,263,330,351,369,381,453,460,497]', '[4,5,6,7,8,9,12,13,14,72,73,74,75,77,78,80,81,82,83,85,86,107,200,201,203,204,205,206,207,208,215,217,283,284,286,287,288,289,293,294,295,377,464,465,466,467,468,487,488,502,503,504,507,508,509,1,71,79,104,198,281,285,369,460,483,497,506]', 1, 1),
 (2, 'api', 2, '普通管理员', '[1,2,3,4,5,6,7,8,9,10,11,1049,12,13,14,15,16,17,18,19,20,21,22,615,617,618,23,24,25,26,27,28,29,30,614,616,31,32,33,34,35,36,37,38,39,1010,1011,1013,1012,40,41,42,43,44,45,46,1009,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,619,66,67,69,70,74,76,81,84,87,88,89,90,91,92,93,94,95,96,622,97,98,99,100,101,102,103,106,107,110,130,131,132,133,134,968,135,136,137,138,141,142,144,145,146,147,150,151,152,153,154,155,156,157,158,159,160,623,161,162,163,164,165,166,169,171,172,774,168,173,174,175,176,177,178,179,180,777,181,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,624,199,200,201,202,203,204,205,206,207,208,209,210,211,212,215,216,217,957,958,959,967,232,233,234,235,236,237,238,239,240,241,242,626,246,247,249,250,251,252,253,254,255,258,259,260,261,262,265,266,267,268,269,270,271,272,273,274,218,219,220,221,222,223,224,225,226,227,228,908,229,230,231,625,965,414,415,416,417,418,419,907,962,420,421,631,281,282,283,284,734,287,290,291,292,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,628,320,321,322,323,324,325,326,327,328,329,332,333,334,335,336,337,338,341,342,343,344,345,346,347,1054,348,349,350,353,354,355,360,361,362,363,366,367,368,372,373,374,377,379,380,383,384,385,386,387,388,389,390,391,392,393,394,395,723,724,725,726,727,396,397,398,399,400,401,402,403,404,630,406,422,423,424,425,426,427,428,429,430,431,432,433,434,435,574,641,648,664,665,956,436,437,438,439,440,441,442,443,632,444,445,446,447,448,449,450,1038,1039,1040,451,452,454,455,456,457,459,461,462,463,464,465,466,467,468,469,840,470,993,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,498,499,502,503,504,505,506,507,508,509,510,511,512,575,576,577,633,634,635,636,637,638,639,640,657,658,659,660,661,662,663,64,71,79,104,139,167,182,198,243,256,263,285,330,351,369,381,405,453,460,497]', '[4,5,6,7,8,9,10,11,12,13,14,377,465,467,487,488,502,503,504,507,508,509,1,369,460,483,497,506]', 2, 1),
 (3, 'api', 3, '普通顾客', '[617,616,1011,1013,1012,46,1009,51,52,59,60,61,65,66,68,69,70,93,94,95,105,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,138,143,144,145,146,148,149,156,157,171,172,774,180,777,189,195,202,209,210,211,213,214,216,957,958,959,237,238,239,244,245,248,249,253,254,255,257,261,262,264,266,418,419,907,275,276,277,278,279,280,282,734,291,292,296,304,305,306,307,308,309,310,316,331,335,336,337,338,339,340,341,342,343,346,347,1054,348,349,350,352,354,355,356,357,358,359,360,364,365,367,372,379,380,381,382,383,384,392,394,395,400,401,402,404,425,427,428,433,434,574,641,648,956,440,441,448,449,1038,1039,1040,451,452,455,456,457,461,462,463,464,465,467,469,840,471,472,473,474,475,476,477,478,479,480,481,482,489,490,491,492,493,494,495,496,498,499,500,501,505,506,507,508,509,510,511,512,637,638,660,663,15,23,31,40,47,55,64,87,104,130,139,150,167,173,182,190,198,232,243,256,263,414,281,285,297,311,330,351,369,385,393,396,422,436,444,453,460,497,633,657]', '[467,500,501,507,508,509,460,497,506]', 3, 1),
@@ -739,21 +785,26 @@ INSERT INTO `cs_auth_rule` (`rule_id`, `module`, `group_id`, `name`, `menu_auth`
 (27, 'home', 1, '超级管理员', '[]', '[]', 1, 0),
 (28, 'home', 2, '普通管理员', '[]', '[]', 2, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_brand`
---
+DROP TABLE IF EXISTS `{prefix}brand`;
+CREATE TABLE `{prefix}brand` (
+  `brand_id` smallint(5) UNSIGNED NOT NULL,
+  `goods_category_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods_category表',
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '品牌名称',
+  `phonetic` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '品牌首拼',
+  `description` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '品牌描述',
+  `logo` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '品牌LOGO',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '品牌url',
+  `target` enum('_self','_blank') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '_self' COMMENT '_self _blank',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品品牌';
 
-TRUNCATE TABLE `cs_brand`;
---
--- 转存表中的数据 `cs_brand`
---
-
-INSERT INTO `cs_brand` (`brand_id`, `goods_category_id`, `name`, `phonetic`, `description`, `logo`, `url`, `target`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}brand` (`brand_id`, `goods_category_id`, `name`, `phonetic`, `description`, `logo`, `url`, `target`, `sort`, `status`) VALUES
 (2, 719, '雅培', 'yapei', '', '', '', '_self', 50, 1),
 (4, 201, 'AOC', 'AOC', '', '', '', '_self', 50, 1),
-(5, 1, '百度', 'baidu', '', '', 'http://www.baidu.com', '_self', 20, 0),
+(5, 182, '百度', 'baidu', '', '', 'http://www.baidu.com', '_self', 20, 0),
 (6, 100, '腾讯', 'tengxun', '', '', '', '_self', 50, 1),
-(7, 0, '阿里', 'ali', '', '', 'http://www.aliyun.com', '_self', 10, 0),
+(7, 354, '阿里', 'ali', '', '', 'http://www.aliyun.com', '_self', 10, 0),
 (16, 3, '大王', 'da wang', '', '', '', '_self', 50, 1),
 (18, 1, '百雀羚', 'bql', '', '', '', '_self', 50, 0),
 (28, 132, '大金', 'd', '', '', '', '_blank', 50, 1),
@@ -762,16 +813,23 @@ INSERT INTO `cs_brand` (`brand_id`, `goods_category_id`, `name`, `phonetic`, `de
 (31, 195, '华为', 'h', '', 'aliyun.oss.careyshop.cn/uploads/files/20191113/62b8f65b-dff3-4f32-8618-6c61fcf2e877.jpg?type=aliyun', '', '_blank', 50, 1),
 (32, 12, '华为', 'huawei', '', 'aliyun.oss.careyshop.cn/uploads/files/20191112/e00bb1e0-b0d9-4aba-9f30-ca47db3741cf.png?type=aliyun', '', '_blank', 50, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_card`
---
+DROP TABLE IF EXISTS `{prefix}card`;
+CREATE TABLE `{prefix}card` (
+  `card_id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '卡名',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `money` decimal(10,2) NOT NULL COMMENT '面额',
+  `category` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '限制商品分类',
+  `exclude_category` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '排除商品分类',
+  `give_num` int(11) NOT NULL COMMENT '发放量',
+  `active_num` int(11) NOT NULL DEFAULT '0' COMMENT '激活量',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `end_time` int(11) NOT NULL DEFAULT '0' COMMENT '截止日期(有效期)',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='购物卡';
 
-TRUNCATE TABLE `cs_card`;
---
--- 转存表中的数据 `cs_card`
---
-
-INSERT INTO `cs_card` (`card_id`, `name`, `description`, `money`, `category`, `exclude_category`, `give_num`, `active_num`, `create_time`, `end_time`, `status`, `is_delete`) VALUES
+INSERT INTO `{prefix}card` (`card_id`, `name`, `description`, `money`, `category`, `exclude_category`, `give_num`, `active_num`, `create_time`, `end_time`, `status`, `is_delete`) VALUES
 (1, '实体购物卡', '', '100.00', '[]', '[]', 10, 3, 1511507142, 0, 1, 0),
 (2, '电子购物卡', '', '50.00', '[]', '[]', 5, 1, 1511507235, 1513699200, 1, 0),
 (3, '实体购物卡', '', '100.00', '[]', '[]', 10, 3, 1511507142, 0, 1, 0),
@@ -815,16 +873,21 @@ INSERT INTO `cs_card` (`card_id`, `name`, `description`, `money`, `category`, `e
 (44, '生成12张电子购物卡', '生成12张电子购物卡 描述 生成12张电子购物卡 描述', '11.12', '[]', '[]', 12, 0, 1580323880, 0, 0, 0),
 (45, '生成1000张电子购物卡', '', '500.00', '[1,12,100,101,102,13,103,104,105,106,107,14,108,109,110,111,15,112,113,114,115,16,116,117,17,118,119,120,121,122,18,124,123,2,19,125,126,127,128,129,20,130,131,132,133,134,21,135,136,137,138,22,139,140,141,142,143,23,144,145,146,147,148,149,150,151,152,153]', '[10,73,686,687,688,689,690,691,692,693,74,694,695,696,697,698,699,700,75,701,702,703,704,705,706,707,708,709,76,710,711,712,77,713,714,715,716,717,718,78,719,720,79,721,722,723,724,725,726,727,728,729,80,730,731,732,733,734,735,736,737,81,738,739,740,741,742,743,744,745,746,747,748,749,750,751,752,82,753,754,755,756,83,757,758,759,760,761,762,763,764,765,766,767,768,11,84,769,770,771,772,773,85,774,775,776,86,777,778,779,780,781,782,783,784,785,786,87,787,788,789,790,791,792,793,794,795,88,796,797,798,799,800,89,801,802,803,804,805,806,90,807,808,809,810,811,812,813,91,814,815,816,817,92,818,819,820,821,822,823,824,825,93,826,827,828,829,830,831,832,833,834,835,94,836,837,838,839,840,841,842,843]', 1000, 0, 1580360382, 0, 1, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_card_use`
---
+DROP TABLE IF EXISTS `{prefix}card_use`;
+CREATE TABLE `{prefix}card_use` (
+  `card_use_id` int(11) UNSIGNED NOT NULL,
+  `card_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应card表',
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `number` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '卡号',
+  `password` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '卡密',
+  `money` decimal(10,2) NOT NULL COMMENT '可用余额',
+  `is_active` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否激活 0=否 1=是',
+  `is_invalid` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效 0=无效 1=有效',
+  `remark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `active_time` int(11) NOT NULL DEFAULT '0' COMMENT '激活日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='购物卡使用';
 
-TRUNCATE TABLE `cs_card_use`;
---
--- 转存表中的数据 `cs_card_use`
---
-
-INSERT INTO `cs_card_use` (`card_use_id`, `card_id`, `user_id`, `number`, `password`, `money`, `is_active`, `is_invalid`, `remark`, `active_time`) VALUES
+INSERT INTO `{prefix}card_use` (`card_use_id`, `card_id`, `user_id`, `number`, `password`, `money`, `is_active`, `is_invalid`, `remark`, `active_time`) VALUES
 (1, 43, 0, '48646499496', '22F3E999BA92682E', '111.00', 0, 1, '', 0),
 (2, 43, 0, '42351226774', '756831EC64D3034F', '111.00', 0, 1, '', 0),
 (3, 43, 0, '73493656193', 'F89842F187875098', '111.00', 0, 1, '', 0),
@@ -1538,7 +1601,7 @@ INSERT INTO `cs_card_use` (`card_use_id`, `card_id`, `user_id`, `number`, `passw
 (711, 45, 0, '69359652368', 'F06B13129A4DDA45', '500.00', 0, 1, '', 0),
 (712, 45, 0, '77497118577', '0971CAD2B94151F6', '500.00', 0, 1, '', 0),
 (713, 45, 0, '84816579283', '548CEB4F2A3CC1F1', '500.00', 0, 1, '', 0);
-INSERT INTO `cs_card_use` (`card_use_id`, `card_id`, `user_id`, `number`, `password`, `money`, `is_active`, `is_invalid`, `remark`, `active_time`) VALUES
+INSERT INTO `{prefix}card_use` (`card_use_id`, `card_id`, `user_id`, `number`, `password`, `money`, `is_active`, `is_invalid`, `remark`, `active_time`) VALUES
 (714, 45, 0, '77873328924', '1748B2086A0C4557', '500.00', 0, 1, '', 0),
 (715, 45, 0, '99177748233', 'D02CC50E117E20F3', '500.00', 0, 1, '', 0),
 (716, 45, 0, '47154581832', '974E38C58B8C07EC', '500.00', 0, 1, '', 0),
@@ -1850,26 +1913,60 @@ INSERT INTO `cs_card_use` (`card_use_id`, `card_id`, `user_id`, `number`, `passw
 (1022, 45, 1, '77566594366', '1329C97911C8ACA5', '0.00', 1, 0, 'sddddd', 1580482862),
 (1023, 45, 1, '42779481863', '96F40102C3EB4E58', '500.00', 1, 1, 'test', 1580482862);
 
---
--- 插入之前先把表清空（truncate） `cs_cart`
---
+DROP TABLE IF EXISTS `{prefix}cart`;
+CREATE TABLE `{prefix}cart` (
+  `cart_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `goods_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods表',
+  `goods_num` smallint(5) UNSIGNED NOT NULL COMMENT '购买数量',
+  `key_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '规格键名',
+  `key_value` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '规格值',
+  `is_selected` tinyint(1) NOT NULL DEFAULT '1' COMMENT '选中 0=否 1=是',
+  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=隐藏 1=显示',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='购物车';
 
-TRUNCATE TABLE `cs_cart`;
---
--- 插入之前先把表清空（truncate） `cs_collect`
---
+INSERT INTO `{prefix}cart` (`cart_id`, `user_id`, `goods_id`, `goods_num`, `key_name`, `key_value`, `is_selected`, `is_show`, `update_time`) VALUES
+(4, 1, 289, 2, '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', 1, 1, 1584201465),
+(5, 1, 288, 1, '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', 0, 0, 1584201465),
+(6, 1, 199, 2, '', '', 1, 1, 1584201465);
 
-TRUNCATE TABLE `cs_collect`;
---
--- 插入之前先把表清空（truncate） `cs_coupon`
---
+DROP TABLE IF EXISTS `{prefix}collect`;
+CREATE TABLE `{prefix}collect` (
+  `collect_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `goods_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods表',
+  `is_top` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否置顶 0=否 1=是',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品收藏夹';
 
-TRUNCATE TABLE `cs_coupon`;
---
--- 转存表中的数据 `cs_coupon`
---
+DROP TABLE IF EXISTS `{prefix}coupon`;
+CREATE TABLE `{prefix}coupon` (
+  `coupon_id` smallint(5) UNSIGNED NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '优惠劵名称',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `guide` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '引导地址',
+  `type` tinyint(1) NOT NULL COMMENT '0=用户 1=生成 2=领取 3=赠送',
+  `give_code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '领取码',
+  `money` decimal(10,2) NOT NULL COMMENT '优惠金额',
+  `quota` decimal(10,2) NOT NULL COMMENT '使用门槛',
+  `category` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '限制商品分类',
+  `exclude_category` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '排除商品分类',
+  `level` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '限制会员等级',
+  `frequency` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '限制领取次数',
+  `give_num` int(11) NOT NULL DEFAULT '0' COMMENT '发放量',
+  `receive_num` int(11) NOT NULL DEFAULT '0' COMMENT '领取量',
+  `use_num` int(11) NOT NULL DEFAULT '0' COMMENT '使用量',
+  `give_begin_time` int(11) NOT NULL COMMENT '发放开始日期',
+  `give_end_time` int(11) NOT NULL COMMENT '发放结束日期',
+  `use_begin_time` int(11) NOT NULL COMMENT '使用开始日期',
+  `use_end_time` int(11) NOT NULL COMMENT '使用截止日期',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用',
+  `is_invalid` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=正常 1=作废',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删 '
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='优惠劵';
 
-INSERT INTO `cs_coupon` (`coupon_id`, `name`, `description`, `guide`, `type`, `give_code`, `money`, `quota`, `category`, `exclude_category`, `level`, `frequency`, `give_num`, `receive_num`, `use_num`, `give_begin_time`, `give_end_time`, `use_begin_time`, `use_end_time`, `status`, `is_invalid`, `is_delete`) VALUES
+INSERT INTO `{prefix}coupon` (`coupon_id`, `name`, `description`, `guide`, `type`, `give_code`, `money`, `quota`, `category`, `exclude_category`, `level`, `frequency`, `give_num`, `receive_num`, `use_num`, `give_begin_time`, `give_end_time`, `use_begin_time`, `use_end_time`, `status`, `is_invalid`, `is_delete`) VALUES
 (1, '优惠劵赠送测试 8折优惠', '活动描述', '', 3, 'ooe9KftqTd', '100.00', '1000.00', '[]', '[]', '', 1, 2000, 0, 0, 1526955060, 1581904831, 1527782400, 1581904831, 1, 0, 0),
 (3, '优惠劵赠送测试 8折优惠', '活动描述', '', 0, 'ooe9KftqTd', '100.00', '1000.00', '[]', '[]', '', 1, 2000, 0, 0, 1526955060, 1581904831, 1527782400, 1581904831, 1, 0, 0),
 (4, '优惠劵赠送测试 8折优惠', '活动描述', '', 1, 'ooe9KftqTd', '100.00', '1000.00', '[]', '[]', '', 1, 2000, 0, 0, 1526955060, 1581904831, 1527782400, 1581904831, 1, 0, 0),
@@ -1937,16 +2034,20 @@ INSERT INTO `cs_coupon` (`coupon_id`, `name`, `description`, `guide`, `type`, `g
 (69, '情人节线下物料生成', '', '', 1, '', '20.00', '100.00', '[]', '[]', '[]', 0, 1000, 1000, 0, 1581043246, 1582905600, 1581043247, 1581043251, 1, 0, 0),
 (70, '情人节指定发放优惠劵', '', '', 0, '', '20.00', '100.00', '[]', '[]', '[]', 0, 105, 104, 0, 1581305729, 1582905600, 1581305733, 1582947334, 1, 0, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_coupon_give`
---
+DROP TABLE IF EXISTS `{prefix}coupon_give`;
+CREATE TABLE `{prefix}coupon_give` (
+  `coupon_give_id` int(11) UNSIGNED NOT NULL,
+  `coupon_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应coupon表',
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `order_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应order表',
+  `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '订单号',
+  `exchange_code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '兑换码',
+  `use_time` int(11) NOT NULL DEFAULT '0' COMMENT '使用日期',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删 '
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='优惠劵发放';
 
-TRUNCATE TABLE `cs_coupon_give`;
---
--- 转存表中的数据 `cs_coupon_give`
---
-
-INSERT INTO `cs_coupon_give` (`coupon_give_id`, `coupon_id`, `user_id`, `order_id`, `order_no`, `exchange_code`, `use_time`, `create_time`, `is_delete`) VALUES
+INSERT INTO `{prefix}coupon_give` (`coupon_give_id`, `coupon_id`, `user_id`, `order_id`, `order_no`, `exchange_code`, `use_time`, `create_time`, `is_delete`) VALUES
 (1, 69, 0, 0, '', 'fwklpCNCXk', 0, 1581046704, 0),
 (2, 69, 0, 0, '', 'QScGqH4q9D', 0, 1581046704, 0),
 (3, 69, 0, 0, '', 'pwBQ2OCj7x', 0, 1581046704, 0),
@@ -2926,7 +3027,7 @@ INSERT INTO `cs_coupon_give` (`coupon_give_id`, `coupon_id`, `user_id`, `order_i
 (977, 69, 0, 0, '', 'mgVnU7sREG', 0, 1581047474, 0),
 (978, 69, 0, 0, '', 'cJmQaLhnMH', 0, 1581047474, 0),
 (979, 69, 0, 0, '', 'gkQfqLqpuU', 0, 1581047474, 0);
-INSERT INTO `cs_coupon_give` (`coupon_give_id`, `coupon_id`, `user_id`, `order_id`, `order_no`, `exchange_code`, `use_time`, `create_time`, `is_delete`) VALUES
+INSERT INTO `{prefix}coupon_give` (`coupon_give_id`, `coupon_id`, `user_id`, `order_id`, `order_no`, `exchange_code`, `use_time`, `create_time`, `is_delete`) VALUES
 (980, 69, 0, 0, '', 'Ve60pod5TM', 0, 1581047474, 0),
 (981, 69, 0, 0, '', 'xRVCT5iqWJ', 0, 1581047474, 0),
 (982, 69, 0, 0, '', 'BpqfPOTb2G', 0, 1581047474, 0),
@@ -3885,7 +3986,7 @@ INSERT INTO `cs_coupon_give` (`coupon_give_id`, `coupon_id`, `user_id`, `order_i
 (1937, 59, 0, 0, '', 'HwESopi2jT', 0, 1581048425, 0),
 (1938, 59, 0, 0, '', 'Nt6eSjpCbi', 0, 1581048425, 0),
 (1939, 59, 0, 0, '', 'aVutR9j4Qf', 0, 1581048425, 0);
-INSERT INTO `cs_coupon_give` (`coupon_give_id`, `coupon_id`, `user_id`, `order_id`, `order_no`, `exchange_code`, `use_time`, `create_time`, `is_delete`) VALUES
+INSERT INTO `{prefix}coupon_give` (`coupon_give_id`, `coupon_id`, `user_id`, `order_id`, `order_no`, `exchange_code`, `use_time`, `create_time`, `is_delete`) VALUES
 (1940, 59, 0, 0, '', 'cGzJRATJl2', 0, 1581048425, 0),
 (1941, 59, 0, 0, '', 'QAtKfQetdv', 0, 1581048425, 0),
 (1942, 59, 0, 0, '', 'x0xhJEdXqk', 0, 1581048425, 0),
@@ -4043,228 +4144,253 @@ INSERT INTO `cs_coupon_give` (`coupon_give_id`, `coupon_id`, `user_id`, `order_i
 (2105, 70, 72, 0, '', 'U7AnGEUSUH', 0, 1586086460, 0),
 (2106, 70, 72, 0, '', 'mqLhTOnxdC', 0, 1586086493, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_delivery`
---
+DROP TABLE IF EXISTS `{prefix}delivery`;
+CREATE TABLE `{prefix}delivery` (
+  `delivery_id` smallint(5) UNSIGNED NOT NULL,
+  `delivery_item_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应delivery_item表',
+  `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '别名',
+  `content` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `first_weight` decimal(10,2) NOT NULL COMMENT '首重',
+  `first_weight_price` decimal(10,2) NOT NULL COMMENT '首重运费',
+  `second_weight` decimal(10,2) NOT NULL COMMENT '续重',
+  `second_weight_price` decimal(10,2) NOT NULL COMMENT '续重运费',
+  `first_item` tinyint(3) UNSIGNED NOT NULL COMMENT '首件',
+  `first_item_price` decimal(10,2) NOT NULL COMMENT '首件运费',
+  `second_item` tinyint(3) UNSIGNED NOT NULL COMMENT '续件',
+  `second_item_price` decimal(10,2) NOT NULL COMMENT '续件运费',
+  `first_volume` decimal(10,2) NOT NULL COMMENT '首体积量',
+  `first_volume_price` decimal(10,2) NOT NULL COMMENT '首体积运费',
+  `second_volume` decimal(10,2) NOT NULL COMMENT '续体积量',
+  `second_volume_price` decimal(10,2) NOT NULL COMMENT '续体积运费',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='配送方式';
 
-TRUNCATE TABLE `cs_delivery`;
---
--- 转存表中的数据 `cs_delivery`
---
-
-INSERT INTO `cs_delivery` (`delivery_id`, `delivery_item_id`, `alias`, `content`, `first_weight`, `first_weight_price`, `second_weight`, `second_weight_price`, `first_item`, `first_item_price`, `second_item`, `second_item_price`, `first_volume`, `first_volume_price`, `second_volume`, `second_volume_price`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}delivery` (`delivery_id`, `delivery_item_id`, `alias`, `content`, `first_weight`, `first_weight_price`, `second_weight`, `second_weight_price`, `first_item`, `first_item_price`, `second_item`, `second_item_price`, `first_volume`, `first_volume_price`, `second_volume`, `second_volume_price`, `sort`, `status`) VALUES
 (1, 1, '快递配送', '江浙沪包邮,其他区域按合同价计算', '1.00', '8.00', '1.00', '1.00', 0, '0.00', 0, '0.00', '0.00', '0.00', '0.00', '0.00', 0, 1),
 (20, 8, '物流配送', '江浙沪包邮,其他区域按合同价计算', '1.00', '2.00', '3.00', '4.00', 5, '6.00', 7, '8.00', '9.00', '10.00', '11.11', '12.12', 1, 1),
 (21, 510, '买家自提', '', '0.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '0.00', '0.00', '0.00', '0.00', 2, 1),
 (22, 511, '同城配送', '', '0.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '0.00', '0.00', '0.00', '0.00', 3, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_delivery_area`
---
+DROP TABLE IF EXISTS `{prefix}delivery_area`;
+CREATE TABLE `{prefix}delivery_area` (
+  `delivery_area_id` smallint(5) UNSIGNED NOT NULL,
+  `delivery_id` smallint(5) UNSIGNED NOT NULL COMMENT '对应delivery表',
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '区域名称',
+  `region` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '所辖区域',
+  `first_weight_price` decimal(10,2) NOT NULL COMMENT '首重运费',
+  `second_weight_price` decimal(10,2) NOT NULL COMMENT '续重运费',
+  `first_item_price` decimal(10,2) NOT NULL COMMENT '首件运费',
+  `second_item_price` decimal(10,2) NOT NULL COMMENT '续件运费',
+  `first_volume_price` decimal(10,2) NOT NULL COMMENT '首体积运费',
+  `second_volume_price` decimal(10,2) NOT NULL COMMENT '续体积运费'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='配送区域';
 
-TRUNCATE TABLE `cs_delivery_area`;
---
--- 转存表中的数据 `cs_delivery_area`
---
-
-INSERT INTO `cs_delivery_area` (`delivery_area_id`, `delivery_id`, `name`, `region`, `first_weight_price`, `second_weight_price`, `first_item_price`, `second_item_price`, `first_volume_price`, `second_volume_price`) VALUES
+INSERT INTO `{prefix}delivery_area` (`delivery_area_id`, `delivery_id`, `name`, `region`, `first_weight_price`, `second_weight_price`, `first_item_price`, `second_item_price`, `first_volume_price`, `second_volume_price`) VALUES
 (1, 1, '江浙沪', '[{\"name\":\"浙江\",\"region_id\":12},{\"name\":\"北京\",\"region_id\":2},{\"name\":\"上海\",\"region_id\":10},{\"name\":\"天津\",\"region_id\":3},{\"name\":\"重庆\",\"region_id\":23},{\"name\":\"河北\",\"region_id\":4},{\"name\":\"山西\",\"region_id\":5},{\"name\":\"河南\",\"region_id\":17}]', '11.00', '6.00', '5.00', '3.50', '0.00', '6.66'),
 (11, 2, '区域名', '[{\"name\":\"辽宁省\",\"region_id\":7},{\"name\":\"辽源市\",\"region_id\":90}]', '12.00', '7.00', '0.00', '0.00', '0.00', '0.00'),
 (15, 2, '北上广', '[{\"name\":\"浙江省\",\"region_id\":12},{\"name\":\"宁波市\",\"region_id\":124}]', '13.00', '8.00', '0.00', '0.00', '0.00', '0.00'),
 (26, 1, '北上广', '[{\"name\":\"香港\",\"region_id\":34},{\"name\":\"澳门\",\"region_id\":35},{\"name\":\"台湾\",\"region_id\":33}]', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00');
 
---
--- 插入之前先把表清空（truncate） `cs_delivery_dist`
---
+DROP TABLE IF EXISTS `{prefix}delivery_dist`;
+CREATE TABLE `{prefix}delivery_dist` (
+  `delivery_dist_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
+  `order_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '流水号',
+  `delivery_item_id` smallint(5) UNSIGNED NOT NULL COMMENT '对应delivery_item表',
+  `delivery_code` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '快递编码',
+  `logistic_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '快递单号',
+  `trace` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '轨迹',
+  `state` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0=无轨迹 1=已揽收 2=在途中 201=到达派件城市 3=签收 4=问题件',
+  `is_sub` tinyint(1) NOT NULL COMMENT '是否订阅 0=否 1=是',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='配送轨迹';
 
-TRUNCATE TABLE `cs_delivery_dist`;
---
--- 转存表中的数据 `cs_delivery_dist`
---
-
-INSERT INTO `cs_delivery_dist` (`delivery_dist_id`, `user_id`, `order_code`, `delivery_item_id`, `delivery_code`, `logistic_code`, `trace`, `state`, `is_sub`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}delivery_dist` (`delivery_dist_id`, `user_id`, `order_code`, `delivery_item_id`, `delivery_code`, `logistic_code`, `trace`, `state`, `is_sub`, `create_time`, `update_time`) VALUES
 (1, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (2, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(5, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(5, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (7, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(10, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(10, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (17, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (18, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (19, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (20, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(21, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(21, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (22, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(23, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(23, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (24, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (25, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (26, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (27, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(28, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(28, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (29, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(30, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(30, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (31, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (32, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (33, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (34, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(35, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(35, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (36, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(37, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(37, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (38, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (39, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (40, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (41, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(42, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(42, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (43, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(44, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(44, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (45, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (46, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (47, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (48, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(49, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(49, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (50, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(51, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(51, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (52, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (53, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (54, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (55, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(56, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(56, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (57, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(58, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(58, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (59, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (60, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258);
-INSERT INTO `cs_delivery_dist` (`delivery_dist_id`, `user_id`, `order_code`, `delivery_item_id`, `delivery_code`, `logistic_code`, `trace`, `state`, `is_sub`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}delivery_dist` (`delivery_dist_id`, `user_id`, `order_code`, `delivery_item_id`, `delivery_code`, `logistic_code`, `trace`, `state`, `is_sub`, `create_time`, `update_time`) VALUES
 (61, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (62, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(63, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(63, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (64, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(65, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(65, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (66, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (67, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (68, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (69, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(70, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(70, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (71, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(72, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(72, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (73, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (74, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (75, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (76, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(77, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(77, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (78, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(79, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(79, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (80, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (81, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (82, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (83, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(84, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(84, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (85, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(86, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(86, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (87, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (88, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (89, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (90, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(91, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(91, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (92, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(93, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(93, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (94, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (95, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (96, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (97, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(98, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(98, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (99, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(100, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(100, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (101, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (102, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (103, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (104, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(105, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(105, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (106, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(107, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(107, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (108, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (109, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258);
-INSERT INTO `cs_delivery_dist` (`delivery_dist_id`, `user_id`, `order_code`, `delivery_item_id`, `delivery_code`, `logistic_code`, `trace`, `state`, `is_sub`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}delivery_dist` (`delivery_dist_id`, `user_id`, `order_code`, `delivery_item_id`, `delivery_code`, `logistic_code`, `trace`, `state`, `is_sub`, `create_time`, `update_time`) VALUES
 (110, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (111, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(112, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(112, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (113, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(114, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(114, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (115, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (116, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (117, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (118, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(119, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(119, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (120, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(121, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(121, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (122, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (123, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (124, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (125, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(126, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(126, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (127, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(128, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(128, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (129, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (130, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (131, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (132, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(133, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(133, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (134, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(135, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(135, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (136, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (137, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (138, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (139, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(140, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(140, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (141, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(142, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(142, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (143, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (144, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (145, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (146, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(147, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(147, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (148, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(149, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(149, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (150, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (151, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258),
 (152, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (153, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(154, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(154, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (155, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(156, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(156, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (157, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (158, 1, 'PO_H9057663247141790001', 1, 'SF', '111222333444555', '[]', 0, 1, 1505233258, 1505233258);
-INSERT INTO `cs_delivery_dist` (`delivery_dist_id`, `user_id`, `order_code`, `delivery_item_id`, `delivery_code`, `logistic_code`, `trace`, `state`, `is_sub`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}delivery_dist` (`delivery_dist_id`, `user_id`, `order_code`, `delivery_item_id`, `delivery_code`, `logistic_code`, `trace`, `state`, `is_sub`, `create_time`, `update_time`) VALUES
 (159, 1, '11475031669090094', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
 (160, 0, '11475031670090094', 4, 'YD', '3934010097802', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
-(161, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
+(161, 1, '15833929218090094', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165),
 (162, 1, '15987151287190094', 2, 'ZTO', '436634129389', '[{\"accept_time\":\"2017-05-03 16:05:10\",\"accept_station\":\"[长沙市] [长沙市场部]的宋娟已收件 电话:13874910870\"},{\"accept_time\":\"2017-05-03 22:26:29\",\"accept_station\":\"[长沙市] 快件到达 [长沙中转部]\"},{\"accept_time\":\"2017-05-04 01:38:26\",\"accept_station\":\"[长沙市] 快件离开 [长沙中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-04 19:19:41\",\"accept_station\":\"[台州市] 快件到达 [台州中转部]\"},{\"accept_time\":\"2017-05-04 19:49:29\",\"accept_station\":\"[台州市] 快件离开 [台州中转部]已发往[宁波中转部]\"},{\"accept_time\":\"2017-05-05 03:31:00\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-05-05 04:05:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-05-05 07:36:44\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-05-05 12:36:10\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-05-05 13:57:23\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"},{\"accept_time\":\"2017-05-05 19:02:06\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的罗小虎已收件 电话:13780009434\"}]', 4, 0, 1494235871, 1494237047),
-(163, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被钱湖北路南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
+(163, 1, '16548008188090094', 3, 'YTO', '885022354514081453', '[{\"accept_time\":\"2017-05-09 17:44:44\",\"accept_station\":\"【山东省德州市武城县公司】 已收件\"},{\"accept_time\":\"2017-05-09 18:04:44\",\"accept_station\":\"【山东省德州市武城县公司】 已打包\"},{\"accept_time\":\"2017-05-09 18:04:57\",\"accept_station\":\"【山东省德州市武城县公司】 已发出 下一站 【济南转运中心】\"},{\"accept_time\":\"2017-05-09 21:07:46\",\"accept_station\":\"【济南转运中心】 已收入\"},{\"accept_time\":\"2017-05-09 21:10:24\",\"accept_station\":\"【济南转运中心】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 01:59:19\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 05:00:23\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市邱隘公司】\"},{\"accept_time\":\"2017-05-11 08:42:28\",\"accept_station\":\"【浙江省宁波市邱隘公司】 已发出 下一站 【宁波转运中心】\"},{\"accept_time\":\"2017-05-11 11:37:03\",\"accept_station\":\"【宁波转运中心】 已收入\"},{\"accept_time\":\"2017-05-11 11:40:27\",\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\"},{\"accept_time\":\"2017-05-11 12:40:14\",\"accept_station\":\"【浙江省宁波市洪塘公司】 已发出 下一站 【浙江省宁波市洪塘B区公司】\"},{\"accept_time\":\"2017-05-11 14:43:55\",\"accept_station\":\"【浙江省宁波市洪塘B区公司】 派件人: 杨增 派件中 派件员电话18613600876\"},{\"accept_time\":\"2017-05-11 17:21:24\",\"accept_station\":\"快件已被广厦怡庭南区【自提柜】代收，请及时取件。有问题请联系派件员15058458548\"},{\"accept_time\":\"2017-05-11 20:12:58\",\"accept_station\":\"客户 签收人: 本人签收 已签收 感谢使用圆通速递，期待再次为您服务\"}]', 3, 0, 1494426296, 1494541528),
 (164, 1, '50307219016090094', 2, 'ZTO', '450644928478', '[{\"accept_time\":\"2017-08-23 22:04:55\",\"accept_station\":\"[东莞市] [东莞石碣]的RK数码已收件 电话:暂无\"},{\"accept_time\":\"2017-08-23 22:30:55\",\"accept_station\":\"[东莞市] 快件离开 [东莞石碣]已发往[宁波]\"},{\"accept_time\":\"2017-08-24 01:19:54\",\"accept_station\":\"[东莞市] 快件到达 [东莞中心]\"},{\"accept_time\":\"2017-08-24 01:23:29\",\"accept_station\":\"[东莞市] 快件离开 [东莞中心]已发往[宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:21:46\",\"accept_station\":\"[宁波市] 快件到达 [宁波中转部]\"},{\"accept_time\":\"2017-08-25 03:41:32\",\"accept_station\":\"[宁波市] 快件离开 [宁波中转部]已发往[宁波]\"},{\"accept_time\":\"2017-08-25 06:13:05\",\"accept_station\":\"[宁波市] 快件到达 [宁波洪塘]\"},{\"accept_time\":\"2017-08-25 06:33:56\",\"accept_station\":\"[宁波市] 快件离开 [宁波洪塘]已发往[宁波洪塘庄桥二部]\"},{\"accept_time\":\"2017-08-25 10:17:49\",\"accept_station\":\"[宁波市] 快件已到达[宁波洪塘庄桥二部],业务员罗小虎正在第1次派件 电话:13780009434 请保持电话畅通、耐心等待\"},{\"accept_time\":\"2017-08-25 13:24:46\",\"accept_station\":\"[宁波市] [宁波洪塘庄桥二部]的派件已签收 感谢使用中通快递,期待再次为您服务!\"}]', 3, 0, 1503537304, 1503649491),
 (165, 1, 'PO_A3217849839847620001', 8, 'EMS', '9898385289059', '[]', 0, 1, 1584947681, 1584947681),
-(191, 1, 'PO_A3150263011275460001', 5, 'YTO', 'YT4415392300377', '[{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已收件 取件人: 王金燕 (18357207313)\",\"accept_time\":\"2020-03-24 18:14:10\"},{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已打包\",\"accept_time\":\"2020-03-24 18:25:41\"},{\"accept_station\":\"【浙江省杭州市余杭区临平】 已发出 下一站 【杭州转运中心公司】\",\"accept_time\":\"2020-03-24 18:34:41\"},{\"accept_station\":\"【杭州转运中心公司】 已收入\",\"accept_time\":\"2020-03-24 22:45:55\"},{\"accept_station\":\"【杭州转运中心】 已发出 下一站 【宁波转运中心公司】\",\"accept_time\":\"2020-03-24 23:06:15\"},{\"accept_station\":\"【宁波转运中心公司】 已收入\",\"accept_time\":\"2020-03-25 02:41:56\"},{\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\",\"accept_time\":\"2020-03-25 03:06:24\"},{\"accept_station\":\"【浙江省宁波市江北区庄桥四部公司】 派件中  派件人: 汪勇 电话 13856639595  如有疑问，请联系：0574-87349434\",\"accept_time\":\"2020-03-25 08:09:39\"},{\"accept_station\":\"快件已由钱湖北路南区18幢架空层丰巢智能柜丰巢柜代收，取件码已发送，请及时取件\",\"accept_time\":\"2020-03-25 10:31:36\"},{\"accept_station\":\"客户签收人: 已签收，签收人凭取货码签收 已签收  感谢使用圆通速递，期待再次为您服务 如有疑问请联系：13856639595，投诉电话：0574-87349434\",\"accept_time\":\"2020-03-25 18:28:46\"}]', 3, 0, 1585492337, 1585493683),
+(191, 1, 'PO_A3150263011275460001', 5, 'YTO', 'YT4415392300377', '[{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已收件 取件人: 王金燕 (18357207313)\",\"accept_time\":\"2020-03-24 18:14:10\"},{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已打包\",\"accept_time\":\"2020-03-24 18:25:41\"},{\"accept_station\":\"【浙江省杭州市余杭区临平】 已发出 下一站 【杭州转运中心公司】\",\"accept_time\":\"2020-03-24 18:34:41\"},{\"accept_station\":\"【杭州转运中心公司】 已收入\",\"accept_time\":\"2020-03-24 22:45:55\"},{\"accept_station\":\"【杭州转运中心】 已发出 下一站 【宁波转运中心公司】\",\"accept_time\":\"2020-03-24 23:06:15\"},{\"accept_station\":\"【宁波转运中心公司】 已收入\",\"accept_time\":\"2020-03-25 02:41:56\"},{\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\",\"accept_time\":\"2020-03-25 03:06:24\"},{\"accept_station\":\"【浙江省宁波市江北区庄桥四部公司】 派件中  派件人: 汪勇 电话 13856639595  如有疑问，请联系：0574-87349434\",\"accept_time\":\"2020-03-25 08:09:39\"},{\"accept_station\":\"快件已由广厦怡庭南区18幢架空层丰巢智能柜丰巢柜代收，取件码已发送，请及时取件\",\"accept_time\":\"2020-03-25 10:31:36\"},{\"accept_station\":\"客户签收人: 已签收，签收人凭取货码签收 已签收  感谢使用圆通速递，期待再次为您服务 如有疑问请联系：13856639595，投诉电话：0574-87349434\",\"accept_time\":\"2020-03-25 18:28:46\"}]', 3, 0, 1585492337, 1585493683),
 (192, 1, 'PO_A3279938010900330001', 8, 'EMS', '9898385289059', '[]', 0, 1, 1585492628, 1585492628),
-(193, 1, 'PO_A3217852987257470001', 5, 'YTO', 'YT4415392300377', '[{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已收件 取件人: 王金燕 (18357207313)\",\"accept_time\":\"2020-03-24 18:14:10\"},{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已打包\",\"accept_time\":\"2020-03-24 18:25:41\"},{\"accept_station\":\"【浙江省杭州市余杭区临平】 已发出 下一站 【杭州转运中心公司】\",\"accept_time\":\"2020-03-24 18:34:41\"},{\"accept_station\":\"【杭州转运中心公司】 已收入\",\"accept_time\":\"2020-03-24 22:45:55\"},{\"accept_station\":\"【杭州转运中心】 已发出 下一站 【宁波转运中心公司】\",\"accept_time\":\"2020-03-24 23:06:15\"},{\"accept_station\":\"【宁波转运中心公司】 已收入\",\"accept_time\":\"2020-03-25 02:41:56\"},{\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\",\"accept_time\":\"2020-03-25 03:06:24\"},{\"accept_station\":\"【浙江省宁波市江北区庄桥四部公司】 派件中  派件人: 汪勇 电话 13856639595  如有疑问，请联系：0574-87349434\",\"accept_time\":\"2020-03-25 08:09:39\"},{\"accept_station\":\"快件已由钱湖北路南区18幢架空层丰巢智能柜丰巢柜代收，取件码已发送，请及时取件\",\"accept_time\":\"2020-03-25 10:31:36\"},{\"accept_station\":\"客户签收人: 已签收，签收人凭取货码签收 已签收  感谢使用圆通速递，期待再次为您服务 如有疑问请联系：13856639595，投诉电话：0574-87349434\",\"accept_time\":\"2020-03-25 18:28:46\"}]', 3, 0, 1585494256, 1585494290),
+(193, 1, 'PO_A3217852987257470001', 5, 'YTO', 'YT4415392300377', '[{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已收件 取件人: 王金燕 (18357207313)\",\"accept_time\":\"2020-03-24 18:14:10\"},{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已打包\",\"accept_time\":\"2020-03-24 18:25:41\"},{\"accept_station\":\"【浙江省杭州市余杭区临平】 已发出 下一站 【杭州转运中心公司】\",\"accept_time\":\"2020-03-24 18:34:41\"},{\"accept_station\":\"【杭州转运中心公司】 已收入\",\"accept_time\":\"2020-03-24 22:45:55\"},{\"accept_station\":\"【杭州转运中心】 已发出 下一站 【宁波转运中心公司】\",\"accept_time\":\"2020-03-24 23:06:15\"},{\"accept_station\":\"【宁波转运中心公司】 已收入\",\"accept_time\":\"2020-03-25 02:41:56\"},{\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\",\"accept_time\":\"2020-03-25 03:06:24\"},{\"accept_station\":\"【浙江省宁波市江北区庄桥四部公司】 派件中  派件人: 汪勇 电话 13856639595  如有疑问，请联系：0574-87349434\",\"accept_time\":\"2020-03-25 08:09:39\"},{\"accept_station\":\"快件已由广厦怡庭南区18幢架空层丰巢智能柜丰巢柜代收，取件码已发送，请及时取件\",\"accept_time\":\"2020-03-25 10:31:36\"},{\"accept_station\":\"客户签收人: 已签收，签收人凭取货码签收 已签收  感谢使用圆通速递，期待再次为您服务 如有疑问请联系：13856639595，投诉电话：0574-87349434\",\"accept_time\":\"2020-03-25 18:28:46\"}]', 3, 0, 1585494256, 1585494290),
 (194, 1, 'PO_A3217852987257470001', 8, 'EMS', '9898385289059', '[]', 0, 0, 1585494274, 1585494274),
 (195, 1, 'PO_A3279948991700770001', 3, 'ZTO', '75339141556336', '[]', 0, 1, 1585718010, 1585718010),
 (196, 1, 'PO_A3150263011275460001', 8, 'EMS', '9898385289059', '[]', 0, 1, 1585492628, 1585492628),
 (197, 1, 'PO_A3217852987257470001', 6, 'YD', '4304451792319', '[]', 0, 1, 1587140325, 1587140325),
 (198, 1, 'PO_A3217852987257470001', 8, 'EMS', 'AAA', '[]', 0, 1, 1587142849, 1587142849),
-(199, 1, 'SH_A4213550720400230001', 5, 'YTO', 'YT4415392300377', '[{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已收件 取件人: 王金燕 (18357207313)\",\"accept_time\":\"2020-03-24 18:14:10\"},{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已打包\",\"accept_time\":\"2020-03-24 18:25:41\"},{\"accept_station\":\"【浙江省杭州市余杭区临平】 已发出 下一站 【杭州转运中心公司】\",\"accept_time\":\"2020-03-24 18:34:41\"},{\"accept_station\":\"【杭州转运中心公司】 已收入\",\"accept_time\":\"2020-03-24 22:45:55\"},{\"accept_station\":\"【杭州转运中心】 已发出 下一站 【宁波转运中心公司】\",\"accept_time\":\"2020-03-24 23:06:15\"},{\"accept_station\":\"【宁波转运中心公司】 已收入\",\"accept_time\":\"2020-03-25 02:41:56\"},{\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\",\"accept_time\":\"2020-03-25 03:06:24\"},{\"accept_station\":\"【浙江省宁波市江北区庄桥四部公司】 派件中  派件人: 汪勇 电话 13856639595  如有疑问，请联系：0574-87349434\",\"accept_time\":\"2020-03-25 08:09:39\"},{\"accept_station\":\"快件已由钱湖北路南区18幢架空层丰巢智能柜丰巢柜代收，取件码已发送，请及时取件\",\"accept_time\":\"2020-03-25 10:31:36\"},{\"accept_station\":\"客户签收人: 已签收，签收人凭取货码签收 已签收  感谢使用圆通速递，期待再次为您服务 如有疑问请联系：13856639595，投诉电话：0574-87349434\",\"accept_time\":\"2020-03-25 18:28:46\"}]', 3, 0, 1585494256, 1585494290),
+(199, 1, 'SH_A4213550720400230001', 5, 'YTO', 'YT4415392300377', '[{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已收件 取件人: 王金燕 (18357207313)\",\"accept_time\":\"2020-03-24 18:14:10\"},{\"accept_station\":\"【浙江省杭州市余杭区临平公司】 已打包\",\"accept_time\":\"2020-03-24 18:25:41\"},{\"accept_station\":\"【浙江省杭州市余杭区临平】 已发出 下一站 【杭州转运中心公司】\",\"accept_time\":\"2020-03-24 18:34:41\"},{\"accept_station\":\"【杭州转运中心公司】 已收入\",\"accept_time\":\"2020-03-24 22:45:55\"},{\"accept_station\":\"【杭州转运中心】 已发出 下一站 【宁波转运中心公司】\",\"accept_time\":\"2020-03-24 23:06:15\"},{\"accept_station\":\"【宁波转运中心公司】 已收入\",\"accept_time\":\"2020-03-25 02:41:56\"},{\"accept_station\":\"【宁波转运中心】 已发出 下一站 【浙江省宁波市洪塘公司】\",\"accept_time\":\"2020-03-25 03:06:24\"},{\"accept_station\":\"【浙江省宁波市江北区庄桥四部公司】 派件中  派件人: 汪勇 电话 13856639595  如有疑问，请联系：0574-87349434\",\"accept_time\":\"2020-03-25 08:09:39\"},{\"accept_station\":\"快件已由广厦怡庭南区18幢架空层丰巢智能柜丰巢柜代收，取件码已发送，请及时取件\",\"accept_time\":\"2020-03-25 10:31:36\"},{\"accept_station\":\"客户签收人: 已签收，签收人凭取货码签收 已签收  感谢使用圆通速递，期待再次为您服务 如有疑问请联系：13856639595，投诉电话：0574-87349434\",\"accept_time\":\"2020-03-25 18:28:46\"}]', 3, 0, 1585494256, 1585494290),
 (200, 1, 'SH_I3060591166003750025', 1, 'SF', '0000', '[]', 0, 1, 1588043380, 1588043380),
 (201, 1, 'SH_A4213550720400230027', 1, 'SF', '00000', '[]', 0, 1, 1588043506, 1588043506),
 (202, 0, 'SH_A4213550720400230028', 4, 'YD', 'YT4415392300377', '[{\"accept_time\":\"2017-04-27 18:59:16\",\"accept_station\":\"到达：贵州贵阳沙冲路公司 已收件\"},{\"accept_time\":\"2017-04-27 21:07:15\",\"accept_station\":\"到达：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-27 21:11:45\",\"accept_station\":\"到达：贵州贵阳分拨中心 发往：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 00:53:32\",\"accept_station\":\"到达：浙江义乌分拨中心 上级站点：贵州贵阳分拨中心\"},{\"accept_time\":\"2017-04-29 00:55:36\",\"accept_station\":\"到达：浙江义乌分拨中心 发往：浙江宁波分拨中心\"},{\"accept_time\":\"2017-04-29 05:33:55\",\"accept_station\":\"到达：浙江宁波分拨中心 上级站点：浙江义乌分拨中心\"},{\"accept_time\":\"2017-04-29 05:38:31\",\"accept_station\":\"到达：浙江宁波分拨中心 发往：浙江宁波江北区洪塘公司\"},{\"accept_time\":\"2017-04-29 14:20:24\",\"accept_station\":\"到达：浙江宁波江北区洪塘公司 指定：邓康(15888033919) 派送\"},{\"accept_time\":\"2017-04-29 15:38:40\",\"accept_station\":\"到达：云柜智能快递柜 上级站点：浙江宁波江北区洪塘公司 发往：\"},{\"accept_time\":\"2017-04-29 18:58:14\",\"accept_station\":\"已签收，感谢使用韵达，期待再次为您服务\"}]', 3, 0, 1493349141, 1493523769),
 (203, 1, 'SH_A4213550720400230028', 7, 'EMS', '1129493657532', '[{\"accept_time\":\"2017-04-27 19:32:15\",\"accept_station\":\"温州市瑞安分公司场桥经营部已收件（揽投员姓名：冯康北,联系电话:13587572587），温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-27 22:23:00\",\"accept_station\":\"离开温州市 发往台州市，温州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 01:09:00\",\"accept_station\":\"到达台州市处理中心（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 02:58:00\",\"accept_station\":\"离开台州市 发往宁波市（经转），台州市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 05:20:00\",\"accept_station\":\"到达  宁波邮区中心局邮件处理中心 处理中心，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 06:30:08\",\"accept_station\":\"离开宁波市 发往江北速递分公司洪塘经营部，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 07:36:38\",\"accept_station\":\"江北速递分公司洪塘经营部安排投递，预计13:00:00前投递（投递员姓名：顾豪杰;联系电话：13600629547），宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 08:54:00\",\"accept_station\":\"已离开宁波邮区中心局邮件处理中心，发往宁波市邮政局速递公司，宁波市\",\"remark\":\"\"},{\"accept_time\":\"2017-04-28 11:05:50\",\"accept_station\":\"投递并签收，签收人：他人收 丰巢，宁波市\",\"remark\":\"\"}]', 3, 0, 1493349047, 1493457934),
-(204, 1, 'SH_A4213550720400230028', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【钱湖北路南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165);
+(204, 1, 'SH_A4213550720400230028', 5, 'STO', '402518834456', '[{\"accept_time\":\"2017-05-07 17:46:45\",\"accept_station\":\"【收件】【陕西西安曲江】的【曲江1 手机(15332460295)】已收件,扫描员是【曲江1】\"},{\"accept_time\":\"2017-05-07 17:52:56\",\"accept_station\":\"【发件】快件在【陕西西安曲江】由【曲江】扫描发往【陕西西安航空部】\"},{\"accept_time\":\"2017-05-07 20:15:20\",\"accept_station\":\"【到件】快件到达【陕西西安航空部】,上一站是【陕西西安曲江】,扫描员是【二号称】\"},{\"accept_time\":\"2017-05-07 20:43:26\",\"accept_station\":\"【装袋】快件在【陕西西安航空部】进行装包发往扫描，发往【浙江杭州中转部】\"},{\"accept_time\":\"2017-05-08 23:15:03\",\"accept_station\":\"【发件】快件在【浙江杭州中转部】由【周林会】扫描发往【浙江宁波中转部】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【发件】快件在【浙江宁波中转部】由【周玲惠】扫描发往【浙江宁波江北公司】\"},{\"accept_time\":\"2017-05-09 04:24:55\",\"accept_station\":\"【装车】【浙江宁波中转部】正在进行【装车】扫描\"},{\"accept_time\":\"2017-05-09 06:43:38\",\"accept_station\":\"【到件】快件到达【浙江宁波江北公司】,上一站是【】,扫描员是【操作部】\"},{\"accept_time\":\"2017-05-09 08:30:01\",\"accept_station\":\"【派件】【浙江宁波江北公司】的【万达营业厅 手机(18158566887)】正在派件,扫描员是【万达点部】\"},{\"accept_time\":\"2017-05-09 10:35:20\",\"accept_station\":\"【派件入柜】快件派送至快递柜【广厦怡庭南区18幢架空层丰巢快递柜】，派件员是【万达点部(18158566887)】\"},{\"accept_time\":\"2017-05-09 12:13:12\",\"accept_station\":\"【签收】已签收,签收人是:【收件箱】\"}]', 3, 0, 1494207583, 1494310165);
 
---
--- 插入之前先把表清空（truncate） `cs_delivery_item`
---
+DROP TABLE IF EXISTS `{prefix}delivery_item`;
+CREATE TABLE `{prefix}delivery_item` (
+  `delivery_item_id` smallint(5) UNSIGNED NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '快递公司',
+  `phonetic` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '首拼',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '快递编码',
+  `type` tinyint(1) NOT NULL COMMENT '0=热门 1=国内 2=国外 3=转运',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='快递公司列表';
 
-TRUNCATE TABLE `cs_delivery_item`;
---
--- 转存表中的数据 `cs_delivery_item`
---
-
-INSERT INTO `cs_delivery_item` (`delivery_item_id`, `name`, `phonetic`, `code`, `type`, `is_delete`) VALUES
+INSERT INTO `{prefix}delivery_item` (`delivery_item_id`, `name`, `phonetic`, `code`, `type`, `is_delete`) VALUES
 (1, '顺丰速运', 's', 'SF', 0, 0),
 (2, '百世快递', 'b', 'HTKY', 0, 0),
 (3, '中通快递', 'z', 'ZTO', 0, 0),
@@ -4777,16 +4903,17 @@ INSERT INTO `cs_delivery_item` (`delivery_item_id`, `name`, `phonetic`, `code`, 
 (510, '买家自提', 'm', 'ZT', 0, 0),
 (511, '同城配送', 't', 'TC', 0, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_discount`
---
+DROP TABLE IF EXISTS `{prefix}discount`;
+CREATE TABLE `{prefix}discount` (
+  `discount_id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '折扣名称',
+  `type` tinyint(1) NOT NULL COMMENT '0=打折 1=减价 2=固定价格 3=送优惠劵',
+  `begin_time` int(11) NOT NULL COMMENT '开始日期',
+  `end_time` int(11) NOT NULL COMMENT '结束日期',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品折扣';
 
-TRUNCATE TABLE `cs_discount`;
---
--- 转存表中的数据 `cs_discount`
---
-
-INSERT INTO `cs_discount` (`discount_id`, `name`, `type`, `begin_time`, `end_time`, `status`) VALUES
+INSERT INTO `{prefix}discount` (`discount_id`, `name`, `type`, `begin_time`, `end_time`, `status`) VALUES
 (8, '开业酬宾2', 1, 1497070996, 1509090919, 1),
 (9, '开业酬宾3', 2, 1497192660, 1497279060, 0),
 (12, '开业酬宾A', 0, 1493650260, 1494427860, 1),
@@ -4829,16 +4956,15 @@ INSERT INTO `cs_discount` (`discount_id`, `name`, `type`, `begin_time`, `end_tim
 (68, '折扣', 1, 1497801300, 1497974100, 0),
 (69, '折扣', 1, 1497887700, 1497974100, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_discount_goods`
---
+DROP TABLE IF EXISTS `{prefix}discount_goods`;
+CREATE TABLE `{prefix}discount_goods` (
+  `discount_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应discount表',
+  `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
+  `discount` decimal(10,2) NOT NULL COMMENT '折扣额',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '描述'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='折扣商品';
 
-TRUNCATE TABLE `cs_discount_goods`;
---
--- 转存表中的数据 `cs_discount_goods`
---
-
-INSERT INTO `cs_discount_goods` (`discount_id`, `goods_id`, `discount`, `description`) VALUES
+INSERT INTO `{prefix}discount_goods` (`discount_id`, `goods_id`, `discount`, `description`) VALUES
 (7, 89, '85.00', ''),
 (7, 93, '90.00', ''),
 (8, 1, '85.00', ''),
@@ -4867,16 +4993,18 @@ INSERT INTO `cs_discount_goods` (`discount_id`, `goods_id`, `discount`, `descrip
 (69, 289, '1.00', ''),
 (69, 288, '1.00', '');
 
---
--- 插入之前先把表清空（truncate） `cs_friend_link`
---
+DROP TABLE IF EXISTS `{prefix}friend_link`;
+CREATE TABLE `{prefix}friend_link` (
+  `friend_link_id` smallint(5) UNSIGNED NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '链接名称',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '链接地址',
+  `logo` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'logo',
+  `target` enum('_self','_blank') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '_self' COMMENT '_self _blank',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='友情链接';
 
-TRUNCATE TABLE `cs_friend_link`;
---
--- 转存表中的数据 `cs_friend_link`
---
-
-INSERT INTO `cs_friend_link` (`friend_link_id`, `name`, `url`, `logo`, `target`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}friend_link` (`friend_link_id`, `name`, `url`, `logo`, `target`, `sort`, `status`) VALUES
 (29, '友情链接E', 'http://oruei.com', '', '_self', 50, 1),
 (32, 'CareyShopA', 'https://www.careyshop.cn', 'aliyun.oss.careyshop.cn/uploads/files/20191112/ea8c5aa7-c66f-44ae-8c44-1f6b53f62ff5.jpg?type=aliyun', '_self', 0, 1),
 (33, '友情链接F', 'http://oruei.com', 'aliyun.oss.careyshop.cn/uploads/files/20191113/a1ad9b84-b3e6-450c-b249-acfdac5e5a6f.png?type=aliyun', '_self', 10, 1),
@@ -4885,16 +5013,49 @@ INSERT INTO `cs_friend_link` (`friend_link_id`, `name`, `url`, `logo`, `target`,
 (47, '友情链接J', 'http://oruei.com', '', '_self', 50, 0),
 (51, '友情链接K', 'http://oruei.com', 'aliyun.oss.careyshop.cn/uploads/files/20191113/a1ad9b84-b3e6-450c-b249-acfdac5e5a6f.png?type=aliyun', '_blank', 15, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_goods`
---
+DROP TABLE IF EXISTS `{prefix}goods`;
+CREATE TABLE `{prefix}goods` (
+  `goods_id` int(11) UNSIGNED NOT NULL,
+  `goods_category_id` smallint(5) UNSIGNED NOT NULL COMMENT '对应goods_category表',
+  `name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '商品名称',
+  `short_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '短名称',
+  `product_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '促销语',
+  `goods_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品货号',
+  `goods_spu` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品SPU',
+  `goods_sku` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品SKU',
+  `bar_code` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品条码',
+  `brand_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应brand表',
+  `store_qty` int(11) NOT NULL DEFAULT '0' COMMENT '库存数量',
+  `comment_sum` int(11) NOT NULL DEFAULT '0' COMMENT '评价数量',
+  `sales_sum` int(11) NOT NULL DEFAULT '0' COMMENT '销售数量',
+  `measure` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品计量(重量、体积)',
+  `measure_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=重量 1=计件 2=体积',
+  `is_postage` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=收费 1=包邮',
+  `market_price` decimal(10,2) NOT NULL COMMENT '市场价',
+  `shop_price` decimal(10,2) NOT NULL COMMENT '本店价',
+  `integral_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=按百分比 1=按固定值',
+  `give_integral` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '赠送积分',
+  `is_integral` int(11) NOT NULL DEFAULT '0' COMMENT '积分可抵扣额',
+  `least_sum` smallint(5) NOT NULL DEFAULT '0' COMMENT '最少起订',
+  `purchase_sum` smallint(5) NOT NULL DEFAULT '0' COMMENT '限购数量 0=不限',
+  `keywords` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '关键词',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '内容',
+  `attachment` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '附件',
+  `video` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '短视频',
+  `unit` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '计量单位',
+  `is_recommend` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=不推 1=推荐',
+  `is_new` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=不新 1=新品',
+  `is_hot` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=普通 1=热卖',
+  `goods_type_id` smallint(5) UNSIGNED NOT NULL COMMENT '对应goods_type表',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=下架 1=上架',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=正常 1=回收 2=软删除',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品表';
 
-TRUNCATE TABLE `cs_goods`;
---
--- 转存表中的数据 `cs_goods`
---
-
-INSERT INTO `cs_goods` (`goods_id`, `goods_category_id`, `name`, `short_name`, `product_name`, `goods_code`, `goods_spu`, `goods_sku`, `bar_code`, `brand_id`, `store_qty`, `comment_sum`, `sales_sum`, `measure`, `measure_type`, `is_postage`, `market_price`, `shop_price`, `integral_type`, `give_integral`, `is_integral`, `least_sum`, `purchase_sum`, `keywords`, `description`, `content`, `attachment`, `video`, `unit`, `is_recommend`, `is_new`, `is_hot`, `goods_type_id`, `sort`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}goods` (`goods_id`, `goods_category_id`, `name`, `short_name`, `product_name`, `goods_code`, `goods_spu`, `goods_sku`, `bar_code`, `brand_id`, `store_qty`, `comment_sum`, `sales_sum`, `measure`, `measure_type`, `is_postage`, `market_price`, `shop_price`, `integral_type`, `give_integral`, `is_integral`, `least_sum`, `purchase_sum`, `keywords`, `description`, `content`, `attachment`, `video`, `unit`, `is_recommend`, `is_new`, `is_hot`, `goods_type_id`, `sort`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
 (1, 2, '美国正品coach女士钱包蔻驰小钱包小卡包钱夹三折搭扣零钱包新款', '', '8天超长待机 / 137g轻巧机身 / 高通骁龙处理器', 'CS73765853', '', '', '', 0, 62, 1, 24, '10.00', 0, 1, '150.00', '10.00', 1, '150.00', 1000000, 1, 0, '', '', '描述', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn/uploads/files/20191230/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn/uploads/files/20191230/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\"}]', '', '', 0, 0, 1, 1, 50, 1, 0, 1492703981, 1571023095),
 (3, 2, '启蒙积木军舰海军军事航母积木113儿童小颗粒积木玩具春节礼物', '', '', 'CS68946681', '', '', '', 0, 10, 0, 0, '10.00', 0, 0, '100.00', '30.00', 0, '60.00', 1, 1, 0, '', '', '描述', '[{\"name\":\"68d42d66a8a9c565.jpg\",\"source\":\"aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\"}]', '', '', 0, 1, 1, 1, 50, 1, 0, 1492704045, 1571023095),
 (4, 2, '乐基乌龟饲料高钙幼龟粮 鱼干虾干面包虫巴西龟鳄龟粮食 龟粮通用', '', '', 'CS37795425', '', '', '', 0, 0, 0, 0, '10.00', 0, 0, '100.00', '200.00', 0, '0.00', 1, 1, 0, '', '', '描述', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\"}]', '[]', '', 1, 1, 1, 1, 50, 1, 0, 1492704177, 1586777273),
@@ -5048,7 +5209,7 @@ INSERT INTO `cs_goods` (`goods_id`, `goods_category_id`, `name`, `short_name`, `
 (264, 123, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机 双卡双待', '荣耀10青春版', '此商品将于2019-10-18,00点结束闪购特卖', 'CS82621497', '', '', '', 0, 409, 0, 0, '0.00', 0, 1, '3000.00', '2000.00', 0, '0.00', 0, 0, 0, '', '', '内容', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn/uploads/files/20191113/c7519497-0721-4518-826e-04c558d259ec.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn/uploads/files/20191113/c7519497-0721-4518-826e-04c558d259ec.jpg?type=aliyun\"}]', '', '', 0, 0, 0, 1, 50, 1, 1, 1572575032, 1575039478),
 (265, 2, '美国正品coach女士钱包蔻驰小钱包小卡包钱夹三折搭扣零钱包新款', '', '8天超长待机 / 137g轻巧机身 / 高通骁龙处理器', 'CS48363241', '', '', '', 0, 62, 0, 0, '10.00', 0, 1, '150.00', '10.00', 1, '150.00', 1000000, 1, 0, '', '', '描述', '[{\"name\":\"68d42d66a8a9c565.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/32dcbebd-ebad-4d41-96d4-196fd7fe9ac7.jpg?type=aliyun\"},{\"name\":\"O1CN01awPGBj1Mqd7qIcu3n_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\"},{\"name\":\"O1CN01wQOP0c1RdsATKsVgU_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\"}]', '[]', '', 0, 0, 1, 1, 50, 0, 0, 1572576043, 1586777405),
 (266, 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机 双卡双待', '荣耀10青春版', '此商品将于2019-10-18,00点结束闪购特卖', 'CS46712398', '', '', '', 0, 400, 0, 0, '0.00', 0, 1, '3000.00', '2000.00', 0, '0.00', 0, 0, 0, '', '', '内容', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\"},{\"name\":\"O1CN01wQOP0c1RdsATKsVgU_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun\"},{\"name\":\"O1CN01awPGBj1Mqd7qIcu3n_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun\"}]', '[]', '', 0, 0, 0, 1, 50, 0, 0, 1572576098, 1586777395);
-INSERT INTO `cs_goods` (`goods_id`, `goods_category_id`, `name`, `short_name`, `product_name`, `goods_code`, `goods_spu`, `goods_sku`, `bar_code`, `brand_id`, `store_qty`, `comment_sum`, `sales_sum`, `measure`, `measure_type`, `is_postage`, `market_price`, `shop_price`, `integral_type`, `give_integral`, `is_integral`, `least_sum`, `purchase_sum`, `keywords`, `description`, `content`, `attachment`, `video`, `unit`, `is_recommend`, `is_new`, `is_hot`, `goods_type_id`, `sort`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}goods` (`goods_id`, `goods_category_id`, `name`, `short_name`, `product_name`, `goods_code`, `goods_spu`, `goods_sku`, `bar_code`, `brand_id`, `store_qty`, `comment_sum`, `sales_sum`, `measure`, `measure_type`, `is_postage`, `market_price`, `shop_price`, `integral_type`, `give_integral`, `is_integral`, `least_sum`, `purchase_sum`, `keywords`, `description`, `content`, `attachment`, `video`, `unit`, `is_recommend`, `is_new`, `is_hot`, `goods_type_id`, `sort`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
 (267, 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机 双卡双待', '荣耀10青春版', '此商品将于2019-10-18,00点结束闪购特卖', 'CS24972518', '', '', '', 0, 4, 0, 0, '0.00', 0, 1, '3000.00', '2000.00', 0, '0.00', 0, 0, 0, '', '', '<img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg%3Ftype%3Daliyun\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F741db4e0-1eae-423c-8de3-04a54bb102e2.gif%3Ftype%3Daliyun\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F4d141311-9184-483c-8204-11dc9253e673.jpg%3Ftype%3Daliyun\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=aliyun.oss.careyshop.cn%2Fuploads%2Ffiles%2F20191230%2F38f69eba-165e-475c-8b1f-824212e02afc.jpg%3Ftype%3Daliyun\" alt=\"\" /><br /><span style=\"color: #ff0000; font-size: 18px;\">也可以插入一些文字<br /></span><span style=\"font-size: 14px; background-color: #000000; color: #ffff99;\">之后继续插入图片<br /></span>无格式文字<br /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F98a14249-c160-43ac-ac0b-4920ed8b75af.png%3Ftype%3Dcareyshop\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2Fe388bb89-6d3e-4d3b-a948-e71096b21530.png%3Ftype%3Dcareyshop\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2Fba732548-149f-436d-a6a3-4ba8f364293b.png%3Ftype%3Dcareyshop\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F8396ed3d-6ec4-45d5-bdd4-15a8b1c865af.png%3Ftype%3Dcareyshop\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F7d3ab2ff-3eff-4b26-a449-0e2b514ea2c4.png%3Ftype%3Dcareyshop\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=demo.careyshop.cn%2Fuploads%2Ffiles%2F2213e588-6192-4909-ae6e-244d6c256eb0.png%3Ftype%3Dcareyshop\" alt=\"\" />', '[{\"name\":\"O1CN01VtX6IC1PbvFiNvskI_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4aff227f-2673-45bc-81cd-8e79777dbe04.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4aff227f-2673-45bc-81cd-8e79777dbe04.jpg?type=aliyun\"}]', '[]', '', 0, 0, 0, 1, 50, 1, 0, 1574817459, 1578031733),
 (276, 1, 'sss', '', '', 'CS88519676', '', '', '', 0, 0, 0, 0, '0.00', 0, 0, '1.00', '1.00', 0, '0.00', 0, 0, 0, '', '', 'sssss', '[]', '[]', '', 0, 0, 0, 1, 50, 1, 2, 1577276763, 1577283310),
 (277, 1, 'sssss', '', '', 'CS75257684', '', '', '', 0, 0, 0, 0, '0.00', 0, 0, '1.00', '1.00', 0, '0.00', 0, 0, 0, '', '', 'for (let val of this.tabList) {<br />let isSuccess = true<br />this.$refs[`form_${val}`].validate(valid =&gt; {<br />if (!valid) {<br />isSuccess = false<br />return false<br />}<br />})<br /><br />if (!isSuccess) {<br />this.activeName = val<br />this.$parent.scrollTo()<br />return<br />}<br />}<br /><br />this.$emit(\'update:confirmLoading\', true)<br />this.state === \'create\' ? this.handleCreate() : this.handleUpdate()', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"careyshop.oruei.com\\/uploads\\/files\\/20191225\\/128931cac5cc14b1f7361b8a1d707f70.jpg?type=careyshop\",\"url\":\"\\/\\/careyshop.oruei.com\\/uploads\\/files\\/20191225\\/128931cac5cc14b1f7361b8a1d707f70.jpg?type=careyshop\"}]', '[]', '', 1, 1, 1, 2, 50, 1, 2, 1577283379, 1577284115),
@@ -5067,16 +5228,17 @@ INSERT INTO `cs_goods` (`goods_id`, `goods_category_id`, `name`, `short_name`, `
 (292, 12, 'test', '', '', 'CS13439226', '', '', '', 0, 0, 0, 0, '0.00', 0, 0, '1.00', '1.00', 0, '0.00', 0, 0, 0, '', '', '<img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=oruei.com%2Fuploads%2Ffiles%2F20200426%2F74070e45-308b-4879-8b45-c629d82e9fe6.jpg%3Ftype%3Dcareyshop\" alt=\"\" /><img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=oruei.com%2Fuploads%2Ffiles%2F20200426%2F1dbcc416-1459-4941-a22e-dfdba84f1e5b.jpg%3Ftype%3Dcareyshop\" alt=\"\" />', '[{\"name\":\"68d42d66a8a9c565.jpg\",\"source\":\"oruei.com\\/uploads\\/files\\/20200426\\/75d86700-8b60-45fc-b79c-1fb83cac2e92.jpg?type=careyshop\",\"url\":\"\\/\\/oruei.com\\/uploads\\/files\\/20200426\\/75d86700-8b60-45fc-b79c-1fb83cac2e92.jpg?type=careyshop\"},{\"name\":\"O1CN01VtX6IC1PbvFiNvskI_!!0-item_pic.jpg\",\"source\":\"oruei.com\\/uploads\\/files\\/20200426\\/5597a0e9-6a00-447f-b9a1-0dfda6766581.jpg?type=careyshop\",\"url\":\"\\/\\/oruei.com\\/uploads\\/files\\/20200426\\/5597a0e9-6a00-447f-b9a1-0dfda6766581.jpg?type=careyshop\"}]', '[]', '', 0, 0, 0, 5, 50, 1, 1, 1587888342, 1587888674),
 (293, 1, 'test2', '', '', 'CS95887141', '', '', '', 0, 1, 0, 0, '1.00', 0, 0, '1.00', '1.00', 0, '0.00', 0, 0, 0, '', '', '<img src=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.thumb/code/inside_content?url=oruei.com%2Fuploads%2Ffiles%2F20200426%2Fb79ecf96-9c94-47a5-83eb-c8928af945b3.jpg%3Ftype%3Dcareyshop\" alt=\"\" />', '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"oruei.com\\/uploads\\/files\\/20200426\\/f824fef0-ca43-47dd-b057-9ece0d1cadaf.jpg?type=careyshop\",\"url\":\"\\/\\/oruei.com\\/uploads\\/files\\/20200426\\/f824fef0-ca43-47dd-b057-9ece0d1cadaf.jpg?type=careyshop\"}]', '[]', '', 0, 0, 0, 3, 50, 1, 1, 1587888819, 1587912531);
 
---
--- 插入之前先把表清空（truncate） `cs_goods_attr`
---
+DROP TABLE IF EXISTS `{prefix}goods_attr`;
+CREATE TABLE `{prefix}goods_attr` (
+  `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
+  `goods_attribute_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods_attribute表',
+  `parent_id` int(11) UNSIGNED NOT NULL COMMENT '父id',
+  `is_important` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=普通 1=核心属性',
+  `attr_value` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '属性值',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品属性列表';
 
-TRUNCATE TABLE `cs_goods_attr`;
---
--- 转存表中的数据 `cs_goods_attr`
---
-
-INSERT INTO `cs_goods_attr` (`goods_id`, `goods_attribute_id`, `parent_id`, `is_important`, `attr_value`, `sort`) VALUES
+INSERT INTO `{prefix}goods_attr` (`goods_id`, `goods_attribute_id`, `parent_id`, `is_important`, `attr_value`, `sort`) VALUES
 (274, 27, 12, 0, '123', 1),
 (274, 3, 1, 0, '222', 0),
 (274, 16, 1, 0, '333', 2),
@@ -5149,16 +5311,23 @@ INSERT INTO `cs_goods_attr` (`goods_id`, `goods_attribute_id`, `parent_id`, `is_
 (288, 31, 4, 0, '这是手写的', 2),
 (288, 33, 4, 0, '这是默认值1a\n这是默认值2a\n这是默认值3a', 3);
 
---
--- 插入之前先把表清空（truncate） `cs_goods_attribute`
---
+DROP TABLE IF EXISTS `{prefix}goods_attribute`;
+CREATE TABLE `{prefix}goods_attribute` (
+  `goods_attribute_id` int(11) UNSIGNED NOT NULL,
+  `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
+  `attr_name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '属性名称',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '属性描述',
+  `icon` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '图标',
+  `goods_type_id` smallint(5) UNSIGNED NOT NULL COMMENT '对应goods_type表',
+  `attr_index` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=不检索 1=关键字 2=范围',
+  `attr_input_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=手工填写 1=单选 2=多选',
+  `attr_values` text COLLATE utf8mb4_unicode_ci COMMENT '可选值列表',
+  `is_important` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=普通 1=核心属性',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品属性';
 
-TRUNCATE TABLE `cs_goods_attribute`;
---
--- 转存表中的数据 `cs_goods_attribute`
---
-
-INSERT INTO `cs_goods_attribute` (`goods_attribute_id`, `parent_id`, `attr_name`, `description`, `icon`, `goods_type_id`, `attr_index`, `attr_input_type`, `attr_values`, `is_important`, `sort`, `is_delete`) VALUES
+INSERT INTO `{prefix}goods_attribute` (`goods_attribute_id`, `parent_id`, `attr_name`, `description`, `icon`, `goods_type_id`, `attr_index`, `attr_input_type`, `attr_values`, `is_important`, `sort`, `is_delete`) VALUES
 (1, 0, '主体', 'AAA', '', 1, 0, 0, NULL, 0, 50, 0),
 (2, 1, '型号', '', 'https://image.suning.cn/uimg/PCMS/prmtExposition/149317753144984207.png', 1, 0, 0, '[]', 1, 50, 0),
 (3, 1, '品牌', '', 'https://image.suning.cn/uimg/PCMS/prmtExposition/149317754593735652.png', 1, 1, 0, '[]', 1, 10, 0),
@@ -5194,16 +5363,14 @@ INSERT INTO `cs_goods_attribute` (`goods_attribute_id`, `parent_id`, `attr_name`
 (40, 4, '1', '', '', 2, 0, 0, '[\"111\\n222\\n333\"]', 1, 50, 1),
 (41, 0, 'test2', '', '', 11, 0, 0, NULL, 0, 50, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_goods_attr_config`
---
+DROP TABLE IF EXISTS `{prefix}goods_attr_config`;
+CREATE TABLE `{prefix}goods_attr_config` (
+  `goods_attr_config_id` int(11) UNSIGNED NOT NULL,
+  `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
+  `config_data` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '配置数据'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品属性配置';
 
-TRUNCATE TABLE `cs_goods_attr_config`;
---
--- 转存表中的数据 `cs_goods_attr_config`
---
-
-INSERT INTO `cs_goods_attr_config` (`goods_attr_config_id`, `goods_id`, `config_data`) VALUES
+INSERT INTO `{prefix}goods_attr_config` (`goods_attr_config_id`, `goods_id`, `config_data`) VALUES
 (1, 267, '[{\"goods_attribute_id\":1,\"attr_name\":\"主体\",\"description\":\"AAA\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":2,\"parent_id\":1,\"attr_name\":\"型号\",\"description\":\"\",\"icon\":\"https:\\/\\/image.suning.cn\\/uimg\\/PCMS\\/prmtExposition\\/149317753144984207.png\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":50,\"attr_value\":\"华为荣耀10青春版\"},{\"goods_attribute_id\":3,\"parent_id\":1,\"attr_name\":\"品牌\",\"description\":\"\",\"icon\":\"https:\\/\\/image.suning.cn\\/uimg\\/PCMS\\/prmtExposition\\/149317754593735652.png\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":10,\"attr_value\":\"华为\"},{\"goods_attribute_id\":16,\"parent_id\":1,\"attr_name\":\"上市时间\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":50,\"attr_value\":\"2018年 11月\"},{\"goods_attribute_id\":17,\"parent_id\":1,\"attr_name\":\"入网许可证号\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":50,\"attr_value\":\"HRY-AL00\\/HRY-AL00a\"}]},{\"goods_attribute_id\":18,\"attr_name\":\"系统\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":19,\"parent_id\":18,\"attr_name\":\"手机操作系统\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":1,\"attr_values\":[\"IOS\",\"Android\"],\"is_important\":1,\"sort\":50,\"attr_value\":[\"Android\"]}]},{\"goods_attribute_id\":20,\"attr_name\":\"基本信息\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":21,\"parent_id\":20,\"attr_name\":\"颜色\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":2,\"attr_values\":[\"白色\",\"黑色\",\"蓝色\",\"紫色\",\"红色\",\"黄色\",\"绿色\"],\"is_important\":1,\"sort\":1,\"attr_value\":[\"白色\",\"黑色\"]},{\"goods_attribute_id\":25,\"parent_id\":20,\"attr_name\":\"重量\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":2,\"attr_value\":\"约162克（含电池）\"},{\"goods_attribute_id\":22,\"parent_id\":20,\"attr_name\":\"机身长度\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":3,\"attr_value\":\"154.8mm\"},{\"goods_attribute_id\":23,\"parent_id\":20,\"attr_name\":\"机身宽度\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":4,\"attr_value\":\"73.64mm\"},{\"goods_attribute_id\":24,\"parent_id\":20,\"attr_name\":\"机身厚度\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":5,\"attr_value\":\"7.95mm\"},{\"goods_attribute_id\":26,\"parent_id\":20,\"attr_name\":\"机身材质\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":1,\"attr_values\":[\"塑料\",\"玻璃\",\"合金\",\"其他\"],\"is_important\":1,\"sort\":6,\"attr_value\":[\"合金\"]}]},{\"goods_attribute_id\":12,\"attr_name\":\"清单\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":10,\"get_attribute\":[{\"goods_attribute_id\":15,\"parent_id\":12,\"attr_name\":\"包装清单\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":50,\"attr_value\":\"外包装采用贴防拆标签，彩盒内标配：\\n1）手机 x 1； \\n2）电池（内置）x 1； \\n3）充电器 x 1； \\n4） 数据线 x 1； \\n5）快速指南 x 1； \\n6）三包凭证 x 1； \\n7）取卡针 x 1； \\n8）保护壳 x 1；\"},{\"goods_attribute_id\":27,\"parent_id\":12,\"attr_name\":\"特意出现比较长的内容用来测试样式\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[\"默认值\"],\"is_important\":1,\"sort\":50,\"attr_value\":\"其它\"}]}]'),
 (11, 274, '[{\"goods_attribute_id\":12,\"attr_name\":\"清单\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":10,\"get_attribute\":[{\"goods_attribute_id\":15,\"parent_id\":12,\"attr_name\":\"包装清单\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":50,\"result\":\"\"},{\"goods_attribute_id\":27,\"parent_id\":12,\"attr_name\":\"特意出现比较长的内容用来测试样式\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":50,\"result\":\"123\"}]},{\"goods_attribute_id\":1,\"attr_name\":\"主体\",\"description\":\"AAA\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":3,\"parent_id\":1,\"attr_name\":\"品牌\",\"description\":\"\",\"icon\":\"https:\\/\\/image.suning.cn\\/uimg\\/PCMS\\/prmtExposition\\/149317754593735652.png\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":10,\"result\":\"222\"},{\"goods_attribute_id\":2,\"parent_id\":1,\"attr_name\":\"型号\",\"description\":\"\",\"icon\":\"https:\\/\\/image.suning.cn\\/uimg\\/PCMS\\/prmtExposition\\/149317753144984207.png\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":50,\"result\":\"\"},{\"goods_attribute_id\":16,\"parent_id\":1,\"attr_name\":\"上市时间\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":50,\"result\":\"333\"},{\"goods_attribute_id\":17,\"parent_id\":1,\"attr_name\":\"入网许可证号\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":50,\"result\":\"\"}]},{\"goods_attribute_id\":18,\"attr_name\":\"系统\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":19,\"parent_id\":18,\"attr_name\":\"手机操作系统\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":1,\"attr_values\":[\"IOS\",\"Android\"],\"is_important\":1,\"sort\":50,\"result\":\"\"}]},{\"goods_attribute_id\":20,\"attr_name\":\"基本信息\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":21,\"parent_id\":20,\"attr_name\":\"颜色\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":2,\"attr_values\":[\"白色\",\"黑色\",\"蓝色\",\"紫色\",\"红色\",\"黄色\",\"绿色\"],\"is_important\":0,\"sort\":1,\"result\":\"\"},{\"goods_attribute_id\":25,\"parent_id\":20,\"attr_name\":\"重量\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":2,\"result\":\"\"},{\"goods_attribute_id\":22,\"parent_id\":20,\"attr_name\":\"机身长度\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":3,\"result\":\"\"},{\"goods_attribute_id\":23,\"parent_id\":20,\"attr_name\":\"机身宽度\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":4,\"result\":\"\"},{\"goods_attribute_id\":24,\"parent_id\":20,\"attr_name\":\"机身厚度\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":5,\"result\":\"\"},{\"goods_attribute_id\":26,\"parent_id\":20,\"attr_name\":\"机身材质\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":1,\"attr_values\":[\"塑料\",\"玻璃\",\"合金\",\"其他\"],\"is_important\":0,\"sort\":6,\"result\":\"\"}]}]'),
 (19, 276, '[{\"goods_attribute_id\":12,\"attr_name\":\"清单\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":10,\"get_attribute\":[{\"goods_attribute_id\":15,\"parent_id\":12,\"attr_name\":\"包装清单\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":50},{\"goods_attribute_id\":27,\"parent_id\":12,\"attr_name\":\"特意出现比较长的内容用来测试样式\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[\"默认值\"],\"is_important\":0,\"sort\":50}]},{\"goods_attribute_id\":1,\"attr_name\":\"主体\",\"description\":\"AAA\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":3,\"parent_id\":1,\"attr_name\":\"品牌\",\"description\":\"\",\"icon\":\"https:\\/\\/image.suning.cn\\/uimg\\/PCMS\\/prmtExposition\\/149317754593735652.png\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":10},{\"goods_attribute_id\":2,\"parent_id\":1,\"attr_name\":\"型号\",\"description\":\"\",\"icon\":\"https:\\/\\/image.suning.cn\\/uimg\\/PCMS\\/prmtExposition\\/149317753144984207.png\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":50},{\"goods_attribute_id\":16,\"parent_id\":1,\"attr_name\":\"上市时间\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":50},{\"goods_attribute_id\":17,\"parent_id\":1,\"attr_name\":\"入网许可证号\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":50}]},{\"goods_attribute_id\":18,\"attr_name\":\"系统\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":19,\"parent_id\":18,\"attr_name\":\"手机操作系统\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":1,\"attr_values\":[\"IOS\",\"Android\"],\"is_important\":1,\"sort\":50,\"result\":[]}]},{\"goods_attribute_id\":20,\"attr_name\":\"基本信息\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":21,\"parent_id\":20,\"attr_name\":\"颜色\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":2,\"attr_values\":[\"白色\",\"黑色\",\"蓝色\",\"紫色\",\"红色\",\"黄色\",\"绿色\"],\"is_important\":0,\"sort\":1,\"result\":[]},{\"goods_attribute_id\":25,\"parent_id\":20,\"attr_name\":\"重量\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":2},{\"goods_attribute_id\":22,\"parent_id\":20,\"attr_name\":\"机身长度\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":3},{\"goods_attribute_id\":23,\"parent_id\":20,\"attr_name\":\"机身宽度\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":4},{\"goods_attribute_id\":24,\"parent_id\":20,\"attr_name\":\"机身厚度\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":5},{\"goods_attribute_id\":26,\"parent_id\":20,\"attr_name\":\"机身材质\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":1,\"attr_values\":[\"塑料\",\"玻璃\",\"合金\",\"其他\"],\"is_important\":0,\"sort\":6,\"result\":[]}]}]'),
@@ -5223,16 +5390,25 @@ INSERT INTO `cs_goods_attr_config` (`goods_attr_config_id`, `goods_id`, `config_
 (35, 185, '[{\"goods_attribute_id\":12,\"attr_name\":\"清单\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":10,\"get_attribute\":[{\"goods_attribute_id\":15,\"parent_id\":12,\"attr_name\":\"包装清单\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":50},{\"goods_attribute_id\":27,\"parent_id\":12,\"attr_name\":\"测试特意出现比较长的内容用来样式\",\"description\":\"测试特意出现比较长的内容用来样式\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[\"默认值\"],\"is_important\":0,\"sort\":50}]},{\"goods_attribute_id\":1,\"attr_name\":\"主体\",\"description\":\"AAA\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":3,\"parent_id\":1,\"attr_name\":\"品牌\",\"description\":\"\",\"icon\":\"https:\\/\\/image.suning.cn\\/uimg\\/PCMS\\/prmtExposition\\/149317754593735652.png\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":10},{\"goods_attribute_id\":2,\"parent_id\":1,\"attr_name\":\"型号\",\"description\":\"\",\"icon\":\"https:\\/\\/image.suning.cn\\/uimg\\/PCMS\\/prmtExposition\\/149317753144984207.png\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":50},{\"goods_attribute_id\":16,\"parent_id\":1,\"attr_name\":\"上市时间\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":50},{\"goods_attribute_id\":17,\"parent_id\":1,\"attr_name\":\"入网许可证号\",\"description\":\"工业代号或者入网型号\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":50}]},{\"goods_attribute_id\":18,\"attr_name\":\"系统\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":19,\"parent_id\":18,\"attr_name\":\"手机操作系统\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":1,\"attr_values\":[\"IOS\",\"Android\"],\"is_important\":1,\"sort\":50,\"attr_value\":[]}]},{\"goods_attribute_id\":20,\"attr_name\":\"基本信息\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"sort\":50,\"get_attribute\":[{\"goods_attribute_id\":21,\"parent_id\":20,\"attr_name\":\"颜色\",\"description\":\"备注颜色必须与页面介绍、产品说明书、外包装等一致\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":1,\"attr_input_type\":2,\"attr_values\":[\"白色\",\"黑色\",\"蓝色\",\"紫色\",\"红色\",\"黄色\",\"绿色\"],\"is_important\":1,\"sort\":1,\"attr_value\":[]},{\"goods_attribute_id\":25,\"parent_id\":20,\"attr_name\":\"重量\",\"description\":\"实际尺寸依配置、制造工艺、测量方法的不同可能有所差异。\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":1,\"sort\":2},{\"goods_attribute_id\":22,\"parent_id\":20,\"attr_name\":\"机身长度\",\"description\":\"实际尺寸依配置、制造工艺、测量方法的不同可能有所差异。\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":3},{\"goods_attribute_id\":23,\"parent_id\":20,\"attr_name\":\"机身宽度\",\"description\":\"实际尺寸依配置、制造工艺、测量方法的不同可能有所差异。\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":4},{\"goods_attribute_id\":24,\"parent_id\":20,\"attr_name\":\"机身厚度\",\"description\":\"实际尺寸依配置、制造工艺、测量方法的不同可能有所差异。\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":0,\"attr_values\":[],\"is_important\":0,\"sort\":5},{\"goods_attribute_id\":26,\"parent_id\":20,\"attr_name\":\"机身材质\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":1,\"attr_index\":0,\"attr_input_type\":1,\"attr_values\":[\"塑料\",\"玻璃\",\"合金\",\"其他\",\"test\"],\"is_important\":1,\"sort\":6,\"attr_value\":[\"test\"]}]}]'),
 (36, 293, '[{\"goods_attribute_id\":6,\"attr_name\":\"颜色\",\"description\":\"\",\"icon\":\"\",\"goods_type_id\":3,\"sort\":50,\"get_attribute\":[]}]');
 
---
--- 插入之前先把表清空（truncate） `cs_goods_category`
---
+DROP TABLE IF EXISTS `{prefix}goods_category`;
+CREATE TABLE `{prefix}goods_category` (
+  `goods_category_id` smallint(5) UNSIGNED NOT NULL,
+  `parent_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+  `name_phonetic` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '名称首拼',
+  `alias` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '别名',
+  `alias_phonetic` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '别名首拼',
+  `category_pic` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '图片',
+  `category_ico` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '图标',
+  `keywords` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '关键词',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `category_type` tinyint(3) NOT NULL DEFAULT '0' COMMENT '类型(自定义)',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `is_navi` tinyint(1) NOT NULL DEFAULT '0' COMMENT '导航 0=否 1=是',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品分类';
 
-TRUNCATE TABLE `cs_goods_category`;
---
--- 转存表中的数据 `cs_goods_category`
---
-
-INSERT INTO `cs_goods_category` (`goods_category_id`, `parent_id`, `name`, `name_phonetic`, `alias`, `alias_phonetic`, `category_pic`, `category_ico`, `keywords`, `description`, `category_type`, `sort`, `is_navi`, `status`) VALUES
+INSERT INTO `{prefix}goods_category` (`goods_category_id`, `parent_id`, `name`, `name_phonetic`, `alias`, `alias_phonetic`, `category_pic`, `category_ico`, `keywords`, `description`, `category_type`, `sort`, `is_navi`, `status`) VALUES
 (1, 0, '手机 、 数码 、 通信', 's', '数码产品', 's', '', '', '', '', 0, 50, 0, 1),
 (2, 0, '家用电器', 'j', '家用电器', 'j', '', '', '', '', 0, 50, 0, 1),
 (3, 0, '电脑、办公', 'd', '电脑', 'd', '', '', '', '', 0, 50, 0, 1),
@@ -6023,7 +6199,7 @@ INSERT INTO `cs_goods_category` (`goods_category_id`, `parent_id`, `name`, `name
 (788, 87, '畅读VIP', 'c', '畅读VIP', 'c', '', '', '', '', 0, 50, 0, 1),
 (789, 87, '免费', 'm', '免费', 'm', '', '', '', '', 0, 50, 0, 1),
 (790, 87, '小说', 'x', '小说', 'x', '', '', '', '', 0, 50, 0, 1);
-INSERT INTO `cs_goods_category` (`goods_category_id`, `parent_id`, `name`, `name_phonetic`, `alias`, `alias_phonetic`, `category_pic`, `category_ico`, `keywords`, `description`, `category_type`, `sort`, `is_navi`, `status`) VALUES
+INSERT INTO `{prefix}goods_category` (`goods_category_id`, `parent_id`, `name`, `name_phonetic`, `alias`, `alias_phonetic`, `category_pic`, `category_ico`, `keywords`, `description`, `category_type`, `sort`, `is_navi`, `status`) VALUES
 (791, 87, '励志与成功', 'l', '励志与成功', 'l', '', '', '', '', 0, 50, 0, 1),
 (792, 87, '经济金融', 'j', '经济金融', 'j', '', '', '', '', 0, 50, 0, 1),
 (793, 87, '文学', 'w', '文学', 'w', '', '', '', '', 0, 50, 0, 1),
@@ -6078,16 +6254,32 @@ INSERT INTO `cs_goods_category` (`goods_category_id`, `parent_id`, `name`, `name
 (842, 94, '计算机与互联网', 'j', '计算机与互联网', 'j', '', '', '', '', 0, 50, 0, 1),
 (843, 94, '科普', 'k', '科普', 'k', '', '', '', '', 0, 50, 0, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_goods_comment`
---
+DROP TABLE IF EXISTS `{prefix}goods_comment`;
+CREATE TABLE `{prefix}goods_comment` (
+  `goods_comment_id` int(11) UNSIGNED NOT NULL,
+  `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id(回复) ',
+  `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
+  `order_goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应order_goods表',
+  `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '对应order表',
+  `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
+  `is_anon` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否匿名 0=否 1=是',
+  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=主评 1=主回 2=追评 3=追回',
+  `content` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '内容',
+  `image` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '晒图',
+  `is_image` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=无图 1=有图',
+  `is_append` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=无追评 1=有追评',
+  `score` tinyint(1) NOT NULL DEFAULT '1' COMMENT '评分 1~5',
+  `praise` smallint(5) NOT NULL DEFAULT '0' COMMENT '点赞',
+  `reply_count` smallint(5) NOT NULL DEFAULT '0' COMMENT '回复数',
+  `ip_address` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'ip地址',
+  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=否 1=是',
+  `is_top` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否置顶 0=否 1=是',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未读 1=已读',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品评价';
 
-TRUNCATE TABLE `cs_goods_comment`;
---
--- 转存表中的数据 `cs_goods_comment`
---
-
-INSERT INTO `cs_goods_comment` (`goods_comment_id`, `parent_id`, `goods_id`, `order_goods_id`, `order_no`, `user_id`, `is_anon`, `type`, `content`, `image`, `is_image`, `is_append`, `score`, `praise`, `reply_count`, `ip_address`, `is_show`, `is_top`, `status`, `is_delete`, `create_time`) VALUES
+INSERT INTO `{prefix}goods_comment` (`goods_comment_id`, `parent_id`, `goods_id`, `order_goods_id`, `order_no`, `user_id`, `is_anon`, `type`, `content`, `image`, `is_image`, `is_append`, `score`, `praise`, `reply_count`, `ip_address`, `is_show`, `is_top`, `status`, `is_delete`, `create_time`) VALUES
 (1, 0, 1, 3, '1', 2, 1, 0, '评价', '[]', 0, 0, 5, 0, 16, '', 1, 1, 1, 1, 1484623482),
 (9, 1, 1, 2, '1', 2, 0, 1, '解释A222', '[]', 0, 0, 5, 0, 0, '', 1, 0, 0, 0, 1484628033),
 (10, 1, 1, 0, '1', 2, 0, 1, '解释B', '[]', 0, 0, 5, 0, 0, '', 1, 0, 0, 0, 1484628041),
@@ -6168,16 +6360,22 @@ INSERT INTO `cs_goods_comment` (`goods_comment_id`, `parent_id`, `goods_id`, `or
 (106, 104, 289, 49, 'PO_A3217849839847620009', 1, 0, 1, '感谢惠顾', '[{\"name\":\"nei_05.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/f3cdf50f-ba56-40c8-8add-991fb20cf569.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/f3cdf50f-ba56-40c8-8add-991fb20cf569.jpg?type=aliyun\"},{\"name\":\"nei_02.jpg.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/8e3101ed-f38a-4a78-8bf0-a3a59e117a8e.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/8e3101ed-f38a-4a78-8bf0-a3a59e117a8e.jpg?type=aliyun\"},{\"name\":\"index7-5.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/da2cf166-91ec-4823-8e21-5032ff9900c6.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/da2cf166-91ec-4823-8e21-5032ff9900c6.png?type=aliyun\"},{\"name\":\"nei_02.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/968cc6c2-b121-4d4c-804e-cf828af7e1fb.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/968cc6c2-b121-4d4c-804e-cf828af7e1fb.jpg?type=aliyun\"}]', 1, 0, 0, 0, 0, '127.0.0.1', 0, 0, 0, 0, 1586782680),
 (107, 104, 289, 49, 'PO_A3217849839847620009', 1, 0, 3, '再次光临', '[{\"name\":\"pdf02.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\"},{\"name\":\"pdf01.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\"}]', 1, 0, 0, 0, 0, '127.0.0.1', 0, 0, 0, 0, 1586782698);
 
---
--- 插入之前先把表清空（truncate） `cs_goods_consult`
---
+DROP TABLE IF EXISTS `{prefix}goods_consult`;
+CREATE TABLE `{prefix}goods_consult` (
+  `goods_consult_id` int(11) UNSIGNED NOT NULL,
+  `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id(回复)',
+  `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表 0=游客',
+  `is_anon` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否匿名 0=否 1=是',
+  `type` tinyint(3) NOT NULL COMMENT '类型(自定义)',
+  `content` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '内容',
+  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否显示 0=否 1=是',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=待回复 1=已回复',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品咨询';
 
-TRUNCATE TABLE `cs_goods_consult`;
---
--- 转存表中的数据 `cs_goods_consult`
---
-
-INSERT INTO `cs_goods_consult` (`goods_consult_id`, `parent_id`, `goods_id`, `user_id`, `is_anon`, `type`, `content`, `is_show`, `status`, `is_delete`, `create_time`) VALUES
+INSERT INTO `{prefix}goods_consult` (`goods_consult_id`, `parent_id`, `goods_id`, `user_id`, `is_anon`, `type`, `content`, `is_show`, `status`, `is_delete`, `create_time`) VALUES
 (1, 0, 1, 1, 1, 0, '这个,那个', 0, 0, 0, 1484186584),
 (2, 0, 1, 0, 1, 1, '这里,那里', 0, 0, 0, 1484186622),
 (3, 0, 2, 1, 1, 2, '还有,没有', 1, 0, 0, 1484188829),
@@ -6258,21 +6456,24 @@ INSERT INTO `cs_goods_consult` (`goods_consult_id`, `parent_id`, `goods_id`, `us
 (79, 16, 1, 1, 1, 1, '那个,这个', 0, 1, 0, 1484186584),
 (80, 66, 1, 0, 1, 3, '???', 0, 1, 0, 1491812969);
 
---
--- 插入之前先把表清空（truncate） `cs_goods_reply`
---
+DROP TABLE IF EXISTS `{prefix}goods_reply`;
+CREATE TABLE `{prefix}goods_reply` (
+  `goods_reply_id` int(11) UNSIGNED NOT NULL,
+  `goods_comment_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods_comment表',
+  `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
+  `nick_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '回复者昵称',
+  `to_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '回复谁',
+  `content` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '内容',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品评价回复';
 
-TRUNCATE TABLE `cs_goods_reply`;
---
--- 插入之前先把表清空（truncate） `cs_goods_type`
---
+DROP TABLE IF EXISTS `{prefix}goods_type`;
+CREATE TABLE `{prefix}goods_type` (
+  `goods_type_id` smallint(5) UNSIGNED NOT NULL,
+  `type_name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '类型名称'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品模型';
 
-TRUNCATE TABLE `cs_goods_type`;
---
--- 转存表中的数据 `cs_goods_type`
---
-
-INSERT INTO `cs_goods_type` (`goods_type_id`, `type_name`) VALUES
+INSERT INTO `{prefix}goods_type` (`goods_type_id`, `type_name`) VALUES
 (1, '手机'),
 (2, '笔记本'),
 (3, '空调'),
@@ -6282,16 +6483,17 @@ INSERT INTO `cs_goods_type` (`goods_type_id`, `type_name`) VALUES
 (7, '洗衣机'),
 (9, '平板电脑');
 
---
--- 插入之前先把表清空（truncate） `cs_help`
---
+DROP TABLE IF EXISTS `{prefix}help`;
+CREATE TABLE `{prefix}help` (
+  `help_id` int(11) UNSIGNED NOT NULL,
+  `router` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '路由',
+  `ver` char(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '版本号',
+  `module` char(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '所属模块',
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '内容',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '外部链接'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE TABLE `cs_help`;
---
--- 转存表中的数据 `cs_help`
---
-
-INSERT INTO `cs_help` (`help_id`, `router`, `ver`, `module`, `content`, `url`) VALUES
+INSERT INTO `{prefix}help` (`help_id`, `router`, `ver`, `module`, `content`, `url`) VALUES
 (1, '/marketing/card/list', '1.0.1', 'admin', '<span>1、购物卡&ldquo;禁用&rdquo;后，未绑定但已生成的购物卡将无法绑定</span></br>\r\n<span>2、购物卡&ldquo;禁用&rdquo;后，已绑定的购物卡不影响消费使用</span></br>\r\n<span>3、删除购物卡后未绑定的将无法绑定，但已绑定的不影响消费</span></br>\r\n<span>4、删除购物卡将失去对已生成卡的管理</span>', ''),
 (2, '/marketing/card/use', '1.0.1', 'admin', '<p>购物卡生成，客户绑定后以下几种情况将影响消费：</p>\r\n<span>1、生成的购物卡被禁用</span></br>\r\n<span>2、可用余额不足</span></br>\r\n<span>3、截至日期已到期</span></br>\r\n<span>4、生成的购物卡未激活</span></br>\r\n<span>5、卡密默认不可见，可在\"<a href=\"./#/setting/setting/system\">系统管理</a>\"中添加可见名单</span>', ''),
 (3, '/system/auth/menu', '1.0.1', 'admin', '<span>任何操作完成后涉及到的账号都需要注销，重新登录才会生效</span>', ''),
@@ -6302,21 +6504,33 @@ INSERT INTO `cs_help` (`help_id`, `router`, `ver`, `module`, `content`, `url`) V
 (9, '/marketing/coupon/list', '1.0.1', 'admin', '<span>1、优惠劵&ldquo;禁用(或删除)&rdquo;后，将不再发放优惠劵</span></br> <span>2、优惠劵&ldquo;禁用(或删除)&rdquo;后，已发放的不影响使用</span></br> <span>3、优惠劵&ldquo;作废&rdquo;后，将不再发放优惠劵</span></br> <span>4、优惠劵&ldquo;作废&rdquo;后，已发放的也将不可使用</span></br> <span>5、删除优惠劵将失去对已发放优惠劵的管理</span></br> <span>6、提示发放数不足时可通过编辑&ldquo;发放数&rdquo;数量进行修改</span>', ''),
 (10, '/marketing/coupon/give', '1.0.1', 'admin', '<span>1、管理员删除优惠劵时对&ldquo;已发放未使用&rdquo;的优惠劵会永久删除</span></br> <span>2、管理员删除优惠劵时对&ldquo;已使用&rdquo;的优惠劵会放入&ldquo;回收站&rdquo;</span></br> <span>3、顾客删除优惠劵时无论是否使用都会放入&ldquo;回收站&rdquo;</span></br> <span>4、回收站里的优惠劵都可以&ldquo;恢复&rdquo;</span></br></br> <b>以下几种情况将视优惠劵无效：</b></br> <span>1、优惠劵已作废</span></br> <span>2、使用截至日期已到期</span>', '');
 
---
--- 插入之前先把表清空（truncate） `cs_history`
---
+DROP TABLE IF EXISTS `{prefix}history`;
+CREATE TABLE `{prefix}history` (
+  `history_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '对应goods表',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='浏览历史';
 
-TRUNCATE TABLE `cs_history`;
---
--- 插入之前先把表清空（truncate） `cs_menu`
---
+DROP TABLE IF EXISTS `{prefix}menu`;
+CREATE TABLE `{prefix}menu` (
+  `menu_id` smallint(5) UNSIGNED NOT NULL,
+  `parent_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
+  `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+  `alias` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '别名',
+  `icon` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '图标',
+  `remark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `module` char(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '所属模块',
+  `type` tinyint(1) NOT NULL COMMENT '0=模块 1=外链',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '链接',
+  `params` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '参数',
+  `target` enum('_self','_blank') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '_self' COMMENT '_self _blank',
+  `is_navi` tinyint(1) NOT NULL DEFAULT '0' COMMENT '导航 0=否 1=是',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='菜单管理';
 
-TRUNCATE TABLE `cs_menu`;
---
--- 转存表中的数据 `cs_menu`
---
-
-INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
 (1, 0, '管理组账户', '', '', '', 'api', 0, '', '', '_self', 0, 1, 1),
 (2, 1, '验证账号是否合法', '', '', '', 'api', 0, 'api/v1/admin/check.admin.username', '', '_self', 0, 1, 1),
 (3, 1, '验证账号昵称是否合法', '', '', '', 'api', 0, 'api/v1/admin/check.admin.nickname', '', '_self', 0, 2, 1),
@@ -6810,7 +7024,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (491, 0, '验证码', '', '', '', 'api', 0, '', '', '_self', 0, 57, 1),
 (492, 491, '使用验证码', '', '', '', 'api', 0, 'api/v1/verification/use.verification.item', '', '_self', 0, 50, 1),
 (493, 491, '发送短信验证码', '', '', '', 'api', 0, 'api/v1/verification/send.verification.sms', '', '_self', 0, 50, 1);
-INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
 (494, 491, '发送邮件验证码', '', '', '', 'api', 0, 'api/v1/verification/send.verification.email', '', '_self', 0, 50, 1),
 (495, 491, '验证短信验证码', '', '', '', 'api', 0, 'api/v1/verification/ver.verification.sms', '', '_self', 0, 50, 1),
 (496, 491, '验证邮件验证码', '', '', '', 'api', 0, 'api/v1/verification/ver.verification.email', '', '_self', 0, 50, 1),
@@ -7315,7 +7529,7 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (1039, 1038, '获取条形码调用地址', '', '', '', 'api', 0, 'api/v1/barcode/get.barcode.callurl', '', '_self', 0, 50, 1),
 (1040, 1038, '动态生成一个二维码', '', '', '', 'api', 0, 'api/v1/barcode/get.barcode.item', '', '_self', 0, 50, 1),
 (1041, 0, '财务', '', 'jinbi', '', 'admin', 0, '/finance', '', '_self', 1, 6, 1);
-INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`, `module`, `type`, `url`, `params`, `target`, `is_navi`, `sort`, `status`) VALUES
 (1042, 1041, '财务首页', '', 'shouye_o', '', 'admin', 0, '/finance/index', '', '_self', 1, 50, 1),
 (1043, 1041, '快捷向导', '', 'ding_o', '', 'admin', 0, '/finance/navi', '', '_self', 1, 50, 1),
 (1044, 1043, '退款日志', '', 'cunkuan_o', '订单生成退款后的日志', 'admin', 1, '/order/admin/refund', '', '_self', 1, 4, 1),
@@ -7359,16 +7573,24 @@ INSERT INTO `cs_menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `remark`
 (1085, 540, '消息预览', '', '', '', 'admin', 0, '/system/message/user/view', '', '_self', 0, 50, 1),
 (1086, 711, '商业授权', '', 'careyshop', '商业授权信息查询', 'admin', 0, '/setting/app/authorize', '', '_self', 1, 50, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_message`
---
+DROP TABLE IF EXISTS `{prefix}message`;
+CREATE TABLE `{prefix}message` (
+  `message_id` int(11) UNSIGNED NOT NULL,
+  `type` tinyint(1) NOT NULL COMMENT '消息类型(自定义)',
+  `member` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=私有函 1=顾客组 2=管理组',
+  `title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '内容',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '外部链接',
+  `target` enum('_self','_blank') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '_self' COMMENT '_self _blank',
+  `page_views` int(11) NOT NULL DEFAULT '0' COMMENT '游览量',
+  `is_top` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否置顶 0=否 1=是',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=禁用 1=启用',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='消息管理';
 
-TRUNCATE TABLE `cs_message`;
---
--- 转存表中的数据 `cs_message`
---
-
-INSERT INTO `cs_message` (`message_id`, `type`, `member`, `title`, `content`, `url`, `target`, `page_views`, `is_top`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}message` (`message_id`, `type`, `member`, `title`, `content`, `url`, `target`, `page_views`, `is_top`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
 (1, 1, 1, 'titleAAA', 'content', '', '_self', 10, 1, 1, 0, 1511763386, 1555402749),
 (2, 2, 1, 'title-2', 'content', 'http://www.baidu.com', '_blank', 4, 1, 1, 0, 1511763407, 1555402743),
 (3, 0, 1, 'title-3', 'content', '', '_self', 0, 0, 1, 0, 1511763409, 1555427090),
@@ -7469,7 +7691,7 @@ INSERT INTO `cs_message` (`message_id`, `type`, `member`, `title`, `content`, `u
 (98, 3, 2, '免费商标数据监控已发布，开启注册/续展/监控等一站式服务！', 'test', '', '_blank', 0, 1, 1, 1, 1555395784, 1555403694),
 (99, 0, 2, '免费商标数据监控已发布，开启注册/续展/监控等一站式服务！', 'test', '', '_blank', 2, 0, 1, 0, 1555395987, 1555402737),
 (100, 3, 2, '【0元体验】企业级分布式应用服务EDAS Serverless版，邀你免费公测！', 'CCC', '', '_blank', 8, 0, 1, 0, 1555396240, 1555427080);
-INSERT INTO `cs_message` (`message_id`, `type`, `member`, `title`, `content`, `url`, `target`, `page_views`, `is_top`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}message` (`message_id`, `type`, `member`, `title`, `content`, `url`, `target`, `page_views`, `is_top`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
 (101, 2, 1, '纳网13周年庆钜惠来袭，域名享1元，主机建站1折起', '<img src=\"http://image.idosend.com/fkImages/13082/Image/137_01.jpg\" width=\"700\" height=\"284\" />&nbsp;<a href=\"http://image.idosend.com/t/dd71037f/9f7e/4cc8/b57a/82ed895aa9a6/2954558-564378.html\" target=\"_blank\" rel=\"noopener\"><img src=\"http://image.idosend.com/fkImages/13082/Image/137_03.jpg\" width=\"651\" height=\"319\" /></a>&nbsp;&nbsp;<a href=\"http://image.idosend.com/t/1722ba26/fc65/4fee/aba9/af2a49cd95fc/2954558-564378.html\" target=\"_blank\" rel=\"noopener\"><img src=\"http://image.idosend.com/fkImages/13082/Image/137_06.jpg\" width=\"651\" height=\"290\" /></a>&nbsp;<a href=\"http://image.idosend.com/t/16cb48d1/9806/4c3e/b4f3/32ef01c8afbc/2954558-564378.html\" target=\"_blank\" rel=\"noopener\"><img src=\"http://image.idosend.com/fkImages/13082/Image/137_08.jpg\" width=\"651\" height=\"250\" /></a>&nbsp;<img src=\"http://image.idosend.com/fkImages/13082/Image/137_10.jpg\" width=\"700\" height=\"111\" />', '', '_blank', 0, 0, 0, 1, 1555470096, 1555470247),
 (102, 0, 2, '奔驰维权女车主和西安利之星4S店达成和解协议', '<p>【消费者购买奔驰新车遭遇发动机漏油最新进展：当事双方已达成和解】4月16日晚， W女士（化名）和西安利之星汽车有限公司达成换车补偿等和解协议。</p>\n<p>此外，记者从西安高新区市场监管部门了解到，涉事车辆有关质量问题已进入鉴定程序，该事件涉及的涉嫌违法违规问题，仍将依法依规进行调查处理，结果将及时向社会公布。同时，根据省市部署，将继续开展汽车销售市场经营行为专项整治工作，依法依规净化市场环境、保护消费者合法权益。</p>\n<p><a href=\"https://c.m.163.com/news/s/S1555048489505.html\" target=\"_blank\" rel=\"noopener\">进入专题&gt;&gt;</a></p>\n<p>&nbsp;</p>\n<div class=\"special_tag_wrap\">\n<div class=\"special_tag special_tag_tj\">\n<div class=\"special_tag_ttl\">延伸 &middot; 推荐</div>\n<div class=\"special_tag_cnt\">\n<p><a href=\"https://news.163.com/19/0417/00/ECU57GGU0001899O.html\" target=\"_blank\" rel=\"noopener\">奔驰女车主与4s店和解：换新车退还金融服务费</a></p>\n<p>16日晚，北青报记者从西安市市场监督管理局高新分局刘副局长处获悉，当晚，维权的奔驰车主王女士和西安利之星汽车有限公司已达成换车、补偿等和解协议。</p>\n</div>\n</div>\n</div>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<div class=\"special_tag_wrap\">\n<div class=\"special_tag special_tag_hg\">\n<div class=\"special_tag_ttl\">延伸 &middot; 回顾</div>\n<div class=\"special_tag_cnt\">\n<p><a href=\"https://news.163.com/19/0416/21/ECTORA1F0001899O.html\" target=\"_blank\" rel=\"noopener\">奔驰车主维权调查:利之星收3%服务费获利2/3</a></p>\n<p>据税务部门的工作人员介绍，车主所交的&ldquo;金融服务费&rdquo;，实际上是第三方陕西元胜公司派驻在西安利之星4S店的工作人员收取的。</p>\n<p><a href=\"https://news.163.com/19/0416/18/ECTGEMV40001899O.html\" target=\"_self\">奔驰公司:已与车主沟通 将暂停涉事授权店销售运营</a></p>\n<p>针对西安奔驰车漏油、车主维权一事，4月16日下午，北京梅赛德斯-奔驰销售服务有限公司发布情况说明。表示将对相关经销商的经营合规性展开调查。结果明确前，该授权店的销售运营将暂停，立即执行。</p>\n</div>\n</div>\n</div>\n<p class=\"f_center\"><img src=\"http://cms-bucket.ws.126.net/2019/04/17/1f7692db33f6484696660f9d5de82808.jpeg?imageView&amp;thumbnail=550x0\" alt=\"奔驰维权女车主和西安利之星4S店达成和解协议\" /></p>', '', '_blank', 5, 0, 1, 0, 1555470175, 1555678321),
 (103, 0, 2, 'test', 'test', '', '_blank', 0, 0, 0, 1, 1556018859, 1556018863),
@@ -7485,16 +7707,18 @@ INSERT INTO `cs_message` (`message_id`, `type`, `member`, `title`, `content`, `u
 (113, 2, 2, '光荣《三国志14》曝光 将于今冬登陆PS4/PC', '<h1 class=\"bt\">光荣《三国志14》曝光 将于今冬登陆PS4/PC</h1>', 'https://www.3dmgame.com/news/201907/3767861.html', '_blank', 1, 0, 1, 1, 1564498784, 1564499402),
 (114, 2, 2, '光荣《三国志14》曝光 将于今冬登陆PS4/PC', '<h1 class=\"bt\">光荣《三国志14》曝光 将于今冬登陆PS4/PC</h1>', 'https://www.3dmgame.com/news/201907/3767861.html', '_blank', 4, 1, 1, 0, 1564499439, 1564499439);
 
---
--- 插入之前先把表清空（truncate） `cs_message_user`
---
+DROP TABLE IF EXISTS `{prefix}message_user`;
+CREATE TABLE `{prefix}message_user` (
+  `message_user_id` int(11) UNSIGNED NOT NULL,
+  `message_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应message表',
+  `user_id` int(11) UNSIGNED DEFAULT NULL COMMENT '对应user表',
+  `admin_id` int(11) UNSIGNED DEFAULT NULL COMMENT '对应admin表',
+  `is_read` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未读 1=已读',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户消息通知';
 
-TRUNCATE TABLE `cs_message_user`;
---
--- 转存表中的数据 `cs_message_user`
---
-
-INSERT INTO `cs_message_user` (`message_user_id`, `message_id`, `user_id`, `admin_id`, `is_read`, `is_delete`, `create_time`) VALUES
+INSERT INTO `{prefix}message_user` (`message_user_id`, `message_id`, `user_id`, `admin_id`, `is_read`, `is_delete`, `create_time`) VALUES
 (1, 100, NULL, 1, 1, 0, 1557190419),
 (2, 93, NULL, 1, 1, 0, 1557190423),
 (3, 86, NULL, 1, 1, 0, 1557190538),
@@ -7518,16 +7742,17 @@ INSERT INTO `cs_message_user` (`message_user_id`, `message_id`, `user_id`, `admi
 (21, 114, NULL, 1, 1, 0, 1577623699),
 (22, 65, NULL, 1, 1, 0, 1585147172);
 
---
--- 插入之前先把表清空（truncate） `cs_navigation`
---
+DROP TABLE IF EXISTS `{prefix}navigation`;
+CREATE TABLE `{prefix}navigation` (
+  `navigation_id` smallint(5) UNSIGNED NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '链接',
+  `target` enum('_self','_blank') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '_self' COMMENT '_self _blank',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='导航';
 
-TRUNCATE TABLE `cs_navigation`;
---
--- 转存表中的数据 `cs_navigation`
---
-
-INSERT INTO `cs_navigation` (`navigation_id`, `name`, `url`, `target`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}navigation` (`navigation_id`, `name`, `url`, `target`, `sort`, `status`) VALUES
 (4, '秒杀', 'index/goods/info', '_self', 5, 1),
 (5, '优惠劵', 'index/goods/info', '_self', 50, 1),
 (6, '闪购', 'index/goods/info', '_self', 15, 1),
@@ -7537,16 +7762,15 @@ INSERT INTO `cs_navigation` (`navigation_id`, `name`, `url`, `target`, `sort`, `
 (10, '旅游', 'index/goods/info', '_blank', 50, 1),
 (11, '特惠', 'index/goods/info', '_blank', 50, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_notice_item`
---
+DROP TABLE IF EXISTS `{prefix}notice_item`;
+CREATE TABLE `{prefix}notice_item` (
+  `notice_item_id` smallint(5) UNSIGNED NOT NULL,
+  `item_name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+  `replace_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '替换变量',
+  `type` tinyint(1) UNSIGNED NOT NULL COMMENT '通知类型'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='通知系统可用变量';
 
-TRUNCATE TABLE `cs_notice_item`;
---
--- 转存表中的数据 `cs_notice_item`
---
-
-INSERT INTO `cs_notice_item` (`notice_item_id`, `item_name`, `replace_name`, `type`) VALUES
+INSERT INTO `{prefix}notice_item` (`notice_item_id`, `item_name`, `replace_name`, `type`) VALUES
 (1, '{验证码}', 'number', 0),
 (2, '{商城名称}', 'shop_name', 1),
 (3, '{用户账号}', 'user_name', 1),
@@ -7582,16 +7806,19 @@ INSERT INTO `cs_notice_item` (`notice_item_id`, `item_name`, `replace_name`, `ty
 (33, '{快递公司}', 'delivery_name', 6),
 (34, '{快递单号}', 'logistic_code', 6);
 
---
--- 插入之前先把表清空（truncate） `cs_notice_tpl`
---
+DROP TABLE IF EXISTS `{prefix}notice_tpl`;
+CREATE TABLE `{prefix}notice_tpl` (
+  `notice_tpl_id` smallint(5) UNSIGNED NOT NULL,
+  `name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '模板名称',
+  `code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '通知系统编码',
+  `type` tinyint(1) UNSIGNED NOT NULL COMMENT '通知类型',
+  `sms_code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '阿里云短信模板编号',
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '标题或签名',
+  `template` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '模板',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='通知系统模板';
 
-TRUNCATE TABLE `cs_notice_tpl`;
---
--- 转存表中的数据 `cs_notice_tpl`
---
-
-INSERT INTO `cs_notice_tpl` (`notice_tpl_id`, `name`, `code`, `type`, `sms_code`, `title`, `template`, `status`) VALUES
+INSERT INTO `{prefix}notice_tpl` (`notice_tpl_id`, `name`, `code`, `type`, `sms_code`, `title`, `template`, `status`) VALUES
 (1, '通用验证', 'sms', 0, 'SMS_78725049', '欧瑞', '您的验证码是{验证码}，在5分钟内有效。如非本人操作请忽略本信息。', 1),
 (2, '注册成功', 'sms', 1, 'SMS_78725049', '欧瑞', '尊敬的{用户昵称}先生/女士，您在{商城名称}注册的账号 {用户账号} 已成为我商城会员。', 1),
 (3, '充值成功', 'sms', 2, 'SMS_78725049', '欧瑞', '尊敬的{用户昵称}，您已成功充值{充值金额}！如您还有疑问，请与客服人员联系。', 1),
@@ -7607,16 +7834,61 @@ INSERT INTO `cs_notice_tpl` (`notice_tpl_id`, `name`, `code`, `type`, `sms_code`
 (13, '下单成功', 'email', 5, '', '', '', 1),
 (14, '订单发货', 'email', 6, '', '', '', 1);
 
---
--- 插入之前先把表清空（truncate） `cs_order`
---
+DROP TABLE IF EXISTS `{prefix}order`;
+CREATE TABLE `{prefix}order` (
+  `order_id` int(11) UNSIGNED NOT NULL,
+  `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父订单Id',
+  `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
+  `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
+  `source` tinyint(3) NOT NULL COMMENT '订单来源(自定义)',
+  `pay_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '订单金额',
+  `goods_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品金额',
+  `total_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '应付金额(含运费)',
+  `use_money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '余额抵扣',
+  `use_level` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '会员抵扣',
+  `use_integral` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '积分抵扣',
+  `use_coupon` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '优惠劵抵扣',
+  `use_discount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品折扣抵扣',
+  `use_promotion` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '订单促销抵扣',
+  `use_card` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '购物卡抵扣',
+  `delivery_fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '运费',
+  `payment_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '支付单号(交易流水号)',
+  `payment_code` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '支付编码',
+  `card_number` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '购物卡号',
+  `delivery_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '配送方式 对应delivery表',
+  `consignee` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '收货人姓名',
+  `country` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '国家',
+  `region_list` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '区域列表',
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '详细地址',
+  `complete_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '完整地址',
+  `zipcode` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '邮编',
+  `tel` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '电话',
+  `mobile` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '手机号码',
+  `buyer_remark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '买家备注',
+  `invoice_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否开票 0=否 1=个人 2=企业',
+  `invoice_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '发票抬头',
+  `tax_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '纳税人识别号',
+  `invoice_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '开票费用',
+  `trade_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '交易状态 0=待处理 1=配货中 2=已发货 3=已完成 4=已取消',
+  `delivery_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '配送状态 0=未发 1=已发 2=部分发',
+  `payment_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '支付状态 0=未付 1=已付',
+  `create_user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '订单创建者(管理组)',
+  `is_give` tinyint(1) NOT NULL DEFAULT '1' COMMENT '收货增 0=否 1=是',
+  `sellers_remark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '卖家备注',
+  `adjustment` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '调整价格',
+  `integral_pct` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '积分换算比例',
+  `give_integral` int(11) NOT NULL DEFAULT '0' COMMENT '赠送积分',
+  `give_coupon` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '赠送优惠劵',
+  `payment_time` int(11) NOT NULL DEFAULT '0' COMMENT '支付日期',
+  `picking_time` int(11) NOT NULL DEFAULT '0' COMMENT '配货日期',
+  `delivery_time` int(11) NOT NULL DEFAULT '0' COMMENT '发货日期',
+  `finished_time` int(11) NOT NULL DEFAULT '0' COMMENT '完成日期',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=回收站 2=删除'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单管理';
 
-TRUNCATE TABLE `cs_order`;
---
--- 转存表中的数据 `cs_order`
---
-
-INSERT INTO `cs_order` (`order_id`, `parent_id`, `order_no`, `user_id`, `source`, `pay_amount`, `goods_amount`, `total_amount`, `use_money`, `use_level`, `use_integral`, `use_coupon`, `use_discount`, `use_promotion`, `use_card`, `delivery_fee`, `payment_no`, `payment_code`, `card_number`, `delivery_id`, `consignee`, `country`, `region_list`, `address`, `complete_address`, `zipcode`, `tel`, `mobile`, `buyer_remark`, `invoice_type`, `invoice_title`, `tax_number`, `invoice_amount`, `trade_status`, `delivery_status`, `payment_status`, `create_user_id`, `is_give`, `sellers_remark`, `adjustment`, `integral_pct`, `give_integral`, `give_coupon`, `payment_time`, `picking_time`, `delivery_time`, `finished_time`, `create_time`, `update_time`, `is_delete`) VALUES
+INSERT INTO `{prefix}order` (`order_id`, `parent_id`, `order_no`, `user_id`, `source`, `pay_amount`, `goods_amount`, `total_amount`, `use_money`, `use_level`, `use_integral`, `use_coupon`, `use_discount`, `use_promotion`, `use_card`, `delivery_fee`, `payment_no`, `payment_code`, `card_number`, `delivery_id`, `consignee`, `country`, `region_list`, `address`, `complete_address`, `zipcode`, `tel`, `mobile`, `buyer_remark`, `invoice_type`, `invoice_title`, `tax_number`, `invoice_amount`, `trade_status`, `delivery_status`, `payment_status`, `create_user_id`, `is_give`, `sellers_remark`, `adjustment`, `integral_pct`, `give_integral`, `give_coupon`, `payment_time`, `picking_time`, `delivery_time`, `finished_time`, `create_time`, `update_time`, `is_delete`) VALUES
 (1, 0, 'PO_A1049550470892670001', 1, 0, '290.01', '300.00', '0.10', '694.89', '0.00', '10.01', '10.00', '0.00', '0.00', '780.00', '1195.00', 'ZF_I1049554124677490001', '3', '9971564621172962', 1, 'consignee', 0, '[12,124,4044]', 'address', '浙江省 宁波市 江北区 address', '', '', '15867430425', '', 0, '', '', '0.00', 3, 1, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 1586960947, 1483509865, 1515050273, 1514995504, 1584978396, 1),
 (2, 0, 'PO_I1049550470892680001', 1, 0, '290.00', '300.00', '0.10', '694.89', '0.00', '10.01', '10.00', '0.00', '0.00', '780.00', '1195.00', '', '', '9971564621172962', 1, 'consignee', 0, '[12,124,4044]', 'address', '浙江省 宁波市 江北区 address', '', '', '15867430425', '', 0, '', '', '0.00', 4, 0, 0, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 1586960947, 0, 0, 1514995504, 1585209264, 1),
 (3, 0, 'PO_I1049550470892670001', 1, 0, '290.00', '300.00', '0.10', '694.89', '0.00', '10.01', '10.00', '0.00', '0.00', '780.00', '1195.00', 'ZF_I1049554124677490001', '3', '9971564621172962', 1, 'consignee', 0, '[12,124,4044]', 'address', '浙江省 宁波市 江北区 address', '', '', '15867430425', '', 0, '', '', '0.00', 3, 1, 1, 1, 1, '', '0.00', '100.00', 100, '[]', 0, 1586960947, 1483509865, 1515050273, 1514995504, 1515050273, 0),
@@ -7739,7 +8011,7 @@ INSERT INTO `cs_order` (`order_id`, `parent_id`, `order_no`, `user_id`, `source`
 (123, 0, 'PO_A3209397421200030001', 1, 2, '30398.62', '31019.00', '95.00', '0.00', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, '[12,124,4044]', 'address', '北京 北京市 东城区 address', '315000', '87487585', '15867430425', '', 2, 'xxx', '0001', '0.00', 0, 0, 0, 1, 1, 'test0009999000', '-30303.62', '100.00', 100, '[]', 0, 0, 0, 0, 1584693974, 1587057874, 0),
 (124, 0, 'PO_A3217849839847620001', 1, 1, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3234729294500560001', '0', '', 20, '赵四', 0, '[12,124,4044]', 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '87487585', '15867430322', '买家备注', 2, '宁波XXX有限公司', '0001111', '0.00', 3, 1, 1, 1, 1, '售后状态为测试使用,并非实际关联售后数据', '0.00', '100.00', 100, '[]', 1584947293, 1586960947, 1584947680, 1585332222, 1584778498, 1585333195, 0),
 (125, 0, 'PO_A3217852987257470001', 1, 0, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3210230912348670001', '0', '', 20, '张三', 0, '[12,124,4044]', '详细地址', '上海 上海市 黄浦区 详细地址', '315000', '87487585', '13777090387', '买家备注', 1, '个人', '', '0.00', 2, 2, 1, 1, 1, '卖家备注', '0.00', '100.00', 100, '[]', 1584802309, 1587021517, 1587142848, 0, 1584778529, 1587142848, 0);
-INSERT INTO `cs_order` (`order_id`, `parent_id`, `order_no`, `user_id`, `source`, `pay_amount`, `goods_amount`, `total_amount`, `use_money`, `use_level`, `use_integral`, `use_coupon`, `use_discount`, `use_promotion`, `use_card`, `delivery_fee`, `payment_no`, `payment_code`, `card_number`, `delivery_id`, `consignee`, `country`, `region_list`, `address`, `complete_address`, `zipcode`, `tel`, `mobile`, `buyer_remark`, `invoice_type`, `invoice_title`, `tax_number`, `invoice_amount`, `trade_status`, `delivery_status`, `payment_status`, `create_user_id`, `is_give`, `sellers_remark`, `adjustment`, `integral_pct`, `give_integral`, `give_coupon`, `payment_time`, `picking_time`, `delivery_time`, `finished_time`, `create_time`, `update_time`, `is_delete`) VALUES
+INSERT INTO `{prefix}order` (`order_id`, `parent_id`, `order_no`, `user_id`, `source`, `pay_amount`, `goods_amount`, `total_amount`, `use_money`, `use_level`, `use_integral`, `use_coupon`, `use_discount`, `use_promotion`, `use_card`, `delivery_fee`, `payment_no`, `payment_code`, `card_number`, `delivery_id`, `consignee`, `country`, `region_list`, `address`, `complete_address`, `zipcode`, `tel`, `mobile`, `buyer_remark`, `invoice_type`, `invoice_title`, `tax_number`, `invoice_amount`, `trade_status`, `delivery_status`, `payment_status`, `create_user_id`, `is_give`, `sellers_remark`, `adjustment`, `integral_pct`, `give_integral`, `give_coupon`, `payment_time`, `picking_time`, `delivery_time`, `finished_time`, `create_time`, `update_time`, `is_delete`) VALUES
 (126, 0, 'PO_A3260290382300820001', 1, 0, '1.96', '2.00', '12.96', '0.00', '0.04', '0.00', '0.00', '0.00', '0.00', '0.00', '11.00', '', '', '', 1, 'consignee', 0, '[12,124,4044]', 'address', '浙江 宁波市 江北区 address', '', '', '15867430425', '', 0, '', '', '0.00', 4, 0, 0, 1, 1, '', '0.00', '100.00', 0, '[]', 0, 1586960947, 0, 0, 1585202903, 1585209337, 1),
 (127, 0, 'PO_A3260296589000320001', 1, 0, '1.96', '2.00', '13.96', '0.00', '0.04', '0.00', '0.00', '0.00', '0.00', '0.00', '11.00', '', '', '', 1, 'consignee', 0, '[12,124,4044]', 'address', '浙江 宁波市 江北区 address', '', '', '15867430425', '', 0, '', '', '0.00', 4, 0, 0, 1, 1, '', '1.00', '100.00', 0, '[]', 0, 1586960947, 0, 0, 1585202965, 1585209317, 1),
 (128, 0, 'PO_A3260297662400000001', 1, 0, '1.96', '2.00', '12.96', '0.00', '0.04', '0.00', '0.00', '0.00', '0.00', '0.00', '11.00', '', '', '', 1, 'consignee', 0, '[12,124,4044]', 'address', '浙江 宁波市 江北区 address', '', '', '15867430425', '', 0, '', '', '0.00', 4, 0, 0, 1, 1, '', '0.00', '100.00', 0, '[]', 0, 1586960947, 0, 0, 1585202976, 1585209311, 1),
@@ -7759,19 +8031,32 @@ INSERT INTO `cs_order` (`order_id`, `parent_id`, `order_no`, `user_id`, `source`
 (142, 0, 'PO_A3217849839847620008', 1, 1, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3234729294500560001', '0', '', 20, '赵四', 0, '[12,124,4044]', 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '87487585', '15867430322', '买家备注', 2, '宁波XXX有限公司', '0001111', '0.00', 3, 1, 1, 1, 1, '售后状态为测试使用,并非实际关联售后数据售后状态为测试使用,并非实际关联售后数据售后状态为测试使用,并非实际关联售后数据售后状态为测试使用,并非实际关联售后数据售后状态为测试使用,并非实际关联售后数据', '0.00', '100.00', 100, '[]', 1584947293, 1586960947, 1584947680, 1585335945, 1584778498, 1587043333, 0),
 (143, 0, 'PO_A3217849839847620009', 1, 1, '30398.62', '31019.00', '0.00', '30398.62', '620.38', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 'ZF_A3234729294500560001', '0', '', 20, '赵四', 0, '[12,124,4044]', 'xxx 新城', '浙江 宁波市 江北区 xxx 新城', '', '87487585', '15867430322', '买家备注', 1, '宁波XXX有限公司', '0001111', '0.00', 3, 1, 1, 1, 0, '简单的设置', '0.00', '100.00', 100, '[]', 1584947293, 1586960947, 1584947680, 1585502045, 1584778498, 1587992724, 0),
 (144, 0, 'PO_A4170629109000020001', 1, 0, '27296.72', '31019.00', '26295.72', '1000.00', '3722.28', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, '[12,124,4044]', 'address', '浙江 宁波市 江北区 address', '', '', '15867430425', '', 0, '', '', '0.00', 4, 0, 0, 1, 0, '', '0.00', '100.00', 100, '[]', 0, 0, 0, 0, 1587106291, 1588050325, 0),
-(145, 0, 'PO_A4170750275700700001', 1, 0, '27296.72', '31019.00', '26195.01', '1000.00', '3722.28', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, '[12,124,4044]', 'address', '浙江 宁波市 江北区 address', '', '', '15867430425', '', 0, '', '', '0.00', 0, 0, 0, 1, 1, '', '-100.71', '100.00', 100, '[]', 0, 0, 0, 0, 1587107502, 1587112506, 0),
+(145, 0, 'PO_A4170750275700700001', 1, 0, '27296.72', '31019.00', '26195.01', '1000.00', '3722.28', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, '[35,400]', 'address', '澳门 澳门半岛 address', '', '', '15867430425', '', 0, '', '', '0.00', 0, 0, 0, 1, 1, '', '-100.71', '100.00', 100, '[]', 0, 0, 0, 0, 1587107502, 1589249760, 0),
 (146, 0, 'PO_A4171039000700310001', 1, 0, '16727.92', '19009.00', '15627.00', '1000.00', '2281.08', '1.00', '0.00', '0.00', '0.00', '0.00', '0.00', '', '', '', 1, 'consignee', 0, '[12,124,4044]', '详细地址', '浙江 宁波市 海曙区 详细地址', '', '', '15867430425', '', 0, '', '', '0.00', 1, 0, 1, 1, 1, '备注\n备注1', '-99.92', '100.00', 100, '[]', 0, 1587185892, 0, 0, 1587110390, 1589126120, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_order_goods`
---
+DROP TABLE IF EXISTS `{prefix}order_goods`;
+CREATE TABLE `{prefix}order_goods` (
+  `order_goods_id` int(11) UNSIGNED NOT NULL,
+  `order_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应order表',
+  `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
+  `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
+  `goods_name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '商品名称',
+  `goods_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods表',
+  `goods_image` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品封面',
+  `goods_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品货号',
+  `goods_sku` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品SKU',
+  `bar_code` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品条码',
+  `key_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '规格键名',
+  `key_value` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '规格值',
+  `market_price` decimal(10,2) NOT NULL COMMENT '市场价',
+  `shop_price` decimal(10,2) NOT NULL COMMENT '本店价',
+  `qty` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '购买数量',
+  `is_comment` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未评 1=已评 2=追评',
+  `is_service` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=可申请 1=售后中 2=已售后 3=不可申',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未发 1=已发 2=收货 3=取消'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单商品';
 
-TRUNCATE TABLE `cs_order_goods`;
---
--- 转存表中的数据 `cs_order_goods`
---
-
-INSERT INTO `cs_order_goods` (`order_goods_id`, `order_id`, `order_no`, `user_id`, `goods_name`, `goods_id`, `goods_image`, `goods_code`, `goods_sku`, `bar_code`, `key_name`, `key_value`, `market_price`, `shop_price`, `qty`, `is_comment`, `is_service`, `status`) VALUES
+INSERT INTO `{prefix}order_goods` (`order_goods_id`, `order_id`, `order_no`, `user_id`, `goods_name`, `goods_id`, `goods_image`, `goods_code`, `goods_sku`, `bar_code`, `key_name`, `key_value`, `market_price`, `shop_price`, `qty`, `is_comment`, `is_service`, `status`) VALUES
 (1, 1, 'PO_I1049550470892670001', 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 288, 'aliyun.oss.careyshop.cn/uploads/files/20191230/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun', 'CS27981253', '', '', '1_3', '颜色分类：E14小螺口【单只装】功率：3.5发光颜色：白', '500.00', '200.00', 1, 0, 0, 2),
 (2, 1, 'PO_I1049550470892670001', 1, '启蒙积木军舰海军军事航母积木113儿童小颗粒积木玩具春节礼物', 89, 'aliyun.oss.careyshop.cn/uploads/files/20191230/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun', 'CS27981253', '', '', '1_2', '颜色分类：E14小螺口【单只装】功率：3.5发光颜色：白', '500.00', '100.00', 1, 0, 2, 2),
 (4, 2, 'PO_I1049550470892680001', 1, '乐基乌龟饲料高钙幼龟粮 鱼干虾干面包虫巴西龟鳄龟粮食 龟粮通用', 89, '', 'CS27981253', '', '', '1_3', '颜色分类：【E27】5瓦功率：5W发光颜色：白', '500.00', '200.00', 1, 0, 0, 3),
@@ -7824,19 +8109,25 @@ INSERT INTO `cs_order_goods` (`order_goods_id`, `order_id`, `order_no`, `user_id
 (53, 145, 'PO_A4170750275700700001', 1, 'OPPO K5 6GB+128GB 奇幻森林 6400万超清四摄 VOOC闪充4.0 高通骁龙730G 全网通4G 游戏智能手机', 199, 'aliyun.oss.careyshop.cn/uploads/files/20191230/3c81b780-0510-442c-8ffc-267217735f94.jpg?type=aliyun', 'CS66472556', '', '', '', '', '7000.00', '6005.00', 2, 0, 0, 0),
 (54, 145, 'PO_A4170750275700700001', 1, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 288, 'aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun', 'CS19938733', '', '', '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '21999.00', '18999.00', 1, 0, 0, 0),
 (55, 145, 'PO_A4170750275700700001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 0),
-(56, 146, 'PO_A4171039000700310001', 1, 'Apple 2020新品 MacBook Pro 16【带触控栏】九代六核i7 16G 512G 深空灰 Radeon Pro 5300M显卡', 288, 'aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun', 'CS19938733', '', '', '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '21999.00', '18999.00', 1, 0, 0, 0),
+(56, 146, 'PO_A4171039000700310001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 288, 'aliyun.oss.careyshop.cn/uploads/files/20191230/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun', 'CS19938733', '', '', '208_411_414', '颜色:黑色 CPU:I5 屏幕:15寸', '21999.00', '18999.00', 1, 0, 0, 0),
 (57, 146, 'PO_A4171039000700310001', 1, '荣耀10青春版 幻彩渐变 2400万AI自拍 全网通版4GB+64GB 渐变蓝 移动联通电信4G全面屏手机', 289, 'aliyun.oss.careyshop.cn/uploads/files/20191230/f82ae8dd-ebe4-4397-889e-418adde10a85.jpg?type=aliyun', 'CS61349218', '', '', '151_158_223_212', '内存:4G 网络:4G 尺码:M 颜色:银色', '3000.00', '5.00', 2, 0, 0, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_order_log`
---
+DROP TABLE IF EXISTS `{prefix}order_log`;
+CREATE TABLE `{prefix}order_log` (
+  `order_log_id` int(11) UNSIGNED NOT NULL,
+  `order_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应order表',
+  `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
+  `trade_status` tinyint(1) NOT NULL COMMENT '交易状态',
+  `delivery_status` tinyint(1) NOT NULL COMMENT '配送状态',
+  `payment_status` tinyint(1) NOT NULL COMMENT '支付状态',
+  `action` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '操作者',
+  `client_type` tinyint(1) NOT NULL COMMENT '-1=游客 0=顾客 1=管理组',
+  `comment` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '备注',
+  `description` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '描述',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单日志';
 
-TRUNCATE TABLE `cs_order_log`;
---
--- 转存表中的数据 `cs_order_log`
---
-
-INSERT INTO `cs_order_log` (`order_log_id`, `order_id`, `order_no`, `trade_status`, `delivery_status`, `payment_status`, `action`, `client_type`, `comment`, `description`, `create_time`) VALUES
+INSERT INTO `{prefix}order_log` (`order_log_id`, `order_id`, `order_no`, `trade_status`, `delivery_status`, `payment_status`, `action`, `client_type`, `comment`, `description`, `create_time`) VALUES
 (1, 2, 'PO_I1049550470892680001', 4, 0, 0, 'Carey', 1, '付款超时订单已取消', '取消订单', 1515050273),
 (2, 1, 'PO_I1049550470892670001', 3, 1, 1, 'Carey', 1, '交易超时，自动确认收货', '确认收货', 1515050273),
 (3, 115, 'PO_A3150167102016240001', 0, 0, 0, 'CareyShop', 0, '提交订单成功', '提交订单', 1584201671),
@@ -8124,18 +8415,27 @@ INSERT INTO `cs_order_log` (`order_log_id`, `order_id`, `order_no`, `trade_statu
 (380, 146, 'PO_A4171039000700310001', 1, 0, 1, 'admin', 1, '订单部分信息已修改', '修改订单', 1589126079),
 (381, 146, 'PO_A4171039000700310001', 1, 0, 1, 'admin', 1, '订单部分信息已修改', '修改订单', 1589126087),
 (382, 146, 'PO_A4171039000700310001', 1, 0, 1, 'admin', 1, '订单部分信息已修改', '修改订单', 1589126099),
-(383, 146, 'PO_A4171039000700310001', 1, 0, 1, 'admin', 1, '订单部分信息已修改', '修改订单', 1589126120);
+(383, 146, 'PO_A4171039000700310001', 1, 0, 1, 'admin', 1, '订单部分信息已修改', '修改订单', 1589126120),
+(384, 145, 'PO_A4170750275700700001', 0, 0, 0, 'admin', 1, '订单部分信息已修改', '修改订单', 1589249760);
 
---
--- 插入之前先把表清空（truncate） `cs_order_refund`
---
+DROP TABLE IF EXISTS `{prefix}order_refund`;
+CREATE TABLE `{prefix}order_refund` (
+  `order_refund_id` int(11) UNSIGNED NOT NULL,
+  `refund_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '退款单号(流水号)',
+  `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
+  `out_trade_no` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '退款交易号',
+  `out_trade_msg` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '退款返回信息',
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `total_amount` decimal(10,2) NOT NULL COMMENT '订单支付总额',
+  `amount` decimal(10,2) NOT NULL COMMENT '退款金额',
+  `payment_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '支付单号(交易流水号)',
+  `to_payment` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '支付方式',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=待处理 1=已处理 2=失败 3=撤销'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单退款';
 
-TRUNCATE TABLE `cs_order_refund`;
---
--- 转存表中的数据 `cs_order_refund`
---
-
-INSERT INTO `cs_order_refund` (`order_refund_id`, `refund_no`, `order_no`, `out_trade_no`, `out_trade_msg`, `user_id`, `total_amount`, `amount`, `payment_no`, `to_payment`, `create_time`, `update_time`, `status`) VALUES
+INSERT INTO `{prefix}order_refund` (`order_refund_id`, `refund_no`, `order_no`, `out_trade_no`, `out_trade_msg`, `user_id`, `total_amount`, `amount`, `payment_no`, `to_payment`, `create_time`, `update_time`, `status`) VALUES
 (1, 'TK_I6135136017166080001', 'PO_I1049550470892680001', '4200000112201806138875935999', '', 1, '0.10', '0.10', 'ZF_I6135059629848380001', '3', 1581585995, 1581585995, 1),
 (2, 'TK_I6135129344929870001', 'PO_I1049550470892680001', '4200000120201806130827213457', '', 1, '0.10', '0.10', 'ZF_I6135078611653400001', '3', 1581586052, 1581586052, 1),
 (3, 'TK_I6135119346449680001', 'PO_I1049550470892680001', '2018061321001004680571090420', '', 1, '0.10', '0.10', 'ZF_I6135096089631500001', '2', 1581586103, 1581586103, 1),
@@ -8236,16 +8536,40 @@ INSERT INTO `cs_order_refund` (`order_refund_id`, `refund_no`, `order_no`, `out_
 (98, 'TK_I6135129344929870001', 'PO_I1049550470892680001', '4200000120201806130827213457', '', 1, '0.10', '0.10', 'ZF_I6135078611653400001', '3', 1581586052, 1581586052, 1),
 (99, 'TK_I6135119346449680001', 'PO_I1049550470892680001', '2018061321001004680571090420', '', 1, '1.00', '0.20', 'ZF_I6135096089631500001', '2', 1581586103, 1581586103, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_order_service`
---
+DROP TABLE IF EXISTS `{prefix}order_service`;
+CREATE TABLE `{prefix}order_service` (
+  `order_service_id` int(11) UNSIGNED NOT NULL,
+  `service_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '售后单号(流水号)',
+  `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单号',
+  `order_goods_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应order_goods表',
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `admin_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应admin表',
+  `qty` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '数量',
+  `type` tinyint(1) NOT NULL COMMENT '0=仅退款 1=退货退款 2=换货 3=维修',
+  `reason` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '原因',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '说明',
+  `goods_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '货物状态 0=未选择 1=未收到货 2=已收到货',
+  `image` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '凭证(照片)',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=待处理 1=已同意 2=已拒绝 3=已寄件 4=售后中 5=已撤销 6=已完成',
+  `is_return` tinyint(1) NOT NULL DEFAULT '0' COMMENT '寄回到商家 0=否 1=是',
+  `result` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '处理结果',
+  `remark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '客服备注',
+  `refund_fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '退款金额',
+  `refund_detail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '退款结构',
+  `refund_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '退款单号',
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '返件地址',
+  `consignee` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '委托人',
+  `zipcode` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '邮编',
+  `mobile` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '手机号码',
+  `logistic_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '快递单号',
+  `delivery_fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '运费',
+  `admin_event` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有新事件',
+  `user_event` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否有新事件',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='售后服务';
 
-TRUNCATE TABLE `cs_order_service`;
---
--- 转存表中的数据 `cs_order_service`
---
-
-INSERT INTO `cs_order_service` (`order_service_id`, `service_no`, `order_no`, `order_goods_id`, `user_id`, `admin_id`, `qty`, `type`, `reason`, `description`, `goods_status`, `image`, `status`, `is_return`, `result`, `remark`, `refund_fee`, `refund_detail`, `refund_no`, `address`, `consignee`, `zipcode`, `mobile`, `logistic_code`, `delivery_fee`, `admin_event`, `user_event`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}order_service` (`order_service_id`, `service_no`, `order_no`, `order_goods_id`, `user_id`, `admin_id`, `qty`, `type`, `reason`, `description`, `goods_status`, `image`, `status`, `is_return`, `result`, `remark`, `refund_fee`, `refund_detail`, `refund_no`, `address`, `consignee`, `zipcode`, `mobile`, `logistic_code`, `delivery_fee`, `admin_event`, `user_event`, `create_time`, `update_time`) VALUES
 (1, 'SH_I3060591166003750001', 'PO_I1049550470892670001', 2, 1, 1, 0, 3, '七天无理由退货', '', 0, '[]', 2, 0, 'ABC', '测试准备', '0.00', '', '', '浙江省 宁波市 江北区 XXX XXX xxx', '张三', '315000', '15867430555', '', '0.00', 0, 1, 1520305911, 1588229587),
 (2, 'SH_A4213550720400230002', 'PO_A3217849839847620009', 49, 1, 1, 2, 0, '快递/物流一直未送到', '', 2, '[]', 2, 0, '超额', '', '0.00', '', '', '', '', '', '', '', '0.00', 0, 1, 1587435507, 1588229675),
 (3, 'SH_A4213550720400230003', 'PO_A3217849839847620009', 49, 1, 0, 2, 2, '不喜欢/不想要', '', 2, '[]', 0, 0, '', '', '0.00', '', '', '', '', '', '', '', '0.00', 1, 0, 1587435507, 1587715964),
@@ -8275,16 +8599,23 @@ INSERT INTO `cs_order_service` (`order_service_id`, `service_no`, `order_no`, `o
 (27, 'SH_A4213550720400230027', 'PO_A3217849839847620009', 49, 1, 0, 2, 2, '不喜欢/不想要', '', 2, '[{\"name\":\"nei_05.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/f3cdf50f-ba56-40c8-8add-991fb20cf569.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/f3cdf50f-ba56-40c8-8add-991fb20cf569.jpg?type=aliyun\"},{\"name\":\"nei_02.jpg.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/8e3101ed-f38a-4a78-8bf0-a3a59e117a8e.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/8e3101ed-f38a-4a78-8bf0-a3a59e117a8e.jpg?type=aliyun\"},{\"name\":\"index7-5.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/da2cf166-91ec-4823-8e21-5032ff9900c6.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/da2cf166-91ec-4823-8e21-5032ff9900c6.png?type=aliyun\"},{\"name\":\"nei_02.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/968cc6c2-b121-4d4c-804e-cf828af7e1fb.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/968cc6c2-b121-4d4c-804e-cf828af7e1fb.jpg?type=aliyun\"}]', 2, 0, '无', '顾客不可见', '0.00', '', '', '', '', '', '', '', '0.00', 0, 1, 1587435507, 1588228584),
 (28, 'SH_A4213550720400230028', 'PO_A4170629109000020001', 50, 1, 1, 2, 2, '货物破损已拒签', '', 2, '[{\"name\":\"nei_05.jpg\",\"source\":\"aliyun.oss.careyshop.cn/uploads/files/20191230/ebafd330-cb20-4ead-8af5-54ca56c5d5d2.png?type=aliyun\",\"url\":\"//aliyun.oss.careyshop.cn/uploads/files/20191230/ebafd330-cb20-4ead-8af5-54ca56c5d5d2.png?type=aliyun\"},{\"name\":\"nei_02.jpg.jpg\",\"source\":\"aliyun.oss.careyshop.cn/uploads/files/20191230/d95f096e-ffd2-4a5b-a6d7-b4bb00335e37.png?type=aliyun\",\"url\":\"//aliyun.oss.careyshop.cn/uploads/files/20191230/d95f096e-ffd2-4a5b-a6d7-b4bb00335e37.png?type=aliyun\"},{\"name\":\"index7-5.png\",\"source\":\"aliyun.oss.careyshop.cn/uploads/files/20191228/b84ff8cc-8646-40f9-a8dc-4939b935f0f2.jpg?type=aliyun\",\"url\":\"//aliyun.oss.careyshop.cn/uploads/files/20191228/b84ff8cc-8646-40f9-a8dc-4939b935f0f2.jpg?type=aliyun\"},{\"name\":\"nei_02.jpg\",\"source\":\"aliyun.oss.careyshop.cn/uploads/files/20191228/9da40623-7ce4-4568-a11f-a099d604115c.jpg?type=aliyun\",\"url\":\"//aliyun.oss.careyshop.cn/uploads/files/20191228/9da40623-7ce4-4568-a11f-a099d604115c.jpg?type=aliyun\"},{\"name\":\"nei_02.jpg\",\"source\":\"aliyun.oss.careyshop.cn/uploads/files/20191215/e09e4d4f-27f7-4fc3-86c5-c23140cd937d.png?type=aliyun\",\"url\":\"//aliyun.oss.careyshop.cn/uploads/files/20191215/e09e4d4f-27f7-4fc3-86c5-c23140cd937d.png?type=aliyun\"}]', 4, 1, '', '卖家备注,顾客不可见', '12.00', '{\"money_amount\":10,\"integral_amount\":0.9,\"card_amount\":0.01,\"payment_amount\":0.1}', 'TK_I6135129344929870001', '浙江省 宁波市 江北区 XXX XXX xxx', '张三', '315000', '15867430555', '', '0.99', 0, 1, 1587435507, 1588228454);
 
---
--- 插入之前先把表清空（truncate） `cs_payment`
---
+DROP TABLE IF EXISTS `{prefix}payment`;
+CREATE TABLE `{prefix}payment` (
+  `payment_id` smallint(5) UNSIGNED NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '支付名称',
+  `code` tinyint(1) NOT NULL COMMENT '支付编码',
+  `image` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '图片',
+  `is_deposit` tinyint(1) NOT NULL COMMENT '财务充值 0=否 1=是',
+  `is_inpour` tinyint(1) NOT NULL COMMENT '账号充值 0=否 1=是',
+  `is_payment` tinyint(1) NOT NULL COMMENT '订单支付 0=否 1=是',
+  `is_refund` tinyint(1) NOT NULL COMMENT '原路返回 0=否 1=是',
+  `setting` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '配置',
+  `model` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '对应模型',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='支付配置';
 
-TRUNCATE TABLE `cs_payment`;
---
--- 转存表中的数据 `cs_payment`
---
-
-INSERT INTO `cs_payment` (`payment_id`, `name`, `code`, `image`, `is_deposit`, `is_inpour`, `is_payment`, `is_refund`, `setting`, `model`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}payment` (`payment_id`, `name`, `code`, `image`, `is_deposit`, `is_inpour`, `is_payment`, `is_refund`, `setting`, `model`, `sort`, `status`) VALUES
 (1, '账户资金', 0, 'aliyun.oss.careyshop.cn/支付图标/yezf.gif?type=aliyun', 1, 0, 0, 0, '[]', '', 50, 1),
 (2, '货到付款', 1, 'aliyun.oss.careyshop.cn/支付图标/hdfk.gif?type=aliyun', 0, 0, 1, 0, '[]', 'cod', 50, 1),
 (3, '支付宝', 2, 'aliyun.oss.careyshop.cn/支付图标/zhifubao.png?type=aliyun', 1, 1, 1, 1, '{\"appId\":{\"name\":\"APPID\",\"value\":\"2017062407558727\",\"remark\":\"支付宝应用中的 <span style=\\\"color:#F56C6C;\\\">APPID<\\/span>\"},\"merchantPrivateKey\":{\"name\":\"商户私钥\",\"value\":\"MIIEowIBAAKCAQEAn\\/2m7I5JWxAppGySs3W0o9YiM59LA8vXWszHf84bK4JHmTXsnwE7pw\\/KtatAu5zx4Zkfk7TPSyQQAnmLYn3W5KuTXW1c47Bsv5VCzaveWD5RviZMVN6GTB2fAFc6KKkBO5h48jxpDeXDUbi0l4jay4w3Wmw+1qi5DPi+mojNdhoTK\\/QV9T0jeqKsTlM6XmlNGuV9pmTz8S3E\\/SLj9NFMSqiiZpwRBcXOwXRgoquhW\\/CAPsSyOtBH7d6g5yxSD8TAiuH6Ip7Jg6kmUxER3vzDp8w4qNb5dtbCzb6rPFwiAeK1dlSVZeCqh9d+1BpF4S9yP61Tru4zdfFHF75YWHYLAQIDAQABAoIBAA2uPuvTbupeg3EP56t40S2BTgNkB6IXeB7Hi\\/edxC0AQucS+VzPWi565zaJoktorDZCRbT3rRIbz1Km2gheAlYjZcKDa4H8wA\\/Rz5iOrcCV859y3uwS6yDvF32L9+kqKnTSIOV1zPXnQ8BlLuwWQ79MCh+tSeJJIym8y2+jaw5CIenhISBeKr5KLkMmjfun5GN3Atm6rnhnLcoBDmwzUa4sS\\/7HKxheGFzw6DDEEN+9cweF9oVECam4qPc0v0vSNlH8tG40vQP6\\/NHZirH4lqLxD\\/BLlMBCMRMkWyk77Ds5UIOAszKuagDLT1agtCXCS3WFZPyiefDQHNH0B8XUoJECgYEAz+kVZbpEItCs89sIJ1dVkEnMKkuFG6ChvuqnRAunzau\\/uilC4DcbYBXp9eFyjLK\\/N27nPDDy+klKnbmjzbtjPdV4RIB7OhHSa4OKuRBkE\\/bRv0WDNg5uiwH3xEimESCAyf3vD7TRT1rGP3bypwKtn4RVNsoOPUfj0rBDGWJRUUcCgYEAxP8fPH76sA+Dfbv7K8cJgLqmpnY2oYnZCMJRk\\/nktBdrRmLYdy2hFHJ40tUg4skQRGHRfZDIVrLoTzLBDECT2GX4rIv5wGHxAXzTETNPwCh+0cQC80ofbo2VpLt5JqnyGmTKFMt7UPrB8CedK3THkbCGOmcu9vF563KWwkHGJXcCgYBkLOEjb7kOsU7z\\/BAUrI7Mg9I8esC6zA3C6FsJfTgv79XkQ6c2Uzb8d\\/KPhz3jLujVM7l0lf0svQ2Xq2+SW\\/x4OZfGIcW9+AJTzUCU5KHjwKPVLhAHhrKahas0xvBFBk0nhhOelLfZLVqiD5ThBXhUiLVqPbbYrf\\/GbykVXPrjVwKBgHpx1NmGV41dZy6czCbOxTJVUcY\\/zf8kLlmKZqhid+wUbmJGiCOzod6StFTfklxD+y912X+BoXR6KXkoo+NYtEyaPTIKowcYGXQCQTL8wMJAqWr6uZa86MKPkIbe3BPTKB+NrCm2vIR+CFOcW82p\\/W2p2hStE\\/z75Psas2g099NLAoGBAKIe5YGVgYTMMj5a40\\/B\\/LMNt4OxltXl1E4bcAIdSSjhniwlqCbTFjYh\\/L23h5bxL3dNR8eQNGy1kQ1n1W+quAPidteMnN2R3Neoo99n2b3l0KDeTiCwd6l3g3Hf6f92CFBtgrv6dPwHb9DUigOqOLeLug\\/zV3Dnf+W9zNHowcCJ\",\"remark\":\"支付宝应用中的 <span style=\\\"color:#F56C6C;\\\">商户私钥<\\/span>\"},\"alipayPublicKey\":{\"name\":\"支付宝公钥\",\"value\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzKb72eE1ykajgd6We0w3Ac+tjQmMgGeSe+3+YA36ORHvTGFIwgiCuXfgIDkRoFA2bMAVCUbIL2orFsmVlCi0M4i6ucFMTuRtjd+p+UaXWaXBdtfk2AYxmWMMn8X5QywdBAEStIP3rT7inXgu3bO0gBGVYqG5E5xHXl\\/hjTZMym5a2cxFEt7DVR5mMaq0pisZBJR1g2niDzVSltsiyhX49SblCDq2cRTmEDh2NXDTe9Xogx1ewn\\/neW7cxImxvFAAfBFhK5WK5ETLl5VHu46KY2D5S+sB2lWRvDg44ZijJFjOu3BDqPQwdjAJFO3kVUgRK+NZqBG7qZNQat5RkUp\\/iQIDAQAB\",\"remark\":\"支付宝应用中的 <span style=\\\"color:#F56C6C;\\\">支付宝公钥<\\/span>\"},\"signType\":{\"name\":\"签名方式\",\"value\":\"RSA2\",\"remark\":\"可使用RSA2、SHA256等签名方式，推荐使用 <span style=\\\"color:#F56C6C;\\\">RSA2<\\/span>\"},\"httpMethod\":{\"name\":\"页面接口方式\",\"value\":\"post\",\"remark\":\"推荐使用 <span style=\\\"color:#F56C6C;\\\">post<\\/span>\"}}', 'alipay', 50, 1),
@@ -8293,16 +8624,23 @@ INSERT INTO `cs_payment` (`payment_id`, `name`, `code`, `image`, `is_deposit`, `
 (6, '购物卡', 5, '', 0, 0, 0, 0, '[]', '', 50, 1),
 (7, '其他', 6, '', 1, 0, 0, 0, '[]', '', 50, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_payment_log`
---
+DROP TABLE IF EXISTS `{prefix}payment_log`;
+CREATE TABLE `{prefix}payment_log` (
+  `payment_log_id` int(11) UNSIGNED NOT NULL,
+  `payment_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '流水号',
+  `out_trade_no` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '交易号',
+  `order_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '订单号',
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `amount` decimal(10,2) NOT NULL COMMENT '支付金额',
+  `payment_time` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '支付日期',
+  `to_payment` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '支付方式',
+  `type` tinyint(1) NOT NULL COMMENT '0=充值 1=订单',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=待付款 1=已完成 2=已关闭'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='支付日志';
 
-TRUNCATE TABLE `cs_payment_log`;
---
--- 转存表中的数据 `cs_payment_log`
---
-
-INSERT INTO `cs_payment_log` (`payment_log_id`, `payment_no`, `out_trade_no`, `order_no`, `user_id`, `amount`, `payment_time`, `to_payment`, `type`, `create_time`, `update_time`, `status`) VALUES
+INSERT INTO `{prefix}payment_log` (`payment_log_id`, `payment_no`, `out_trade_no`, `order_no`, `user_id`, `amount`, `payment_time`, `to_payment`, `type`, `create_time`, `update_time`, `status`) VALUES
 (3, 'ZF_I1049554124677490001', '4200000013201801047643752535', 'PO_I1049550470892670001', 1, '0.10', '2018-01-04 00:06:17', '3', 1, 1514995541, 1514995578, 1),
 (4, 'ZF_I3214089531968020001', '', '', 1, '0.01', '2018-01-04 00:06:17', '0', 0, 1521640895, 1521640895, 0),
 (5, 'ZF_I3271779247864060001', '', '', 1, '0.01', '2018-01-04 00:06:17', '3', 0, 1522117792, 1522117792, 0),
@@ -8510,21 +8848,23 @@ INSERT INTO `cs_payment_log` (`payment_log_id`, `payment_no`, `out_trade_no`, `o
 (207, 'ZF_A3279947153800210001', '1458337322445961911699772756', 'PO_A3279943676300210001', 1, '0.00', '2020-03-27 16:57:51', '1', 1, 1585299471, 1585299471, 1),
 (208, 'ZF_A3279956752500580001', '6151635927743914721463557834', 'PO_A3279948991700770001', 1, '0.00', '2020-03-27 16:59:27', '1', 1, 1585299567, 1585299567, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_praise`
---
+DROP TABLE IF EXISTS `{prefix}praise`;
+CREATE TABLE `{prefix}praise` (
+  `praise_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL COMMENT '对应user表',
+  `goods_comment_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods_comment表'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='点赞记录';
 
-TRUNCATE TABLE `cs_praise`;
---
--- 插入之前先把表清空（truncate） `cs_promotion`
---
+DROP TABLE IF EXISTS `{prefix}promotion`;
+CREATE TABLE `{prefix}promotion` (
+  `promotion_id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '促销名称',
+  `begin_time` int(11) NOT NULL DEFAULT '0' COMMENT '开始日期',
+  `end_time` int(11) NOT NULL DEFAULT '0' COMMENT '结束日期',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单促销';
 
-TRUNCATE TABLE `cs_promotion`;
---
--- 转存表中的数据 `cs_promotion`
---
-
-INSERT INTO `cs_promotion` (`promotion_id`, `name`, `begin_time`, `end_time`, `status`) VALUES
+INSERT INTO `{prefix}promotion` (`promotion_id`, `name`, `begin_time`, `end_time`, `status`) VALUES
 (23, '促销名称', 1497282900, 1497542100, 0),
 (40, '促销名称', 1497542100, 1497542100, 1),
 (42, '促销名称', 1497628500, 1497628500, 1),
@@ -8552,16 +8892,15 @@ INSERT INTO `cs_promotion` (`promotion_id`, `name`, `begin_time`, `end_time`, `s
 (77, '促销名称', 1497282960, 1497455940, 0),
 (96, '优惠劵赠送', 1581009722, 1582905600, 1);
 
---
--- 插入之前先把表清空（truncate） `cs_promotion_item`
---
+DROP TABLE IF EXISTS `{prefix}promotion_item`;
+CREATE TABLE `{prefix}promotion_item` (
+  `promotion_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应promotion表',
+  `quota` decimal(10,2) NOT NULL COMMENT '限额',
+  `settings` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '0=减价 1=打折 2=免邮 3=送积分 4=送优惠劵',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='订单促销项';
 
-TRUNCATE TABLE `cs_promotion_item`;
---
--- 转存表中的数据 `cs_promotion_item`
---
-
-INSERT INTO `cs_promotion_item` (`promotion_id`, `quota`, `settings`, `description`) VALUES
+INSERT INTO `{prefix}promotion_item` (`promotion_id`, `quota`, `settings`, `description`) VALUES
 (6, '100.00', '[{\"type\":\"0\",\"value\":\"90\"},{\"type\":\"1\",\"value\":\"80\"}]', ''),
 (23, '200.00', '[{\"type\":\"0\",\"value\":\"90\"},{\"type\":\"1\",\"value\":\"80\"}]', ''),
 (34, '200.00', '[{\"type\":\"0\",\"value\":\"90\"}]', ''),
@@ -8616,16 +8955,17 @@ INSERT INTO `cs_promotion_item` (`promotion_id`, `quota`, `settings`, `descripti
 (95, '10.00', '[{\"type\":\"4\",\"value\":\"10\"}]', ''),
 (96, '200.00', '[{\"type\":\"4\",\"value\":68}]', '');
 
---
--- 插入之前先把表清空（truncate） `cs_qrcode`
---
+DROP TABLE IF EXISTS `{prefix}qrcode`;
+CREATE TABLE `{prefix}qrcode` (
+  `qrcode_id` mediumint(8) UNSIGNED NOT NULL,
+  `name` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `text` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '内容',
+  `size` smallint(5) UNSIGNED NOT NULL DEFAULT '75' COMMENT '大小',
+  `suffix` enum('png','jpg','gif') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'png' COMMENT '后缀',
+  `logo` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'logo'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='二维码管理';
 
-TRUNCATE TABLE `cs_qrcode`;
---
--- 转存表中的数据 `cs_qrcode`
---
-
-INSERT INTO `cs_qrcode` (`qrcode_id`, `name`, `text`, `size`, `suffix`, `logo`) VALUES
+INSERT INTO `{prefix}qrcode` (`qrcode_id`, `name`, `text`, `size`, `suffix`, `logo`) VALUES
 (2, 'testAAA', 'testaaa', 75, 'jpg', ''),
 (3, 'test', 'test', 75, 'gif', ''),
 (4, 'AAA', 'AAA', 75, 'png', ''),
@@ -8639,16 +8979,16 @@ INSERT INTO `cs_qrcode` (`qrcode_id`, `name`, `text`, `size`, `suffix`, `logo`) 
 (13, '3', 'test ok ok', 75, 'png', 'http://aliyun.oss.careyshop.cn/uploads/files/20191112/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun'),
 (14, '线下物料', '五一活动,门店线下物料', 300, 'png', 'http://aliyun.oss.careyshop.cn/uploads/files/20200330/4dd3960b-486c-4dfb-8c86-0e424ac61c32.png?type=aliyun');
 
---
--- 插入之前先把表清空（truncate） `cs_region`
---
+DROP TABLE IF EXISTS `{prefix}region`;
+CREATE TABLE `{prefix}region` (
+  `region_id` smallint(5) UNSIGNED NOT NULL,
+  `parent_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父节点id',
+  `region_name` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '区域名称',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='区域';
 
-TRUNCATE TABLE `cs_region`;
---
--- 转存表中的数据 `cs_region`
---
-
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+INSERT INTO `{prefix}region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
 (1, 0, '中国', 50, 0),
 (2, 1, '北京', 1, 0),
 (3, 1, '天津', 3, 0),
@@ -10720,7 +11060,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (2070, 197, '其它区', 60, 0),
 (2071, 198, '湖滨区', 50, 0),
 (2072, 198, '渑池县', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+INSERT INTO `{prefix}region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
 (2073, 198, '陕州区', 50, 0),
 (2074, 198, '卢氏县', 50, 0),
 (2075, 198, '义马市', 50, 0),
@@ -12695,20 +13035,23 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (4044, 124, '江北区', 49, 0),
 (4080, 1, '钓鱼岛', 35, 0),
 (4081, 4080, '钓鱼岛', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+INSERT INTO `{prefix}region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
 (4083, 1, '海外', 36, 0),
 (4084, 4083, '海外', 50, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_service_log`
---
+DROP TABLE IF EXISTS `{prefix}service_log`;
+CREATE TABLE `{prefix}service_log` (
+  `service_log_id` int(11) UNSIGNED NOT NULL,
+  `order_service_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应order_service表',
+  `service_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '售后单号',
+  `action` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '操作者',
+  `client_type` tinyint(1) NOT NULL COMMENT '-1=游客 0=顾客 1=管理组',
+  `comment` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '具体说明',
+  `description` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '描述',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='售后日志';
 
-TRUNCATE TABLE `cs_service_log`;
---
--- 转存表中的数据 `cs_service_log`
---
-
-INSERT INTO `cs_service_log` (`service_log_id`, `order_service_id`, `service_no`, `action`, `client_type`, `comment`, `description`, `create_time`) VALUES
+INSERT INTO `{prefix}service_log` (`service_log_id`, `order_service_id`, `service_no`, `action`, `client_type`, `comment`, `description`, `create_time`) VALUES
 (1, 2, 'SH_A4213550720400230001', 'CareyShop', 1, '发起申请售后服务。', '申请售后', 1587435507),
 (2, 2, 'SH_A4213550720400230001', 'CareyShop', 1, '商家已拒绝售后服务，如有需要您可以再次申请。', '拒绝售后', 1587715761),
 (3, 2, 'SH_A4213550720400230001', 'CareyShop', 1, '商家已拒绝售后服务，如有需要您可以再次申请。', '拒绝售后', 1587715964),
@@ -12874,23 +13217,24 @@ INSERT INTO `cs_service_log` (`service_log_id`, `order_service_id`, `service_no`
 (163, 2, 'SH_A4213550720400230002', 'admin', 1, '商家已拒绝售后服务，如有需要您可以再次申请。', '拒绝售后', 1588229675),
 (164, 23, 'SH_A4213550720400230023', 'admin2', 1, '商家已拒绝售后服务，如有需要您可以再次申请。', '拒绝售后', 1588229744);
 
---
--- 插入之前先把表清空（truncate） `cs_setting`
---
+DROP TABLE IF EXISTS `{prefix}setting`;
+CREATE TABLE `{prefix}setting` (
+  `setting_id` smallint(5) UNSIGNED NOT NULL,
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '变量名',
+  `value` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '变量值',
+  `module` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '模块(作用域)',
+  `description` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `help_text` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '帮助'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统配置';
 
-TRUNCATE TABLE `cs_setting`;
---
--- 转存表中的数据 `cs_setting`
---
-
-INSERT INTO `cs_setting` (`setting_id`, `code`, `value`, `module`, `description`, `help_text`) VALUES
+INSERT INTO `{prefix}setting` (`setting_id`, `code`, `value`, `module`, `description`, `help_text`) VALUES
 (1, 'api_id', '', 'delivery_dist', '快递鸟商户ID', '填写快递鸟 <span style=\"color:#F56C6C;\">商户ID</span>'),
 (2, 'api_key', '', 'delivery_dist', '快递鸟ApiKey', '填写快递鸟 <span style=\"color:#F56C6C;\">API key</span>'),
 (3, 'is_sub', '1', 'delivery_dist', '是否启用订阅', '开启订阅后快递鸟会主动将配送轨迹推送到系统'),
 (4, 'success', 'http://www.careyshop.cn/', 'payment', '支付成功提示页', '支付成功后返回到的页面'),
 (5, 'error', 'http://www.careyshop.cn/', 'payment', '支付失败提示页', '支付失败后返回到的页面'),
 (6, 'sms', '{\"key_id\":{\"name\":\"Access Key ID\",\"value\":\"LTAIS84N5AozgaNj\"},\"key_secret\":{\"name\":\"Access Key Secret\",\"value\":\"2vaz6AmNMmgKO5oaYUs1bm2B1iYams\"},\"status\":{\"name\":\"启用状态\",\"value\":\"1\"}}', 'notice', '短信通知', '短信通知参数配置'),
-(7, 'email', '{\"email_host\":{\"name\":\"SMTP服务器\",\"value\":\"smtp.126.com\"},\"email_port\":{\"name\":\"SMTP端口\",\"value\":\"25\"},\"email_addr\":{\"name\":\"发信人邮箱地址\",\"value\":\"dnyz123@126.com\"},\"email_id\":{\"name\":\"SMTP身份验证用户名\",\"value\":\"dnyz123\"},\"email_pass\":{\"name\":\"SMTP身份验证码\",\"value\":\"123456\"},\"email_ssl\":{\"name\":\"是否使用安全链接\",\"value\":\"0\"},\"status\":{\"name\":\"启用状态\",\"value\":\"0\"}}', 'notice', '邮件通知', '邮件通知参数配置'),
+(7, 'email', '{\"email_host\":{\"name\":\"SMTP服务器\",\"value\":\"smtp.126.com\"},\"email_port\":{\"name\":\"SMTP端口\",\"value\":\"25\"},\"email_addr\":{\"name\":\"发信人邮箱地址\",\"value\":\"dnyz520@126.com\"},\"email_id\":{\"name\":\"SMTP身份验证用户名\",\"value\":\"dnyz520\"},\"email_pass\":{\"name\":\"SMTP身份验证码\",\"value\":\"123456\"},\"email_ssl\":{\"name\":\"是否使用安全链接\",\"value\":\"0\"},\"status\":{\"name\":\"启用状态\",\"value\":\"0\"}}', 'notice', '邮件通知', '邮件通知参数配置'),
 (8, 'money', '0', 'delivery', '满额包邮', '满多少金额启用全场包邮'),
 (9, 'money_status', '0', 'delivery', '满额是否启用', '满额是否启用'),
 (10, 'money_exclude', '[32,361,3537,3538,3539,3540,3541,3542,3543,3544,3545,3546,362,3547,3548,3549,3550,3551,363,3552,3553,3554,3555,364,3556,3557,3558,3559,365,3560,3561,3562,3563,3564,3565,3566,3567,3568,366,3569,3570,3571,3572,3573,367,3574,3575,3576,3577,3578,3579,3580,3581,3582,3583,368,3584,3585,3586,3587,3588,3589,3590,3591,3592,3593,369,3594,3595,3596,3597,3598,370,3599,3600,3601,3602,3603,3604,3605,3606,3607,3608,3609,3610,3611,371,3612,3613,3614,3615,3616,3617,3618,3619,3620,372,3621,3622,3623,3624,3625,3626,3627,3628,3629,3630,3631,373,3632,3633,3634,3635,3636,3637,3638,3639,374,3640,3641,3642,3643,3644,3645,3646,3647,34,397,4026,4027,4028,4029,398,4030,4031,4032,4033,4034,399,4035,4036,4037,4038,4039,4040,4041,4042,4043,35,400,401,33,375,3648,3649,3650,3651,3652,3653,3654,3655,3656,3657,3658,3659,3660,376,3661,3662,3663,3664,3665,3666,3667,3668,3669,3670,3671,3673,3674,3675,3676,3677,3678,3679,3680,3681,3682,3683,3684,3685,3686,3687,3688,3689,3690,3691,3692,3693,3694,3695,3696,3697,3698,3699,3700,3672,377,3701,3702,3703,3704,3705,3706,3708,3709,3710,3711,3712,3713,3714,3715,3716,3717,3718,3719,3720,3721,3722,3723,3724,3725,3726,3727,3728,3729,3730,3731,3732,3733,3734,3735,3736,3737,3738,3707,378,3739,3740,3741,3742,3743,3744,3745,3746,3748,3749,3750,3751,3752,3753,3754,3755,3756,3757,3758,3759,3760,3761,3762,3763,3764,3765,3766,3767,3768,3747,379,3769,3770,3771,3772,3773,3774,380,3775,3776,3777,3778,3779,3780,3781,3782,3783,3784,3785,3786,3787,381,3788,3789,3790,3791,3792,3793,3794,3795,382,3796,3797,3798,3799,383,3800,3801,3802,384,3803,3804,3805,3806,3807,3808,3809,3810,3811,3812,3813,3814,3815,3816,3817,3818,3819,3820,3821,3822,3823,3824,3825,3826,3827,3828,3829,3830,3831,385,3832,3833,3834,3835,3836,3837,3838,3839,3840,3841,3842,3843,3844,386,3845,3846,3847,3848,3849,3850,3851,3852,3853,3854,3855,3856,3857,387,3858,3859,3860,3861,3862,3863,3864,3865,3866,3867,3868,3869,3870,388,3871,3872,3873,3874,3875,3876,3877,3878,3879,3880,3881,3882,3883,3884,3885,3886,3887,3888,389,3889,3890,3891,3892,3893,3894,3895,3896,3897,3898,3899,3900,3901,3902,3903,3904,3905,3906,3907,3908,3909,3910,3911,3912,3913,3914,390,3915,3916,3917,3918,3919,3920,3921,3922,3923,3924,3925,3926,3927,3928,3929,3930,3931,3932,391,3933,3934,3935,3936,3937,3938,3939,3940,3941,3942,3943,3944,3945,3946,3947,3948,3949,3950,3951,3952,392,3953,3954,3955,3956,3957,3958,3959,3960,3961,3962,3963,3964,3965,3966,3967,3968,3969,3970,3971,3972,3973,3974,3975,3976,3977,3978,3979,3980,3981,3982,3983,3984,3985,393,3986,3987,3988,3989,3990,3991,3992,3993,3994,3995,3996,3997,3998,3999,4000,4001,394,4002,4003,4004,4005,4006,4007,4008,4009,4010,4011,4012,4013,4014,4015,395,4016,4017,4018,4019,4020,4021,396,4022,4023,4024,4025,4080,4081,4083,4084]', 'delivery', '满额不包邮区域', '满额不包邮区域'),
@@ -12955,16 +13299,17 @@ INSERT INTO `cs_setting` (`setting_id`, `code`, `value`, `module`, `description`
 (69, 'aliyun_endpoint', 'oss-cn-hangzhou.aliyuncs.com', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
 (70, 'aliyun_rolearn', 'acs:ram::1763866338345155:role/aliyunosstokengeneratorrole', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>');
 
---
--- 插入之前先把表清空（truncate） `cs_spec`
---
+DROP TABLE IF EXISTS `{prefix}spec`;
+CREATE TABLE `{prefix}spec` (
+  `spec_id` int(11) UNSIGNED NOT NULL,
+  `goods_type_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods_type表 0=自定义',
+  `name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '规格名称',
+  `spec_index` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否检索 0=否 1=是',
+  `spec_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=文字 1=图片 2=颜色',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品规格';
 
-TRUNCATE TABLE `cs_spec`;
---
--- 转存表中的数据 `cs_spec`
---
-
-INSERT INTO `cs_spec` (`spec_id`, `goods_type_id`, `name`, `spec_index`, `spec_type`, `sort`) VALUES
+INSERT INTO `{prefix}spec` (`spec_id`, `goods_type_id`, `name`, `spec_index`, `spec_type`, `sort`) VALUES
 (1, 2, '颜色', 1, 2, 30),
 (2, 6, '制冷', 1, 0, 50),
 (3, 1, '网络', 1, 2, 10),
@@ -12984,16 +13329,14 @@ INSERT INTO `cs_spec` (`spec_id`, `goods_type_id`, `name`, `spec_index`, `spec_t
 (86, 0, '规格', 0, 0, 50),
 (87, 0, '规格', 0, 0, 50);
 
---
--- 插入之前先把表清空（truncate） `cs_spec_config`
---
+DROP TABLE IF EXISTS `{prefix}spec_config`;
+CREATE TABLE `{prefix}spec_config` (
+  `spec_config_id` int(11) UNSIGNED NOT NULL,
+  `goods_id` int(11) UNSIGNED NOT NULL COMMENT '对应goods表',
+  `config_data` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '配置数据'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品规格配置';
 
-TRUNCATE TABLE `cs_spec_config`;
---
--- 转存表中的数据 `cs_spec_config`
---
-
-INSERT INTO `cs_spec_config` (`spec_config_id`, `goods_id`, `config_data`) VALUES
+INSERT INTO `{prefix}spec_config` (`spec_config_id`, `goods_id`, `config_data`) VALUES
 (1, 267, '[{\"spec_id\":4,\"goods_type_id\":1,\"name\":\"内存\",\"spec_index\":1,\"spec_type\":1,\"sort\":20,\"spec_item\":[{\"spec_item_id\":151,\"item_name\":\"4G\",\"is_contact\":1,\"sort\":2,\"image\":[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\"},{\"name\":\"1.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/352e5500-1b7d-4345-8110-3f2fcd4c0124.jpg?type=aliyun\"}],\"color\":\"\"},{\"spec_item_id\":152,\"item_name\":\"8G\",\"is_contact\":1,\"sort\":1,\"image\":[{\"name\":\"O1CN01VtX6IC1PbvFiNvskI_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4aff227f-2673-45bc-81cd-8e79777dbe04.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4aff227f-2673-45bc-81cd-8e79777dbe04.jpg?type=aliyun\"},{\"name\":\"3.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4d141311-9184-483c-8204-11dc9253e673.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/4d141311-9184-483c-8204-11dc9253e673.jpg?type=aliyun\"}],\"color\":\"\"},{\"spec_item_id\":153,\"item_name\":\"16G\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"}],\"check_list\":[153,152,151],\"check_all\":true,\"is_indeterminate\":false},{\"spec_id\":3,\"goods_type_id\":1,\"name\":\"网络\",\"spec_index\":1,\"spec_type\":2,\"sort\":10,\"spec_item\":[{\"spec_item_id\":158,\"item_name\":\"4G\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":149,\"item_name\":\"5G\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"}],\"check_list\":[],\"check_all\":false,\"is_indeterminate\":false},{\"spec_id\":5,\"goods_type_id\":1,\"name\":\"尺码\",\"spec_index\":1,\"spec_type\":0,\"sort\":50,\"spec_item\":[{\"spec_item_id\":223,\"item_name\":\"M\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":224,\"item_name\":\"X\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":225,\"item_name\":\"XL\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"}],\"check_list\":[],\"check_all\":false,\"is_indeterminate\":false},{\"spec_id\":10,\"goods_type_id\":1,\"name\":\"颜色\",\"spec_index\":1,\"spec_type\":1,\"sort\":50,\"spec_item\":[{\"spec_item_id\":212,\"item_name\":\"银色\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":211,\"item_name\":\"灰色\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":408,\"item_name\":\"深黑色\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"},{\"spec_item_id\":409,\"item_name\":\"淡蓝色\",\"is_contact\":1,\"sort\":3,\"image\":[],\"color\":\"\"},{\"spec_item_id\":405,\"item_name\":\"白色\",\"is_contact\":1,\"sort\":4,\"image\":[],\"color\":\"\"},{\"spec_item_id\":406,\"item_name\":\"红色\",\"is_contact\":1,\"sort\":5,\"image\":[],\"color\":\"\"},{\"spec_item_id\":410,\"item_name\":\"绿黄色\",\"is_contact\":1,\"sort\":6,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":21,\"goods_type_id\":1,\"name\":\"星期\",\"spec_index\":1,\"spec_type\":2,\"sort\":50,\"spec_item\":[{\"spec_item_id\":240,\"item_name\":\"周日\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":238,\"item_name\":\"周一\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":243,\"item_name\":\"周二\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"},{\"spec_item_id\":235,\"item_name\":\"周三\",\"is_contact\":1,\"sort\":3,\"image\":[],\"color\":\"\"},{\"spec_item_id\":237,\"item_name\":\"周四\",\"is_contact\":1,\"sort\":4,\"image\":[],\"color\":\"\"},{\"spec_item_id\":239,\"item_name\":\"周五\",\"is_contact\":1,\"sort\":5,\"image\":[],\"color\":\"\"},{\"spec_item_id\":241,\"item_name\":\"周六\",\"is_contact\":1,\"sort\":6,\"image\":[],\"color\":\"\"}],\"check_list\":[]}]'),
 (2, 276, '[{\"spec_id\":3,\"goods_type_id\":1,\"name\":\"网络\",\"spec_index\":1,\"spec_type\":2,\"sort\":10,\"spec_item\":[{\"spec_item_id\":149,\"item_name\":\"5G\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":158,\"item_name\":\"4G\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":4,\"goods_type_id\":1,\"name\":\"内存\",\"spec_index\":1,\"spec_type\":1,\"sort\":20,\"spec_item\":[{\"spec_item_id\":153,\"item_name\":\"16G\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":152,\"item_name\":\"8G\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":151,\"item_name\":\"4G\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":5,\"goods_type_id\":1,\"name\":\"尺码\",\"spec_index\":1,\"spec_type\":0,\"sort\":50,\"spec_item\":[{\"spec_item_id\":223,\"item_name\":\"M\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":224,\"item_name\":\"X\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":225,\"item_name\":\"XL\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":10,\"goods_type_id\":1,\"name\":\"颜色\",\"spec_index\":1,\"spec_type\":1,\"sort\":50,\"spec_item\":[{\"spec_item_id\":212,\"item_name\":\"银色\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":211,\"item_name\":\"灰色\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":408,\"item_name\":\"深黑色\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"},{\"spec_item_id\":409,\"item_name\":\"淡蓝色\",\"is_contact\":1,\"sort\":3,\"image\":[],\"color\":\"\"},{\"spec_item_id\":405,\"item_name\":\"白色\",\"is_contact\":1,\"sort\":4,\"image\":[],\"color\":\"\"},{\"spec_item_id\":406,\"item_name\":\"红色\",\"is_contact\":1,\"sort\":5,\"image\":[],\"color\":\"\"},{\"spec_item_id\":410,\"item_name\":\"绿黄色\",\"is_contact\":1,\"sort\":6,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":21,\"goods_type_id\":1,\"name\":\"星期\",\"spec_index\":1,\"spec_type\":2,\"sort\":50,\"spec_item\":[{\"spec_item_id\":240,\"item_name\":\"周日\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":238,\"item_name\":\"周一\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":243,\"item_name\":\"周二\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"},{\"spec_item_id\":235,\"item_name\":\"周三\",\"is_contact\":1,\"sort\":3,\"image\":[],\"color\":\"\"},{\"spec_item_id\":237,\"item_name\":\"周四\",\"is_contact\":1,\"sort\":4,\"image\":[],\"color\":\"\"},{\"spec_item_id\":239,\"item_name\":\"周五\",\"is_contact\":1,\"sort\":5,\"image\":[],\"color\":\"\"},{\"spec_item_id\":241,\"item_name\":\"周六\",\"is_contact\":1,\"sort\":6,\"image\":[],\"color\":\"\"}],\"check_list\":[]}]'),
 (3, 277, '[{\"spec_id\":1,\"goods_type_id\":2,\"name\":\"颜色\",\"spec_index\":1,\"spec_type\":2,\"sort\":30,\"spec_item\":[{\"spec_item_id\":208,\"item_name\":\"黑色\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":209,\"item_name\":\"白色\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":80,\"goods_type_id\":2,\"name\":\"CPU\",\"spec_index\":1,\"spec_type\":1,\"sort\":50,\"spec_item\":[{\"spec_item_id\":411,\"item_name\":\"I5\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":412,\"item_name\":\"I7\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":81,\"goods_type_id\":2,\"name\":\"屏幕\",\"spec_index\":1,\"spec_type\":0,\"sort\":50,\"spec_item\":[{\"spec_item_id\":413,\"item_name\":\"13寸\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":414,\"item_name\":\"15寸\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":415,\"item_name\":\"19寸\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"}],\"check_list\":[]}]'),
@@ -13010,16 +13353,18 @@ INSERT INTO `cs_spec_config` (`spec_config_id`, `goods_id`, `config_data`) VALUE
 (16, 291, '[{\"spec_id\":3,\"goods_type_id\":1,\"name\":\"网络\",\"spec_index\":1,\"spec_type\":2,\"sort\":10,\"spec_item\":[{\"spec_item_id\":149,\"item_name\":\"5G\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":158,\"item_name\":\"4G\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"}],\"check_list\":[],\"check_all\":false,\"is_indeterminate\":false},{\"spec_id\":4,\"goods_type_id\":1,\"name\":\"内存\",\"spec_index\":1,\"spec_type\":1,\"sort\":20,\"spec_item\":[{\"spec_item_id\":153,\"item_name\":\"16G\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":152,\"item_name\":\"8G\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":151,\"item_name\":\"4G\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":5,\"goods_type_id\":1,\"name\":\"尺码\",\"spec_index\":1,\"spec_type\":0,\"sort\":50,\"spec_item\":[{\"spec_item_id\":223,\"item_name\":\"M\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":224,\"item_name\":\"X\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":225,\"item_name\":\"XL\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":10,\"goods_type_id\":1,\"name\":\"颜色\",\"spec_index\":1,\"spec_type\":1,\"sort\":50,\"spec_item\":[{\"spec_item_id\":212,\"item_name\":\"银色\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":211,\"item_name\":\"灰色\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":408,\"item_name\":\"深黑色\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"},{\"spec_item_id\":409,\"item_name\":\"淡蓝色\",\"is_contact\":1,\"sort\":3,\"image\":[],\"color\":\"\"},{\"spec_item_id\":405,\"item_name\":\"白色\",\"is_contact\":1,\"sort\":4,\"image\":[],\"color\":\"\"},{\"spec_item_id\":406,\"item_name\":\"红色\",\"is_contact\":1,\"sort\":5,\"image\":[],\"color\":\"\"},{\"spec_item_id\":410,\"item_name\":\"绿黄色\",\"is_contact\":1,\"sort\":6,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":21,\"goods_type_id\":1,\"name\":\"星期\",\"spec_index\":1,\"spec_type\":2,\"sort\":50,\"spec_item\":[{\"spec_item_id\":240,\"item_name\":\"周日\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":238,\"item_name\":\"周一\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":243,\"item_name\":\"周二\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"},{\"spec_item_id\":235,\"item_name\":\"周三\",\"is_contact\":1,\"sort\":3,\"image\":[],\"color\":\"\"},{\"spec_item_id\":237,\"item_name\":\"周四\",\"is_contact\":1,\"sort\":4,\"image\":[],\"color\":\"\"},{\"spec_item_id\":239,\"item_name\":\"周五\",\"is_contact\":1,\"sort\":5,\"image\":[],\"color\":\"\"},{\"spec_item_id\":241,\"item_name\":\"周六\",\"is_contact\":1,\"sort\":6,\"image\":[],\"color\":\"\"}],\"check_list\":[240,238,243,235,237,239,241],\"check_all\":true,\"is_indeterminate\":false}]'),
 (17, 185, '[{\"spec_id\":3,\"goods_type_id\":1,\"name\":\"网络\",\"spec_index\":1,\"spec_type\":2,\"sort\":10,\"spec_item\":[{\"spec_item_id\":149,\"item_name\":\"5G\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":158,\"item_name\":\"4G\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":4,\"goods_type_id\":1,\"name\":\"内存\",\"spec_index\":1,\"spec_type\":1,\"sort\":20,\"spec_item\":[{\"spec_item_id\":153,\"item_name\":\"16G\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":152,\"item_name\":\"8G\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":151,\"item_name\":\"4G\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":5,\"goods_type_id\":1,\"name\":\"尺码\",\"spec_index\":1,\"spec_type\":0,\"sort\":50,\"spec_item\":[{\"spec_item_id\":223,\"item_name\":\"M\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":224,\"item_name\":\"X\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":225,\"item_name\":\"XL\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":10,\"goods_type_id\":1,\"name\":\"颜色\",\"spec_index\":1,\"spec_type\":1,\"sort\":50,\"spec_item\":[{\"spec_item_id\":212,\"item_name\":\"银色\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":211,\"item_name\":\"灰色\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":408,\"item_name\":\"深黑色\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"},{\"spec_item_id\":409,\"item_name\":\"淡蓝色\",\"is_contact\":1,\"sort\":3,\"image\":[],\"color\":\"\"},{\"spec_item_id\":405,\"item_name\":\"白色\",\"is_contact\":1,\"sort\":4,\"image\":[],\"color\":\"\"},{\"spec_item_id\":406,\"item_name\":\"红色\",\"is_contact\":1,\"sort\":5,\"image\":[],\"color\":\"\"},{\"spec_item_id\":410,\"item_name\":\"绿黄色\",\"is_contact\":1,\"sort\":6,\"image\":[],\"color\":\"\"}],\"check_list\":[]},{\"spec_id\":21,\"goods_type_id\":1,\"name\":\"星期\",\"spec_index\":1,\"spec_type\":2,\"sort\":50,\"spec_item\":[{\"spec_item_id\":240,\"item_name\":\"周日\",\"is_contact\":1,\"sort\":0,\"image\":[],\"color\":\"\"},{\"spec_item_id\":238,\"item_name\":\"周一\",\"is_contact\":1,\"sort\":1,\"image\":[],\"color\":\"\"},{\"spec_item_id\":243,\"item_name\":\"周二\",\"is_contact\":1,\"sort\":2,\"image\":[],\"color\":\"\"},{\"spec_item_id\":235,\"item_name\":\"周三\",\"is_contact\":1,\"sort\":3,\"image\":[],\"color\":\"\"},{\"spec_item_id\":237,\"item_name\":\"周四\",\"is_contact\":1,\"sort\":4,\"image\":[],\"color\":\"\"},{\"spec_item_id\":239,\"item_name\":\"周五\",\"is_contact\":1,\"sort\":5,\"image\":[],\"color\":\"\"},{\"spec_item_id\":241,\"item_name\":\"周六\",\"is_contact\":1,\"sort\":6,\"image\":[],\"color\":\"\"}],\"check_list\":[]}]');
 
---
--- 插入之前先把表清空（truncate） `cs_spec_goods`
---
+DROP TABLE IF EXISTS `{prefix}spec_goods`;
+CREATE TABLE `{prefix}spec_goods` (
+  `goods_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods表',
+  `key_name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '规格键名',
+  `key_value` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '规格值',
+  `price` decimal(10,2) NOT NULL COMMENT '商品价格',
+  `store_qty` int(11) NOT NULL DEFAULT '0' COMMENT '库存数量',
+  `bar_code` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品条码',
+  `goods_sku` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品SKU'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品规格列表';
 
-TRUNCATE TABLE `cs_spec_goods`;
---
--- 转存表中的数据 `cs_spec_goods`
---
-
-INSERT INTO `cs_spec_goods` (`goods_id`, `key_name`, `key_value`, `price`, `store_qty`, `bar_code`, `goods_sku`) VALUES
+INSERT INTO `{prefix}spec_goods` (`goods_id`, `key_name`, `key_value`, `price`, `store_qty`, `bar_code`, `goods_sku`) VALUES
 (202, '149_143', '网络:5G 颜色:黑色', '5400.00', 100, '', ''),
 (202, '149_144', '网络:5G 颜色:白色', '5400.00', 100, '', ''),
 (202, '158_143', '网络:4G 颜色:黑色', '3400.00', 100, '', ''),
@@ -13415,16 +13760,16 @@ INSERT INTO `cs_spec_goods` (`goods_id`, `key_name`, `key_value`, `price`, `stor
 (288, '209_412_413', '颜色:白色 CPU:I7 屏幕:13寸', '18999.00', 9, '', ''),
 (288, '209_412_414', '颜色:白色 CPU:I7 屏幕:15寸', '18999.00', 9, '', '');
 
---
--- 插入之前先把表清空（truncate） `cs_spec_image`
---
+DROP TABLE IF EXISTS `{prefix}spec_image`;
+CREATE TABLE `{prefix}spec_image` (
+  `goods_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应goods表',
+  `spec_item_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应spec_item表',
+  `spec_type` tinyint(1) UNSIGNED NOT NULL COMMENT '1=图片 2=颜色',
+  `image` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '商品规格图片',
+  `color` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '商品规格颜色'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品规格图片';
 
-TRUNCATE TABLE `cs_spec_image`;
---
--- 转存表中的数据 `cs_spec_image`
---
-
-INSERT INTO `cs_spec_image` (`goods_id`, `spec_item_id`, `spec_type`, `image`, `color`) VALUES
+INSERT INTO `{prefix}spec_image` (`goods_id`, `spec_item_id`, `spec_type`, `image`, `color`) VALUES
 (201, 143, 1, '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\"}]', ''),
 (201, 144, 1, '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\"}]', ''),
 (201, 149, 1, '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20190731\\/c6b3cdee-f291-443b-81c5-cd5a8dcbd94d.jpg?type=aliyun\"}]', ''),
@@ -13508,16 +13853,16 @@ INSERT INTO `cs_spec_image` (`goods_id`, `spec_item_id`, `spec_type`, `image`, `
 (288, 411, 1, '[{\"name\":\"O1CN01LqDyEL1hpLsINePCa_!!2863054326.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/97405ac5-3c64-4d48-b3da-238710c7272b.jpg?type=aliyun\"},{\"name\":\"pdf02.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/24a5e752-d51e-448a-8995-353b16d92345.png?type=aliyun\"}]', ''),
 (288, 412, 1, '[{\"name\":\"O1CN01Lm14uN1yXLqqxZuXd_!!0-item_pic.jpg\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/40267cb9-c022-43d8-adf2-77cdc88fa6d0.jpg?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191230\\/40267cb9-c022-43d8-adf2-77cdc88fa6d0.jpg?type=aliyun\"},{\"name\":\"pdf01.png\",\"source\":\"aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\",\"url\":\"\\/\\/aliyun.oss.careyshop.cn\\/uploads\\/files\\/20191112\\/0bc6f961-a07b-45ba-8f75-fc55a1c54d1f.png?type=aliyun\"}]', '');
 
---
--- 插入之前先把表清空（truncate） `cs_spec_item`
---
+DROP TABLE IF EXISTS `{prefix}spec_item`;
+CREATE TABLE `{prefix}spec_item` (
+  `spec_item_id` int(11) UNSIGNED NOT NULL,
+  `spec_id` int(11) UNSIGNED NOT NULL COMMENT '对应spec表',
+  `item_name` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '项名',
+  `is_contact` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否关联 0=否 1=是',
+  `sort` tinyint(3) NOT NULL DEFAULT '50' COMMENT '排序'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品规格项';
 
-TRUNCATE TABLE `cs_spec_item`;
---
--- 转存表中的数据 `cs_spec_item`
---
-
-INSERT INTO `cs_spec_item` (`spec_item_id`, `spec_id`, `item_name`, `is_contact`, `sort`) VALUES
+INSERT INTO `{prefix}spec_item` (`spec_item_id`, `spec_id`, `item_name`, `is_contact`, `sort`) VALUES
 (143, 1, '黑色', 0, 50),
 (144, 1, '白色', 0, 50),
 (149, 3, '5G', 1, 0),
@@ -13640,16 +13985,29 @@ INSERT INTO `cs_spec_item` (`spec_item_id`, `spec_id`, `item_name`, `is_contact`
 (451, 87, '1', 0, 50),
 (452, 87, '2', 0, 50);
 
---
--- 插入之前先把表清空（truncate） `cs_storage`
---
+DROP TABLE IF EXISTS `{prefix}storage`;
+CREATE TABLE `{prefix}storage` (
+  `storage_id` int(11) UNSIGNED NOT NULL,
+  `parent_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父id',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `mime` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'mime',
+  `ext` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '后缀',
+  `size` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '大小',
+  `pixel` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '像素',
+  `hash` char(40) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '哈希值',
+  `path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '路径',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '外链',
+  `protocol` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '协议',
+  `type` tinyint(1) NOT NULL COMMENT '0=图片 1=附件 2=目录 3=视频',
+  `priority` tinyint(1) NOT NULL DEFAULT '1' COMMENT '优先权 0>1',
+  `cover` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '封面',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `is_default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '默认目录 0=否 1=是',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='资源管理器';
 
-TRUNCATE TABLE `cs_storage`;
---
--- 转存表中的数据 `cs_storage`
---
-
-INSERT INTO `cs_storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `size`, `pixel`, `hash`, `path`, `url`, `protocol`, `type`, `priority`, `cover`, `sort`, `is_default`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `size`, `pixel`, `hash`, `path`, `url`, `protocol`, `type`, `priority`, `cover`, `sort`, `is_default`, `create_time`, `update_time`) VALUES
 (3, 0, '视频', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1573547821, 1577461558),
 (4, 3, '视频-有海报', 'video/mp4', 'mp4', 23014356, '[]', '2125298091532905922013119CC3D2E9', 'uploads/files/20191112/291baffc-1309-48a8-8c75-bf6e9140d365.mp4', 'aliyun.oss.careyshop.cn/uploads/files/20191112/291baffc-1309-48a8-8c75-bf6e9140d365.mp4?type=aliyun', 'aliyun', 3, 1, 'aliyun.oss.careyshop.cn/uploads/files/20191112/4850ef5f-3890-4ca4-8fa3-8b5b0087708b.jpg?type=aliyun', 50, 0, 1573547849, 1573547976),
 (5, 0, '海报', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1573547915, 1577461558),
@@ -13797,7 +14155,7 @@ INSERT INTO `cs_storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `siz
 (147, 0, 'flag50.png', 'image/png', 'png', 1699, '{\"width\":40,\"height\":32}', '60F6126390525920D4FF0FA328DECA8C', 'uploads/files/20191112/b08c913b-3ac4-4251-9c60-25fe38e26f49.png', 'aliyun.oss.careyshop.cn/uploads/files/20191112/b08c913b-3ac4-4251-9c60-25fe38e26f49.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172),
 (148, 0, 'imges01.jpg', 'image/jpeg', 'jpg', 41700, '{\"width\":600,\"height\":315}', '0A5ECB247DA3BF18F7A76E8ABB34BE9F', 'uploads/files/20191112/05fc8e5b-8487-4edb-8f95-0164e81f621f.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191112/05fc8e5b-8487-4edb-8f95-0164e81f621f.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172),
 (149, 0, 'gkf-13.jpg', 'image/jpeg', 'jpg', 120851, '{\"width\":1920,\"height\":400}', 'D32D349DD8C2F50B9163B422CC827117', 'uploads/files/20191112/a219bd6b-b969-4d20-8bbb-6739a4214eb6.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191112/a219bd6b-b969-4d20-8bbb-6739a4214eb6.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172);
-INSERT INTO `cs_storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `size`, `pixel`, `hash`, `path`, `url`, `protocol`, `type`, `priority`, `cover`, `sort`, `is_default`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `size`, `pixel`, `hash`, `path`, `url`, `protocol`, `type`, `priority`, `cover`, `sort`, `is_default`, `create_time`, `update_time`) VALUES
 (150, 0, 'imges05.jpg', 'image/jpeg', 'jpg', 21590, '{\"width\":600,\"height\":274}', 'F6BA54F57BBDAABF7DD929959AEB9571', 'uploads/files/20191112/a82a0331-2414-4bc0-82d0-93da28ba55e7.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191112/a82a0331-2414-4bc0-82d0-93da28ba55e7.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172),
 (151, 0, 'imges03.jpg', 'image/jpeg', 'jpg', 70125, '{\"width\":600,\"height\":840}', '72715D0133BA101BBBC4D781A1E39A90', 'uploads/files/20191112/63ee9d1d-5b51-49b4-9231-361e2fe93560.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191112/63ee9d1d-5b51-49b4-9231-361e2fe93560.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172),
 (152, 0, 'imges08.jpg', 'image/jpeg', 'jpg', 25273, '{\"width\":600,\"height\":306}', 'C433DE50969CF74B8691C71B0F506409', 'uploads/files/20191112/8389c66a-a6b9-468d-8a4d-dd73fd6a4579.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191112/8389c66a-a6b9-468d-8a4d-dd73fd6a4579.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172),
@@ -13907,16 +14265,21 @@ INSERT INTO `cs_storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `siz
 (745, 0, '方形LOGO', 'image/png', 'png', 44040, '{\"width\":500,\"height\":500}', '3C637EA448623591B2A7649CC607F0D8', 'uploads/files/20200403/8b85fe59-7481-48dc-82ef-592d281b7d4b.png', 'aliyun.oss.careyshop.cn/uploads/files/20200403/8b85fe59-7481-48dc-82ef-592d281b7d4b.png?type=aliyun&rand=759369279', 'aliyun', 0, 1, '', 50, 0, 1585927764, 1586015200),
 (746, 0, '默认目录', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 1, 1573547791, 1577461558);
 
---
--- 插入之前先把表清空（truncate） `cs_storage_style`
---
+DROP TABLE IF EXISTS `{prefix}storage_style`;
+CREATE TABLE `{prefix}storage_style` (
+  `storage_style_id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+  `code` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '编码',
+  `platform` tinyint(3) NOT NULL COMMENT '平台(自定义)',
+  `scale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '缩放规格',
+  `resize` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '缩放方式',
+  `quality` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '图片质量',
+  `suffix` varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '输出格式',
+  `style` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '第三方样式',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='资源样式';
 
-TRUNCATE TABLE `cs_storage_style`;
---
--- 转存表中的数据 `cs_storage_style`
---
-
-INSERT INTO `cs_storage_style` (`storage_style_id`, `name`, `code`, `platform`, `scale`, `resize`, `quality`, `suffix`, `style`, `status`) VALUES
+INSERT INTO `{prefix}storage_style` (`storage_style_id`, `name`, `code`, `platform`, `scale`, `resize`, `quality`, `suffix`, `style`, `status`) VALUES
 (1, '正文内容图片 790*0', 'inside_content', 0, '{\"pc\":{\"size\":[790,0],\"crop\":[0,0],\"slider\":0,\"order\":true},\"mobile\":{\"size\":[480,0],\"crop\":[0,0],\"slider\":0,\"order\":true}}', 'scaling', 100, '', '', 1),
 (2, '文章列表封面 150*0', 'article_lists', 0, '{\"pc\":{\"size\":[150,0],\"crop\":[0,0],\"slider\":0,\"order\":true},\"mobile\":{\"size\":[150,0],\"crop\":[0,0],\"slider\":0,\"order\":true}}', 'scaling', 100, '', '', 1),
 (3, '资源管理列表 158*158', 'storage_lists', 0, '{\"pc\":{\"size\":[158,158],\"crop\":[0,0],\"slider\":0,\"order\":true},\"mobile\":{\"size\":[158,158],\"crop\":[0,0],\"slider\":0,\"order\":true}}', 'scaling', 100, '', '', 1),
@@ -13930,16 +14293,17 @@ INSERT INTO `cs_storage_style` (`storage_style_id`, `name`, `code`, `platform`, 
 (12, '商品缩略图 480*480', 'goods_image_x480', 0, '{\"pc\":{\"size\":[480,480],\"crop\":[0,0],\"slider\":0,\"order\":true},\"mobile\":{\"size\":[480,480],\"crop\":[0,0],\"slider\":0,\"order\":true}}', 'scaling', 100, '', '', 1),
 (13, '商品缩略图 800*800', 'goods_image_x800', 0, '{\"pc\":{\"size\":[800,800],\"crop\":[0,0],\"slider\":0,\"order\":true},\"mobile\":{\"size\":[800,800],\"crop\":[0,0],\"slider\":0,\"order\":true}}', 'scaling', 100, '', '', 1);
 
---
--- 插入之前先把表清空（truncate） `cs_support`
---
+DROP TABLE IF EXISTS `{prefix}support`;
+CREATE TABLE `{prefix}support` (
+  `support_id` smallint(5) UNSIGNED NOT NULL,
+  `type_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '客服组名称',
+  `nick_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '昵称',
+  `code` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '联系方式',
+  `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='客服';
 
-TRUNCATE TABLE `cs_support`;
---
--- 转存表中的数据 `cs_support`
---
-
-INSERT INTO `cs_support` (`support_id`, `type_name`, `nick_name`, `code`, `sort`, `status`) VALUES
+INSERT INTO `{prefix}support` (`support_id`, `type_name`, `nick_name`, `code`, `sort`, `status`) VALUES
 (1, '咨询客服', '小雅', '252404501', 50, 1),
 (2, '咨询客服', '小薇', 'http://www.careyshop.cn', 39, 1),
 (3, '售后服务', '小芳', '45980388', 50, 0),
@@ -13947,21 +14311,38 @@ INSERT INTO `cs_support` (`support_id`, `type_name`, `nick_name`, `code`, `sort`
 (5, '大客户专员', '犬牙', 'www', 50, 0),
 (6, '小可爱', '小宝小朋友', '8358400', 0, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_token`
---
+DROP TABLE IF EXISTS `{prefix}token`;
+CREATE TABLE `{prefix}token` (
+  `token_id` int(11) UNSIGNED NOT NULL,
+  `client_id` int(11) UNSIGNED NOT NULL COMMENT '编号',
+  `group_id` mediumint(8) UNSIGNED NOT NULL COMMENT '用户组Id',
+  `username` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号',
+  `client_type` tinyint(1) UNSIGNED NOT NULL COMMENT '0=顾客 1=管理组',
+  `platform` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '来源终端',
+  `code` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '随机密钥',
+  `token` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '授权码',
+  `token_expires` int(11) NOT NULL COMMENT '授权码过期时间',
+  `refresh` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '刷新授权码',
+  `refresh_expires` int(11) NOT NULL COMMENT '刷新授权码过期时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='token';
 
-TRUNCATE TABLE `cs_token`;
---
--- 插入之前先把表清空（truncate） `cs_topic`
---
+INSERT INTO `{prefix}token` (`token_id`, `client_id`, `group_id`, `username`, `client_type`, `platform`, `code`, `token`, `token_expires`, `refresh`, `refresh_expires`) VALUES
+(1, 1, 1, 'admin', 1, 'admin', '3804e7052d6b7822b760ebc90a1570c7', '0b9d38c2c608bc8a831ec8a9c6234e41', 1591925247, '21e37859277a69d26881c90cffc921a7', 1592011647);
 
-TRUNCATE TABLE `cs_topic`;
---
--- 转存表中的数据 `cs_topic`
---
+DROP TABLE IF EXISTS `{prefix}topic`;
+CREATE TABLE `{prefix}topic` (
+  `topic_id` int(11) UNSIGNED NOT NULL,
+  `title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
+  `alias` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '别名',
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '内容',
+  `keywords` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '关键词',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='专题';
 
-INSERT INTO `cs_topic` (`topic_id`, `title`, `alias`, `content`, `keywords`, `description`, `status`, `create_time`, `update_time`) VALUES
+INSERT INTO `{prefix}topic` (`topic_id`, `title`, `alias`, `content`, `keywords`, `description`, `status`, `create_time`, `update_time`) VALUES
 (37, '专题A专题A专题A专题A专题A专题A专题A专题A专题A专题A专题A专题A专题A专题A', '别名别名别名别名别名别名别名别名别名别名', '内容', '关键词', '描述', 1, 1549958573, 1549958573),
 (38, '专题B专题B专题B专题B专题B专题B专题B专题B专题B专题B专题B专题B专题B专题B', '别名别名别名别名别名别名别名别名别名别名', '内容', '关键词', '描述', 0, 1549958573, 1549958573),
 (39, '专题A专题A专题A专题A专题A专题A专题A专题A专题A专题A专题A专题A专题A专题A', '别名别名别名别名别名别名别名别名别名别名', '内容', '关键词', '描述', 1, 1549958573, 1549958573),
@@ -14065,16 +14446,24 @@ INSERT INTO `cs_topic` (`topic_id`, `title`, `alias`, `content`, `keywords`, `de
 (223, 'BBB', 'CCC', '<p><a href=\"//careyshop.oruei.com/api/v1/storage/method/get.storage.download/code/article_content?url=careyshop.oruei.com/uploads/files/20190214/968f0c3ae0d65f8228d6e27ef5f1be01.txt?type=careyshop&amp;filename=666.txt\">附件：666.txt</a></p>', '', '', 1, 1550122443, 1583828522),
 (224, 'DDD', 'ddd', '...mapActions(\'careyshop/update\', [<br />\'updateChange\'<br />]),4444445555555777777', '123', '456', 0, 1550122452, 1556458876);
 
---
--- 插入之前先把表清空（truncate） `cs_transaction`
---
+DROP TABLE IF EXISTS `{prefix}transaction`;
+CREATE TABLE `{prefix}transaction` (
+  `transaction_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED DEFAULT '0' COMMENT '对应user表',
+  `action` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '操作者',
+  `type` tinyint(1) NOT NULL COMMENT '0=收入 1=支出',
+  `amount` decimal(10,2) NOT NULL COMMENT '交易金额',
+  `balance` decimal(10,2) NOT NULL COMMENT '剩余余额',
+  `source_no` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '来源订单号',
+  `remark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `cause` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '原因',
+  `module` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'points=积分 money=余额 card=购物卡',
+  `to_payment` tinyint(1) NOT NULL COMMENT '支付方式',
+  `card_number` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '购物卡卡号',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='交易结算日志';
 
-TRUNCATE TABLE `cs_transaction`;
---
--- 转存表中的数据 `cs_transaction`
---
-
-INSERT INTO `cs_transaction` (`transaction_id`, `user_id`, `action`, `type`, `amount`, `balance`, `source_no`, `remark`, `cause`, `module`, `to_payment`, `card_number`, `create_time`) VALUES
+INSERT INTO `{prefix}transaction` (`transaction_id`, `user_id`, `action`, `type`, `amount`, `balance`, `source_no`, `remark`, `cause`, `module`, `to_payment`, `card_number`, `create_time`) VALUES
 (1, 1, 'Carey', 0, '694.89', '101682.60', 'PO_I1049550470892680001', '取消订单', '', 'money', 0, '', 1515050273),
 (2, 1, 'Carey', 0, '1001.00', '22258382.00', 'PO_I1049550470892680001', '取消订单', '', 'points', 0, '', 1515050273),
 (3, 1, 'Carey', 0, '780.00', '31367.01', 'PO_I1049550470892680001', '取消订单', '', 'card', 5, '9971564621172962', 1515050273),
@@ -14372,26 +14761,42 @@ INSERT INTO `cs_transaction` (`transaction_id`, `user_id`, `action`, `type`, `am
 (315, 1, 'CareyShop', 1, '100.00', '500.00', 'PO_A4171039000700310001', '创建订单', '', 'points', 0, '', 1587110390),
 (316, 1, 'admin', 1, '100.00', '400.00', 'SH_A4213550720400230028', '退回赠送', '', 'points', 0, '', 1587992724);
 
---
--- 插入之前先把表清空（truncate） `cs_user`
---
+DROP TABLE IF EXISTS `{prefix}user`;
+CREATE TABLE `{prefix}user` (
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `username` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号',
+  `password` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码',
+  `mobile` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '手机',
+  `is_mobile` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否验证 0=否 1=是',
+  `email` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '邮箱',
+  `is_email` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否验证 0=否 1=是',
+  `nickname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '昵称',
+  `head_pic` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '头像',
+  `sex` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=保密 1=男 2=女',
+  `birthday` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '生日',
+  `level_icon` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '等级图标',
+  `user_level_id` int(11) UNSIGNED NOT NULL DEFAULT '1' COMMENT '对应user_level表',
+  `user_address_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user_address表',
+  `group_id` mediumint(8) UNSIGNED NOT NULL COMMENT '用户组Id',
+  `last_login` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录日期',
+  `last_ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '最后登录ip',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='顾客组账号';
 
-TRUNCATE TABLE `cs_user`;
---
--- 转存表中的数据 `cs_user`
---
-
-INSERT INTO `cs_user` (`user_id`, `username`, `password`, `mobile`, `is_mobile`, `email`, `is_email`, `nickname`, `head_pic`, `sex`, `birthday`, `level_icon`, `user_level_id`, `user_address_id`, `group_id`, `last_login`, `last_ip`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
-(1, 'dnyz123', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430425', 0, '', 0, 'CareyShop', 'careyshop.oruei.com/uploads/files/20190703/8aa5ca5886378861f768219c8539a20b.jpg?type=careyshop', 1, '1997-11-20', 'http://aliyun.oss.careyshop.cn/会员等级/level5.png?type=aliyun', 5, 10, 3, 1501751876, '127.0.0.1', 1, 0, 1490945016, 1565231779),
+INSERT INTO `{prefix}user` (`user_id`, `username`, `password`, `mobile`, `is_mobile`, `email`, `is_email`, `nickname`, `head_pic`, `sex`, `birthday`, `level_icon`, `user_level_id`, `user_address_id`, `group_id`, `last_login`, `last_ip`, `status`, `is_delete`, `create_time`, `update_time`) VALUES
+(1, 'dnyz520', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430425', 0, '', 0, 'CareyShop', 'careyshop.oruei.com/uploads/files/20190703/8aa5ca5886378861f768219c8539a20b.jpg?type=careyshop', 1, '1997-11-20', 'http://aliyun.oss.careyshop.cn/会员等级/level5.png?type=aliyun', 5, 10, 3, 1501751876, '127.0.0.1', 1, 0, 1490945016, 1565231779),
 (5, 'dnyz521', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430425', 0, '', 0, '思维空间', '', 0, '0000-00-00', 'http://aliyun.oss.careyshop.cn/会员等级/level2.png?type=aliyun', 2, 0, 3, 1501741634, '127.0.0.1', 1, 1, 1490945016, 1565231779),
 (6, 'dnyz522', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430425', 0, '', 0, '思维空间', '', 0, '0000-00-00', 'http://aliyun.oss.careyshop.cn/会员等级/level2.png?type=aliyun', 2, 0, 3, 1490977294, '', 1, 1, 1490945016, 1565231779),
-(7, 'dnyz123_A', '1729c0c36d336144af763b6889057409', '15867430421', 0, '', 0, '', '', 0, '1986-11-26', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 1, 0, 3, 0, '', 1, 1, 1496913131, 1565231646),
+(7, 'dnyz520_A', '1729c0c36d336144af763b6889057409', '15867430421', 0, '', 0, '', '', 0, '1986-11-26', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 1, 0, 3, 0, '', 1, 1, 1496913131, 1565231646),
 (8, 'test', '1729c0c36d336144af763b6889057409', '15867430435', 1, '', 0, '', '', 0, '', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 1, 0, 3, 0, '', 1, 1, 0, 1565231646),
 (9, 'test123', '1729c0c36d336144af763b6889057409', '15867430436', 1, '', 0, '', '', 0, '', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 1, 0, 3, 0, '', 1, 0, 0, 1565231646),
 (10, 'test1234', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430437', 1, '', 0, '', '', 0, '', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 1, 0, 3, 0, '', 1, 0, 0, 1565231646),
 (11, 'test1235', 'c2ae5ecbc528042b647338de295dba83', '15867430438', 1, '', 0, '', '', 0, '', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 1, 0, 3, 1501683244, '127.0.0.1', 0, 0, 0, 1565231646),
-(12, 'dnyz123666', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430654', 1, '', 0, '', '', 0, '', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 1, 0, 3, 0, '', 1, 0, 0, 1565231646),
-(16, 'dnyz123888', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430655', 1, '', 0, '', '', 0, '', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 1, 0, 3, 0, '', 1, 0, 0, 1565231646),
+(12, 'Dnyz520666', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430654', 1, '', 0, '', '', 0, '', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 1, 0, 3, 0, '', 1, 0, 0, 1565231646),
+(16, 'Dnyz520888', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430655', 1, '', 0, '', '', 0, '', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 1, 0, 3, 0, '', 1, 0, 0, 1565231646),
 (17, 'carey', 'c2ae5ecbc528042b647338de295dba83', '13071297155', 0, '', 0, 'carey', 'careyshop.oruei.com/uploads/files/20190625/c00b7c190e1508c0f97567a97599bee1.jpg?type=careyshop', 1, '1997-11-20', 'http://aliyun.oss.careyshop.cn/会员等级/level6.png?type=aliyun', 6, 0, 3, 0, '', 0, 1, 1524460342, 1571105834),
 (18, 'dnyz251', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430425', 0, '', 0, 'careya', '//host/head_pic.jpg', 1, '1997-11-20', 'http://aliyun.oss.careyshop.cn/会员等级/level2.png?type=aliyun', 2, 0, 3, 1501751876, '127.0.0.1', 0, 0, 1490945016, 1565231779),
 (19, 'dnyz252', 'ab412677a10a7f9d7d34c67937bf5c1e', '15867430425', 0, '', 0, '思维空间', '', 0, '0000-00-00', 'http://aliyun.oss.careyshop.cn/会员等级/level2.png?type=aliyun', 2, 0, 3, 1501741634, '127.0.0.1', 1, 1, 1490945016, 1565231779),
@@ -14455,69 +14860,76 @@ INSERT INTO `cs_user` (`user_id`, `username`, `password`, `mobile`, `is_mobile`,
 (83, 'admin4', 'a3f503f93e25cbcad633b1bd25854740', '131111111', 0, '', 0, '', '', 0, '', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 1, 0, 7, 0, '', 1, 1, 1561684715, 1565231646),
 (84, 'dnyz262', 'c2ae5ecbc528042b647338de295dba83', '13777090809', 0, '', 0, '', '', 0, '', 'http://aliyun.oss.careyshop.cn/会员等级/level5.png?type=aliyun', 1, 0, 3, 0, '', 1, 1, 1565228865, 1565231646);
 
---
--- 插入之前先把表清空（truncate） `cs_user_address`
---
+DROP TABLE IF EXISTS `{prefix}user_address`;
+CREATE TABLE `{prefix}user_address` (
+  `user_address_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `consignee` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '姓名',
+  `country` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '国家',
+  `region_list` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '区域列表',
+  `region` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '所在地区',
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '详细地址',
+  `zipcode` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '邮编',
+  `tel` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '电话',
+  `mobile` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '手机号码',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='账号收货地址';
 
-TRUNCATE TABLE `cs_user_address`;
---
--- 转存表中的数据 `cs_user_address`
---
-
-INSERT INTO `cs_user_address` (`user_address_id`, `user_id`, `consignee`, `country`, `region_list`, `region`, `address`, `zipcode`, `tel`, `mobile`, `is_delete`) VALUES
-(3, 72, '张三3', 0, '', '澳门 澳门半岛 江东区', '江北万达商务楼', '315000', '87487585', '13777090314', 1),
-(4, 1, '张三No', 0, '', '', '江北区', '', '', '15867430425', 1),
-(5, 1, '张三B', 0, '', '', '江北区', '', '', '', 1),
-(6, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 1),
+INSERT INTO `{prefix}user_address` (`user_address_id`, `user_id`, `consignee`, `country`, `region_list`, `region`, `address`, `zipcode`, `tel`, `mobile`, `is_delete`) VALUES
+(3, 72, '赵晓明3', 0, '', '澳门 澳门半岛 江东区', '江北万达商务楼', '315000', '87487585', '13777090314', 1),
+(4, 1, '赵晓明No', 0, '', '', '江北区', '', '', '15867430425', 1),
+(5, 1, '赵晓明B', 0, '', '', '江北区', '', '', '', 1),
+(6, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 1),
 (7, 72, 'A', 0, '', '吉林 四平市 梨树县', 'B', '315000', 'D', '15867430421', 1),
-(8, 72, '张三Yes', 0, '', '', '江北区', '', '', '15867430425', 1),
+(8, 72, '赵晓明Yes', 0, '', '', '江北区', '', '', '15867430425', 1),
 (9, 72, 'B', 0, '', '河北 石家庄市 井陉矿区', 'CCC', '315111', '123456', '15867430425', 1),
-(10, 1, '张三', 0, '', '浙江 宁波市 江北区', '江北区', '', '', '15867430425', 0),
-(11, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(12, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(13, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(14, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(15, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(16, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(17, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(18, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 1),
-(19, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(20, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(21, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(22, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(23, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(24, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(25, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(26, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(27, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(28, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(29, 1, '张三', 0, '', '', '江北区', '', '', '15867430425', 0),
-(30, 72, '张三yes', 0, '', '湖北 武汉市 武昌区', '江北区江北区江北区江北区', '', '', '15867430425', 1),
+(10, 1, '赵晓明', 0, '', '浙江 宁波市 江北区', '江北区', '', '', '15867430425', 0),
+(11, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(12, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(13, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(14, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(15, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(16, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(17, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(18, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 1),
+(19, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(20, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(21, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(22, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(23, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(24, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(25, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(26, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(27, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(28, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(29, 1, '赵晓明', 0, '', '', '江北区', '', '', '15867430425', 0),
+(30, 72, '赵晓明yes', 0, '', '湖北 武汉市 武昌区', '江北区江北区江北区江北区', '', '', '15867430425', 1),
 (31, 72, 'aaaaaaaaa', 0, '', '上海 上海市 黄浦区', 'aaaaaaaaaaa', '', '', '137777777', 1),
 (32, 72, 'aaaaaaaa', 0, '', '天津 天津市 和平区', 'bbbbbbbbbb', '2222222', '1111111111', '131111111111', 1),
 (33, 72, 'bbbbbbbbbb', 0, '', '重庆 重庆市 大渡口区', 'cccccccccc', '', '', '131111111111', 1),
 (34, 72, '思维', 0, '[12,124,1376]', '浙江 宁波市 海曙区', '江北万达', '315000', '0574-87487585', '13777090215', 0),
-(35, 72, '思维', 0, '', '黑龙江 齐齐哈尔市 富拉尔基区', '钱湖北路北区22幢92号606室', '315000', '', '13071297155', 1),
-(36, 72, '张三', 0, '[35,400]', '澳门 澳门半岛', '世纪大道华东成1号楼', '', '', '137777111', 0),
+(35, 72, '思维', 0, '', '黑龙江 齐齐哈尔市 富拉尔基区', '广厦怡庭北区22幢92号606室', '315000', '', '13071297155', 1),
+(36, 72, '张三', 0, '[35,401]', '澳门 离岛', '世纪大道华东成1号楼', '', '', '137777111', 0),
 (37, 72, '李四', 0, '[4080,4081]', '钓鱼岛 钓鱼岛', '选中的数据过滤项，如果需要自定义表头过滤的渲染方式，可能会需要此属性。', '', '', '13111111', 0),
 (38, 72, 'AAA', 0, '', '上海 上海市 卢湾区', 'BBB', '', '', '1311111', 1),
 (39, 72, 'CCC', 0, '', '天津 天津市 河东区', 'DDD', '', '', '1344444', 1),
 (40, 72, '55555', 0, '', '重庆 重庆市 大渡口区', '44444', '100000', '222222', '3333333', 1),
-(41, 72, '张三', 0, '', '澳门 澳门半岛', '详细地址', '', '', '15867430425', 1),
-(42, 72, '张三', 0, '', '澳门 澳门半岛', '详细地址', '', '', '15867430425', 1),
+(41, 72, '赵晓明', 0, '', '澳门 澳门半岛', '详细地址', '', '', '15867430425', 1),
+(42, 72, '赵晓明', 0, '', '澳门 澳门半岛', '详细地址', '', '', '15867430425', 1),
 (48, 1, '赵四', 0, '', '浙江 宁波市 江北区', 'address', '', '', '15867430425', 0),
 (49, 72, '王五', 0, '[12,124,4044]', '浙江 宁波市 江北区', '详细地址', '', '', '15867430425', 0);
 
---
--- 插入之前先把表清空（truncate） `cs_user_level`
---
+DROP TABLE IF EXISTS `{prefix}user_level`;
+CREATE TABLE `{prefix}user_level` (
+  `user_level_id` smallint(5) UNSIGNED NOT NULL,
+  `name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '等级名称',
+  `icon` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '图标',
+  `amount` decimal(10,2) NOT NULL COMMENT '消费金额',
+  `discount` tinyint(3) NOT NULL COMMENT '折扣',
+  `description` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '等级描述'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='账号等级';
 
-TRUNCATE TABLE `cs_user_level`;
---
--- 转存表中的数据 `cs_user_level`
---
-
-INSERT INTO `cs_user_level` (`user_level_id`, `name`, `icon`, `amount`, `discount`, `description`) VALUES
+INSERT INTO `{prefix}user_level` (`user_level_id`, `name`, `icon`, `amount`, `discount`, `description`) VALUES
 (1, '青铜会员', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', '0.00', 100, '青铜会员'),
 (2, '白银会员', 'http://aliyun.oss.careyshop.cn/会员等级/level2.png?type=aliyun', '10000.00', 98, '白银会员累计消费满10000，全场享9.8折优惠'),
 (3, '黄金会员', 'http://aliyun.oss.careyshop.cn/会员等级/level3.png?type=aliyun', '30000.00', 95, '黄金会员累计消费满30000，全场享9.5折优惠'),
@@ -14525,16 +14937,18 @@ INSERT INTO `cs_user_level` (`user_level_id`, `name`, `icon`, `amount`, `discoun
 (5, '钻石会员', 'http://aliyun.oss.careyshop.cn/会员等级/level5.png?type=aliyun', '100000.00', 90, '钻石会员累计消费满100000，全场享9折优惠'),
 (6, '至尊 VIP', 'http://aliyun.oss.careyshop.cn/会员等级/level6.png?type=aliyun', '200000.00', 88, '至尊VIP累计消费满200000，全场享8.8折优惠');
 
---
--- 插入之前先把表清空（truncate） `cs_user_money`
---
+DROP TABLE IF EXISTS `{prefix}user_money`;
+CREATE TABLE `{prefix}user_money` (
+  `user_money_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `total_money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '累计消费',
+  `balance` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '可用余额',
+  `lock_balance` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '锁定余额',
+  `points` int(11) NOT NULL DEFAULT '0' COMMENT '账号积分',
+  `lock_points` int(11) NOT NULL DEFAULT '0' COMMENT '锁定积分'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='账号资金表';
 
-TRUNCATE TABLE `cs_user_money`;
---
--- 转存表中的数据 `cs_user_money`
---
-
-INSERT INTO `cs_user_money` (`user_money_id`, `user_id`, `total_money`, `balance`, `lock_balance`, `points`, `lock_points`) VALUES
+INSERT INTO `{prefix}user_money` (`user_money_id`, `user_id`, `total_money`, `balance`, `lock_balance`, `points`, `lock_points`) VALUES
 (1, 1, '182391.72', '898024.68', '445.15', 400, 0),
 (2, 73, '0.00', '0.00', '0.00', 0, 0),
 (3, 74, '0.00', '0.00', '0.00', 0, 0),
@@ -14550,61 +14964,707 @@ INSERT INTO `cs_user_money` (`user_money_id`, `user_id`, `total_money`, `balance
 (13, 83, '0.00', '0.00', '0.00', 0, 0),
 (14, 84, '0.00', '0.00', '0.00', 0, 0);
 
---
--- 插入之前先把表清空（truncate） `cs_verification`
---
+DROP TABLE IF EXISTS `{prefix}verification`;
+CREATE TABLE `{prefix}verification` (
+  `verification_id` int(11) UNSIGNED NOT NULL,
+  `number` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '号码',
+  `code` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '验证码',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=无效 1=有效',
+  `type` enum('sms','email') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '类型',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='验证码';
 
-TRUNCATE TABLE `cs_verification`;
---
--- 转存表中的数据 `cs_verification`
---
-
-INSERT INTO `cs_verification` (`verification_id`, `number`, `code`, `status`, `type`, `create_time`) VALUES
+INSERT INTO `{prefix}verification` (`verification_id`, `number`, `code`, `status`, `type`, `create_time`) VALUES
 (1, '13071297155', '666666', 0, 'sms', 1561538521),
 (2, 'dnyz261@126.com', '888888', 0, 'email', 1561538521),
 (3, '15867430425', '571422', 1, 'sms', 1587953305);
 
---
--- 插入之前先把表清空（truncate） `cs_withdraw`
---
+DROP TABLE IF EXISTS `{prefix}withdraw`;
+CREATE TABLE `{prefix}withdraw` (
+  `withdraw_id` int(11) UNSIGNED NOT NULL,
+  `withdraw_no` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '提现单号',
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '收款人姓名',
+  `mobile` varchar(12) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '收款人手机',
+  `bank_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '收款账户',
+  `account` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '收款账号',
+  `money` decimal(10,2) NOT NULL COMMENT '提现金额',
+  `fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '手续费(百分比)',
+  `amount` decimal(10,2) NOT NULL COMMENT '合计金额',
+  `remark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=待处理 1=处理中 2=已取消 3=已完成 4=已拒绝',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建日期',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='提现申请';
 
-TRUNCATE TABLE `cs_withdraw`;
---
--- 转存表中的数据 `cs_withdraw`
---
+INSERT INTO `{prefix}withdraw` (`withdraw_id`, `withdraw_no`, `user_id`, `name`, `mobile`, `bank_name`, `account`, `money`, `fee`, `amount`, `remark`, `status`, `create_time`, `update_time`) VALUES
+(1, 'TX_H6238358225052790001', 1, '赵晓明', '15867430425', '支付宝', 'dnyz520@163.com', '100.00', '0.00', '100.00', '', 2, 1498183582, 1498183761),
+(2, 'TX_H6238479678832110001', 1, '赵晓明', '15867430425', '支付宝', 'dnyz520@163.com', '99.99', '0.00', '99.99', '备注', 3, 1498184796, 1498206529),
+(4, 'TX_H6238547918993630001', 1, '赵晓明', '15867430425', '支付宝', 'dnyz520@163.com', '99.99', '6.00', '105.99', '账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整', 4, 1498185479, 1498209124),
+(5, 'TX_H6300542394601500001', 1, '赵晓明', '15867430425', '支付宝', 'dnyz520@163.com', '104.50', '6.00', '110.77', '提现完成备注测试', 3, 1498805424, 1561345801),
+(6, 'TX_H6300543145824740001', 1, '赵晓明', '15867430425', '支付宝', 'dnyz520@163.com', '104.50', '6.00', '110.77', '账号不正确', 1, 1498805431, 1561345837),
+(7, 'TX_H6300543945944240001', 1, '赵晓明', '15867430425', '支付宝', 'dnyz520@163.com', '104.50', '6.00', '110.77', 'ok', 0, 1498805439, 1561345860),
+(8, 'TX_H6300544085683450001', 1, '赵晓明', '15867430425', '支付宝', 'dnyz520@163.com', '104.50', '6.00', '110.77', 'ok', 0, 1498805440, 1561354718),
+(9, 'TX_H6300544219265430001', 1, '赵晓明', '15867430425', '支付宝', 'dnyz520@163.com', '104.50', '6.00', '110.77', 'value', 0, 1498805442, 1561345925),
+(10, 'TX_H6300544401461660001', 1, '赵晓明', '15867430425', '支付宝', 'dnyz520@163.com', '104.50', '6.00', '110.77', '', 0, 1498805444, 1561347165),
+(12, 'TX_H7079689041181850001', 1, '赵晓明', '15867430425', '支付宝', 'dnyz520@163.com', '0.03', '6.00', '0.03', '', 0, 1499396890, 1499396890);
 
-INSERT INTO `cs_withdraw` (`withdraw_id`, `withdraw_no`, `user_id`, `name`, `mobile`, `bank_name`, `account`, `money`, `fee`, `amount`, `remark`, `status`, `create_time`, `update_time`) VALUES
-(1, 'TX_H6238358225052790001', 1, '张三', '15867430425', '支付宝', 'dnyz123@163.com', '100.00', '0.00', '100.00', '', 2, 1498183582, 1498183761),
-(2, 'TX_H6238479678832110001', 1, '张三', '15867430425', '支付宝', 'dnyz123@163.com', '99.99', '0.00', '99.99', '备注', 3, 1498184796, 1498206529),
-(4, 'TX_H6238547918993630001', 1, '张三', '15867430425', '支付宝', 'dnyz123@163.com', '99.99', '6.00', '105.99', '账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整账号不完整', 4, 1498185479, 1498209124),
-(5, 'TX_H6300542394601500001', 1, '张三', '15867430425', '支付宝', 'dnyz123@163.com', '104.50', '6.00', '110.77', '提现完成备注测试', 3, 1498805424, 1561345801),
-(6, 'TX_H6300543145824740001', 1, '张三', '15867430425', '支付宝', 'dnyz123@163.com', '104.50', '6.00', '110.77', '账号不正确', 1, 1498805431, 1561345837),
-(7, 'TX_H6300543945944240001', 1, '张三', '15867430425', '支付宝', 'dnyz123@163.com', '104.50', '6.00', '110.77', 'ok', 0, 1498805439, 1561345860),
-(8, 'TX_H6300544085683450001', 1, '张三', '15867430425', '支付宝', 'dnyz123@163.com', '104.50', '6.00', '110.77', 'ok', 0, 1498805440, 1561354718),
-(9, 'TX_H6300544219265430001', 1, '张三', '15867430425', '支付宝', 'dnyz123@163.com', '104.50', '6.00', '110.77', 'value', 0, 1498805442, 1561345925),
-(10, 'TX_H6300544401461660001', 1, '张三', '15867430425', '支付宝', 'dnyz123@163.com', '104.50', '6.00', '110.77', '', 0, 1498805444, 1561347165),
-(12, 'TX_H7079689041181850001', 1, '张三', '15867430425', '支付宝', 'dnyz123@163.com', '0.03', '6.00', '0.03', '', 0, 1499396890, 1499396890);
+DROP TABLE IF EXISTS `{prefix}withdraw_user`;
+CREATE TABLE `{prefix}withdraw_user` (
+  `withdraw_user_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '对应user表',
+  `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '收款人姓名',
+  `mobile` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '收款人手机',
+  `bank_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '收款账户',
+  `account` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '收款账号',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='提现账号';
 
---
--- 插入之前先把表清空（truncate） `cs_withdraw_user`
---
-
-TRUNCATE TABLE `cs_withdraw_user`;
---
--- 转存表中的数据 `cs_withdraw_user`
---
-
-INSERT INTO `cs_withdraw_user` (`withdraw_user_id`, `user_id`, `name`, `mobile`, `bank_name`, `account`, `is_delete`) VALUES
-(1, 1, '张三', '15867430425', '支付宝', 'dnyz123@163.com', 0),
-(2, 1, '张四', '15867430425', '支付宝', 'dnyz123@126.com', 1),
-(3, 2, '张四', '15867430425', '支付宝', 'dnyz123@126.com', 0),
+INSERT INTO `{prefix}withdraw_user` (`withdraw_user_id`, `user_id`, `name`, `mobile`, `bank_name`, `account`, `is_delete`) VALUES
+(1, 1, '赵晓明', '15867430425', '支付宝', 'dnyz520@163.com', 0),
+(2, 1, '赵楷瑞', '15867430425', '支付宝', 'dnyz520@126.com', 1),
+(3, 2, '赵楷瑞', '15867430425', '支付宝', 'dnyz520@126.com', 0),
 (4, 1, '1', '22222222', '3', '4', 0),
 (5, 72, '101', '22222222301', '301', '401', 0),
 (6, 72, '2', '2222224444', '3', '4', 1),
 (7, 72, '333', '33333333', '3', '3', 0),
 (8, 72, 'A1', '1311111', 'B2', 'C3', 0);
-COMMIT;
 
+
+ALTER TABLE `{prefix}action_log`
+  ADD PRIMARY KEY (`action_log_id`),
+  ADD KEY `client_type` (`client_type`),
+  ADD KEY `path` (`path`),
+  ADD KEY `status` (`status`);
+
+ALTER TABLE `{prefix}admin`
+  ADD PRIMARY KEY (`admin_id`),
+  ADD KEY `username` (`username`),
+  ADD KEY `status` (`status`),
+  ADD KEY `is_delete` (`is_delete`),
+  ADD KEY `nickname` (`nickname`),
+  ADD KEY `group_id` (`group_id`);
+
+ALTER TABLE `{prefix}ads`
+  ADD PRIMARY KEY (`ads_id`),
+  ADD KEY `ads_position_id` (`ads_position_id`),
+  ADD KEY `start_time` (`begin_time`),
+  ADD KEY `end_time` (`end_time`),
+  ADD KEY `sort` (`sort`),
+  ADD KEY `status` (`status`) USING BTREE,
+  ADD KEY `code` (`code`),
+  ADD KEY `platform` (`platform`);
+
+ALTER TABLE `{prefix}ads_position`
+  ADD PRIMARY KEY (`ads_position_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `name` (`name`) USING BTREE,
+  ADD KEY `code` (`code`),
+  ADD KEY `platform` (`platform`);
+
+ALTER TABLE `{prefix}app`
+  ADD PRIMARY KEY (`app_id`),
+  ADD KEY `app_key` (`app_key`),
+  ADD KEY `status` (`status`),
+  ADD KEY `is_delete` (`is_delete`);
+
+ALTER TABLE `{prefix}app_install`
+  ADD PRIMARY KEY (`app_install_id`),
+  ADD KEY `user_agent` (`user_agent`),
+  ADD KEY `name` (`name`);
+
+ALTER TABLE `{prefix}article`
+  ADD PRIMARY KEY (`article_id`),
+  ADD KEY `article_cat_id` (`article_cat_id`),
+  ADD KEY `is_top` (`is_top`),
+  ADD KEY `status` (`status`) USING BTREE;
+
+ALTER TABLE `{prefix}article_cat`
+  ADD PRIMARY KEY (`article_cat_id`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `cat_type` (`cat_type`),
+  ADD KEY `sort` (`sort`),
+  ADD KEY `is_navi` (`is_navi`) USING BTREE;
+
+ALTER TABLE `{prefix}ask`
+  ADD PRIMARY KEY (`ask_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `ask_type` (`ask_type`) USING BTREE,
+  ADD KEY `is_delete` (`is_delete`);
+
+ALTER TABLE `{prefix}auth_group`
+  ADD PRIMARY KEY (`group_id`),
+  ADD KEY `sort` (`sort`),
+  ADD KEY `status` (`status`);
+
+ALTER TABLE `{prefix}auth_rule`
+  ADD PRIMARY KEY (`rule_id`),
+  ADD KEY `module` (`module`),
+  ADD KEY `status` (`status`),
+  ADD KEY `group_id` (`group_id`),
+  ADD KEY `sort` (`sort`);
+
+ALTER TABLE `{prefix}brand`
+  ADD PRIMARY KEY (`brand_id`),
+  ADD KEY `is_show` (`status`),
+  ADD KEY `name` (`name`),
+  ADD KEY `goods_category_id` (`goods_category_id`),
+  ADD KEY `sort` (`sort`);
+
+ALTER TABLE `{prefix}card`
+  ADD PRIMARY KEY (`card_id`),
+  ADD KEY `name` (`name`),
+  ADD KEY `status` (`status`),
+  ADD KEY `is_delete` (`is_delete`);
+
+ALTER TABLE `{prefix}card_use`
+  ADD PRIMARY KEY (`card_use_id`) USING BTREE,
+  ADD KEY `card_id` (`card_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `number` (`number`),
+  ADD KEY `money` (`money`),
+  ADD KEY `is_invalid` (`is_invalid`) USING BTREE;
+
+ALTER TABLE `{prefix}cart`
+  ADD PRIMARY KEY (`cart_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `goods_id` (`goods_id`),
+  ADD KEY `key_name` (`key_name`),
+  ADD KEY `update_time` (`update_time`),
+  ADD KEY `is_show` (`is_show`);
+
+ALTER TABLE `{prefix}collect`
+  ADD PRIMARY KEY (`collect_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `is_top` (`is_top`),
+  ADD KEY `goods_id` (`goods_id`);
+
+ALTER TABLE `{prefix}coupon`
+  ADD PRIMARY KEY (`coupon_id`),
+  ADD KEY `name` (`name`),
+  ADD KEY `is_delete` (`is_delete`),
+  ADD KEY `type` (`type`),
+  ADD KEY `status` (`status`),
+  ADD KEY `is_invalid` (`is_invalid`),
+  ADD KEY `use_end_time` (`use_end_time`),
+  ADD KEY `give_code` (`give_code`) USING BTREE;
+
+ALTER TABLE `{prefix}coupon_give`
+  ADD PRIMARY KEY (`coupon_give_id`),
+  ADD KEY `coupon_id` (`coupon_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `use_time` (`use_time`),
+  ADD KEY `is_delete` (`is_delete`),
+  ADD KEY `exchange_code` (`exchange_code`) USING BTREE;
+
+ALTER TABLE `{prefix}delivery`
+  ADD PRIMARY KEY (`delivery_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `sort` (`sort`),
+  ADD KEY `delivery_item_id` (`delivery_item_id`);
+
+ALTER TABLE `{prefix}delivery_area`
+  ADD PRIMARY KEY (`delivery_area_id`),
+  ADD KEY `delivery_id` (`delivery_id`);
+
+ALTER TABLE `{prefix}delivery_dist`
+  ADD PRIMARY KEY (`delivery_dist_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `state` (`state`),
+  ADD KEY `delivery_code` (`delivery_code`),
+  ADD KEY `logistic_code` (`logistic_code`),
+  ADD KEY `order_code` (`order_code`) USING BTREE,
+  ADD KEY `is_sub` (`is_sub`);
+
+ALTER TABLE `{prefix}delivery_item`
+  ADD PRIMARY KEY (`delivery_item_id`),
+  ADD KEY `type` (`type`),
+  ADD KEY `is_delete` (`is_delete`) USING BTREE;
+
+ALTER TABLE `{prefix}discount`
+  ADD PRIMARY KEY (`discount_id`),
+  ADD KEY `begin_time` (`begin_time`),
+  ADD KEY `end_time` (`end_time`),
+  ADD KEY `status` (`status`);
+
+ALTER TABLE `{prefix}discount_goods`
+  ADD KEY `discount_id` (`discount_id`),
+  ADD KEY `goods_id` (`goods_id`);
+
+ALTER TABLE `{prefix}friend_link`
+  ADD PRIMARY KEY (`friend_link_id`),
+  ADD KEY `is_show` (`status`),
+  ADD KEY `sort` (`sort`);
+
+ALTER TABLE `{prefix}goods`
+  ADD PRIMARY KEY (`goods_id`),
+  ADD KEY `goods_code` (`goods_code`),
+  ADD KEY `name` (`name`(191)),
+  ADD KEY `goods_category_id` (`goods_category_id`),
+  ADD KEY `brand_id` (`brand_id`),
+  ADD KEY `is_integral` (`is_integral`),
+  ADD KEY `is_recommend` (`is_recommend`),
+  ADD KEY `is_new` (`is_new`),
+  ADD KEY `is_hot` (`is_hot`),
+  ADD KEY `sort` (`sort`),
+  ADD KEY `status` (`status`),
+  ADD KEY `shop_price` (`shop_price`),
+  ADD KEY `is_delete` (`is_delete`),
+  ADD KEY `store_qty` (`store_qty`),
+  ADD KEY `is_postage` (`is_postage`),
+  ADD KEY `bar_code` (`bar_code`);
+
+ALTER TABLE `{prefix}goods_attr`
+  ADD KEY `goods_id` (`goods_id`),
+  ADD KEY `is_important` (`is_important`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `attr_value` (`attr_value`),
+  ADD KEY `goods_attribute_id` (`goods_attribute_id`),
+  ADD KEY `sort` (`sort`);
+
+ALTER TABLE `{prefix}goods_attribute`
+  ADD PRIMARY KEY (`goods_attribute_id`),
+  ADD KEY `goods_type_id` (`goods_type_id`),
+  ADD KEY `sort` (`sort`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `is_delete` (`is_delete`),
+  ADD KEY `attr_index` (`attr_index`);
+
+ALTER TABLE `{prefix}goods_attr_config`
+  ADD PRIMARY KEY (`goods_attr_config_id`),
+  ADD KEY `goods_id` (`goods_id`);
+
+ALTER TABLE `{prefix}goods_category`
+  ADD PRIMARY KEY (`goods_category_id`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `category_type` (`category_type`),
+  ADD KEY `status` (`status`),
+  ADD KEY `sort` (`sort`),
+  ADD KEY `is_navi` (`is_navi`) USING BTREE;
+
+ALTER TABLE `{prefix}goods_comment`
+  ADD PRIMARY KEY (`goods_comment_id`),
+  ADD KEY `type` (`type`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `goods_id` (`goods_id`),
+  ADD KEY `is_delete` (`is_delete`),
+  ADD KEY `is_top` (`is_top`),
+  ADD KEY `score` (`score`),
+  ADD KEY `is_show` (`is_show`),
+  ADD KEY `is_image` (`is_image`),
+  ADD KEY `order_no` (`order_no`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `order_goods_id` (`order_goods_id`),
+  ADD KEY `is_append` (`is_append`);
+
+ALTER TABLE `{prefix}goods_consult`
+  ADD PRIMARY KEY (`goods_consult_id`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `is_delete` (`is_delete`),
+  ADD KEY `is_show` (`is_show`),
+  ADD KEY `status` (`status`);
+
+ALTER TABLE `{prefix}goods_reply`
+  ADD PRIMARY KEY (`goods_reply_id`),
+  ADD KEY `goods_comment_id` (`goods_comment_id`);
+
+ALTER TABLE `{prefix}goods_type`
+  ADD PRIMARY KEY (`goods_type_id`);
+
+ALTER TABLE `{prefix}help`
+  ADD PRIMARY KEY (`help_id`),
+  ADD KEY `router` (`router`),
+  ADD KEY `module` (`module`);
+
+ALTER TABLE `{prefix}history`
+  ADD PRIMARY KEY (`history_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `goods_id` (`goods_id`),
+  ADD KEY `update_time` (`update_time`);
+
+ALTER TABLE `{prefix}menu`
+  ADD PRIMARY KEY (`menu_id`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `sort` (`sort`),
+  ADD KEY `status` (`status`),
+  ADD KEY `module` (`module`) USING BTREE,
+  ADD KEY `is_navi` (`is_navi`);
+
+ALTER TABLE `{prefix}message`
+  ADD PRIMARY KEY (`message_id`),
+  ADD KEY `type` (`type`),
+  ADD KEY `is_top` (`is_top`),
+  ADD KEY `status` (`status`),
+  ADD KEY `is_delete` (`is_delete`),
+  ADD KEY `member` (`member`) USING BTREE,
+  ADD KEY `create_time` (`create_time`);
+
+ALTER TABLE `{prefix}message_user`
+  ADD PRIMARY KEY (`message_user_id`),
+  ADD KEY `message_id` (`message_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `is_delete` (`is_delete`),
+  ADD KEY `is_read` (`is_read`),
+  ADD KEY `admin_id` (`admin_id`);
+
+ALTER TABLE `{prefix}navigation`
+  ADD PRIMARY KEY (`navigation_id`);
+
+ALTER TABLE `{prefix}notice_item`
+  ADD PRIMARY KEY (`notice_item_id`),
+  ADD KEY `type` (`type`);
+
+ALTER TABLE `{prefix}notice_tpl`
+  ADD PRIMARY KEY (`notice_tpl_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `code` (`code`),
+  ADD KEY `type` (`type`);
+
+ALTER TABLE `{prefix}order`
+  ADD PRIMARY KEY (`order_id`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `order_no` (`order_no`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `trade_status` (`trade_status`),
+  ADD KEY `delivery_status` (`delivery_status`),
+  ADD KEY `payment_status` (`payment_status`),
+  ADD KEY `create_user_id` (`create_user_id`),
+  ADD KEY `is_delete` (`is_delete`),
+  ADD KEY `create_time` (`create_time`),
+  ADD KEY `delivery_time` (`delivery_time`);
+
+ALTER TABLE `{prefix}order_goods`
+  ADD PRIMARY KEY (`order_goods_id`),
+  ADD KEY `order_id` (`order_id`),
+  ADD KEY `order_no` (`order_no`),
+  ADD KEY `goods_name` (`goods_name`),
+  ADD KEY `goods_id` (`goods_id`),
+  ADD KEY `key_name` (`key_name`),
+  ADD KEY `is_comment` (`is_comment`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `status` (`status`) USING BTREE,
+  ADD KEY `is_service` (`is_service`);
+
+ALTER TABLE `{prefix}order_log`
+  ADD PRIMARY KEY (`order_log_id`),
+  ADD KEY `order_id` (`order_id`),
+  ADD KEY `order_no` (`order_no`);
+
+ALTER TABLE `{prefix}order_refund`
+  ADD PRIMARY KEY (`order_refund_id`),
+  ADD KEY `refund_no` (`refund_no`),
+  ADD KEY `order_no` (`order_no`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `status` (`status`);
+
+ALTER TABLE `{prefix}order_service`
+  ADD PRIMARY KEY (`order_service_id`),
+  ADD KEY `service_no` (`service_no`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `order_no` (`order_no`),
+  ADD KEY `status` (`status`),
+  ADD KEY `type` (`type`),
+  ADD KEY `order_goods_id` (`order_goods_id`),
+  ADD KEY `admin_event` (`admin_event`) USING BTREE,
+  ADD KEY `user_event` (`user_event`) USING BTREE,
+  ADD KEY `admin_id` (`admin_id`) USING BTREE;
+
+ALTER TABLE `{prefix}payment`
+  ADD PRIMARY KEY (`payment_id`),
+  ADD KEY `code` (`code`),
+  ADD KEY `sort` (`sort`),
+  ADD KEY `status` (`status`);
+
+ALTER TABLE `{prefix}payment_log`
+  ADD PRIMARY KEY (`payment_log_id`),
+  ADD KEY `payment_no` (`payment_no`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `order_no` (`order_no`),
+  ADD KEY `type` (`type`),
+  ADD KEY `status` (`status`),
+  ADD KEY `trade_no` (`out_trade_no`);
+
+ALTER TABLE `{prefix}praise`
+  ADD PRIMARY KEY (`praise_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `goods_comment_id` (`goods_comment_id`);
+
+ALTER TABLE `{prefix}promotion`
+  ADD PRIMARY KEY (`promotion_id`),
+  ADD KEY `begin_time` (`begin_time`),
+  ADD KEY `end_time` (`end_time`),
+  ADD KEY `status` (`status`);
+
+ALTER TABLE `{prefix}promotion_item`
+  ADD KEY `promotion_id` (`promotion_id`),
+  ADD KEY `quota` (`quota`);
+
+ALTER TABLE `{prefix}qrcode`
+  ADD PRIMARY KEY (`qrcode_id`);
+
+ALTER TABLE `{prefix}region`
+  ADD PRIMARY KEY (`region_id`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `is_delete` (`is_delete`),
+  ADD KEY `sort` (`sort`);
+
+ALTER TABLE `{prefix}service_log`
+  ADD PRIMARY KEY (`service_log_id`),
+  ADD KEY `order_service_id` (`order_service_id`),
+  ADD KEY `service_no` (`service_no`);
+
+ALTER TABLE `{prefix}setting`
+  ADD PRIMARY KEY (`setting_id`) USING BTREE,
+  ADD KEY `code` (`code`),
+  ADD KEY `module` (`module`);
+
+ALTER TABLE `{prefix}spec`
+  ADD PRIMARY KEY (`spec_id`) USING BTREE,
+  ADD KEY `goods_type_id` (`goods_type_id`),
+  ADD KEY `sort` (`sort`),
+  ADD KEY `spec_index` (`spec_index`);
+
+ALTER TABLE `{prefix}spec_config`
+  ADD PRIMARY KEY (`spec_config_id`),
+  ADD KEY `goods_id` (`goods_id`);
+
+ALTER TABLE `{prefix}spec_goods`
+  ADD KEY `goods_id` (`goods_id`),
+  ADD KEY `key_name` (`key_name`);
+
+ALTER TABLE `{prefix}spec_image`
+  ADD KEY `goods_id` (`goods_id`),
+  ADD KEY `spec_item_id` (`spec_item_id`);
+
+ALTER TABLE `{prefix}spec_item`
+  ADD PRIMARY KEY (`spec_item_id`),
+  ADD KEY `spec_id` (`spec_id`),
+  ADD KEY `is_contact` (`is_contact`) USING BTREE,
+  ADD KEY `sort` (`sort`) USING BTREE;
+
+ALTER TABLE `{prefix}storage`
+  ADD PRIMARY KEY (`storage_id`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `type` (`type`),
+  ADD KEY `sort` (`sort`),
+  ADD KEY `hash` (`hash`),
+  ADD KEY `path` (`path`),
+  ADD KEY `name` (`name`),
+  ADD KEY `protocol` (`protocol`),
+  ADD KEY `priority` (`priority`);
+
+ALTER TABLE `{prefix}storage_style`
+  ADD PRIMARY KEY (`storage_style_id`) USING BTREE,
+  ADD KEY `code` (`code`),
+  ADD KEY `platform` (`platform`),
+  ADD KEY `status` (`status`);
+
+ALTER TABLE `{prefix}support`
+  ADD PRIMARY KEY (`support_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `sort` (`sort`);
+
+ALTER TABLE `{prefix}token`
+  ADD PRIMARY KEY (`token_id`),
+  ADD KEY `user_id` (`client_id`),
+  ADD KEY `admin_id` (`platform`),
+  ADD KEY `client_type` (`client_type`),
+  ADD KEY `token` (`token`);
+
+ALTER TABLE `{prefix}topic`
+  ADD PRIMARY KEY (`topic_id`),
+  ADD KEY `is_show` (`status`);
+
+ALTER TABLE `{prefix}transaction`
+  ADD PRIMARY KEY (`transaction_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `type` (`type`),
+  ADD KEY `order_no` (`source_no`),
+  ADD KEY `module` (`module`),
+  ADD KEY `create_time` (`create_time`),
+  ADD KEY `card_number` (`card_number`);
+
+ALTER TABLE `{prefix}user`
+  ADD PRIMARY KEY (`user_id`),
+  ADD KEY `username` (`username`),
+  ADD KEY `mobile` (`mobile`),
+  ADD KEY `email` (`email`),
+  ADD KEY `nickname` (`nickname`),
+  ADD KEY `user_level_id` (`user_level_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `is_delete` (`is_delete`);
+
+ALTER TABLE `{prefix}user_address`
+  ADD PRIMARY KEY (`user_address_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `is_delete` (`is_delete`);
+
+ALTER TABLE `{prefix}user_level`
+  ADD PRIMARY KEY (`user_level_id`),
+  ADD KEY `amount` (`amount`);
+
+ALTER TABLE `{prefix}user_money`
+  ADD PRIMARY KEY (`user_money_id`),
+  ADD KEY `user_id` (`user_id`);
+
+ALTER TABLE `{prefix}verification`
+  ADD PRIMARY KEY (`verification_id`),
+  ADD KEY `number` (`number`),
+  ADD KEY `code` (`code`);
+
+ALTER TABLE `{prefix}withdraw`
+  ADD PRIMARY KEY (`withdraw_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `withdraw_no` (`withdraw_no`),
+  ADD KEY `create_time` (`create_time`);
+
+ALTER TABLE `{prefix}withdraw_user`
+  ADD PRIMARY KEY (`withdraw_user_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `is_delete` (`is_delete`);
+
+
+ALTER TABLE `{prefix}action_log`
+  MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `{prefix}admin`
+  MODIFY `admin_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+ALTER TABLE `{prefix}ads`
+  MODIFY `ads_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
+ALTER TABLE `{prefix}ads_position`
+  MODIFY `ads_position_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=171;
+ALTER TABLE `{prefix}app`
+  MODIFY `app_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `{prefix}app_install`
+  MODIFY `app_install_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `{prefix}article`
+  MODIFY `article_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=264;
+ALTER TABLE `{prefix}article_cat`
+  MODIFY `article_cat_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+ALTER TABLE `{prefix}ask`
+  MODIFY `ask_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+ALTER TABLE `{prefix}auth_group`
+  MODIFY `group_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+ALTER TABLE `{prefix}auth_rule`
+  MODIFY `rule_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+ALTER TABLE `{prefix}brand`
+  MODIFY `brand_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+ALTER TABLE `{prefix}card`
+  MODIFY `card_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+ALTER TABLE `{prefix}card_use`
+  MODIFY `card_use_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1024;
+ALTER TABLE `{prefix}cart`
+  MODIFY `cart_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+ALTER TABLE `{prefix}collect`
+  MODIFY `collect_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `{prefix}coupon`
+  MODIFY `coupon_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+ALTER TABLE `{prefix}coupon_give`
+  MODIFY `coupon_give_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2107;
+ALTER TABLE `{prefix}delivery`
+  MODIFY `delivery_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+ALTER TABLE `{prefix}delivery_area`
+  MODIFY `delivery_area_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+ALTER TABLE `{prefix}delivery_dist`
+  MODIFY `delivery_dist_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+ALTER TABLE `{prefix}delivery_item`
+  MODIFY `delivery_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=512;
+ALTER TABLE `{prefix}discount`
+  MODIFY `discount_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+ALTER TABLE `{prefix}friend_link`
+  MODIFY `friend_link_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+ALTER TABLE `{prefix}goods`
+  MODIFY `goods_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=294;
+ALTER TABLE `{prefix}goods_attribute`
+  MODIFY `goods_attribute_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+ALTER TABLE `{prefix}goods_attr_config`
+  MODIFY `goods_attr_config_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+ALTER TABLE `{prefix}goods_category`
+  MODIFY `goods_category_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=844;
+ALTER TABLE `{prefix}goods_comment`
+  MODIFY `goods_comment_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+ALTER TABLE `{prefix}goods_consult`
+  MODIFY `goods_consult_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+ALTER TABLE `{prefix}goods_reply`
+  MODIFY `goods_reply_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `{prefix}goods_type`
+  MODIFY `goods_type_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+ALTER TABLE `{prefix}help`
+  MODIFY `help_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+ALTER TABLE `{prefix}history`
+  MODIFY `history_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `{prefix}menu`
+  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1087;
+ALTER TABLE `{prefix}message`
+  MODIFY `message_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
+ALTER TABLE `{prefix}message_user`
+  MODIFY `message_user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+ALTER TABLE `{prefix}navigation`
+  MODIFY `navigation_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+ALTER TABLE `{prefix}notice_item`
+  MODIFY `notice_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+ALTER TABLE `{prefix}notice_tpl`
+  MODIFY `notice_tpl_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+ALTER TABLE `{prefix}order`
+  MODIFY `order_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
+ALTER TABLE `{prefix}order_goods`
+  MODIFY `order_goods_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+ALTER TABLE `{prefix}order_log`
+  MODIFY `order_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=385;
+ALTER TABLE `{prefix}order_refund`
+  MODIFY `order_refund_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+ALTER TABLE `{prefix}order_service`
+  MODIFY `order_service_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+ALTER TABLE `{prefix}payment`
+  MODIFY `payment_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+ALTER TABLE `{prefix}payment_log`
+  MODIFY `payment_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
+ALTER TABLE `{prefix}praise`
+  MODIFY `praise_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `{prefix}promotion`
+  MODIFY `promotion_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+ALTER TABLE `{prefix}qrcode`
+  MODIFY `qrcode_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+ALTER TABLE `{prefix}region`
+  MODIFY `region_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4085;
+ALTER TABLE `{prefix}service_log`
+  MODIFY `service_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
+ALTER TABLE `{prefix}setting`
+  MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+ALTER TABLE `{prefix}spec`
+  MODIFY `spec_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+ALTER TABLE `{prefix}spec_config`
+  MODIFY `spec_config_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+ALTER TABLE `{prefix}spec_item`
+  MODIFY `spec_item_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=453;
+ALTER TABLE `{prefix}storage`
+  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=747;
+ALTER TABLE `{prefix}storage_style`
+  MODIFY `storage_style_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+ALTER TABLE `{prefix}support`
+  MODIFY `support_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+ALTER TABLE `{prefix}token`
+  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `{prefix}topic`
+  MODIFY `topic_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=225;
+ALTER TABLE `{prefix}transaction`
+  MODIFY `transaction_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=317;
+ALTER TABLE `{prefix}user`
+  MODIFY `user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+ALTER TABLE `{prefix}user_address`
+  MODIFY `user_address_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+ALTER TABLE `{prefix}user_level`
+  MODIFY `user_level_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+ALTER TABLE `{prefix}user_money`
+  MODIFY `user_money_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+ALTER TABLE `{prefix}verification`
+  MODIFY `verification_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `{prefix}withdraw`
+  MODIFY `withdraw_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+ALTER TABLE `{prefix}withdraw_user`
+  MODIFY `withdraw_user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

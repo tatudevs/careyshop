@@ -1,34 +1,14 @@
--- phpMyAdmin SQL Dump
--- version 4.7.0
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1:3306
--- Generation Time: 2017-10-31 00:19:33
--- 服务器版本： 5.7.18-log
--- PHP Version: 5.6.30
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `careyshop`
---
 
--- --------------------------------------------------------
-
---
--- 表的结构 `cs_region`
---
-
-CREATE TABLE `cs_region` (
+DROP TABLE IF EXISTS `{prefix}region`;
+CREATE TABLE `{prefix}region` (
   `region_id` smallint(5) UNSIGNED NOT NULL,
   `parent_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父节点id',
   `region_name` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '区域名称',
@@ -36,18 +16,7 @@ CREATE TABLE `cs_region` (
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=未删 1=已删'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='区域';
 
---
--- 插入之前先把表清空（truncate） `cs_region`
---
-
-TRUNCATE TABLE `cs_region`;
--- --------------------------------------------------------
-
---
--- 转存表中的数据 `cs_region`
---
-
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+INSERT INTO `{prefix}region` VALUES
 (1, 0, '北京市', 50, 0),
 (2, 1, '市辖区', 50, 0),
 (3, 2, '东城区', 50, 0),
@@ -1989,11 +1958,11 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (1939, 1933, '贾光乡', 50, 0),
 (1940, 1933, '晾马台乡', 50, 0),
 (1941, 1933, '平王乡', 50, 0),
-(1942, 1772, '涞源县', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(1942, 1772, '涞源县', 50, 0),
 (1943, 1942, '涞源镇', 50, 0),
 (1944, 1942, '银坊镇', 50, 0),
-(1945, 1942, '走马驿镇', 50, 0),
+(1945, 1942, '走马驿镇', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (1946, 1942, '水堡镇', 50, 0),
 (1947, 1942, '王安镇', 50, 0),
 (1948, 1942, '杨家庄镇', 50, 0),
@@ -3853,13 +3822,13 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (3802, 3799, '云竹镇', 50, 0),
 (3803, 3799, '郝北镇', 50, 0),
 (3804, 3799, '社城镇', 50, 0),
-(3805, 3799, '河峪乡', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(3805, 3799, '河峪乡', 50, 0),
 (3806, 3799, '北寨乡', 50, 0),
 (3807, 3799, '西马乡', 50, 0),
 (3808, 3799, '岚峪乡', 50, 0),
 (3809, 3799, '讲堂乡', 50, 0),
-(3810, 3776, '左权县', 50, 0),
+(3810, 3776, '左权县', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (3811, 3810, '县城街道社区管理委员会', 50, 0),
 (3812, 3810, '辽阳镇', 50, 0),
 (3813, 3810, '桐峪镇', 50, 0),
@@ -5690,15 +5659,15 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (5638, 5636, '索伦镇', 50, 0),
 (5639, 5636, '德佰斯镇', 50, 0),
 (5640, 5636, '大石寨镇', 50, 0),
-(5641, 5636, '归流河镇', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(5641, 5636, '归流河镇', 50, 0),
 (5642, 5636, '葛根庙镇', 50, 0),
 (5643, 5636, '察尔森镇', 50, 0),
 (5644, 5636, '额尔格图镇', 50, 0),
 (5645, 5636, '满族屯满族乡', 50, 0),
 (5646, 5636, '乌兰毛都苏木乡', 50, 0),
 (5647, 5636, '阿力得尔苏木乡', 50, 0),
-(5648, 5636, '跃进马场', 50, 0),
+(5648, 5636, '跃进马场', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (5649, 5636, '索伦牧场', 50, 0),
 (5650, 5636, '呼和马场', 50, 0),
 (5651, 5636, '阿力得尔牧场', 50, 0),
@@ -7531,8 +7500,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (7478, 7474, '药王庙镇', 50, 0),
 (7479, 7474, '汤神庙镇', 50, 0),
 (7480, 7474, '玲珑塔镇', 50, 0),
-(7481, 7474, '大屯镇', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(7481, 7474, '大屯镇', 50, 0),
 (7482, 7474, '牛亡牛营子乡', 50, 0),
 (7483, 7474, '素珠营子乡', 50, 0),
 (7484, 7474, '石佛乡', 50, 0),
@@ -7541,7 +7509,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (7487, 7474, '要路沟乡', 50, 0),
 (7488, 7474, '魏家岭乡', 50, 0),
 (7489, 7474, '西碱厂乡', 50, 0),
-(7490, 7474, '头道营子乡', 50, 0),
+(7490, 7474, '头道营子乡', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (7491, 7474, '新开岭乡', 50, 0),
 (7492, 7474, '贺杖子乡', 50, 0),
 (7493, 7474, '养马甸子乡', 50, 0),
@@ -9366,8 +9335,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (9313, 9307, '西山街道', 50, 0),
 (9314, 9307, '长胜乡', 50, 0),
 (9315, 9307, '岭东区青山旅游公司', 50, 0),
-(9316, 9307, '岭东区岭东经营所', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(9316, 9307, '岭东区岭东经营所', 50, 0),
 (9317, 9296, '四方台区', 50, 0),
 (9318, 9317, '振兴中路街道', 50, 0),
 (9319, 9317, '振兴东路街道', 50, 0),
@@ -9379,7 +9347,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (9325, 9323, '跃进街道', 50, 0),
 (9326, 9323, '东保卫街道', 50, 0),
 (9327, 9323, '七星街道', 50, 0),
-(9328, 9323, '双阳街道', 50, 0),
+(9328, 9323, '双阳街道', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (9329, 9323, '新安街道', 50, 0),
 (9330, 9323, '电厂街道', 50, 0),
 (9331, 9323, '七星镇', 50, 0),
@@ -11132,8 +11101,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (11078, 11069, '大黄山街道', 50, 0),
 (11079, 11069, '大庙镇', 50, 0),
 (11080, 11069, '大黄山镇', 50, 0),
-(11081, 11067, '云龙区', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(11081, 11067, '云龙区', 50, 0),
 (11082, 11081, '彭城街道', 50, 0),
 (11083, 11081, '子房街道', 50, 0),
 (11084, 11081, '黄山街道', 50, 0),
@@ -11146,7 +11114,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (11091, 11089, '利国街道', 50, 0),
 (11092, 11089, '桃园街道', 50, 0),
 (11093, 11089, '三河尖街道', 50, 0),
-(11094, 11089, '垞城街道', 50, 0),
+(11094, 11089, '垞城街道', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (11095, 11089, '义安街道', 50, 0),
 (11096, 11089, '张集街道', 50, 0),
 (11097, 11089, '电厂街道', 50, 0),
@@ -12881,8 +12850,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (12826, 12824, '东胜街道', 50, 0),
 (12827, 12824, '明楼街道', 50, 0),
 (12828, 12824, '白鹤街道', 50, 0),
-(12829, 12824, '东柳街道', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(12829, 12824, '东柳街道', 50, 0),
 (12830, 12824, '东郊街道', 50, 0),
 (12831, 12824, '福明街道', 50, 0),
 (12832, 12813, '江北区', 50, 0),
@@ -12897,7 +12865,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (12841, 12813, '北仑区', 50, 0),
 (12842, 12841, '大榭街道', 50, 0),
 (12843, 12841, '新碶街道', 50, 0),
-(12844, 12841, '小港街道', 50, 0),
+(12844, 12841, '小港街道', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (12845, 12841, '大碶街道', 50, 0),
 (12846, 12841, '霞浦街道', 50, 0),
 (12847, 12841, '柴桥街道', 50, 0),
@@ -14640,8 +14609,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (14584, 14583, '沙塘路街道', 50, 0),
 (14585, 14583, '解放路街道', 50, 0),
 (14586, 14583, '湖东路街道', 50, 0),
-(14587, 14583, '桃源路街道', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(14587, 14583, '桃源路街道', 50, 0),
 (14588, 14583, '霍里镇', 50, 0),
 (14589, 14575, '雨山区', 50, 0),
 (14590, 14589, '平湖街道', 50, 0),
@@ -14658,7 +14626,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (14601, 14597, '石桥镇', 50, 0),
 (14602, 14597, '塘南镇', 50, 0),
 (14603, 14597, '护河镇', 50, 0),
-(14604, 14597, '太白镇', 50, 0),
+(14604, 14597, '太白镇', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (14605, 14597, '丹阳镇', 50, 0),
 (14606, 14597, '博望镇', 50, 0),
 (14607, 14597, '新市镇', 50, 0),
@@ -16401,8 +16370,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (16344, 16341, '新圩镇', 50, 0),
 (16345, 16341, '新店镇', 50, 0),
 (16346, 16341, '内厝镇', 50, 0),
-(16347, 16341, '大帽山农场', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(16347, 16341, '大帽山农场', 50, 0),
 (16348, 16068, '莆田市', 50, 0),
 (16349, 16348, '市辖区', 50, 0),
 (16350, 16348, '城厢区', 50, 0),
@@ -16421,7 +16389,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (16363, 16358, '国欢镇', 50, 0),
 (16364, 16358, '梧塘镇', 50, 0),
 (16365, 16358, '江口镇', 50, 0),
-(16366, 16358, '萩芦镇', 50, 0),
+(16366, 16358, '萩芦镇', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (16367, 16358, '白沙镇', 50, 0),
 (16368, 16358, '庄边镇', 50, 0),
 (16369, 16358, '新县镇', 50, 0),
@@ -18145,8 +18114,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (18087, 18084, '过埠镇', 50, 0),
 (18088, 18084, '铅厂镇', 50, 0),
 (18089, 18084, '长龙镇', 50, 0),
-(18090, 18084, '关田镇', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(18090, 18084, '关田镇', 50, 0),
 (18091, 18084, '龙勾乡', 50, 0),
 (18092, 18084, '杰坝乡', 50, 0),
 (18093, 18084, '金坑乡', 50, 0),
@@ -18167,7 +18135,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (18108, 18102, '鹤子镇', 50, 0),
 (18109, 18102, '三百山镇', 50, 0),
 (18110, 18102, '车头镇', 50, 0),
-(18111, 18102, '镇岗乡', 50, 0),
+(18111, 18102, '镇岗乡', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (18112, 18102, '凤山乡', 50, 0),
 (18113, 18102, '新龙乡', 50, 0),
 (18114, 18102, '蔡坊乡', 50, 0),
@@ -19887,8 +19856,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (19828, 19825, '盐窝镇', 50, 0),
 (19829, 19825, '陈庄镇', 50, 0),
 (19830, 19825, '汀罗镇', 50, 0),
-(19831, 19825, '明集乡', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(19831, 19825, '明集乡', 50, 0),
 (19832, 19825, '北岭乡', 50, 0),
 (19833, 19825, '虎滩乡', 50, 0),
 (19834, 19825, '刁口乡', 50, 0),
@@ -19911,7 +19879,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (19851, 19848, '毓璜顶街道', 50, 0),
 (19852, 19848, '通伸街道', 50, 0),
 (19853, 19848, '凤凰台街道', 50, 0),
-(19854, 19848, '奇山街道', 50, 0),
+(19854, 19848, '奇山街道', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (19855, 19848, '白石街道', 50, 0),
 (19856, 19848, '芝罘岛街道', 50, 0),
 (19857, 19848, '黄务街道', 50, 0),
@@ -21641,8 +21610,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (21581, 21577, '北道门街道', 50, 0),
 (21582, 21577, '北郊乡', 50, 0),
 (21583, 21577, '柳园口乡', 50, 0),
-(21584, 21575, '顺河区', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(21584, 21575, '顺河区', 50, 0),
 (21585, 21584, '清平街道', 50, 0),
 (21586, 21584, '铁塔街道', 50, 0),
 (21587, 21584, '曹门街道', 50, 0),
@@ -21666,7 +21634,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (21605, 21602, '繁塔街道', 50, 0),
 (21606, 21602, '官坊街道', 50, 0),
 (21607, 21602, '菜市街道', 50, 0),
-(21608, 21602, '南郊乡', 50, 0),
+(21608, 21602, '南郊乡', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (21609, 21602, '汪屯乡', 50, 0),
 (21610, 21575, '金明区', 50, 0),
 (21611, 21610, '城西街道', 50, 0),
@@ -23393,8 +23362,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (23332, 23317, '罗庄乡', 50, 0),
 (23333, 23317, '桑固乡', 50, 0),
 (23334, 23317, '何营乡', 50, 0),
-(23335, 23317, '王集乡', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(23335, 23317, '王集乡', 50, 0),
 (23336, 23317, '刘店集乡', 50, 0),
 (23337, 23317, '骆集乡', 50, 0),
 (23338, 23317, '太平乡', 50, 0),
@@ -23421,7 +23389,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (23359, 23342, '王集乡', 50, 0),
 (23360, 23342, '李寨乡', 50, 0),
 (23361, 23342, '卧龙乡', 50, 0),
-(23362, 23342, '龙岗乡', 50, 0),
+(23362, 23342, '龙岗乡', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (23363, 23342, '马牧乡', 50, 0),
 (23364, 23342, '搓阳乡', 50, 0),
 (23365, 23342, '太邱乡', 50, 0),
@@ -25131,8 +25100,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (25069, 24949, '松滋市', 50, 0),
 (25070, 25069, '新江口镇', 50, 0),
 (25071, 25069, '南海镇', 50, 0),
-(25072, 25069, '八宝镇', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(25072, 25069, '八宝镇', 50, 0),
 (25073, 25069, '宛市镇', 50, 0),
 (25074, 25069, '老城镇', 50, 0),
 (25075, 25069, '陈店镇', 50, 0),
@@ -25160,7 +25128,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (25097, 25088, '火车站开发区', 50, 0),
 (25098, 25088, '黄州科技经济开发区管理委员会', 50, 0),
 (25099, 25086, '团风县', 50, 0),
-(25100, 25099, '团风镇', 50, 0),
+(25100, 25099, '团风镇', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (25101, 25099, '淋山河镇', 50, 0),
 (25102, 25099, '方高坪镇', 50, 0),
 (25103, 25099, '回龙山镇', 50, 0),
@@ -26875,8 +26844,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (26812, 26793, '澧澹乡', 50, 0),
 (26813, 26793, '澧南乡', 50, 0),
 (26814, 26793, '澧东乡', 50, 0),
-(26815, 26793, '涔南乡', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(26815, 26793, '涔南乡', 50, 0),
 (26816, 26793, '大坪乡', 50, 0),
 (26817, 26793, '道河乡', 50, 0),
 (26818, 26793, '双龙乡', 50, 0),
@@ -26907,7 +26875,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (26843, 26826, '九里乡', 50, 0),
 (26844, 26683, '桃源县', 50, 0),
 (26845, 26844, '漳江镇', 50, 0),
-(26846, 26844, '陬市镇', 50, 0),
+(26846, 26844, '陬市镇', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (26847, 26844, '盘塘镇', 50, 0),
 (26848, 26844, '热市镇', 50, 0),
 (26849, 26844, '黄石镇', 50, 0),
@@ -28621,8 +28590,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (28557, 28539, '帽子峰镇', 50, 0),
 (28558, 28240, '深圳市', 50, 0),
 (28559, 28558, '市辖区', 50, 0),
-(28560, 28558, '罗湖区', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(28560, 28558, '罗湖区', 50, 0),
 (28561, 28560, '桂园街道', 50, 0),
 (28562, 28560, '黄贝街道', 50, 0),
 (28563, 28560, '东门街道', 50, 0),
@@ -28654,7 +28622,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (28589, 28581, '西丽街道', 50, 0),
 (28590, 28558, '宝安区', 50, 0),
 (28591, 28590, '新安街道', 50, 0),
-(28592, 47497, '光明街道', 50, 0),
+(28592, 47497, '光明街道', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (28593, 28590, '西乡街道', 50, 0),
 (28594, 28590, '福永街道', 50, 0),
 (28595, 28590, '沙井街道', 50, 0),
@@ -30369,8 +30338,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (30304, 30300, '南乡镇', 50, 0),
 (30305, 30300, '新福镇', 50, 0),
 (30306, 30300, '莲塘镇', 50, 0),
-(30307, 30300, '平马镇', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(30307, 30300, '平马镇', 50, 0),
 (30308, 30300, '峦城镇', 50, 0),
 (30309, 30300, '六景镇', 50, 0),
 (30310, 30300, '石塘镇', 50, 0),
@@ -30404,7 +30372,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (30338, 30319, '柳南区', 50, 0),
 (30339, 30338, '河西街道', 50, 0),
 (30340, 30338, '南站街道', 50, 0),
-(30341, 30338, '鹅山街道', 50, 0),
+(30341, 30338, '鹅山街道', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (30342, 30338, '柳南街道', 50, 0),
 (30343, 30338, '柳石街道', 50, 0),
 (30344, 30338, '银山街道', 50, 0),
@@ -32119,8 +32088,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (32053, 31930, '江北区', 50, 0),
 (32054, 32053, '华新街街道', 50, 0),
 (32055, 32053, '江北城街道', 50, 0),
-(32056, 32053, '石马河街道', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(32056, 32053, '石马河街道', 50, 0),
 (32057, 32053, '大石坝街道', 50, 0),
 (32058, 32053, '寸滩街道', 50, 0),
 (32059, 32053, '观音桥街道', 50, 0),
@@ -32155,7 +32123,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (32088, 32066, '虎溪镇', 50, 0),
 (32089, 32066, '西永镇', 50, 0),
 (32090, 32066, '土主镇', 50, 0),
-(32091, 32066, '中梁镇', 50, 0),
+(32091, 32066, '中梁镇', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (32092, 32066, '联芳园区镇', 50, 0),
 (32093, 31930, '九龙坡区', 50, 0),
 (32094, 32093, '杨家坪街道', 50, 0),
@@ -33884,8 +33853,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (33817, 33007, '绵阳市', 50, 0),
 (33818, 33817, '市辖区', 50, 0),
 (33819, 33817, '涪城区', 50, 0),
-(33820, 33819, '城厢街道', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(33820, 33819, '城厢街道', 50, 0),
 (33821, 33819, '城北街道', 50, 0),
 (33822, 33819, '工区街道', 50, 0),
 (33823, 33819, '南山街道', 50, 0),
@@ -33923,7 +33891,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (33855, 33844, '柏林镇', 50, 0),
 (33856, 33844, '徐家镇', 50, 0),
 (33857, 33844, '石板镇', 50, 0),
-(33858, 33844, '刘家镇', 50, 0),
+(33858, 33844, '刘家镇', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (33859, 33844, '玉河镇', 50, 0),
 (33860, 33844, '松垭镇', 50, 0),
 (33861, 33844, '白蝉乡', 50, 0),
@@ -35658,8 +35627,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (35590, 35573, '联合苗族乡', 50, 0),
 (35591, 35573, '高坪苗族乡', 50, 0),
 (35592, 35427, '兴文县', 50, 0),
-(35593, 35592, '古宋镇', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(35593, 35592, '古宋镇', 50, 0),
 (35594, 35592, '僰王山镇', 50, 0),
 (35595, 35592, '共乐镇', 50, 0),
 (35596, 35592, '莲花镇', 50, 0),
@@ -35699,7 +35667,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (35630, 35627, '奎阁街道', 50, 0),
 (35631, 35627, '广福街道', 50, 0),
 (35632, 35627, '万盛街道', 50, 0),
-(35633, 35627, '中桥街道', 50, 0),
+(35633, 35627, '中桥街道', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (35634, 35627, '枣山镇', 50, 0),
 (35635, 35627, '官盛镇', 50, 0),
 (35636, 35627, '协兴镇', 50, 0),
@@ -37430,8 +37399,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (37361, 37345, '田湾乡', 50, 0),
 (37362, 37345, '德石乡', 50, 0),
 (37363, 37345, '大河乡', 50, 0),
-(37364, 37345, '盐塘乡', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(37364, 37345, '盐塘乡', 50, 0),
 (37365, 37345, '巫木乡', 50, 0),
 (37366, 37345, '大草乡', 50, 0),
 (37367, 37345, '博大乡', 50, 0),
@@ -37473,7 +37441,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (37403, 37380, '银鹿乡', 50, 0),
 (37404, 37270, '会理县', 50, 0),
 (37405, 37404, '城关镇', 50, 0),
-(37406, 37404, '鹿厂镇', 50, 0),
+(37406, 37404, '鹿厂镇', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (37407, 37404, '黎溪镇', 50, 0),
 (37408, 37404, '通安镇', 50, 0),
 (37409, 37404, '太平镇', 50, 0),
@@ -39180,8 +39149,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (39110, 39107, '双井镇', 50, 0),
 (39111, 39107, '牛大场镇', 50, 0),
 (39112, 39107, '白垛乡', 50, 0),
-(39113, 39107, '甘溪乡', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(39113, 39107, '甘溪乡', 50, 0),
 (39114, 39107, '马号乡', 50, 0),
 (39115, 39107, '马溪乡', 50, 0),
 (39116, 39075, '三穗县', 50, 0),
@@ -39225,7 +39193,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (39154, 39151, '坪地镇', 50, 0),
 (39155, 39151, '兰田镇', 50, 0),
 (39156, 39151, '瓮洞镇', 50, 0),
-(39157, 39151, '高酿镇', 50, 0),
+(39157, 39151, '高酿镇', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (39158, 39151, '石洞镇', 50, 0),
 (39159, 39151, '远口镇', 50, 0),
 (39160, 39151, '坌处镇', 50, 0),
@@ -40952,8 +40921,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (40881, 40876, '普棚镇', 50, 0),
 (40882, 40876, '刘厂镇', 50, 0),
 (40883, 40876, '禾甸镇', 50, 0),
-(40884, 40876, '米甸镇', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(40884, 40876, '米甸镇', 50, 0),
 (40885, 40876, '鹿鸣乡', 50, 0),
 (40886, 40876, '东山乡', 50, 0),
 (40887, 40852, '宾川县', 50, 0),
@@ -40998,7 +40966,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (40926, 40919, '紫金乡', 50, 0),
 (40927, 40919, '五印乡', 50, 0),
 (40928, 40919, '牛街乡', 50, 0),
-(40929, 40919, '青华乡', 50, 0),
+(40929, 40919, '青华乡', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (40930, 40852, '永平县', 50, 0),
 (40931, 40930, '博南镇', 50, 0),
 (40932, 40930, '杉阳镇', 50, 0),
@@ -42718,8 +42687,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (42646, 42634, '纵目乡', 50, 0),
 (42647, 42634, '史官乡', 50, 0),
 (42648, 42634, '北塬乡', 50, 0),
-(42649, 42490, '富平县', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(42649, 42490, '富平县', 50, 0),
 (42650, 42649, '杜村镇', 50, 0),
 (42651, 42649, '庄里镇', 50, 0),
 (42652, 42649, '张桥镇', 50, 0),
@@ -42767,7 +42735,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (42694, 42691, '玉泉街道', 50, 0),
 (42695, 42691, '孟塬镇', 50, 0),
 (42696, 42691, '桃下镇', 50, 0),
-(42697, 42691, '夫水镇', 50, 0),
+(42697, 42691, '夫水镇', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (42698, 42691, '华西镇', 50, 0),
 (42699, 42691, '卫峪乡', 50, 0),
 (42700, 42691, '五方乡', 50, 0),
@@ -44471,8 +44440,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (44398, 44392, '朝那镇', 50, 0),
 (44399, 44392, '新开乡', 50, 0),
 (44400, 44392, '西屯乡', 50, 0),
-(44401, 44392, '上良乡', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(44401, 44392, '上良乡', 50, 0),
 (44402, 44392, '梁原乡', 50, 0),
 (44403, 44392, '龙门乡', 50, 0),
 (44404, 44392, '星火乡', 50, 0),
@@ -44522,7 +44490,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (44448, 44431, '郑河乡', 50, 0),
 (44449, 44431, '南坪乡', 50, 0),
 (44450, 44431, '盘安乡', 50, 0),
-(44451, 44352, '静宁县', 50, 0),
+(44451, 44352, '静宁县', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (44452, 44451, '城区街道', 50, 0),
 (44453, 44451, '城关镇', 50, 0),
 (44454, 44451, '威戎镇', 50, 0),
@@ -46217,8 +46186,7 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (46143, 46140, '新北区', 50, 0),
 (46144, 46138, '克拉玛依区', 50, 0),
 (46145, 46144, '天山路街道', 50, 0),
-(46146, 46144, '胜利路街道', 50, 0);
-INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_delete`) VALUES
+(46146, 46144, '胜利路街道', 50, 0),
 (46147, 46144, '昆仑路街道', 50, 0),
 (46148, 46144, '银河路街道', 50, 0),
 (46149, 46144, '金龙镇街道', 50, 0),
@@ -46269,7 +46237,8 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (46194, 46189, '郭勒布依乡乡', 50, 0),
 (46195, 46189, '伊拉湖乡', 50, 0),
 (46196, 46189, '博斯坦乡', 50, 0),
-(46197, 46047, '哈密地区', 50, 0),
+(46197, 46047, '哈密地区', 50, 0);
+INSERT INTO `{prefix}region` VALUES
 (46198, 46197, '哈密市', 50, 0),
 (46199, 46198, '东河区街道', 50, 0),
 (46200, 46198, '西河区街道', 50, 0),
@@ -47571,29 +47540,16 @@ INSERT INTO `cs_region` (`region_id`, `parent_id`, `region_name`, `sort`, `is_de
 (47496, 28558, '龙华新区', 50, 0),
 (47497, 28558, '光明新区', 50, 0);
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `cs_region`
---
-ALTER TABLE `cs_region`
+ALTER TABLE `{prefix}region`
   ADD PRIMARY KEY (`region_id`),
   ADD KEY `parent_id` (`parent_id`),
   ADD KEY `is_delete` (`is_delete`),
   ADD KEY `sort` (`sort`);
 
---
--- 在导出的表使用AUTO_INCREMENT
---
 
---
--- 使用表AUTO_INCREMENT `cs_region`
---
-ALTER TABLE `cs_region`
-  MODIFY `region_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47498;COMMIT;
-
+ALTER TABLE `{prefix}region`
+  MODIFY `region_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47498;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
