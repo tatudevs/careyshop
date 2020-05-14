@@ -640,13 +640,9 @@ class Order extends CareyShop
         $country = isset($this->dataParams['country']) ? $this->dataParams['country'] : 0;
         $regionList = $this->dataParams['region_list'];
 
-        if (!empty($country)) {
-            array_unshift($regionList, $country);
-        }
-
         // 判断完整收货地址是否需要包含国籍
         if (Config::get('is_country.value', 'system_shopping') != 0) {
-            array_unshift($regionId, $country);
+            array_unshift($regionList, $country);
         }
 
         $regionDb = new Region();
