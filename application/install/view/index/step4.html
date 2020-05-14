@@ -24,6 +24,12 @@
 
 {load href="/static/install/js/jquery.js"/}
 <script type="text/javascript">
+    $(document).ready(function () {
+        $('#log').animate({
+            scrollTop: $('#log').get(0).scrollHeight
+        });
+    });
+
     function insert_log(msg) {
         $('#log-inner').append(msg);
     }
@@ -35,7 +41,7 @@ use think\Db;
 // 连接数据库
 $data = session('installData');
 $dbInstance = Db::connect([
-    'type'     => 'mysql',
+    'type'     => $data['type'],
     'hostname' => $data['hostname'],
     'database' => $data['database'],
     'username' => $data['username'],
@@ -46,7 +52,7 @@ $dbInstance = Db::connect([
 ]);
 
 // 创建数据表
-create_data($dbInstance, $data['prefix']);
+create_data($dbInstance, $data);
 
 // 生成配置文件
 write_config($data);

@@ -4,7 +4,7 @@ USE `{database}`$$
 
 DROP FUNCTION IF EXISTS `getRegionChildrenList`$$
 
-CREATE DEFINER=`{username}`@`%` FUNCTION `getRegionChildrenList`(`rootId` TEXT) RETURNS VARCHAR(4000) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci
+CREATE FUNCTION `getRegionChildrenList`(`rootId` TEXT) RETURNS VARCHAR(4000) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci
     NO SQL
     COMMENT '根据父ID获取区域所有子级'
 BEGIN
@@ -34,7 +34,7 @@ USE `{database}`$$
 
 DROP FUNCTION IF EXISTS `getStorageChildrenList`$$
 
-CREATE DEFINER=`{username}`@`%` FUNCTION `getStorageChildrenList`(`rootId` TEXT) RETURNS VARCHAR(4000) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci
+CREATE FUNCTION `getStorageChildrenList`(`rootId` TEXT) RETURNS VARCHAR(4000) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci
 NO SQL
 COMMENT '根据父ID获取资源管理器所有子级'
 BEGIN

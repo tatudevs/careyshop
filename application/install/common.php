@@ -136,15 +136,41 @@ function check_func()
 }
 
 /**
- * 创建数据表
- * @param Object $db     数据库连接实列
- * @param string $prefix 表前缀
+ * 替换语句中的宏
+ * @param string $sql  源SQL语句
+ * @param array  $data 配置数据
+ * @return mixed
  */
-function create_data($db, $prefix)
+function macro_str_replace($sql, $data)
 {
-    for ($i = 20000; $i > 0; $i--) {
-        $msg = '<li><span class="correct_span">&radic;</span>测试</span></li>';
-        insert_log($msg);
+    if (is_array($data)) {
+        foreach ($data as $key => $value) {
+            $sql = str_replace("{{$key}}", $value, $sql);
+        }
+    }
+
+    return $sql;
+}
+
+/**
+ * 创建数据表
+ * @param Object $db   数据库实列
+ * @param array  $data 配置数据
+ */
+function create_data($db, $data)
+{
+    // 资源路径
+    $path = APP_PATH . 'install' . DS . 'data' . DS;
+
+    // 创建SQL函数
+    $fun = file_get_contents($path . 'careyshop_function.tpl');
+    $fun = macro_str_replace($fun, $data);
+
+    if(false !== $db->execute($fun)){
+        insert_log('创建数据函数完成');
+    } else {
+        insert_log('创建数据函数失败', true);
+        session('error', true);
     }
 }
 
@@ -156,9 +182,17 @@ function write_config($data)
 {
 }
 
-function insert_log($msg)
+/**
+ * 发送日志
+ * @param string $msg   信息
+ * @param bool   $error 是否错误
+ */
+function insert_log($msg, $error = false)
 {
-    echo "<script type='text/javascript'>insert_log(".$msg.")</script>";
+    $html = sprintf('"<li><i class=\"%s\"/>%s<span style=\"float: right;\">%s</span></li>"',
+        $error ? 'icon_error' : 'icon_check', $msg, date('m-d H:i:s'));
+
+    echo "<script type=\"text/javascript\">insert_log({$html})</script>";
     flush();
     ob_flush();
 }

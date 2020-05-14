@@ -134,12 +134,13 @@ class Index extends Controller
             }
 
             // 缓存配置数据
+            $data['type'] = 'mysql';
             session('installData', $data);
 
             try {
                 // 创建数据库连接
                 $dbInstance = Db::connect([
-                    'type'     => 'mysql',
+                    'type'     => $data['type'],
                     'hostname' => $data['hostname'],
                     'username' => $data['username'],
                     'password' => $data['password'],
@@ -184,9 +185,9 @@ class Index extends Controller
             $this->success('', $this->request->baseFile() . '?s=/index/step4.html');
         }
 
-        if (session('step') != 3 && !session('reinstall')) {
-            $this->redirect($this->request->baseFile());
-        }
+//        if (session('step') != 3 && !session('reinstall')) {
+//            $this->redirect($this->request->baseFile());
+//        }
 
         session('step', 4);
         return $this->fetch();
@@ -216,5 +217,72 @@ class Index extends Controller
         session('installData', null);
 
         return $this->fetch();
+    }
+
+    public function test()
+    {
+//        $dbInstance = Db::connect([
+//            'type'     => 'mysql',
+//            'hostname' => '127.0.0.1',
+//            'database' => 'careyshop',
+//            'username' => 'root',
+//            'password' => 'root',
+//            'hostport' => 3306,
+//            'charset'  => 'utf8mb4',
+//            'prefix'   => '',
+//        ]);
+
+//        $path = APP_PATH . 'install' . DS . 'data' . DS;
+//        $sql = file_get_contents($path . 'careyshop_function.tpl');
+
+        $sql = '
+\n"
+
+    . "\'CREATE FUNCTION `getRegionChildrenList`(`rootId` TEXT) RETURNS VARCHAR(4000) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci\n"
+
+    . "    NO SQL\n"
+
+    . "    COMMENT \'根据父ID获取区域所有子级\'\n"
+
+    . "BEGIN\n"
+
+    . "DECLARE sTemp VARCHAR(4000)DECLARE sTempChd VARCHAR(4000)SET sTemp = NULLSET sTempChd = CAST(rootId AS CHAR)WHILE sTempChd IS NOT NULL DO\n"
+
+    . "IF (sTemp IS NOT NULL) THEN\n"
+
+    . "SET sTemp = CONCAT(sTemp,\',\',sTempChd)ELSE\n"
+
+    . "SET sTemp = CONCAT(sTempChd)END IFSELECT GROUP_CONCAT(region_id) INTO sTempChd FROM `{prefix}region` WHERE FIND_IN_SET(parent_id,sTempChd)>0END WHILERETURN sTempEND"';
+
+        $mysqli = mysqli_connect('127.0.0.1', 'root', 'root', 'careyshop', '3306');
+        $mysqli->set_charset('utf8');
+        mysqli_query($mysqli, $sql);
+//        $mysqli->multi_query($sql);
+        $mysqli->close();
+
+        echo $sql;
+
+////        $dbInstance->prepare();
+//
+//        $version = $dbInstance->execute('DROP FUNCTION IF EXISTS `getRegionChildrenList`;');
+//        print_r($version);exit();
+//
+////        // 资源路径
+////        $path = APP_PATH . 'install' . DS . 'data' . DS;
+////
+////        // 创建SQL函数
+////        $sql = file_get_contents($path . 'careyshop_function.tpl');
+////        $dbInstance->execute($sql);
+//
+////        $sql = str_replace("\r", "\n", $sql);
+////        $sql = explode(";\n", $sql);
+////
+//////        print_r($sql);exit();
+////
+////        foreach ($sql as $value) {
+////            $value = trim($value);
+////            if(empty($value)) continue;
+////            $dbInstance->execute($value);
+////        }
     }
 }
