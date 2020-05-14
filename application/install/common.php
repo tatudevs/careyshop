@@ -118,6 +118,7 @@ function check_func()
         ['bcmath', '支持', 'check', '模块'],
         ['mbstring', '支持', 'check', '模块'],
         ['file_get_contents', '支持', 'check', '函数'],
+        ['version_compare', '支持', 'check', '函数'],
     ];
 
     foreach ($items as &$val) {
@@ -132,4 +133,32 @@ function check_func()
     }
 
     return $items;
+}
+
+/**
+ * 创建数据表
+ * @param Object $db     数据库连接实列
+ * @param string $prefix 表前缀
+ */
+function create_data($db, $prefix)
+{
+    for ($i = 20000; $i > 0; $i--) {
+        $msg = '<li><span class="correct_span">&radic;</span>测试</span></li>';
+        insert_log($msg);
+    }
+}
+
+/**
+ * 生成配置文件
+ * @param array $data 配置数据
+ */
+function write_config($data)
+{
+}
+
+function insert_log($msg)
+{
+    echo "<script type='text/javascript'>insert_log(".$msg.")</script>";
+    flush();
+    ob_flush();
 }

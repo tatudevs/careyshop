@@ -123,8 +123,8 @@
 </section>
 
 <div class="loading" style="display: none;"><span>请稍后...</span></div>
-<script src="static/install/js/jquery.js"></script>
-<script>
+{load href="/static/install/js/jquery.js"/}
+<script type="text/javascript">
     $('#submit').click(function () {
         $('#response_tips').hide();
         const data = $('form').serializeArray();
@@ -140,7 +140,7 @@
             },
             success: function (data) {
                 if (data.code === 1) {
-                    self.location.href = data.url;
+                    location.href = data.url;
                 } else {
                     $('#response_tips').show().html('<span class="tips_error">' + data.msg + '</span>');
                 }

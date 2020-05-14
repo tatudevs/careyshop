@@ -148,8 +148,11 @@ class Index extends Controller
                     'prefix'   => $data['prefix'],
                 ]);
 
-                // 检测数据库连接
-                $dbInstance->execute('select version()');
+                // 检测数据库连接并检测版本
+                $version = $dbInstance->query('select version() as version limit 1;');
+                if (version_compare(reset($version)['version'], '5.5.3', '<')) {
+                    throw new \Exception('数据库版本过低，必须 5.5.3 及以上');
+                }
 
                 // 检测是否已存在数据库
                 if (!$data['is_cover']) {
@@ -203,7 +206,7 @@ class Index extends Controller
             $this->error('安装出错，请重新安装！', $this->request->baseFile());
         }
 
-        // 生成配置文件
+        // 安装锁定文件
 //        $lockPath = APP_PATH . 'install' . DS . 'data' . DS . 'install.lock';
 //        file_put_contents($lockPath, 'lock');
 
