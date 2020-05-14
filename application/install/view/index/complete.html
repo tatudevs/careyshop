@@ -1,3 +1,29 @@
 {extend name="layout"/}
 {block name="content"}
+<section class="section">
+    <div class="success_tip cc">
+        <a href="{:url('/' . ADMIN_MODULE)}" class="f16 b">安装完成，进入后台管理</a>
+        <p>再次感谢您选择 CareyShop，希望您会喜欢我们的产品！<p>
+    </div>
+
+    <div class="bottom tac">
+        <a href="{:url('/' . ADMIN_MODULE)}" class="btn">登录后台</a>
+        <a href="{$Request.baseFile}" class="btn">打开前台</a>
+    </div>
+</section>
+
+<script src="static/install/js/jquery.js"></script>
+<script>
+    $(function () {
+        $.ajax({
+            type: 'post',
+            url: 'https://careyshop.cn/api/v1/app.php',
+            data: {user_agent: 'careyshop', ver: '{:get_version()}'},
+            dataType: 'json',
+            success: function () {
+                // 版本更新预留
+            }
+        })
+    })
+</script>
 {/block}

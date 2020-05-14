@@ -203,9 +203,9 @@ class Index extends Controller
             $this->error('安装出错，请重新安装！', $this->request->baseFile());
         }
 
-        // 写入安装锁定文件
-        $lockPath = APP_PATH . 'install' . DS . 'data' . DS . 'install.lock';
-        file_put_contents($lockPath, 'lock');
+        // 生成配置文件
+//        $lockPath = APP_PATH . 'install' . DS . 'data' . DS . 'install.lock';
+//        file_put_contents($lockPath, 'lock');
 
         session('step', null);
         session('error', null);
