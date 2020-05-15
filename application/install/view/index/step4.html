@@ -34,29 +34,4 @@
         $('#log-inner').append(msg);
     }
 </script>
-
-{php}
-use think\Db;
-
-// 连接数据库
-$data = session('installData');
-$dbInstance = Db::connect([
-    'type'     => $data['type'],
-    'hostname' => $data['hostname'],
-    'database' => $data['database'],
-    'username' => $data['username'],
-    'password' => $data['password'],
-    'hostport' => $data['hostport'],
-    'charset'  => 'utf8mb4',
-    'prefix'   => $data['prefix'],
-]);
-
-// 创建数据表
-create_data($dbInstance, $data);
-
-// 生成配置文件
-write_config($data);
-
-// echo "<script type=\"text/javascript\">location.href='".request()->baseFile()."?s=/index/complete.html'</script>";
-{/php}
 {/block}

@@ -1,9 +1,4 @@
-DELIMITER $$
-
-USE `{database}`$$
-
-DROP FUNCTION IF EXISTS `getRegionChildrenList`$$
-
+DROP FUNCTION IF EXISTS `getRegionChildrenList`;
 CREATE FUNCTION `getRegionChildrenList`(`rootId` TEXT) RETURNS VARCHAR(4000) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci
     NO SQL
     COMMENT '根据父ID获取区域所有子级'
@@ -23,17 +18,9 @@ END IF;
 SELECT GROUP_CONCAT(region_id) INTO sTempChd FROM `{prefix}region` WHERE FIND_IN_SET(parent_id,sTempChd)>0;
 END WHILE;
 RETURN sTemp;
-END$$
+END;
 
-DELIMITER ;
-
-
-DELIMITER $$
-
-USE `{database}`$$
-
-DROP FUNCTION IF EXISTS `getStorageChildrenList`$$
-
+DROP FUNCTION IF EXISTS `getStorageChildrenList`;
 CREATE FUNCTION `getStorageChildrenList`(`rootId` TEXT) RETURNS VARCHAR(4000) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci
 NO SQL
 COMMENT '根据父ID获取资源管理器所有子级'
@@ -53,6 +40,4 @@ END IF;
 SELECT GROUP_CONCAT(storage_id) INTO sTempChd FROM `{prefix}region` WHERE FIND_IN_SET(parent_id,sTempChd)>0;
 END WHILE;
 RETURN sTemp;
-END$$
-
-DELIMITER ;
+END;

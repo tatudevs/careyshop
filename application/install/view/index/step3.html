@@ -140,7 +140,7 @@
             },
             success: function (data) {
                 if (data.code === 1) {
-                    location.href = data.url;
+                    self.location.href = data.url;
                 } else {
                     $('#response_tips').show().html('<span class="tips_error">' + data.msg + '</span>');
                 }

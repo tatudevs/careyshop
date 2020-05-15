@@ -159,18 +159,52 @@ function macro_str_replace($sql, $data)
  */
 function create_data($db, $data)
 {
-    // 资源路径
+    // 各类资源路径
     $path = APP_PATH . 'install' . DS . 'data' . DS;
 
-    // 创建SQL函数
-    $fun = file_get_contents($path . 'careyshop_function.tpl');
-    $fun = macro_str_replace($fun, $data);
+    // 创建数据库函数
+    $sql = file_get_contents($path . 'careyshop_function.tpl');
+    $sql = macro_str_replace($sql, $data);
 
-    if(false !== $db->execute($fun)){
-        insert_log('创建数据函数完成');
+    $mysqli = mysqli_connect(
+        $data['hostname'],
+        $data['username'],
+        $data['password'],
+        $data['database'],
+        $data['hostport']
+    );
+
+    $mysqli->set_charset('utf8mb4');
+
+    if ($mysqli->multi_query($sql)) {
+        insert_log('创建数据库函数完成');
     } else {
-        insert_log('创建数据函数失败', true);
+        insert_log('创建数据库函数失败', true);
         session('error', true);
+    }
+
+    $mysqli->close();
+
+    // 创建数据库表
+    $sql = file_get_contents($path . sprintf('careyshop%s.sql', $data['is_demo'] == 1 ? '_demo' : ''));
+    $sql = macro_str_replace($sql, $data);
+    $sql = str_replace("\r", "\n", $sql);
+    $sql = explode(";\n", $sql);
+
+    foreach ($sql as $value) {
+        $value = trim($value);
+        if (empty($value)) {
+            continue;
+        }
+
+        if (false !== $db->execute($value)) {
+            insert_log('创建数据库表完成');
+        } else {
+            insert_log('创建数据库表失败', true);
+            session('error', true);
+        }
+
+        sleep(1);
     }
 }
 
@@ -189,10 +223,10 @@ function write_config($data)
  */
 function insert_log($msg, $error = false)
 {
-    $html = sprintf('"<li><i class=\"%s\"/>%s<span style=\"float: right;\">%s</span></li>"',
+    $html = sprintf('<li><i class="%s"/>%s<span style="float: right;">%s</span></li>',
         $error ? 'icon_error' : 'icon_check', $msg, date('m-d H:i:s'));
 
-    echo "<script type=\"text/javascript\">insert_log({$html})</script>";
+    echo "<script type=\"text/javascript\">insert_log('{$html}')</script>";
     flush();
     ob_flush();
 }
