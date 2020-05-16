@@ -1,5 +1,5 @@
 const serverConfig = {
-  BASE_API: '//demo.careyshop.cn/api',
-  APP_KEY: '86757125',
-  APP_SECRET: 'ea1bd533d001fd73b09944f04c96a6fc'
+  BASE_API: '/api',
+  APP_KEY: '72468394',
+  APP_SECRET: 'b55049601f314d29016f1707a0881485'
 }

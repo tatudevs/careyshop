@@ -355,7 +355,7 @@ class Index extends Controller
                 'password'    => user_md5($data['admin_password']),
                 'group_id'    => AUTH_SUPER_ADMINISTRATOR,
                 'nickname'    => 'CareyShop',
-                'create_time' => time(),
+                'create_time' => '1530289832',
                 'update_time' => time(),
             ];
 
