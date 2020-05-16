@@ -57,7 +57,7 @@
                 }
             },
             error: function (err) {
-                insert_log('网络请求错误', true);
+                insert_log('网络请求错误或内部服务器错误', true);
                 console.info('error：' + err.responseText);
             }
         });

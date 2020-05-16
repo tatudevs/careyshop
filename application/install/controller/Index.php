@@ -10,6 +10,8 @@
 
 namespace app\install\controller;
 
+use app\common\model\Admin;
+use app\common\model\App;
 use think\Controller;
 use think\Validate;
 use think\Cache;
@@ -30,14 +32,15 @@ class Index extends Controller
         }
 
         if (is_file(APP_PATH . 'database.php')) {
-            session('reinstall', true);
+            session('step', 2);
             $this->assign('next', '重新安装');
+            $this->assign('nextUrl', url('step3'));
         } else {
-            session('reinstall', false);
+            session('step', 1);
             $this->assign('next', '接 受');
+            $this->assign('nextUrl', url('step2'));
         }
 
-        session('step', 1);
         session('error', false);
 
         return $this->fetch();
@@ -51,10 +54,6 @@ class Index extends Controller
     {
         session('step', 2);
         session('error', false);
-
-        if (session('reinstall')) {
-            $this->redirect(url('step4'));
-        }
 
         // 环境检测
         $env = check_env();
@@ -186,9 +185,9 @@ class Index extends Controller
             $this->success('success', url('step4'));
         }
 
-//        if (session('step') != 3 && !session('reinstall')) {
-//            $this->redirect(url('/'));
-//        }
+        if (session('step') != 3) {
+            $this->redirect(url('/'));
+        }
 
         session('step', 4);
         Cache::clear('install');
@@ -198,27 +197,12 @@ class Index extends Controller
 
     public function install()
     {
-//        if (session('step') != 4 || !$this->request->isAjax()) {
-//            $this->error('请按步骤安装');
-//        }
-
-        $data = [
-            'type'           => 'mysql',
-            'hostname'       => '127.0.0.1',
-            'database'       => 'careyshop',
-            'username'       => 'root',
-            'password'       => 'root',
-            'hostport'       => '3306',
-            'prefix'         => 'cs_',
-            'admin_user'     => 'admin',
-            'admin_password' => 'admin888',
-            'is_cover'       => '1',
-            'is_demo'        => '0',
-            'is_region'      => '0',
-        ];
+        if (session('step') != 4 || !$this->request->isAjax()) {
+            $this->error('请按步骤安装');
+        }
 
         // 数据准备
-//        $data = session('installData');
+        $data = session('installData');
         $type = $this->request->post('type');
         $result = ['status' => 1, 'type' => $type];
         $path = APP_PATH . 'install' . DS . 'data' . DS;
@@ -297,7 +281,7 @@ class Index extends Controller
                     $this->success('开始安装精准区域', url('install', 'idx=0'), $result);
                 } else {
                     $result['type'] = 'config';
-                    $this->success('开始安装配置文件', url('install'), $result);
+                    $this->success('开始安装配置文件', url('install', 'idx=0'), $result);
                 }
             }
 
@@ -340,7 +324,7 @@ class Index extends Controller
 
             if ($idx >= count($region)) {
                 $result['type'] = 'config';
-                $this->success('开始安装配置文件', url('install'), $result);
+                $this->success('开始安装配置文件', url('install', 'idx=0'), $result);
             }
 
             // 插入数据库表
@@ -366,12 +350,66 @@ class Index extends Controller
 
         // 安装配置文件
         if ('config' == $type) {
-            $result['status'] = 0;
-            $this->success('全部安装完成', url('complete'), $result);
+            $msg = '';
+            $idx = $this->request->param('idx');
+
+            switch ($idx) {
+                case 0: // 数据库配置文件
+                    $conf = file_get_contents($path . 'database.tpl');
+                    $conf = macro_str_replace($conf, $data);
+
+                    if (!file_put_contents(APP_PATH . 'database.php', $conf)) {
+                        $this->error('数据库配置文件写入失败');
+                    }
+
+                    $msg = '开始创建超级管理员';
+                    break;
+
+                case 1: // 创建超级管理员
+                    $adminData = [
+                        'username'         => $data['admin_user'],
+                        'password'         => $data['admin_password'],
+                        'password_confirm' => $data['admin_password'],
+                        'group_id'         => AUTH_SUPER_ADMINISTRATOR,
+                        'nickname'         => 'CareyShop',
+                    ];
+
+                    $adminDB = new Admin();
+                    if (false === $adminDB->addAdminItem($adminData)) {
+                        $this->error($adminDB->getError());
+                    }
+
+                    $msg = '开始创建应用APP';
+                    break;
+
+                case 2: // 创建APP
+                    $appDB = new App();
+                    $appResult = $appDB->addAppItem(['app_name' => 'Admin(后台管理)', 'captcha' => 1]);
+
+                    if (false === $appResult) {
+                        $this->error($appDB->getError());
+                    }
+
+                    $pro = file_get_contents($path . 'production.tpl');
+                    $pro = macro_str_replace($pro, $appResult);
+
+                    $pathPro = ROOT_PATH . 'public' . DS . 'static' . DS . 'admin' . DS . 'static' . DS . 'config';
+                    if (!file_put_contents($pathPro . DS . 'production.js', $pro)) {
+                        $this->error('后台配置文件写入失败');
+                    }
+
+                    break;
+
+                default:
+                    $result['status'] = 0;
+                    $this->success('安装完成！', url('complete'), $result);
+            }
+
+            $this->success($msg, url('install', 'idx=' . ($idx + 1)), $result);
         }
 
         // 结束
-        $this->error('异常结束，安装未完成，请刷新重试');
+        $this->error('异常结束，安装未完成');
     }
 
     /**
@@ -389,12 +427,11 @@ class Index extends Controller
         }
 
         // 安装锁定文件
-//        $lockPath = APP_PATH . 'install' . DS . 'data' . DS . 'install.lock';
-//        file_put_contents($lockPath, 'lock');
+        $lockPath = APP_PATH . 'install' . DS . 'data' . DS . 'install.lock';
+        file_put_contents($lockPath, 'lock');
 
         session('step', null);
         session('error', null);
-        session('reinstall', null);
         session('installData', null);
         Cache::clear('install');
 
