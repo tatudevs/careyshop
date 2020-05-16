@@ -10,8 +10,6 @@
 
 namespace app\install\controller;
 
-use app\common\model\Admin;
-use app\common\model\App;
 use think\Controller;
 use think\Validate;
 use think\Cache;
@@ -242,7 +240,7 @@ class Index extends Controller
 
         // 连接数据库
         $db = null;
-        if (in_array($type, ['database', 'region'])) {
+        if (in_array($type, ['database', 'region', 'config'])) {
             try {
                 $db = Db::connect([
                     'type'     => $data['type'],
@@ -281,7 +279,7 @@ class Index extends Controller
                     $this->success('开始安装精准区域', url('install', 'idx=0'), $result);
                 } else {
                     $result['type'] = 'config';
-                    $this->success('开始安装配置文件', url('install', 'idx=0'), $result);
+                    $this->success('开始安装配置文件', url('install'), $result);
                 }
             }
 
@@ -324,7 +322,7 @@ class Index extends Controller
 
             if ($idx >= count($region)) {
                 $result['type'] = 'config';
-                $this->success('开始安装配置文件', url('install', 'idx=0'), $result);
+                $this->success('开始安装配置文件', url('install'), $result);
             }
 
             // 插入数据库表
@@ -350,62 +348,57 @@ class Index extends Controller
 
         // 安装配置文件
         if ('config' == $type) {
-            $msg = '';
-            $idx = $this->request->param('idx');
+            // 创建超级管理员
+            $adminData = [
+                'admin_id'    => 1,
+                'username'    => $data['admin_user'],
+                'password'    => user_md5($data['admin_password']),
+                'group_id'    => AUTH_SUPER_ADMINISTRATOR,
+                'nickname'    => 'CareyShop',
+                'create_time' => time(),
+                'update_time' => time(),
+            ];
 
-            switch ($idx) {
-                case 0: // 数据库配置文件
-                    $conf = file_get_contents($path . 'database.tpl');
-                    $conf = macro_str_replace($conf, $data);
-
-                    if (!file_put_contents(APP_PATH . 'database.php', $conf)) {
-                        $this->error('数据库配置文件写入失败');
-                    }
-
-                    $msg = '开始创建超级管理员';
-                    break;
-
-                case 1: // 创建超级管理员
-                    $adminData = [
-                        'username'         => $data['admin_user'],
-                        'password'         => $data['admin_password'],
-                        'password_confirm' => $data['admin_password'],
-                        'group_id'         => AUTH_SUPER_ADMINISTRATOR,
-                        'nickname'         => 'CareyShop',
-                    ];
-
-                    $adminDB = new Admin();
-                    if (false === $adminDB->addAdminItem($adminData)) {
-                        $this->error($adminDB->getError());
-                    }
-
-                    $msg = '开始创建应用APP';
-                    break;
-
-                case 2: // 创建APP
-                    $appDB = new App();
-                    $appResult = $appDB->addAppItem(['app_name' => 'Admin(后台管理)', 'captcha' => 1]);
-
-                    if (false === $appResult) {
-                        $this->error($appDB->getError());
-                    }
-
-                    $pro = file_get_contents($path . 'production.tpl');
-                    $pro = macro_str_replace($pro, $appResult);
-
-                    $pathPro = ROOT_PATH . 'public' . DS . 'static' . DS . 'admin' . DS . 'static' . DS . 'config';
-                    if (!file_put_contents($pathPro . DS . 'production.js', $pro)) {
-                        $this->error('后台配置文件写入失败');
-                    }
-
-                    break;
-
-                default:
-                    $result['status'] = 0;
-                    $this->success('安装完成！', url('complete'), $result);
+            try {
+                $db->name('admin')->insert($adminData);
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
             }
 
-            $this->success($msg, url('install', 'idx=' . ($idx + 1)), $result);
+            // 创建APP
+            $appData = [
+                'app_id'     => 1,
+                'app_name'   => 'Admin(后台管理)',
+                'app_key'    => rand_number(8),
+                'app_secret' => rand_string(),
+                'captcha'    => 1,
+            ];
+
+            try {
+                $db->name('app')->insert($appData);
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
+            }
+
+            // 创建数据库配置文件
+            $fileConfig = file_get_contents($path . 'database.tpl');
+            $fileConfig = macro_str_replace($fileConfig, $data);
+
+            if (!file_put_contents(APP_PATH . 'database.php', $fileConfig)) {
+                $this->error('数据库配置文件写入失败');
+            }
+
+            // 创建后台配置文件
+            $fileAdmin = file_get_contents($path . 'production.tpl');
+            $fileAdmin = macro_str_replace($fileAdmin, $appData);
+
+            $pathPro = ROOT_PATH . 'public' . DS . 'static' . DS . 'admin' . DS . 'static' . DS . 'config';
+            if (!file_put_contents($pathPro . DS . 'production.js', $fileAdmin)) {
+                $this->error('后台配置文件写入失败');
+            }
+
+            $result['status'] = 0;
+            $this->success('安装完成！', url('complete'), $result);
         }
 
         // 结束
