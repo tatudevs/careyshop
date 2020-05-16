@@ -153,80 +153,27 @@ function macro_str_replace($sql, $data)
 }
 
 /**
- * 创建数据表
- * @param Object $db   数据库实列
- * @param array  $data 配置数据
+ * 获取SQL语句动作
+ * @param string $sql SQL语句
+ * @return string
  */
-function create_data($db, $data)
+function get_sql_message($sql)
 {
-    // 各类资源路径
-    $path = APP_PATH . 'install' . DS . 'data' . DS;
-
-    // 创建数据库函数
-    $sql = file_get_contents($path . 'careyshop_function.tpl');
-    $sql = macro_str_replace($sql, $data);
-
-    $mysqli = mysqli_connect(
-        $data['hostname'],
-        $data['username'],
-        $data['password'],
-        $data['database'],
-        $data['hostport']
-    );
-
-    $mysqli->set_charset('utf8mb4');
-
-    if ($mysqli->multi_query($sql)) {
-        insert_log('创建数据库函数完成');
-    } else {
-        insert_log('创建数据库函数失败', true);
-        session('error', true);
+    if (preg_match('/CREATE TABLE? `([^ ]*)`/is', $sql, $matches)) {
+        return !empty($matches[1]) ? "创建数据库表 {$matches[1]} 完成" : '';
     }
 
-    $mysqli->close();
+    if (preg_match('/INSERT INTO? `([^ ]*)`/is', $sql, $matches)) {
+        return !empty($matches[1]) ? "插入数据库行 {$matches[1]} 完成" : '';
+    }
 
-    // 创建数据库表
-    $sql = file_get_contents($path . sprintf('careyshop%s.sql', $data['is_demo'] == 1 ? '_demo' : ''));
-    $sql = macro_str_replace($sql, $data);
-    $sql = str_replace("\r", "\n", $sql);
-    $sql = explode(";\n", $sql);
-
-    foreach ($sql as $value) {
-        $value = trim($value);
-        if (empty($value)) {
-            continue;
-        }
-
-        if (false !== $db->execute($value)) {
-            insert_log('创建数据库表完成');
+    if (preg_match('/ALTER TABLE? `([^ ]*)`/is', $sql, $matches)) {
+        if (mb_strpos($sql, 'MODIFY')) {
+            return !empty($matches[1]) ? "调整数据库索引 {$matches[1]} 完成" : '';
         } else {
-            insert_log('创建数据库表失败', true);
-            session('error', true);
+            return !empty($matches[1]) ? "创建数据库索引 {$matches[1]} 完成" : '';
         }
-
-        sleep(1);
     }
-}
 
-/**
- * 生成配置文件
- * @param array $data 配置数据
- */
-function write_config($data)
-{
-}
-
-/**
- * 发送日志
- * @param string $msg   信息
- * @param bool   $error 是否错误
- */
-function insert_log($msg, $error = false)
-{
-    $html = sprintf('<li><i class="%s"/>%s<span style="float: right;">%s</span></li>',
-        $error ? 'icon_error' : 'icon_check', $msg, date('m-d H:i:s'));
-
-    echo "<script type=\"text/javascript\">insert_log('{$html}')</script>";
-    flush();
-    ob_flush();
+    return '';
 }

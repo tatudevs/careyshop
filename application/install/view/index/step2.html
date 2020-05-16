@@ -60,9 +60,9 @@
     </div>
 
     <div class="bottom tac">
-        <a href="{$Request.baseFile}?s=/index/step2.html" class="btn">重新检测</a>
+        <a href="{:url('step2')}" class="btn">重新检测</a>
         {eq name="isNext" value="true"}
-        <a href="{$Request.baseFile}?s=/index/step3.html" class="btn">下一步</a>
+        <a href="{:url('step3')}" class="btn">下一步</a>
         {/eq}
     </div>
 </section>

@@ -16,7 +16,7 @@
 
     <div class="bottom tac">
         <a href="javascript:" class="btn_old">
-            <img src="static/install/images/loading.gif" align="absmiddle"/>
+            <img src="/static/install/images/loading.gif" align="absmiddle"/>
             <span>正在安装...</span>
         </a>
     </div>
@@ -24,14 +24,82 @@
 
 {load href="/static/install/js/jquery.js"/}
 <script type="text/javascript">
+    $.ajaxSetup({cache: false});
     $(document).ready(function () {
-        $('#log').animate({
-            scrollTop: $('#log').get(0).scrollHeight
-        });
+        reloads();
     });
 
-    function insert_log(msg) {
-        $('#log-inner').append(msg);
+    function reloads(next, type) {
+        $.ajax({
+            type: "post",
+            url: next || "{:url('install')}",
+            data: {type: type},
+            dataType: "json",
+            success: function (res) {
+                try {
+                    if (res.code && res.data) {
+                        if (res.msg) {
+                            insert_log(res.msg);
+                        }
+
+                        if (res.data.status) {
+                            reloads(res.url, res.data.type);
+                        } else {
+                            setTimeout(function () {
+                                self.location.href = res.url;
+                            }, 2000);
+                        }
+                    } else {
+                        insert_log(res.msg, true);
+                    }
+                } catch(e) {
+                    insert_log(e.message, true);
+                }
+            },
+            error: function (err) {
+                insert_log('网络请求错误', true);
+                console.info('error：' + err.responseText);
+            }
+        });
+    }
+
+    function dateFormat(fmt) {
+        const date = new Date();
+        let format = fmt || "mm-dd HH:MM:SS";
+
+        const opt = {
+            "Y+": date.getFullYear().toString(),        // 年
+            "m+": (date.getMonth() + 1).toString(),     // 月
+            "d+": date.getDate().toString(),            // 日
+            "H+": date.getHours().toString(),           // 时
+            "M+": date.getMinutes().toString(),         // 分
+            "S+": date.getSeconds().toString()          // 秒
+        };
+
+        if (/(y+)/.test(format)) {
+            format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+
+        for (let k in opt) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, RegExp.$1.length === 1
+                    ? opt[k]
+                    : ("00" + opt[k]).substr(("" + opt[k]).length));
+            }
+        }
+
+        return format;
+    }
+
+    function insert_log(msg, error) {
+        let date = dateFormat();
+        const icon = error ? "icon_error" : "icon_check";
+        const message = '<li><i class="' + icon + '"/>' + msg + '<span class="fr">' + date + '</span></li>';
+
+        $("#log-inner").append(message);
+        $("#log").scrollTop(function () {
+            return $(this)[0].scrollHeight
+        });
     }
 </script>
 {/block}

@@ -12,6 +12,7 @@ namespace app\install\controller;
 
 use think\Controller;
 use think\Validate;
+use think\Cache;
 use think\Db;
 
 define('INSTALL_APP_PATH', realpath('./') . '/');
@@ -52,7 +53,7 @@ class Index extends Controller
         session('error', false);
 
         if (session('reinstall')) {
-            $this->redirect($this->request->baseFile() . '?s=/index/step4.html');
+            $this->redirect(url('step4'));
         }
 
         // 环境检测
@@ -80,7 +81,7 @@ class Index extends Controller
     public function step3()
     {
         if (session('step') != 2) {
-            $this->redirect($this->request->baseFile());
+            $this->redirect(url('/'));
         }
 
         session('step', 3);
@@ -182,42 +183,195 @@ class Index extends Controller
             }
 
             // 准备工作完成
-            $this->success('', $this->request->baseFile() . '?s=/index/step4.html');
+            $this->success('success', url('step4'));
         }
 
 //        if (session('step') != 3 && !session('reinstall')) {
-//            $this->redirect($this->request->baseFile());
+//            $this->redirect(url('/'));
 //        }
 
         session('step', 4);
+        Cache::clear('install');
+
         return $this->fetch();
     }
 
-    /**
-     * @throws \think\Exception
-     */
     public function install()
     {
+//        if (session('step') != 4 || !$this->request->isAjax()) {
+//            $this->error('请按步骤安装');
+//        }
+
+        $data = [
+            'type'           => 'mysql',
+            'hostname'       => '127.0.0.1',
+            'database'       => 'careyshop',
+            'username'       => 'root',
+            'password'       => 'root',
+            'hostport'       => '3306',
+            'prefix'         => 'cs_',
+            'admin_user'     => 'admin',
+            'admin_password' => 'admin888',
+            'is_cover'       => '1',
+            'is_demo'        => '0',
+            'is_region'      => '0',
+        ];
+
+        // 数据准备
+//        $data = session('installData');
+        $type = $this->request->post('type');
+        $result = ['status' => 1, 'type' => $type];
+        $path = APP_PATH . 'install' . DS . 'data' . DS;
+
+        if (!$type) {
+            $result['type'] = 'function';
+            $this->success('开始安装数据库函数', url('install'), $result);
+        }
+
+        // 安装数据库函数
+        if ('function' == $type) {
+            try {
+                $sql = file_get_contents($path . 'careyshop_function.tpl');
+                $sql = macro_str_replace($sql, $data);
+
+                $mysqli = mysqli_connect(
+                    $data['hostname'],
+                    $data['username'],
+                    $data['password'],
+                    $data['database'],
+                    $data['hostport']
+                );
+
+                $mysqli->set_charset('utf8mb4');
+                if (!$mysqli->multi_query($sql)) {
+                    throw new \Exception($mysqli->error);
+                }
+
+                $mysqli->close();
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
+            }
+
+            $result['type'] = 'database';
+            $this->success('开始安装数据库表', url('install', 'idx=0'), $result);
+        }
+
         // 连接数据库
-        $data = session('installData');
-        $dbInstance = Db::connect([
-            'type'     => $data['type'],
-            'hostname' => $data['hostname'],
-            'database' => $data['database'],
-            'username' => $data['username'],
-            'password' => $data['password'],
-            'hostport' => $data['hostport'],
-            'charset'  => 'utf8mb4',
-            'prefix'   => $data['prefix'],
-        ]);
+        $db = null;
+        if (in_array($type, ['database', 'region'])) {
+            try {
+                $db = Db::connect([
+                    'type'     => $data['type'],
+                    'hostname' => $data['hostname'],
+                    'database' => $data['database'],
+                    'username' => $data['username'],
+                    'password' => $data['password'],
+                    'hostport' => $data['hostport'],
+                    'charset'  => 'utf8mb4',
+                    'prefix'   => $data['prefix'],
+                ]);
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
+            }
+        }
 
-        // 创建数据表
-        create_data($dbInstance, $data);
+        // 安装数据库表
+        if ('database' == $type) {
+            $database = Cache::remember('database', function () use ($data, $path) {
+                $sql = file_get_contents($path . sprintf('careyshop%s.sql', $data['is_demo'] == 1 ? '_demo' : ''));
+                $sql = macro_str_replace($sql, $data);
+                $sql = str_replace("\r", "\n", $sql);
+                $sql = explode(";\n", $sql);
 
-        // 生成配置文件
-        write_config($data);
+                Cache::tag('install', 'database');
+                return $sql;
+            });
 
-        $this->redirect($this->request->baseFile() . '?s=/index/complete.html');
+            // 数据库表安装完成
+            $msg = '';
+            $idx = $this->request->param('idx');
+
+            if ($idx >= count($database)) {
+                if ($data['is_region']) {
+                    $result['type'] = 'region';
+                    $this->success('开始安装精准区域', url('install', 'idx=0'), $result);
+                } else {
+                    $result['type'] = 'config';
+                    $this->success('开始安装配置文件', url('install'), $result);
+                }
+            }
+
+            // 插入数据库表
+            if (array_key_exists($idx, $database)) {
+                $sql = $value = trim($database[$idx]);
+
+                if (!empty($value)) {
+                    try {
+                        if (false !== $db->execute($sql)) {
+                            $msg = get_sql_message($sql);
+                        } else {
+                            throw new \Exception($db->getError());
+                        }
+                    } catch (\Exception $e) {
+                        $this->error($e->getMessage());
+                    }
+                }
+            }
+
+            // 返回下一步
+            $this->success($msg, url('install', 'idx=' . ($idx + 1)), $result);
+        }
+
+        // 安装精准区域
+        if ('region' == $type) {
+            $region = Cache::remember('region', function () use ($data, $path) {
+                $sql = file_get_contents($path . 'cs_region_full.sql');
+                $sql = macro_str_replace($sql, $data);
+                $sql = str_replace("\r", "\n", $sql);
+                $sql = explode(";\n", $sql);
+
+                Cache::tag('install', 'region');
+                return $sql;
+            });
+
+            // 精准区域安装完成
+            $msg = '';
+            $idx = $this->request->param('idx');
+
+            if ($idx >= count($region)) {
+                $result['type'] = 'config';
+                $this->success('开始安装配置文件', url('install'), $result);
+            }
+
+            // 插入数据库表
+            if (array_key_exists($idx, $region)) {
+                $sql = $value = trim($region[$idx]);
+
+                if (!empty($value)) {
+                    try {
+                        if (false !== $db->execute($sql)) {
+                            $msg = get_sql_message($sql);
+                        } else {
+                            throw new \Exception($db->getError());
+                        }
+                    } catch (\Exception $e) {
+                        $this->error($e->getMessage());
+                    }
+                }
+            }
+
+            // 返回下一步
+            $this->success($msg, url('install', 'idx=' . ($idx + 1)), $result);
+        }
+
+        // 安装配置文件
+        if ('config' == $type) {
+            $result['status'] = 0;
+            $this->success('全部安装完成', url('complete'), $result);
+        }
+
+        // 结束
+        $this->error('异常结束，安装未完成，请刷新重试');
     }
 
     /**
@@ -227,11 +381,11 @@ class Index extends Controller
     public function complete()
     {
         if (session('step') != 4) {
-            $this->error('请按步骤安装系统', $this->request->baseFile());
+            $this->error('请按步骤安装系统', url('/'));
         }
 
         if (session('error')) {
-            $this->error('安装出错，请重新安装！', $this->request->baseFile());
+            $this->error('安装出错，请重新安装！', url('/'));
         }
 
         // 安装锁定文件
@@ -242,6 +396,7 @@ class Index extends Controller
         session('error', null);
         session('reinstall', null);
         session('installData', null);
+        Cache::clear('install');
 
         return $this->fetch();
     }

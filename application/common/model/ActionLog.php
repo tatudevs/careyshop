@@ -86,10 +86,10 @@ class ActionLog extends CareyShop
         if (empty($menuMap)) {
             $menuMap = Cache::remember('menuOfActionLog', function () {
                 $menuList = Menu::getMenuListData('api');
+                Cache::tag('CommonAuth', 'menuOfActionLog');
+
                 return array_column($menuList, 'name', 'url');
             });
-
-            Cache::tag('CommonAuth', 'menuOfActionLog');
         }
 
         if (array_key_exists($key, $menuMap)) {

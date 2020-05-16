@@ -116,7 +116,7 @@
         <div id="response_tips" style="display: none; text-align: center; margin-bottom: 10px;"></div>
 
         <div class="bottom tac">
-            <a href="{$Request.baseFile}?s=/index/step2.html" class="btn">上一步</a>
+            <a href="{:url('step2')}" class="btn">上一步</a>
             <button type="button" id="submit" class="btn install_btn">创建数据</button>
         </div>
     </form>
@@ -138,20 +138,20 @@
                 $('.loading').show();
                 $('#submit').attr('disabled', true).addClass('btn_old');
             },
-            success: function (data) {
-                if (data.code === 1) {
-                    self.location.href = data.url;
+            success: function (res) {
+                if (res.code === 1) {
+                    self.location.href = res.url;
                 } else {
-                    $('#response_tips').show().html('<span class="tips_error">' + data.msg + '</span>');
+                    $('#response_tips').show().html('<span class="tips_error">' + res.msg + '</span>');
                 }
             },
             complete: function () {
                 $('.loading').hide();
                 $('#submit').removeAttr('disabled').removeClass('btn_old');
             },
-            error: function (data) {
+            error: function (err) {
                 $('#response_tips').show().html('<span class="tips_error">网络请求错误</span>');
-                console.info('error：' + data.responseText);
+                console.info('error：' + err.responseText);
             }
         })
     })
