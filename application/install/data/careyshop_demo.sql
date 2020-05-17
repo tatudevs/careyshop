@@ -13225,8 +13225,8 @@ CREATE TABLE `{prefix}setting` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统配置';
 
 INSERT INTO `{prefix}setting` (`setting_id`, `code`, `value`, `module`, `description`, `help_text`) VALUES
-(1, 'api_id', '', 'delivery_dist', '快递鸟商户ID', '填写快递鸟 <span style=\"color:#F56C6C;\">商户ID</span>'),
-(2, 'api_key', '', 'delivery_dist', '快递鸟ApiKey', '填写快递鸟 <span style=\"color:#F56C6C;\">API key</span>'),
+(1, 'api_id', '1286210', 'delivery_dist', '快递鸟商户ID', '填写快递鸟 <span style=\"color:#F56C6C;\">商户ID</span>'),
+(2, 'api_key', 'e5257ab3-7ac9-477d-a5d1-54cd7fc93974', 'delivery_dist', '快递鸟ApiKey', '填写快递鸟 <span style=\"color:#F56C6C;\">API key</span>'),
 (3, 'is_sub', '1', 'delivery_dist', '是否启用订阅', '开启订阅后快递鸟会主动将配送轨迹推送到系统'),
 (4, 'success', 'http://www.careyshop.cn/', 'payment', '支付成功提示页', '支付成功后返回到的页面'),
 (5, 'error', 'http://www.careyshop.cn/', 'payment', '支付失败提示页', '支付失败后返回到的页面'),
