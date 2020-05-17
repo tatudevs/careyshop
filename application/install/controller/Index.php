@@ -105,6 +105,7 @@ class Index extends Controller
                 'prefix'         => 'require',
                 'admin_user'     => 'require|length:4,20',
                 'admin_password' => 'require|min:6|confirm',
+                'base_api'       => 'require',
                 'is_cover'       => 'require|in:0,1',
                 'is_demo'        => 'require|in:0,1',
                 'is_region'      => 'require|in:0,1',
@@ -119,6 +120,7 @@ class Index extends Controller
                 'prefix'         => '数据表前缀',
                 'admin_user'     => '管理员账号',
                 'admin_password' => '管理员密码',
+                'base_api'       => 'API接口路径',
                 'is_cover'       => '覆盖同名数据库',
                 'is_demo'        => '导入演示数据',
                 'is_region'      => '区域数据',
@@ -376,6 +378,7 @@ class Index extends Controller
 
             try {
                 $db->name('app')->insert($appData);
+                $appData['base_api'] = $data['base_api'];
             } catch (\Exception $e) {
                 $this->error($e->getMessage());
             }
