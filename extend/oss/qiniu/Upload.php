@@ -431,22 +431,14 @@ class Upload extends UploadBase
         $secretKey = Config::get('qiniu_secret_key.value', 'upload');
         $bucket = Config::get('qiniu_bucket.value', 'upload');
 
-        if (empty($accessKey) || empty($secretKey) || empty($bucket)) {
-            return true;
-        }
-
         $auth = new Auth($accessKey, $secretKey);
         $config = new \Qiniu\Config();
         $bucketManager = new BucketManager($auth, $config);
 
         $ops = $bucketManager->buildBatchDelete($bucket, $this->delFileList);
-        list($ret, $err) = $bucketManager->batch($ops);
+        $bucketManager->batch($ops);
 
-        if ($ret) {
-            return true;
-        }
-
-        return $this->setError($err->message());
+        return true;
     }
 
     /**

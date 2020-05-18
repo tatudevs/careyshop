@@ -526,15 +526,11 @@ class Upload extends UploadBase
         $endPoint = Config::get('aliyun_endpoint.value', 'upload');
         $bucket = Config::get('aliyun_bucket.value', 'upload');
 
-        if (empty($accessKeyId) || empty($accessKeySecret) || empty($endPoint) || empty($bucket)) {
-            return true;
-        }
-
         try {
             $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endPoint);
             $ossClient->deleteObjects($bucket, $this->delFileList);
         } catch (OssException $e) {
-            return $this->setError($e->getMessage());
+            return true;
         }
 
         return true;
