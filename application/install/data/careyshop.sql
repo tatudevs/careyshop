@@ -7554,6 +7554,31 @@ CREATE TABLE `{prefix}storage` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='资源管理器';
 
+INSERT INTO `{prefix}storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `size`, `pixel`, `hash`, `path`, `url`, `protocol`, `type`, `priority`, `cover`, `sort`, `is_default`, `create_time`, `update_time`) VALUES
+(1, 0, '会员等级', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1588922794, 1588926835),
+(2, 0, '支付图标', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1588922800, 1588926835),
+(3, 1, 'level1.png', 'image/png', 'png', 417, '{\"width\":16,\"height\":16}', 'F41831546A34BE42C34343FD92492C67', '会员等级/level1.png', 'aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(4, 1, 'level2.png', 'image/png', 'png', 408, '{\"width\":16,\"height\":16}', 'E61AF90BB05B24B06514F8300674BD96', '会员等级/level2.png', 'aliyun.oss.careyshop.cn/会员等级/level2.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(5, 1, 'level3.png', 'image/png', 'png', 406, '{\"width\":16,\"height\":16}', '578C74719EF4D67B7426A2AB3B481173', '会员等级/level3.png', 'aliyun.oss.careyshop.cn/会员等级/level3.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(6, 1, 'level4.png', 'image/png', 'png', 401, '{\"width\":16,\"height\":16}', '8C1D64E3514293AA87E713727965A965', '会员等级/level4.png', 'aliyun.oss.careyshop.cn/会员等级/level4.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(7, 1, 'level5.png', 'image/png', 'png', 686, '{\"width\":16,\"height\":16}', '670A286772BB8571218CE91A881DB004', '会员等级/level5.png', 'aliyun.oss.careyshop.cn/会员等级/level5.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(8, 1, 'level6.png', 'image/png', 'png', 1118, '{\"width\":52,\"height\":16}', '94E46D065664D0FCAC16C36609FD4B5A', '会员等级/level6.png', 'aliyun.oss.careyshop.cn/会员等级/level6.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(9, 2, 'alipay.gif', 'image/gif', 'gif', 3021, '{\"width\":130,\"height\":40}', '09E09591677CDF421EC853CFCAA6B9C3', '支付图标/alipay.gif', 'aliyun.oss.careyshop.cn/支付图标/alipay.gif?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(10, 2, 'hdfk.gif', 'image/gif', 'gif', 2120, '{\"width\":130,\"height\":40}', '41993EF1E4FF5CE64F60BD66714A53D3', '支付图标/hdfk.gif', 'aliyun.oss.careyshop.cn/支付图标/hdfk.gif?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(11, 2, 'jd.png', 'image/png', 'png', 2113, '{\"width\":86,\"height\":50}', 'B8C109758B5334BDDCDB4FCE71E73554', '支付图标/jd.png', 'aliyun.oss.careyshop.cn/支付图标/jd.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(12, 2, 'baidu.png', 'image/png', 'png', 1789, '{\"width\":86,\"height\":50}', 'CC35A174F72A0BDD4C41170194C44426', '支付图标/baidu.png', 'aliyun.oss.careyshop.cn/支付图标/baidu.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(13, 2, 'paypal.jpg', 'image/jpeg', 'jpg', 15141, '{\"width\":130,\"height\":37}', '85952C58A935D24EE51CF91429BD5DF3', '支付图标/paypal.jpg', 'aliyun.oss.careyshop.cn/支付图标/paypal.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(14, 2, 'malipay.gif', 'image/gif', 'gif', 14727, '{\"width\":130,\"height\":40}', '66233678DF31634B26F04491A2CE5850', '支付图标/malipay.gif', 'aliyun.oss.careyshop.cn/支付图标/malipay.gif?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(15, 2, 'qq.png', 'image/png', 'png', 3627, '{\"width\":86,\"height\":50}', '7B6E41A80BC2E80A9B1BD3A2388EE7ED', '支付图标/qq.png', 'aliyun.oss.careyshop.cn/支付图标/qq.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(16, 2, 'weixin.png', 'image/png', 'png', 1712, '{\"width\":86,\"height\":50}', '752F1A30D6A86FF83D329FB031DDC8CC', '支付图标/weixin.png', 'aliyun.oss.careyshop.cn/支付图标/weixin.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(17, 2, 'wxpay.png', 'image/png', 'png', 52342, '{\"width\":130,\"height\":35}', 'DD81FAE66BA72F31847260BB00AD3C9C', '支付图标/wxpay.png', 'aliyun.oss.careyshop.cn/支付图标/wxpay.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(18, 2, 'xxzf.gif', 'image/gif', 'gif', 2347, '{\"width\":130,\"height\":40}', '3096FBFAF4FD5BA3CAF99C16ED9D17A4', '支付图标/xxzf.gif', 'aliyun.oss.careyshop.cn/支付图标/xxzf.gif?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(19, 2, 'wxmpay.png', 'image/png', 'png', 53092, '{\"width\":130,\"height\":35}', '8A4C4B15AE3C3906A58BED143D8B5018', '支付图标/wxmpay.png', 'aliyun.oss.careyshop.cn/支付图标/wxmpay.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(20, 2, 'wxh5pay.png', 'image/png', 'png', 53092, '{\"width\":130,\"height\":35}', '8A4C4B15AE3C3906A58BED143D8B5018', '支付图标/wxh5pay.png', 'aliyun.oss.careyshop.cn/支付图标/wxh5pay.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(21, 2, 'yezf.gif', 'image/gif', 'gif', 1128, '{\"width\":130,\"height\":40}', 'CE6885A00CB0CD1172E14CEAE2A2854E', '支付图标/yezf.gif', 'aliyun.oss.careyshop.cn/支付图标/yezf.gif?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(22, 2, 'yinlian.png', 'image/png', 'png', 3263, '{\"width\":86,\"height\":50}', 'EA74308D5EA06E0B7AB9A68DD06522A6', '支付图标/yinlian.png', 'aliyun.oss.careyshop.cn/支付图标/yinlian.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(23, 2, 'zhifubao.png', 'image/png', 'png', 1751, '{\"width\":86,\"height\":50}', '444B8960B1A5205DD3A3F10C7CE96621', '支付图标/zhifubao.png', 'aliyun.oss.careyshop.cn/支付图标/zhifubao.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112);
+
 DROP TABLE IF EXISTS `{prefix}storage_style`;
 CREATE TABLE `{prefix}storage_style` (
   `storage_style_id` int(11) UNSIGNED NOT NULL,
@@ -8355,7 +8380,7 @@ ALTER TABLE `{prefix}spec_config`
 ALTER TABLE `{prefix}spec_item`
   MODIFY `spec_item_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}storage`
-  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 ALTER TABLE `{prefix}storage_style`
   MODIFY `storage_style_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 ALTER TABLE `{prefix}support`
