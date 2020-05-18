@@ -14004,7 +14004,7 @@ CREATE TABLE `{prefix}storage` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新日期'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='资源管理器';
 
-INSERT INTO `{prefix}storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `size`, `pixel`, `hash`, `path`, `url`, `protocol`, `type`, `priority`, `cover`, `sort`, `is_default`, `create_time`, `update_time`) VALUES
+INSERT INTO `cs_storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `size`, `pixel`, `hash`, `path`, `url`, `protocol`, `type`, `priority`, `cover`, `sort`, `is_default`, `create_time`, `update_time`) VALUES
 (3, 0, '视频', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1573547821, 1577461558),
 (4, 3, '视频-有海报', 'video/mp4', 'mp4', 23014356, '[]', '2125298091532905922013119CC3D2E9', 'uploads/files/20191112/291baffc-1309-48a8-8c75-bf6e9140d365.mp4', 'aliyun.oss.careyshop.cn/uploads/files/20191112/291baffc-1309-48a8-8c75-bf6e9140d365.mp4?type=aliyun', 'aliyun', 3, 1, 'aliyun.oss.careyshop.cn/uploads/files/20191112/4850ef5f-3890-4ca4-8fa3-8b5b0087708b.jpg?type=aliyun', 50, 0, 1573547849, 1573547976),
 (5, 0, '海报', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1573547915, 1577461558),
@@ -14152,7 +14152,7 @@ INSERT INTO `{prefix}storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`,
 (147, 0, 'flag50.png', 'image/png', 'png', 1699, '{\"width\":40,\"height\":32}', '60F6126390525920D4FF0FA328DECA8C', 'uploads/files/20191112/b08c913b-3ac4-4251-9c60-25fe38e26f49.png', 'aliyun.oss.careyshop.cn/uploads/files/20191112/b08c913b-3ac4-4251-9c60-25fe38e26f49.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172),
 (148, 0, 'imges01.jpg', 'image/jpeg', 'jpg', 41700, '{\"width\":600,\"height\":315}', '0A5ECB247DA3BF18F7A76E8ABB34BE9F', 'uploads/files/20191112/05fc8e5b-8487-4edb-8f95-0164e81f621f.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191112/05fc8e5b-8487-4edb-8f95-0164e81f621f.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172),
 (149, 0, 'gkf-13.jpg', 'image/jpeg', 'jpg', 120851, '{\"width\":1920,\"height\":400}', 'D32D349DD8C2F50B9163B422CC827117', 'uploads/files/20191112/a219bd6b-b969-4d20-8bbb-6739a4214eb6.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191112/a219bd6b-b969-4d20-8bbb-6739a4214eb6.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172);
-INSERT INTO `{prefix}storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `size`, `pixel`, `hash`, `path`, `url`, `protocol`, `type`, `priority`, `cover`, `sort`, `is_default`, `create_time`, `update_time`) VALUES
+INSERT INTO `cs_storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`, `size`, `pixel`, `hash`, `path`, `url`, `protocol`, `type`, `priority`, `cover`, `sort`, `is_default`, `create_time`, `update_time`) VALUES
 (150, 0, 'imges05.jpg', 'image/jpeg', 'jpg', 21590, '{\"width\":600,\"height\":274}', 'F6BA54F57BBDAABF7DD929959AEB9571', 'uploads/files/20191112/a82a0331-2414-4bc0-82d0-93da28ba55e7.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191112/a82a0331-2414-4bc0-82d0-93da28ba55e7.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172),
 (151, 0, 'imges03.jpg', 'image/jpeg', 'jpg', 70125, '{\"width\":600,\"height\":840}', '72715D0133BA101BBBC4D781A1E39A90', 'uploads/files/20191112/63ee9d1d-5b51-49b4-9231-361e2fe93560.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191112/63ee9d1d-5b51-49b4-9231-361e2fe93560.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172),
 (152, 0, 'imges08.jpg', 'image/jpeg', 'jpg', 25273, '{\"width\":600,\"height\":306}', 'C433DE50969CF74B8691C71B0F506409', 'uploads/files/20191112/8389c66a-a6b9-468d-8a4d-dd73fd6a4579.jpg', 'aliyun.oss.careyshop.cn/uploads/files/20191112/8389c66a-a6b9-468d-8a4d-dd73fd6a4579.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1573548172, 1573548172),
@@ -14260,7 +14260,30 @@ INSERT INTO `{prefix}storage` (`storage_id`, `parent_id`, `name`, `mime`, `ext`,
 (540, 746, '139239-20191205105026444-823399952.png', 'image/png', 'png', 55610, '{\"width\":554,\"height\":288}', 'A5F4F98690D5BCF8F6FF61F922DF622D', 'uploads/files/20191230/ebafd330-cb20-4ead-8af5-54ca56c5d5d2.png', 'aliyun.oss.careyshop.cn/uploads/files/20191230/ebafd330-cb20-4ead-8af5-54ca56c5d5d2.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1577686073, 1577686073),
 (743, 0, '店铺LOGO', 'image/png', 'png', 9118, '{\"width\":216,\"height\":75}', '5F89E2F349ED11E4214DBB2E8C6A7FDB', 'uploads/files/20200330/4dd3960b-486c-4dfb-8c86-0e424ac61c32.png', 'aliyun.oss.careyshop.cn/uploads/files/20200330/4dd3960b-486c-4dfb-8c86-0e424ac61c32.png?type=aliyun&rand=1068039053', 'aliyun', 0, 1, '', 50, 0, 1585554379, 1586015075),
 (745, 0, '方形LOGO', 'image/png', 'png', 44040, '{\"width\":500,\"height\":500}', '3C637EA448623591B2A7649CC607F0D8', 'uploads/files/20200403/8b85fe59-7481-48dc-82ef-592d281b7d4b.png', 'aliyun.oss.careyshop.cn/uploads/files/20200403/8b85fe59-7481-48dc-82ef-592d281b7d4b.png?type=aliyun&rand=759369279', 'aliyun', 0, 1, '', 50, 0, 1585927764, 1586015200),
-(746, 0, '默认目录', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 1, 1573547791, 1577461558);
+(746, 0, '默认目录', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 1, 1573547791, 1577461558),
+(789, 0, '会员等级', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1589826028, 1589826028),
+(790, 0, '支付图标', '', '', 0, '', '', '', '', '', 2, 0, '', 50, 0, 1589826033, 1589826033),
+(791, 789, 'level1.png', 'image/png', 'png', 417, '{\"width\":16,\"height\":16}', 'F41831546A34BE42C34343FD92492C67', '会员等级/level1.png', 'aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(792, 789, 'level2.png', 'image/png', 'png', 408, '{\"width\":16,\"height\":16}', 'E61AF90BB05B24B06514F8300674BD96', '会员等级/level2.png', 'aliyun.oss.careyshop.cn/会员等级/level2.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(793, 789, 'level3.png', 'image/png', 'png', 406, '{\"width\":16,\"height\":16}', '578C74719EF4D67B7426A2AB3B481173', '会员等级/level3.png', 'aliyun.oss.careyshop.cn/会员等级/level3.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(794, 789, 'level4.png', 'image/png', 'png', 401, '{\"width\":16,\"height\":16}', '8C1D64E3514293AA87E713727965A965', '会员等级/level4.png', 'aliyun.oss.careyshop.cn/会员等级/level4.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(795, 789, 'level5.png', 'image/png', 'png', 686, '{\"width\":16,\"height\":16}', '670A286772BB8571218CE91A881DB004', '会员等级/level5.png', 'aliyun.oss.careyshop.cn/会员等级/level5.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(796, 789, 'level6.png', 'image/png', 'png', 1118, '{\"width\":52,\"height\":16}', '94E46D065664D0FCAC16C36609FD4B5A', '会员等级/level6.png', 'aliyun.oss.careyshop.cn/会员等级/level6.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923087, 1588923087),
+(797, 790, 'alipay.gif', 'image/gif', 'gif', 3021, '{\"width\":130,\"height\":40}', '09E09591677CDF421EC853CFCAA6B9C3', '支付图标/alipay.gif', 'aliyun.oss.careyshop.cn/支付图标/alipay.gif?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(798, 790, 'hdfk.gif', 'image/gif', 'gif', 2120, '{\"width\":130,\"height\":40}', '41993EF1E4FF5CE64F60BD66714A53D3', '支付图标/hdfk.gif', 'aliyun.oss.careyshop.cn/支付图标/hdfk.gif?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(799, 790, 'jd.png', 'image/png', 'png', 2113, '{\"width\":86,\"height\":50}', 'B8C109758B5334BDDCDB4FCE71E73554', '支付图标/jd.png', 'aliyun.oss.careyshop.cn/支付图标/jd.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(800, 790, 'baidu.png', 'image/png', 'png', 1789, '{\"width\":86,\"height\":50}', 'CC35A174F72A0BDD4C41170194C44426', '支付图标/baidu.png', 'aliyun.oss.careyshop.cn/支付图标/baidu.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(801, 790, 'paypal.jpg', 'image/jpeg', 'jpg', 15141, '{\"width\":130,\"height\":37}', '85952C58A935D24EE51CF91429BD5DF3', '支付图标/paypal.jpg', 'aliyun.oss.careyshop.cn/支付图标/paypal.jpg?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(802, 790, 'malipay.gif', 'image/gif', 'gif', 14727, '{\"width\":130,\"height\":40}', '66233678DF31634B26F04491A2CE5850', '支付图标/malipay.gif', 'aliyun.oss.careyshop.cn/支付图标/malipay.gif?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(803, 790, 'qq.png', 'image/png', 'png', 3627, '{\"width\":86,\"height\":50}', '7B6E41A80BC2E80A9B1BD3A2388EE7ED', '支付图标/qq.png', 'aliyun.oss.careyshop.cn/支付图标/qq.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(804, 790, 'weixin.png', 'image/png', 'png', 1712, '{\"width\":86,\"height\":50}', '752F1A30D6A86FF83D329FB031DDC8CC', '支付图标/weixin.png', 'aliyun.oss.careyshop.cn/支付图标/weixin.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(805, 790, 'wxpay.png', 'image/png', 'png', 52342, '{\"width\":130,\"height\":35}', 'DD81FAE66BA72F31847260BB00AD3C9C', '支付图标/wxpay.png', 'aliyun.oss.careyshop.cn/支付图标/wxpay.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(806, 790, 'xxzf.gif', 'image/gif', 'gif', 2347, '{\"width\":130,\"height\":40}', '3096FBFAF4FD5BA3CAF99C16ED9D17A4', '支付图标/xxzf.gif', 'aliyun.oss.careyshop.cn/支付图标/xxzf.gif?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(807, 790, 'wxmpay.png', 'image/png', 'png', 53092, '{\"width\":130,\"height\":35}', '8A4C4B15AE3C3906A58BED143D8B5018', '支付图标/wxmpay.png', 'aliyun.oss.careyshop.cn/支付图标/wxmpay.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(808, 790, 'wxh5pay.png', 'image/png', 'png', 53092, '{\"width\":130,\"height\":35}', '8A4C4B15AE3C3906A58BED143D8B5018', '支付图标/wxh5pay.png', 'aliyun.oss.careyshop.cn/支付图标/wxh5pay.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(809, 790, 'yezf.gif', 'image/gif', 'gif', 1128, '{\"width\":130,\"height\":40}', 'CE6885A00CB0CD1172E14CEAE2A2854E', '支付图标/yezf.gif', 'aliyun.oss.careyshop.cn/支付图标/yezf.gif?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(810, 790, 'yinlian.png', 'image/png', 'png', 3263, '{\"width\":86,\"height\":50}', 'EA74308D5EA06E0B7AB9A68DD06522A6', '支付图标/yinlian.png', 'aliyun.oss.careyshop.cn/支付图标/yinlian.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112),
+(811, 790, 'zhifubao.png', 'image/png', 'png', 1751, '{\"width\":86,\"height\":50}', '444B8960B1A5205DD3A3F10C7CE96621', '支付图标/zhifubao.png', 'aliyun.oss.careyshop.cn/支付图标/zhifubao.png?type=aliyun', 'aliyun', 0, 1, '', 50, 0, 1588923112, 1588923112);
 
 DROP TABLE IF EXISTS `{prefix}storage_style`;
 CREATE TABLE `{prefix}storage_style` (
@@ -15637,7 +15660,7 @@ ALTER TABLE `{prefix}spec_config`
 ALTER TABLE `{prefix}spec_item`
   MODIFY `spec_item_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=453;
 ALTER TABLE `{prefix}storage`
-  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=789;
+  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=812;
 ALTER TABLE `{prefix}storage_style`
   MODIFY `storage_style_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 ALTER TABLE `{prefix}support`
