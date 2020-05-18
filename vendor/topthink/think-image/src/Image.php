@@ -29,7 +29,6 @@ if (!function_exists('file_put_contents')) {
 
 class Image
 {
-
     /* 缩略图相关常量定义 */
     const THUMB_SCALING   = 1; //常量，标识缩略图等比例缩放类型
     const THUMB_FILLED    = 2; //常量，标识缩略图缩放后填充类型
@@ -342,8 +341,8 @@ class Image
         do {
             //创建新图像
             $img = imagecreatetruecolor($width, $height);
-            // 调整默认颜色
-            $color = imagecolorallocate($img, 255, 255, 255);
+            // 分配颜色 + alpha，将颜色填充到新图上
+            $color = imagecolorallocatealpha($img, 0, 0, 0, 127);
             imagefill($img, 0, 0, $color);
             //裁剪
             imagecopyresampled($img, $this->im, 0, 0, $x, $y, $width, $height, $w, $h);
@@ -432,8 +431,8 @@ class Image
                 do {
                     //创建新图像
                     $img = imagecreatetruecolor($width, $height);
-                    // 调整默认颜色
-                    $color = imagecolorallocate($img, 255, 255, 255);
+                    // 分配颜色 + alpha，将颜色填充到新图上
+                    $color = imagecolorallocatealpha($img, 0, 0, 0, 127);
                     imagefill($img, 0, 0, $color);
                     //裁剪
                     imagecopyresampled($img, $this->im, $posx, $posy, $x, $y, $neww, $newh, $w, $h);
@@ -458,8 +457,8 @@ class Image
                 do {
                     //创建新图像
                     $img = imagecreatetruecolor($width, $height);
-                    // 调整默认颜色
-                    $color = imagecolorallocate($img, 255, 255, 255);
+                    // 分配颜色 + alpha，将颜色填充到新图上
+                    $color = imagecolorallocatealpha($img, 0, 0, 0, 127);
                     imagefill($img, 0, 0, $color);
                     //裁剪
                     imagecopyresampled($img, $this->im, $posx, $posy, $x, $y, $neww, $newh, $w, $h);
@@ -560,8 +559,8 @@ class Image
         do {
             //添加水印
             $src = imagecreatetruecolor($info[0], $info[1]);
-            // 调整默认颜色
-            $color = imagecolorallocate($src, 255, 255, 255);
+            // 分配颜色 + alpha，将颜色填充到新图上
+            $color = imagecolorallocatealpha($img, 0, 0, 0, 127);
             imagefill($src, 0, 0, $color);
             imagecopy($src, $this->im, 0, 0, $x, $y, $info[0], $info[1]);
             imagecopy($src, $water, 0, 0, 0, 0, $info[0], $info[1]);
@@ -712,5 +711,4 @@ class Image
     {
         empty($this->im) || imagedestroy($this->im);
     }
-
 }
