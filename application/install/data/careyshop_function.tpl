@@ -37,7 +37,7 @@ SET sTemp = CONCAT(sTemp,',',sTempChd);
 ELSE
 SET sTemp = CONCAT(sTempChd);
 END IF;
-SELECT GROUP_CONCAT(storage_id) INTO sTempChd FROM `{prefix}region` WHERE FIND_IN_SET(parent_id,sTempChd)>0;
+SELECT GROUP_CONCAT(storage_id) INTO sTempChd FROM `{prefix}storage` WHERE FIND_IN_SET(parent_id,sTempChd)>0;
 END WHILE;
 RETURN sTemp;
 END;
