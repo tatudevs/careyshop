@@ -14,7 +14,7 @@ define('AUTH_ADMINISTRATOR', 2);
 define('AUTH_CLIENT', 3);
 define('AUTH_GUEST', 4);
 
-if (!function_exists('unique_and_delzero')) {
+if (!function_exists('get_version')) {
     /**
      * 获取版本号
      * @return string
