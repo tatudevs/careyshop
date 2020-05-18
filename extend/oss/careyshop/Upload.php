@@ -408,7 +408,7 @@ class Upload extends UploadBase
         $fileInfo = pathinfo($urlArray['path']);
         $suffix = $fileInfo['extension'];
         $param = $this->request->param();
-        $extension = ['jpg', 'png', 'svg', 'gif', 'bmp', 'tiff', 'webp'];
+        $extension = ['jpg', 'png', 'svg', 'bmp', 'tiff', 'webp'];
         $url = $this->getNewUrl($fileInfo['filename'], $fileInfo['extension'], $fileInfo, $urlArray);
 
         // 非图片资源则直接返回
