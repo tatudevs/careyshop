@@ -134,6 +134,8 @@ class Image
         } else {
             $type = strtolower($type);
         }
+
+        ob_start();
         //保存图像
         if ('jpeg' == $type || 'jpg' == $type) {
             //JPEG图像设置隔行扫描
