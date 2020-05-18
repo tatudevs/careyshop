@@ -32,7 +32,7 @@
     function reloads(next, type) {
         $.ajax({
             type: "post",
-            url: next || "{:url('install')}",
+            url: next || "{:get_url('install')}",
             data: {type: type},
             dataType: "json",
             success: function (res) {

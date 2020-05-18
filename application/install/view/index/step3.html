@@ -9,7 +9,7 @@
         </ul>
     </div>
 
-    <form id="install_form" action="{:url('step4')}" method="post">
+    <form id="install_form" action="{:get_url('step4')}" method="post">
         <div class="server">
             <table width="100%">
                 <tr>
@@ -126,7 +126,7 @@
         <div id="response_tips" style="display: none; text-align: center; margin-bottom: 10px;"></div>
 
         <div class="bottom tac">
-            <a href="{:url('step2')}" class="btn">上一步</a>
+            <a href="{:get_url('step2')}" class="btn">上一步</a>
             <button type="button" id="submit" class="btn install_btn">创建数据</button>
         </div>
     </form>
@@ -141,7 +141,7 @@
 
         $.ajax({
             type: 'post',
-            url: "{:url('step4')}",
+            url: "{:get_url('step4')}",
             data: data,
             dataType: 'json',
             beforeSend: function () {

@@ -9,6 +9,24 @@
  */
 
 /**
+ * 生成URL
+ * @param string $vars 参数
+ * @param  mixed $idx  下步序号
+ * @return string
+ */
+function get_url($vars = '', $idx = null)
+{
+    $url = request()->baseFile();
+    if (!empty($vars) && $vars != '/') {
+        $url .= "?s=/index/{$vars}";
+        !is_null($idx) && $url .= "/idx/{$idx}";
+        $url .= '.html';
+    }
+
+    return $url;
+}
+
+/**
  * 系统环境检测
  * @return array 系统环境数据
  */
@@ -117,6 +135,7 @@ function check_func()
         ['curl', '支持', 'check', '模块'],
         ['bcmath', '支持', 'check', '模块'],
         ['mbstring', '支持', 'check', '模块'],
+        ['scandir', '支持', 'check', '函数'],
         ['file_get_contents', '支持', 'check', '函数'],
         ['version_compare', '支持', 'check', '函数'],
     ];

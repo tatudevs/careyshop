@@ -32,11 +32,11 @@ class Index extends Controller
         if (is_file(APP_PATH . 'database.php')) {
             session('step', 2);
             $this->assign('next', '重新安装');
-            $this->assign('nextUrl', url('step3'));
+            $this->assign('nextUrl', get_url('step3'));
         } else {
             session('step', 1);
             $this->assign('next', '接 受');
-            $this->assign('nextUrl', url('step2'));
+            $this->assign('nextUrl', get_url('step2'));
         }
 
         session('error', false);
@@ -78,7 +78,7 @@ class Index extends Controller
     public function step3()
     {
         if (session('step') != 2) {
-            $this->redirect(url('/'));
+            $this->redirect(get_url());
         }
 
         session('step', 3);
@@ -182,11 +182,11 @@ class Index extends Controller
             }
 
             // 准备工作完成
-            $this->success('success', url('step4'));
+            $this->success('success', get_url('step4'));
         }
 
         if (session('step') != 3) {
-            $this->redirect(url('/'));
+            $this->redirect(get_url());
         }
 
         session('step', 4);
@@ -209,7 +209,7 @@ class Index extends Controller
 
         if (!$type) {
             $result['type'] = 'function';
-            $this->success('开始安装数据库函数', url('install'), $result);
+            $this->success('开始安装数据库函数', get_url('install'), $result);
         }
 
         // 安装数据库函数
@@ -237,7 +237,7 @@ class Index extends Controller
             }
 
             $result['type'] = 'database';
-            $this->success('开始安装数据库表', url('install', 'idx=0'), $result);
+            $this->success('开始安装数据库表', get_url('install', 0), $result);
         }
 
         // 连接数据库
@@ -278,10 +278,10 @@ class Index extends Controller
             if ($idx >= count($database)) {
                 if ($data['is_region']) {
                     $result['type'] = 'region';
-                    $this->success('开始安装精准区域', url('install', 'idx=0'), $result);
+                    $this->success('开始安装精准区域', get_url('install', 0), $result);
                 } else {
                     $result['type'] = 'config';
-                    $this->success('开始安装配置文件', url('install'), $result);
+                    $this->success('开始安装配置文件', get_url('install'), $result);
                 }
             }
 
@@ -303,7 +303,7 @@ class Index extends Controller
             }
 
             // 返回下一步
-            $this->success($msg, url('install', 'idx=' . ($idx + 1)), $result);
+            $this->success($msg, get_url('install', $idx + 1), $result);
         }
 
         // 安装精准区域
@@ -324,7 +324,7 @@ class Index extends Controller
 
             if ($idx >= count($region)) {
                 $result['type'] = 'config';
-                $this->success('开始安装配置文件', url('install'), $result);
+                $this->success('开始安装配置文件', get_url('install'), $result);
             }
 
             // 插入数据库表
@@ -345,7 +345,7 @@ class Index extends Controller
             }
 
             // 返回下一步
-            $this->success($msg, url('install', 'idx=' . ($idx + 1)), $result);
+            $this->success($msg, get_url('install', $idx + 1), $result);
         }
 
         // 安装配置文件
@@ -401,7 +401,7 @@ class Index extends Controller
             }
 
             $result['status'] = 0;
-            $this->success('安装完成！', url('complete'), $result);
+            $this->success('安装完成！', get_url('complete'), $result);
         }
 
         // 结束
@@ -415,11 +415,11 @@ class Index extends Controller
     public function complete()
     {
         if (session('step') != 4) {
-            $this->error('请按步骤安装系统', url('/'));
+            $this->error('请按步骤安装系统', get_url());
         }
 
         if (session('error')) {
-            $this->error('安装出错，请重新安装！', url('/'));
+            $this->error('安装出错，请重新安装！', get_url());
         }
 
         // 安装锁定文件
