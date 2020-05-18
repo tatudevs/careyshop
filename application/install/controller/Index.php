@@ -426,10 +426,15 @@ class Index extends Controller
         $lockPath = APP_PATH . 'install' . DS . 'data' . DS . 'install.lock';
         file_put_contents($lockPath, 'lock');
 
+        // 清理记录
         session('step', null);
         session('error', null);
         session('installData', null);
-        Cache::clear('install');
+
+        // 清理缓存资源(Cache::clear()其实可以不写,clear命令同样清理缓存)
+        // 但防止系统不支持"shell_exec"还是需要单独清理
+        Cache::clear();
+        shell_exec(sprintf('php "%s" %s', ROOT_PATH . 'careyshop', 'clear'));
 
         return $this->fetch();
     }
