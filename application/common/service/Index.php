@@ -27,6 +27,10 @@ class Index extends CareyShop
             return $this->setError('调试模式下不需要执行');
         }
 
+        if (!function_exists('shell_exec')) {
+            return $this->setError('shell_exec 函数未启用');
+        }
+
         $shell = [
             'autoload'   => 'optimize:autoload',    // 生成类库映射文件
             'route'      => 'optimize:route',       // 生成路由缓存

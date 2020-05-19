@@ -434,7 +434,9 @@ class Index extends Controller
         // 清理缓存资源(Cache::clear()其实可以不写,clear命令同样清理缓存)
         // 但防止系统不支持"shell_exec"还是需要单独清理
         Cache::clear();
-        shell_exec(sprintf('php "%s" %s', ROOT_PATH . 'careyshop', 'clear'));
+        if (!ini_get('safe_mode') && function_exists('shell_exec')) {
+            shell_exec(sprintf('php "%s" %s', ROOT_PATH . 'careyshop', 'clear'));
+        }
 
         return $this->fetch();
     }
