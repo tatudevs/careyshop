@@ -205,10 +205,6 @@ class AppInstall extends CareyShop
                 ->where(['user_agent' => ['eq', $data['user_agent']]]);
         });
 
-        if ($result->isEmpty()) {
-            return $this->setError('不存在标识为 ' . $data['user_agent'] . ' 的应用安装包');
-        }
-
         foreach ($result as $value) {
             if (version_compare($value->getAttr('ver'), $data['ver'], '>')) {
                 $value->setAttr('is_updated', true);
