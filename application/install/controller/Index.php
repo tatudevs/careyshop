@@ -108,7 +108,6 @@ class Index extends Controller
                 'base_api'       => 'require',
                 'is_cover'       => 'require|in:0,1',
                 'is_demo'        => 'require|in:0,1',
-                'is_region'      => 'require|in:0,1',
             ];
 
             $field = [
@@ -123,7 +122,6 @@ class Index extends Controller
                 'base_api'       => 'API接口路径',
                 'is_cover'       => '覆盖同名数据库',
                 'is_demo'        => '导入演示数据',
-                'is_region'      => '区域数据',
             ];
 
             $data = $this->request->post();
@@ -215,7 +213,7 @@ class Index extends Controller
         // 安装数据库函数
         if ('function' == $type) {
             try {
-                $sql = file_get_contents($path . 'careyshop_function.tpl');
+                $sql = file_get_contents($path . 'function_sql.tpl');
                 $sql = macro_str_replace($sql, $data);
 
                 $mysqli = mysqli_connect(
@@ -242,7 +240,7 @@ class Index extends Controller
 
         // 连接数据库
         $db = null;
-        if (in_array($type, ['database', 'region', 'config'])) {
+        if (in_array($type, ['database', 'config'])) {
             try {
                 $db = Db::connect([
                     'type'     => $data['type'],
@@ -276,60 +274,13 @@ class Index extends Controller
             $idx = $this->request->param('idx');
 
             if ($idx >= count($database)) {
-                if ($data['is_region']) {
-                    $result['type'] = 'region';
-                    $this->success('开始安装精准区域', get_url('install', 0), $result);
-                } else {
-                    $result['type'] = 'config';
-                    $this->success('开始安装配置文件', get_url('install'), $result);
-                }
-            }
-
-            // 插入数据库表
-            if (array_key_exists($idx, $database)) {
-                $sql = $value = trim($database[$idx]);
-
-                if (!empty($value)) {
-                    try {
-                        if (false !== $db->execute($sql)) {
-                            $msg = get_sql_message($sql);
-                        } else {
-                            throw new \Exception($db->getError());
-                        }
-                    } catch (\Exception $e) {
-                        $this->error($e->getMessage());
-                    }
-                }
-            }
-
-            // 返回下一步
-            $this->success($msg, get_url('install', $idx + 1), $result);
-        }
-
-        // 安装精准区域
-        if ('region' == $type) {
-            $region = Cache::remember('region', function () use ($data, $path) {
-                $sql = file_get_contents($path . 'cs_region_full.sql');
-                $sql = macro_str_replace($sql, $data);
-                $sql = str_replace("\r", "\n", $sql);
-                $sql = explode(";\n", $sql);
-
-                Cache::tag('install', 'region');
-                return $sql;
-            });
-
-            // 精准区域安装完成
-            $msg = '';
-            $idx = $this->request->param('idx');
-
-            if ($idx >= count($region)) {
                 $result['type'] = 'config';
                 $this->success('开始安装配置文件', get_url('install'), $result);
             }
 
             // 插入数据库表
-            if (array_key_exists($idx, $region)) {
-                $sql = $value = trim($region[$idx]);
+            if (array_key_exists($idx, $database)) {
+                $sql = $value = trim($database[$idx]);
 
                 if (!empty($value)) {
                     try {

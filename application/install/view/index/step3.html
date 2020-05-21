@@ -90,8 +90,8 @@
 
                 <tr>
                     <td class="tar">API接口路径</td>
-                    <td><label><input type="text" name="base_api" value="/index.php?s=api" class="input"></label></td>
-                    <td><span class="gray">支持“相对路径”、“http”、“https”、“//”</span></td>
+                    <td><label><input type="text" name="base_api" value="{:url('/api', '', false, true)}" class="input"></label></td>
+                    <td><span class="gray">支持“http”、“https”、“//”，需支持PATH_INFO方式访问</span></td>
                 </tr>
 
                 <tr>
@@ -108,15 +108,6 @@
                     <td>
                         <label class="radio"><input type="radio" name="is_demo" value="1"><span>导入</span></label>
                         <label class="radio"><input type="radio" name="is_demo" value="0" checked><span>不导入</span></label>
-                    </td>
-                    <td></td>
-                </tr>
-
-                <tr>
-                    <td class="tar">区域数据</td>
-                    <td>
-                        <label class="radio"><input type="radio" name="is_region" value="0" checked><span>精确到区</span></label>
-                        <label class="radio"><input type="radio" name="is_region" value="1"><span>精确到街道</span></label>
                     </td>
                     <td></td>
                 </tr>

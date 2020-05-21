@@ -2,13 +2,13 @@
 {block name="content"}
 <section class="section">
     <div class="success_tip cc">
-        <a href="{$Request.baseFile}?s={$Think.ADMIN_MODULE}" class="f16 b">安装完成，进入后台管理</a>
+        <a href="{$Request.baseFile}/{$Think.ADMIN_MODULE}/" class="f16 b">安装完成，进入后台管理</a>
         <p>删除"application\install\data"目录下的"install.lock"可再次重新安装。<p>
         <p>再次感谢您选择 CareyShop，希望您会喜欢我们的产品！<p>
     </div>
 
     <div class="bottom tac">
-        <a href="{$Request.baseFile}?s={$Think.ADMIN_MODULE}" class="btn">登录后台</a>
+        <a href="{$Request.baseFile}/{$Think.ADMIN_MODULE}/" class="btn">登录后台</a>
         <a href="{:get_url()}" class="btn">打开前台</a>
     </div>
 </section>

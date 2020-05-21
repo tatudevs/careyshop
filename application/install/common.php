@@ -131,6 +131,7 @@ function check_func()
         ['pdo', '支持', 'check', '类'],
         ['pdo_mysql', '支持', 'check', '模块'],
         ['openssl', '支持', 'check', '模块'],
+        ['exif', '支持', 'check', '模块'],
         ['fileinfo', '支持', 'check', '模块'],
         ['curl', '支持', 'check', '模块'],
         ['bcmath', '支持', 'check', '模块'],
