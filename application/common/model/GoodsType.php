@@ -250,7 +250,9 @@ class GoodsType extends CareyShop
             }
         }
 
-        self::destroy($data['goods_type_id']);
+        self::destroy(function ($query) use ($data) {
+            $query->where('goods_type_id', 'in', $data['goods_type_id']);
+        });
 
         return true;
     }

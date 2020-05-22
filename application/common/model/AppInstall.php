@@ -130,9 +130,11 @@ class AppInstall extends CareyShop
             return false;
         }
 
-        self::destroy($data['app_install_id']);
-        Cache::clear('AppInstall');
+        self::destroy(function ($query) use ($data) {
+            $query->where('app_install_id', 'in', $data['app_install_id']);
+        });
 
+        Cache::clear('AppInstall');
         return true;
     }
 

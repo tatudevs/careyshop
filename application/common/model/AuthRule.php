@@ -148,9 +148,11 @@ class AuthRule extends CareyShop
             return false;
         }
 
-        self::destroy($data['rule_id']);
-        Cache::clear('CommonAuth');
+        self::destroy(function ($query) use ($data) {
+            $query->where('rule_id', 'in', $data['rule_id']);
+        });
 
+        Cache::clear('CommonAuth');
         return true;
     }
 

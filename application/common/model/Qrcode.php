@@ -179,7 +179,9 @@ class Qrcode extends CareyShop
             return false;
         }
 
-        self::destroy($data['qrcode_id']);
+        self::destroy(function ($query) use ($data) {
+            $query->where('qrcode_id', 'in', $data['qrcode_id']);
+        });
 
         return true;
     }

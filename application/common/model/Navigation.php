@@ -90,9 +90,11 @@ class Navigation extends CareyShop
             return false;
         }
 
-        self::destroy($data['navigation_id']);
-        Cache::clear('Navigation');
+        self::destroy(function ($query) use ($data) {
+            $query->where('navigation_id', 'in', $data['navigation_id']);
+        });
 
+        Cache::clear('Navigation');
         return true;
     }
 

@@ -230,9 +230,11 @@ class StorageStyle extends CareyShop
             return false;
         }
 
-        self::destroy($data['storage_style_id']);
-        Cache::clear('StorageStyle');
+        self::destroy(function ($query) use ($data) {
+            $query->where('storage_style_id', 'in', $data['storage_style_id']);
+        });
 
+        Cache::clear('StorageStyle');
         return true;
     }
 

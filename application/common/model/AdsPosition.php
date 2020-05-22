@@ -167,7 +167,9 @@ class AdsPosition extends CareyShop
             }
         }
 
-        self::destroy($data['ads_position_id']);
+        self::destroy(function ($query) use ($data) {
+            $query->where('ads_position_id', 'in', $data['ads_position_id']);
+        });
 
         return true;
     }

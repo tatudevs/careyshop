@@ -86,7 +86,9 @@ class FriendLink extends CareyShop
             return false;
         }
 
-        self::destroy($data['friend_link_id']);
+        self::destroy(function ($query) use ($data) {
+            $query->where('friend_link_id', 'in', $data['friend_link_id']);
+        });
 
         return true;
     }

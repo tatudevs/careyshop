@@ -170,9 +170,11 @@ class GoodsCategory extends CareyShop
             }
         }
 
-        self::destroy($data['goods_category_id']);
-        Cache::clear('GoodsCategory');
+        self::destroy(function ($query) use ($data) {
+            $query->where('goods_category_id', 'in', $data['goods_category_id']);
+        });
 
+        Cache::clear('GoodsCategory');
         return true;
     }
 

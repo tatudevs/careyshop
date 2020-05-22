@@ -194,7 +194,9 @@ class DeliveryArea extends CareyShop
             return false;
         }
 
-        self::destroy($data['delivery_area_id']);
+        self::destroy(function ($query) use ($data) {
+            $query->where('delivery_area_id', 'in', $data['delivery_area_id']);
+        });
 
         return true;
     }

@@ -139,9 +139,11 @@ class ArticleCat extends CareyShop
             }
         }
 
-        self::destroy($data['article_cat_id']);
-        Cache::clear('ArticleCat');
+        self::destroy(function ($query) use ($data) {
+            $query->where('article_cat_id', 'in', $data['article_cat_id']);
+        });
 
+        Cache::clear('ArticleCat');
         return true;
     }
 

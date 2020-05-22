@@ -146,9 +146,11 @@ class Payment extends CareyShop
             return false;
         }
 
-        self::destroy($data['payment_id']);
-        Cache::clear('Payment');
+        self::destroy(function ($query) use ($data) {
+            $query->where('payment_id', 'in', $data['payment_id']);
+        });
 
+        Cache::clear('Payment');
         return true;
     }
 

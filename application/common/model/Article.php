@@ -107,7 +107,9 @@ class Article extends CareyShop
             return false;
         }
 
-        self::destroy($data['article_id']);
+        self::destroy(function ($query) use ($data) {
+            $query->where('article_id', 'in', $data['article_id']);
+        });
 
         return true;
     }

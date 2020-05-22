@@ -91,7 +91,9 @@ class Topic extends CareyShop
             return false;
         }
 
-        self::destroy($data['topic_id']);
+        self::destroy(function ($query) use ($data) {
+            $query->where('topic_id', 'in', $data['topic_id']);
+        });
 
         return true;
     }

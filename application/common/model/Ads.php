@@ -171,7 +171,9 @@ class Ads extends CareyShop
             return false;
         }
 
-        self::destroy($data['ads_id']);
+        self::destroy(function ($query) use ($data) {
+            $query->where('ads_id', 'in', $data['ads_id']);
+        });
 
         return true;
     }

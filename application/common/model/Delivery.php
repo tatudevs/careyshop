@@ -135,7 +135,9 @@ class Delivery extends CareyShop
             return false;
         }
 
-        self::destroy($data['delivery_id']);
+        self::destroy(function ($query) use ($data) {
+            $query->where('delivery_id', 'in', $data['delivery_id']);
+        });
 
         return true;
     }

@@ -161,7 +161,9 @@ class UserLevel extends CareyShop
             return $this->setError('等级已在使用中,建议进行编辑修改');
         }
 
-        self::destroy($data['user_level_id']);
+        self::destroy(function ($query) use ($data) {
+            $query->where('user_level_id', 'in', $data['user_level_id']);
+        });
 
         return true;
     }

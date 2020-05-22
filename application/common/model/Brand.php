@@ -119,9 +119,11 @@ class Brand extends CareyShop
             return false;
         }
 
-        self::destroy($data['brand_id']);
-        Cache::clear('Brand');
+        self::destroy(function ($query) use ($data) {
+            $query->where('brand_id', 'in', $data['brand_id']);
+        });
 
+        Cache::clear('Brand');
         return true;
     }
 

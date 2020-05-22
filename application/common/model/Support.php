@@ -86,7 +86,9 @@ class Support extends CareyShop
             return false;
         }
 
-        self::destroy($data['support_id']);
+        self::destroy(function ($query) use ($data) {
+            $query->where('support_id', 'in', $data['support_id']);
+        });
 
         return true;
     }
