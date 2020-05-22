@@ -122,7 +122,7 @@ class ArticleCat extends CareyShop
         // 过滤不需要的分类
         $catFilter = [];
         foreach ($result as $value) {
-            if ($value['children_total'] > 0 || $value['aricle_total'] > 0) {
+            if ($value['children_total'] > 0 || $value['article_total'] > 0) {
                 $catFilter[$value['article_cat_id']] = $value;
             }
         }
@@ -133,7 +133,7 @@ class ArticleCat extends CareyShop
                     return $this->setError('Id:' . $catId . ' 分类名称"' . $catFilter[$catId]['cat_name'] . '"存在子分类');
                 }
 
-                if ($catFilter[$catId]['aricle_total'] > 0) {
+                if ($catFilter[$catId]['article_total'] > 0) {
                     return $this->setError('Id:' . $catId . ' 分类名称"' . $catFilter[$catId]['cat_name'] . '"存在关联内容');
                 }
             }
@@ -190,7 +190,7 @@ class ArticleCat extends CareyShop
             $query
                 ->cache(true, null, 'ArticleCat')
                 ->alias('c')
-                ->field('c.*,count(s.article_cat_id) children_total,ifnull(a.num, 0) aricle_total')
+                ->field('c.*,count(s.article_cat_id) children_total,ifnull(a.num, 0) article_total')
                 ->join('article_cat s', 's.parent_id = c.article_cat_id', 'left')
                 ->join([$article => 'a'], 'a.article_cat_id = c.article_cat_id', 'left')
                 ->where($map)
