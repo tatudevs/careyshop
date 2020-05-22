@@ -7411,7 +7411,7 @@ CREATE TABLE `{prefix}setting` (
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '变量值',
   `module` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '模块(作用域)',
   `description` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
-  `help_text` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '帮助'
+  `help_text` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '帮助'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统配置';
 
 INSERT INTO `{prefix}setting` (`setting_id`, `code`, `value`, `module`, `description`, `help_text`) VALUES
@@ -7469,20 +7469,20 @@ INSERT INTO `{prefix}setting` (`setting_id`, `code`, `value`, `module`, `descrip
 (52, 'weixin_url', 'http://www.careyshop.cn/', 'system_info', '移动中间页地址', '例如微信中无法访问实际地址，可通过该地址进行跳转'),
 (53, 'qrcode_logo', 'static/api/images/qrcode_logo.png', 'system_info', '二维码LOGO', '生成二维码时默认的LOGO，可使用 <span style=\"color:#F56C6C;\">路径</span> 或 <span style=\"color:#F56C6C;\">网址</span>'),
 (54, 'default', 'careyshop', 'upload', '默认资源上传模块', '在不指定上传模块时，系统默认启用的上传模块'),
-(55, 'oss', 'careyshop.cn/oss?url=', 'upload', '资源获取短地址', '可启用短地址获取资源，避免原地址冗长'),
+(55, 'oss', 'careyshop.cn/oss?url=', 'upload', '资源获取短地址', '可启用短地址获取资源，避免原地址冗长，不必添加地址前缀'),
 (56, 'image_ext', 'jpg,png,svg,gif,bmp,tiff,webp', 'upload', '允许上传的图片后缀', '设置的后缀对 <strong>上传模块</strong> <span style=\"color:#F56C6C;\">如果不支持样式处理，将返回原图</span>'),
 (57, 'file_ext', 'doc,docx,xls,xlsx,ppt,pptx,pdf,wps,txt,rar,zip,gz,bz2,7z,pem,mp4,ogg,webm,ico', 'upload', '允许上传的文件后缀', ''),
 (58, 'file_size', '5M', 'upload', '附件上传大小限制', ''),
 (59, 'token_expires', '300', 'upload', '上传令牌有效时长(秒)', '获得上传令牌后多少秒后视为无效'),
-(60, 'careyshop_url', '', 'upload', '资源绑定域名别名', 'CareyShop(本地上传)模块绑定资源目录域名，资源Host路径将变为该值'),
+(60, 'careyshop_url', '', 'upload', '资源绑定域名别名', 'CareyShop(本地上传)绑定资源目录域名后，Host路径将变为该值，不必添加地址前缀'),
 (61, 'qiniu_access_key', '', 'upload', 'AccessKey(AK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">AK</span>'),
 (62, 'qiniu_secret_key', '', 'upload', 'SecretKey(SK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">SK</span>'),
 (63, 'qiniu_bucket', '', 'upload', '存储空间名称', '选择一个存储空间，请保证访问控制为 <span style=\"color:#F56C6C;\">公开空间</span>'),
-(64, 'qiniu_url', '', 'upload', '外链域名', '存储空间 <span style=\"color:#F56C6C;\">对外访问域名</span>，也支持填写 <span style=\"color:#F56C6C;\">自定义域名</span>'),
+(64, 'qiniu_url', '', 'upload', '外链域名', '存储空间 <span style=\"color:#F56C6C;\">对外访问域名</span>，也支持填写 <span style=\"color:#F56C6C;\">自定义域名</span>，不必添加地址前缀'),
 (65, 'aliyun_access_key', '', 'upload', 'AccessKey ID', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey ID</span> 值'),
 (66, 'aliyun_secret_key', '', 'upload', 'AccessKey Secret', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey Secret</span> 值'),
 (67, 'aliyun_bucket', '', 'upload', 'Bucket 名称', '选择一个Bucket，请保证读写权限为 <span style=\"color:#F56C6C;\">公共读</span>'),
-(68, 'aliyun_url', '', 'upload', 'Bucket 域名', '外网访问 <span style=\"color:#F56C6C;\">Bucket域名</span>，也支持填写 <span style=\"color:#F56C6C;\">用户域名</span>'),
+(68, 'aliyun_url', '', 'upload', 'Bucket 域名', '外网访问 <span style=\"color:#F56C6C;\">Bucket域名</span>，也支持填写 <span style=\"color:#F56C6C;\">用户域名</span>，不必添加地址前缀'),
 (69, 'aliyun_endpoint', '', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
 (70, 'aliyun_rolearn', '', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>');
 

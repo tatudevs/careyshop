@@ -405,11 +405,11 @@ class Setting extends CareyShop
 
     /**
      * 检测上传大小是否符合服务器限制
-     * @access public
+     * @access private
      * @param  array $data 外部数据
      * @return bool
      */
-    public function checkPostMaxSize($data)
+    private function checkPostMaxSize($data)
     {
         if (!array_key_exists('default', $data) && !array_key_exists('file_size', $data)) {
             return true;
@@ -430,6 +430,34 @@ class Setting extends CareyShop
         $serverSize = ini_get('upload_max_filesize');
         if (string_to_byte($fileSize) > string_to_byte($serverSize)) {
             return $this->setError(\oss\careyshop\Upload::NAME . ' 上传大小最大仅支持 ' . $serverSize);
+        }
+
+        return true;
+    }
+
+    /**
+     * 检测地址是否不包含前缀(http、https)
+     * @access private
+     * @param string $key   键名
+     * @param string $value 键值
+     * @return bool
+     * @throws \Exception
+     */
+    private function checkUrl($key, $value)
+    {
+        $url = [
+            'oss'           => '资源获取短地址',
+            'careyshop_url' => '资源绑定域名别名',
+            'qiniu_url'     => '外链域名',
+            'aliyun_url'    => 'Bucket 域名',
+        ];
+
+        if (!array_key_exists($key, $url)) {
+            return true;
+        }
+
+        if (preg_match('/^((https|http)?:\/\/)[^\s]+/', $value)) {
+            throw new \Exception($url[$key] . '不需要添加地址前缀');
         }
 
         return true;
@@ -468,17 +496,21 @@ class Setting extends CareyShop
                         break;
 
                     case 'oss':
+                    case 'careyshop_url':
+                    case 'qiniu_url':
+                    case 'aliyun_url':
+                        $this->checkUrl($key, $value);
+                        $this->setSettingItem($key, $value, 'upload', 'Setting.string');
+                        break;
+
                     case 'image_ext':
                     case 'file_ext':
-                    case 'careyshop_url':
                     case 'qiniu_access_key':
                     case 'qiniu_secret_key':
                     case 'qiniu_bucket':
-                    case 'qiniu_url':
                     case 'aliyun_access_key':
                     case 'aliyun_secret_key':
                     case 'aliyun_bucket':
-                    case 'aliyun_url':
                     case 'aliyun_endpoint':
                     case 'aliyun_rolearn':
                         $this->setSettingItem($key, $value, 'upload', 'Setting.string');
