@@ -33,6 +33,12 @@ class CareyShop extends Controller
     public $appkey;
 
     /**
+     * AppSecret
+     * @var string
+     */
+    public $appSecret;
+
+    /**
      * Token
      * @var string
      */
@@ -171,6 +177,12 @@ class CareyShop extends Controller
         if (true !== $auth) {
             // 拒绝访问(403)
             $this->outputError($auth, 403);
+        }
+
+        // 验证APP
+        $app = $this->checkApp();
+        if (true !== $app) {
+            $this->outputError($app);
         }
 
         // 验证Sign
@@ -313,42 +325,6 @@ class CareyShop extends Controller
         return $this->error;
     }
 
-    /*
-     * 验证Sign是否合法
-     * @access private
-     * @return string|true
-     */
-    private function checkSign()
-    {
-        // 获取app_secret
-        $appMap = ['app_key' => $this->appkey, 'status' => 1, 'is_delete' => 0];
-        $appSecret = Db::name('app')->cache(true, null, 'app')->where($appMap)->value('app_secret');
-
-        if (!$appSecret) {
-            return 'appkey已禁用或不存在';
-        }
-
-        unset($this->params['sign']);
-        $params = $this->params;
-        ksort($params);
-
-        $type = ['array', 'object', 'NULL'];
-        $stringToBeSigned = $appSecret;
-        foreach ($params as $key => $val) {
-            if ($key != '' && !in_array(gettype($val), $type)) {
-                $stringToBeSigned .= $key.$val;
-            }
-        }
-        unset($key, $val);
-        $stringToBeSigned .= $appSecret;
-
-        if (!hash_equals(md5($stringToBeSigned), $this->sign)) {
-            return 'sign错误';
-        }
-
-        return true;
-    }
-
     /**
      * 只验证Token是否合法,否则一律按游客处理
      * @access private
@@ -443,6 +419,62 @@ class CareyShop extends Controller
         }
 
         return '权限不足';
+    }
+
+    /**
+     * 验证APP状态
+     * @access private
+     * @return bool|string
+     */
+    private function checkApp()
+    {
+        // 白名单中排除的接口
+        $exclude = [
+            'login.admin.user',
+            'login.user.user',
+        ];
+
+        if (!$this->apiDebug || in_array($this->method, $exclude)) {
+            $appMap = ['app_key' => $this->appkey, 'status' => 1, 'is_delete' => 0];
+            $appSecret = Db::name('app')->cache(true, null, 'app')->where($appMap)->value('app_secret');
+
+            if ($appSecret) {
+                $this->appSecret = $appSecret;
+                return true;
+            } else {
+                return 'appkey已禁用或不存在';
+            }
+        }
+
+        return true;
+    }
+
+    /*
+     * 验证Sign是否合法
+     * @access private
+     * @return string|true
+     */
+    private function checkSign()
+    {
+        unset($this->params['sign']);
+        $params = $this->params;
+        ksort($params);
+
+        $type = ['array', 'object', 'NULL'];
+        $stringToBeSigned = $this->appSecret;
+        foreach ($params as $key => $val) {
+            if ($key != '' && !in_array(gettype($val), $type)) {
+                $stringToBeSigned .= $key.$val;
+            }
+        }
+        unset($key, $val);
+        $stringToBeSigned .= $this->appSecret;
+
+        if (!hash_equals(md5($stringToBeSigned), $this->sign)) {
+            return 'sign错误';
+        }
+
+        return true;
     }
 
     /**

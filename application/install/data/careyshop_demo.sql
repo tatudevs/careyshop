@@ -423,7 +423,7 @@ CREATE TABLE `{prefix}app_install` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='应用安装包';
 
 INSERT INTO `{prefix}app_install` (`app_install_id`, `user_agent`, `name`, `ver`, `url`, `count`, `create_time`, `update_time`) VALUES
-(1, 'vue', 'CareyShop Admin', '1.6.0', 'https://github.com/dnyz520/careyshop-admin', 0, 1582526239, 1586538952);
+(1, 'vue', 'careyshop-admin', '1.6.0', 'https://github.com/dnyz520/careyshop-admin', 0, 1582526239, 1586538952);
 
 DROP TABLE IF EXISTS `{prefix}article`;
 CREATE TABLE `{prefix}article` (
