@@ -408,7 +408,7 @@ class Goods extends CareyShop
         }
 
         $map['goods_id'] = ['in', $data['goods_id']];
-        $field = 'goods_id,name,store_qty,sales_sum,status,is_delete';
+        $field = 'goods_id,name,short_name,attachment,store_qty,sales_sum,status,is_delete';
 
         $order = [];
         $result = $this->where($map)->column($field, 'goods_id');
