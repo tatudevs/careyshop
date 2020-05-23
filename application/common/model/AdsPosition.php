@@ -366,7 +366,7 @@ class AdsPosition extends CareyShop
                 $query->order(['sort' => 'asc', 'ads_id' => 'desc']);
             }
 
-            $query->field('ads_id,name,url,target,content,color')->where($map);
+            $query->field('ads_id,name,url,target,content,color,type')->where($map);
         });
 
         if (false === $adsResult) {
