@@ -13282,7 +13282,7 @@ INSERT INTO `{prefix}setting` (`setting_id`, `code`, `value`, `module`, `descrip
 (55, 'oss', 'careyshop.cn/oss?url=', 'upload', '资源获取短地址', '可启用短地址获取资源，避免原地址冗长，不必添加地址前缀'),
 (56, 'image_ext', 'jpg,png,svg,gif,bmp,tiff,webp', 'upload', '允许上传的图片后缀', '设置的后缀对 <strong>上传模块</strong> <span style=\"color:#F56C6C;\">如果不支持样式处理，将返回原图</span>'),
 (57, 'file_ext', 'doc,docx,xls,xlsx,ppt,pptx,pdf,wps,txt,rar,zip,gz,bz2,7z,pem,mp4,ogg,webm,ico', 'upload', '允许上传的文件后缀', ''),
-(58, 'file_size', '5M', 'upload', '附件上传大小限制', ''),
+(58, 'file_size', '1M', 'upload', '附件上传大小限制', ''),
 (59, 'token_expires', '300', 'upload', '上传令牌有效时长(秒)', '获得上传令牌后多少秒后视为无效'),
 (60, 'careyshop_url', '', 'upload', '资源绑定域名别名', 'CareyShop(本地上传)绑定资源目录域名后，Host路径将变为该值，不必添加地址前缀'),
 (61, 'qiniu_access_key', '-eibVM1dkuOQU9vbF9oMRbiMtw4t_-QUMQJgPPDJ', 'upload', 'AccessKey(AK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">AK</span>'),
