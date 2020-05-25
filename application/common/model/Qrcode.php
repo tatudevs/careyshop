@@ -45,7 +45,6 @@ class Qrcode extends CareyShop
         // 默认参数初始化
         empty($data['text']) && $data['text'] = pack('H*', 'E59FBAE4BA8E436172657953686F70E59586E59F8EE6A186E69EB6E7B3BBE7BB9F');
         empty($data['size']) && $data['size'] = 75;
-        empty($data['logo']) && $data['logo'] = config('qrcode_logo.value', null, 'system_info');
         empty($data['suffix']) && $data['suffix'] = 'png';
 
         if (isset($data['qrcode_id'])) {
@@ -58,6 +57,7 @@ class Qrcode extends CareyShop
         // 保留参数
         $data['suffix'] == 'jpg' && $data['suffix'] = 'jpeg';
         empty($data['generate']) && $data['generate'] = 'image';
+        empty($data['logo']) && $data['logo'] = config('qrcode_logo.value', null, 'system_info');
         $data['logo'] = \app\common\service\Qrcode::getQrcodeLogoPath($data['logo']);
 
         // 生成二维码
@@ -68,23 +68,30 @@ class Qrcode extends CareyShop
             ->setPadding(3)
             ->setErrorCorrection('high')
             ->setImageType($data['suffix']);
-
-        // 添加 LOGO
         $image = $qrCode->getImage();
+
+        ob_start();
+        call_user_func('image' . $data['suffix'], $image);
+        $imageData = ob_get_contents();
+        ob_end_clean();
+
+        // 添加LOGO
+        ob_start();
+        $qr = imagecreatefromstring($imageData);
         $logo = imagecreatefromstring(file_get_contents(urldecode($data['logo'])));
 
-        $qrWidth = imagesx($image);
+        $qrWidth = imagesx($qr);
         $logoWidth = imagesx($logo);
         $logoHeight = imagesy($logo);
         $logoQrWidth = $qrWidth / 5;
         $scale = $logoWidth / $logoQrWidth;
         $logoQrHeight = $logoHeight / $scale;
         $fromWidth = ($qrWidth - $logoQrWidth) / 2;
-        imagecopyresampled($image, $logo, $fromWidth, $fromWidth, 0, 0, $logoQrWidth, $logoQrHeight, $logoWidth, $logoHeight);
+        imagecopyresampled($qr, $logo, $fromWidth, $fromWidth, 0, 0, $logoQrWidth, $logoQrHeight, $logoWidth, $logoHeight);
 
-        call_user_func('image' . $data['suffix'], $image);
+        call_user_func('image' . $data['suffix'], $qr);
         $content = ob_get_clean();
-        imagedestroy($image);
+        imagedestroy($qr);
 
         if ($data['generate'] == 'base64') {
             return [
