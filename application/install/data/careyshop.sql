@@ -181,14 +181,15 @@ CREATE TABLE `{prefix}auth_group` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户组';
 
 INSERT INTO `{prefix}auth_group` (`group_id`, `name`, `description`, `system`, `sort`, `status`) VALUES
-(1, '超级管理员', '系统保留，拥有最高权限', 1, 50, 1),
-(2, '普通管理员', '系统保留，拥有较高权限', 1, 50, 1),
-(3, '普通顾客', '系统保留，前台普通顾客', 1, 50, 1),
-(4, '游客', '系统保留，无需授权即可访问', 1, 50, 1),
-(5, '后勤', '这是一段描述', 0, 50, 1),
-(6, '售后', '这是一段描述', 0, 50, 1),
-(7, '客服', '这是一段描述', 0, 50, 1),
-(8, '财务', '这是一段描述', 0, 50, 1);
+(1, '超级管理员', '系统保留，在后台拥有最高权限', 1, 50, 1),
+(2, '普通管理员', '系统保留，在后台拥有较高权限', 1, 50, 1),
+(3, '普通顾客', '系统保留，前台普通顾客组成员', 1, 50, 1),
+(4, '游客', '前后台通用，无需授权即可访问接口(白名单)', 1, 50, 1),
+(5, '运营', '用于后台登录，运营人员专用', 0, 50, 1),
+(6, '客服', '用于后台登录，客服人员专用', 0, 50, 1),
+(7, '售后', '用于后台登录，售后人员专用', 0, 50, 1),
+(8, '财务', '用于后台登录，财务人员专用', 0, 50, 1),
+(9, '库管', '用于后台登录，仓库人员专用', 0, 50, 1);
 
 DROP TABLE IF EXISTS `{prefix}auth_rule`;
 CREATE TABLE `{prefix}auth_rule` (
@@ -8286,7 +8287,7 @@ ALTER TABLE `{prefix}article_cat`
 ALTER TABLE `{prefix}ask`
   MODIFY `ask_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}auth_group`
-  MODIFY `group_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `group_id` mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 ALTER TABLE `{prefix}auth_rule`
   MODIFY `rule_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 ALTER TABLE `{prefix}brand`
