@@ -197,7 +197,18 @@ class Upload extends UploadBase
         }
 
         // 非法附件检测
-        if (in_array($file->getMime(), ['text/x-php', 'text/html'])) {
+        $filterMime = [
+            'text/x-php',
+            'text/html',
+            'text/javascript',
+            'text/x-python',
+            'text/x-java-source',
+            'text/x-shellscript',
+            'text/x-perl',
+            'text/x-sql',
+        ];
+
+        if (in_array($file->getMime(), $filterMime)) {
             return '禁止上传非法附件';
         }
 
