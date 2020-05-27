@@ -18,9 +18,13 @@
     $(function () {
         $.ajax({
             type: 'post',
-            url: 'https://careyshop.cn/api/v1/app.php',
-            data: {user_agent: 'careyshop', ver: '{:get_version()}'},
+            url: 'https://api.careyshop.cn/api/v1/app_install.html',
             dataType: 'json',
+            data: {
+                method: 'query.app.install.updated',
+                user_agent: 'careyshop',
+                ver: '{:get_version()}'
+            },
             success: function () {
                 // 版本更新预留
             }
