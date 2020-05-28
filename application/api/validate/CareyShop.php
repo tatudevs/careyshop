@@ -22,7 +22,7 @@ class CareyShop extends Validate
         'appkey'     => 'integer|length:8',
         'token'      => 'length:32',
         'sign'       => 'min:32',
-        'timestamp'  => 'date|checkTimestamp',
+        'timestamp'  => 'checkTimestamp',
         'format'     => 'in:json,jsonp,xml',
         'version'    => 'max:10',
         'controller' => 'max:20',
@@ -51,6 +51,10 @@ class CareyShop extends Validate
     protected function checkTimestamp($value)
     {
         $timestamp = strtotime($value);
+        if (false === $timestamp) {
+            $timestamp = $value;
+        }
+
         if ($timestamp > strtotime("+10 minute") || $timestamp < strtotime("-10 minute")) {
             return 'timestamp已过期';
         }
