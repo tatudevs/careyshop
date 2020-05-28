@@ -7723,12 +7723,12 @@ CREATE TABLE `{prefix}user_level` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='账号等级';
 
 INSERT INTO `{prefix}user_level` (`user_level_id`, `name`, `icon`, `amount`, `discount`, `description`) VALUES
-(1, '青铜会员', 'http://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', '0.00', 100, '青铜会员'),
-(2, '白银会员', 'http://aliyun.oss.careyshop.cn/会员等级/level2.png?type=aliyun', '10000.00', 98, '白银会员累计消费满10000，全场享9.8折优惠'),
-(3, '黄金会员', 'http://aliyun.oss.careyshop.cn/会员等级/level3.png?type=aliyun', '30000.00', 95, '黄金会员累计消费满30000，全场享9.5折优惠'),
-(4, '铂金会员', 'http://aliyun.oss.careyshop.cn/会员等级/level4.png?type=aliyun', '50000.00', 92, '铂金会员累计消费满50000，全场享9.2折优惠'),
-(5, '钻石会员', 'http://aliyun.oss.careyshop.cn/会员等级/level5.png?type=aliyun', '100000.00', 90, '钻石会员累计消费满100000，全场享9折优惠'),
-(6, '至尊 VIP', 'http://aliyun.oss.careyshop.cn/会员等级/level6.png?type=aliyun', '200000.00', 88, '至尊VIP累计消费满200000，全场享8.8折优惠');
+(1, '青铜会员', 'https://aliyun.oss.careyshop.cn/会员等级/level1.png?type=aliyun', '0.00', 100, '青铜会员'),
+(2, '白银会员', 'https://aliyun.oss.careyshop.cn/会员等级/level2.png?type=aliyun', '10000.00', 98, '白银会员累计消费满10000，全场享9.8折优惠'),
+(3, '黄金会员', 'https://aliyun.oss.careyshop.cn/会员等级/level3.png?type=aliyun', '30000.00', 95, '黄金会员累计消费满30000，全场享9.5折优惠'),
+(4, '铂金会员', 'https://aliyun.oss.careyshop.cn/会员等级/level4.png?type=aliyun', '50000.00', 92, '铂金会员累计消费满50000，全场享9.2折优惠'),
+(5, '钻石会员', 'https://aliyun.oss.careyshop.cn/会员等级/level5.png?type=aliyun', '100000.00', 90, '钻石会员累计消费满100000，全场享9折优惠'),
+(6, '至尊 VIP', 'https://aliyun.oss.careyshop.cn/会员等级/level6.png?type=aliyun', '200000.00', 88, '至尊VIP累计消费满200000，全场享8.8折优惠');
 
 DROP TABLE IF EXISTS `{prefix}user_money`;
 CREATE TABLE `{prefix}user_money` (
