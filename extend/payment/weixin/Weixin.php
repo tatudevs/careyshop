@@ -160,6 +160,10 @@ class Weixin extends Payment
             $result['is_callback'] = $this->appRequestExecute();
         }
 
+        if (false === $result['is_callback']) {
+            return false;
+        }
+
         return $this->request == 'web' ? $result : $result['is_callback'];
     }
 
@@ -207,7 +211,7 @@ class Weixin extends Payment
     /**
      * pc查询结果
      * @access private
-     * @return string
+     * @return mixed
      * @throws
      */
     private function pcRequestExecute()
@@ -223,9 +227,18 @@ class Weixin extends Payment
         $notify = new \NativePay();
         $result = $notify->GetPayUrl($input);
 
+        if ('SUCCESS' !== $result['return_code']) {
+            $this->error = $result['return_msg'];
+            return false;
+        }
+
+        if ('SUCCESS' !== $result['result_code']) {
+            $this->error = $result['err_code_des'];
+            return false;
+        }
+
         $vars = ['method' => 'get.qrcode.item'];
-        $text = 'SUCCESS' !== $result['return_code'] ? $result['return_msg'] : urlencode($result['code_url']);
-        $url = Url::build('api/v1/qrcode', $vars, true, true) . '?text=' . $text;
+        $url = Url::build('api/v1/qrcode', $vars, true, true) . '?text=' . urlencode($result['code_url']);
 
         return '<img src="' . $url . '"/>';
     }

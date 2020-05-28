@@ -447,9 +447,9 @@ class Payment extends CareyShop
                 return $this->setError($paymentLogDb->getError());
             }
 
-            // 支付金额不匹配则需要更新
-            if (bccomp($paymentLogResult->getAttr('amount'), $data['money'], 2) !== 0) {
-                $paymentLogResult->save(['amount' => $data['money']]);
+            // 支付金额不匹配则返回错误
+            if (bccomp($paymentLogResult['amount'], $data['money'], 2) !== 0) {
+                return $this->setError('支付金额发生变化，请重新创建订单');
             }
         }
 
