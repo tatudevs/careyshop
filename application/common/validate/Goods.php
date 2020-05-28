@@ -211,10 +211,10 @@ class Goods extends CareyShop
             'order_field',
         ],
         'type_list'  => [
-            'goods_category_id',
+            'goods_category_id' => 'integer|egt:0',
             'goods_type',
             'brand_id',
-            'shop_price' => 'array|length:2',
+            'shop_price'        => 'array|length:2',
             'page_no',
             'page_size',
         ],

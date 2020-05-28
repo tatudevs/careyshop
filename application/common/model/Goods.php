@@ -699,7 +699,7 @@ class Goods extends CareyShop
         $map['status'] = ['eq', 1];
         $map['is_delete'] = ['eq', 0];
         $map['store_qty'] = ['gt', 0];
-        $map['goods_category_id'] = ['eq', $data['goods_category_id']];
+        empty($data['goods_category_id']) ?: $map['goods_category_id'] = ['eq', $data['goods_category_id']];
         is_empty_parm($data['brand_id']) ?: $map['brand_id'] = ['eq', $data['brand_id']];
         !isset($data['shop_price']) ?: $map['shop_price'] = ['between', $data['shop_price']];
 
