@@ -223,12 +223,11 @@ class Weixin extends Payment
         $notify = new \NativePay();
         $result = $notify->GetPayUrl($input);
 
-        $vars = [
-            'method' => 'get.qrcode.item',
-            'text'   => 'SUCCESS' !== $result['return_code'] ? $result['return_msg'] : urlencode($result['code_url']),
-        ];
+        $vars = ['method' => 'get.qrcode.item'];
+        $text = 'SUCCESS' !== $result['return_code'] ? $result['return_msg'] : urlencode($result['code_url']);
+        $url = Url::build('api/v1/qrcode', $vars, true, true) . '?text=' . $text;
 
-        return '<img src="' . Url::build('api/v1/qrcode', $vars, true, true) . '"/>';
+        return '<img src="' . $url . '"/>';
     }
 
     /**
