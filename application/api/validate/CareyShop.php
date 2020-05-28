@@ -21,7 +21,7 @@ class CareyShop extends Validate
     protected $rule = [
         'appkey'     => 'integer|length:8',
         'token'      => 'length:32',
-        'sign'       => 'length:32',
+        'sign'       => 'length:32,256',
         'timestamp'  => 'integer|checkTimestamp',
         'format'     => 'in:json,jsonp,xml',
         'version'    => 'max:10',
