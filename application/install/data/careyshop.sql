@@ -175,21 +175,22 @@ CREATE TABLE `{prefix}auth_group` (
   `group_id` mediumint(8) UNSIGNED NOT NULL,
   `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `module` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '所属模块',
   `system` tinyint(1) NOT NULL DEFAULT '0' COMMENT '系统保留',
   `sort` tinyint(3) UNSIGNED NOT NULL DEFAULT '50' COMMENT '排序',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=禁用 1=启用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户组';
 
-INSERT INTO `{prefix}auth_group` (`group_id`, `name`, `description`, `system`, `sort`, `status`) VALUES
-(1, '超级管理员', '系统保留，在后台拥有最高权限', 1, 50, 1),
-(2, '普通管理员', '系统保留，在后台拥有较高权限', 1, 50, 1),
-(3, '普通顾客', '系统保留，前台普通顾客组成员', 1, 50, 1),
-(4, '游客', '前后台通用，无需授权即可访问接口(白名单)', 1, 50, 1),
-(5, '运营', '用于后台登录，运营人员专用', 0, 50, 1),
-(6, '客服', '用于后台登录，客服人员专用', 0, 50, 1),
-(7, '售后', '用于后台登录，售后人员专用', 0, 50, 1),
-(8, '财务', '用于后台登录，财务人员专用', 0, 50, 1),
-(9, '库管', '用于后台登录，仓库人员专用', 0, 50, 1);
+INSERT INTO `{prefix}auth_group` (`group_id`, `name`, `description`, `module`, `system`, `sort`, `status`) VALUES
+(1, '超级管理员', '系统保留，在后台拥有最高权限', 'admin', 1, 50, 1),
+(2, '普通管理员', '系统保留，在后台拥有较高权限', 'admin', 1, 50, 1),
+(3, '普通顾客', '系统保留，前台普通顾客组成员', 'home', 1, 50, 1),
+(4, '游客', '前后台通用，无需授权即可访问接口(白名单)', 'api', 1, 50, 1),
+(5, '运营', '用于后台登录，运营人员专用', 'admin', 0, 50, 1),
+(6, '客服', '用于后台登录，客服人员专用', 'admin', 0, 50, 1),
+(7, '售后', '用于后台登录，售后人员专用', 'admin', 0, 50, 1),
+(8, '财务', '用于后台登录，财务人员专用', 'admin', 0, 50, 1),
+(9, '库管', '用于后台登录，仓库人员专用', 'admin', 0, 50, 1);
 
 DROP TABLE IF EXISTS `{prefix}auth_rule`;
 CREATE TABLE `{prefix}auth_rule` (
@@ -7846,6 +7847,7 @@ ALTER TABLE `{prefix}ask`
 
 ALTER TABLE `{prefix}auth_group`
   ADD PRIMARY KEY (`group_id`),
+  ADD KEY `module` (`module`),
   ADD KEY `sort` (`sort`),
   ADD KEY `status` (`status`);
 
