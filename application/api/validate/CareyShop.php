@@ -20,14 +20,14 @@ class CareyShop extends Validate
      */
     protected $rule = [
         'appkey'     => 'integer|length:8',
-        'token'      => 'length:32',
+        'token'      => 'max:100',
         'sign'       => 'min:32',
         'timestamp'  => 'checkTimestamp',
         'format'     => 'in:json,jsonp,xml',
         'version'    => 'max:10',
         'controller' => 'max:20',
         'method'     => 'max:100',
-        'callback'   => 'max:100', // jsonp的返回方法
+        'callback'   => 'max:255', // jsonp的返回方法
     ];
 
     /**
