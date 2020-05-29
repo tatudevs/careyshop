@@ -6505,7 +6505,7 @@ INSERT INTO `{prefix}help` (`help_id`, `router`, `ver`, `module`, `content`, `ur
 (1, '/marketing/card/list', '1.0.1', 'admin', '<span>1、购物卡&ldquo;禁用&rdquo;后，未绑定但已生成的购物卡将无法绑定</span></br>\r\n<span>2、购物卡&ldquo;禁用&rdquo;后，已绑定的购物卡不影响消费使用</span></br>\r\n<span>3、删除购物卡后未绑定的将无法绑定，但已绑定的不影响消费</span></br>\r\n<span>4、删除购物卡将失去对已生成卡的管理</span>', ''),
 (2, '/marketing/card/use', '1.0.1', 'admin', '<p>购物卡生成，客户绑定后以下几种情况将影响消费：</p>\r\n<span>1、生成的购物卡被禁用</span></br>\r\n<span>2、可用余额不足</span></br>\r\n<span>3、截至日期已到期</span></br>\r\n<span>4、生成的购物卡未激活</span></br>\r\n<span>5、卡密默认不可见，可在\"<a href=\"./#/setting/setting/system\">系统管理</a>\"中添加可见名单</span>', ''),
 (3, '/setting/auth/menu', '1.0.1', 'admin', '<span>操作完成后可在右上角选择&ldquo;重载菜单&rdquo;进行界面刷新</span>', ''),
-(4, '/setting/auth/rule', '1.0.1', 'admin', '<span>1、操作完成后可在右上角选择&ldquo;重载菜单&rdquo;进行权限刷新</span></br>\r\n<span>2、API接口授权给&ldquo;游客&rdquo;后，其余用户组不勾选权限也可访问</span></br>\r\n<span>3、&ldquo;操作日志&rdquo;深色表示有权限，浅色表示无权限，主要用于区分</span>', ''),
+(4, '/setting/auth/rule', '1.0.1', 'admin', '<span>1、操作完成后可在右上角选择&ldquo;重载菜单&rdquo;进行权限刷新</span></br>\r\n<span>2、API接口授权给&ldquo;游客&rdquo;后，其余用户组不勾选权限也可访问</span></br>\r\n<span>3、&ldquo;操作日志&rdquo;深色表示有权限，浅色表示无权限，主要用于区分</span></br>\r\n<span>4、API接口呈绿色，表示该接口使用游客权限，不勾选也可访问</span>', ''),
 (5, '/setting/logistics/delivery', '1.0.1', 'admin', '<span>&ldquo;费用设置&rdquo;将作为 <strong>配送区域 </strong>中的基础费用，如果 <strong>配送区域 </strong>中的区域未单独设置运费，那么此设置将作为计算值</span>', ''),
 (6, '/member/withdraw/list', '1.0.1', 'admin', '<span>&ldquo;提现金额&rdquo;为实际需打款给对方的金额</span>', ''),
 (7, '/goods/setting/brand', '1.0.1', 'admin', '<span>1、不同的分类下允许品牌名称重复</span></br>\r\n<span>2、分类搜索品牌时，如果子分类下的品牌条件符合也会出现结果</span>', ''),
