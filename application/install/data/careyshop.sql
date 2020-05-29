@@ -2450,13 +2450,13 @@ INSERT INTO `{prefix}menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `re
 (473, 460, '刷新Token', '', '', '', 'api', 0, 'api/v1/user/refresh.user.token', '', '_self', 0, 15, 1),
 (474, 460, '忘记密码', '', '', '', 'api', 0, 'api/v1/user/find.user.password', '', '_self', 0, 16, 1),
 (475, 0, '收货地址', '', '', '', 'api', 0, '', '', '_self', 0, 54, 1),
-(476, 475, '获取指定账号的收货地址列表', '', '', '', 'api', 0, 'api/v1/user_address/get.user.address.list', '', '_self', 0, 50, 1),
-(477, 475, '获取指定账号的一个收货地址', '', '', '', 'api', 0, 'api/v1/user_address/get.user.address.item', '', '_self', 0, 50, 1),
-(478, 475, '添加一个收货地址', '', '', '', 'api', 0, 'api/v1/user_address/add.user.address.item', '', '_self', 0, 50, 1),
-(479, 475, '编辑一个收货地址', '', '', '', 'api', 0, 'api/v1/user_address/set.user.address.item', '', '_self', 0, 50, 1),
-(480, 475, '批量删除收货地址', '', '', '', 'api', 0, 'api/v1/user_address/del.user.address.list', '', '_self', 0, 50, 1),
-(481, 475, '设置一个收货地址为默认', '', '', '', 'api', 0, 'api/v1/user_address/set.user.address.default', '', '_self', 0, 50, 1),
-(482, 475, '检测是否超出最大添加数量', '', '', '', 'api', 0, 'api/v1/user_address/is.user.address.maximum', '', '_self', 0, 50, 1),
+(476, 475, '获取指定账号的收货地址列表', '', '', '', 'api', 0, 'api/v1/user_address/get.user.address.list', '', '_self', 0, 1, 1),
+(477, 475, '获取指定账号的一个收货地址', '', '', '', 'api', 0, 'api/v1/user_address/get.user.address.item', '', '_self', 0, 2, 1),
+(478, 475, '添加一个收货地址', '', '', '', 'api', 0, 'api/v1/user_address/add.user.address.item', '', '_self', 0, 4, 1),
+(479, 475, '编辑一个收货地址', '', '', '', 'api', 0, 'api/v1/user_address/set.user.address.item', '', '_self', 0, 5, 1),
+(480, 475, '批量删除收货地址', '', '', '', 'api', 0, 'api/v1/user_address/del.user.address.list', '', '_self', 0, 6, 1),
+(481, 475, '设置一个收货地址为默认', '', '', '', 'api', 0, 'api/v1/user_address/set.user.address.default', '', '_self', 0, 7, 1),
+(482, 475, '检测是否超出最大添加数量', '', '', '', 'api', 0, 'api/v1/user_address/is.user.address.maximum', '', '_self', 0, 8, 1),
 (483, 0, '账号等级', '', '', '', 'api', 0, '', '', '_self', 0, 55, 1),
 (484, 483, '获取一个账号等级', '', '', '', 'api', 0, 'api/v1/user_level/get.user.level.item', '', '_self', 0, 50, 1),
 (485, 483, '获取账号等级列表', '', '', '', 'api', 0, 'api/v1/user_level/get.user.level.list', '', '_self', 0, 50, 1),
@@ -3015,7 +3015,8 @@ INSERT INTO `{prefix}menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `re
 (1083, 561, '文章预览', '', '', '', 'admin', 0, '/system/article/view', '', '_self', 0, 50, 1),
 (1084, 562, '专题预览', '', '', '', 'admin', 0, '/system/topic/view', '', '_self', 0, 50, 1),
 (1085, 540, '消息预览', '', '', '', 'admin', 0, '/system/message/user/view', '', '_self', 0, 50, 1),
-(1086, 711, '商业授权', '', 'careyshop', '商业授权信息查询', 'admin', 0, '/setting/app/authorize', '', '_self', 1, 50, 1);
+(1086, 711, '商业授权', '', 'careyshop', '商业授权信息查询', 'admin', 0, '/setting/app/authorize', '', '_self', 1, 50, 1),
+(1087, 475, '获取指定账号的默认收货地址', '', '', '', 'api', 0, 'api/v1/user_address/get.user.address.default', '', '_self', 0, 3, 1);
 
 DROP TABLE IF EXISTS `{prefix}message`;
 CREATE TABLE `{prefix}message` (
@@ -8348,7 +8349,7 @@ ALTER TABLE `{prefix}help`
 ALTER TABLE `{prefix}history`
   MODIFY `history_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}menu`
-  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1087;
+  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1088;
 ALTER TABLE `{prefix}message`
   MODIFY `message_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}message_user`
