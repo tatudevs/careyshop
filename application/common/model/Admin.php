@@ -121,6 +121,40 @@ class Admin extends CareyShop
     }
 
     /**
+     * 验证当前账户是否有越级操作
+     * @access private
+     * @param int   $adminID admin_id
+     * @param array $data    外部数据
+     * @return bool|false
+     * @throws
+     */
+    private function checkAdminAuth($adminID = null, $data = null)
+    {
+        if (get_client_group() === AUTH_SUPER_ADMINISTRATOR) {
+            return true;
+        }
+
+        if (!is_null($adminID)) {
+            $result = self::get($adminID);
+            if (!$result) {
+                return is_null($result) ? $this->setError('账号不存在') : false;
+            }
+
+            if (get_client_group() > $result->getAttr('group_id')) {
+                return $this->setError('操作失败，您可能存在越级操作');
+            }
+        }
+
+        if (!is_empty_parm($data['group_id'])) {
+            if (get_client_group() > $data['group_id']) {
+                return $this->setError('操作失败，您可能存在越级操作');
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * 添加一个账号
      * @access public
      * @param  array $data 外部数据
@@ -130,6 +164,10 @@ class Admin extends CareyShop
     public function addAdminItem($data)
     {
         if (!$this->validateData($data, 'Admin')) {
+            return false;
+        }
+
+        if (!$this->checkAdminAuth(null, $data)) {
             return false;
         }
 
@@ -156,6 +194,9 @@ class Admin extends CareyShop
 
         // 数据类型修改
         $data['client_id'] = (int)$data['client_id'];
+        if (!$this->checkAdminAuth($data['client_id'], $data)) {
+            return false;
+        }
 
         if (!empty($data['nickname'])) {
             $nickMap['admin_id'] = ['neq', $data['client_id']];
@@ -192,6 +233,12 @@ class Admin extends CareyShop
             return false;
         }
 
+        foreach ($data['client_id'] as $item) {
+            if (!$this->checkAdminAuth($item)) {
+                return false;
+            }
+        }
+
         $map = ['admin_id' => ['in', $data['client_id']]];
         if (false !== $this->save(['status' => $data['status']], $map)) {
             foreach ($data['client_id'] as $value) {
@@ -219,11 +266,11 @@ class Admin extends CareyShop
             return false;
         }
 
-        $result = self::get($data['client_id']);
-        if (!$result) {
-            return is_null($result) ? $this->setError('账号不存在') : false;
+        if (!$this->checkAdminAuth($data['client_id'], $data)) {
+            return false;
         }
 
+        $result = self::get($data['client_id']);
         if (!hash_equals($result->getAttr('password'), user_md5($data['password_old']))) {
             return $this->setError('原始密码错误');
         }
@@ -246,6 +293,10 @@ class Admin extends CareyShop
     public function resetAdminItem($data)
     {
         if (!$this->validateData($data, 'Admin.reset')) {
+            return false;
+        }
+
+        if (!$this->checkAdminAuth($data['client_id'])) {
             return false;
         }
 
@@ -272,6 +323,12 @@ class Admin extends CareyShop
     {
         if (!$this->validateData($data, 'Admin.del')) {
             return false;
+        }
+
+        foreach ($data['client_id'] as $item) {
+            if (!$this->checkAdminAuth($item)) {
+                return false;
+            }
         }
 
         $map = ['admin_id' => ['in', $data['client_id']]];
