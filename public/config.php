@@ -8,8 +8,10 @@
  * @date        2018/11/21
  */
 
-// 定义额外的系统常量
+// 公共文件夹目录,index.php目录更换后需要改动
 define('APP_PUBLIC_PATH', '');
+
+// 管理模块入口
 define('ADMIN_MODULE', 'admin');
 
 /**
