@@ -516,7 +516,7 @@
             var err_line = $('.line-' + LINE, ol[0])[0];
             err_line.className = err_line.className + ' line-error';
 
-            $.getScript('//cdn.bootcss.com/prettify/r298/prettify.min.js', function(){
+            $.getScript('https://zh-static.oss-accelerate.aliyuncs.com/js/prettify.min.js', function(){
                 prettyPrint();
 
                 // 解决Firefox浏览器一个很诡异的问题
@@ -529,7 +529,6 @@
 
         })();
     </script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/@careyshop/stats@1.0.11/dist/stats.min.js"></script>
     <?php } ?>
 </body>
 </html>
