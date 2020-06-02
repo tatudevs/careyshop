@@ -1,5 +1,6 @@
 CareyShop 商城框架系统
 ===============
+![banner](https://aliyun.oss.careyshop.cn/poster/banner.png)
 CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城框架系统，秉承简洁、快速、极致的开发理念，采用前后端分离，支持分布式部署。框架内部使用面向对象模块化调用，在多终端、跨平台时采用 REST API 进行数据交互，可直接对接 PC、移动设备、小程序、云部署，构建 Android、IOS 的 APP。
 
 **CareyShop（QQ）交流一群：714593455**
@@ -13,7 +14,7 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 后台项目 Git  
 [Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-admin.git "Coding 仓库")
 
-后台功能预览  
+功能预览  
 [经典皮肤](./docs/PREVIEW-WHITE.md) | [深灰皮肤](./docs/PREVIEW-GRAY.md)
 
 ### 安装
