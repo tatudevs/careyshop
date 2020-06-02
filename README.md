@@ -13,7 +13,8 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 后台项目 Git  
 [Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-admin.git "Coding 仓库")
 
-[经典皮肤](../docs/PREVIEW-WHITE.md) | [深灰皮肤](../docs/PREVIEW-GRAY.md)
+后台功能预览  
+[经典皮肤](./docs/PREVIEW-WHITE.md) | [深灰皮肤](./docs/PREVIEW-GRAY.md)
 
 ### 安装
 将项目下的`public`目录设为`web访问`目录，第一次访问时会进入`安装向导`，通过向导完成安装。
