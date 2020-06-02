@@ -13,6 +13,8 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 后台项目 Git  
 [Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-admin.git "Coding 仓库")
 
+[经典皮肤](../docs/PREVIEW-WHITE.md) | [深灰皮肤](../docs/PREVIEW-GRAY.md)
+
 ### 安装
 将项目下的`public`目录设为`web访问`目录，第一次访问时会进入`安装向导`，通过向导完成安装。
 
@@ -29,6 +31,8 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 - 如何隐藏`index.php`入口文件?  
 建议采用`PATH_INFO`访问地址，隐藏入口文件可做伪静态，请参见：  
 [https://doc.careyshop.cn/docs/word/a-61530552870](https://doc.careyshop.cn/docs/word/a-61530552870)
+
+### 功能预览
 
 #### 声明
 CareyShop 原则上使用 AGPLv3 开源，请遵守 AGPLv3 的相关条款，或者与我们联系获取商业授权，   
