@@ -1003,7 +1003,7 @@ class Goods extends CareyShop
             if ($i == 0) {
                 $price[] = ['text' => $end . '以下', 'value' => [$start, $end]];
             } elseif ($i == ($page - 1)) {
-                $price[] = ['text' => $end . '以内', 'value' => [$start, $end]];
+                $price[] = ['text' => $start . '以上', 'value' => [$start, $end]];
             } else {
                 $price[] = ['text' => $start . '-' . $end, 'value' => [$start, $end]];
             }
