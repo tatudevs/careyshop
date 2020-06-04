@@ -758,16 +758,19 @@ class Goods extends CareyShop
             return [];
         }
 
+        // 搜索条件
+        $map = [];
+
         if (!empty($data['shop_price'])) {
-            $this->where(['shop_price' => ['between', $data['shop_price']]]);
+            $map['shop_price'] = ['between', $data['shop_price']];
         }
 
         if (!empty($data['brand_id'])) {
-            $this->where(['brand_id' => ['in', $data['brand_id']]]);
+            $map['brand_id'] = ['in', $data['brand_id']];
         }
 
         // 启用全局搜索条件
-        return self::scope('global')->column('goods_id');
+        return self::scope('global')->where($map)->column('goods_id');
     }
 
     /**
