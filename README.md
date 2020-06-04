@@ -8,17 +8,20 @@ CareyShop（简称 CS）是一套基于 ThinkPHP5 框架开发的高性能商城
 
 **CareyShop（QQ）交流一群：714593455**
 
-### 传送门
-[后台 Demo 预览](https://demo.careyshop.cn/admin "后台 Demo 预览") | [官方网站](https://www.careyshop.cn "CareyShop官方网站") | [文档中心](https://doc.careyshop.cn "CareyShop文档中心") | [数据库词典](https://doc.careyshop.cn/docs/data_dict "数据库词典")
+### 预览
+[后台 Demo 预览](https://demo.careyshop.cn/admin "后台 Demo 预览") | [经典配套款](./docs/PREVIEW-WHITE.md) | [深灰商务款](./docs/PREVIEW-GRAY.md)
 
-后端项目 Git  
+### 文档
+[文档中心](https://doc.careyshop.cn "CareyShop文档中心") | [数据库词典](https://doc.careyshop.cn/docs/data_dict "数据库词典")
+
+### 仓库同步
 [Github 仓库](https://github.com/dnyz520/careyshop "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop.git "Coding 仓库")
 
-后台项目 Git  
+### 生态 - 后台项目
 [Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-admin.git "Coding 仓库")
 
-全方位页面展示  
-[经典配套款](./docs/PREVIEW-WHITE.md) | [深灰商务款](./docs/PREVIEW-GRAY.md)
+### 功能
+* 
 
 ### 安装
 将项目下的`public`目录设为`web访问`目录，第一次访问时会进入`安装向导`，通过向导完成安装。
