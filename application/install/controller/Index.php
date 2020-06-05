@@ -260,7 +260,7 @@ class Index extends Controller
         // 安装数据库表
         if ('database' == $type) {
             $database = Cache::remember('database', function () use ($data, $path) {
-                $sql = file_get_contents($path . sprintf('careyshop%s.sql', $data['is_demo'] == 1 ? '_demo' : ''));
+                $sql = file_get_contents($path . sprintf('careyshop%s.tpl', $data['is_demo'] == 1 ? '_demo' : ''));
                 $sql = macro_str_replace($sql, $data);
                 $sql = str_replace("\r", "\n", $sql);
                 $sql = explode(";\n", $sql);
