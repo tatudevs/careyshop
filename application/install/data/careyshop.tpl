@@ -7948,8 +7948,8 @@ ALTER TABLE `{prefix}discount_goods`
 
 ALTER TABLE `{prefix}friend_link`
   ADD PRIMARY KEY (`friend_link_id`),
-  ADD KEY `is_show` (`status`),
-  ADD KEY `sort` (`sort`);
+  ADD KEY `sort` (`sort`),
+  ADD KEY `status` (`status`) USING BTREE;
 
 ALTER TABLE `{prefix}goods`
   ADD PRIMARY KEY (`goods_id`),
