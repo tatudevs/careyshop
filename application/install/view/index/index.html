@@ -61,6 +61,9 @@
 
     <div class="bottom tac">
         <a href="{$nextUrl}" class="btn">{$next}</a>
+        {if session('step') == 1}
+        <a href="" class="btn">拒 绝</a>
+        {/if}
     </div>
 </div>
 {/block}
