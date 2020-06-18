@@ -17,7 +17,7 @@ return [
         'product_website' => 'http://www.careyshop.cn',
         'product_update'  => 'http://www.careyshop.cn/checkUpdate',
         'develop_team'    => 'think',
-        'company_name'    => '温州明达网络科技有限公司',
+        'company_name'    => '温州瑞令网络科技有限公司',
         'company_website' => 'http://www.careyshop.cn',
     ],
 
