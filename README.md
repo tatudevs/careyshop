@@ -1,6 +1,4 @@
-<p align="center">
-    <img src="https://aliyun.oss.careyshop.cn/poster/banner.png" />
-</p>
+<p align="center"><img src="https://aliyun.oss.careyshop.cn/poster/banner.png" /></p>
 
 <h1 align="center">CareyShop 商城框架系统</h1>
 
