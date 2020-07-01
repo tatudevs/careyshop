@@ -20,7 +20,7 @@ return [
     // API调试模式
     'api_debug'           => false,
     // API请求结果为空时返回内容
-    'empty_result'        => new \stdClass(),
+    'empty_result'        => null,
 
     // +----------------------------------------------------------------------
     // | 异常及错误设置

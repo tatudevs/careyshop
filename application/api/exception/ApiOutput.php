@@ -151,7 +151,7 @@ class ApiOutput
             $result = [
                 'status'  => $code,
                 'message' => $error == true ? empty($message) ? '发生未知异常' : $message : 'success',
-                'data' => new \stdClass(),
+                'data' => Config::get('empty_result'),
             ];
 
             if (!$error) {
