@@ -151,6 +151,7 @@ class ApiOutput
             $result = [
                 'status'  => $code,
                 'message' => $error == true ? empty($message) ? '发生未知异常' : $message : 'success',
+                'data' => new \stdClass(),
             ];
 
             if (!$error) {
