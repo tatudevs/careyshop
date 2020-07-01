@@ -34,6 +34,8 @@ class Collect extends CareyShop
             'get.collect.list'   => ['getCollectList'],
             // 获取商品收藏数量
             'get.collect.count'  => ['getCollectCount'],
+            // 检测指定商品是否被收藏
+            'is.collect.goods'   => ['isCollectGoods'],
         ];
     }
 }

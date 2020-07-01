@@ -45,18 +45,21 @@ class Collect extends CareyShop
      * @var array
      */
     protected $scene = [
-        'del'  => [
+        'del'   => [
             'collect_id' => 'require|arrayHasOnlyInts',
         ],
-        'top'  => [
+        'top'   => [
             'collect_id' => 'require|arrayHasOnlyInts',
             'is_top'     => 'require|in:0,1',
         ],
-        'list' => [
+        'list'  => [
             'page_no',
             'page_size',
             'order_type',
             'order_field',
+        ],
+        'goods' => [
+            'goods_id',
         ],
     ];
 }

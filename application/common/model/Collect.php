@@ -221,4 +221,32 @@ class Collect extends CareyShop
 
         return ['total_result' => $totalResult];
     }
+
+    /**
+     * 检测指定商品是否被收藏
+     * @access public
+     * @param  array $data 外部数据
+     * @return false|array
+     * @throws
+     */
+    public function isCollectGoods($data)
+    {
+        if (!$this->validateData($data, 'Collect.goods')) {
+            return false;
+        }
+
+        // 游客返回结果
+        if (get_client_type() <= 0) {
+            return ['is_collect' => 0];
+        }
+
+        // 查询条件
+        $map = [
+            'user_id'  => get_client_id(),
+            'goods_id' => $data['goods_id'],
+        ];
+
+        $result = $this->where($map)->find();
+        return ['is_collect' => $result ? 1 : 0];
+    }
 }
