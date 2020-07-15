@@ -65,9 +65,10 @@ class ApiOutput
         }
 
         self::$header['Access-Control-Allow-Origin'] = $origin;
-        self::$header['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS';
+        self::$header['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS';
         self::$header['Access-Control-Allow-Credentials'] = 'true';
         self::$header['Access-Control-Allow-Headers'] = 'Content-Type, Accept';
+        self::$header['Access-Control-Expose-Headers'] = '*';
         self::$header['Access-Control-Max-Age'] = '86400'; // 1天
     }
 
