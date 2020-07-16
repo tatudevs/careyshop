@@ -14,6 +14,7 @@ class Index
 {
     public function index()
     {
-        return ['status' => 200, 'data' => '欢迎使用CareyShop商城框架系统 - Api'];
+        $isRest = db('setting')->where(['code' => 'open_api_rest', 'module' => 'system_info'])->value('value');
+        return $isRest ? view() : ['status' => 200, 'data' => '欢迎使用CareyShop商城框架系统 - Api'];
     }
 }
