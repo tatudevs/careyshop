@@ -13321,7 +13321,8 @@ INSERT INTO `{prefix}setting` (`setting_id`, `code`, `value`, `module`, `descrip
 (67, 'aliyun_bucket', 'careyshop', 'upload', 'Bucket 名称', '选择一个Bucket，请保证读写权限为 <span style=\"color:#F56C6C;\">公共读</span>'),
 (68, 'aliyun_url', 'aliyun.oss.careyshop.cn', 'upload', 'Bucket 域名', '外网访问 <span style=\"color:#F56C6C;\">Bucket域名</span>，也支持填写 <span style=\"color:#F56C6C;\">用户域名</span>，不必添加地址前缀'),
 (69, 'aliyun_endpoint', 'oss-cn-hangzhou.aliyuncs.com', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
-(70, 'aliyun_rolearn', 'acs:ram::1763866338345155:role/aliyunosstokengeneratorrole', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>');
+(70, 'aliyun_rolearn', 'acs:ram::1763866338345155:role/aliyunosstokengeneratorrole', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>'),
+(71, 'open_api_rest', '1', 'system_info', '是否开启Rest API调试', '开启后可通过内置的Rest调试工具对接口进行调试');
 
 DROP TABLE IF EXISTS `{prefix}spec`;
 CREATE TABLE `{prefix}spec` (
@@ -15680,7 +15681,7 @@ ALTER TABLE `{prefix}region`
 ALTER TABLE `{prefix}service_log`
   MODIFY `service_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
 ALTER TABLE `{prefix}setting`
-  MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 ALTER TABLE `{prefix}spec`
   MODIFY `spec_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 ALTER TABLE `{prefix}spec_config`
