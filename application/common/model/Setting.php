@@ -355,6 +355,7 @@ class Setting extends CareyShop
                 switch ($key) {
                     case 'open_index':
                     case 'open_api':
+                    case 'open_api_rest':
                     case 'open_mobile':
                     case 'home_captcha':
                     case 'admin_captcha':
