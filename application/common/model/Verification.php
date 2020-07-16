@@ -95,7 +95,7 @@ class Verification extends CareyShop
             $map['number'] = ['eq', $data['number']];
             $map['status'] = ['eq', 1];
 
-            $query->where($map);
+            $query->where($map)->order(['verification_id' => 'desc']);
         });
 
         if (!$result) {
