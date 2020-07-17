@@ -1,8 +1,15 @@
 #!/usr/bin/env php
 <?php
+/**
+ * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
+ *
+ * CareyShop    命令行入口文件
+ *
+ * @author      zxm <252404501@qq.com>
+ * @date        2017/5/4
+ */
 namespace think;
 
-// 命令行入口文件
 // 加载基础文件
 require __DIR__ . '/vendor/autoload.php';
 
