@@ -1,24 +1,27 @@
 {
-    "name": "topthink/think",
-    "description": "the new thinkphp framework",
+    "name": "dnyz520/careyshop",
+    "description": "high performance mall framework system for CareyShop",
     "type": "project",
     "keywords": [
-        "framework",
-        "thinkphp",
-        "ORM"
+        "shop",
+        "php",
+        "vue",
+        "careyshop",
+        "framework"
     ],
-    "homepage": "http://thinkphp.cn/",
-    "license": "Apache-2.0",
+    "homepage": "https://careyshop.cn/",
+    "license": "AGPL-3.0",
     "authors": [
         {
-            "name": "liu21st",
-            "email": "liu21st@gmail.com"
-        },
-        {
-            "name": "yunwuxin",
-            "email": "448901948@qq.com"
-        }        
+            "name": "dnyz520",
+            "email": "dnyz520@126.com"
+        }
     ],
+    "support": {
+        "email": "dnyz520@126.com",
+        "issues": "https://github.com/dnyz520/careyshop/issues",
+        "source": "https://demo.careyshop.cn/admin"
+    },
     "require": {
         "php": ">=7.1.0",
         "topthink/framework": "^6.0.0",
@@ -44,5 +47,11 @@
             "@php think service:discover",
             "@php think vendor:publish"
         ]
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
     }
 }
