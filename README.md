@@ -1,10 +1,10 @@
-<p style="text-align:center">
+<p align="center">
     <img src="https://aliyun.oss.careyshop.cn/poster/banner.png"  alt="careyshop_banner"/>
 </p>
 
-<h1 style="text-align:center">CareyShop 商城框架系统</h1>
+<h1 align="center">CareyShop 商城框架系统</h1>
 
-<p style="text-align:center">
+<p align="center">
     <a href="https://www.careyshop.cn">
         <img src="https://img.shields.io/badge/website-CareyShop-yellow.svg" alt="careyshop"/>
     </a>
@@ -19,7 +19,7 @@
     </a>
 </p>
 
-<p style="text-align:center">
+<p align="center">
     <b>如果对您有帮助，请帮忙点右上角 "Star" 支持一下 谢谢！</b>
 </p>
 
