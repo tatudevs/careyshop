@@ -1,10 +1,10 @@
-<p align="center">
+<p style="text-align:center">
     <img src="https://aliyun.oss.careyshop.cn/poster/banner.png"  alt="careyshop_banner"/>
 </p>
 
-<h1 align="center">CareyShop 商城框架系统</h1>
+<h1 style="text-align:center">CareyShop 商城框架系统</h1>
 
-<p align="center">
+<p style="text-align:center">
     <a href="https://www.careyshop.cn">
         <img src="https://img.shields.io/badge/website-CareyShop-yellow.svg" alt="careyshop"/>
     </a>
@@ -19,7 +19,7 @@
     </a>
 </p>
 
-<p align="center">
+<p style="text-align:center">
     <b>如果对您有帮助，请帮忙点右上角 "Star" 支持一下 谢谢！</b>
 </p>
 
@@ -43,8 +43,8 @@ CareyShop 后台管理模板 [Github 仓库](https://github.com/dnyz520/careysho
 CareyShop Rest接口调试 [Github 仓库](https://github.com/dnyz520/careyshop-rest "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-rest "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-rest.git "Coding 仓库")
 
 ## 功能
-* 升级至TP6.0（开发中）
-* uniapp小程序（计划）
+* uniapp小程序（开发中）
+* 升级至TP6.0
 * REST API内置调试工具
 * 商品管理
 * 商品分类
@@ -118,20 +118,16 @@ CareyShop Rest接口调试 [Github 仓库](https://github.com/dnyz520/careyshop-
 将项目下的`public`目录设为`web访问`目录，第一次访问时会进入`安装向导`，通过向导完成安装。
 
 ## 快速启动
-切换到项目`public`目录下，输入命令行`php -S 127.0.0.1:8080 router.php`，便可使用 PHP 自带的`webserver`服务快速访问，按键`Ctrl + C`退出服务。
+切换到项目根目录下，输入命令行`php think run -H 127.0.0.1 -p 8080`，便可使用 PHP 自带的`webserver`服务快速访问，按键`Ctrl + C`退出服务。
 
 > 建议使用`IP`启动，避免使用`localhost`，并且此方法只适合调试环境。
 
 ## 常见问题
-- 不习惯将入口文件部署在`public`或部署环境不支持怎么办?  
-可以灵活变动，请参见：  
-[https://doc.careyshop.cn/guide/enter/](https://doc.careyshop.cn/guide/enter/)
-
 - 如何隐藏`index.php`入口文件?  
 建议采用`PATH_INFO`访问地址，隐藏入口文件可做伪静态，请参见：  
 [https://doc.careyshop.cn/guide/rewrite/](https://doc.careyshop.cn/guide/rewrite/)
 
-## 内置调试
+## 接口调试
 ![](https://aliyun.oss.careyshop.cn/poster/rest_api.png)
 
 ## 管理后台
