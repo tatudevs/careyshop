@@ -1,19 +1,24 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006~2019 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
-// $Id$
+/**
+ * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
+ *
+ * CareyShop    PHP自带WebServer支持
+ *
+ * @author      zxm <252404501@qq.com>
+ * @date        2017/4/24
+ */
 
+/**
+ * 启动命令：php think run
+ * 如有特殊指定：php think run -H tp.com -p 80
+ */
 if (is_file($_SERVER["DOCUMENT_ROOT"] . $_SERVER["SCRIPT_NAME"])) {
     return false;
 } else {
     $_SERVER["SCRIPT_FILENAME"] = __DIR__ . '/index.php';
+    if (!isset($_SERVER['PATH_INFO'])) {
+        $_SERVER['PATH_INFO'] = $_SERVER['SCRIPT_NAME'];
+    }
 
     require __DIR__ . "/index.php";
 }
