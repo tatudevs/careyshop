@@ -1,5 +1,13 @@
 <?php
-// 中间件配置
+/**
+ * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
+ *
+ * CareyShop    中间件配置
+ *
+ * @author      zxm <252404501@qq.com>
+ * @date        2020/6/6
+ */
+
 return [
     // 别名或分组
     'alias'    => [],

@@ -1,7 +1,13 @@
 <?php
-// +----------------------------------------------------------------------
-// | Cookie设置
-// +----------------------------------------------------------------------
+/**
+ * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
+ *
+ * CareyShop    Cookie设置
+ *
+ * @author      zxm <252404501@qq.com>
+ * @date        2020/6/6
+ */
+
 return [
     // cookie 保存时间
     'expire'    => 0,
