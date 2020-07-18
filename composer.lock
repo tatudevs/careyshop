@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "508fe885e87149d9050c5eeb87ddfe21",
+    "content-hash": "7bff6c96d95ab6ae0ca782fc4f9f4542",
     "packages": [
         {
             "name": "league/flysystem",
@@ -946,59 +946,6 @@
                 }
             ],
             "time": "2020-05-30T20:06:45+00:00"
-        },
-        {
-            "name": "topthink/think-trace",
-            "version": "v1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/top-think/think-trace.git",
-                "reference": "d8da2e39df268ab8775013de699f0c3012e51318"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-trace/zipball/d8da2e39df268ab8775013de699f0c3012e51318",
-                "reference": "d8da2e39df268ab8775013de699f0c3012e51318",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "php": ">=7.1.0",
-                "topthink/framework": "^6.0.0"
-            },
-            "type": "library",
-            "extra": {
-                "think": {
-                    "services": [
-                        "think\\trace\\Service"
-                    ],
-                    "config": {
-                        "trace": "src/config.php"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "think\\trace\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "liu21st",
-                    "email": "liu21st@gmail.com"
-                }
-            ],
-            "description": "thinkphp debug trace",
-            "time": "2020-03-18T07:59:53+00:00"
         }
     ],
     "aliases": [],

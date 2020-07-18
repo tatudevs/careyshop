@@ -18,7 +18,6 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
     public static $prefixLengthsPsr4 = array (
         't' => 
         array (
-            'think\\trace\\' => 12,
             'think\\' => 6,
         ),
         'a' => 
@@ -51,10 +50,6 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
     );
 
     public static $prefixDirsPsr4 = array (
-        'think\\trace\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/topthink/think-trace/src',
-        ),
         'think\\' => 
         array (
             0 => __DIR__ . '/..' . '/topthink/framework/src/think',
