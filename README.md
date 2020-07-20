@@ -2,7 +2,7 @@
     <img src="https://aliyun.oss.careyshop.cn/poster/banner.png"  alt="careyshop_banner"/>
 </p>
 
-<h1 align="center">CareyShop 商城框架系统</h1>
+<h1 align="center">CareyShop 商城框架系统(未完成,请勿克隆)</h1>
 
 <p align="center">
     <a href="https://www.careyshop.cn">
