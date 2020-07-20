@@ -18,6 +18,7 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
     public static $prefixLengthsPsr4 = array (
         't' => 
         array (
+            'think\\view\\driver\\' => 18,
             'think\\app\\' => 10,
             'think\\' => 6,
         ),
@@ -51,6 +52,10 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
     );
 
     public static $prefixDirsPsr4 = array (
+        'think\\view\\driver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/topthink/think-view/src',
+        ),
         'think\\app\\' => 
         array (
             0 => __DIR__ . '/..' . '/topthink/think-multi-app/src',
@@ -60,6 +65,7 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
             0 => __DIR__ . '/..' . '/topthink/framework/src/think',
             1 => __DIR__ . '/..' . '/topthink/think-helper/src',
             2 => __DIR__ . '/..' . '/topthink/think-orm/src',
+            3 => __DIR__ . '/..' . '/topthink/think-template/src',
         ),
         'app\\' => 
         array (
