@@ -19,9 +19,10 @@ class Index
 {
     public function index()
     {
-        $status = Db::name('setting')->where(['code' => 'open_api_rest', 'module' => 'system_info'])->value('value');
+        $map = ['code' => 'open_api_rest', 'module' => 'system_info'];
+        $showRest = Db::name('setting')->where($map)->value('value');
 
-        View::assign('status', $status);
+        View::assign('showRest', $showRest);
         return View::fetch();
     }
 }

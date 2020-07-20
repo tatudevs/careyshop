@@ -18,7 +18,14 @@ class Index
 {
     public function index()
     {
-        $isRest = Db::name('setting')->where(['code' => 'open_api_rest', 'module' => 'system_info'])->value('value');
-        return $isRest || input('?get.key') ? view() : json(['status' => 200, 'data' => '欢迎使用CareyShop商城框架系统 - Api']);
+        $map = ['code' => 'open_api_rest', 'module' => 'system_info'];
+        $isRest = Db::name('setting')->where($map)->value('value');
+
+        $result = [
+            'status' => 200,
+            'data'   => '欢迎使用CareyShop商城框架系统 - Api',
+        ];
+
+        return $isRest || input('?get.key') ? view() : json($result);
     }
 }
