@@ -11,4 +11,4 @@
 
 use think\facade\Route;
 
-Route::rule(':versions/:controller', ':versions.:controller/index');
+Route::rule(':version/:controller', ':version.:controller/index');

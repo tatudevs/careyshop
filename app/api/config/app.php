@@ -9,7 +9,7 @@
  */
 
 return [
-    // API调试模式
+    // 是否开启API调试模式
     'api_debug'    => env('api_debug', false),
     // API请求结果为空时返回内容
     'empty_result' => null,

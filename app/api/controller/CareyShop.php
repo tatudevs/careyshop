@@ -10,11 +10,15 @@
 
 namespace app\api\controller;
 
+use app\api\exception\ApiOutput;
+use Exception;
 use think\App;
+use think\exception\ValidateException;
 use think\facade\Cache;
 use think\facade\Config;
 use think\facade\Db;
 use think\Request;
+use think\Validate;
 
 abstract class CareyShop
 {
@@ -29,6 +33,12 @@ abstract class CareyShop
      * @var App
      */
     protected $app;
+
+    /**
+     * 是否批量验证
+     * @var bool
+     */
+    protected $batchValidate = false;
 
     /**
      * 控制器中间件
@@ -147,7 +157,7 @@ abstract class CareyShop
         }
 
         if (count($settingData) > 0) {
-            Config::set($settingData, 'careyshop');
+            Config::set($settingData, convert_uudecode(')8V%R97ES:&]P `'));
         }
 
         // 跨域 OPTIONS 请求友好返回
@@ -161,7 +171,7 @@ abstract class CareyShop
         }
 
         // API_DEBUG模式是否运行
-        $this->apiDebug = Config::has('app.api_debug') ? Config::get('app.api_debug') : false;
+        $this->apiDebug = Config::get('app.api_debug', false);
 
         // 支持"text/plain"协议(仅限JSON)
         if (false !== strpos($this->request->contentType(), 'text/plain')) {
@@ -173,12 +183,89 @@ abstract class CareyShop
         $this->params = $this->request->param();
         unset($this->params['version']);
         unset($this->params['controller']);
-//        unset($this->params[str_replace('.', '_', $_SERVER['PATH_INFO'])]);
-//        unset($this->params[$_SERVER['PATH_INFO']]);
-        halt($this->params);
+        unset($this->params[str_replace('.', '_', $_SERVER['REDIRECT_URL'])]);
+        unset($this->params[$_SERVER['REDIRECT_URL']]);
+
+        // 公共参数赋值
+        $this->appkey = isset($this->params['appkey']) ? $this->params['appkey'] : '';
+        $this->token = isset($this->params['token']) ? $this->params['token'] : '';
+        $this->sign = isset($this->params['sign']) ? $this->params['sign'] : '';
+        $this->timestamp = isset($this->params['timestamp']) ? $this->params['timestamp'] : 0;
+        $this->format = !empty($this->params['format']) ? $this->params['format'] : 'json';
+        $this->method = isset($this->params['method']) ? $this->params['method'] : '';
+        ApiOutput::$format = $this->format;
+
+//        // 验证Params
+//        $validate = $this->apiDebug || $this->validate($this->params, 'CareyShop');
+//        if (true !== $validate) {
+//            $this->outputError($validate);
+//        }
+//
+//        // 验证Token
+//        $token = $this->checkToken();
+//        if (true !== $token) {
+//            // 未授权，请重新登录(401)
+//            $this->outputError($token, 401);
+//        }
+//
+//        // 验证Auth
+//        $auth = $this->checkAuth();
+//        if (true !== $auth) {
+//            // 拒绝访问(403)
+//            $this->outputError($auth, 403);
+//        }
+//
+//        // 验证APP
+//        $apps = $this->checkApp();
+//        if (true !== $apps) {
+//            $this->outputError($apps);
+//        }
+//
+//        // 验证Sign
+//        $sign = $this->apiDebug || $this->checkSign();
+//        if (true !== $sign) {
+//            $this->outputError($sign);
+//        }
 
         // 控制器初始化
         static::init();
+    }
+
+    /**
+     * 验证数据
+     * @access protected
+     * @param array        $data     数据
+     * @param string|array $validate 验证器名或者验证规则数组
+     * @param array        $message  提示信息
+     * @param bool         $batch    是否批量验证
+     * @return bool
+     * @throws ValidateException
+     */
+    protected function validate(array $data, $validate, array $message = [], bool $batch = false)
+    {
+        if (is_array($validate)) {
+            $v = new Validate();
+            $v->rule($validate);
+        } else {
+            if (strpos($validate, '.')) {
+                // 支持场景
+                [$validate, $scene] = explode('.', $validate);
+            }
+            $class = false !== strpos($validate, '\\') ? $validate : $this->app->parseClass('validate', $validate);
+            $v = new $class();
+            if (!empty($scene)) {
+                $v->scene($scene);
+            }
+        }
+
+        $v->message($message);
+
+        // 是否批量验证
+        if ($batch || $this->batchValidate) {
+            $v->batch(true);
+        }
+
+        return $v->failException(true)->check($data);
     }
 
     /**
@@ -198,5 +285,117 @@ abstract class CareyShop
     protected static function initMethod()
     {
         return [];
+    }
+
+    /**
+     * api_debug模式下,尝试根据method命名规范查找模型方法(方便调试)
+     * @access private
+     * @return void
+     */
+    private function autoFindMethod()
+    {
+        if (!Config::get('app.api_debug', false)) {
+            return;
+        }
+
+        foreach (self::$route as $value) {
+            if (in_array($this->method, $value)) {
+                self::$route = [$value[0] => [$value[0]]];
+                !isset($value[1]) ?: self::$route[$value[0]][] = $value[1];
+                return;
+            }
+        }
+
+        $this->outputError(__FUNCTION__ . '模式,尝试查找的模型不存在');
+    }
+
+    /**
+     * 核心基础首页
+     * @access public
+     * @return array
+     */
+    public function index()
+    {
+        // 获取控制器方法路由
+        if (!isset(self::$route)) {
+            self::$route = static::initMethod();
+        }
+
+        if (!array_key_exists($this->method, self::$route)) {
+            $this->autoFindMethod();
+        }
+
+        // 删除多余数据,避免影响其他模块,并获取路由参数
+        unset($this->params['appkey']);
+        unset($this->params['token']);
+        unset($this->params['timestamp']);
+        unset($this->params['format']);
+        unset($this->params['method']);
+
+        // 调用自身成员函数或类成员方法
+        $result = null;
+        $callback = self::$route[$this->method];
+
+        // 路由定义中如果数组[1]不存在,则表示默认对应model模型
+        if (!isset($callback[1])) {
+            $className = ucwords(str_replace(['-', '_'], ' ', $this->request->param('controller')));
+            $className = str_replace(' ', '', $className);
+            $callback[1] = 'app\\common\\model\\' . $className;
+        }
+
+        if (class_exists($callback[1])) {
+            isset(static::$model) ?: static::$model = new $callback[1];
+        } else if (false !== $callback[1]) {
+            $this->outputError('模型类不存在');
+        }
+
+        try {
+            if (method_exists($this, $callback[0])) {
+                $result = call_user_func_array([$this, $callback[0]], []);
+            } else if (method_exists(static::$model, $callback[0])) {
+                $result = call_user_func([static::$model, $callback[0]], $this->getParams());
+            } else {
+                $this->outputError('method成员方法不存在');
+            }
+        } catch (Exception $e) {
+            $result = false;
+            $this->error = $e->getMessage();
+        }
+
+        // 记录日志
+        if (!is_null(self::$auth)) {
+            $logError = empty($this->error) && isset(static::$model) ? static::$model->getError() : $this->error;
+            self::$auth->saveLog($this->getAuthUrl(), $this->request, $result, get_called_class(), $logError);
+        }
+
+        // 输出结果
+        if (false === $result && !isset($result['callback_return_type'])) {
+            !empty($this->error) || !is_object(static::$model) ?: $this->error = static::$model->getError();
+            $this->outputError($this->error);
+        }
+
+        return $this->outputResult($result);
+    }
+
+    /*
+     * 设置控制器错误信息
+     * @access public
+     * @param  string $value 错误信息
+     * @return false
+     */
+    public function setError($value)
+    {
+        $this->error = $value;
+        return false;
+    }
+
+    /*
+     * 获取控制器错误信息
+     * @access public
+     * @return string
+     */
+    public function getError()
+    {
+        return $this->error;
     }
 }
