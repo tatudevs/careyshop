@@ -17,8 +17,10 @@ use think\exception\ValidateException;
 use think\facade\Cache;
 use think\facade\Config;
 use think\facade\Db;
+use think\helper\Str;
 use think\Request;
 use think\Validate;
+use throwable;
 
 abstract class CareyShop
 {
@@ -195,37 +197,37 @@ abstract class CareyShop
         $this->method = isset($this->params['method']) ? $this->params['method'] : '';
         ApiOutput::$format = $this->format;
 
-//        // 验证Params
-//        $validate = $this->apiDebug || $this->validate($this->params, 'CareyShop');
-//        if (true !== $validate) {
-//            $this->outputError($validate);
-//        }
-//
-//        // 验证Token
-//        $token = $this->checkToken();
-//        if (true !== $token) {
-//            // 未授权，请重新登录(401)
-//            $this->outputError($token, 401);
-//        }
-//
+        // 验证Params
+        $validate = $this->apiDebug || $this->validate($this->params, 'CareyShop');
+        if (true !== $validate) {
+            $this->outputError($validate);
+        }
+
+        // 验证Token
+        $token = $this->checkToken();
+        if (true !== $token) {
+            // 未授权，请重新登录(401)
+            $this->outputError($token, 401);
+        }
+
 //        // 验证Auth
 //        $auth = $this->checkAuth();
 //        if (true !== $auth) {
 //            // 拒绝访问(403)
 //            $this->outputError($auth, 403);
 //        }
-//
-//        // 验证APP
-//        $apps = $this->checkApp();
-//        if (true !== $apps) {
-//            $this->outputError($apps);
-//        }
-//
-//        // 验证Sign
-//        $sign = $this->apiDebug || $this->checkSign();
-//        if (true !== $sign) {
-//            $this->outputError($sign);
-//        }
+
+        // 验证APP
+        $apps = $this->checkApp();
+        if (true !== $apps) {
+            $this->outputError($apps);
+        }
+
+        // 验证Sign
+        $sign = $this->apiDebug || $this->checkSign();
+        if (true !== $sign) {
+            $this->outputError($sign);
+        }
 
         // 控制器初始化
         static::init();
@@ -359,19 +361,19 @@ abstract class CareyShop
             }
         } catch (Exception $e) {
             $result = false;
-            $this->error = $e->getMessage();
+            $this->setError($e->getMessage());
         }
 
         // 记录日志
         if (!is_null(self::$auth)) {
-            $logError = empty($this->error) && isset(static::$model) ? static::$model->getError() : $this->error;
+            $logError = empty($this->error) && isset(static::$model) ? static::$model->getError() : $this->getError();
             self::$auth->saveLog($this->getAuthUrl(), $this->request, $result, get_called_class(), $logError);
         }
 
         // 输出结果
         if (false === $result && !isset($result['callback_return_type'])) {
-            !empty($this->error) || !is_object(static::$model) ?: $this->error = static::$model->getError();
-            $this->outputError($this->error);
+            !empty($this->error) || !is_object(static::$model) ?: $this->setError(static::$model->getError());
+            $this->outputError($this->getError());
         }
 
         return $this->outputResult($result);
@@ -397,5 +399,243 @@ abstract class CareyShop
     public function getError()
     {
         return $this->error;
+    }
+
+    /**
+     * 只验证Token是否合法,否则一律按游客处理
+     * @access private
+     * @return string|true
+     * @throws throwable
+     */
+    private function checkToken()
+    {
+        // 初始账号数据
+        $GLOBALS['client'] = [
+            'type'        => config('extra.client_group.' . ($this->apiDebug ? 'admin' : 'visitor') . 'value'),
+            'group_id'    => $this->apiDebug ? AUTH_SUPER_ADMINISTRATOR : AUTH_GUEST,
+            'client_id'   => $this->apiDebug ? 1 : 0,
+            'client_name' => $this->apiDebug ? 'CareyShop' : '游客',
+            'token'       => $this->token,
+        ];
+
+        // Token为空则表示以游客身份访问
+        if (empty($this->token) || $this->apiDebug) {
+            return true;
+        }
+
+        // 从本地数据库获取Token
+        $data = Cache::remember('token:' . $this->token, function () {
+            return Db::name('token')->where(['token' => $this->token])->find();
+        });
+
+        // 存在Token则进行验证
+        if (!is_null($data)) {
+            // 必须先检测Token是否过期,不然下面的检测没意义
+            if (empty($data['token_expires']) || time() > $data['token_expires']) {
+                return 'token已过期';
+            }
+
+            // 还原Token加密过程
+            $token = user_md5(sprintf('%d%d%s', $data['client_id'], $data['client_type'], $data['code']));
+
+            // 取错的情况下第2个比较逻辑成立,否则为非法Token
+            if (!hash_equals($token, $this->token) || $token != $data['token']) {
+                return 'token错误';
+            }
+
+            // 设置全局变量并设置账号缓存标签
+            $GLOBALS['client'] = [
+                'type'        => $data['client_type'],
+                'group_id'    => $data['group_id'],
+                'client_id'   => $data['client_id'],
+                'client_name' => $data['username'],
+                'token'       => $this->token,
+            ];
+
+            $cacheTag = 'token:' . (is_client_admin() ? 'admin_' : 'user_') . get_client_id();
+            Cache::tag($cacheTag)->append('token:' . $this->token);
+        } else if (!empty($this->token)) {
+            // 不以白名单方式访问一律按Token未授权处理
+            return '未授权或授权已过期';
+        }
+
+        return true;
+    }
+
+    /**
+     * 验证Auth
+     * @access private
+     * @return string|true
+     * @throws throwable
+     */
+    private function checkAuth()
+    {
+        // 初始化规则模块
+        if (is_null(self::$auth)) {
+            $module = app('http')->getName();
+            $authCache = $module . get_client_group();
+
+            self::$auth = Cache::remember($authCache, function () use ($module) {
+                return new Auth($module, get_client_group());
+            });
+
+            Cache::tag('CommonAuth')->append($authCache);
+        }
+
+        // 批量API调用或调试模式不需要权限验证
+        if ($this->apiDebug || $this->request->controller() == 'Batch') {
+            return true;
+        }
+
+        // 优先验证是否属于白名单接口(任何访问者都可访问)
+        if (self::$auth->checkWhite($this->getAuthUrl())) {
+            $this->apiDebug = true;
+            return true;
+        }
+
+        // 再验证是否有权限
+        if (self::$auth->check($this->getAuthUrl())) {
+            return true;
+        }
+
+        return '权限不足';
+    }
+
+    /**
+     * 验证APP状态
+     * @access private
+     * @return bool|string
+     */
+    private function checkApp()
+    {
+        // 白名单中排除的接口
+        $exclude = [
+            'login.admin.user',
+            'login.user.user',
+        ];
+
+        if (!$this->apiDebug || in_array($this->method, $exclude)) {
+            $appMap = ['app_key' => $this->appkey, 'status' => 1, 'is_delete' => 0];
+            $appSecret = Db::name('app')->cache(true, null, 'app')->where($appMap)->value('app_secret');
+
+            if ($appSecret) {
+                $this->appSecret = $appSecret;
+                return true;
+            } else {
+                return 'appkey已禁用或不存在';
+            }
+        }
+
+        return true;
+    }
+
+    /*
+     * 验证Sign是否合法
+     * @access private
+     * @return string|true
+     */
+    private function checkSign()
+    {
+        unset($this->params['sign']);
+        $params = $this->params;
+        ksort($params);
+
+        $type = ['array', 'object', 'NULL'];
+        $stringToBeSigned = $this->appSecret;
+        foreach ($params as $key => $val) {
+            if ($key != '' && !in_array(gettype($val), $type)) {
+                $stringToBeSigned .= $key . $val;
+            }
+        }
+        unset($key, $val);
+        $stringToBeSigned .= $this->appSecret;
+
+        if (!hash_equals(md5($stringToBeSigned), $this->sign)) {
+            return 'sign错误';
+        }
+
+        return true;
+    }
+
+    /**
+     * 输出请求结果
+     * @access protected
+     * @param array $data 业务结果
+     * @param int   $code HTTP状态码
+     * @return array
+     */
+    protected function outputResult($data = [], $code = 200)
+    {
+        return ApiOutput::outPut($data, $code);
+    }
+
+    /**
+     * 输出错误结果
+     * @access protected
+     * @param string $message 错误消息
+     * @param int    $code    错误编码
+     * @return void
+     */
+    protected function outputError($message = '', $code = 500)
+    {
+        abort($code, $message);
+    }
+
+    /**
+     * 获取公共参数
+     * @access protected
+     * @param int/string $key 键值
+     * @return mixed
+     */
+    protected function getParams($key = null)
+    {
+        return is_null($key) ? $this->params : $this->params[$key];
+    }
+
+    /**
+     * 删除指定的公共参数
+     * @access protected
+     * @param string/array $key 键值
+     * @return mixed
+     */
+    protected function unParams($key)
+    {
+        if (isset($key)) {
+            if (is_string($key)) {
+                unset($this->params[$key]);
+            } else if (is_array($key)) {
+                foreach ($key as $val) {
+                    unset($this->params[$val]);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * 检测指定参数是否存在
+     * @access protected
+     * @param string $key 键值
+     * @return bool
+     */
+    protected function hasParams($key)
+    {
+        return isset($this->params[$key]);
+    }
+
+    /**
+     * 返回权限验证需要的URL规则
+     * @access private
+     * @return string
+     */
+    private function getAuthUrl()
+    {
+        $module = app('http')->getName();
+        $version = $this->request->param('version');
+        $controller = Str::snake($this->request->param('controller'));
+        $method = $this->method;
+
+        return sprintf('%s/%s/%s/%s', $module, $version, $controller, $method);
     }
 }
