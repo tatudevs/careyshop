@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    Api基类控制器
+ * CareyShop    API基类控制器
  *
  * @author      zxm <252404501@qq.com>
  * @date        2020/7/20
@@ -199,7 +199,7 @@ abstract class CareyShop
         ApiOutput::$format = $this->format;
 
         // 验证Params
-        $validate = $this->apiDebug || $this->validate($this->params, 'CareyShop');
+        $validate = $this->validate($this->params, 'CareyShop');
         if (true !== $validate) {
             $this->outputError($validate);
         }
@@ -349,7 +349,7 @@ abstract class CareyShop
         if (class_exists($callback[1])) {
             isset(static::$model) ?: static::$model = new $callback[1];
         } else if (false !== $callback[1]) {
-            $this->outputError('模型类不存在');
+            $this->outputError('模型类或方法不存在');
         }
 
         try {
