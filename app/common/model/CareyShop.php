@@ -13,7 +13,7 @@ namespace app\common\model;
 use think\exception\ValidateException;
 use think\Model;
 
-class CareyShop extends Model
+abstract class CareyShop extends Model
 {
     /**
      * 错误信息
