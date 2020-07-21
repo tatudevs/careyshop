@@ -257,7 +257,7 @@ abstract class CareyShop
             $class = false !== strpos($validate, '\\') ? $validate : $this->app->parseClass('validate', $validate);
             $v = new $class();
             if (!empty($scene)) {
-                $v->scene($scene);
+                $v->hasScene($scene) ? $v->scene($scene) : $this->outputError($scene . ' 场景不存在');
             }
         }
 
