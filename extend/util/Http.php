@@ -5,7 +5,7 @@
  * CareyShop    cUrl扩展库
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/3/1
+ * @date        2020/7/22
  */
 
 namespace util;
@@ -15,8 +15,8 @@ class Http
     /**
      * 通过GET方式访问
      * @access public
-     * @param  string $url    host
-     * @param  bool   $isGzip 是否gzip压缩
+     * @param string $url    host
+     * @param bool   $isGzip 是否gzip压缩
      * @return string
      */
     public static function httpGet($url, $isGzip = false)
@@ -45,10 +45,10 @@ class Http
     /**
      * 通过POST方式访问
      * @access public
-     * @param  string $url    host
-     * @param  array  $data   发送数据
-     * @param  string $type   content-type
-     * @param  bool   $isGzip 是否gzip压缩
+     * @param string $url    host
+     * @param array  $data   发送数据
+     * @param string $type   content-type
+     * @param bool   $isGzip 是否gzip压缩
      * @return string
      */
     public static function httpPost($url, $data, $type = 'form', $isGzip = false)

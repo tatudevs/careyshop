@@ -5,7 +5,7 @@
  * CareyShop    汉字转拼音扩展库
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/03/22
+ * @date        2020/7/22
  */
 
 namespace util;

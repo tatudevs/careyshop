@@ -5,10 +5,12 @@
  * CareyShop    IP查询扩展库(https://github.com/lionsoul2014/ip2region)
  *
  * @author      zxm <252404501@qq.com>
- * @date        2019/11/20
+ * @date        2020/7/22
  */
 
 namespace util;
+
+use Exception;
 
 defined('INDEX_BLOCK_LENGTH') or define('INDEX_BLOCK_LENGTH', 12);
 defined('TOTAL_HEADER_LENGTH') or define('TOTAL_HEADER_LENGTH', 8192);
@@ -39,7 +41,7 @@ class Ip2Region
      * the original db binary string
      */
     private $dbBinStr = null;
-    private $dbFile = null;
+    private $dbFile;
 
     /**
      * Ip2Region constructor.
@@ -47,7 +49,7 @@ class Ip2Region
      */
     public function __construct($dbFile = null)
     {
-        $path = EXTEND_PATH . 'data' . DS . 'ip2region.db';
+        $path = root_path() . 'extend' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'ip2region.db';
         $this->dbFile = empty($dbFile) ? $path : $dbFile;
     }
 
@@ -71,7 +73,7 @@ class Ip2Region
         if ($this->dbBinStr == null) {
             $this->dbBinStr = file_get_contents($this->dbFile);
             if ($this->dbBinStr == false) {
-                throw new \Exception("Fail to open the db file {$this->dbFile}");
+                throw new Exception("Fail to open the db file {$this->dbFile}");
             }
             $this->firstIndexPtr = self::getLong($this->dbBinStr, 0);
             $this->lastIndexPtr = self::getLong($this->dbBinStr, 4);
@@ -110,8 +112,8 @@ class Ip2Region
         $dataPtr = ($dataPtr & 0x00FFFFFF);
 
         return [
-//            'city_id' => self::getLong($this->dbBinStr, $dataPtr),
-            'region'  => substr($this->dbBinStr, $dataPtr + 4, $dataLen - 4),
+            // 'city_id' => self::getLong($this->dbBinStr, $dataPtr),
+            'region' => substr($this->dbBinStr, $dataPtr + 4, $dataLen - 4),
         ];
     }
 
@@ -134,7 +136,7 @@ class Ip2Region
             if ($this->dbFileHandler == null) {
                 $this->dbFileHandler = fopen($this->dbFile, 'r');
                 if ($this->dbFileHandler == false) {
-                    throw new \Exception("Fail to open the db file {$this->dbFile}");
+                    throw new Exception("Fail to open the db file {$this->dbFile}");
                 }
             }
             fseek($this->dbFileHandler, 0);
@@ -180,8 +182,8 @@ class Ip2Region
         $data = fread($this->dbFileHandler, $dataLen);
 
         return [
-//            'city_id' => self::getLong($data, 0),
-            'region'  => substr($data, 4),
+            // 'city_id' => self::getLong($data, 0),
+            'region' => substr($data, 4),
         ];
     }
 
@@ -205,7 +207,7 @@ class Ip2Region
             if ($this->dbFileHandler == null) {
                 $this->dbFileHandler = fopen($this->dbFile, 'r');
                 if ($this->dbFileHandler == false) {
-                    throw new \Exception("Fail to open the db file {$this->dbFile}");
+                    throw new Exception("Fail to open the db file {$this->dbFile}");
                 }
             }
             fseek($this->dbFileHandler, 8);
@@ -320,8 +322,8 @@ class Ip2Region
         $data = fread($this->dbFileHandler, $dataLen);
 
         return [
-//            'city_id' => self::getLong($data, 0),
-            'region'  => substr($data, 4),
+            // 'city_id' => self::getLong($data, 0),
+            'region' => substr($data, 4),
         ];
     }
 
