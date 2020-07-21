@@ -11,6 +11,7 @@
 namespace app\api\controller;
 
 use app\api\exception\ApiOutput;
+use app\common\service\Auth;
 use Exception;
 use think\App;
 use think\exception\ValidateException;
@@ -210,12 +211,12 @@ abstract class CareyShop
             $this->outputError($token, 401);
         }
 
-//        // 验证Auth
-//        $auth = $this->checkAuth();
-//        if (true !== $auth) {
-//            // 拒绝访问(403)
-//            $this->outputError($auth, 403);
-//        }
+        // 验证Auth
+        $auth = $this->checkAuth();
+        if (true !== $auth) {
+            // 拒绝访问(403)
+            $this->outputError($auth, 403);
+        }
 
         // 验证APP
         $apps = $this->checkApp();
