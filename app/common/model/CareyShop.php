@@ -71,6 +71,7 @@ abstract class CareyShop extends Model
             return $this->setError($name . '场景不存在');
         }
 
+        // todo 待调试
         $rule = $validate->getSetScene($scene);
         foreach ($data as $key => $item) {
             if (!in_array($key, $rule, true) && !array_key_exists($key, $rule)) {
