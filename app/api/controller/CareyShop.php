@@ -204,31 +204,31 @@ abstract class CareyShop
             $this->outputError($validate);
         }
 
-        // 验证Token
-        $token = $this->checkToken();
-        if (true !== $token) {
-            // 未授权，请重新登录(401)
-            $this->outputError($token, 401);
-        }
+//        // 验证Token
+//        $token = $this->checkToken();
+//        if (true !== $token) {
+//            // 未授权，请重新登录(401)
+//            $this->outputError($token, 401);
+//        }
 
-        // 验证Auth
-        $auth = $this->checkAuth();
-        if (true !== $auth) {
-            // 拒绝访问(403)
-            $this->outputError($auth, 403);
-        }
+//        // 验证Auth
+//        $auth = $this->checkAuth();
+//        if (true !== $auth) {
+//            // 拒绝访问(403)
+//            $this->outputError($auth, 403);
+//        }
 
-        // 验证APP
-        $apps = $this->checkApp();
-        if (true !== $apps) {
-            $this->outputError($apps);
-        }
+//        // 验证APP
+//        $apps = $this->checkApp();
+//        if (true !== $apps) {
+//            $this->outputError($apps);
+//        }
 
-        // 验证Sign
-        $sign = $this->apiDebug || $this->checkSign();
-        if (true !== $sign) {
-            $this->outputError($sign);
-        }
+//        // 验证Sign
+//        $sign = $this->apiDebug || $this->checkSign();
+//        if (true !== $sign) {
+//            $this->outputError($sign);
+//        }
 
         // 控制器初始化
         static::init();
@@ -337,7 +337,7 @@ abstract class CareyShop
 
         // 调用自身成员函数或类成员方法
         $result = null;
-        $callback = self::$route[$this->method];
+        $callback = isset(self::$route[$this->method]) ? self::$route[$this->method] : null;
 
         // 路由定义中如果数组[1]不存在,则表示默认对应model模型
         if (!isset($callback[1])) {
