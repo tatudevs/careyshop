@@ -10,6 +10,7 @@
 
 namespace app\api\controller;
 
+use Exception;
 use think\helper\Str;
 
 class Batch extends CareyShop
@@ -58,23 +59,22 @@ class Batch extends CareyShop
             try {
                 // 验证数据
                 $validate = $this->validate($value, 'CareyShop.batch');
-                print_r($validate);exit();
                 if (true !== $validate) {
-                    throw new \Exception($validate);
+                    throw new Exception($validate);
                 }
 
                 // 权限验证,先验证是否属于白名单,再验证是否有权限
                 if (!$this->apiDebug) {
                     if (!static::$auth->checkWhite($authUrl)) {
                         if (!static::$auth->check($authUrl)) {
-                            throw new \Exception('权限不足', 403);
+                            throw new Exception('权限不足', 403);
                         }
                     }
                 }
 
                 $route = $oldData['class']::initMethod();
                 if (!array_key_exists($method, $route)) {
-                    throw new \Exception('method路由方法不存在');
+                    throw new Exception('method路由方法不存在');
                 }
 
                 $method = $route[$method];
@@ -85,23 +85,23 @@ class Batch extends CareyShop
                 if (class_exists($method[1])) {
                     static::$model = new $method[1];
                 } else {
-                    throw new \Exception('method不支持批量调用');
+                    throw new Exception('method不支持批量调用');
                 }
 
                 if (!method_exists(static::$model, $method[0])) {
-                    throw new \Exception('method成员方法不存在');
+                    throw new Exception('method成员方法不存在');
                 }
 
                 unset($value['version'], $value['controller'], $value['method']);
                 $callback = call_user_func([static::$model, $method[0]], $value);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $callback = false;
                 $this->setError($e->getMessage());
             }
 
             // 确定调用结果
             if (false === $callback) {
-                !empty($this->error) ?: $this->error = static::$model->getError();
+                !empty($this->error) ?: $this->setError(static::$model->getError());
             }
 
             $result[$key] = [
@@ -113,14 +113,14 @@ class Batch extends CareyShop
                 'data'       => $callback,
             ];
 
-//            // 日志记录
-//            static::$auth->saveLog(
-//                $authUrl,
-//                $this->request,
-//                false !== $callback ? $result[$key] : false,
-//                $oldData['class'],
-//                $this->getError()
-//            );
+            // 日志记录
+            static::$auth->saveLog(
+                $authUrl,
+                $this->request,
+                false !== $callback ? $result[$key] : false,
+                $oldData['class'],
+                $this->getError()
+            );
         }
 
         if (empty($result)) {

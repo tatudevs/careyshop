@@ -31,16 +31,16 @@ class CareyShop extends Validate
     ];
 
     /**
-     * 场景规则
-     * @var array
+     * 批量调用验证场景
+     * @return CareyShop
      */
-    protected $scene = [
-        'batch' => [
-            'version'    => 'require',
-            'controller' => 'require',
-            'method'     => 'require',
-        ],
-    ];
+    public function sceneBatch()
+    {
+        return $this->only(['version', 'controller', 'method'])
+            ->append('version', 'require')
+            ->append('controller', 'require')
+            ->append('method', 'require');
+    }
 
     /**
      * 验证时间戳是否在允许范围内
