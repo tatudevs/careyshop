@@ -1,15 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2015 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: yunwuxin <448901948@qq.com>
-// +----------------------------------------------------------------------
 
-namespace think\image\gif;
+namespace careyshop\image\gif;
 
 class Gif
 {
@@ -19,6 +10,7 @@ class Gif
      * @var array
      */
     private $frames = [];
+
     /**
      * 每帧等待时间列表
      *
@@ -41,7 +33,7 @@ class Gif
             }
             /* 解码GIF图片 */
             try {
-                $de           = new Decoder($src);
+                $de = new Decoder($src);
                 $this->frames = $de->getFrames();
                 $this->delays = $de->getDelays();
             } catch (\Exception $e) {
@@ -53,7 +45,7 @@ class Gif
     /**
      * 设置或获取当前帧的数据
      *
-     * @param  string $stream 二进制数据流
+     * @param string $stream 二进制数据流
      * @return mixed        获取到的数据
      */
     public function image($stream = null)
@@ -62,7 +54,9 @@ class Gif
             $current = current($this->frames);
             return false === $current ? reset($this->frames) : $current;
         }
+
         $this->frames[key($this->frames)] = $stream;
+        return $stream;
     }
 
     /**
@@ -78,7 +72,7 @@ class Gif
     /**
      * 编码并保存当前GIF图片
      *
-     * @param  string $pathname 图片名称
+     * @param string $pathname 图片名称
      */
     public function save($pathname)
     {

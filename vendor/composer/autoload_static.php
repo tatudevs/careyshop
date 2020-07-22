@@ -85,13 +85,13 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         array (
             0 => __DIR__ . '/..' . '/topthink/framework/src/think',
             1 => __DIR__ . '/..' . '/topthink/think-helper/src',
-            2 => __DIR__ . '/..' . '/topthink/think-image/src',
-            3 => __DIR__ . '/..' . '/topthink/think-orm/src',
-            4 => __DIR__ . '/..' . '/topthink/think-template/src',
+            2 => __DIR__ . '/..' . '/topthink/think-orm/src',
+            3 => __DIR__ . '/..' . '/topthink/think-template/src',
         ),
         'careyshop\\' => 
         array (
-            0 => __DIR__ . '/..' . '/dnyz520/careyshop-ip2region/src',
+            0 => __DIR__ . '/..' . '/dnyz520/careyshop-image/src',
+            1 => __DIR__ . '/..' . '/dnyz520/careyshop-ip2region/src',
         ),
         'app\\' => 
         array (

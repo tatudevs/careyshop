@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f1c941f186974ac327b3abcbb347ec78",
+    "content-hash": "721c5e4b0269f5506fff69af24fb5942",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -107,6 +107,51 @@
                 "symfony"
             ],
             "time": "2018-10-25T18:32:10+00:00"
+        },
+        {
+            "name": "dnyz520/careyshop-image",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dnyz520/careyshop-image.git",
+                "reference": "ee4528208a2baa7ff659b859d192d3341052ce4b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-image/zipball/ee4528208a2baa7ff659b859d192d3341052ce4b",
+                "reference": "ee4528208a2baa7ff659b859d192d3341052ce4b",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-gd": "*"
+            },
+            "require-dev": {
+                "topthink/framework": "^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "careyshop\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "careyshop",
+                    "email": "dnyz520@126.com"
+                }
+            ],
+            "description": "The CareyShop Image Package",
+            "time": "2020-07-22T06:20:57+00:00"
         },
         {
             "name": "dnyz520/careyshop-ip2region",
@@ -866,52 +911,6 @@
             ],
             "description": "The ThinkPHP6 Helper Package",
             "time": "2019-11-08T08:01:10+00:00"
-        },
-        {
-            "name": "topthink/think-image",
-            "version": "v1.0.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/top-think/think-image.git",
-                "reference": "8586cf47f117481c6d415b20f7dedf62e79d5512"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-image/zipball/8586cf47f117481c6d415b20f7dedf62e79d5512",
-                "reference": "8586cf47f117481c6d415b20f7dedf62e79d5512",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "ext-gd": "*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.8.*",
-                "topthink/framework": "^5.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "think\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "yunwuxin",
-                    "email": "448901948@qq.com"
-                }
-            ],
-            "description": "The ThinkPHP5 Image Package",
-            "time": "2016-09-29T06:05:43+00:00"
         },
         {
             "name": "topthink/think-multi-app",

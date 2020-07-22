@@ -1,0 +1,25 @@
+{
+    "name": "dnyz520/careyshop-image",
+    "description": "The CareyShop Image Package",
+    "license": "AGPL-3.0",
+    "authors": [
+        {
+            "name": "careyshop",
+            "email": "dnyz520@126.com"
+        }
+    ],
+    "require": {
+        "ext-gd": "*"
+    },
+    "require-dev": {
+        "topthink/framework": "^6.0"
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "autoload": {
+        "psr-4": {
+            "careyshop\\": "src"
+        }
+    }
+}
