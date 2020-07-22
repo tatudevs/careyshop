@@ -15,9 +15,10 @@ function captcha($config = null, $api = false): Response
 
 /**
  * @param string $value
+ * @param bool   $api
  * @return bool
  */
-function captcha_check($value)
+function captcha_check($value, $api = false)
 {
     return Captcha::check($value);
 }

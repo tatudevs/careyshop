@@ -25,7 +25,7 @@ class Captcha
     // 验证码字符集合
     protected $codeSet = '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY';
     // 验证码过期时间（s）
-    protected $expire = 1800;
+    protected $expire = 120;
     // 使用中文验证码
     protected $useZh = false;
     // 中文验证码字符串
@@ -35,7 +35,7 @@ class Captcha
     // 验证码字体大小(px)
     protected $fontSize = 25;
     // 是否画混淆曲线
-    protected $useCurve = true;
+    protected $useCurve = false;
     // 是否添加杂点
     protected $useNoise = true;
     // 验证码图片高度
@@ -43,11 +43,11 @@ class Captcha
     // 验证码图片宽度
     protected $imageW = 0;
     // 验证码位数
-    protected $length = 5;
+    protected $length = 4;
     // 验证码字体，不设置随机获取
     protected $fontttf = '';
     // 背景颜色
-    protected $bg = [243, 251, 254];
+    protected $bg = [255, 255, 255];
     //算术验证码
     protected $math = false;
 
@@ -223,10 +223,47 @@ class Captcha
         imagepng($this->im);
         $content = ob_get_clean();
         imagedestroy($this->im);
+        $this->setPng($content);
 
         return $api
             ? $content
             : response($content, 200, ['Content-Length' => strlen($content)])->contentType('image/png');
+    }
+
+    /**
+     * 设置png图片
+     * @param $bin
+     */
+    private function setPng(&$bin)
+    {
+        if (strcmp(substr($bin, 0, 8), pack('H*', '89504E470D0A1A0A')) !== 0) {
+            return;
+        }
+
+        $data = substr($bin, 8);
+        $chunks = [];
+        $c = strlen($data);
+
+        $offset = 0;
+        while ($offset < $c) {
+            $packed = unpack('Nsize/a4chunk', $data);
+            $size = $packed['size'];
+            $chunk = $packed['chunk'];
+
+            $chunks[] = ['offset' => $offset + 8, 'size' => $size, 'chunk' => $chunk];
+            $jump = $size + 12;
+            $offset += $jump;
+            $data = substr($data, $jump);
+        }
+
+        if (count($chunks) >= 2 && $chunks[0]['chunk'] === 'IHDR') {
+            $firstPart = substr($bin, 0, 33);
+            $secondPart = substr($bin, 33);
+            $cr = pack('H*', '0000004C7445587420436F707972696768742028632920436172657953686F7020416C6C20726967687473207265736572766564204275696C64207769746820436172657953686F700000000000000000000000597F70B8');
+            $bin = $firstPart;
+            $bin .= $cr;
+            $bin .= $secondPart;
+        }
     }
 
     /**
