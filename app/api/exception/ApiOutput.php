@@ -27,6 +27,17 @@ class ApiOutput
      * @var array
      */
     public static $header = [];
+    public static $headerKey;
+    public static $headerValue;
+
+    /**
+     * 初始化
+     */
+    public static function init()
+    {
+        self::$headerKey = base64_decode('WC1Qb3dlcmVkLUJ5');
+        self::$headerValue = base64_decode('Q2FyZXlTaG9w');
+    }
 
     /**
      * 响应头
@@ -35,7 +46,7 @@ class ApiOutput
     {
         $isOrigin = Request::has('origin', 'header');
         $allowOrigin = json_decode(Config::get('careyshop.system_info.allow_origin'), true);
-        self::$header['X-Powered-By'] = 'CareyShop/' . get_version();
+        self::$header[self::$headerKey] = self::$headerValue . '/' . get_version();
 
         // 未配置跨域或"origin"不存在时不返回访问控制(CORS)
         if (empty($allowOrigin) || !$isOrigin) {
@@ -109,7 +120,7 @@ class ApiOutput
      */
     public static function outView($result, $code)
     {
-        header('X-Powered-By: '. self::$header['X-Powered-By']);
+        header(self::$headerKey . ': ' . self::$header[self::$headerKey]);
         return view('common@/CareyShop', ['data' => $result], $code);
     }
 
@@ -161,7 +172,9 @@ class ApiOutput
         }
 
         // 按请求格式返回
+        self::init();
         self::setCrossDomain();
+
         switch (self::$format) {
             case 'view':
                 return self::outView($result, $code);
