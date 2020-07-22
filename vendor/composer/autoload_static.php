@@ -155,7 +155,7 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         ),
         'CodeItNow\\' => 
         array (
-            0 => __DIR__ . '/..' . '/codeitnowin/barcode/CodeItNow',
+            0 => __DIR__ . '/..' . '/dnyz520/careyshop-barcode/CodeItNow',
         ),
     );
 

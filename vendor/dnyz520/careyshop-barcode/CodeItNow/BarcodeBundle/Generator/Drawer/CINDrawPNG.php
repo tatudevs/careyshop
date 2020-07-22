@@ -28,7 +28,7 @@ if (!function_exists('file_put_contents')) {
 
 class CINDrawPNG extends CINDraw {
     private $dpi;
-    
+
     /**
      * Constructor.
      *
@@ -83,7 +83,7 @@ class CINDrawPNG extends CINDraw {
         $data = substr($bin, 8);
         $chunks = array();
         $c = strlen($data);
-        
+
         $offset = 0;
         while ($offset < $c) {
             $packed = unpack('Nsize/a4chunk', $data);
@@ -95,7 +95,7 @@ class CINDrawPNG extends CINDraw {
             $offset += $jump;
             $data = substr($data, $jump);
         }
-        
+
         return $chunks;
     }
 
@@ -144,13 +144,11 @@ class CINDrawPNG extends CINDraw {
         if (count($chunks) >= 2 && $chunks[0]['chunk'] === 'IHDR') {
             $firstPart = substr($bin, 0, 33);
             $secondPart = substr($bin, 33);
-            $cr = pack('H*', '0000004C74455874436F707972696768740047656E657261746564207769746820426172636F64652047656E657261746F7220666F722050485020687474703A2F2F7777772E626172636F64657068702E636F6D597F70B8');
+            $cr = pack('H*', '0000004C74455874000000000000000000000000204261736564206F6E20436172657953686F7020436F707972696768742028632920436172657953686F7020416C6C2072696768747320726573657276656420597F70B8');
             $bin = $firstPart;
             $bin .= $cr;
             $bin .= $secondPart;
         }
-        
-        // Chunks is dirty!! But we are done.
     }
 
     private static $crc_table = array();

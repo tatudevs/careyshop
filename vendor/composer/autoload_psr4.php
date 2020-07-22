@@ -26,5 +26,5 @@ return array(
     'OSS\\' => array($vendorDir . '/aliyuncs/oss-sdk-php/src/OSS'),
     'League\\Flysystem\\Cached\\' => array($vendorDir . '/league/flysystem-cached-adapter/src'),
     'League\\Flysystem\\' => array($vendorDir . '/league/flysystem/src'),
-    'CodeItNow\\' => array($vendorDir . '/codeitnowin/barcode/CodeItNow'),
+    'CodeItNow\\' => array($vendorDir . '/dnyz520/careyshop-barcode/CodeItNow'),
 );

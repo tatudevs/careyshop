@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "721c5e4b0269f5506fff69af24fb5942",
+    "content-hash": "abb47221ac6281b458148b711e185c85",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -54,17 +54,17 @@
             "time": "2019-11-15T11:05:42+00:00"
         },
         {
-            "name": "codeitnowin/barcode",
-            "version": "3.0.3",
+            "name": "dnyz520/careyshop-barcode",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/codeitnowin/barcode-generator.git",
-                "reference": "6325a15ae904ec401b947e1a3e868de1c2cc80b0"
+                "url": "https://github.com/dnyz520/careyshop-barcode.git",
+                "reference": "5c1e95e0b4a4cc7769f4fa17bee4c62481bcfca4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeitnowin/barcode-generator/zipball/6325a15ae904ec401b947e1a3e868de1c2cc80b0",
-                "reference": "6325a15ae904ec401b947e1a3e868de1c2cc80b0",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-barcode/zipball/5c1e95e0b4a4cc7769f4fa17bee4c62481bcfca4",
+                "reference": "5c1e95e0b4a4cc7769f4fa17bee4c62481bcfca4",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -85,28 +85,16 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "AGPL-3.0"
             ],
             "authors": [
                 {
-                    "name": "Akhtar Khan",
-                    "email": "er.akhtarkhan@gmail.com"
+                    "name": "careyshop",
+                    "email": "dnyz520@126.com"
                 }
             ],
-            "description": "Barcode & Qr Code generator library by http://www.codeitnow.in. You can use it with Custom PHP application or any PHP Framework such as Laravel, Cakephp, Yii, Codeigneter etc.",
-            "homepage": "http://www.codeitnow.in",
-            "keywords": [
-                "Symfony2",
-                "barcode",
-                "cakephp",
-                "code",
-                "generator",
-                "laravel",
-                "qr",
-                "qrcode",
-                "symfony"
-            ],
-            "time": "2018-10-25T18:32:10+00:00"
+            "description": "The CareyShop Barcode Package",
+            "time": "2020-07-22T07:14:15+00:00"
         },
         {
             "name": "dnyz520/careyshop-image",

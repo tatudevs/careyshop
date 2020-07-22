@@ -32,9 +32,9 @@
         "aliyuncs/oss-sdk-php": "^2.3",
         "phpmailer/phpmailer": "^6.1",
         "qiniu/php-sdk": "^7.2",
-        "codeitnowin/barcode": "^3.0",
         "dnyz520/careyshop-ip2region": "^1.0",
-        "dnyz520/careyshop-image": "^1.0"
+        "dnyz520/careyshop-image": "^1.0",
+        "dnyz520/careyshop-barcode": "^1.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2"
