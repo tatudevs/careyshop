@@ -106,6 +106,50 @@
         ]
     },
     {
+        "name": "dnyz520/careyshop-ip2region",
+        "version": "v1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/dnyz520/careyshop-ip2region.git",
+            "reference": "367e395da4f3e4f37193c77be2d4cb9f59b057fa"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/367e395da4f3e4f37193c77be2d4cb9f59b057fa",
+            "reference": "367e395da4f3e4f37193c77be2d4cb9f59b057fa",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "phpmailer/phpmailer": "^6.1"
+        },
+        "time": "2020-07-22T02:43:47+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "careyshop\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "AGPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "careyshop",
+                "email": "dnyz520@126.com"
+            }
+        ],
+        "description": "The CareyShop Ip2Region Package"
+    },
+    {
         "name": "league/flysystem",
         "version": "1.0.69",
         "version_normalized": "1.0.69.0",

@@ -1,0 +1,19 @@
+{
+    "name": "dnyz520/careyshop-ip2region",
+    "description": "The CareyShop Ip2Region Package",
+    "license": "AGPL-3.0",
+    "authors": [
+        {
+            "name": "careyshop",
+            "email": "dnyz520@126.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "careyshop\\": "src"
+        }
+    }
+}

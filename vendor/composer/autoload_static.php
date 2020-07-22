@@ -25,6 +25,10 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
             'think\\app\\' => 10,
             'think\\' => 6,
         ),
+        'c' => 
+        array (
+            'careyshop\\' => 10,
+        ),
         'a' => 
         array (
             'app\\' => 4,
@@ -84,6 +88,10 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
             2 => __DIR__ . '/..' . '/topthink/think-image/src',
             3 => __DIR__ . '/..' . '/topthink/think-orm/src',
             4 => __DIR__ . '/..' . '/topthink/think-template/src',
+        ),
+        'careyshop\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dnyz520/careyshop-ip2region/src',
         ),
         'app\\' => 
         array (

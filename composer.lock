@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8511e622459df731a4b247d7915f603",
+    "content-hash": "f1c941f186974ac327b3abcbb347ec78",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -107,6 +107,48 @@
                 "symfony"
             ],
             "time": "2018-10-25T18:32:10+00:00"
+        },
+        {
+            "name": "dnyz520/careyshop-ip2region",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dnyz520/careyshop-ip2region.git",
+                "reference": "367e395da4f3e4f37193c77be2d4cb9f59b057fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/367e395da4f3e4f37193c77be2d4cb9f59b057fa",
+                "reference": "367e395da4f3e4f37193c77be2d4cb9f59b057fa",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "phpmailer/phpmailer": "^6.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "careyshop\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "careyshop",
+                    "email": "dnyz520@126.com"
+                }
+            ],
+            "description": "The CareyShop Ip2Region Package",
+            "time": "2020-07-22T02:43:47+00:00"
         },
         {
             "name": "league/flysystem",
