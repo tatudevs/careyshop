@@ -5,12 +5,12 @@
  * CareyShop    支付宝同步返回
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/7/2
+ * @date        2020/7/23
  */
 
 namespace payment\alipay;
 
-use think\Config;
+use AopClient;
 
 require_once __DIR__ . '/lib/AopClient.php';
 
@@ -83,15 +83,15 @@ class ReturnUrl
     /**
      * 返回支付成功页面
      * @access public
-     * @param  string $msg 消息内容
+     * @param string $msg 消息内容
      * @return array
      */
     public function getSuccess($msg = '支付结算完成')
     {
         $data['callback_return_type'] = 'view';
         $data['is_callback'] = sprintf(
-            '<head><meta http-equiv="refresh" content="0; url=%s?info=%s&payment_no=%s"></head>',
-            Config::get('success.value', 'payment'),
+            '<head><meta http-equiv="refresh" content="0; url=%s?info=%s&payment_no=%s"><title></title></head>',
+            config('careyshop.payment.success'),
             $msg,
             $this->paymentNo
         );
@@ -102,15 +102,15 @@ class ReturnUrl
     /**
      * 返回支付失败页面
      * @access public
-     * @param  string $msg 消息内容
+     * @param string $msg 消息内容
      * @return array
      */
     public function getError($msg = '支付结算失败')
     {
         $data['callback_return_type'] = 'view';
         $data['is_callback'] = sprintf(
-            '<head><meta http-equiv="refresh" content="0; url=%s?info=%s&payment_no=%s"></head>',
-            Config::get('error.value', 'payment'),
+            '<head><meta http-equiv="refresh" content="0; url=%s?info=%s&payment_no=%s"><title></title></head>',
+            config('careyshop.payment.error'),
             $msg,
             $this->paymentNo
         );
@@ -121,7 +121,7 @@ class ReturnUrl
     /**
      * 验签方法
      * @access public
-     * @param  array $setting 配置参数
+     * @param array $setting 配置参数
      * @return bool
      */
     public function checkReturn($setting = null)
@@ -140,7 +140,7 @@ class ReturnUrl
             return false;
         }
 
-        $aop = new \AopClient();
+        $aop = new AopClient();
         $aop->alipayrsaPublicKey = $setting['alipayPublicKey']['value'];
 
         if (!$aop->rsaCheckV1($arr, $aop->alipayrsaPublicKey, $arr['sign_type'])) {

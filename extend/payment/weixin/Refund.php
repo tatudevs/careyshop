@@ -5,12 +5,16 @@
  * CareyShop    微信支付原路退回
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/9/25
+ * @date        2020/7/23
  */
 
 namespace payment\weixin;
 
 use payment\Payment;
+use WxPayApi;
+use WxPayConfig;
+use WxPayRefund;
+use WxPayRefundQuery;
 
 require_once __DIR__ . '/lib/WxPay.Api.php';
 
@@ -73,7 +77,7 @@ class Refund extends Payment
     /**
      * 设置支付配置
      * @access public
-     * @param  array $setting 配置信息
+     * @param array $setting 配置信息
      * @return bool
      */
     public function setConfig($setting)
@@ -107,12 +111,12 @@ class Refund extends Payment
             return false;
         }
 
-        \WxPayConfig::$appid = $this->appid;
-        \WxPayConfig::$mchid = $this->mchid;
-        \WxPayConfig::$key = $this->key;
-        \WxPayConfig::$appsecret = $this->appsecret;
-        \WxPayConfig::$sslcert = $this->sslcert;
-        \WxPayConfig::$sslkey = $this->sslkey;
+        WxPayConfig::$appid = $this->appid;
+        WxPayConfig::$mchid = $this->mchid;
+        WxPayConfig::$key = $this->key;
+        WxPayConfig::$appsecret = $this->appsecret;
+        WxPayConfig::$sslcert = $this->sslcert;
+        WxPayConfig::$sslkey = $this->sslkey;
 
         return true;
     }
@@ -120,7 +124,7 @@ class Refund extends Payment
     /**
      * 设置退款流水号
      * @access public
-     * @param  string $refundNo 退款流水号
+     * @param string $refundNo 退款流水号
      */
     public function setRefundNo($refundNo)
     {
@@ -130,7 +134,7 @@ class Refund extends Payment
     /**
      * 设置退款金额
      * @access public
-     * @param  string $amount 退款金额
+     * @param string $amount 退款金额
      */
     public function setRefundAmount($amount)
     {
@@ -155,14 +159,14 @@ class Refund extends Payment
      */
     public function refundRequest()
     {
-        $input = new \WxPayRefund();
+        $input = new WxPayRefund();
         $input->SetOut_trade_no($this->outTradeNo);
         $input->SetTotal_fee($this->totalAmount * 100);
         $input->SetRefund_fee($this->refundAmount * 100);
         $input->SetOut_refund_no($this->refundNo);
         $input->SetOp_user_id($this->mchid);
 
-        $result = \WxPayApi::refund($input);
+        $result = WxPayApi::refund($input);
         if ($result['return_code'] != 'SUCCESS') {
             $this->error = isset($result['return_msg']) ? $result['return_msg'] : '未知错误';
             return false;
@@ -185,10 +189,10 @@ class Refund extends Payment
      */
     public function refundFastpayQueryRequest()
     {
-        $input = new \WxPayRefundQuery();
+        $input = new WxPayRefundQuery();
         $input->SetOut_refund_no($this->refundNo);
 
-        $result = \WxPayApi::refundQuery($input);
+        $result = WxPayApi::refundQuery($input);
         if ($result['return_code'] != 'SUCCESS') {
             $this->error = isset($result['return_msg']) ? $result['return_msg'] : '未知错误';
             return false;
@@ -206,7 +210,7 @@ class Refund extends Payment
             'CHANGE'      => '退款异常',
         ];
 
-        $data = [
+        return [
             'refund_amount'      => $result['refund_fee'] / 100,
             'refund_status'      => $refund_status[$result['refund_status_0']],
             'refund_recv_accout' => $result['refund_recv_accout_0'],
@@ -214,7 +218,5 @@ class Refund extends Payment
             'payment_no'         => $result['out_trade_no'],
             'out_trade_no'       => $result['transaction_id'],
         ];
-
-        return $data;
     }
 }

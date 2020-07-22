@@ -5,14 +5,18 @@
  * CareyShop    微信支付
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/7/4
+ * @date        2020/7/23
  */
 
 namespace payment\weixin;
 
+use JsApiPay;
+use NativePay;
 use payment\Payment;
-use think\Request;
-use think\Url;
+use think\facade\Request;
+use WxPayApi;
+use WxPayConfig;
+use WxPayUnifiedOrder;
 
 require_once __DIR__ . '/lib/WxPay.Api.php';
 require_once __DIR__ . '/example/WxPay.NativePay.php';
@@ -46,14 +50,14 @@ class Weixin extends Payment
 
     /**
      * 请求来源
-     * @var array/bool
+     * @var array|bool
      */
     private $request;
 
     /**
      * 设置请求来源
      * @access public
-     * @param  string $request 请求来源
+     * @param string $request 请求来源
      * @return object
      */
     public function setQequest($request)
@@ -65,7 +69,7 @@ class Weixin extends Payment
     /**
      * 设置支付配置
      * @access public
-     * @param  array $setting 配置信息
+     * @param array $setting 配置信息
      * @return bool
      */
     public function setConfig($setting)
@@ -89,10 +93,10 @@ class Weixin extends Payment
             return false;
         }
 
-        \WxPayConfig::$appid = $this->appid;
-        \WxPayConfig::$mchid = $this->mchid;
-        \WxPayConfig::$key = $this->key;
-        \WxPayConfig::$appsecret = $this->appsecret;
+        WxPayConfig::$appid = $this->appid;
+        WxPayConfig::$mchid = $this->mchid;
+        WxPayConfig::$key = $this->key;
+        WxPayConfig::$appsecret = $this->appsecret;
 
         return true;
     }
@@ -100,7 +104,7 @@ class Weixin extends Payment
     /**
      * 格式化参数格式化成url参数
      * @access private
-     * @param  array $data 参数信息
+     * @param array $data 参数信息
      * @return string
      */
     private function toUrlParams($data)
@@ -119,7 +123,7 @@ class Weixin extends Payment
     /**
      * 生成签名
      * @access private
-     * @param  array $data 参数信息
+     * @param array $data 参数信息
      * @return string
      */
     private function makeSign($data)
@@ -129,15 +133,13 @@ class Weixin extends Payment
         $string = $this->toUrlParams($data);
 
         // 签名步骤二：在string后加入KEY
-        $string = $string . '&key=' . \WxPayConfig::$key;
+        $string = $string . '&key=' . WxPayConfig::$key;
 
         // 签名步骤三：MD5加密
         $string = md5($string);
 
         // 签名步骤四：所有字符转为大写
-        $result = strtoupper($string);
-
-        return $result;
+        return strtoupper($string);
     }
 
     /**
@@ -151,7 +153,7 @@ class Weixin extends Payment
         $result['is_callback'] = [];
 
         if ($this->request == 'web') {
-            if (Request::instance()->isMobile() && strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {
+            if (Request::isMobile() && strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {
                 $result['is_callback'] = $this->jsRequestExecute();
             } else {
                 $result['is_callback'] = $this->pcRequestExecute();
@@ -175,7 +177,7 @@ class Weixin extends Payment
      */
     private function appRequestExecute()
     {
-        $input = new \WxPayUnifiedOrder();
+        $input = new WxPayUnifiedOrder();
         $input->SetBody($this->subject);
         $input->SetOut_trade_no($this->outTradeNo);
         $input->SetTotal_fee($this->totalAmount * 100);
@@ -183,7 +185,7 @@ class Weixin extends Payment
         $input->SetTrade_type('APP');
 
         // 发送统一下单请求,生成预付款单
-        $order = \WxPayApi::unifiedOrder($input);
+        $order = WxPayApi::unifiedOrder($input);
 
         if ($order['return_code'] != 'SUCCESS') {
             $this->error = $order['return_msg'];
@@ -199,7 +201,7 @@ class Weixin extends Payment
             'appid'     => $order['appid'],
             'partnerid' => $order['mch_id'],
             'prepayid'  => $order['prepay_id'],
-            'noncestr'  => \WxPayApi::getNonceStr(),
+            'noncestr'  => WxPayApi::getNonceStr(),
             'timestamp' => time(),
             'package'   => 'Sign=WXPay',
         ];
@@ -216,7 +218,7 @@ class Weixin extends Payment
      */
     private function pcRequestExecute()
     {
-        $input = new \WxPayUnifiedOrder();
+        $input = new WxPayUnifiedOrder();
         $input->SetBody($this->subject);
         $input->SetOut_trade_no($this->outTradeNo);
         $input->SetTotal_fee($this->totalAmount * 100);
@@ -224,7 +226,7 @@ class Weixin extends Payment
         $input->SetTrade_type('NATIVE');
         $input->SetProduct_id($this->totalAmount * 100);
 
-        $notify = new \NativePay();
+        $notify = new NativePay();
         $result = $notify->GetPayUrl($input);
 
         if ('SUCCESS' !== $result['return_code']) {
@@ -237,9 +239,12 @@ class Weixin extends Payment
             return false;
         }
 
-        $vars = ['method' => 'get.qrcode.item'];
-        $url = Url::build('api/v1/qrcode', $vars, true, true) . '?text=' . urlencode($result['code_url']);
+        $vars = [
+            'method' => 'get.qrcode.item',
+            'text'   => urlencode($result['code_url']),
+        ];
 
+        $url = url('api/v1/qrcode', $vars, true, true)->build();
         return '<img src="' . $url . '"/>';
     }
 
@@ -251,10 +256,10 @@ class Weixin extends Payment
      */
     private function jsRequestExecute()
     {
-        $tools = new \JsApiPay();
+        $tools = new JsApiPay();
         $openId = $tools->GetOpenid();
 
-        $input = new \WxPayUnifiedOrder();
+        $input = new WxPayUnifiedOrder();
         $input->SetBody($this->subject);
         $input->SetOut_trade_no($this->outTradeNo);
         $input->SetTotal_fee($this->totalAmount * 100);
@@ -262,10 +267,10 @@ class Weixin extends Payment
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
 
-        $order = \WxPayApi::unifiedOrder($input);
+        $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
 
-        $html = <<<EOF
+        return <<<EOF
 	<script type="text/javascript">
 	//调用微信JS api 支付
 	function jsApiCall()
@@ -274,14 +279,14 @@ class Weixin extends Payment
 			'getBrandWCPayRequest',$jsApiParameters,
 			function(res){
 				//WeixinJSBridge.log(res.err_msg);
-				 if(res.err_msg == "get_brand_wcpay_request:ok") {
+				 if(res.err_msg === "get_brand_wcpay_request:ok") {
 				    location.href='/';
 				 }else{
 				 	//alert(res.err_code+res.err_desc+res.err_msg);
 				    location.href='/';
 				 }
 			}
-		);
+		)
 	}
 
 	function callpay()
@@ -300,7 +305,5 @@ class Weixin extends Payment
 	callpay();
 	</script>
 EOF;
-
-        return $html;
     }
 }

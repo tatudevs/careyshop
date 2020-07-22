@@ -2,6 +2,7 @@
 /**
  * 加密方法
  * @param string $str
+ * @param        $screct_key
  * @return string
  */
 function encrypt($str, $screct_key)
@@ -18,6 +19,7 @@ function encrypt($str, $screct_key)
 /**
  * 解密方法
  * @param string $str
+ * @param        $screct_key
  * @return string
  */
 function decrypt($str, $screct_key)

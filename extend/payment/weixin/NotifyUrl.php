@@ -5,15 +5,20 @@
  * CareyShop    微信支付异步返回
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/7/4
+ * @date        2020/7/23
  */
 
 namespace payment\weixin;
 
+use WxPayApi;
+use WxPayConfig;
+use WxPayNotify;
+use WxPayOrderQuery;
+
 require_once __DIR__ . '/lib/WxPay.Api.php';
 require_once __DIR__ . '/lib/WxPay.Notify.php';
 
-class NotifyUrl extends \WxPayNotify
+class NotifyUrl extends WxPayNotify
 {
     /**
      * 流水号
@@ -88,7 +93,7 @@ class NotifyUrl extends \WxPayNotify
     /**
      * 返回支付成功响应
      * @access public
-     * @param  string $msg 消息内容
+     * @param string $msg 消息内容
      * @return array
      */
     public function getSuccess($msg = '')
@@ -103,7 +108,7 @@ class NotifyUrl extends \WxPayNotify
     /**
      * 返回支付失败响应
      * @access public
-     * @param  string $msg 消息内容
+     * @param string $msg 消息内容
      * @return array
      */
     public function getError($msg = '')
@@ -118,15 +123,15 @@ class NotifyUrl extends \WxPayNotify
     /**
      * 查询订单
      * @access public
-     * @param  string $transactionId 微信订单号
+     * @param string $transactionId 微信订单号
      * @return bool
      * @throws
      */
     public function orderQuery($transactionId)
     {
-        $input = new \WxPayOrderQuery();
+        $input = new WxPayOrderQuery();
         $input->SetTransaction_id($transactionId);
-        $result = \WxPayApi::orderQuery($input);
+        $result = WxPayApi::orderQuery($input);
 
         if (array_key_exists('return_code', $result)
             && array_key_exists('result_code', $result)
@@ -140,7 +145,7 @@ class NotifyUrl extends \WxPayNotify
             return false;
         }
 
-        if ($result['appid'] != \WxPayConfig::$appid) {
+        if ($result['appid'] != WxPayConfig::$appid) {
             return false;
         }
 
@@ -150,8 +155,8 @@ class NotifyUrl extends \WxPayNotify
     /**
      * 重写回调处理函数
      * @access public
-     * @param  array  $data 数据
-     * @param  string $msg  消息
+     * @param array  $data 数据
+     * @param string $msg  消息
      * @return bool
      */
     public function NotifyProcess($data, &$msg)
@@ -177,7 +182,7 @@ class NotifyUrl extends \WxPayNotify
     /**
      * 验签方法
      * @access public
-     * @param  array $setting 配置参数
+     * @param array $setting 配置参数
      * @return bool
      */
     public function checkReturn($setting = null)
@@ -186,10 +191,10 @@ class NotifyUrl extends \WxPayNotify
             return false;
         }
 
-        \WxPayConfig::$appid = $setting['appid']['value'];
-        \WxPayConfig::$mchid = $setting['mchid']['value'];
-        \WxPayConfig::$key = $setting['key']['value'];
-        \WxPayConfig::$appsecret = $setting['appsecret']['value'];
+        WxPayConfig::$appid = $setting['appid']['value'];
+        WxPayConfig::$mchid = $setting['mchid']['value'];
+        WxPayConfig::$key = $setting['key']['value'];
+        WxPayConfig::$appsecret = $setting['appsecret']['value'];
 
         $this->Handle(false);
         return $this->isCheck;

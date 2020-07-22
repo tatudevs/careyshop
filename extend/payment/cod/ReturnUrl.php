@@ -69,7 +69,7 @@ class ReturnUrl
         $data['callback_return_type'] = 'view';
         $data['is_callback'] = sprintf(
             '<head><meta http-equiv="refresh" content="0; url=%s?info=%s&payment_no=%s"><title></title></head>',
-            Config::get('success.value', 'payment'),
+            config('careyshop.payment.success'),
             $msg,
             $this->paymentNo
         );
@@ -88,7 +88,7 @@ class ReturnUrl
         $data['callback_return_type'] = 'view';
         $data['is_callback'] = sprintf(
             '<head><meta http-equiv="refresh" content="0; url=%s?info=%s&payment_no=%s"><title></title></head>',
-            Config::get('error.value', 'payment'),
+            config('careyshop.payment.error'),
             $msg,
             $this->paymentNo
         );
@@ -103,7 +103,7 @@ class ReturnUrl
      */
     public function checkReturn()
     {
-        $this->paymentNo = $this->request->param('out_trade_no');
+        $this->paymentNo = input('param.out_trade_no');
         return true;
     }
 }
