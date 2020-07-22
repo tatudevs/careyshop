@@ -12,13 +12,16 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        '841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
+        '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         't' => 
         array (
             'think\\view\\driver\\' => 18,
+            'think\\captcha\\' => 14,
             'think\\app\\' => 10,
             'think\\' => 6,
         ),
@@ -33,21 +36,31 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\VarDumper\\' => 28,
         ),
+        'Q' => 
+        array (
+            'Qiniu\\' => 6,
+        ),
         'P' => 
         array (
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
             'Psr\\Cache\\' => 10,
+            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'O' => 
         array (
             'Opis\\Closure\\' => 13,
+            'OSS\\' => 4,
         ),
         'L' => 
         array (
             'League\\Flysystem\\Cached\\' => 24,
             'League\\Flysystem\\' => 17,
+        ),
+        'C' => 
+        array (
+            'CodeItNow\\' => 10,
         ),
     );
 
@@ -55,6 +68,10 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         'think\\view\\driver\\' => 
         array (
             0 => __DIR__ . '/..' . '/topthink/think-view/src',
+        ),
+        'think\\captcha\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/topthink/think-captcha/src',
         ),
         'think\\app\\' => 
         array (
@@ -64,8 +81,9 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         array (
             0 => __DIR__ . '/..' . '/topthink/framework/src/think',
             1 => __DIR__ . '/..' . '/topthink/think-helper/src',
-            2 => __DIR__ . '/..' . '/topthink/think-orm/src',
-            3 => __DIR__ . '/..' . '/topthink/think-template/src',
+            2 => __DIR__ . '/..' . '/topthink/think-image/src',
+            3 => __DIR__ . '/..' . '/topthink/think-orm/src',
+            4 => __DIR__ . '/..' . '/topthink/think-template/src',
         ),
         'app\\' => 
         array (
@@ -87,6 +105,10 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         array (
             0 => __DIR__ . '/..' . '/symfony/var-dumper',
         ),
+        'Qiniu\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu',
+        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
@@ -103,9 +125,17 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
         'Opis\\Closure\\' => 
         array (
             0 => __DIR__ . '/..' . '/opis/closure/src',
+        ),
+        'OSS\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/aliyuncs/oss-sdk-php/src/OSS',
         ),
         'League\\Flysystem\\Cached\\' => 
         array (
@@ -114,6 +144,10 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         'League\\Flysystem\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/flysystem/src',
+        ),
+        'CodeItNow\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeitnowin/barcode/CodeItNow',
         ),
     );
 
