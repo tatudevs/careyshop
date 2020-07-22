@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "abb47221ac6281b458148b711e185c85",
+    "content-hash": "6aa253aa3732dc139f07aca0161e4dc2",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -55,16 +55,16 @@
         },
         {
             "name": "dnyz520/careyshop-barcode",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-barcode.git",
-                "reference": "5c1e95e0b4a4cc7769f4fa17bee4c62481bcfca4"
+                "reference": "1069fcd467ea15c5a3016aef7eb21d2f65a37df4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-barcode/zipball/5c1e95e0b4a4cc7769f4fa17bee4c62481bcfca4",
-                "reference": "5c1e95e0b4a4cc7769f4fa17bee4c62481bcfca4",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-barcode/zipball/1069fcd467ea15c5a3016aef7eb21d2f65a37df4",
+                "reference": "1069fcd467ea15c5a3016aef7eb21d2f65a37df4",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -75,7 +75,7 @@
             },
             "require": {
                 "ext-gd": "*",
-                "php": ">=5.3.2"
+                "php": ">=7.1.0"
             },
             "type": "library",
             "autoload": {
@@ -94,20 +94,20 @@
                 }
             ],
             "description": "The CareyShop Barcode Package",
-            "time": "2020-07-22T07:14:15+00:00"
+            "time": "2020-07-22T08:51:50+00:00"
         },
         {
-            "name": "dnyz520/careyshop-image",
+            "name": "dnyz520/careyshop-captcha",
             "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/dnyz520/careyshop-image.git",
-                "reference": "ee4528208a2baa7ff659b859d192d3341052ce4b"
+                "url": "https://github.com/dnyz520/careyshop-captcha.git",
+                "reference": "26ae5133ed178fc462f33be7d94a6ccf220e9351"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-image/zipball/ee4528208a2baa7ff659b859d192d3341052ce4b",
-                "reference": "ee4528208a2baa7ff659b859d192d3341052ce4b",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/26ae5133ed178fc462f33be7d94a6ccf220e9351",
+                "reference": "26ae5133ed178fc462f33be7d94a6ccf220e9351",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -117,7 +117,64 @@
                 ]
             },
             "require": {
-                "ext-gd": "*"
+                "php": ">=7.1.0",
+                "topthink/framework": "^6.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "careyshop": {
+                    "services": [
+                        "careyshop\\captcha\\CaptchaService"
+                    ],
+                    "config": {
+                        "captcha": "src/config.php"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "careyshop\\captcha\\": "src/"
+                },
+                "files": [
+                    "src/helper.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "careyshop",
+                    "email": "dnyz520@126.com"
+                }
+            ],
+            "description": "The CareyShop Captcha Package",
+            "time": "2020-07-22T08:52:15+00:00"
+        },
+        {
+            "name": "dnyz520/careyshop-image",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dnyz520/careyshop-image.git",
+                "reference": "80a63490428ab1a17b72950c5cb46e914eb2a22c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-image/zipball/80a63490428ab1a17b72950c5cb46e914eb2a22c",
+                "reference": "80a63490428ab1a17b72950c5cb46e914eb2a22c",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=7.1.0"
             },
             "require-dev": {
                 "topthink/framework": "^6.0"
@@ -139,20 +196,20 @@
                 }
             ],
             "description": "The CareyShop Image Package",
-            "time": "2020-07-22T06:20:57+00:00"
+            "time": "2020-07-22T08:52:48+00:00"
         },
         {
             "name": "dnyz520/careyshop-ip2region",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-ip2region.git",
-                "reference": "367e395da4f3e4f37193c77be2d4cb9f59b057fa"
+                "reference": "758dd11f0cc3670d98015945fe4a47d7b2f693b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/367e395da4f3e4f37193c77be2d4cb9f59b057fa",
-                "reference": "367e395da4f3e4f37193c77be2d4cb9f59b057fa",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/758dd11f0cc3670d98015945fe4a47d7b2f693b2",
+                "reference": "758dd11f0cc3670d98015945fe4a47d7b2f693b2",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -162,6 +219,7 @@
                 ]
             },
             "require": {
+                "php": ">=7.1.0",
                 "phpmailer/phpmailer": "^6.1"
             },
             "type": "library",
@@ -181,7 +239,7 @@
                 }
             ],
             "description": "The CareyShop Ip2Region Package",
-            "time": "2020-07-22T02:43:47+00:00"
+            "time": "2020-07-22T08:53:20+00:00"
         },
         {
             "name": "league/flysystem",
@@ -799,61 +857,6 @@
                 "thinkphp"
             ],
             "time": "2020-06-26T16:03:10+00:00"
-        },
-        {
-            "name": "topthink/think-captcha",
-            "version": "v3.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/top-think/think-captcha.git",
-                "reference": "1eef3717c1bcf4f5bbe2d1a1c704011d330a8b55"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-captcha/zipball/1eef3717c1bcf4f5bbe2d1a1c704011d330a8b55",
-                "reference": "1eef3717c1bcf4f5bbe2d1a1c704011d330a8b55",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "topthink/framework": "^6.0.0"
-            },
-            "type": "library",
-            "extra": {
-                "think": {
-                    "services": [
-                        "think\\captcha\\CaptchaService"
-                    ],
-                    "config": {
-                        "captcha": "src/config.php"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "think\\captcha\\": "src/"
-                },
-                "files": [
-                    "src/helper.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "yunwuxin",
-                    "email": "448901948@qq.com"
-                }
-            ],
-            "description": "captcha package for thinkphp",
-            "time": "2020-05-19T10:55:45+00:00"
         },
         {
             "name": "topthink/think-helper",

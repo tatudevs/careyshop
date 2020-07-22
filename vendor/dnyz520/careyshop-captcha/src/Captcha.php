@@ -1,15 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2015 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: yunwuxin <448901948@qq.com>
-// +----------------------------------------------------------------------
 
-namespace think\captcha;
+namespace careyshop\captcha;
 
 use Exception;
 use think\Config;
@@ -18,18 +9,18 @@ use think\Session;
 
 class Captcha
 {
-    private $im    = null; // 验证码图片实例
+    private $im = null; // 验证码图片实例
     private $color = null; // 验证码字体颜色
 
     /**
      * @var Config|null
      */
-    private $config = null;
+    private $config;
 
     /**
      * @var Session|null
      */
-    private $session = null;
+    private $session;
 
     // 验证码字符集合
     protected $codeSet = '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY';
@@ -68,7 +59,7 @@ class Captcha
      */
     public function __construct(Config $config, Session $session)
     {
-        $this->config  = $config;
+        $this->config = $config;
         $this->session = $session;
     }
 
@@ -101,11 +92,11 @@ class Captcha
         $bag = '';
 
         if ($this->math) {
-            $this->useZh  = false;
+            $this->useZh = false;
             $this->length = 5;
 
-            $x   = random_int(10, 30);
-            $y   = random_int(1, 9);
+            $x = random_int(10, 30);
+            $y = random_int(1, 9);
             $bag = "{$x} + {$y} = ";
             $key = $x + $y;
             $key .= '';
@@ -162,12 +153,12 @@ class Captcha
 
     /**
      * 输出验证码并把验证码的值保存的session中
-     * @access public
-     * @param null|string $config
+     * @param string|null $config
      * @param bool        $api
-     * @return Response
+     * @return mixed
+     * @throws Exception
      */
-    public function create(string $config = null, bool $api = false): Response
+    public function create(string $config = null, bool $api = false)
     {
         $this->configure($config);
 
@@ -233,7 +224,9 @@ class Captcha
         $content = ob_get_clean();
         imagedestroy($this->im);
 
-        return response($content, 200, ['Content-Length' => strlen($content)])->contentType('image/png');
+        return $api
+            ? $content
+            : response($content, 200, ['Content-Length' => strlen($content)])->contentType('image/png');
     }
 
     /**
@@ -265,7 +258,7 @@ class Captcha
         for ($px = $px1; $px <= $px2; $px = $px + 1) {
             if (0 != $w) {
                 $py = $A * sin($w * $px + $f) + $b + $this->imageH / 2; // y = Asin(ωx+φ) + b
-                $i  = (int) ($this->fontSize / 5);
+                $i = (int)($this->fontSize / 5);
                 while ($i > 0) {
                     imagesetpixel($this->im, $px + $i, $py + $i, $this->color); // 这里(while)循环画像素点比imagettftext和imagestring用字体大小一次画出（不用这while循环）性能要好很多
                     $i--;
@@ -274,18 +267,18 @@ class Captcha
         }
 
         // 曲线后部分
-        $A   = mt_rand(1, $this->imageH / 2); // 振幅
-        $f   = mt_rand(-$this->imageH / 4, $this->imageH / 4); // X轴方向偏移量
-        $T   = mt_rand($this->imageH, $this->imageW * 2); // 周期
-        $w   = (2 * M_PI) / $T;
-        $b   = $py - $A * sin($w * $px + $f) - $this->imageH / 2;
+        $A = mt_rand(1, $this->imageH / 2); // 振幅
+        $f = mt_rand(-$this->imageH / 4, $this->imageH / 4); // X轴方向偏移量
+        $T = mt_rand($this->imageH, $this->imageW * 2); // 周期
+        $w = (2 * M_PI) / $T;
+        $b = $py - $A * sin($w * $px + $f) - $this->imageH / 2;
         $px1 = $px2;
         $px2 = $this->imageW;
 
         for ($px = $px1; $px <= $px2; $px = $px + 1) {
             if (0 != $w) {
                 $py = $A * sin($w * $px + $f) + $b + $this->imageH / 2; // y = Asin(ωx+φ) + b
-                $i  = (int) ($this->fontSize / 5);
+                $i = (int)($this->fontSize / 5);
                 while ($i > 0) {
                     imagesetpixel($this->im, $px + $i, $py + $i, $this->color);
                     $i--;
@@ -330,11 +323,10 @@ class Captcha
 
         $gb = $bgs[array_rand($bgs)];
 
-        list($width, $height) = @getimagesize($gb);
+        [$width, $height] = @getimagesize($gb);
         // Resample
         $bgImage = @imagecreatefromjpeg($gb);
         @imagecopyresampled($this->im, $bgImage, 0, 0, 0, 0, $this->imageW, $this->imageH, $width, $height);
         @imagedestroy($bgImage);
     }
-
 }

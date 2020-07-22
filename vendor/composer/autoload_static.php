@@ -12,21 +12,21 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        'dedcc85cd6292ba67f8bcf9a7983c616' => __DIR__ . '/..' . '/dnyz520/careyshop-captcha/src/helper.php',
         '841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
-        '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         't' => 
         array (
             'think\\view\\driver\\' => 18,
-            'think\\captcha\\' => 14,
             'think\\app\\' => 10,
             'think\\' => 6,
         ),
         'c' => 
         array (
+            'careyshop\\captcha\\' => 18,
             'careyshop\\' => 10,
         ),
         'a' => 
@@ -73,10 +73,6 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         array (
             0 => __DIR__ . '/..' . '/topthink/think-view/src',
         ),
-        'think\\captcha\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/topthink/think-captcha/src',
-        ),
         'think\\app\\' => 
         array (
             0 => __DIR__ . '/..' . '/topthink/think-multi-app/src',
@@ -87,6 +83,10 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
             1 => __DIR__ . '/..' . '/topthink/think-helper/src',
             2 => __DIR__ . '/..' . '/topthink/think-orm/src',
             3 => __DIR__ . '/..' . '/topthink/think-template/src',
+        ),
+        'careyshop\\captcha\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dnyz520/careyshop-captcha/src',
         ),
         'careyshop\\' => 
         array (

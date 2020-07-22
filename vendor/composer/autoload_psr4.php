@@ -7,9 +7,9 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'think\\view\\driver\\' => array($vendorDir . '/topthink/think-view/src'),
-    'think\\captcha\\' => array($vendorDir . '/topthink/think-captcha/src'),
     'think\\app\\' => array($vendorDir . '/topthink/think-multi-app/src'),
     'think\\' => array($vendorDir . '/topthink/framework/src/think', $vendorDir . '/topthink/think-helper/src', $vendorDir . '/topthink/think-orm/src', $vendorDir . '/topthink/think-template/src'),
+    'careyshop\\captcha\\' => array($vendorDir . '/dnyz520/careyshop-captcha/src'),
     'careyshop\\' => array($vendorDir . '/dnyz520/careyshop-image/src', $vendorDir . '/dnyz520/careyshop-ip2region/src'),
     'app\\' => array($baseDir . '/app'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),

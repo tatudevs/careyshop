@@ -1,15 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2015 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: yunwuxin <448901948@qq.com>
-// +----------------------------------------------------------------------
 
-use think\captcha\facade\Captcha;
+use careyshop\captcha\facade\Captcha;
 use think\facade\Route;
 use think\Response;
 
@@ -32,13 +23,14 @@ function captcha_src($config = null): string
 }
 
 /**
- * @param $id
+ * @param string $id
+ * @param string $domid
  * @return string
  */
 function captcha_img($id = '', $domid = ''): string
 {
     $src = captcha_src($id);
-  
+
     $domid = empty($domid) ? $domid : "id='" . $domid . "'";
 
     return "<img src='{$src}' alt='captcha' " . $domid . " onclick='this.src=\"{$src}?\"+Math.random();' />";
