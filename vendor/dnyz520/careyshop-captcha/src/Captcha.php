@@ -1,6 +1,6 @@
 <?php
 
-namespace careyshop\captcha;
+namespace careyshop;
 
 use Exception;
 use think\Config;

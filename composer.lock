@@ -98,16 +98,16 @@
         },
         {
             "name": "dnyz520/careyshop-captcha",
-            "version": "v1.0.0",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-captcha.git",
-                "reference": "26ae5133ed178fc462f33be7d94a6ccf220e9351"
+                "reference": "2faf04f8cac4e474218e35a2739255a218fcedcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/26ae5133ed178fc462f33be7d94a6ccf220e9351",
-                "reference": "26ae5133ed178fc462f33be7d94a6ccf220e9351",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/2faf04f8cac4e474218e35a2739255a218fcedcc",
+                "reference": "2faf04f8cac4e474218e35a2739255a218fcedcc",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -122,10 +122,7 @@
             },
             "type": "library",
             "extra": {
-                "careyshop": {
-                    "services": [
-                        "careyshop\\captcha\\CaptchaService"
-                    ],
+                "think": {
                     "config": {
                         "captcha": "src/config.php"
                     }
@@ -133,7 +130,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "careyshop\\captcha\\": "src/"
+                    "careyshop\\": "src/"
                 },
                 "files": [
                     "src/helper.php"
@@ -150,7 +147,7 @@
                 }
             ],
             "description": "The CareyShop Captcha Package",
-            "time": "2020-07-22T08:52:15+00:00"
+            "time": "2020-07-22T15:30:44+00:00"
         },
         {
             "name": "dnyz520/careyshop-image",
@@ -1390,5 +1387,6 @@
     "platform": {
         "php": ">=7.1.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

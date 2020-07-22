@@ -14,17 +14,14 @@
     },
     "autoload": {
         "psr-4": {
-            "careyshop\\captcha\\": "src/"
+            "careyshop\\": "src/"
         },
         "files": [
             "src/helper.php"
         ]
     },
     "extra": {
-        "careyshop": {
-            "services": [
-                "careyshop\\captcha\\CaptchaService"
-            ],
+        "think": {
             "config":{
                 "captcha": "src/config.php"
             }            
