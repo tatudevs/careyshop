@@ -5,7 +5,7 @@
  * CareyShop    阿里云OSS
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/1/23
+ * @date        2020/7/23
  */
 
 namespace oss\aliyun;
@@ -14,13 +14,13 @@ use app\common\model\Storage;
 use oss\Upload as UploadBase;
 use OSS\OssClient;
 use OSS\Core\OssException;
-use think\Cache;
-use think\Config;
-use think\Url;
 use aliyun\AssumeRoleRequest;
 use aliyun\core\Config as AliyunConfig;
 use aliyun\core\profile\DefaultProfile;
 use aliyun\core\DefaultAcsClient;
+use think\facade\Cache;
+use think\facade\Config;
+use think\facade\Route;
 use util\Http;
 
 class Upload extends UploadBase
@@ -51,24 +51,23 @@ class Upload extends UploadBase
     private function getCallbackUrl()
     {
         $vars = ['method' => 'put.upload.data', 'module' => self::MODULE];
-        $callbackUrl = Url::bUild('/api/v1/upload', $vars, true, true);
-
-        return $callbackUrl;
+        return Route::buildUrl('/api/v1/upload', $vars)->domain(true)->build();
     }
 
     /**
      * 获取上传地址
      * @access public
      * @return array|false
+     * @throws \throwable
      */
     public function getUploadUrl()
     {
         // 请求获取bucket所在数据中心位置信息
         $location = Cache::remember('aliyunLocation', function () {
-            $accessKeyId = Config::get('aliyun_access_key.value', 'upload');
-            $accessKeySecret = Config::get('aliyun_secret_key.value', 'upload');
-            $endPoint = Config::get('aliyun_endpoint.value', 'upload');
-            $bucket = Config::get('aliyun_bucket.value', 'upload');
+            $accessKeyId = Config::get('careyshop.upload.aliyun_access_key');
+            $accessKeySecret = Config::get('careyshop.upload.aliyun_secret_key');
+            $endPoint = Config::get('careyshop.upload.aliyun_endpoint');
+            $bucket = Config::get('careyshop.upload.aliyun_bucket');
 
             try {
                 $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endPoint);
@@ -86,11 +85,11 @@ class Upload extends UploadBase
         }, 7200);
 
         if (false === $location) {
-            Cache::rm('aliyunLocation');
+            Cache::delete('aliyunLocation');
             return false;
         }
 
-        $uploadUrl = Url::bUild('/', '', false, $location);
+        $uploadUrl = Route::buildUrl('/')->suffix(false)->domain($location)->build();
         $param = [
             ['name' => 'x:replace', 'type' => 'hidden', 'default' => $this->replace],
             ['name' => 'x:parent_id', 'type' => 'hidden', 'default' => 0],
@@ -110,30 +109,30 @@ class Upload extends UploadBase
     /**
      * 获取上传Token
      * @access public
-     * @param  string $replace 替换资源(path)
+     * @param string $replace 替换资源(path)
      * @return array
+     * @throws \throwable
      */
     public function getToken($replace = '')
     {
         empty($replace) ?: $this->replace = $replace;
-        $token = $this->request->param('type') === 'app' ? $this->getAppToken() : $this->getWebToken();
-
-        return $token;
+        return $this->request->param('type') === 'app' ? $this->getAppToken() : $this->getWebToken();
     }
 
     /**
      * 获取表单上传所需Token
      * @access private
      * @return array|false
+     * @throws \throwable
      */
     private function getWebToken()
     {
         // 获取配置数据
-        $accessKeyId = Config::get('aliyun_access_key.value', 'upload');
-        $accessKeySecret = Config::get('aliyun_secret_key.value', 'upload');
+        $accessKeyId = Config::get('careyshop.upload.aliyun_access_key');
+        $accessKeySecret = Config::get('careyshop.upload.aliyun_secret_key');
 
         $timestamp = new \DateTime();
-        $expires = time() + Config::get('token_expires.value', 'upload');
+        $expires = time() + Config::get('careyshop.upload.token_expires');
         $dir = 'uploads/files/' . date('Ymd/', time());
 
         if (!empty($this->replace)) {
@@ -144,7 +143,7 @@ class Upload extends UploadBase
         $policyArray = [
             'expiration' => $timestamp->setTimestamp($expires)->format('Y-m-d\TH:i:s\Z'),
             'conditions' => [
-                ['content-length-range', 0, string_to_byte(Config::get('file_size.value', 'upload'))],
+                ['content-length-range', 0, string_to_byte(Config::get('careyshop.upload.file_size'))],
                 ['starts-with', '$key', $dir],
             ],
         ];
@@ -198,11 +197,11 @@ class Upload extends UploadBase
     private function getAppToken()
     {
         // 获取配置数据
-        $accessKeyId = Config::get('aliyun_access_key.value', 'upload');
-        $accessKeySecret = Config::get('aliyun_secret_key.value', 'upload');
-        $roleArn = Config::get('aliyun_rolearn.value', 'upload');
-        $bucket = Config::get('aliyun_bucket.value', 'upload');
-        $tokenExpires = Config::get('token_expires.value', 'upload');
+        $accessKeyId = Config::get('careyshop.upload.aliyun_access_key');
+        $accessKeySecret = Config::get('careyshop.upload.aliyun_secret_key');
+        $roleArn = Config::get('careyshop.upload.aliyun_rolearn');
+        $bucket = Config::get('careyshop.upload.aliyun_bucket');
+        $tokenExpires = Config::get('careyshop.upload.token_expires');
         $tokenExpires < 900 && $tokenExpires = 900;
 
         // 加载区域结点配置
@@ -240,7 +239,7 @@ class Upload extends UploadBase
             return $this->setError($e->getMessage());
         }
 
-        $result = [
+        return [
             'assumed_role_user' => [
                 'assumed_role_id' => $response['AssumedRoleUser']['AssumedRoleId'],
                 'arn'             => $response['AssumedRoleUser']['Arn'],
@@ -257,23 +256,20 @@ class Upload extends UploadBase
             'callback_url'      => $this->getCallbackUrl(),
             'expires'           => time() + $tokenExpires,
         ];
-
-        return $result;
     }
 
     /**
      * 接收第三方推送数据
      * @access public
      * @return array|false
-     * @throws
      */
     public function putUploadData()
     {
         // 获取OSS的签名header和公钥url header
-        $authorizationBase64 = $this->request->server('HTTP_AUTHORIZATION', '');
-        $pubKeyUrlBase64 = $this->request->server('HTTP_X_OSS_PUB_KEY_URL', '');
+        $authorizationBase64 = $this->request->server('HTTP_AUTHORIZATION');
+        $pubKeyUrlBase64 = $this->request->server('HTTP_X_OSS_PUB_KEY_URL');
 
-        if ($authorizationBase64 == '' || $pubKeyUrlBase64 == '') {
+        if (!$authorizationBase64 || !$pubKeyUrlBase64) {
             return $this->setError(self::NAME . '模块异常访问!');
         }
 
@@ -326,7 +322,7 @@ class Upload extends UploadBase
             'pixel'     => $isImage ? ['width' => (int)$params['width'], 'height' => (int)$params['height']] : [],
             'hash'      => $params['hash'],
             'path'      => $params['path'],
-            'url'       => Config::get('aliyun_url.value', 'upload') . '/' . $params['path'] . '?type=' . self::MODULE,
+            'url'       => Config::get('careyshop.upload.aliyun_url') . '/' . $params['path'] . '?type=' . self::MODULE,
             'protocol'  => self::MODULE,
             'type'      => $isImage ? 0 : $this->getFileType($params['mime']),
         ];
@@ -336,34 +332,30 @@ class Upload extends UploadBase
             $data['url'] .= sprintf('&rand=%s', mt_rand(0, time()));
         }
 
-        $map['path'] = ['eq', $data['path']];
-        $map['protocol'] = ['eq', self::MODULE];
-        $map['type'] = ['neq', 2];
+        try {
+            $map['path'] = ['=', $data['path']];
+            $map['protocol'] = ['=', self::MODULE];
+            $map['type'] = ['<>', 2];
 
-        $storageDb = new Storage();
-        $result = $storageDb->where($map)->find();
+            $storageDb = new Storage();
+            $result = $storageDb->where($map)->find();
 
-        if (false === $result) {
-            return $this->setError($storageDb->getError());
+            if (!is_null($result)) {
+                // 替换资源进行更新
+                $result->save($data);
+                $result->setAttr('status', 200);
+                $ossResult = $result->toArray();
+            } else {
+                // 插入新记录
+                $storageDb->save($data);
+                $storageDb->setAttr('status', 200);
+                $ossResult = $storageDb->toArray();
+            }
+        } catch (\Exception $e) {
+            return $this->setError($e->getMessage());
         }
 
-        if (!is_null($result)) {
-            // 替换资源进行更新
-            if (false === $result->save($data)) {
-                return $this->setError($storageDb->getError());
-            }
-
-            $ossResult = $result->setAttr('status', 200)->toArray();
-        } else {
-            // 插入新记录
-            if (false === $storageDb->isUpdate(false)->save($data)) {
-                return $this->setError($storageDb->getError());
-            }
-
-            $ossResult = $storageDb->setAttr('status', 200)->toArray();
-        }
-
-        $ossResult['oss'] = Config::get('oss.value', 'upload');
+        $ossResult['oss'] = Config::get('careyshop.upload.oss');
         return [$ossResult];
     }
 
@@ -381,9 +373,9 @@ class Upload extends UploadBase
     /**
      * 获取缩略大小请求参数
      * @access private
-     * @param  int    $width  宽度
-     * @param  int    $height 高度
-     * @param  string $resize 缩放方式
+     * @param int    $width  宽度
+     * @param int    $height 高度
+     * @param string $resize 缩放方式
      * @return string
      */
     private function getSizeParam($width, $height, $resize)
@@ -405,8 +397,8 @@ class Upload extends UploadBase
     /**
      * 获取裁剪区域请求参数
      * @access private
-     * @param  int $width  宽度
-     * @param  int $height 高度
+     * @param int $width  宽度
+     * @param int $height 高度
      * @return string
      */
     private function getCropParam($width, $height)
@@ -422,7 +414,7 @@ class Upload extends UploadBase
     /**
      * 获取资源缩略图实际路径
      * @access public
-     * @param  array $urlArray 路径结构
+     * @param array $urlArray 路径结构
      * @return string
      */
     public function getThumbUrl($urlArray)
@@ -472,7 +464,7 @@ class Upload extends UploadBase
         }
 
         // 检测尺寸是否正确
-        list($sWidth, $sHeight) = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
+        [$sWidth, $sHeight] = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
 
         // 处理缩放尺寸、裁剪尺寸
         if ($sWidth || $sHeight) {
@@ -484,7 +476,7 @@ class Upload extends UploadBase
                         break;
 
                     case 'crop':
-                        list($cWidth, $cHeight) = @array_pad($value, 2, 0);
+                        [$cWidth, $cHeight] = @array_pad($value, 2, 0);
                         $options .= $this->getCropParam($cWidth, $cHeight);
                         break;
                 }
@@ -521,10 +513,10 @@ class Upload extends UploadBase
             return $this->setError(self::NAME . '批量删除资源不可超过1000个');
         }
 
-        $accessKeyId = Config::get('aliyun_access_key.value', 'upload');
-        $accessKeySecret = Config::get('aliyun_secret_key.value', 'upload');
-        $endPoint = Config::get('aliyun_endpoint.value', 'upload');
-        $bucket = Config::get('aliyun_bucket.value', 'upload');
+        $accessKeyId = Config::get('careyshop.upload.aliyun_access_key');
+        $accessKeySecret = Config::get('careyshop.upload.aliyun_secret_key');
+        $endPoint = Config::get('careyshop.upload.aliyun_endpoint');
+        $bucket = Config::get('careyshop.upload.aliyun_bucket');
 
         try {
             $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endPoint);
@@ -539,7 +531,7 @@ class Upload extends UploadBase
     /**
      * 清除缩略图文件夹
      * @access public
-     * @param  string $path 路径
+     * @param string $path 路径
      * @return void
      */
     public function clearThumb($path)
@@ -550,8 +542,8 @@ class Upload extends UploadBase
     /**
      * 响应实际下载路径
      * @access public
-     * @param  string $url      路径
-     * @param  string $filename 文件名
+     * @param string $url      路径
+     * @param string $filename 文件名
      * @return void
      */
     public function getDownload($url, $filename = '')
@@ -559,10 +551,10 @@ class Upload extends UploadBase
         // 拆分 URL 链接
         $urlArray = parse_url($url);
 
-        $accessKeyId = Config::get('aliyun_access_key.value', 'upload');
-        $accessKeySecret = Config::get('aliyun_secret_key.value', 'upload');
-        $endPoint = Config::get('aliyun_endpoint.value', 'upload');
-        $bucket = Config::get('aliyun_bucket.value', 'upload');
+        $accessKeyId = Config::get('careyshop.upload.aliyun_access_key');
+        $accessKeySecret = Config::get('careyshop.upload.aliyun_secret_key');
+        $endPoint = Config::get('careyshop.upload.aliyun_endpoint');
+        $bucket = Config::get('careyshop.upload.aliyun_bucket');
         $object = mb_substr($urlArray['path'], 1, null, 'UTF-8');
         $timeout = 3600;
 
@@ -592,7 +584,7 @@ class Upload extends UploadBase
     /**
      * 获取资源缩略图信息
      * @access public
-     * @param  string $url 路径
+     * @param string $url 路径
      * @return array
      */
     public function getThumbInfo($url)
@@ -605,14 +597,14 @@ class Upload extends UploadBase
 
         try {
             $result = Http::httpGet($url);
-            list($width, $height) = @getimagesize('data://image/*;base64,' . base64_encode($result));
+            [$width, $height] = @getimagesize('data://image/*;base64,' . base64_encode($result));
 
             if ($width <= 0 || $height <= 0) {
                 return $info;
             }
 
             $info = [
-                'size'   => strlen($result) * sizeof($result),
+                'size'   => strlen($result),
                 'width'  => $width,
                 'height' => $height,
             ];

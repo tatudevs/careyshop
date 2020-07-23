@@ -5,17 +5,19 @@
  * CareyShop    本地上传
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/1/22
+ * @date        2020/7/23
  */
 
 namespace oss\careyshop;
 
+const DS = DIRECTORY_SEPARATOR;
+
 use app\common\model\Storage;
 use oss\Upload as UploadBase;
-use think\Config;
+use think\facade\Config;
+use think\facade\Filesystem;
+use think\facade\Route;
 use think\File;
-use think\Image;
-use think\Url;
 
 class Upload extends UploadBase
 {
@@ -44,13 +46,12 @@ class Upload extends UploadBase
     protected static $maxSizeInfo;
 
     /**
-     * 构造函数
+     * 初始化
      * @access public
      * @return void
      */
-    public function __construct()
+    public function initialize()
     {
-        parent::__construct();
         $this->setFileMaxSize();
     }
 
@@ -63,7 +64,7 @@ class Upload extends UploadBase
     {
         if (is_null(self::$maxSize)) {
             $serverSize = ini_get('upload_max_filesize');
-            $userMaxSize = Config::get('file_size.value', 'upload');
+            $userMaxSize = Config::get('careyshop.upload.file_size');
 
             if (!empty($userMaxSize)) {
                 if (string_to_byte($userMaxSize) < string_to_byte($serverSize)) {
@@ -85,7 +86,7 @@ class Upload extends UploadBase
      */
     public function getUploadUrl()
     {
-        $uploadUrl = Url::bUild('/api/v1/upload', ['method' => 'add.upload.list'], true, true);
+        $uploadUrl = Route::buildUrl('/api/v1/upload', ['method' => 'add.upload.list'])->domain(true)->build();
         $param = [
             ['name' => 'x:replace', 'type' => 'hidden', 'default' => $this->replace],
             ['name' => 'x:parent_id', 'type' => 'hidden', 'default' => 0],
@@ -101,13 +102,13 @@ class Upload extends UploadBase
     /**
      * 获取上传Token
      * @access public
-     * @param  string $replace 替换资源(path)
+     * @param string $replace 替换资源(path)
      * @return array
      */
     public function getToken($replace = '')
     {
         empty($replace) ?: $this->replace = $replace;
-        $tokenExpires = Config::get('token_expires.value', 'upload');
+        $tokenExpires = Config::get('careyshop.upload.token_expires');
 
         $response['upload_url'] = $this->getUploadUrl();
         $response['token'] = self::MODULE;
@@ -133,8 +134,9 @@ class Upload extends UploadBase
         $filesData = [];
         $files = $this->request->file();
 
+        // 验证资源
         if (empty($files)) {
-            $uploadMaxSize = Config::get('file_size.value', 'upload');
+            $uploadMaxSize = Config::get('careyshop.upload.file_size');
             if (!string_to_byte($uploadMaxSize)) {
                 $uploadMaxSize = ini_get('upload_max_filesize');
             }
@@ -146,13 +148,23 @@ class Upload extends UploadBase
             return $this->setError('替换资源只能上传单个文件');
         }
 
+        try {
+            $ext = Config::get('careyshop.upload.image_ext') . ',' . Config::get('careyshop.upload.file_ext');
+            $rule = sprintf('filesize:%s|fileExt:%s', self::$maxSize, $ext);
+
+            validate(['image' => $rule])->check($files);
+        } catch (\Exception $e) {
+            return $this->setError($e->getMessage());
+        }
+
+        // 实际保存资源
         foreach ($files as $value) {
             if ($this->request->has('x:replace', 'param', true) && count($value) > 1) {
                 return $this->setError('替换资源只能上传单个文件');
             }
 
             if (is_object($value)) {
-                $result = $this->saveFile((object)$value);
+                $result = $this->saveFile($value);
                 if (is_array($result)) {
                     $filesData[] = $result;
                 } else {
@@ -186,7 +198,7 @@ class Upload extends UploadBase
     /**
      * 保存资源并写入库
      * @access private
-     * @param  object $file 上传文件对象
+     * @param  File $file 上传文件对象
      * @return array|string
      * @throws
      */
@@ -212,21 +224,19 @@ class Upload extends UploadBase
             return '禁止上传非法附件';
         }
 
-        // 创建验证规则数据
-        $rule = [
-            'size' => self::$maxSize,
-            'ext'  => Config::get('image_ext.value', 'upload') . ',' . Config::get('file_ext.value', 'upload'),
-        ];
+        // todo 不再继续,需要边调试边修改
+//        $savename = \think\facade\Filesystem::putFileAs( 'topic', $file,'abc.jpg');
+//        Filesystem::disk('public')->putFileAs();
 
         // 保存附件到项目目录
         $filePath = DS . 'uploads' . DS . 'files' . DS;
         if ($this->request->has('x:replace', 'param', true)) {
             $movePath = pathinfo($this->request->param('x:replace'));
             $filePath = $movePath['dirname'] . DS;
-            $info = $file->validate($rule)->move(ROOT_PATH . 'public' . $filePath, $movePath['basename']);
+            $info = $file->move(ROOT_PATH . 'public' . $filePath, $movePath['basename']);
         } else {
             $saveName = date('Ymd') . DS . guid_v4();
-            $info = $file->validate($rule)->move(ROOT_PATH . 'public' . $filePath, $saveName);
+            $info = $file->move(ROOT_PATH . 'public' . $filePath, $saveName);
         }
 
         if (false === $info) {
@@ -234,7 +244,7 @@ class Upload extends UploadBase
         }
 
         // 判断是否为图片
-        list($width, $height) = @getimagesize($info->getPathname());
+        [$width, $height] = @getimagesize($info->getPathname());
         $isImage = (int)$width > 0 && (int)$height > 0;
 
         // 附件相对路径,并统一斜杠为'/'
@@ -398,7 +408,7 @@ class Upload extends UploadBase
             $width <= 0 && $width = $height;
             $height <= 0 && $height = $width;
         } else if ('proportion' === $resize) {
-            list($sWidth, $sHeight) = $imageFile->size();
+            [$sWidth, $sHeight] = $imageFile->size();
             $width = ($width / 100) * $sWidth;
             $height = ($width / 100) * $sHeight;
         } else {
@@ -454,8 +464,8 @@ class Upload extends UploadBase
         }
 
         // 检测尺寸是否正确
-        list($sWidth, $sHeight) = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
-        list($cWidth, $cHeight) = @array_pad(isset($param['crop']) ? $param['crop'] : [], 2, 0);
+        [$sWidth, $sHeight] = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
+        [$cWidth, $cHeight] = @array_pad(isset($param['crop']) ? $param['crop'] : [], 2, 0);
 
         try {
             // 创建图片实例(并且是图片才创建缩略图文件夹)
@@ -639,7 +649,7 @@ class Upload extends UploadBase
                 return $info;
             }
 
-            list($width, $height) = @getimagesize($result);
+            [$width, $height] = @getimagesize($result);
             if ($width <= 0 || $height <= 0) {
                 return $info;
             }

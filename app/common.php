@@ -8,8 +8,6 @@
  * @date        2020/7/20
  */
 
-use think\facade\Db;
-
 // 系统默认权限
 define('AUTH_SUPER_ADMINISTRATOR', 1);
 define('AUTH_ADMINISTRATOR', 2);
@@ -95,9 +93,7 @@ if (!function_exists('get_client_nickname')) {
         }
 
         $userType = is_client_admin() ? 'admin' : 'user';
-        $map['user_id'] = ['eq', get_client_id()];
-
-        return Db::name($userType)->where($map)->value('nickname', '');
+        return \think\facade\Db::name($userType)->where('user_id', get_client_id())->value('nickname');
     }
 }
 

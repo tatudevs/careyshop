@@ -43,6 +43,16 @@ abstract class CareyShop extends Model
     }
 
     /**
+     * 返回模型的错误信息
+     * @access public
+     * @return string|array
+     */
+    public function getError()
+    {
+        return $this->error;
+    }
+
+    /**
      * 设置模型错误信息
      * @access public
      * @param string $value 错误信息

@@ -16,9 +16,9 @@ use Qiniu\Auth;
 use Qiniu\Region;
 use Qiniu\Storage\BucketManager;
 use Qiniu\Zone;
-use think\Cache;
-use think\Config;
-use think\Url;
+use think\facade\Cache;
+use think\facade\Config;
+use think\facade\Route;
 use util\Http;
 
 class Upload extends UploadBase
@@ -43,32 +43,31 @@ class Upload extends UploadBase
     private function getCallbackUrl()
     {
         $vars = ['method' => 'put.upload.data', 'module' => self::MODULE];
-        $callbackUrl = Url::bUild('/api/v1/upload', $vars, true, true);
-
-        return $callbackUrl;
+        return Route::buildUrl('/api/v1/upload', $vars)->domain(true)->build();
     }
 
     /**
      * 获取上传地址
      * @access public
      * @return array|false
+     * @throws \throwable
      */
     public function getUploadUrl()
     {
         $zone = Cache::remember('qiniuZone', function () {
-            $accessKey = Config::get('qiniu_access_key.value', 'upload');
-            $bucket = Config::get('qiniu_bucket.value', 'upload');
+            $accessKey = Config::get('careyshop.upload.qiniu_access_key');
+            $bucket = Config::get('careyshop.upload.qiniu_bucket');
 
             return Zone::queryZone($accessKey, $bucket);
         }, 7200);
 
         if (!$zone instanceof Region) {
-            Cache::rm('qiniuZone');
+            Cache::delete('qiniuZone');
             return $this->setError($zone[1]->message());
         }
 
         $random = array_rand($zone->cdnUpHosts, 1);
-        $uploadUrl = Url::bUild('/', '', false, $zone->cdnUpHosts[$random]);
+        $uploadUrl = Route::buildUrl('/')->suffix(false)->domain($zone->cdnUpHosts[$random])->build();
 
         $param = [
             ['name' => 'x:replace', 'type' => 'hidden', 'default' => $this->replace],
@@ -85,17 +84,18 @@ class Upload extends UploadBase
     /**
      * 获取上传Token
      * @access public
-     * @param  string $replace 替换资源(path)
+     * @param string $replace 替换资源(path)
      * @return array|false
+     * @throws \throwable
      */
     public function getToken($replace = '')
     {
         // 初始化Auth状态
         empty($replace) ?: $this->replace = $replace;
-        $accessKey = Config::get('qiniu_access_key.value', 'upload');
-        $secretKey = Config::get('qiniu_secret_key.value', 'upload');
-        $bucket = Config::get('qiniu_bucket.value', 'upload');
-        $tokenExpires = Config::get('token_expires.value', 'upload');
+        $accessKey = Config::get('careyshop.upload.qiniu_access_key');
+        $secretKey = Config::get('careyshop.upload.qiniu_secret_key');
+        $bucket = Config::get('careyshop.upload.qiniu_bucket');
+        $tokenExpires = Config::get('careyshop.upload.token_expires');
 
         // 回调参数(别用JSON,处理很麻烦)
         $callbackBody = 'replace=$(x:replace)&parent_id=$(x:parent_id)&filename=$(x:filename)&mime=$(mimeType)&path=$(key)&';
@@ -114,7 +114,7 @@ class Upload extends UploadBase
         // 组建上传策略
         $policy = [
             // 限定上传附件大小最大值
-            'fsizeLimit'       => string_to_byte(Config::get('file_size.value', 'upload')),
+            'fsizeLimit'       => string_to_byte(Config::get('careyshop.upload.file_size')),
             // 是否以"keyPrefix"为前缀的文件
             'isPrefixalScope'  => empty($this->replace) ? 1 : 0,
             // 回调地址
@@ -155,14 +155,14 @@ class Upload extends UploadBase
         $contentType = 'application/x-www-form-urlencoded';
 
         // 回调的签名信息,验证该回调是否来自七牛
-        $authorization = $this->request->server('HTTP_AUTHORIZATION', '');
+        $authorization = $this->request->server('HTTP_AUTHORIZATION');
 
         // 回调地址
         $callbackUrl = $this->getCallbackUrl();
 
         // 初始化Auth状态
-        $accessKey = Config::get('qiniu_access_key.value', 'upload');
-        $secretKey = Config::get('qiniu_secret_key.value', 'upload');
+        $accessKey = Config::get('careyshop.upload.qiniu_access_key');
+        $secretKey = Config::get('careyshop.upload.qiniu_secret_key');
 
         $auth = new Auth($accessKey, $secretKey);
         $isQiniuCallback = $auth->verifyCallback($contentType, $authorization, $callbackUrl, $callbackBody);
@@ -187,7 +187,7 @@ class Upload extends UploadBase
             'pixel'     => $isImage ? ['width' => (int)$params['width'], 'height' => (int)$params['height']] : [],
             'hash'      => $params['hash'],
             'path'      => $params['path'],
-            'url'       => Config::get('qiniu_url.value', 'upload') . '/' . $params['path'] . '?type=' . self::MODULE,
+            'url'       => Config::get('careyshop.upload.qiniu_url') . '/' . $params['path'] . '?type=' . self::MODULE,
             'protocol'  => self::MODULE,
             'type'      => $isImage ? 0 : $this->getFileType($params['mime']),
         ];
@@ -197,35 +197,31 @@ class Upload extends UploadBase
             $data['url'] .= sprintf('&rand=%s', mt_rand(0, time()));
         }
 
-        !empty($params['replace']) ?: $map['hash'] = ['eq', $data['hash']];
-        $map['path'] = ['eq', $data['path']];
-        $map['protocol'] = ['eq', self::MODULE];
-        $map['type'] = ['neq', 2];
+        try {
+            !empty($params['replace']) ?: $map['hash'] = ['=', $data['hash']];
+            $map['path'] = ['=', $data['path']];
+            $map['protocol'] = ['=', self::MODULE];
+            $map['type'] = ['<>', 2];
 
-        $storageDb = new Storage();
-        $result = $storageDb->where($map)->find();
+            $storageDb = new Storage();
+            $result = $storageDb->where($map)->find();
 
-        if (false === $result) {
-            return $this->setError($storageDb->getError());
+            if (!is_null($result)) {
+                // 更新已有资源
+                $result->save($data);
+                $result->setAttr('status', 200);
+                $ossResult = $result->toArray();
+            } else {
+                // 插入新记录
+                $storageDb->save($data);
+                $storageDb->setAttr('status', 200);
+                $ossResult = $storageDb->toArray();
+            }
+        } catch (\Exception $e) {
+            return $this->setError($e->getMessage());
         }
 
-        if (!is_null($result)) {
-            // 更新已有资源
-            if (false === $result->save($data)) {
-                return $this->setError($storageDb->getError());
-            }
-
-            $ossResult = $result->setAttr('status', 200)->toArray();
-        } else {
-            // 插入新记录
-            if (false === $storageDb->isUpdate(false)->save($data)) {
-                return $this->setError($storageDb->getError());
-            }
-
-            $ossResult = $storageDb->setAttr('status', 200)->toArray();
-        }
-
-        $ossResult['oss'] = Config::get('oss.value', 'upload');
+        $ossResult['oss'] = Config::get('careyshop.upload.oss');
         return [$ossResult];
     }
 
@@ -243,9 +239,9 @@ class Upload extends UploadBase
     /**
      * 获取缩略大小请求参数
      * @access private
-     * @param  int    $width  宽度
-     * @param  int    $height 高度
-     * @param  string $resize 缩放方式
+     * @param int    $width  宽度
+     * @param int    $height 高度
+     * @param string $resize 缩放方式
      * @return string
      */
     private function getSizeParam($width, $height, $resize)
@@ -267,8 +263,8 @@ class Upload extends UploadBase
     /**
      * 获取图片整体大小请求参数
      * @access private
-     * @param  int $width  宽度
-     * @param  int $height 高度
+     * @param int $width  宽度
+     * @param int $height 高度
      * @return string
      */
     private function getExtentParam($width, $height)
@@ -288,8 +284,8 @@ class Upload extends UploadBase
     /**
      * 获取裁剪区域请求参数
      * @access private
-     * @param  int $width  宽度
-     * @param  int $height 高度
+     * @param int $width  宽度
+     * @param int $height 高度
      * @return string
      */
     private function getCropParam($width, $height)
@@ -306,7 +302,7 @@ class Upload extends UploadBase
     /**
      * 获取资源缩略图实际路径
      * @access public
-     * @param  array $urlArray 路径结构
+     * @param array $urlArray 路径结构
      * @return string
      */
     public function getThumbUrl($urlArray)
@@ -352,8 +348,8 @@ class Upload extends UploadBase
         }
 
         // 检测尺寸是否正确
-        list($sWidth, $sHeight) = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
-        list($cWidth, $cHeight) = @array_pad(isset($param['crop']) ? $param['crop'] : [], 2, 0);
+        [$sWidth, $sHeight] = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
+        [$cWidth, $cHeight] = @array_pad(isset($param['crop']) ? $param['crop'] : [], 2, 0);
 
         if ($sWidth || $sHeight) {
             // 画布最后的尺寸初始化
@@ -427,9 +423,9 @@ class Upload extends UploadBase
         }
 
         // 初始化Auth状态
-        $accessKey = Config::get('qiniu_access_key.value', 'upload');
-        $secretKey = Config::get('qiniu_secret_key.value', 'upload');
-        $bucket = Config::get('qiniu_bucket.value', 'upload');
+        $accessKey = Config::get('careyshop.upload.qiniu_access_key');
+        $secretKey = Config::get('careyshop.upload.qiniu_secret_key');
+        $bucket = Config::get('careyshop.upload.qiniu_bucket');
 
         $auth = new Auth($accessKey, $secretKey);
         $config = new \Qiniu\Config();
@@ -444,7 +440,7 @@ class Upload extends UploadBase
     /**
      * 清除缩略图文件夹
      * @access public
-     * @param  string $path 路径
+     * @param string $path 路径
      * @return void
      */
     public function clearThumb($path)
@@ -455,8 +451,8 @@ class Upload extends UploadBase
     /**
      * 响应实际下载路径
      * @access public
-     * @param  string $url      路径
-     * @param  string $filename 文件名
+     * @param string $url      路径
+     * @param string $filename 文件名
      * @return void
      */
     public function getDownload($url, $filename = '')
@@ -472,7 +468,7 @@ class Upload extends UploadBase
     /**
      * 获取资源缩略图信息
      * @access public
-     * @param  string $url 路径
+     * @param string $url 路径
      * @return array
      */
     public function getThumbInfo($url)
@@ -485,14 +481,14 @@ class Upload extends UploadBase
 
         try {
             $result = Http::httpGet($url);
-            list($width, $height) = @getimagesize('data://image/*;base64,' . base64_encode($result));
+            [$width, $height] = @getimagesize('data://image/*;base64,' . base64_encode($result));
 
             if ($width <= 0 || $height <= 0) {
                 return $info;
             }
 
             $info = [
-                'size'   => strlen($result) * sizeof($result),
+                'size'   => strlen($result),
                 'width'  => $width,
                 'height' => $height,
             ];
