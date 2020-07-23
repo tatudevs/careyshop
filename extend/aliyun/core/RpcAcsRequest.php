@@ -4,18 +4,18 @@ namespace aliyun\core;
 
 abstract class RpcAcsRequest extends AcsRequest
 {
-	private $dateTimeFormat = 'Y-m-d\TH:i:s\Z'; 
+	private $dateTimeFormat = 'Y-m-d\TH:i:s\Z';
 	private $domainParameters = array();
-	
+
 	function  __construct($product, $version, $actionName)
 	{
 		parent::__construct($product, $version, $actionName);
 		$this->initialize();
 	}
-	
+
 	private function initialize()
 	{
-		$this->setMethod("GET");	
+		$this->setMethod("GET");
 		$this->setAcceptFormat("JSON");
 	}
 
@@ -50,15 +50,15 @@ abstract class RpcAcsRequest extends AcsRequest
 		$apiParams["Version"] = $this->getVersion();
 		$apiParams["Signature"] = $this->computeSignature($apiParams, $credential->getAccessSecret(), $iSigner);
 		if(parent::getMethod() == "POST") {
-			
-			$requestUrl = $this->getProtocol()."://". $domain . "/";			
+
+			$requestUrl = $this->getProtocol()."://". $domain . "/";
 			foreach ($apiParams as $apiParamKey => $apiParamValue)
 			{
 				$this->putDomainParameters($apiParamKey,$apiParamValue);
 			}
-			return $requestUrl;			
+			return $requestUrl;
 		}
-		else {	
+		else {
 			$requestUrl = $this->getProtocol()."://". $domain . "/?";
 
 			foreach ($apiParams as $apiParamKey => $apiParamValue)
@@ -68,7 +68,7 @@ abstract class RpcAcsRequest extends AcsRequest
 			return substr($requestUrl, 0, -1);
 		}
 	}
-	
+
 	private function computeSignature($parameters, $accessKeySecret, $iSigner)
 	{
 	    ksort($parameters);
@@ -76,13 +76,11 @@ abstract class RpcAcsRequest extends AcsRequest
 	    foreach($parameters as $key => $value)
 	    {
 			$canonicalizedQueryString .= '&' . $this->percentEncode($key). '=' . $this->percentEncode($value);
-	    }	
+	    }
 	    $stringToSign = parent::getMethod().'&%2F&' . $this->percentencode(substr($canonicalizedQueryString, 1));
-	    $signature = $iSigner->signString($stringToSign, $accessKeySecret."&");
-
-	    return $signature;
+        return $iSigner->signString($stringToSign, $accessKeySecret."&");
 	}
-	
+
 	protected function percentEncode($str)
 	{
 	    $res = urlencode($str);
@@ -91,12 +89,12 @@ abstract class RpcAcsRequest extends AcsRequest
 	    $res = preg_replace('/%7E/', '~', $res);
 	    return $res;
 	}
-	
-	public function getDomainParameter()	
+
+	public function getDomainParameter()
 	{
 		return $this->domainParameters;
 	}
-	
+
 	public function putDomainParameters($name, $value)
 	{
 		$this->domainParameters[$name] = $value;

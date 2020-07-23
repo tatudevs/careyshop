@@ -9,20 +9,20 @@ abstract class RoaAcsRequest extends AcsRequest
 	private $domainParameters = array();
 	private $dateTimeFormat ="D, d M Y H:i:s \G\M\T";
 	private static $headerSeparator = "\n";
-	private static $querySeprator = "&"; 
-	
+	private static $querySeprator = "&";
+
 	function  __construct($product, $version, $actionName)
 	{
 		parent::__construct($product, $version, $actionName);
 		$this->setVersion($version);
 		$this->initialize();
 	}
-	
+
 	private function initialize()
 	{
 		$this->setMethod("RAW");
 	}
-	
+
 	public function composeUrl($iSigner, $credential, $domain)
 	{
 		$this->prepareHeader($iSigner);
@@ -33,35 +33,34 @@ abstract class RoaAcsRequest extends AcsRequest
 			$signString = $signString.$this->headers["Accept"];
 		}
 		$signString = $signString.self::$headerSeparator;
-		
+
 		if(isset($this->headers["Content-MD5"]))
 		{
 			$signString = $signString.$this->headers["Content-MD5"];
 		}
 		$signString = $signString.self::$headerSeparator;
-		
+
 		if(isset($this->headers["Content-Type"]))
 		{
 			$signString = $signString.$this->headers["Content-Type"];
 		}
 		$signString = $signString.self::$headerSeparator;
-		
+
 		if(isset($this->headers["Date"]))
 		{
 			$signString = $signString.$this->headers["Date"];
 		}
 		$signString = $signString.self::$headerSeparator;
-		
+
 		$uri = $this->replaceOccupiedParameters();
 		$signString = $signString.$this->buildCanonicalHeaders();
 		$queryString = $this->buildQueryString($uri);
 		$signString .= $queryString;
 		$this->headers["Authorization"] = "acs ".$credential->getAccessKeyId().":"
 				.$iSigner->signString($signString, $credential->getAccessSecret());
-		$requestUrl = $this->getProtocol()."://".$domain.$queryString;
-		return $requestUrl;
+        return $this->getProtocol()."://".$domain.$queryString;
 	}
-	
+
 	private function prepareHeader($iSigner)
 	{
 		date_default_timezone_set("GMT");
@@ -80,7 +79,7 @@ abstract class RoaAcsRequest extends AcsRequest
         }
 		$this->headers["Content-Type"] = "application/octet-stream;charset=utf-8";
 	}
-	
+
 	private function replaceOccupiedParameters()
 	{
 		$result = $this->uriPattern;
@@ -91,7 +90,7 @@ abstract class RoaAcsRequest extends AcsRequest
 		}
 		return $result;
 	}
-	
+
 	private function buildCanonicalHeaders()
 	{
 		$sortMap = array();
@@ -111,7 +110,7 @@ abstract class RoaAcsRequest extends AcsRequest
 		}
 		return $headerString;
 	}
-	
+
 	private function splitSubResource($uri)
 	{
 		$queIndex = strpos($uri, "?");
@@ -121,13 +120,13 @@ abstract class RoaAcsRequest extends AcsRequest
 			array_push($uriParts, substr($uri,0,$queIndex));
 			array_push($uriParts, substr($uri,$queIndex+1));
 		}
-		else 
+		else
 		{
 			array_push($uriParts,$uri);
 		}
 		return $uriParts;
-	} 
-	
+	}
+
 	private function buildQueryString($uri)
 	{
 		$uriParts = $this->splitSubResource($uri);
@@ -157,7 +156,7 @@ abstract class RoaAcsRequest extends AcsRequest
 		}
 		return $queryString;
 	}
-	
+
 	private function formatToAccept($acceptFormat)
 	{
 		if($acceptFormat == "JSON")
@@ -169,37 +168,37 @@ abstract class RoaAcsRequest extends AcsRequest
 		}
 		return "application/octet-stream";
 	}
-	
+
 	public function getPathParameters()
 	{
 		return $this->pathParameters;
 	}
-	
+
 	public function putPathParameter($name, $value)
 	{
 		$this->pathParameters[$name] = $value;
 	}
-	
-	public function getDomainParameter()	
+
+	public function getDomainParameter()
 	{
 		return $this->domainParameters;
 	}
-	
+
 	public function putDomainParameters($name, $value)
 	{
 		$this->domainParameters[$name] = $value;
 	}
-	
+
 	public function getUriPattern()
 	{
 		return $this->uriPattern;
 	}
-	
+
 	public function setUriPattern($uriPattern)
 	{
 		return $this->uriPattern = $uriPattern;
 	}
-	
+
 	public function setVersion($version)
 	{
 		$this->version = $version;
