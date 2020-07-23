@@ -10,11 +10,14 @@
 
 namespace app\common\model;
 
-use captcha\Captcha;
-use think\Cache;
-
 class App extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'app_id';
+
     /**
      * 隐藏属性
      * @var array

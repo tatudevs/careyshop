@@ -1,14 +1,13 @@
 <?php
 
-use think\Response;
 use careyshop\facade\Captcha;
 
 /**
  * @param string $config
  * @param bool   $api
- * @return Response
+ * @return mixed
  */
-function captcha($config = null, $api = false): Response
+function captcha($config = null, $api = false)
 {
     return Captcha::create($config, $api);
 }
@@ -20,5 +19,5 @@ function captcha($config = null, $api = false): Response
  */
 function captcha_check($value, $api = false)
 {
-    return Captcha::check($value);
+    return Captcha::check($value, $api);
 }

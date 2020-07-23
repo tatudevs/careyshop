@@ -130,9 +130,10 @@ class Captcha
      * 验证验证码是否正确
      * @access public
      * @param string $code 用户验证码
+     * @param bool   $api
      * @return bool 用户验证码是否正确
      */
-    public function check(string $code): bool
+    public function check(string $code, bool $api): bool
     {
         if (!$this->session->has('captcha')) {
             return false;
@@ -152,7 +153,7 @@ class Captcha
     }
 
     /**
-     * 输出验证码并把验证码的值保存的session中
+     * 输出验证码
      * @param string|null $config
      * @param bool        $api
      * @return mixed

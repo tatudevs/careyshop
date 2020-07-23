@@ -98,16 +98,16 @@
         },
         {
             "name": "dnyz520/careyshop-captcha",
-            "version": "v1.0.3",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-captcha.git",
-                "reference": "9c6c1839efb7338ef665b7058784f8ca60cba37d"
+                "reference": "4c45c1d4381f57474003907c24338bcba9642c54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/9c6c1839efb7338ef665b7058784f8ca60cba37d",
-                "reference": "9c6c1839efb7338ef665b7058784f8ca60cba37d",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/4c45c1d4381f57474003907c24338bcba9642c54",
+                "reference": "4c45c1d4381f57474003907c24338bcba9642c54",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -147,7 +147,7 @@
                 }
             ],
             "description": "The CareyShop Captcha Package",
-            "time": "2020-07-22T16:35:46+00:00"
+            "time": "2020-07-23T08:53:34+00:00"
         },
         {
             "name": "dnyz520/careyshop-image",
@@ -1387,6 +1387,5 @@
     "platform": {
         "php": ">=7.1.0"
     },
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }

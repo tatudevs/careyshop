@@ -343,12 +343,12 @@ class Upload extends UploadBase
             if (!is_null($result)) {
                 // 替换资源进行更新
                 $result->save($data);
-                $result->setAttr('status', 200);
+                $result['status'] = 200;
                 $ossResult = $result->toArray();
             } else {
                 // 插入新记录
                 $storageDb->save($data);
-                $storageDb->setAttr('status', 200);
+                $storageDb['status'] = 200;
                 $ossResult = $storageDb->toArray();
             }
         } catch (\Exception $e) {
