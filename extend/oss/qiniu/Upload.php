@@ -198,10 +198,10 @@ class Upload extends UploadBase
         }
 
         try {
-            !empty($params['replace']) ?: $map['hash'] = ['=', $data['hash']];
-            $map['path'] = ['=', $data['path']];
-            $map['protocol'] = ['=', self::MODULE];
-            $map['type'] = ['<>', 2];
+            !empty($params['replace']) ?: $map[] = ['hash', '=', $data['hash']];
+            $map[] = ['path', '=', $data['path']];
+            $map[] = ['protocol', '=', self::MODULE];
+            $map[] = ['type', '<>', 2];
 
             $storageDb = new Storage();
             $result = $storageDb->where($map)->find();

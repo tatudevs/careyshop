@@ -19,7 +19,7 @@ abstract class CareyShop extends Model
      * 错误信息
      * @var string
      */
-    protected $error;
+    protected $error = '';
 
     /**
      * 检测是否存在相同值

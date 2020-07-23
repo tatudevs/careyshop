@@ -579,7 +579,7 @@ abstract class CareyShop
      */
     protected function outputError($message = '', $code = 500)
     {
-        abort($code, $message);
+        abort($code, (string)$message);
     }
 
     /**

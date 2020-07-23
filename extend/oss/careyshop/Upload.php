@@ -280,9 +280,9 @@ class Upload extends UploadBase
             $data['url'] .= sprintf('&rand=%s', mt_rand(0, time()));
         }
 
-        $map['path'] = ['eq', $data['path']];
-        $map['protocol'] = ['eq', self::MODULE];
-        $map['type'] = ['neq', 2];
+        $map[] = ['path', '=', $data['path']];
+        $map[] = ['protocol', '=', self::MODULE];
+        $map[] = ['type', '<>', 2];
 
         $storageDb = new Storage();
         $result = $storageDb->where($map)->find();

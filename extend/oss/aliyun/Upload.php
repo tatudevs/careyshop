@@ -333,9 +333,9 @@ class Upload extends UploadBase
         }
 
         try {
-            $map['path'] = ['=', $data['path']];
-            $map['protocol'] = ['=', self::MODULE];
-            $map['type'] = ['<>', 2];
+            $map[] = ['path', '=', $data['path']];
+            $map[] = ['protocol', '=', self::MODULE];
+            $map[] = ['type', '<>', 2];
 
             $storageDb = new Storage();
             $result = $storageDb->where($map)->find();

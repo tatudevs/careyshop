@@ -37,40 +37,49 @@ class App extends CareyShop
     ];
 
     /**
-     * 场景规则
-     * @var array
+     * 场景验证
+     * @return App
      */
-    protected $scene = [
-        'set'     => [
-            'app_id'   => 'require|integer|gt:0',
-            'app_name' => 'require|max:30',
-            'captcha',
-            'status',
-        ],
-        'item'    => [
-            'app_id' => 'require|integer|gt:0',
-        ],
-        'del'     => [
-            'app_id' => 'require|arrayHasOnlyInts',
-        ],
-        'unique'  => [
-            'app_name' => 'require|max:30',
-            'exclude_id',
-        ],
-        'replace' => [
-            'app_id' => 'require|integer|gt:0',
-        ],
-        'captcha' => [
-            'app_id'  => 'require|arrayHasOnlyInts',
-            'captcha' => 'require|in:0,1',
-        ],
-        'status'  => [
-            'app_id' => 'require|arrayHasOnlyInts',
-            'status' => 'require|in:0,1',
-        ],
-        'list'    => [
-            'app_name' => 'max:30',
-            'status'   => 'in:0,1',
-        ],
-    ];
+    public function sceneItem()
+    {
+        return $this->only(['app_id'])
+            ->append('app_id', 'require');
+    }
+
+    public function sceneList()
+    {
+        return $this->only(['app_name', 'status'])
+            ->remove('app_name', ['require', 'unique']);
+    }
+
+//    /**
+//     * 场景规则
+//     * @var array
+//     */
+//    protected $scene = [
+//        'set'     => [
+//            'app_id'   => 'require|integer|gt:0',
+//            'app_name' => 'require|max:30',
+//            'captcha',
+//            'status',
+//        ],
+//        'del'     => [
+//            'app_id' => 'require|arrayHasOnlyInts',
+//        ],
+//        'unique'  => [
+//            'app_name' => 'require|max:30',
+//            'exclude_id',
+//        ],
+//        'replace' => [
+//            'app_id' => 'require|integer|gt:0',
+//        ],
+//        'captcha' => [
+//            'app_id'  => 'require|arrayHasOnlyInts',
+//            'captcha' => 'require|in:0,1',
+//        ],
+//        'status'  => [
+//            'app_id' => 'require|arrayHasOnlyInts',
+//            'status' => 'require|in:0,1',
+//        ],
+//    ];
 }
