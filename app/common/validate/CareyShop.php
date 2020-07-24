@@ -26,6 +26,16 @@ class CareyShop extends Validate
     }
 
     /**
+     * 获取规则全部键名
+     * @access public
+     * @return array
+     */
+    public function getRuleKey()
+    {
+        return array_keys($this->rule);
+    }
+
+    /**
      * 日期是否在合理范围内
      * @access public
      * @param array $args 参数
@@ -129,17 +139,6 @@ class CareyShop extends Validate
         }
 
         return $args[4] . '内的键值必须是字符串';
-    }
-
-    /**
-     * 获取验证器编辑场景
-     * @access public
-     * @param string $scene 场景名
-     * @return array
-     */
-    public function getSetScene($scene)
-    {
-        return isset($this->scene[$scene]) ? $this->scene[$scene] : [];
     }
 
     /**

@@ -10,6 +10,8 @@
 
 namespace app\common\model;
 
+use think\facade\Cache;
+
 class App extends CareyShop
 {
     /**
@@ -73,7 +75,7 @@ class App extends CareyShop
      */
     public function addAppItem($data)
     {
-        if (validate('\app\common\validate\App')->check($data)) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -89,38 +91,37 @@ class App extends CareyShop
         return false;
     }
 
-//    /**
-//     * 编辑一个应用
-//     * @access public
-//     * @param  array $data 外部数据
-//     * @return array|false
-//     * @throws
-//     */
-//    public function setAppItem($data)
-//    {
-//        if (!$this->validateSetData($data, 'App.set')) {
-//            return false;
-//        }
-//
-//        if (!empty($data['app_name'])) {
-//            $map['app_id'] = ['neq', $data['app_id']];
-//            $map['app_name'] = ['eq', $data['app_name']];
-//
-//            if (self::checkUnique($map)) {
-//                return $this->setError('应用名称已存在');
-//            }
-//        }
-//
-//        $field = ['app_name', 'captcha', 'status'];
-//        $map = ['app_id' => ['eq', $data['app_id']]];
-//
-//        if (false !== $this->allowField($field)->save($data, $map)) {
-//            Cache::clear('app');
-//            return $this->toArray();
-//        }
-//
-//        return false;
-//    }
+    /**
+     * 编辑一个应用
+     * @access public
+     * @param array $data 外部数据
+     * @return void|false|array
+     * @throws
+     */
+    public function setAppItem($data)
+    {
+        if (!$this->validateData($data, 'set', true)) {
+            return false;
+        }
+
+        if (!empty($data['app_name'])) {
+            $map[] = ['app_id', '<>', $data['app_id']];
+            $map[] = ['app_name', '=', $data['app_name']];
+
+            if (self::checkUnique($map)) {
+                return $this->setError('应用名称已存在');
+            }
+        }
+
+        // 允许修改字段与条件
+        $field = ['app_name', 'captcha', 'status'];
+        $map = [['app_id', '=', $data['app_id']]];
+
+        $result = self::update($data, $map, $field);
+        Cache::tag('app')->clear();
+
+        return $result->toArray();
+    }
 
     /**
      * 获取一个应用
@@ -131,7 +132,7 @@ class App extends CareyShop
      */
     public function getAppItem($data)
     {
-        if (!validate('\app\common\validate\App')->scene('item')->check($data)) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
@@ -142,141 +143,126 @@ class App extends CareyShop
     /**
      * 获取应用列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-//    public function getAppList($data)
-//    {
-//        if (!validate('\app\common\validate\App')->scene('list')->check($data)) {
-//            return false;
-//        }
-//
-//        $result = self::all(function ($query) use ($data) {
-////            // 搜索条件
-////            $map = [];
-////            is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
-////            empty($data['app_name']) ?: $map['app_name'] = ['like', '%' . $data['app_name'] . '%'];
-////
-////            $query->where($map);
-//        });
-//
-////        if (false !== $result) {
-////            return $result->toArray();
-////        }
-////
-////        return false;
-//    }
+    public function getAppList($data)
+    {
+        if (!$this->validateData($data, 'list')) {
+            return false;
+        }
 
-//    /**
-//     * 批量删除应用
-//     * @access public
-//     * @param  array $data 外部数据
-//     * @return bool
-//     */
-//    public function delAppList($data)
-//    {
-//        if (!$this->validateData($data, 'App.del')) {
-//            return false;
-//        }
-//
-//        $map['app_id'] = ['in', $data['app_id']];
-//        if (false !== $this->save(['is_delete' => 1], $map)) {
-//            Cache::clear('app');
-//            return true;
-//        }
-//
-//        return false;
-//    }
-//
-//    /**
-//     * 查询应用名称是否已存在
-//     * @access public
-//     * @param  array $data 外部数据
-//     * @return bool
-//     */
-//    public function uniqueAppName($data)
-//    {
-//        if (!$this->validateData($data, 'App.unique')) {
-//            return false;
-//        }
-//
-//        $map['app_name'] = ['eq', $data['app_name']];
-//        !isset($data['exclude_id']) ?: $map['app_id'] = ['neq', $data['exclude_id']];
-//
-//        if (self::checkUnique($map)) {
-//            return $this->setError('应用名称已存在');
-//        }
-//
-//        return true;
-//    }
-//
-//    /**
-//     * 更换应用Secret
-//     * @access public
-//     * @param  array $data 外部数据
-//     * @return array|false
-//     * @throws
-//     */
-//    public function replaceAppSecret($data)
-//    {
-//        if (!$this->validateData($data, 'App.replace')) {
-//            return false;
-//        }
-//
-//        $map['app_id'] = ['eq', $data['app_id']];
-//        $result = $this->save(['app_secret' => rand_string()], $map);
-//
-//        if (false !== $result) {
-//            Cache::clear('app');
-//            return $result === 0 ? false : $this->toArray();
-//        }
-//
-//        return false;
-//    }
-//
-//    /**
-//     * 批量设置应用验证码
-//     * @access public
-//     * @param  array $data 外部数据
-//     * @return bool
-//     */
-//    public function setAppCaptcha($data)
-//    {
-//        if (!$this->validateData($data, 'App.captcha')) {
-//            return false;
-//        }
-//
-//        $map['app_id'] = ['in', $data['app_id']];
-//        if (false !== $this->save(['captcha' => $data['captcha']], $map)) {
-//            Cache::clear('app');
-//            return true;
-//        }
-//
-//        return false;
-//    }
-//
-//    /**
-//     * 批量设置应用状态
-//     * @access public
-//     * @param  array $data 外部数据
-//     * @return bool
-//     */
-//    public function setAppStatus($data)
-//    {
-//        if (!$this->validateData($data, 'App.status')) {
-//            return false;
-//        }
-//
-//        $map['app_id'] = ['in', $data['app_id']];
-//        if (false !== $this->save(['status' => $data['status']], $map)) {
-//            Cache::clear('app');
-//            return true;
-//        }
-//
-//        return false;
-//    }
-//
+        // 搜索条件
+        $map = [];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
+        empty($data['app_name']) ?: $map[] = ['app_name', 'like', '%' . $data['app_name'] . '%'];
+
+        $result = $this->where($map)->select();
+        return $result->toArray();
+    }
+
+    /**
+     * 批量删除应用
+     * @access public
+     * @param array $data 外部数据
+     * @return bool
+     */
+    public function delAppList($data)
+    {
+        if (!$this->validateData($data, 'del')) {
+            return false;
+        }
+
+        // 搜索条件
+        $map[] = ['app_id', 'in', $data['app_id']];
+
+        self::update(['is_delete' => 1], $map);
+        Cache::tag('app')->clear();
+
+        return true;
+    }
+
+    /**
+     * 查询应用名称是否已存在
+     * @access public
+     * @param array $data 外部数据
+     * @return void|false
+     * @throws \Exception
+     */
+    public function uniqueAppName($data)
+    {
+        if (!$this->validateData($data, 'unique')) {
+            return false;
+        }
+
+        $map[] = ['app_name', '=', $data['app_name']];
+        !isset($data['exclude_id']) ?: $map[] = ['app_id', '<>', $data['exclude_id']];
+
+        if (self::checkUnique($map)) {
+            return $this->setError('应用名称已存在');
+        }
+
+        return true;
+    }
+
+    /**
+     * 更换应用Secret
+     * @access public
+     * @param  array $data 外部数据
+     * @return array|false
+     */
+    public function replaceAppSecret($data)
+    {
+        if (!$this->validateData($data, 'replace')) {
+            return false;
+        }
+
+        $map[] = ['app_id', '=', $data['app_id']];
+        $result = self::update(['app_secret' => rand_string()], $map);
+        Cache::tag('app')->clear();
+
+        return $result->toArray();
+    }
+
+    /**
+     * 批量设置应用验证码
+     * @access public
+     * @param array $data 外部数据
+     * @return bool
+     */
+    public function setAppCaptcha($data)
+    {
+        if (!$this->validateData($data, 'captcha')) {
+            return false;
+        }
+
+        $map[] = ['app_id', 'in', $data['app_id']];
+        self::update(['captcha' => $data['captcha']], $map);
+        Cache::tag('app')->clear();
+
+        return true;
+    }
+
+    /**
+     * 批量设置应用状态
+     * @access public
+     * @param array $data 外部数据
+     * @return bool
+     */
+    public function setAppStatus($data)
+    {
+        if (!$this->validateData($data, 'status')) {
+            return false;
+        }
+
+        $map[] = ['app_id', 'in', $data['app_id']];
+        self::update(['status' => $data['status']], $map);
+        Cache::tag('app')->clear();
+
+        return true;
+    }
+
 //    /**
 //     * 查询应用验证码状态
 //     * @access public

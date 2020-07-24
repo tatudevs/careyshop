@@ -17,20 +17,24 @@ class Index extends CareyShop
     /**
      * 调整最优状态(正式环境有效)
      * @access public
-     * @return array|false
+     * @return array|bool|void
+     * @throws \Exception
      */
     public function setSystemOptimize()
     {
         if (ini_get('safe_mode')) {
-            return $this->setError('PHP安全模式下无法运行');
+            $this->setError('PHP安全模式下无法运行');
+            return;
         }
 
         if (env('app_debug', true)) {
-            return $this->setError('调试模式下不需要执行');
+            $this->setError('调试模式下不需要执行');
+            return;
         }
 
         if (!function_exists('shell_exec')) {
-            return $this->setError('shell_exec 函数未启用');
+            $this->setError('shell_exec 函数未启用');
+            return;
         }
 
         $shell = [

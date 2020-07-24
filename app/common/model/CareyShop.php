@@ -53,61 +53,47 @@ abstract class CareyShop extends Model
     }
 
     /**
-     * 设置模型错误信息
+     * 设置模型错误信息并抛出异常
      * @access public
      * @param string $value 错误信息
-     * @return false
+     * @throws \Exception
      */
     public function setError($value)
     {
         $this->error = $value;
-        return false;
+        throw new \Exception($value);
     }
 
     /**
-     * 根据传入参数进行验证
+     * 模型验证器
      * @access public
-     * @param array  $data  待验证数据
-     * @param string $name  验证器
-     * @param string $scene 场景
+     * @param array|object $data     验证数据
+     * @param string|null  $scene    场景名
+     * @param bool         $clean    是否清理规则键值不存在的$data
+     * @param string       $validate 验证器规则或类
      * @return bool
      */
-    public function validateSetData(&$data, $name, $scene = '')
+    public function validateData(&$data, $scene = null, $clean = false, $validate = '')
     {
-        !mb_strpos($name, '.', null, 'utf-8') ?: [$name, $scene] = explode('.', $name);
-        $validate = validate($name);
-
-        if (!$validate->hasScene($scene)) {
-            return $this->setError($name . '场景不存在');
-        }
-
-        // todo 待调试
-        $rule = $validate->getSetScene($scene);
-        foreach ($data as $key => $item) {
-            if (!in_array($key, $rule, true) && !array_key_exists($key, $rule)) {
-                unset($data[$key]);
-                continue;
-            }
-        }
-        unset($key, $item);
-
-        $pk = $this->getPk();
-        foreach ($rule as $key => $value) {
-            $field = is_string($key) ? $key : $value;
-            if ($field == $pk) {
-                continue;
-            }
-
-            if (!array_key_exists($field, $data)) {
-                unset($rule[$key]);
-            }
-        }
-        unset($key, $value);
-
         try {
-            $validate->scene($scene)->check($data);
+            $validate ?: $validate = '\\app\\common\\validate\\' . $this->getName();
+            $v = validate($validate);
+
+            if ($clean) {
+                $keys = $v->getRuleKey();
+                foreach ($data as $key => $value) {
+                    if (!in_array($key, $keys, true)) {
+                        unset($data[$key]);
+                    }
+                }
+
+                unset($key, $value);
+            }
+
+            $v->scene($scene)->check($data);
         } catch (ValidateException $e) {
-            return $this->setError((string)$e->getError());
+            $this->error = $e->getMessage();
+            return false;
         }
 
         return true;

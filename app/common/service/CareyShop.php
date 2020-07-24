@@ -13,25 +13,25 @@ namespace app\common\service;
 class CareyShop
 {
     /**
-     * 控制器错误信息
+     * 错误信息
      * @var string
      */
     public $error;
 
-    /*
-     * 设置控制器错误信息
+    /**
+     * 设置错误信息并抛出异常
      * @access public
-     * @param  string $value 错误信息
-     * @return false
+     * @param string $value 错误信息
+     * @throws \Exception
      */
     public function setError($value)
     {
         $this->error = $value;
-        return false;
+        throw new \Exception($value);
     }
 
     /*
-     * 获取控制器错误信息
+     * 获取错误信息
      * @access public
      * @return string
      */
