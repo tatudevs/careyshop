@@ -16,13 +16,6 @@ class Index
 {
     public function index()
     {
-        $vars = [
-            'method' => 'get.qrcode.item',
-            'text'   => urlencode('https://www.careyshop.cn'),
-        ];
-
-        $url = url('api/v1/qrcode', $vars, true, true)->build();
-        return $url;
-//        return '欢迎使用CareyShop商城框架系统 - Mobile';
+        return '欢迎使用CareyShop商城框架系统 - Mobile';
     }
 }

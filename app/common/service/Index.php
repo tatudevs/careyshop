@@ -39,10 +39,8 @@ class Index extends CareyShop
 
         $shell = [
             'route'         => 'optimize:route',
-            'route_api'     => 'optimize:route api',
             'schema'        => 'optimize:schema',
-            'schema_api'    => 'optimize:schema api',
-            'schema_common' => 'optimize:schema common',
+            'schema_api'    => 'optimize:schema api'
         ];
 
         $result = [];
