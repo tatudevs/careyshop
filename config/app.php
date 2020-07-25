@@ -47,4 +47,7 @@ return [
     'error_message'           => '系统看小差了，请稍后访问！',
     // 显示错误信息
     'show_error_msg'          => false,
+
+    // 默认每页显示条数
+    'list_rows'               => env('paginate.list_rows', 15),
 ];
