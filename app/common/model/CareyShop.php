@@ -23,6 +23,12 @@ abstract class CareyShop extends Model
     protected $error = '';
 
     /**
+     * 默认排序
+     * @var array
+     */
+    protected $defaultOrder = [];
+
+    /**
      * 检测是否存在相同值
      * @access public
      * @param array $map 查询条件
@@ -91,9 +97,21 @@ abstract class CareyShop extends Model
     {
         if (isset($data['order_field']) && isset($data['order_type'])) {
             $query->order([$data['order_field'] => $data['order_type']]);
-        } else if (!is_null($value)) {
-            $query->order($value);
+        } else {
+            $query->order($this->defaultOrder);
         }
+    }
+
+    /**
+     * 设置默认排序
+     * @access public
+     * @param array $order
+     * @return $this
+     */
+    public function setDefaultOrder($order)
+    {
+        $this->defaultOrder = $order;
+        return $this;
     }
 
     /**
