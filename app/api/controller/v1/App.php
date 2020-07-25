@@ -48,4 +48,15 @@ class App extends CareyShop
             'image.app.captcha'       => ['imageAppCaptcha', 'app\common\service\App'],
         ];
     }
+
+    /**
+     * 查询应用验证码
+     * @access protected
+     * @return array|false
+     */
+    protected function getAppCaptcha()
+    {
+        $appKey = $this->request->param('appkey');
+        return \app\common\model\App::getAppCaptcha($appKey, true);
+    }
 }

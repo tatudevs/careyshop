@@ -35,28 +35,27 @@ class App extends CareyShop
      */
     public function imageAppCaptcha()
     {
-//        $id = input('param.session_id');
-//        $generate = input('param.generate');
-//
-//        $image = Captcha::create(null, true);
-////        $captcha = new Captcha($config);
-////        $image = $captcha->getImage($id);
-//
-//        if ($generate == 'base64') {
-//            return [
-//                'content_type' => 'image/png',
-//                'base64'       => base64_encode($image),
-//            ];
-//        } else {
-//            $result = response($image, 200, ['Content-Length' => strlen($image)])
-//                ->contentType('image/png');
-//
-//            return [
-//                'callback_return_type' => 'response',
-//                'is_callback'          => $result,
-//            ];
-//        }
-        return [];
+        $keyID = input('param.session_id', '');
+        $generate = input('param.generate');
+
+        // 获取验证码
+        $config = ['mode' => 'api', 'cacheType' => 'cache'];
+        $image = Captcha::create($config, $keyID);
+
+        if ($generate == 'base64') {
+            return [
+                'content_type' => 'image/png',
+                'base64'       => base64_encode($image),
+            ];
+        } else {
+            $result = response($image, 200, ['Content-Length' => strlen($image)])
+                ->contentType('image/png');
+
+            return [
+                'callback_return_type' => 'response',
+                'is_callback'          => $result,
+            ];
+        }
     }
 
     /**
@@ -67,11 +66,7 @@ class App extends CareyShop
      */
     public static function checkCaptcha($code)
     {
-//        $captcha = new Captcha();
-//        $id = Request::instance()->param('session_id');
-//
-//        $result = $captcha->check($code, $id);
-//        return $result === false ? $captcha->getError() : true;
-        return true;
+        $keyID = input('param.session_id', '');
+        return Captcha::check($code, $keyID);
     }
 }

@@ -10,6 +10,7 @@
 
 namespace app\common\model;
 
+use careyshop\facade\Captcha;
 use think\facade\Cache;
 
 class App extends CareyShop
@@ -214,7 +215,7 @@ class App extends CareyShop
      */
     public function replaceAppSecret($data)
     {
-        if (!$this->validateData($data, 'replace')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
@@ -263,42 +264,41 @@ class App extends CareyShop
         return true;
     }
 
-//    /**
-//     * 查询应用验证码状态
-//     * @access public
-//     * @param string $key     外部数据
-//     * @param bool   $session 是否创建Session
-//     * @return array
-//     * @throws
-//     */
-//    public static function getAppCaptcha($key, $session = true)
-//    {
-//        $result = [
-//            'captcha'    => true,
-//            'session_id' => '',
-//        ];
-//
-//        if (empty($key)) {
-//            return $result;
-//        }
-//
-//        $appResult = self::where(['app_key' => $key])->find();
-//        if (false !== $appResult && !is_null($appResult)) {
-//            if ($appResult->getAttr('captcha') === 0) {
-//                $result['captcha'] = false;
-//                return $result;
-//            }
-//        }
-//
-//        if ($session) {
-//            $captcha = new Captcha();
-//            if (-1 === get_client_type()) {
-//                $result['session_id'] = $captcha->getKey(rand_string());
-//            } else {
-//                $result['session_id'] = $captcha->getKey(get_client_token());
-//            }
-//        }
-//
-//        return $result;
-//    }
+    /**
+     * 查询应用验证码状态
+     * @access public
+     * @param string $key    外部数据
+     * @param bool   $is_key 是否创建标识
+     * @return array
+     * @throws
+     */
+    public static function getAppCaptcha($key, $is_key = true)
+    {
+        $result = [
+            'captcha'    => true,
+            'session_id' => '',
+        ];
+
+        if (empty($key)) {
+            return $result;
+        }
+
+        $appResult = self::where(['app_key' => $key])->find();
+        if (!is_null($appResult)) {
+            if ($appResult->getAttr('captcha') === 0) {
+                $result['captcha'] = false;
+                return $result;
+            }
+        }
+
+        if ($is_key) {
+            if (-1 === get_client_type()) {
+                $result['session_id'] = Captcha::getKeyId(rand_string());
+            } else {
+                $result['session_id'] = Captcha::getKeyId(get_client_token());
+            }
+        }
+
+        return $result;
+    }
 }

@@ -71,12 +71,6 @@ class App extends CareyShop
             ->remove('app_name', 'unique');
     }
 
-    public function sceneReplace()
-    {
-        return $this->only(['app_id'])
-            ->append('app_id', 'require');
-    }
-
     public function sceneCaptcha()
     {
         return $this->only(['app_id', 'captcha'])
@@ -92,18 +86,4 @@ class App extends CareyShop
             ->append('app_id', 'require|arrayHasOnlyInts')
             ->append('status', 'require');
     }
-
-//    /**
-//     * 场景规则
-//     * @var array
-//     */
-//    protected $scene = [
-//        'replace' => [
-//            'app_id' => 'require|integer|gt:0',
-//        ],
-//        'status'  => [
-//            'app_id' => 'require|arrayHasOnlyInts',
-//            'status' => 'require|in:0,1',
-//        ],
-//    ];
 }
