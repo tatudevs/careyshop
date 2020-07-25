@@ -249,11 +249,9 @@ class ActionLog extends CareyShop
             return $result;
         }
 
-        // 默认排序字段
-        $data['order'] = ['action_log_id' => 'desc'];
-
         // 实际查询
-        $result['items'] = $this->where($map)
+        $result['items'] = $this->setDefaultOrder(['action_log_id' => 'desc'])
+            ->where($map)
             ->withSearch(['page', 'order'], $data)
             ->select()
             ->append(['action', 'ip_region'])
