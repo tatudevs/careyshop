@@ -159,8 +159,7 @@ class App extends CareyShop
         is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
         empty($data['app_name']) ?: $map[] = ['app_name', 'like', '%' . $data['app_name'] . '%'];
 
-        $result = $this->where($map)->select();
-        return $result->toArray();
+        return $this->where($map)->select()->toArray();
     }
 
     /**
