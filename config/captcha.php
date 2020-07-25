@@ -9,32 +9,36 @@
  */
 
 return [
+    // 模式 api 或 web
+    'mode'      => 'web',
+    // 缓存方式 cache 或 session
+    'cacheType' => 'session',
     //验证码位数
-    'length'   => 4,
+    'length'    => 4,
     // 验证码字符集合
-    'codeSet'  => '0123456789',
+    'codeSet'   => '0123456789',
     // 验证码过期时间
-    'expire'   => 120,
+    'expire'    => 120,
     // 是否使用中文验证码
-    'useZh'    => false,
+    'useZh'     => false,
     // 是否使用算术验证码
-    'math'     => false,
+    'math'      => false,
     // 是否使用背景图
-    'useImgBg' => false,
+    'useImgBg'  => false,
     //验证码字符大小
-    'fontSize' => 25,
+    'fontSize'  => 25,
     // 是否使用混淆曲线
-    'useCurve' => false,
+    'useCurve'  => false,
     //是否添加杂点
-    'useNoise' => true,
+    'useNoise'  => true,
     // 验证码字体 不设置则随机
-    'fontttf'  => '1.ttf',
+    'fontttf'   => '1.ttf',
     //背景颜色
-    'bg'       => [255, 255, 255],
+    'bg'        => [255, 255, 255],
     // 验证码图片高度
-    'imageH'   => 0,
+    'imageH'    => 0,
     // 验证码图片宽度
-    'imageW'   => 0,
+    'imageW'    => 0,
 
     // 添加额外的验证码设置
     // verify => [

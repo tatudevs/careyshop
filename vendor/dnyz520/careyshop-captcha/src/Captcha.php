@@ -3,6 +3,7 @@
 namespace careyshop;
 
 use Exception;
+use think\Cache;
 use think\Config;
 use think\Response;
 use think\Session;
@@ -21,6 +22,14 @@ class Captcha
      * @var Session|null
      */
     private $session;
+
+    /**
+     * @var Cache|null
+     */
+    private $cache;
+
+    // 加盐
+    protected $seKey = 'CAREYSHOP.CN';
 
     // 验证码字符集合
     protected $codeSet = '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY';
@@ -50,29 +59,36 @@ class Captcha
     protected $bg = [255, 255, 255];
     //算术验证码
     protected $math = false;
+    // 模式 api 或 web
+    protected $mode = 'web';
+    // 缓存方式 cache 或 session
+    protected $cacheType = 'session';
 
     /**
      * 架构方法 设置参数
-     * @access public
      * @param Config  $config
      * @param Session $session
+     * @param Cache   $cache
      */
-    public function __construct(Config $config, Session $session)
+    public function __construct(Config $config, Session $session, Cache $cache)
     {
         $this->config = $config;
         $this->session = $session;
+        $this->cache = $cache;
     }
 
     /**
      * 配置验证码
-     * @param string|null $config
+     * @param string|array|null $config
      */
-    protected function configure(string $config = null): void
+    protected function configure($config = null): void
     {
         if (is_null($config)) {
             $config = $this->config->get('captcha', []);
-        } else {
+        } else if (is_string($config)) {
             $config = $this->config->get('captcha.' . $config, []);
+        } else if (is_array($config)) {
+            $config = array_merge($this->config->get('captcha', []), $config);
         }
 
         foreach ($config as $key => $val) {
@@ -84,10 +100,11 @@ class Captcha
 
     /**
      * 创建验证码
+     * @param string|null $key_id 验证码标识
      * @return array
      * @throws Exception
      */
-    protected function generate(): array
+    protected function generate($key_id): array
     {
         $bag = '';
 
@@ -116,9 +133,17 @@ class Captcha
 
         $hash = password_hash($key, PASSWORD_BCRYPT, ['cost' => 10]);
 
-        $this->session->set('captcha', [
-            'key' => $hash,
-        ]);
+        if ($key_id && $this->cacheType === 'cache') {
+            $this->cache->set($key_id, [
+                'key'    => $hash,
+                'create' => time(),
+            ], $this->expire);
+        } else {
+            $this->session->set('captcha', [
+                'key'    => $hash,
+                'create' => time(),
+            ]);
+        }
 
         return [
             'value' => $bag,
@@ -128,42 +153,48 @@ class Captcha
 
     /**
      * 验证验证码是否正确
-     * @access public
-     * @param string $code 用户验证码
-     * @param bool   $api
-     * @return bool 用户验证码是否正确
+     * @param string      $code   用户验证码
+     * @param string|null $key_id 验证码标识
+     * @return true|string
      */
-    public function check(string $code, bool $api): bool
+    public function check(string $code, $key_id = '')
     {
-        if (!$this->session->has('captcha')) {
-            return false;
+        if (empty($code)) {
+            return '验证码不能为空';
         }
 
-        $key = $this->session->get('captcha.key');
+        if ($key_id && $this->cacheType === 'cache') {
+            $result = $this->cache->get($key_id);
+            $result && $this->cache->delete($key_id);
+        } else {
+            $result = $this->session->get('captcha.key');
+            $result && $this->session->delete('captcha');
+        }
+
+        if (is_null($result)) {
+            return '验证码未创建';
+        }
+
+        if (!isset($result['create']) || time() - $result['create'] > $this->expire) {
+            return '验证码过期';
+        }
 
         $code = mb_strtolower($code, 'UTF-8');
-
-        $res = password_verify($code, $key);
-
-        if ($res) {
-            $this->session->delete('captcha');
-        }
-
-        return $res;
+        return password_verify($code, $result['key']);
     }
 
     /**
      * 输出验证码
-     * @param string|null $config
-     * @param bool        $api
+     * @param string|array|null $config
+     * @param string|null       $key_id
      * @return mixed
      * @throws Exception
      */
-    public function create(string $config = null, bool $api = false)
+    public function create($config = null, $key_id = '')
     {
         $this->configure($config);
 
-        $generator = $this->generate();
+        $generator = $this->generate($key_id);
 
         // 图片宽(px)
         $this->imageW || $this->imageW = $this->length * $this->fontSize * 1.5 + $this->length * $this->fontSize / 2;
@@ -211,7 +242,6 @@ class Captcha
         $text = $this->useZh ? preg_split('/(?<!^)(?!$)/u', $generator['value']) : str_split($generator['value']); // 验证码
 
         foreach ($text as $index => $char) {
-
             $x     = $this->fontSize * ($index + 1) * mt_rand(1.2, 1.6) * ($this->math ? 1 : 1.5);
             $y     = $this->fontSize + mt_rand(10, 20);
             $angle = $this->math ? 0 : mt_rand(-40, 40);
@@ -226,7 +256,7 @@ class Captcha
         imagedestroy($this->im);
         $this->setPng($content);
 
-        return $api
+        return $this->mode === 'api'
             ? $content
             : response($content, 200, ['Content-Length' => strlen($content)])->contentType('image/png');
     }
@@ -366,5 +396,27 @@ class Captcha
         $bgImage = @imagecreatefromjpeg($gb);
         @imagecopyresampled($this->im, $bgImage, 0, 0, 0, 0, $this->imageW, $this->imageH, $width, $height);
         @imagedestroy($bgImage);
+    }
+
+    /**
+     * 加密
+     * @param string $str
+     * @return string
+     */
+    private function authCode(string $str): string
+    {
+        $key = substr(md5($this->seKey), 5, 8);
+        $str = substr(md5($str), 8, 10);
+        return md5($key . $str);
+    }
+
+    /**
+     * 返回验证码标识
+     * @param string $key
+     * @return string
+     */
+    public function getKeyId(string $key): string
+    {
+        return $this->authCode($this->seKey . $key);
     }
 }

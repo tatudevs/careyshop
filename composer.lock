@@ -98,16 +98,16 @@
         },
         {
             "name": "dnyz520/careyshop-captcha",
-            "version": "v1.0.4",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-captcha.git",
-                "reference": "4c45c1d4381f57474003907c24338bcba9642c54"
+                "reference": "b0e645f667d8fb1b0c721f730b92d6d7d6b264af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/4c45c1d4381f57474003907c24338bcba9642c54",
-                "reference": "4c45c1d4381f57474003907c24338bcba9642c54",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/b0e645f667d8fb1b0c721f730b92d6d7d6b264af",
+                "reference": "b0e645f667d8fb1b0c721f730b92d6d7d6b264af",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -147,7 +147,7 @@
                 }
             ],
             "description": "The CareyShop Captcha Package",
-            "time": "2020-07-23T08:53:34+00:00"
+            "time": "2020-07-25T10:13:57+00:00"
         },
         {
             "name": "dnyz520/careyshop-image",
@@ -1297,16 +1297,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v4.4.10",
+            "version": "v4.4.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "56b3aa5eab0ac6720dcd559fd1d590ce301594ac"
+                "reference": "2125805a1a4e57f2340bc566c3013ca94d2722dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/56b3aa5eab0ac6720dcd559fd1d590ce301594ac",
-                "reference": "56b3aa5eab0ac6720dcd559fd1d590ce301594ac",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/2125805a1a4e57f2340bc566c3013ca94d2722dc",
+                "reference": "2125805a1a4e57f2340bc566c3013ca94d2722dc",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1376,7 +1376,21 @@
                 "debug",
                 "dump"
             ],
-            "time": "2020-05-30T20:06:45+00:00"
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-06-24T13:34:53+00:00"
         }
     ],
     "aliases": [],
@@ -1387,5 +1401,6 @@
     "platform": {
         "php": ">=7.1.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

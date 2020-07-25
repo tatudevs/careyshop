@@ -9,8 +9,9 @@ use think\Facade;
  * Class Captcha
  * @package careyshop\facade
  * @mixin \careyshop\Captcha
- * @method static mixed create(string $config = null, bool $api = false) 输出验证码
- * @method static bool check(string $code, bool $api) 验证验证码是否正确
+ * @method static mixed create($config = null, $key_id = '') 输出验证码
+ * @method static mixed check(string $code, $key_id = '') 验证验证码是否正确
+ * @method static string getKeyId(string $key) 返回验证码标识
  */
 class Captcha extends Facade
 {
