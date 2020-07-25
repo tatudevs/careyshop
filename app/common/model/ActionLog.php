@@ -46,13 +46,9 @@ class ActionLog extends CareyShop
      * @var array
      */
     protected $type = [
-        'action_log_id' => 'integer',
-        'client_type'   => 'integer',
-        'user_id'       => 'integer',
         'header'        => 'json',
         'params'        => 'json',
         'result'        => 'json',
-        'status'        => 'integer',
     ];
 
     /**
