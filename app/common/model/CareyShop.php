@@ -11,6 +11,7 @@
 namespace app\common\model;
 
 use think\exception\ValidateException;
+use think\facade\Config;
 use think\Model;
 
 abstract class CareyShop extends Model
@@ -62,6 +63,37 @@ abstract class CareyShop extends Model
     {
         $this->error = $value;
         throw new \Exception($value);
+    }
+
+    /**
+     * 翻页搜索器
+     * @access public
+     * @param CareyShop $query
+     * @param string    $value
+     * @param array     $data
+     */
+    public function searchPageAttr($query, $value, $data)
+    {
+        $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        $pageSize = isset($data['page_size']) ? $data['page_size'] : Config::get('app.list_rows');
+
+        $query->page($pageNo, $pageSize);
+    }
+
+    /**
+     * 排序搜索器
+     * @access public
+     * @param CareyShop $query
+     * @param array     $value
+     * @param array     $data
+     */
+    public function searchOrderAttr($query, $value, $data)
+    {
+        if (isset($data['order_field']) && isset($data['order_type'])) {
+            $query->order([$data['order_field'] => $data['order_type']]);
+        } else if (!is_null($value)) {
+            $query->order($value);
+        }
     }
 
     /**
