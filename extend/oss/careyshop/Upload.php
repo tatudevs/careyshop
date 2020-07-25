@@ -86,7 +86,8 @@ class Upload extends UploadBase
      */
     public function getUploadUrl()
     {
-        $uploadUrl = Route::buildUrl('/api/v1/upload', ['method' => 'add.upload.list'])->domain(true)->build();
+        $vars = ['method' => 'add.upload.list'];
+        $uploadUrl = Route::buildUrl('api/v1/upload', $vars)->domain(true)->build();
         $param = [
             ['name' => 'x:replace', 'type' => 'hidden', 'default' => $this->replace],
             ['name' => 'x:parent_id', 'type' => 'hidden', 'default' => 0],
