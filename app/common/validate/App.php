@@ -37,7 +37,7 @@ class App extends CareyShop
     ];
 
     /**
-     * 场景验证
+     * 场景规则
      * @return App
      */
     public function sceneItem()
