@@ -5,12 +5,10 @@
  * CareyShop    菜单管理模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/3/9
+ * @date        2020/7/26
  */
 
 namespace app\common\model;
-
-use think\Cache;
 
 class Menu extends CareyShop
 {
@@ -38,7 +36,7 @@ class Menu extends CareyShop
     /**
      * URL驼峰转下划线修改器
      * @access protected
-     * @param  string $value 值
+     * @param string $value 值
      * @return string
      */
     private function strToSnake($value)
@@ -56,13 +54,13 @@ class Menu extends CareyShop
     /**
      * 添加一个菜单
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function addMenuItem($data)
     {
-        if (!$this->validateData($data, 'Menu')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
