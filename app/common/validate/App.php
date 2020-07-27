@@ -38,52 +38,39 @@ class App extends CareyShop
 
     /**
      * 场景规则
-     * @return App
+     * @var array
      */
-    public function sceneItem()
-    {
-        return $this->only(['app_id'])
-            ->append('app_id', 'require');
-    }
-
-    public function sceneList()
-    {
-        return $this->only(['app_name', 'status'])
-            ->remove('app_name', ['require', 'unique']);
-    }
-
-    public function sceneSet()
-    {
-        return $this->append('app_id', 'require')
-            ->remove('app_name', 'unique');
-    }
-
-    public function sceneDel()
-    {
-        return $this->only(['app_id'])
-            ->remove('app_id', ['integer', 'gt'])
-            ->append('app_id', 'require|arrayHasOnlyInts');
-    }
-
-    public function sceneUnique()
-    {
-        return $this->only(['app_name', 'exclude_id'])
-            ->remove('app_name', 'unique');
-    }
-
-    public function sceneCaptcha()
-    {
-        return $this->only(['app_id', 'captcha'])
-            ->remove('app_id', ['integer', 'gt'])
-            ->append('app_id', 'require|arrayHasOnlyInts')
-            ->append('captcha', 'require');
-    }
-
-    public function sceneStatus()
-    {
-        return $this->only(['app_id', 'status'])
-            ->remove('app_id', ['integer', 'gt'])
-            ->append('app_id', 'require|arrayHasOnlyInts')
-            ->append('status', 'require');
-    }
+    protected $scene = [
+        'set'     => [
+            'app_id'   => 'require|integer|gt:0',
+            'app_name' => 'require|max:30',
+            'captcha',
+            'status',
+        ],
+        'item'    => [
+            'app_id' => 'require|integer|gt:0',
+        ],
+        'del'     => [
+            'app_id' => 'require|arrayHasOnlyInts',
+        ],
+        'unique'  => [
+            'app_name' => 'require|max:30',
+            'exclude_id',
+        ],
+        'replace' => [
+            'app_id' => 'require|integer|gt:0',
+        ],
+        'captcha' => [
+            'app_id'  => 'require|arrayHasOnlyInts',
+            'captcha' => 'require|in:0,1',
+        ],
+        'status'  => [
+            'app_id' => 'require|arrayHasOnlyInts',
+            'status' => 'require|in:0,1',
+        ],
+        'list'    => [
+            'app_name' => 'max:30',
+            'status'   => 'in:0,1',
+        ],
+    ];
 }

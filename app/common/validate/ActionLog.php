@@ -50,11 +50,11 @@ class ActionLog extends CareyShop
 
     /**
      * 场景规则
-     * @return ActionLog
+     * @var array
      */
-    public function sceneItem()
-    {
-        return $this->only(['action_log_id'])
-            ->append('action_log_id', 'require');
-    }
+    protected $scene = [
+        'item' => [
+            'action_log_id' => 'require|integer|gt:0',
+        ],
+    ];
 }

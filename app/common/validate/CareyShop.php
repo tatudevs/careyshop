@@ -36,6 +36,33 @@ class CareyShop extends Validate
     }
 
     /**
+     * 提取场景字段载入到规则
+     * @access public
+     * @param string $name 场景名称
+     * @throws \Exception
+     */
+    public function extractScene($name)
+    {
+        // 为了兼容数组格式的场景验证,不对函数式场景做检测
+        if (!isset($this->scene[$name])) {
+            throw new \Exception('验证规则场景 ' . $name . ' 不存在');
+        }
+
+        $rule = [];
+        $scene = $this->scene[$name];
+
+        foreach ($scene as $key => $value) {
+            if (is_numeric($key)) {
+                $rule[$value] = $this->rule[$value];
+            } else {
+                $rule[$key] = $value;
+            }
+        }
+
+        $this->rule = $rule;
+    }
+
+    /**
      * 日期是否在合理范围内
      * @access public
      * @param array $args 参数
