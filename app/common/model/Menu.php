@@ -153,10 +153,12 @@ class Menu extends CareyShop
             }
         }
 
-        $result->save($data);
-        Cache::tag('CommonAuth')->clear();
+        if ($result->save($data)) {
+            Cache::tag('CommonAuth')->clear();
+            return $result->toArray();
+        }
 
-        return $result->toArray();
+        return false;
     }
 
     /**
