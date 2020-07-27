@@ -126,8 +126,18 @@ abstract class CareyShop extends Model
     public function validateData(&$data, $scene = null, $clean = false, $validate = '')
     {
         try {
-            $validate ?: $validate = '\\app\\common\\validate\\' . $this->getName();
-            $v = validate($validate);
+            // 确定规则来源
+            if (empty($validate)) {
+                $class = '\\app\\common\\validate\\' . $this->getName();
+                if ($scene) {
+                    $v = new $class();
+                    $v->extractScene($scene);
+                } else {
+                    $v = validate($class);
+                }
+            } else {
+                $v = validate($validate);
+            }
 
             if ($clean) {
                 $keys = $v->getRuleKey();
@@ -140,7 +150,7 @@ abstract class CareyShop extends Model
                 unset($key, $value);
             }
 
-            $v->scene($scene)->check($data);
+            $v->failException(true)->check($data);
         } catch (ValidateException $e) {
             $this->error = $e->getMessage();
             return false;
