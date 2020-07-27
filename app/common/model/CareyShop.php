@@ -63,12 +63,12 @@ abstract class CareyShop extends Model
      * 设置模型错误信息并抛出异常
      * @access public
      * @param string $value 错误信息
-     * @throws \Exception
+     * @return bool
      */
     public function setError($value)
     {
         $this->error = $value;
-        throw new \Exception($value);
+        return false;
     }
 
     /**
