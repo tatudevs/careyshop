@@ -60,7 +60,7 @@ abstract class CareyShop extends Model
     }
 
     /**
-     * 设置模型错误信息并抛出异常
+     * 设置模型错误信息
      * @access public
      * @param string $value 错误信息
      * @return bool
