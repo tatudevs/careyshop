@@ -8,9 +8,11 @@
  * @date        2019/11/21
  */
 
-namespace app\common\validate;
+namespace app\api\validate;
 
-class IpLocation extends CareyShop
+use think\Validate;
+
+class IpLocation extends Validate
 {
     /**
      * 验证规则

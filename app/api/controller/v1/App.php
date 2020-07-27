@@ -5,7 +5,7 @@
  * CareyShop    应用管理控制器
  *
  * @author      zxm <252404501@qq.com>
- * @date        2020/7/21
+ * @date        2017/3/24
  */
 
 namespace app\api\controller\v1;
@@ -57,6 +57,6 @@ class App extends CareyShop
     protected function getAppCaptcha()
     {
         $appKey = $this->request->param('appkey');
-        return \app\common\model\App::getAppCaptcha($appKey, true);
+        return \app\common\model\App::getAppCaptcha($appKey);
     }
 }

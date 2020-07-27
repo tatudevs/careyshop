@@ -2,17 +2,17 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    操作日志控制器
+ * CareyShop    订单退款控制器
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/10/24
+ * @date        2017/9/25
  */
 
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
 
-class ActionLog extends CareyShop
+class OrderRefund extends CareyShop
 {
     /**
      * 方法路由器
@@ -22,10 +22,10 @@ class ActionLog extends CareyShop
     protected static function initMethod()
     {
         return [
-            // 获取一条操作日志
-            'get.action.log.item' => ['getActionLogItem'],
-            // 获取操作日志列表
-            'get.action.log.list' => ['getActionLogList'],
+            // 查询一笔退款信息
+            'query.refund.item' => ['queryRefundItem'],
+            // 获取退款记录列表
+            'get.refund.list'   => ['getRefundList'],
         ];
     }
 }
