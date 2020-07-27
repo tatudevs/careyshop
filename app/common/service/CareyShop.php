@@ -16,18 +16,18 @@ class CareyShop
      * 错误信息
      * @var string
      */
-    public $error;
+    public $error = '';
 
     /**
-     * 设置错误信息并抛出异常
+     * 设置错误信息
      * @access public
      * @param string $value 错误信息
-     * @throws \Exception
+     * @return false
      */
     public function setError($value)
     {
         $this->error = $value;
-        throw new \Exception($value);
+        return false;
     }
 
     /*

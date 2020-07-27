@@ -17,24 +17,21 @@ class Index extends CareyShop
     /**
      * 调整最优状态(正式环境有效)
      * @access public
-     * @return array|bool|void
+     * @return array|false
      * @throws \Exception
      */
     public function setSystemOptimize()
     {
         if (ini_get('safe_mode')) {
-            $this->setError('PHP安全模式下无法运行');
-            return;
+            return $this->setError('PHP安全模式下无法运行');
         }
 
         if (env('app_debug', true)) {
-            $this->setError('调试模式下不需要执行');
-            return;
+            return $this->setError('调试模式下不需要执行');
         }
 
         if (!function_exists('shell_exec')) {
-            $this->setError('shell_exec 函数未启用');
-            return;
+            return $this->setError('shell_exec 函数未启用');
         }
 
         $shell = [
@@ -51,7 +48,7 @@ class Index extends CareyShop
             $result[$key] = chop($output);
         }
 
-        sleep(2);
+        sleep(1);
         return !empty($result) ? $result : false;
     }
 
@@ -63,7 +60,7 @@ class Index extends CareyShop
     public function clearCacheAll()
     {
         Cache::clear();
-        sleep(3);
+        sleep(1);
 
         return true;
     }
