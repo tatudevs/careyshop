@@ -5,7 +5,7 @@
  * CareyShop    菜单管理验证器
  *
  * @author      zxm <252404501@qq.com>
- * @date        2020/7/27
+ * @date        2018/3/9
  */
 
 namespace app\common\validate;
