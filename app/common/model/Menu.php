@@ -57,7 +57,7 @@ class Menu extends CareyShop
      * 添加一个菜单
      * @access public
      * @param array $data 外部数据
-     * @return array|false|void
+     * @return array|false
      * @throws
      */
     public function addMenuItem($data)
@@ -109,7 +109,7 @@ class Menu extends CareyShop
      * 编辑一个菜单
      * @access public
      * @param array $data 外部数据
-     * @return array|false|void
+     * @return array|false
      * @throws
      */
     public function setMenuItem($data)
@@ -146,10 +146,6 @@ class Menu extends CareyShop
             }
 
             $menuList = self::getMenuListData($result->getAttr('module'), $data['menu_id']);
-            if (false === $menuList) {
-                return false;
-            }
-
             foreach ($menuList as $value) {
                 if ($data['parent_id'] == $value['menu_id']) {
                     return $this->setError('上级菜单不能设为自身的子菜单');
@@ -287,7 +283,7 @@ class Menu extends CareyShop
      * 删除一个菜单(影响下级子菜单)
      * @access public
      * @param array $data 外部数据
-     * @return false|array|void
+     * @return false|array
      * @throws
      */
     public function delMenuItem($data)
@@ -472,7 +468,7 @@ class Menu extends CareyShop
      * 设置菜单状态(影响上下级菜单)
      * @access public
      * @param array $data 外部数据
-     * @return array|false|void
+     * @return array|false
      * @throws
      */
     public function setMenuStatus($data)

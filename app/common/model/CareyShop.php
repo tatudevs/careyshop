@@ -152,8 +152,7 @@ abstract class CareyShop extends Model
 
             $v->failException(true)->check($data);
         } catch (ValidateException $e) {
-            $this->error = $e->getMessage();
-            return false;
+            return $this->setError($e->getMessage());
         }
 
         return true;

@@ -96,7 +96,7 @@ class App extends CareyShop
      * 编辑一个应用
      * @access public
      * @param array $data 外部数据
-     * @return void|false|array
+     * @return false|array
      * @throws
      */
     public function setAppItem($data)
@@ -187,7 +187,7 @@ class App extends CareyShop
      * 查询应用名称是否已存在
      * @access public
      * @param array $data 外部数据
-     * @return void|false
+     * @return bool
      * @throws \Exception
      */
     public function uniqueAppName($data)
