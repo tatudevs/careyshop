@@ -171,7 +171,7 @@ class Menu extends CareyShop
      * @param bool   $isLayer 是否返回本级菜单
      * @param int    $level   菜单深度
      * @param array  $filter  过滤'is_navi'与'status'
-     * @return array|false
+     * @return array|mixed
      * @throws
      */
     public static function getMenuListData($module, $menuId = 0, $isLayer = false, $level = null, $filter = null)
@@ -189,28 +189,19 @@ class Menu extends CareyShop
                 continue;
             }
 
-            $map['m.' . $key] = (int)$value;
+            $map[] = ['m.' . $key, '=', (int)$value];
             $joinMap .= sprintf(' AND s.%s = %d', $key, $value);
             $treeCache .= $key . $value;
         }
 
-        print_r($joinMap);exit();
-
-        $result = self::all(function ($query) use ($map, $joinMap) {
-            $query
-                ->cache(true, null, 'CommonAuth')
-                ->alias('m')
-                ->field('m.*,count(s.menu_id) children_total')
-                ->join('menu s', 's.parent_id = m.menu_id' . $joinMap, 'left')
-                ->where($map)
-                ->group('m.menu_id')
-                ->order('m.parent_id,m.sort,m.menu_id');
-        });
-
-        if (false === $result) {
-            Cache::clear('CommonAuth');
-            return false;
-        }
+        $result = self::cache(true, null, 'CommonAuth')
+            ->alias('m')
+            ->field('m.*,count(s.menu_id) children_total')
+            ->join('menu s', 's.parent_id = m.menu_id' . $joinMap, 'left')
+            ->where($map)
+            ->group('m.menu_id')
+            ->order('m.parent_id,m.sort,m.menu_id')
+            ->select();
 
         $treeCache .= sprintf('id%dlevel%dis_layer%d', $menuId, is_null($level) ? -1 : $level, $isLayer);
         empty(self::$menuAuth) ?: $treeCache .= 'auth' . implode(',', self::$menuAuth);
@@ -234,11 +225,11 @@ class Menu extends CareyShop
     /**
      * 过滤和排序所有菜单
      * @access private
-     * @param  int    $parentId   上级菜单Id
-     * @param  object $list       原始模型对象
-     * @param  int    $limitLevel 显示多少级深度 null:全部
-     * @param  bool   $isLayer    是否返回本级菜单
-     * @param  int    $level      层级深度
+     * @param int    $parentId   上级菜单Id
+     * @param object $list       原始模型对象
+     * @param int    $limitLevel 显示多少级深度 null:全部
+     * @param bool   $isLayer    是否返回本级菜单
+     * @param int    $level      层级深度
      * @return array
      */
     private static function setMenuTree($parentId, &$list, $limitLevel = null, $isLayer = false, $level = 0)
@@ -295,29 +286,26 @@ class Menu extends CareyShop
     /**
      * 删除一个菜单(影响下级子菜单)
      * @access public
-     * @param  array $data 外部数据
-     * @return false|array
+     * @param array $data 外部数据
+     * @return false|array|void
      * @throws
      */
     public function delMenuItem($data)
     {
-        if (!$this->validateData($data, 'Menu.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $result = self::get($data['menu_id']);
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->find($data['menu_id']);
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         $menuList = self::getMenuListData($result->getAttr('module'), $data['menu_id'], true);
-        if (false === $menuList) {
-            return false;
-        }
-
         $delList = array_column($menuList, 'menu_id');
+
         self::destroy($delList);
-        Cache::clear('CommonAuth');
+        Cache::tag('CommonAuth')->clear();
 
         return ['children' => $delList];
     }
@@ -325,12 +313,12 @@ class Menu extends CareyShop
     /**
      * 根据Id获取导航数据
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function getMenuIdNavi($data)
     {
-        if (!$this->validateData($data, 'Menu.navi')) {
+        if (!$this->validateData($data, 'navi')) {
             return false;
         }
 
@@ -339,18 +327,18 @@ class Menu extends CareyShop
         $filter['status'] = 1;
         $data['menu_id'] = isset($data['menu_id']) ?: 0;
 
-        return self::getParentList(request()->module(), $data['menu_id'], $isLayer, $filter);
+        return self::getParentList(app('http')->getName(), $data['menu_id'], $isLayer, $filter);
     }
 
     /**
      * 根据Url获取导航数据
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function getMenuUrlNavi($data)
     {
-        if (!$this->validateData($data, 'Menu.url')) {
+        if (!$this->validateData($data, 'url')) {
             return false;
         }
 
@@ -359,61 +347,57 @@ class Menu extends CareyShop
         $filter['status'] = 1;
         $filter['url'] = isset($data['url']) ? $data['url'] : null;
 
-        return self::getParentList(request()->module(), 0, $isLayer, $filter);
+        return self::getParentList(app('http')->getName(), 0, $isLayer, $filter);
     }
 
     /**
      * 批量设置是否导航
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setMenuNavi($data)
     {
-        if (!$this->validateData($data, 'Menu.nac')) {
+        if (!$this->validateData($data, 'nac')) {
             return false;
         }
 
-        $map['menu_id'] = ['in', $data['menu_id']];
-        if (false !== $this->save(['is_navi' => $data['is_navi']], $map)) {
-            Cache::clear('CommonAuth');
-            return true;
-        }
+        $map[] = ['menu_id', 'in', $data['menu_id']];
+        self::update(['is_navi' => $data['is_navi']], $map);
+        Cache::tag('CommonAuth')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 设置菜单排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setMenuSort($data)
     {
-        if (!$this->validateData($data, 'Menu.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['menu_id'] = ['eq', $data['menu_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            Cache::clear('CommonAuth');
-            return true;
-        }
+        $map[] = ['menu_id', 'eq', $data['menu_id']];
+        self::update(['sort' => $data['sort']], $map);
+        Cache::tag('CommonAuth')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 根据编号自动排序
      * @access public
-     * @param  $data
+     * @param array $data 外部数据
      * @return bool
      * @throws \Exception
      */
     public function setMenuIndex($data)
     {
-        if (!$this->validateData($data, 'Menu.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -422,27 +406,25 @@ class Menu extends CareyShop
             $list[] = ['menu_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            Cache::clear('CommonAuth');
-            return true;
-        }
+        $this->saveAll($list);
+        Cache::tag('CommonAuth')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 根据编号获取上级菜单列表
      * @access public
-     * @param  string $module  所属模块
-     * @param  int    $menuId  菜单编号
-     * @param  bool   $isLayer 是否返回本级
-     * @param  array  $filter  过滤'is_navi'与'status'
-     * @return array|false
+     * @param string $module  所属模块
+     * @param int    $menuId  菜单编号
+     * @param bool   $isLayer 是否返回本级
+     * @param array  $filter  过滤'is_navi'与'status'
+     * @return array
      */
     public static function getParentList($module, $menuId, $isLayer = false, $filter = null)
     {
         // 搜索条件
-        $map['module'] = ['eq', $module];
+        $map[] = ['module', '=', $module];
 
         // 过滤'is_navi'与'status'
         foreach ((array)$filter as $key => $value) {
@@ -450,15 +432,10 @@ class Menu extends CareyShop
                 continue;
             }
 
-            $map[$key] = $value;
+            $map[] = [$key, '=', $value];
         }
 
-        $list = self::cache(true, null, 'CommonAuth')->where($map)->column(null, 'menu_id');
-        if ($list === false) {
-            Cache::clear('CommonAuth');
-            return false;
-        }
-
+        $list = self::cache(true, null, 'CommonAuth')->where($map)->column('*', 'menu_id');
         // 判断是否根据url获取
         if (isset($filter['url'])) {
             $url = array_column($list, 'menu_id', 'url');
@@ -494,19 +471,19 @@ class Menu extends CareyShop
     /**
      * 设置菜单状态(影响上下级菜单)
      * @access public
-     * @param  array $data 外部数据
-     * @return array|false
+     * @param array $data 外部数据
+     * @return array|false|void
      * @throws
      */
     public function setMenuStatus($data)
     {
-        if (!$this->validateData($data, 'Menu.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $result = self::get($data['menu_id']);
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->get($data['menu_id']);
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         if ($result->getAttr('status') == $data['status']) {
@@ -520,36 +497,28 @@ class Menu extends CareyShop
         $parent = [];
         if ($data['status'] == 1) {
             $parent = self::getParentList($module, $data['menu_id'], false);
-            if (false === $parent) {
-                return false;
-            }
         }
 
         // 子菜单则无条件继承
         $children = self::getMenuListData($module, $data['menu_id'], true);
-        if (false === $children) {
-            return false;
-        }
 
         $parent = array_column($parent, 'menu_id');
         $children = array_column($children, 'menu_id');
 
-        $map['menu_id'] = ['in', array_merge($parent, $children)];
-        $map['status'] = ['eq', $result->getAttr('status')];
+        $map[] = ['menu_id', 'in', array_merge($parent, $children)];
+        $map[] = ['status', '=', $result->getAttr('status')];
 
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            Cache::clear('CommonAuth');
-            return ['parent' => $parent, 'children' => $children, 'status' => (int)$data['status']];
-        }
+        self::update(['status' => $data['status']], $map);
+        Cache::tag('CommonAuth')->clear();
 
-        return false;
+        return ['parent' => $parent, 'children' => $children, 'status' => (int)$data['status']];
     }
 
     /**
      * 获取菜单列表
      * @access public
-     * @param  array $data 外部数据
-     * @return array|false
+     * @param array $data 外部数据
+     * @return array|bool|mixed
      */
     public function getMenuList($data)
     {
@@ -571,12 +540,12 @@ class Menu extends CareyShop
     /**
      * 根据权限获取菜单列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function getMenuAuthList($data)
     {
-        if (!$this->validateData($data, 'Menu.auth')) {
+        if (!$this->validateData($data, 'auth')) {
             return false;
         }
 
@@ -598,24 +567,18 @@ class Menu extends CareyShop
     /**
      * 获取以URL为索引的菜单列表
      * @access public
-     * @param  string $module 所属模块
-     * @param  int    $status 菜单状态
-     * @return array|false
+     * @param string $module 所属模块
+     * @param int    $status 菜单状态
+     * @return array
      */
     public static function getUrlMenuList($module, $status = 1)
     {
         // 缓存名称
         $key = 'urlMenuList' . $module . $status;
 
-        $map['module'] = ['eq', $module];
-        $map['status'] = ['eq', $status];
+        $map[] = ['module', '=', $module];
+        $map[] = ['status', '=', $status];
 
-        $result = self::cache($key, null, 'CommonAuth')->where($map)->column(null, 'url');
-        if (!$result) {
-            Cache::rm($key);
-            return false;
-        }
-
-        return $result;
+        return self::cache($key, null, 'CommonAuth')->where($map)->column('*', 'url');
     }
 }
