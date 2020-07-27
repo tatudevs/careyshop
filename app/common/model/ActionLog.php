@@ -202,7 +202,7 @@ class ActionLog extends CareyShop
     /**
      * 获取一条操作日志
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return mixed
      * @throws
      */
@@ -225,7 +225,7 @@ class ActionLog extends CareyShop
      */
     public function getActionLogList($data)
     {
-        if (!$this->validateData($data, 'ActionLog')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
