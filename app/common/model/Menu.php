@@ -114,7 +114,7 @@ class Menu extends CareyShop
      */
     public function setMenuItem($data)
     {
-        if (!$this->validateData($data, 'set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -157,12 +157,10 @@ class Menu extends CareyShop
             }
         }
 
-        if (false !== $result->save($data)) {
-            Cache::tag('CommonAuth')->clear();
-            return $result->toArray();
-        }
+        $result->save($data);
+        Cache::tag('CommonAuth')->clear();
 
-        return false;
+        return $result->toArray();
     }
 
     /**
@@ -196,7 +194,7 @@ class Menu extends CareyShop
             $treeCache .= $key . $value;
         }
 
-        print_r($map);exit();
+        print_r($joinMap);exit();
 
         $result = self::all(function ($query) use ($map, $joinMap) {
             $query
@@ -555,7 +553,7 @@ class Menu extends CareyShop
      */
     public function getMenuList($data)
     {
-        if (!$this->validateData($data, 'Menu.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
