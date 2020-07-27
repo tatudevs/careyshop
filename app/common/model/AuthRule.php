@@ -5,15 +5,21 @@
  * CareyShop    规则模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/3/27
+ * @date        2020/7/28
  */
 
 namespace app\common\model;
 
-use think\Cache;
+use think\facade\Cache;
 
 class AuthRule extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'rule_id';
+
     /**
      * 只读属性
      * @var array
@@ -28,24 +34,20 @@ class AuthRule extends CareyShop
      * @var array
      */
     protected $type = [
-        'rule_id'   => 'integer',
-        'group_id'  => 'integer',
         'menu_auth' => 'array',
         'log_auth'  => 'array',
-        'sort'      => 'integer',
-        'status'    => 'integer',
     ];
 
     /**
      * 添加一条规则
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function addAuthRuleItem($data)
     {
-        if (!$this->validateData($data, 'AuthRule')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -54,15 +56,15 @@ class AuthRule extends CareyShop
         !empty($data['menu_auth']) ?: $data['menu_auth'] = [];
         !empty($data['log_auth']) ?: $data['log_auth'] = [];
 
-        $map['module'] = ['eq', $data['module']];
-        $map['group_id'] = ['eq', $data['group_id']];
+        $map[] = ['module', '=', $data['module']];
+        $map[] = ['group_id', '=', $data['group_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('当前模块下已存在相同用户组');
         }
 
-        if (false !== $this->allowField(true)->save($data)) {
-            Cache::clear('CommonAuth');
+        if ($this->save($data)) {
+            Cache::tag('CommonAuth')->clear();
             return $this->toArray();
         }
 
@@ -72,34 +74,30 @@ class AuthRule extends CareyShop
     /**
      * 获取一条规则
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAuthRuleItem($data)
     {
-        if (!$this->validateData($data, 'AuthRule.get')) {
+        if (!$this->validateData($data, 'get')) {
             return false;
         }
 
-        $result = self::get($data['rule_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['rule_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 编辑一条规则
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function setAuthRuleItem($data)
     {
-        if (!$this->validateSetData($data, 'AuthRule.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -113,23 +111,24 @@ class AuthRule extends CareyShop
         }
 
         // 获取原始数据
-        $result = self::get($data['rule_id']);
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->find($data['rule_id']);
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         if (!empty($data['module'])) {
-            $map['rule_id'] = ['neq', $data['rule_id']];
-            $map['module'] = ['eq', $data['module']];
-            $map['group_id'] = ['eq', $result->getAttr('group_id')];
+            $map[] = ['rule_id', '<>', $data['rule_id']];
+            $map[] = ['module', '=', $data['module']];
+            $map[] = ['group_id', '=', $result->getAttr('group_id')];
 
             if (self::checkUnique($map)) {
                 return $this->setError('当前模块下已存在相同用户组');
             }
         }
 
-        if (false !== $result->allowField(true)->save($data)) {
-            Cache::clear('CommonAuth');
+
+        if ($result->save($data)) {
+            Cache::tag('CommonAuth')->clear();
             return $result->toArray();
         }
 
@@ -139,20 +138,18 @@ class AuthRule extends CareyShop
     /**
      * 批量删除规则
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delAuthRuleList($data)
     {
-        if (!$this->validateData($data, 'AuthRule.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('rule_id', 'in', $data['rule_id']);
-        });
+        self::destroy($data['rule_id']);
+        Cache::tag('CommonAuth')->clear();
 
-        Cache::clear('CommonAuth');
         return true;
     }
 
@@ -165,17 +162,19 @@ class AuthRule extends CareyShop
      */
     public function getAuthRuleList($data)
     {
-        if (!$this->validateData($data, 'AuthRule.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            // 搜索条件
-            $map = [];
-            empty($data['group_id']) ?: $map['group_id'] = ['eq', $data['group_id']];
-            is_empty_parm($data['module']) ?: $map['module'] = ['eq', $data['module']];
-            is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        // 搜索条件
+        $map = [];
+        empty($data['group_id']) ?: $map[] = ['group_id', '=', $data['group_id']];
+        is_empty_parm($data['module']) ?: $map[] = ['module', '=', $data['module']];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
+        // todo 未完成
+
+        $result = self::all(function ($query) use ($data) {
             // 排序方式
             $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
 
