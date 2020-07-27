@@ -60,63 +60,76 @@ class Menu extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @return Menu
      */
-    protected $scene = [
-        'item'   => [
-            'menu_id' => 'require|integer|gt:0',
-        ],
-        'set'    => [
-            'menu_id' => 'require|integer|gt:0',
-            'parent_id',
-            'name',
-            'alias',
-            'icon',
-            'remark',
-            'type',
-            'url',
-            'params',
-            'target',
-            'is_navi',
-            'sort',
-        ],
-        'del'    => [
-            'menu_id' => 'require|integer|gt:0',
-        ],
-        'list'   => [
-            'menu_id' => 'integer|egt:0',
-            'module',
-            'level',
-            'is_layer',
-            'is_navi',
-            'status',
-        ],
-        'sort'   => [
-            'menu_id' => 'require|integer|gt:0',
-            'sort'    => 'require|integer|between:0,255',
-        ],
-        'index'  => [
-            'menu_id' => 'require|arrayHasOnlyInts',
-        ],
-        'status' => [
-            'menu_id' => 'require|integer|gt:0',
-            'status'  => 'require|in:0,1',
-        ],
-        'navi'   => [
-            'menu_id' => 'integer|egt:0',
-            'is_layer',
-        ],
-        'url'    => [
-            'url' => 'max:100',
-            'is_layer',
-        ],
-        'nac'    => [
-            'menu_id' => 'require|arrayHasOnlyInts',
-            'is_navi' => 'require|in:0,1',
-        ],
-        'auth'   => [
-            'menu_id' => 'integer|egt:0',
-            'module',
-        ],
-    ];
+    public function sceneItem()
+    {
+        return $this->only(['menu_id'])
+            ->append('menu_id', 'require');
+    }
+
+    public function sceneSet()
+    {
+        return $this->only(['menu_id', 'parent_id', 'name', 'alias', 'icon', 'remark', 'type', 'url'])
+            ->append('menu_id', 'require');
+    }
+
+//    /**
+//     * 场景规则
+//     * @var array
+//     */
+//    protected $scene = [
+//        'set'    => [
+//            'menu_id' => 'require|integer|gt:0',
+//            'parent_id',
+//            'name',
+//            'alias',
+//            'icon',
+//            'remark',
+//            'type',
+//            'url',
+//            'params',
+//            'target',
+//            'is_navi',
+//            'sort',
+//        ],
+//        'del'    => [
+//            'menu_id' => 'require|integer|gt:0',
+//        ],
+//        'list'   => [
+//            'menu_id' => 'integer|egt:0',
+//            'module',
+//            'level',
+//            'is_layer',
+//            'is_navi',
+//            'status',
+//        ],
+//        'sort'   => [
+//            'menu_id' => 'require|integer|gt:0',
+//            'sort'    => 'require|integer|between:0,255',
+//        ],
+//        'index'  => [
+//            'menu_id' => 'require|arrayHasOnlyInts',
+//        ],
+//        'status' => [
+//            'menu_id' => 'require|integer|gt:0',
+//            'status'  => 'require|in:0,1',
+//        ],
+//        'navi'   => [
+//            'menu_id' => 'integer|egt:0',
+//            'is_layer',
+//        ],
+//        'url'    => [
+//            'url' => 'max:100',
+//            'is_layer',
+//        ],
+//        'nac'    => [
+//            'menu_id' => 'require|arrayHasOnlyInts',
+//            'is_navi' => 'require|in:0,1',
+//        ],
+//        'auth'   => [
+//            'menu_id' => 'integer|egt:0',
+//            'module',
+//        ],
+//    ];
 }

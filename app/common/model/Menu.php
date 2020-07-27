@@ -10,6 +10,8 @@
 
 namespace app\common\model;
 
+use think\facade\Cache;
+
 class Menu extends CareyShop
 {
     /**
@@ -55,7 +57,7 @@ class Menu extends CareyShop
      * 添加一个菜单
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|void
      * @throws
      */
     public function addMenuItem($data)
@@ -69,17 +71,17 @@ class Menu extends CareyShop
         empty($data['url']) ?: $data['url'] = $this->strToSnake($data['url']);
 
         if (!empty($data['url']) && 0 == $data['type']) {
-            $map['module'] = ['eq', $data['module']];
-            $map['type'] = ['eq', 0];
-            $map['url'] = ['eq', $data['url']];
+            $map[] = ['module', '=', $data['module']];
+            $map[] = ['type', '=', 0];
+            $map[] = ['url', '=', $data['url']];
 
             if (self::checkUnique($map)) {
                 return $this->setError('Url已存在');
             }
         }
 
-        if (false !== $this->allowField(true)->save($data)) {
-            Cache::clear('CommonAuth');
+        if ($this->save($data)) {
+            Cache::tag('CommonAuth')->clear();
             return $this->toArray();
         }
 
@@ -89,40 +91,36 @@ class Menu extends CareyShop
     /**
      * 获取一个菜单
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getMenuItem($data)
     {
-        if (!$this->validateData($data, 'Menu.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['menu_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['menu_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 编辑一个菜单
      * @access public
-     * @param  array $data 外部数据
-     * @return array|false
+     * @param array $data 外部数据
+     * @return array|false|void
      * @throws
      */
     public function setMenuItem($data)
     {
-        if (!$this->validateSetData($data, 'Menu.set')) {
+        if (!$this->validateData($data, 'set')) {
             return false;
         }
 
-        $result = self::get($data['menu_id']);
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->find($data['menu_id']);
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         // 检测编辑后是否存在重复URL
@@ -131,10 +129,10 @@ class Menu extends CareyShop
         isset($data['url']) ?: $data['url'] = $result->getAttr('url');
 
         if (!empty($data['url']) && 0 == $data['type']) {
-            $map['menu_id'] = ['neq', $data['menu_id']];
-            $map['module'] = ['eq', $result->getAttr('module')];
-            $map['type'] = ['eq', 0];
-            $map['url'] = ['eq', $data['url']];
+            $map[] = ['menu_id', '<>', $data['menu_id']];
+            $map[] = ['module', '=', $result->getAttr('module')];
+            $map[] = ['type', '=', 0];
+            $map[] = ['url', '=', $data['url']];
 
             if (self::checkUnique($map)) {
                 return $this->setError('Url已存在');
@@ -159,8 +157,8 @@ class Menu extends CareyShop
             }
         }
 
-        if (false !== $result->allowField(true)->save($data)) {
-            Cache::clear('CommonAuth');
+        if (false !== $result->save($data)) {
+            Cache::tag('CommonAuth')->clear();
             return $result->toArray();
         }
 
@@ -170,11 +168,11 @@ class Menu extends CareyShop
     /**
      * 根据条件获取菜单列表数据
      * @access public static
-     * @param  string $module  所属模块
-     * @param  int    $menuId  菜单Id
-     * @param  bool   $isLayer 是否返回本级菜单
-     * @param  int    $level   菜单深度
-     * @param  array  $filter  过滤'is_navi'与'status'
+     * @param string $module  所属模块
+     * @param int    $menuId  菜单Id
+     * @param bool   $isLayer 是否返回本级菜单
+     * @param int    $level   菜单深度
+     * @param array  $filter  过滤'is_navi'与'status'
      * @return array|false
      * @throws
      */
@@ -185,7 +183,7 @@ class Menu extends CareyShop
 
         // 搜索条件
         $joinMap = '';
-        $map['m.module'] = ['eq', $module];
+        $map[] = ['m.module', '=', $module];
 
         // 过滤'is_navi'与'status'
         foreach ((array)$filter as $key => $value) {
@@ -197,6 +195,8 @@ class Menu extends CareyShop
             $joinMap .= sprintf(' AND s.%s = %d', $key, $value);
             $treeCache .= $key . $value;
         }
+
+        print_r($map);exit();
 
         $result = self::all(function ($query) use ($map, $joinMap) {
             $query
