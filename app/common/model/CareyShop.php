@@ -29,6 +29,12 @@ abstract class CareyShop extends Model
     protected $defaultOrder = [];
 
     /**
+     * 固定排序
+     * @var array
+     */
+    protected $fixedOrder = [];
+
+    /**
      * 检测是否存在相同值
      * @access public
      * @param array $map 查询条件
@@ -98,11 +104,14 @@ abstract class CareyShop extends Model
         $order = [];
         if (isset($data['order_field']) || isset($data['order_type'])) {
             $order[$data['order_field']] = $data['order_type'];
-            if (!empty($this->defaultOrder)) {
-                $order = array_merge($order, $this->defaultOrder);
-            }
         } else {
             $order = $this->defaultOrder;
+        }
+
+        if (!empty($this->fixedOrder)) {
+            // 固定排序必须在前,否则将导致自定义排序无法覆盖
+            $order = array_merge($this->fixedOrder, $order);
+            $order = array_reverse($order);
         }
 
         if (!empty($order)) {
@@ -113,12 +122,15 @@ abstract class CareyShop extends Model
     /**
      * 设置默认排序
      * @access public
-     * @param array $order
+     * @param array $order 默认排序
+     * @param array $fixed 固定排序
      * @return $this
      */
-    public function setDefaultOrder($order)
+    public function setDefaultOrder($order, $fixed = [])
     {
         $this->defaultOrder = $order;
+        $this->fixedOrder = $fixed;
+
         return $this;
     }
 
