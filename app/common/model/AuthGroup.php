@@ -10,10 +10,16 @@
 
 namespace app\common\model;
 
-use think\Cache;
+use think\facade\Cache;
 
 class AuthGroup extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'group_id';
+
     /**
      * 只读属性
      * @var array
@@ -24,44 +30,33 @@ class AuthGroup extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'group_id' => 'integer',
-        'system'   => 'integer',
-        'sort'     => 'integer',
-        'status'   => 'integer',
-    ];
-
-    /**
      * hasMany cs_auth_rule
      * @access public
      * @return mixed
      */
     public function hasAuthRule()
     {
-        return $this->hasMany('AuthRule', 'group_id');
+        return $this->hasMany(AuthRule::class, 'group_id');
     }
 
     /**
      * 添加一个用户组
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function addAuthGroupItem($data)
     {
-        if (!$this->validateData($data, 'AuthGroup')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 避免无关字段
         unset($data['group_id'], $data['system']);
 
-        if (false !== $this->allowField(true)->save($data)) {
-            Cache::clear('CommonAuth');
+        if ($this->save($data)) {
+            Cache::tag('CommonAuth')->clear();
             return $this->toArray();
         }
 
@@ -71,62 +66,57 @@ class AuthGroup extends CareyShop
     /**
      * 编辑一个用户组
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function setAuthGroupItem($data)
     {
-        if (!$this->validateSetData($data, 'AuthGroup.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
-        $map['group_id'] = ['eq', $data['group_id']];
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            Cache::clear('CommonAuth');
-            return $this->toArray();
-        }
+        $map[] = ['group_id', '=', $data['group_id']];
 
-        return false;
+        $result = self::update($data, $map);
+        Cache::tag('CommonAuth')->clear();
+
+        return $result->toArray();
     }
 
     /**
      * 获取一个用户组
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAuthGroupItem($data)
     {
-        if (!$this->validateData($data, 'AuthGroup.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['group_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['group_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 删除一个用户组
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function delAuthGroupItem($data)
     {
-        if (!$this->validateData($data, 'AuthGroup.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $result = self::get($data['group_id']);
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->with('hasAuthRule')->find($data['group_id']);
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         if ($result->getAttr('system') === 1) {
@@ -135,17 +125,16 @@ class AuthGroup extends CareyShop
 
         // 查询是否已被使用
         if (User::checkUnique(['group_id' => $data['group_id']])) {
-            return $this->setError('当前用户组已被使用');
+            return $this->setError('当前用户组已被顾客组账号使用');
         }
 
         if (Admin::checkUnique(['group_id' => $data['group_id']])) {
-            return $this->setError('当前用户组已被使用');
+            return $this->setError('当前用户组已被管理组账号使用');
         }
 
         // 删除本身与规则表中的数据
-        $result->delete();
-        $result->hasAuthRule()->delete();
-        Cache::clear('CommonAuth');
+        $result->together(['hasAuthRule'])->delete();
+        Cache::tag('CommonAuth')->clear();
 
         return true;
     }
@@ -153,91 +142,68 @@ class AuthGroup extends CareyShop
     /**
      * 获取用户组列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAuthGroupList($data)
     {
-        if (!$this->validateData($data, 'AuthGroup.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            // 搜索条件
-            $map = [];
-            !isset($data['exclude_id']) ?: $map['group_id'] = ['not in', $data['exclude_id']];
-            is_empty_parm($data['module']) ?: $map['module'] = ['eq', $data['module']];
-            is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        // 搜索条件
+        $map = [];
+        !isset($data['exclude_id']) ?: $map[] = ['group_id', 'not in', $data['exclude_id']];
+        is_empty_parm($data['module']) ?: $map[] = ['module', '=', $data['module']];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'group_id';
-
-            // 排序处理
-            $order['sort'] = 'asc';
-            $order[$orderField] = $orderType;
-
-            if (!empty($data['order_field'])) {
-                $order = array_reverse($order);
-            }
-
-            $query
-                ->cache(true, null, 'CommonAuth')
-                ->where($map)
-                ->order($order);
-        });
-
-        if (false === $result) {
-            Cache::clear('CommonAuth');
-            return false;
-        }
-
-        return $result->toArray();
+        return $this->setDefaultOrder(['group_id' => 'asc'], ['sort' => 'asc'])
+            ->cache(true, null, 'CommonAuth')
+            ->where($map)
+            ->withSearch(['order'], $data)
+            ->select()
+            ->toArray();
     }
 
     /**
      * 批量设置用户组状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setAuthGroupStatus($data)
     {
-        if (!$this->validateData($data, 'AuthGroup.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['group_id'] = ['in', $data['group_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            Cache::clear('CommonAuth');
-            return true;
-        }
+        $map[] = ['group_id', 'in', $data['group_id']];
 
-        return false;
+        self::update(['status' => $data['status']], $map);
+        Cache::tag('CommonAuth')->clear();
+
+        return true;
     }
 
     /**
      * 设置用户组排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setAuthGroupSort($data)
     {
-        if (!$this->validateData($data, 'AuthGroup.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['group_id'] = ['eq', $data['group_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            Cache::clear('CommonAuth');
-            return true;
-        }
+        $map[] = ['group_id', '=', $data['group_id']];
 
-        return false;
+        self::update(['sort' => $data['sort']], $map);
+        Cache::tag('CommonAuth')->clear();
+
+        return true;
     }
 
     /**
@@ -249,7 +215,7 @@ class AuthGroup extends CareyShop
      */
     public function setAuthGroupIndex($data)
     {
-        if (!$this->validateData($data, 'AuthGroup.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -258,11 +224,9 @@ class AuthGroup extends CareyShop
             $list[] = ['group_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            Cache::clear('CommonAuth');
-            return true;
-        }
+        $this->saveAll($list);
+        Cache::tag('CommonAuth')->clear();
 
-        return false;
+        return true;
     }
 }
