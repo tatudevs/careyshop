@@ -96,7 +96,7 @@ if (!function_exists('echo_value')) {
     <title>系统发生错误</title>
     <meta name="robots" content="noindex,nofollow" />
     <style>
-        /* Base */
+        /* Base 瑞令网络科技*/
         body {
             color: #333;
             font: 16px Verdana, "Helvetica Neue", helvetica, Arial, 'Microsoft YaHei', sans-serif;
@@ -339,7 +339,7 @@ if (!function_exists('echo_value')) {
         <div class="info"><h1><?php echo htmlentities($message); ?></h1></div>
     </div>
     <?php } ?>
-    
+
     <?php if (!empty($datas)) { ?>
     <div class="exception-var">
         <h2>Exception Datas</h2>
@@ -413,7 +413,7 @@ if (!function_exists('echo_value')) {
             return elements;
 
             function get_elements_by_class(search_class, node, tag) {
-                var elements = [], eles, 
+                var elements = [], eles,
                     pattern  = new RegExp('(^|\\s)' + search_class + '(\\s|$)');
 
                 node = node || document;
@@ -432,18 +432,18 @@ if (!function_exists('echo_value')) {
 
         $.getScript = function(src, func){
             var script = document.createElement('script');
-            
+
             script.async  = 'async';
             script.src    = src;
             script.onload = func || function(){};
-            
+
             $('head')[0].appendChild(script);
         }
 
         ;(function(){
             var files = $('.toggle');
             var ol    = $('ol', $('.prettyprint')[0]);
-            var li    = $('li', ol[0]);   
+            var li    = $('li', ol[0]);
 
             // 短路径和长路径变换
             for(var i = 0; i < files.length; i++){
