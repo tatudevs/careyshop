@@ -111,7 +111,7 @@ class Admin extends CareyShop
      */
     public function hasToken()
     {
-        return $this->hasOne('Token', 'admin_id', 'client_id');
+        return $this->hasOne(Token::class, 'admin_id', 'client_id');
     }
 
     /**
@@ -122,9 +122,9 @@ class Admin extends CareyShop
     public function getAuthGroup()
     {
         return $this
-            ->hasOne('AuthGroup', 'group_id', 'group_id', [], 'left')
-            ->field('name,status')
-            ->setEagerlyType(0);
+            ->hasOne(AuthGroup::class, 'group_id', 'group_id')
+            ->joinType('left')
+            ->field('name,status');
     }
 
     /**
@@ -142,9 +142,9 @@ class Admin extends CareyShop
         }
 
         if (!is_null($adminID)) {
-            $result = self::get($adminID);
-            if (!$result) {
-                return is_null($result) ? $this->setError('账号不存在') : false;
+            $result = $this->find($adminID);
+            if (is_null($result)) {
+                return $this->setError('账号不存在');
             }
 
             if (get_client_group() > $result->getAttr('group_id')) {
@@ -164,13 +164,13 @@ class Admin extends CareyShop
     /**
      * 添加一个账号
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|bool
      * @throws
      */
     public function addAdminItem($data)
     {
-        if (!$this->validateData($data, 'Admin')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -179,13 +179,14 @@ class Admin extends CareyShop
         }
 
         $field = ['username', 'password', 'group_id', 'nickname', 'head_pic'];
-        if (false !== $this->allowField($field)->save($data)) {
+        if ($this->allowField($field)->save($data)) {
             return $this->hidden(['password_confirm'])->toArray();
         }
 
         return false;
     }
 
+    // todo 完成到此处
     /**
      * 编辑一个账号
      * @access public
