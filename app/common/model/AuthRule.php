@@ -260,7 +260,7 @@ class AuthRule extends CareyShop
         }
 
         $map[] = ['module', '=', $module];
-        $map[] = ['group_id', 'in', $groupId];
+        $map[] = ['group_id', 'in', is_array($groupId) ? $groupId : [$groupId]];
         $map[] = ['status', '=', 1];
 
         $menuAuth = [];
