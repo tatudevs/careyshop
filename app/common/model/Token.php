@@ -13,6 +13,12 @@ namespace app\common\model;
 class Token extends CareyShop
 {
     /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'token_id';
+
+    /**
      * 只读属性
      * @var array
      */
@@ -36,26 +42,13 @@ class Token extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'token_id'        => 'integer',
-        'client_id'       => 'integer',
-        'group_id'        => 'integer',
-        'client_type'     => 'integer',
-        'token_expires'   => 'integer',
-        'refresh_expires' => 'integer',
-    ];
-
-    /**
      * 产生Token
      * @access public
-     * @param  int    $id       编号
-     * @param  int    $group    用户组编号
-     * @param  int    $type     顾客或管理组
-     * @param  string $username 账号
-     * @param  string $platform 来源平台
+     * @param int    $id       编号
+     * @param int    $group    用户组编号
+     * @param int    $type     顾客或管理组
+     * @param string $username 账号
+     * @param string $platform 来源平台
      * @return false|array
      * @throws
      */
@@ -80,45 +73,35 @@ class Token extends CareyShop
         ];
 
         // 搜索条件
-        $map['client_id'] = ['eq', $id];
-        $map['client_type'] = ['eq', $type];
-        $map['platform'] = ['eq', $platform];
+        $map[] = ['client_id', '=', $id];
+        $map[] = ['client_type', '=', $type];
+        $map[] = ['platform', '=', $platform];
 
-        $result = $this->where($map)->find();
-        if (false === $result) {
-            return false;
-        }
+        $result = $this->where($map)->findOrEmpty();
+        $result->save($data);
 
-        if ($result && false !== $result->save($data)) {
-            return $result->hidden(['username', 'platform'])->toArray();
-        }
-
-        if (false !== $this->allowField(true)->save($data)) {
-            return $this->hidden(['username', 'platform'])->toArray();
-        }
-
-        return false;
+        return $result->hidden(['username', 'platform'])->toArray();
     }
 
     /**
      * 刷新Token
      * @access public
-     * @param  int    $type     顾客或管理组
-     * @param  string $refresh  刷新令牌
-     * @param  string $oldToken 原授权令牌
+     * @param int    $type     顾客或管理组
+     * @param string $refresh  刷新令牌
+     * @param string $oldToken 原授权令牌
      * @return false|array
      * @throws
      */
     public function refreshUser($type, $refresh, $oldToken)
     {
         // 搜索条件
-        $map['client_id'] = ['eq', get_client_id()];
-        $map['client_type'] = ['eq', $type];
-        $map['token'] = ['eq', $oldToken];
+        $map[] = ['client_id', '=', get_client_id()];
+        $map[] = ['client_type', '=', $type];
+        $map[] = ['token', '=', $oldToken];
 
         $result = $this->where($map)->find();
-        if (!$result) {
-            return is_null($result) ? $this->setError('refresh不存在') : false;
+        if (is_null($result)) {
+            return $this->setError('refresh不存在');
         }
 
         if (time() > $result->getAttr('refresh_expires')) {
@@ -142,10 +125,7 @@ class Token extends CareyShop
             'refresh_expires' => $expires + (1 * 24 * 60 * 60),
         ];
 
-        if (false !== $result->save($data)) {
-            return $result->hidden(['username', 'platform'])->toArray();
-        }
-
-        return false;
+        $result->save($data);
+        return $result->hidden(['username', 'platform'])->toArray();
     }
 }
