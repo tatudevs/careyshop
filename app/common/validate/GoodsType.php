@@ -22,8 +22,8 @@ class GoodsType extends CareyShop
         'exclude_id'    => 'integer|gt:0',
         'page_no'       => 'integer|gt:0',
         'page_size'     => 'integer|gt:0',
-        'order_type'    => 'in:asc,desc',
-        'order_field'   => 'in:goods_type_id,type_name',
+        'order_type'    => 'requireWith:order_field|in:asc,desc',
+        'order_field'   => 'requireWith:order_type|in:goods_type_id,type_name',
     ];
 
     /**

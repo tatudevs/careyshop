@@ -32,8 +32,8 @@ class Storage extends CareyShop
         'sort'        => 'integer|between:0,255',
         'page_no'     => 'integer|gt:0',
         'page_size'   => 'integer|gt:0',
-        'order_type'  => 'in:asc,desc',
-        'order_field' => 'in:storage_id,name,type,create_time,update_time',
+        'order_type'  => 'requireWith:order_field|in:asc,desc',
+        'order_field' => 'requireWith:order_type|in:storage_id,name,type,create_time,update_time',
         'is_layer'    => 'in:0,1',
         'is_default'  => 'in:0,1',
     ];

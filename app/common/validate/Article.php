@@ -32,8 +32,8 @@ class Article extends CareyShop
         'status'         => 'in:0,1',
         'page_no'        => 'integer|gt:0',
         'page_size'      => 'integer|gt:0',
-        'order_type'     => 'in:asc,desc',
-        'order_field'    => 'in:article_id,article_cat_id,title,source,is_top,status,create_time,update_time',
+        'order_type'     => 'requireWith:order_field|in:asc,desc',
+        'order_field'    => 'requireWith:order_type|in:article_id,article_cat_id,title,source,is_top,status,create_time,update_time',
     ];
 
     /**

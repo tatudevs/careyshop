@@ -60,8 +60,8 @@ class Goods extends CareyShop
         'goods_type'        => 'in:integral,recommend,new,hot',
         'page_no'           => 'integer|gt:0',
         'page_size'         => 'integer|gt:0',
-        'order_type'        => 'in:asc,desc',
-        'order_field'       => 'in:goods_id,goods_code,name,shop_price,store_qty,sales_sum,sort,is_integral,is_recommend,is_new,is_hot,create_time',
+        'order_type'        => 'requireWith:order_field|in:asc,desc',
+        'order_field'       => 'requireWith:order_type|in:goods_id,goods_code,name,shop_price,store_qty,sales_sum,sort,is_integral,is_recommend,is_new,is_hot,create_time',
     ];
 
     /**
@@ -231,7 +231,7 @@ class Goods extends CareyShop
             'page_no'           => 'integer|gt:0',
             'page_size'         => 'integer|gt:0',
             'order_type',
-            'order_field'       => 'in:goods_id,sales_sum,comment_sum,shop_price,create_time',
+            'order_field'       => 'requireWith:order_type|in:goods_id,sales_sum,comment_sum,shop_price,create_time',
         ],
         'sort'       => [
             'goods_id' => 'require|integer|gt:0',

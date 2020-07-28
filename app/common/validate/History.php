@@ -21,8 +21,8 @@ class History extends CareyShop
         'goods_id'    => 'require|integer|gt:0',
         'page_no'     => 'integer|gt:0',
         'page_size'   => 'integer|gt:0',
-        'order_type'  => 'in:asc,desc',
-        'order_field' => 'in:history_id,goods_id,update_time',
+        'order_type'  => 'requireWith:order_field|in:asc,desc',
+        'order_field' => 'requireWith:order_type|in:history_id,goods_id,update_time',
     ];
 
     /**

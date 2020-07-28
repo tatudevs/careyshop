@@ -30,8 +30,8 @@ class PaymentLog extends CareyShop
         'end_time'       => 'date|betweenTime|afterTime:begin_time',
         'page_no'        => 'integer|gt:0',
         'page_size'      => 'integer|gt:0',
-        'order_type'     => 'in:asc,desc',
-        'order_field'    => 'in:payment_log_id,payment_time,create_time,status',
+        'order_type'     => 'requireWith:order_field|in:asc,desc',
+        'order_field'    => 'requireWith:order_type|in:payment_log_id,payment_time,create_time,status',
     ];
 
     /**

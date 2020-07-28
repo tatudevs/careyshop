@@ -33,8 +33,8 @@ class Transaction extends CareyShop
         'card_number'    => 'length:16',
         'page_no'        => 'integer|gt:0',
         'page_size'      => 'integer|gt:0',
-        'order_type'     => 'in:asc,desc',
-        'order_field'    => 'in:transaction_id,type,create_time',
+        'order_type'     => 'requireWith:order_field|in:asc,desc',
+        'order_field'    => 'requireWith:order_type|in:transaction_id,type,create_time',
     ];
 
     /**

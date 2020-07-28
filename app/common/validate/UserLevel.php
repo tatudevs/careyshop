@@ -23,8 +23,8 @@ class UserLevel extends CareyShop
         'amount'        => 'require|float|egt:0|regex:^\d+(\.\d{1,2})?$',
         'discount'      => 'require|integer|between:0,100',
         'description'   => 'max:200',
-        'order_type'    => 'in:asc,desc',
-        'order_field'   => 'in:user_level_id,amount,discount',
+        'order_type'    => 'requireWith:order_field|in:asc,desc',
+        'order_field'   => 'requireWith:order_type|in:user_level_id,amount,discount',
     ];
 
     /**

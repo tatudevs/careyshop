@@ -30,8 +30,8 @@ class Brand extends CareyShop
         'exclude_id'        => 'integer|gt:0',
         'page_no'           => 'integer|gt:0',
         'page_size'         => 'integer|gt:0',
-        'order_type'        => 'in:asc,desc',
-        'order_field'       => 'in:brand_id,goods_category_id,name,phonetic,description,sort,status',
+        'order_type'        => 'requireWith:order_field|in:asc,desc',
+        'order_field'       => 'requireWith:order_type|in:brand_id,goods_category_id,name,phonetic,description,sort,status',
     ];
 
     /**

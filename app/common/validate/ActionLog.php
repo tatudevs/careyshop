@@ -26,8 +26,8 @@ class ActionLog extends CareyShop
         'end_time'      => 'date|betweenTime|afterTime:begin_time',
         'page_no'       => 'integer|gt:0',
         'page_size'     => 'integer|gt:0',
-        'order_type'    => 'in:asc,desc',
-        'order_field'   => 'in:action_log_id,client_type,username,path,status,create_time',
+        'order_type'    => 'requireWith:order_field|in:asc,desc',
+        'order_field'   => 'requireWith:order_type|in:action_log_id,client_type,username,path,status,create_time',
     ];
 
     /**

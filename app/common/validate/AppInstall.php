@@ -24,8 +24,8 @@ class AppInstall extends CareyShop
         'url'            => 'require|max:255',
         'page_no'        => 'integer|gt:0',
         'page_size'      => 'integer|gt:0',
-        'order_type'     => 'in:asc,desc',
-        'order_field'    => 'in:app_install_id,name,count,create_time,update_time',
+        'order_type'     => 'requireWith:order_field|in:asc,desc',
+        'order_field'    => 'requireWith:order_type|in:app_install_id,name,count,create_time,update_time',
     ];
 
     /**

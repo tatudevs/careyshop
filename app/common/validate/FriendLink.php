@@ -24,8 +24,8 @@ class FriendLink extends CareyShop
         'target'         => 'in:_self,_blank',
         'sort'           => 'integer|between:0,255',
         'status'         => 'in:0,1',
-        'order_type'     => 'in:asc,desc',
-        'order_field'    => 'in:friend_link_id,name,sort,status',
+        'order_type'     => 'requireWith:order_field|in:asc,desc',
+        'order_field'    => 'requireWith:order_type|in:friend_link_id,name,sort,status',
     ];
 
     /**

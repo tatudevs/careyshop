@@ -25,8 +25,8 @@ class AuthRule extends CareyShop
         'log_auth'    => 'arrayHasOnlyInts',
         'sort'        => 'integer|between:0,255',
         'status'      => 'in:0,1',
-        'order_type'  => 'in:asc,desc',
-        'order_field' => 'in:rule_id,name,sort,status',
+        'order_type'  => 'requireWith:order_field|in:asc,desc',
+        'order_field' => 'requireWith:order_type|in:rule_id,name,sort,status',
     ];
 
     /**

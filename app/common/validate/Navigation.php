@@ -23,8 +23,8 @@ class Navigation extends CareyShop
         'target'        => 'in:_self,_blank',
         'sort'          => 'integer|between:0,255',
         'status'        => 'in:0,1',
-        'order_type'    => 'in:asc,desc',
-        'order_field'   => 'in:navigation_id,name,target,sort,status',
+        'order_type'    => 'requireWith:order_field|in:asc,desc',
+        'order_field'   => 'requireWith:order_type|in:navigation_id,name,target,sort,status',
     ];
 
     /**

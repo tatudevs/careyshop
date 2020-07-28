@@ -28,8 +28,8 @@ class Withdraw extends CareyShop
         'end_time'         => 'date|betweenTime|afterTime:begin_time',
         'page_no'          => 'integer|gt:0',
         'page_size'        => 'integer|gt:0',
-        'order_type'       => 'in:asc,desc',
-        'order_field'      => 'in:withdraw_id,withdraw_no,create_time,update_time,status',
+        'order_type'       => 'requireWith:order_field|in:asc,desc',
+        'order_field'      => 'requireWith:order_type|in:withdraw_id,withdraw_no,create_time,update_time,status',
     ];
 
     /**

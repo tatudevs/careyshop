@@ -28,8 +28,8 @@ class Card extends CareyShop
         'status'           => 'in:0,1',
         'page_no'          => 'integer|gt:0',
         'page_size'        => 'integer|gt:0',
-        'order_type'       => 'in:asc,desc',
-        'order_field'      => 'in:card_id,name,money,give_num,active_num,create_time,end_time,status',
+        'order_type'       => 'requireWith:order_field|in:asc,desc',
+        'order_field'      => 'requireWith:order_type|in:card_id,name,money,give_num,active_num,create_time,end_time,status',
     ];
 
     /**

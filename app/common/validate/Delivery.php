@@ -41,8 +41,8 @@ class Delivery extends CareyShop
         'volume_total'        => 'float|egt:0|regex:^\d+(\.\d{1,2})?$',
         'exclude_id'          => 'integer|gt:0',
         'name'                => 'max:50',
-        'order_type'          => 'in:asc,desc',
-        'order_field'         => 'in:delivery_id,name,content,sort,status',
+        'order_type'          => 'requireWith:order_field|in:asc,desc',
+        'order_field'         => 'requireWith:order_type|in:delivery_id,name,content,sort,status',
     ];
 
     /**
