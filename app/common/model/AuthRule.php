@@ -156,7 +156,7 @@ class AuthRule extends CareyShop
     /**
      * 获取规则列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
@@ -172,77 +172,52 @@ class AuthRule extends CareyShop
         is_empty_parm($data['module']) ?: $map[] = ['module', '=', $data['module']];
         is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
-        // todo 未完成
-
-        $result = self::all(function ($query) use ($data) {
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'rule_id';
-
-            // 排序处理
-            $order['sort'] = 'asc';
-            $order[$orderField] = $orderType;
-
-            if (!empty($data['order_field'])) {
-                $order = array_reverse($order);
-            }
-
-            $query
-                ->cache(true, null, 'CommonAuth')
-                ->where($map)
-                ->order($order);
-        });
-
-        if (false === $result) {
-            Cache::clear('CommonAuth');
-            return false;
-        }
-
-        return $result->toArray();
+        return $this->setDefaultOrder(['rule_id' => 'asc'], ['sort' => 'asc'])
+            ->cache(true, null, 'CommonAuth')
+            ->where($map)
+            ->withSearch(['order'], $data)
+            ->select()
+            ->toArray();
     }
 
     /**
      * 批量设置规则状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setAuthRuleStatus($data)
     {
-        if (!$this->validateData($data, 'AuthRule.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['rule_id'] = ['in', $data['rule_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            Cache::clear('CommonAuth');
-            return true;
-        }
+        $map[] = ['rule_id', 'in', $data['rule_id']];
 
-        return false;
+        self::update(['status' => $data['status']], $map);
+        Cache::tag('CommonAuth')->clear();
+
+        return true;
     }
 
     /**
      * 设置规则排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setAuthRuleSort($data)
     {
-        if (!$this->validateData($data, 'AuthRule.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['rule_id'] = ['eq', $data['rule_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            Cache::clear('CommonAuth');
-            return true;
-        }
+        $map[] = ['rule_id', '=', $data['rule_id']];
 
-        return false;
+        self::update(['sort' => $data['sort']], $map);
+        Cache::tag('CommonAuth')->clear();
+
+        return true;
     }
 
     /**
@@ -254,7 +229,7 @@ class AuthRule extends CareyShop
      */
     public function setAuthRuleIndex($data)
     {
-        if (!$this->validateData($data, 'AuthRule.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -263,19 +238,17 @@ class AuthRule extends CareyShop
             $list[] = ['rule_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            Cache::clear('CommonAuth');
-            return true;
-        }
+        $this->saveAll($list);
+        Cache::tag('CommonAuth')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 根据用户组编号与对应模块获取权限明细
      * @access public
-     * @param  string $module  对应模块
-     * @param  int    $groupId 用户组编号
+     * @param string $module  对应模块
+     * @param int    $groupId 用户组编号
      * @return array|false
      * @throws
      */
@@ -286,21 +259,15 @@ class AuthRule extends CareyShop
             $groupId = [$groupId, AUTH_GUEST];
         }
 
-        $map['module'] = ['eq', $module];
-        $map['group_id'] = ['in', $groupId];
-        $map['status'] = ['eq', 1];
-
-        $result = self::where($map)->cache(true, null, 'CommonAuth')->select();
-        if (false === $result) {
-            Cache::clear('CommonAuth');
-            return false;
-        }
+        $map[] = ['module', '=', $module];
+        $map[] = ['group_id', 'in', $groupId];
+        $map[] = ['status', '=', 1];
 
         $menuAuth = [];
         $logAuth = [];
         $whiteList = [];
 
-        $result = $result->toArray();
+        $result = self::where($map)->cache(true, null, 'CommonAuth')->select()->toArray();
         foreach ($result as $value) {
             // 默认将所有获取到的编号都归入数组
             if (!empty($value['menu_auth'])) {
