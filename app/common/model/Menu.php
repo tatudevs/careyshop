@@ -479,7 +479,7 @@ class Menu extends CareyShop
             return false;
         }
 
-        $result = $this->get($data['menu_id']);
+        $result = $this->find($data['menu_id']);
         if (is_null($result)) {
             return $this->setError('数据不存在');
         }
