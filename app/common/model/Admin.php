@@ -10,8 +10,16 @@
 
 namespace app\common\model;
 
+use careyshop\Ip2Region;
+
 class Admin extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'admin_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -45,9 +53,27 @@ class Admin extends CareyShop
     ];
 
     /**
+     * 定义全局的查询范围
+     * @var string[]
+     */
+    protected $globalScope = [
+        'delete',
+    ];
+
+    /**
+     * 全局是否删除查询条件
+     * @access protected
+     * @param Admin $query 模型
+     */
+    protected function scopeDelete($query)
+    {
+        $query->where(['is_delete' => 0]);
+    }
+
+    /**
      * 密码修改器
      * @access protected
-     * @param  string $value 值
+     * @param string $value 值
      * @return string
      */
     protected function setPasswordAttr($value)
@@ -76,17 +102,6 @@ class Admin extends CareyShop
         }
 
         return $value;
-    }
-
-    /**
-     * 全局查询条件
-     * @access protected
-     * @param  object $query 模型
-     * @return void
-     */
-    protected function base($query)
-    {
-        $query->where(['is_delete' => ['eq', 0]]);
     }
 
     /**

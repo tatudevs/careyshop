@@ -47,7 +47,9 @@ class App extends CareyShop
     ];
 
     /**
-     * @param \think\Model $query
+     * 全局是否删除查询条件
+     * @access protected
+     * @param App $query 模型
      */
     public function scopeDelete($query)
     {
