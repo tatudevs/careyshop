@@ -95,10 +95,18 @@ abstract class CareyShop extends Model
      */
     public function searchOrderAttr($query, $value, $data)
     {
-        if (isset($data['order_field']) && isset($data['order_type'])) {
-            $query->order([$data['order_field'] => $data['order_type']]);
+        $order = [];
+        if (isset($data['order_field']) || isset($data['order_type'])) {
+            $order[$data['order_field']] = $data['order_type'];
+            if (!empty($this->defaultOrder)) {
+                $order = array_merge($order, $this->defaultOrder);
+            }
         } else {
-            $query->order($this->defaultOrder);
+            $order = $this->defaultOrder;
+        }
+
+        if (!empty($order)) {
+            $query->order($order);
         }
     }
 
