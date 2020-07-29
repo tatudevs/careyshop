@@ -114,7 +114,7 @@ class AuthGroup extends CareyShop
             return false;
         }
 
-        $result = $this->with('hasAuthRule')->find($data['group_id']);
+        $result = $this->with('has_auth_rule')->find($data['group_id']);
         if (is_null($result)) {
             return $this->setError('数据不存在');
         }
@@ -133,7 +133,7 @@ class AuthGroup extends CareyShop
         }
 
         // 删除本身与规则表中的数据
-        $result->together(['hasAuthRule'])->delete();
+        $result->together(['has_auth_rule'])->delete();
         Cache::tag('CommonAuth')->clear();
 
         return true;
