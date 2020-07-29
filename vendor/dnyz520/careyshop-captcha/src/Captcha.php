@@ -163,7 +163,7 @@ class Captcha
             return '验证码不能为空';
         }
 
-        if ($key_id && $this->cacheType === 'cache') {
+        if ($key_id || $this->cacheType === 'cache') {
             $result = $this->cache->get($key_id);
             $result && $this->cache->delete($key_id);
         } else {
@@ -180,7 +180,11 @@ class Captcha
         }
 
         $code = mb_strtolower($code, 'UTF-8');
-        return password_verify($code, $result['key']);
+        if (!password_verify($code, $result['key'])) {
+            return '验证码错误';
+        }
+
+        return true;
     }
 
     /**
