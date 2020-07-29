@@ -52,7 +52,7 @@ class Token extends CareyShop
      * @return false|array
      * @throws
      */
-    public function setToken($id, $group, $type, $username, $platform)
+    public static function setToken($id, $group, $type, $username, $platform)
     {
         $code = rand_string();
         $token = user_md5(sprintf('%d%d%s', $id, $type, $code));
@@ -77,7 +77,7 @@ class Token extends CareyShop
         $map[] = ['client_type', '=', $type];
         $map[] = ['platform', '=', $platform];
 
-        $result = $this->where($map)->findOrEmpty();
+        $result = self::where($map)->findOrEmpty();
         $result->save($data);
 
         return $result->hidden(['username', 'platform'])->toArray();
