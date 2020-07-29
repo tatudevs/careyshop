@@ -11,6 +11,7 @@
 namespace app\common\model;
 
 use careyshop\Ip2Region;
+use think\facade\Cache;
 
 class Admin extends CareyShop
 {
@@ -62,10 +63,10 @@ class Admin extends CareyShop
 
     /**
      * 全局是否删除查询条件
-     * @access protected
+     * @access public
      * @param Admin $query 模型
      */
-    protected function scopeDelete($query)
+    public function scopeDelete($query)
     {
         $query->where(['is_delete' => 0]);
     }
@@ -124,7 +125,7 @@ class Admin extends CareyShop
         return $this
             ->hasOne(AuthGroup::class, 'group_id', 'group_id')
             ->joinType('left')
-            ->field('name,status');
+            ->field('group_id,name,status');
     }
 
     /**
@@ -186,17 +187,16 @@ class Admin extends CareyShop
         return false;
     }
 
-    // todo 完成到此处
     /**
      * 编辑一个账号
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function setAdminItem($data)
     {
-        if (!$this->validateSetData($data, 'Admin.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -207,8 +207,8 @@ class Admin extends CareyShop
         }
 
         if (!empty($data['nickname'])) {
-            $nickMap['admin_id'] = ['neq', $data['client_id']];
-            $nickMap['nickname'] = ['eq', $data['nickname']];
+            $nickMap[] = ['admin_id', '<>', $data['client_id']];
+            $nickMap[] = ['nickname', '=', $data['nickname']];
 
             if (self::checkUnique($nickMap)) {
                 return $this->setError('昵称已存在');
@@ -216,28 +216,29 @@ class Admin extends CareyShop
         }
 
         if (isset($data['group_id'])) {
-            Cache::clear('token:admin_' . $data['client_id']);
-            $this->hasToken()->where(['client_id' => $data['client_id'], 'client_type' => 1])->delete();
+            $map[] = ['client_id', '=', $data['client_id']];
+            $map[] = ['client_type', '=', 1];
+
+            Cache::tag('token:admin_' . $data['client_id'])->clear();
+            $this->hasToken()->where($map)->delete();
         }
 
-        $map['admin_id'] = ['eq', $data['client_id']];
-        if (false !== $this->allowField(['group_id', 'nickname', 'head_pic'])->save($data, $map)) {
-            return $this->toArray();
-        }
+        $map = [['admin_id', '=', $data['client_id']]];
+        $result = self::update($data, $map, ['group_id', 'nickname', 'head_pic']);
 
-        return false;
+        return $result->toArray();
     }
 
     /**
      * 批量设置账号状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function setAdminStatus($data)
     {
-        if (!$this->validateData($data, 'Admin.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
@@ -247,30 +248,32 @@ class Admin extends CareyShop
             }
         }
 
-        $map = ['admin_id' => ['in', $data['client_id']]];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            foreach ($data['client_id'] as $value) {
-                Cache::clear('token:admin_' . $value);
-            }
+        $map = [['admin_id', 'in', $data['client_id']]];
+        self::update(['status' => $data['status']], $map);
 
-            $map = ['client_id' => ['in', $data['client_id']], 'client_type' => 1];
-            $this->hasToken()->where($map)->delete();
-            return true;
+        foreach ($data['client_id'] as $value) {
+            Cache::tag('token:admin_' . $value)->clear();
         }
 
-        return false;
+        $map = [
+            ['client_id', 'in', $data['client_id']],
+            ['client_type', '=', 1],
+        ];
+
+        $this->hasToken()->where($map)->delete();
+        return true;
     }
 
     /**
      * 修改一个账号密码
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function setAdminPassword($data)
     {
-        if (!$this->validateData($data, 'Admin.change')) {
+        if (!$this->validateData($data, 'change')) {
             return false;
         }
 
@@ -278,29 +281,33 @@ class Admin extends CareyShop
             return false;
         }
 
-        $result = self::get($data['client_id']);
+        $result = $this->find($data['client_id']);
+        if (is_null($result)) {
+            return $this->setError('账号不存在');
+        }
+
         if (!hash_equals($result->getAttr('password'), user_md5($data['password_old']))) {
             return $this->setError('原始密码错误');
         }
 
-        if (false !== $result->setAttr('password', $data['password'])->save()) {
-            Cache::clear('token:admin_' . $data['client_id']);
-            $result->hasToken()->where(['client_id' => $data['client_id'], 'client_type' => 1])->delete();
-            return true;
-        }
+        $result->setAttr('password', $data['password']);
+        $result->save();
 
-        return false;
+        Cache::tag('token:admin_' . $data['client_id'])->clear();
+        $this->hasToken()->where(['client_id' => $data['client_id'], 'client_type' => 1])->delete();
+
+        return true;
     }
 
     /**
      * 重置一个账号密码
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      */
     public function resetAdminItem($data)
     {
-        if (!$this->validateData($data, 'Admin.reset')) {
+        if (!$this->validateData($data, 'reset')) {
             return false;
         }
 
@@ -310,26 +317,24 @@ class Admin extends CareyShop
 
         // 初始化部分数据
         $data['password'] = mb_strtolower(get_randstr(8), 'utf-8');
-        $map['admin_id'] = ['eq', $data['client_id']];
+        $map[] = ['admin_id', '=', $data['client_id']];
 
-        if (false !== $this->save(['password' => $data['password']], $map)) {
-            Cache::clear('token:admin_' . $data['client_id']);
-            return ['password' => $data['password']];
-        }
+        self::update(['password' => $data['password']], $map);
+        Cache::tag('token:admin_' . $data['client_id'])->clear();
 
-        return false;
+        return ['password' => $data['password']];
     }
 
     /**
      * 批量删除账号
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function delAdminList($data)
     {
-        if (!$this->validateData($data, 'Admin.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
@@ -339,110 +344,89 @@ class Admin extends CareyShop
             }
         }
 
-        $map = ['admin_id' => ['in', $data['client_id']]];
-        if (false !== $this->save(['is_delete' => 1], $map)) {
-            foreach ($data['client_id'] as $value) {
-                Cache::clear('token:admin_' . $value);
-            }
+        $map = [['admin_id', 'in', $data['client_id']]];
+        self::update(['is_delete' => 1], $map);
 
-            $map = ['client_id' => ['in', $data['client_id']], 'client_type' => 1];
-            $this->hasToken()->where($map)->delete();
-
-            return true;
+        foreach ($data['client_id'] as $value) {
+            Cache::tag('token:admin_' . $value)->clear();
         }
 
-        return false;
+        $map = [
+            ['client_id', 'in', $data['client_id']],
+            ['client_type', '=', 1],
+        ];
+
+        $this->hasToken()->where($map)->delete();
+        return true;
     }
 
     /**
      * 获取一个账号
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAdminItem($data)
     {
-        if (!$this->validateData($data, 'Admin.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['client_id'], 'getAuthGroup');
-        if (false !== $result) {
-            return is_null($result) ? null : $result->append(['last_ip_region'])->toArray();
-        }
-
-        return false;
+        $result = $this->with('get_auth_group')->find($data['client_id']);
+        return is_null($result) ? null : $result->append(['last_ip_region'])->toArray();
     }
 
     /**
      * 获取账号列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAdminList($data)
     {
-        if (!$this->validateData($data, 'Admin.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
         $map = [];
-        !isset($data['client_id']) ?: $map['admin.admin_id'] = ['in', $data['client_id']];
-        empty($data['account']) ?: $map['admin.username|admin.nickname'] = ['eq', $data['account']];
-        is_empty_parm($data['group_id']) ?: $map['admin.group_id'] = ['eq', $data['group_id']];
-        is_empty_parm($data['status']) ?: $map['admin.status'] = ['eq', $data['status']];
+        !isset($data['client_id']) ?: $map[] = ['admin_id', 'in', $data['client_id']];
+        empty($data['account']) ?: $map[] = ['username|nickname', '=', $data['account']];
+        is_empty_parm($data['group_id']) ?: $map[] = ['group_id', '=', $data['group_id']];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
-        $totalResult = $this->alias('admin')->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['admin_id' => 'desc'])
+            ->with('get_auth_group')
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->append(['last_ip_region'])
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'admin_id';
-
-            $query
-                ->with('getAuthGroup')
-                ->where($map)
-                ->order(['admin.' . $orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return [
-                'items'        => $result->append(['last_ip_region'])->toArray(),
-                'total_result' => $totalResult,
-            ];
-        }
-
-        return false;
+        return $result;
     }
 
     /**
      * 获取指定账号的基础数据
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|bool
      */
     public function getAdminSelect($data)
     {
-        if (!$this->validateData($data, 'Admin.select')) {
+        if (!$this->validateData($data, 'select')) {
             return false;
         }
 
-        $map['admin_id'] = ['in', $data['client_id']];
+        $map[] = ['admin_id', 'in', $data['client_id']];
         $field = 'admin_id,username,nickname,status';
 
         $order = [];
@@ -466,13 +450,13 @@ class Admin extends CareyShop
      */
     public function logoutAdmin()
     {
-        $map['client_id'] = ['eq', get_client_id()];
-        $map['client_type'] = ['eq', 1];
+        $map[] = ['client_id', '=', get_client_id()];
+        $map[] = ['client_type', '=', 1];
 
-        $token = Request::instance()->param('token');
+        $token = input('param.token');
         if (!empty($token)) {
-            $map['token'] = ['eq', $token];
-            Cache::rm('token:' . $token);
+            $map[] = ['token', '=', $token];
+            Cache::delete('token:' . $token);
         }
 
         $this->hasToken()->where($map)->delete();
@@ -482,19 +466,19 @@ class Admin extends CareyShop
     /**
      * 登录账号
      * @access public
-     * @param  array $data       外部数据
-     * @param  bool  $isGetToken 是否需要返回Token
+     * @param array $data       外部数据
+     * @param bool  $isGetToken 是否需要返回Token
      * @return array|false
      * @throws
      */
     public function loginAdmin($data, $isGetToken = true)
     {
-        if (!$this->validateData($data, 'Admin.login')) {
+        if (!$this->validateData($data, 'login')) {
             return false;
         }
 
         // 请求实列
-        $request = Request::instance();
+        $request = request();
 
         // 验证码识别
         $appResult = App::getAppCaptcha($request->param('appkey'), false);
@@ -506,9 +490,11 @@ class Admin extends CareyShop
         }
 
         // 根据账号获取
-        $result = self::get(['username' => $data['username']]);
-        if (!$result) {
-            return is_null($result) ? $this->setError('账号不存在') : false;
+        $map[] = ['username', '=', $data['username']];
+        $result = $this->where($map)->find();
+
+        if (is_null($result)) {
+            return $this->setError('账号不存在');
         }
 
         if ($result->getAttr('status') !== 1) {
@@ -522,7 +508,7 @@ class Admin extends CareyShop
         $data['last_login'] = time();
         $data['last_ip'] = $request->ip();
         unset($data['admin_id']);
-        $this->allowField(['last_login', 'last_ip'])->save($data, ['username' => $data['username']]);
+        $result->allowField(['last_login', 'last_ip'])->save($data);
 
         if (!$isGetToken) {
             return ['admin' => $result->toArray()];
@@ -530,38 +516,32 @@ class Admin extends CareyShop
 
         $adminId = $result->getAttr('admin_id');
         $groupId = $result->getAttr('group_id');
+        $tokenResult = Token::setToken($adminId, $groupId, 1, $data['username'], $data['platform']);
 
-        $tokenDb = new Token();
-        $tokenResult = $tokenDb->setToken($adminId, $groupId, 1, $data['username'], $data['platform']);
-
-        if (false === $tokenResult) {
-            return $this->setError($tokenDb->getError());
-        }
-
-        Cache::clear('token:admin_' . $result->getAttr('admin_id'));
+        Cache::tag('token:admin_' . $result->getAttr('admin_id'))->clear();
         return ['admin' => $result->toArray(), 'token' => $tokenResult];
     }
 
     /**
      * 刷新Token
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function refreshToken($data)
     {
-        if (!$this->validateData($data, 'Admin.refresh')) {
+        if (!$this->validateData($data, 'refresh')) {
             return false;
         }
 
         // 获取原始Token
-        $oldToken = Request::instance()->param('token', '');
+        $oldToken = input('param.token', '');
 
         $tokenDb = new Token();
         $result = $tokenDb->refreshUser(1, $data['refresh'], $oldToken);
 
         if (false !== $result) {
-            Cache::rm('token:' . $oldToken);
+            Cache::delete('token:' . $oldToken);
             return ['token' => $result];
         }
 
