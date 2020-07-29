@@ -48,7 +48,7 @@ class App extends CareyShop
 
     /**
      * 全局是否删除查询条件
-     * @access protected
+     * @access public
      * @param App $query 模型
      */
     public function scopeDelete($query)
