@@ -67,6 +67,6 @@ class App extends CareyShop
     public static function checkCaptcha($code)
     {
         $keyID = input('param.session_id', '');
-        return Captcha::check($code, $keyID);
+        return Captcha::check((string)$code, $keyID);
     }
 }
