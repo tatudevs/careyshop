@@ -204,31 +204,31 @@ abstract class CareyShop
             $this->outputError($validate);
         }
 
-//        // 验证Token
-//        $token = $this->checkToken();
-//        if (true !== $token) {
-//            // 未授权，请重新登录(401)
-//            $this->outputError($token, 401);
-//        }
+        // 验证Token
+        $token = $this->checkToken();
+        if (true !== $token) {
+            // 未授权，请重新登录(401)
+            $this->outputError($token, 401);
+        }
 
-//        // 验证Auth
-//        $auth = $this->checkAuth();
-//        if (true !== $auth) {
-//            // 拒绝访问(403)
-//            $this->outputError($auth, 403);
-//        }
+        // 验证Auth
+        $auth = $this->checkAuth();
+        if (true !== $auth) {
+            // 拒绝访问(403)
+            $this->outputError($auth, 403);
+        }
 
-//        // 验证APP
-//        $apps = $this->checkApp();
-//        if (true !== $apps) {
-//            $this->outputError($apps);
-//        }
+        // 验证APP
+        $apps = $this->checkApp();
+        if (true !== $apps) {
+            $this->outputError($apps);
+        }
 
-//        // 验证Sign
-//        $sign = $this->apiDebug || $this->checkSign();
-//        if (true !== $sign) {
-//            $this->outputError($sign);
-//        }
+        // 验证Sign
+        $sign = $this->apiDebug || $this->checkSign();
+        if (true !== $sign) {
+            $this->outputError($sign);
+        }
 
         // 控制器初始化
         static::init();
