@@ -126,7 +126,8 @@ class Admin extends CareyShop
         return $this
             ->hasOne(AuthGroup::class, 'group_id', 'group_id')
             ->joinType('left')
-            ->field('group_id,name,status');
+            ->field('group_id,name,status')
+            ->hidden(['group_id']);
     }
 
     /**
