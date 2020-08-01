@@ -132,8 +132,8 @@ class Admin extends CareyShop
     /**
      * 验证当前账户是否有越级操作
      * @access private
-     * @param int   $adminID admin_id
-     * @param array $data    外部数据
+     * @param null $adminID admin_id
+     * @param null $data    外部数据
      * @return bool|false
      * @throws
      */
