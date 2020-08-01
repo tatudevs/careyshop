@@ -73,23 +73,24 @@ class Admin extends CareyShop
 
     /**
      * 密码修改器
-     * @access protected
+     * @access public
      * @param string $value 值
      * @return string
      */
-    protected function setPasswordAttr($value)
+    public function setPasswordAttr($value)
     {
         return user_md5($value);
     }
 
     /**
      * 获取器最后登录ip
+     * @access public
      * @param $value
      * @param $data
      * @return string
      * @throws \Exception
      */
-    protected function getLastIpRegionAttr($value, $data)
+    public function getLastIpRegionAttr($value, $data)
     {
         if (empty($data['last_ip'])) {
             return '';
