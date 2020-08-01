@@ -225,8 +225,8 @@ abstract class CareyShop
         }
 
         // 验证Sign
-        $sign = $this->apiDebug || $this->checkSign();
-        if (true !== $sign) {
+        $sign = $this->checkSign();
+        if (true !== $sign && !$this->apiDebug) {
             $this->outputError($sign);
         }
 
@@ -537,6 +537,10 @@ abstract class CareyShop
      */
     private function checkSign()
     {
+        if (empty($this->params['sign'])) {
+            return 'sign不存在';
+        }
+
         unset($this->params['sign']);
         $params = $this->params;
         ksort($params);
@@ -585,7 +589,7 @@ abstract class CareyShop
     /**
      * 获取公共参数
      * @access protected
-     * @param int/string $key 键值
+     * @param null $key
      * @return mixed
      */
     protected function getParams($key = null)

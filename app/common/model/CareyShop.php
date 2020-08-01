@@ -39,7 +39,6 @@ abstract class CareyShop extends Model
      * @access public
      * @param array $map 查询条件
      * @return bool false:不存在
-     * @throws
      */
     public static function checkUnique($map)
     {

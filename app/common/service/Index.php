@@ -18,7 +18,6 @@ class Index extends CareyShop
      * 调整最优状态(正式环境有效)
      * @access public
      * @return array|false
-     * @throws \Exception
      */
     public function setSystemOptimize()
     {

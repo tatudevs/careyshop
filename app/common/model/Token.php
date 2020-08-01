@@ -50,7 +50,6 @@ class Token extends CareyShop
      * @param string $username 账号
      * @param string $platform 来源平台
      * @return false|array
-     * @throws
      */
     public static function setToken($id, $group, $type, $username, $platform)
     {

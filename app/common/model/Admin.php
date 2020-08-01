@@ -168,7 +168,6 @@ class Admin extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|bool
-     * @throws
      */
     public function addAdminItem($data)
     {
@@ -193,7 +192,6 @@ class Admin extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setAdminItem($data)
     {
@@ -235,7 +233,6 @@ class Admin extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function setAdminStatus($data)
     {
@@ -331,7 +328,6 @@ class Admin extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function delAdminList($data)
     {
@@ -447,7 +443,6 @@ class Admin extends CareyShop
      * 注销账号
      * @access public
      * @return bool
-     * @throws
      */
     public function logoutAdmin()
     {

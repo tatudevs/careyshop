@@ -58,7 +58,6 @@ class Menu extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addMenuItem($data)
     {
@@ -167,10 +166,9 @@ class Menu extends CareyShop
      * @param string $module  所属模块
      * @param int    $menuId  菜单Id
      * @param bool   $isLayer 是否返回本级菜单
-     * @param int    $level   菜单深度
-     * @param array  $filter  过滤'is_navi'与'status'
+     * @param null   $level   菜单深度
+     * @param null   $filter  过滤'is_navi'与'status'
      * @return array|mixed
-     * @throws
      */
     public static function getMenuListData($module, $menuId = 0, $isLayer = false, $level = null, $filter = null)
     {
@@ -225,7 +223,7 @@ class Menu extends CareyShop
      * @access private
      * @param int    $parentId   上级菜单Id
      * @param object $list       原始模型对象
-     * @param int    $limitLevel 显示多少级深度 null:全部
+     * @param null   $limitLevel 显示多少级深度 null:全部
      * @param bool   $isLayer    是否返回本级菜单
      * @param int    $level      层级深度
      * @return array
@@ -416,7 +414,7 @@ class Menu extends CareyShop
      * @param string $module  所属模块
      * @param int    $menuId  菜单编号
      * @param bool   $isLayer 是否返回本级
-     * @param array  $filter  过滤'is_navi'与'status'
+     * @param null   $filter  过滤'is_navi'与'status'
      * @return array
      */
     public static function getParentList($module, $menuId, $isLayer = false, $filter = null)

@@ -44,7 +44,6 @@ class AuthGroup extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addAuthGroupItem($data)
     {
@@ -68,7 +67,6 @@ class AuthGroup extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setAuthGroupItem($data)
     {
