@@ -5,7 +5,7 @@
  * CareyShop    商品属性列表模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/20
+ * @date        2020/8/3
  */
 
 namespace app\common\model;
@@ -31,22 +31,10 @@ class GoodsAttr extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'goods_id'           => 'integer',
-        'goods_attribute_id' => 'integer',
-        'parent_id'          => 'integer',
-        'is_important'       => 'integer',
-        'sort'               => 'integer',
-    ];
-
-    /**
      * 添加商品属性列表
      * @access public
-     * @param  int   $goodsId 商品编号
-     * @param  array $data    外部数据
+     * @param int   $goodsId 商品编号
+     * @param array $data    外部数据
      * @return bool
      * @throws
      */
@@ -56,12 +44,12 @@ class GoodsAttr extends CareyShop
         foreach ($data as $key => $value) {
             $data[$key]['goods_id'] = $goodsId;
 
-            if (!$this->validateData($data[$key], 'GoodsAttr')) {
+            if (!$this->validateData($data[$key])) {
                 return false;
             }
         }
 
-        $result = $this->allowField(true)->isUpdate(false)->saveAll($data);
+        $result = $this->saveAll($data);
         return false !== $result;
     }
 }
