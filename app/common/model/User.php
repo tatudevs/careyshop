@@ -149,7 +149,7 @@ class User extends CareyShop
     public function getUserLevel()
     {
         return $this
-            ->hasOne(UserLevel::class, 'user_level_id')
+            ->hasOne(UserLevel::class, 'user_level_id', 'user_level_id')
             ->joinType('left')
             ->field('user_level_id,name,icon,discount')
             ->hidden(['user_level_id']);
@@ -163,7 +163,7 @@ class User extends CareyShop
     public function getAuthGroup()
     {
         return $this
-            ->hasOne(AuthGroup::class, 'group_id')
+            ->hasOne(AuthGroup::class, 'group_id', 'group_id')
             ->joinType('left')
             ->field('group_id,name,status')
             ->hidden(['group_id']);
