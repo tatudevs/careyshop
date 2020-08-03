@@ -5,7 +5,7 @@
  * CareyShop    收货地址管理模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/3/30
+ * @date        2020/8/3
  */
 
 namespace app\common\model;
@@ -17,6 +17,12 @@ class UserAddress extends CareyShop
      * @var int
      */
     const ADDRESS_COUNT_MAX = 20;
+
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'user_address_id';
 
     /**
      * 隐藏属性
@@ -41,112 +47,98 @@ class UserAddress extends CareyShop
      * @var array
      */
     protected $type = [
-        'user_address_id' => 'integer',
-        'country'         => 'integer',
-        'region_list'     => 'array',
-        'is_delete'       => 'integer',
+        'region_list' => 'array',
     ];
 
     /**
-     * 全局查询条件
-     * @access protected
-     * @param  object $query 模型
-     * @return void
+     * 定义全局的查询范围
+     * @var string[]
      */
-    protected function base($query)
+    protected $globalScope = [
+        'delete',
+    ];
+
+    /**
+     * 全局是否删除查询条件
+     * @access public
+     * @param User $query 模型
+     */
+    public function scopeDelete($query)
     {
-        $query->where(['is_delete' => ['eq', 0]]);
+        $query->where(['is_delete' => 0]);
     }
 
     /**
      * 获取指定账号的收货地址列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAddressList($data)
     {
-        if (!$this->validateData($data, 'UserAddress.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $query->where(['user_id' => ['eq', is_client_admin() ? $data['client_id'] : get_client_id()]]);
-        });
-
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return false;
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
+        return $this->where($map)->select()->toArray();
     }
 
     /**
      * 获取指定账号的一个收货地址
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAddressItem($data)
     {
-        if (!$this->validateData($data, 'UserAddress.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['user_address_id'] = ['eq', $data['user_address_id']];
-            $map['user_id'] = ['eq', is_client_admin() ? $data['client_id'] : get_client_id()];
+        $map[] = ['user_address_id', '=', $data['user_address_id']];
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
 
-            $query->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->where($map)->find();
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取指定账号的默认收货地址信息
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAddressDefault($data)
     {
-        if (!$this->validateData($data, 'UserAddress.get_default')) {
+        if (!$this->validateData($data, 'get_default')) {
             return false;
         }
 
-        $map['user_id'] = ['eq', is_client_admin() ? $data['client_id'] : get_client_id()];
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
         $userId = User::where($map)->value('user_address_id', 0);
 
         if (!$userId) {
             return $this->setError('尚未指定默认收货地址或尚未存在');
         }
 
-        $result = self::get($userId);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($userId);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 添加一个收货地址
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function addAddressItem($data)
     {
-        if (!$this->validateData($data, 'UserAddress')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -164,7 +156,7 @@ class UserAddress extends CareyShop
         $regionDb = new Region();
         $data['region'] = $regionDb->getRegionName(['region_id' => $region]);
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             if (isset($data['is_default']) && $data['is_default'] == 1) {
                 $this->setUserAddressDefault($this->getAttr('user_id'), $this->getAttr('user_address_id'));
             }
@@ -178,13 +170,13 @@ class UserAddress extends CareyShop
     /**
      * 编辑一个收货地址
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function setAddressItem($data)
     {
-        if (!$this->validateSetData($data, 'UserAddress.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -193,12 +185,12 @@ class UserAddress extends CareyShop
         !isset($data['is_default']) ?: $data['is_default'] = (int)$data['is_default'];
 
         $userId = is_client_admin() ? $data['client_id'] : get_client_id();
-        $map['user_id'] = ['eq', $userId];
-        $map['user_address_id'] = ['eq', $data['user_address_id']];
+        $map[] = ['user_id', '=', $userId];
+        $map[] = ['user_address_id', '=', $data['user_address_id']];
 
         $result = $this->where($map)->find();
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         // 处理区域
@@ -212,7 +204,7 @@ class UserAddress extends CareyShop
         $regionDb = new Region();
         $data['region'] = $regionDb->getRegionName(['region_id' => $region]);
 
-        if (false !== $result->allowField(true)->save($data)) {
+        if ($result->save($data)) {
             if (isset($data['is_default']) && $data['is_default'] == 1) {
                 $this->setUserAddressDefault($userId, $data['user_address_id']);
             }
@@ -226,53 +218,50 @@ class UserAddress extends CareyShop
     /**
      * 批量删除收货地址
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delAddressList($data)
     {
-        if (!$this->validateData($data, 'UserAddress.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $map['user_address_id'] = ['in', $data['user_address_id']];
-        $map['user_id'] = ['eq', is_client_admin() ? $data['client_id'] : get_client_id()];
+        $map[] = ['user_address_id', 'in', $data['user_address_id']];
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
 
-        if (false !== $this->isUpdate(true)->save(['is_delete' => 1], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['is_delete' => 1], $map);
+        return true;
     }
 
     /**
      * 设置账号默认收货地址
      * @access public
-     * @param  int $clientId  账号Id
-     * @param  int $addressId 收货地址Id
+     * @param int $clientId  账号Id
+     * @param int $addressId 收货地址Id
      * @return void
      */
     private function setUserAddressDefault($clientId, $addressId)
     {
-        User::where(['user_id' => ['eq', $clientId]])->setField('user_address_id', $addressId);
+        User::update(['user_address_id' => $addressId], ['user_id' => $clientId]);
     }
 
     /**
      * 设置一个收货地址为默认
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function setAddressDefault($data)
     {
-        if (!$this->validateData($data, 'UserAddress.default')) {
+        if (!$this->validateData($data, 'default')) {
             return false;
         }
 
-        $result = self::get($data['user_address_id']);
-        if (!$result) {
-            return is_null($result) ? $this->setError('收货地址不存在') : false;
+        $result = $this->find($data['user_address_id']);
+        if (is_null($result)) {
+            return $this->setError('收货地址不存在');
         }
 
         if (!is_client_admin() && $result->getAttr('user_id') != get_client_id()) {
@@ -286,7 +275,7 @@ class UserAddress extends CareyShop
     /**
      * 检测是否超出最大添加数量
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
@@ -296,7 +285,7 @@ class UserAddress extends CareyShop
             return false;
         }
 
-        $map['user_id'] = ['eq', is_client_admin() ? $data['client_id'] : get_client_id()];
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
         $result = $this->where($map)->count();
 
         if ($result >= self::ADDRESS_COUNT_MAX || !is_numeric($result)) {
