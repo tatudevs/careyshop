@@ -207,7 +207,7 @@ class User extends CareyShop
             $this->commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
