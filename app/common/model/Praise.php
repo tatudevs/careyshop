@@ -13,6 +13,12 @@ namespace app\common\model;
 class Praise extends CareyShop
 {
     /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'praise_id';
+
+    /**
      * 只读属性
      * @var array
      */
