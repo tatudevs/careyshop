@@ -5,13 +5,19 @@
  * CareyShop    帮助文档模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2019/3/19
+ * @date        2020/8/3
  */
 
 namespace app\common\model;
 
 class Help extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'help_id';
+
     /**
      * 只读属性
      * @var array
@@ -21,29 +27,21 @@ class Help extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'help_id' => 'integer',
-    ];
-
-    /**
      * 验证帮助文档是否唯一
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function uniqueHelpItem($data)
     {
-        if (!$this->validateData($data, 'Help.unique')) {
+        if (!$this->validateData($data, 'unique')) {
             return false;
         }
 
-        $map['router'] = ['eq', $data['router']];
-        $map['ver'] = ['eq', $data['ver']];
-        $map['module'] = ['eq', $data['module']];
-        !isset($data['exclude_id']) ?: $map['help_id'] = ['neq', $data['exclude_id']];
+        $map[] = ['router', '=', $data['router']];
+        $map[] = ['ver', '=', $data['ver']];
+        $map[] = ['module', '=', $data['module']];
+        !isset($data['exclude_id']) ?: $map[] = ['help_id', '<>', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('帮助文档特征已存在');
@@ -55,13 +53,12 @@ class Help extends CareyShop
     /**
      * 添加一条帮助文档
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool|array
-     * @throws
      */
     public function addHelpItem($data)
     {
-        if (!$this->validateData($data, 'Help')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -73,7 +70,7 @@ class Help extends CareyShop
         // 避免无关字段
         unset($data['help_id']);
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
@@ -83,13 +80,12 @@ class Help extends CareyShop
     /**
      * 编辑一条帮助文档
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool|array
-     * @throws
      */
     public function setHelpItem($data)
     {
-        if (!$this->validateData($data, 'Help.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -98,112 +94,82 @@ class Help extends CareyShop
             return false;
         }
 
-        $map['help_id'] = ['eq', $data['help_id']];
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            return $this->toArray();
-        }
+        $map[] = ['help_id', '=', $data['help_id']];
+        $result = self::update($data, $map);
 
-        return false;
+        return $result->toArray();
     }
 
     /**
      * 获取一条帮助文档
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool|array
      * @throws
      */
     public function getHelpItem($data)
     {
-        if (!$this->validateData($data, 'Help.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['help_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['help_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 根据路由获取帮助文档
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool|array
      * @throws
      */
     public function getHelpRouter($data)
     {
-        if (!$this->validateData($data, 'Help.router')) {
+        if (!$this->validateData($data, 'router')) {
             return false;
         }
 
-        $map['router'] = ['eq', $data['router']];
-        $map['ver'] = ['eq', $data['ver']];
-        $map['module'] = ['eq', $data['module']];
+        $map[] = ['router', '=', $data['router']];
+        $map[] = ['ver', '=', $data['ver']];
+        $map[] = ['module', '=', $data['module']];
 
-        $result = self::get(function ($query) use ($map) {
-            $query->field('content,url')->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->field('content,url')->where($map)->find();
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取帮助文档列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool|array
      * @throws
      */
     public function getHelpList($data)
     {
-        if (!$this->validateData($data, 'Help.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
         $map = [];
-        empty($data['router']) ?: $map['router'] = ['eq', $data['router']];
-        empty($data['ver']) ?: $map['ver'] = ['eq', $data['ver']];
-        empty($data['module']) ?: $map['module'] = ['eq', $data['module']];
-        empty($data['content']) ?: $map['content'] = ['like', '%' . $data['content'] . '%'];
-        empty($data['url']) ?: $map['url'] = ['like', '%' . $data['url'] . '%'];
+        empty($data['router']) ?: $map[] = ['router', '=', $data['router']];
+        empty($data['ver']) ?: $map[] = ['ver', '=', $data['ver']];
+        empty($data['module']) ?: $map[] = ['module', '=', $data['module']];
+        empty($data['content']) ?: $map[] = ['content', 'like', '%' . $data['content'] . '%'];
+        empty($data['url']) ?: $map[] = ['url', 'like', '%' . $data['url'] . '%'];
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        $result['items'] = $this->setDefaultOrder(['help_id' => 'desc'])
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'help_id';
-
-            $query
-                ->where($map)
-                ->order([$orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 }
