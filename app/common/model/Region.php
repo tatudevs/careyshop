@@ -5,16 +5,22 @@
  * CareyShop    区域验证器
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/3/27
+ * @date        2020/8/3
  */
 
 namespace app\common\model;
 
-use think\Cache;
-use think\Config;
+use think\facade\Cache;
+use think\facade\Config;
 
 class Region extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'region_id';
+
     /**
      * 隐藏属性
      * @var array
@@ -33,25 +39,21 @@ class Region extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
+     * 定义全局的查询范围
+     * @var string[]
      */
-    protected $type = [
-        'region_id' => 'integer',
-        'parent_id' => 'integer',
-        'sort'      => 'integer',
-        'is_delete' => 'integer',
+    protected $globalScope = [
+        'delete',
     ];
 
     /**
-     * 全局查询条件
-     * @access protected
-     * @param  object $query 模型
-     * @return void
+     * 全局是否删除查询条件
+     * @access public
+     * @param User $query 模型
      */
-    protected function base($query)
+    public function scopeDelete($query)
     {
-        $query->where(['is_delete' => ['eq', 0]]);
+        $query->where(['is_delete' => 0]);
     }
 
     /**
@@ -61,7 +63,7 @@ class Region extends CareyShop
      */
     public static function getRegionCacheList()
     {
-        return self::useGlobalScope(false)
+        return self::withoutGlobalScope()
             ->cache('DeliveryArea')
             ->order(['sort', 'region_id'])
             ->column('region_id,parent_id,region_name,sort,is_delete', 'region_id');
@@ -70,18 +72,17 @@ class Region extends CareyShop
     /**
      * 添加一个区域
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addRegionItem($data)
     {
-        if (!$this->validateData($data, 'Region')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
-        if (false !== $this->allowField(['parent_id', 'region_name', 'sort'])->save($data)) {
-            Cache::rm('DeliveryArea');
+        if ($this->allowField(['parent_id', 'region_name', 'sort'])->save($data)) {
+            Cache::delete('DeliveryArea');
             return $this->toArray();
         }
 
@@ -91,104 +92,99 @@ class Region extends CareyShop
     /**
      * 编辑一个区域
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function setRegionItem($data)
     {
-        if (!$this->validateSetData($data, 'Region.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
-        $map['region_id'] = ['eq', $data['region_id']];
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            Cache::rm('DeliveryArea');
-            return $this->toArray();
-        }
+        // 搜索条件
+        $map[] = ['region_id', '=', $data['region_id']];
 
-        return false;
+        $result = self::update($data, $map);
+        Cache::delete('DeliveryArea');
+
+        return $result->toArray();
     }
 
     /**
      * 批量删除区域
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delRegionList($data)
     {
-        if (!$this->validateData($data, 'Region.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
+        // 搜索条件
         $map['region_id'] = ['in', $data['region_id']];
-        if (false !== $this->save(['is_delete' => 1], $map)) {
-            Cache::rm('DeliveryArea');
-            return true;
-        }
 
-        return false;
+        self::update(['is_delete' => 1], $map);
+        Cache::delete('DeliveryArea');
+
+        return true;
     }
 
     /**
      * 获取指定区域
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getRegionItem($data)
     {
-        if (!$this->validateData($data, 'Region.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
         // 是否提取已删除区域
         $scope = isset($data['region_all']) ? !$data['region_all'] : true;
-        $result = self::useGlobalScope($scope)->where(['region_id' => ['eq', $data['region_id']]])->find();
 
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = self::withoutGlobalScope($scope ? [] : ['delete'])->find($data['region_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取指定Id下的子节点
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getRegionList($data)
     {
-        if (!$this->validateData($data, 'Region.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 是否提取已删除区域
         $scope = isset($data['region_all']) ? !$data['region_all'] : true;
-        $map['parent_id'] = isset($data['region_id']) ? ['eq', $data['region_id']] : ['eq', 0];
-        $result = self::useGlobalScope($scope)->where($map)->order(['sort', 'region_id'])->select();
+        $map[] = ['parent_id', '=', isset($data['region_id']) ? $data['region_id'] : 0];
 
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return false;
+        return self::withoutGlobalScope($scope ? [] : ['delete'])
+            ->where($map)
+            ->order(['sort', 'region_id'])
+            ->select()
+            ->toArray();
     }
 
     /**
      * 获取指定Id下的所有子节点
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function getRegionSonList($data)
     {
-        if (!$this->validateData($data, 'Region.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
@@ -206,10 +202,10 @@ class Region extends CareyShop
     /**
      * 过滤和排序所有区域
      * @access private
-     * @param  int   $id    上级区域Id
-     * @param  array &$tree 树结构
-     * @param  array &$list 原始数据结构
-     * @param  bool  $isDelete 是否提取已删除区域
+     * @param int    $id       上级区域Id
+     * @param array &$tree     树结构
+     * @param array &$list     原始数据结构
+     * @param bool   $isDelete 是否提取已删除区域
      * @return void
      */
     private static function getRegionChildrenList($id, &$tree, &$list, $isDelete)
@@ -242,22 +238,22 @@ class Region extends CareyShop
     /**
      * 设置区域排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setRegionSort($data)
     {
-        if (!$this->validateData($data, 'Region.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['region_id'] = ['eq', $data['region_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            Cache::rm('DeliveryArea');
-            return true;
-        }
+        // 搜索条件
+        $map[] = ['region_id', '=', $data['region_id']];
 
-        return false;
+        self::update(['sort' => $data['sort']], $map);
+        Cache::delete('DeliveryArea');
+
+        return true;
     }
 
     /**
@@ -269,7 +265,7 @@ class Region extends CareyShop
      */
     public function setRegionIndex($data)
     {
-        if (!$this->validateData($data, 'Region.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -278,28 +274,26 @@ class Region extends CareyShop
             $list[] = ['region_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            Cache::rm('DeliveryArea');
-            return true;
-        }
+        $this->saveAll($list);
+        Cache::delete('DeliveryArea');
 
-        return false;
+        return true;
     }
 
     /**
      * 根据区域编号获取区域名称
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return string
      */
     public function getRegionName($data)
     {
-        if (!$this->validateData($data, 'Region.name')) {
+        if (!$this->validateData($data, 'name')) {
             return '';
         }
 
-        $map['region_id'] = ['in', $data['region_id']];
-        $result = self::useGlobalScope(false)->where($map)->column('region_name', 'region_id');
+        $map[] = ['region_id', 'in', $data['region_id']];
+        $result = self::withoutGlobalScope()->where($map)->column('region_name', 'region_id');
 
         // 根据用户输入的顺序返回
         $name = [];
@@ -307,6 +301,6 @@ class Region extends CareyShop
             !isset($result[$value]) ?: $name[] = $result[$value];
         }
 
-        return implode(Config::get('spacer.value', 'system_shopping'), $name);
+        return implode(Config::get('careyshop.system_shopping.spacer', ''), $name);
     }
 }
