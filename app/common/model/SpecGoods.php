@@ -5,7 +5,7 @@
  * CareyShop    商品规格列表模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/21
+ * @date        2020/8/3
  */
 
 namespace app\common\model;
@@ -33,16 +33,14 @@ class SpecGoods extends CareyShop
      * @var array
      */
     protected $type = [
-        'goods_id'  => 'integer',
-        'price'     => 'float',
-        'store_qty' => 'integer',
+        'price' => 'float',
     ];
 
     /**
      * 添加商品规格列表
      * @access public
-     * @param  int   $goodsId 商品编号
-     * @param  array $data    外部数据
+     * @param int   $goodsId 商品编号
+     * @param array $data    外部数据
      * @return bool
      * @throws
      */
@@ -52,7 +50,7 @@ class SpecGoods extends CareyShop
         foreach ($data as $key => $value) {
             $data[$key]['goods_id'] = $goodsId;
 
-            if (!$this->validateData($data[$key], 'SpecGoods')) {
+            if (!$this->validateData($data[$key])) {
                 return false;
             }
 
@@ -62,7 +60,7 @@ class SpecGoods extends CareyShop
             }
         }
 
-        $result = $this->allowField(true)->saveAll($data);
+        $result = $this->saveAll($data);
         return false !== $result;
     }
 }
