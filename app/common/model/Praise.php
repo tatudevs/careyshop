@@ -5,7 +5,7 @@
  * CareyShop    点赞记录模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/6/22
+ * @date        2020/8/3
  */
 
 namespace app\common\model;
@@ -18,15 +18,5 @@ class Praise extends CareyShop
      */
     protected $readonly = [
         'praise_id',
-    ];
-
-    /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'praise_id'        => 'integer',
-        'user_id'          => 'integer',
-        'goods_comment_id' => 'integer',
     ];
 }
