@@ -5,13 +5,19 @@
  * CareyShop    售后日志模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/10/13
+ * @date        2020/8/3
  */
 
 namespace app\common\model;
 
 class ServiceLog extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'service_log_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -34,25 +40,14 @@ class ServiceLog extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'service_log_id'   => 'integer',
-        'order_service_id' => 'integer',
-        'client_type'      => 'integer',
-    ];
-
-    /**
      * 添加售后操作日志
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
-     * @throws
      */
     public function addServiceLogItem($data)
     {
-        if (!$this->validateData($data, 'ServiceLog')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -61,7 +56,7 @@ class ServiceLog extends CareyShop
         $data['action'] = get_client_name();
         $data['client_type'] = get_client_type();
 
-        if (false !== $this->isUpdate(false)->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
