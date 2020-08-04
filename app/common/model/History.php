@@ -5,13 +5,19 @@
  * CareyShop    我的足迹模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/7/15
+ * @date        2020/8/4
  */
 
 namespace app\common\model;
 
 class History extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'history_id';
+
     /**
      * 隐藏属性
      * @var array
@@ -34,9 +40,6 @@ class History extends CareyShop
      * @var array
      */
     protected $type = [
-        'history_id'  => 'integer',
-        'user_id'     => 'integer',
-        'goods_id'    => 'integer',
         'update_time' => 'timestamp',
     ];
 
@@ -48,20 +51,21 @@ class History extends CareyShop
     public function getGoods()
     {
         $field = [
-            'goods_category_id', 'name', 'short_name', 'brand_id', 'store_qty',
-            'comment_sum', 'sales_sum', 'attachment', 'status', 'is_delete',
+            'goods_id', 'goods_category_id', 'name', 'short_name', 'brand_id',
+            'store_qty', 'comment_sum', 'sales_sum', 'attachment', 'status', 'is_delete',
         ];
 
         return $this
-            ->hasOne('Goods', 'goods_id', 'goods_id')
+            ->hasOne(Goods::class, 'goods_id', 'goods_id')
+            ->joinType('left')
             ->field($field)
-            ->setEagerlyType(0);
+            ->hidden(['goods_id']);
     }
 
     /**
      * 添加一个我的足迹
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
@@ -71,19 +75,17 @@ class History extends CareyShop
             return true;
         }
 
-        if (!$this->validateData($data, 'History')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['user_id'] = ['eq', get_client_id()];
-            $map['goods_id'] = ['eq', $data['goods_id']];
+        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['goods_id', '=', $data['goods_id']];
 
-            $query->where($map);
-        });
-
-        if ($result) {
-            $result->setAttr('update_time', time())->save();
+        $result = $this->where($map)->find();
+        if (!is_null($result)) {
+            $result->setAttr('update_time', time());
+            $result->save();
             return true;
         }
 
@@ -92,7 +94,7 @@ class History extends CareyShop
         $data['user_id'] = get_client_id();
         $data['update_time'] = time();
 
-        if (false !== $this->allowField(true)->isUpdate(false)->save($data)) {
+        if ($this->save($data)) {
             return true;
         }
 
@@ -102,19 +104,19 @@ class History extends CareyShop
     /**
      * 批量删除我的足迹
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delHistoryList($data)
     {
-        if (!$this->validateData($data, 'History.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $map['history_id'] = ['in', $data['history_id']];
-        $map['user_id'] = ['eq', get_client_id()];
-        $this->where($map)->delete();
+        $map[] = ['history_id', 'in', $data['history_id']];
+        $map[] = ['user_id', '=', get_client_id()];
 
+        $this->where($map)->delete();
         return true;
     }
 
@@ -133,13 +135,12 @@ class History extends CareyShop
      * 获取我的足迹数量
      * @access public
      * @return array
-     * @throws
      */
     public function getHistoryCount()
     {
         // 搜索条件
-        $map['history.user_id'] = ['eq', get_client_id()];
-        $totalResult = $this->with('getGoods')->where($map)->count();
+        $map[] = ['user_id', '=', get_client_id()];
+        $totalResult = $this->with('get_goods')->where($map)->count();
 
         return ['total_result' => $totalResult];
     }
@@ -147,48 +148,31 @@ class History extends CareyShop
     /**
      * 获取我的足迹列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function getHistoryList($data)
     {
-        if (!$this->validateData($data, 'History.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['history.user_id'] = ['eq', get_client_id()];
-        $totalResult = $this->with('getGoods')->where($map)->count();
+        $map[] = ['user_id', '=', get_client_id()];
+        $result['total_result'] = $this->where($map)->count();
 
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($map, $data) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        $result['items'] = $this->setDefaultOrder(['update_time' => 'desc'])
+            ->with('get_goods')
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'update_time';
-
-            $query
-                ->with('getGoods')
-                ->where($map)
-                ->order(['history.' . $orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 }
