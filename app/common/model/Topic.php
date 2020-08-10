@@ -5,13 +5,19 @@
  * CareyShop    专题模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/3/28
+ * @date        2020/8/10
  */
 
 namespace app\common\model;
 
 class Topic extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'topic_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -27,31 +33,21 @@ class Topic extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'topic_id'    => 'integer',
-        'status'      => 'integer',
-    ];
-
-    /**
      * 添加一个专题
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addTopicItem($data)
     {
-        if (!$this->validateData($data, 'Topic')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 避免无关字段
         unset($data['topic_id']);
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
