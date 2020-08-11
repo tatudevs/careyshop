@@ -57,22 +57,19 @@ class Topic extends CareyShop
     /**
      * 编辑一个专题
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setTopicItem($data)
     {
-        if (!$this->validateSetData($data, 'Topic.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
-        $map['topic_id'] = ['eq', $data['topic_id']];
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            return $this->toArray();
-        }
+        $map[] = ['topic_id', '=', $data['topic_id']];
+        $result = self::update($data, $map);
 
-        return false;
+        return $result->toArray();
     }
 
     /**
@@ -83,7 +80,7 @@ class Topic extends CareyShop
      */
     public function delTopicList($data)
     {
-        if (!$this->validateData($data, 'Topic.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
