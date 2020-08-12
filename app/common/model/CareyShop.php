@@ -156,6 +156,9 @@ abstract class CareyShop extends Model
                 }
             } else {
                 $v = validate($validate);
+                if ($scene) {
+                    $v->extractScene($scene);
+                }
             }
 
             if ($clean) {
