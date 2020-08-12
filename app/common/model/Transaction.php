@@ -5,7 +5,7 @@
  * CareyShop    交易结算模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/6/20
+ * @date        2020/8/13
  */
 
 namespace app\common\model;
@@ -25,6 +25,12 @@ class Transaction extends CareyShop
     const TRANSACTION_EXPENDITURE = 1;
 
     /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'transaction_id';
+
+    /**
      * 是否需要自动写入时间戳
      * @var bool
      */
@@ -41,12 +47,8 @@ class Transaction extends CareyShop
      * @var array
      */
     protected $type = [
-        'transaction_id' => 'integer',
-        'user_id'        => 'integer',
-        'type'           => 'integer',
-        'amount'         => 'float',
-        'balance'        => 'float',
-        'to_payment'     => 'integer',
+        'amount'  => 'float',
+        'balance' => 'float',
     ];
 
     /**
@@ -57,21 +59,19 @@ class Transaction extends CareyShop
     public function getUser()
     {
         return $this
-            ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('username,nickname,level_icon,head_pic')
-            ->setEagerlyType(0);
+            ->hasOne(User::class, 'user_id', 'user_id')
+            ->joinType('left');
     }
 
     /**
      * 添加一条交易结算
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addTransactionItem($data)
     {
-        if (!$this->validateData($data, 'Transaction')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -84,7 +84,7 @@ class Transaction extends CareyShop
         $this->setAttr('transaction_id', null);
         $data['action'] = get_client_name();
 
-        if (false !== $this->isUpdate(false)->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
@@ -94,28 +94,21 @@ class Transaction extends CareyShop
     /**
      * 获取一笔交易结算
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getTransactionItem($data)
     {
-        if (!$this->validateData($data, 'Transaction.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['transaction_id'] = ['eq', $data['transaction_id']];
-            is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
+        $map[] = ['transaction_id', '=', $data['transaction_id']];
+        is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
 
-            $query->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->where($map)->find();
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
@@ -127,64 +120,76 @@ class Transaction extends CareyShop
      */
     public function getTransactionList($data)
     {
-        if (!$this->validateData($data, 'Transaction.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['transaction.user_id'] = ['eq', get_client_id()];
-        is_empty_parm($data['type']) ?: $map['transaction.type'] = ['eq', $data['type']];
-        empty($data['source_no']) ?: $map['transaction.source_no'] = ['eq', $data['source_no']];
-        is_empty_parm($data['module']) ?: $map['transaction.module'] = ['eq', $data['module']];
-        empty($data['card_number']) ?: $map['transaction.card_number'] = ['eq', $data['card_number']];
+        $map = [];
+        is_empty_parm($data['type']) ?: $map[] = ['transaction.type', '=', $data['type']];
+        empty($data['source_no']) ?: $map[] = ['transaction.source_no', '=', $data['source_no']];
+        is_empty_parm($data['module']) ?: $map[] = ['transaction.module', '=', $data['module']];
+        empty($data['card_number']) ?: $map[] = ['transaction.card_number', '=', $data['card_number']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
-            $map['transaction.create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
+            $map[] = ['transaction.create_time', 'between time', [$data['begin_time'], $data['end_time']]];
         }
 
         // 关联查询
         $with = [];
 
         // 后台管理搜索
-        if (is_client_admin()) {
-            $with = ['getUser'];
-            unset($map['transaction.user_id']);
-            empty($data['action']) ?: $map['transaction.action'] = ['eq', $data['action']];
-            is_empty_parm($data['to_payment']) ?: $map['transaction.to_payment'] = ['eq', $data['to_payment']];
-            empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
+        if (!is_client_admin()) {
+            $with['get_user'] = ['username', 'level_icon', 'head_pic', 'nickname'];
+            empty($data['action']) ?: $map[] = ['transaction.action', '=', $data['action']];
+            is_empty_parm($data['to_payment']) ?: $map[] = ['transaction.to_payment', '=', $data['to_payment']];
+            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+        } else {
+            $map[] = ['transaction.user_id', '=', get_client_id()];
         }
 
         // 获取总数量,为空直接返回
-        $totalResult = $this->alias('transaction')->with($with)->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->alias('transaction')->withJoin($with)->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map, $with) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['transaction_id' => 'desc'])
+            ->alias('transaction')
+            ->withJoin($with)
+            ->where($map)
+            ->withSearch(['page', 'order'], $data, 'transaction')
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
+        return $result;
 
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'transaction_id';
-
-            $query
-                ->alias('transaction')
-                ->with($with)
-                ->where($map)
-                ->order(['transaction.' . $orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+//        $result = self::all(function ($query) use ($data, $map, $with) {
+//            // 翻页页数
+//            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+//
+//            // 每页条数
+//            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
+//
+//            // 排序方式
+//            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
+//
+//            // 排序的字段
+//            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'transaction_id';
+//
+//            $query
+//                ->alias('transaction')
+//                ->with($with)
+//                ->where($map)
+//                ->order(['transaction.' . $orderField => $orderType])
+//                ->page($pageNo, $pageSize);
+//        });
+//
+//        if (false !== $result) {
+//            return ['items' => $result->toArray(), 'total_result' => $totalResult];
+//        }
+//
+//        return false;
     }
 }
