@@ -75,7 +75,7 @@ class Topic extends CareyShop
     /**
      * 批量删除专题
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delTopicList($data)
@@ -84,115 +84,88 @@ class Topic extends CareyShop
             return false;
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('topic_id', 'in', $data['topic_id']);
-        });
-
+        self::destroy($data['topic_id']);
         return true;
     }
 
     /**
      * 获取一个专题
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getTopicItem($data)
     {
-        if (!$this->validateData($data, 'Topic.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['topic_id'] = ['eq', $data['topic_id']];
-            is_client_admin() ?: $map['status'] = ['eq', 1];
+        $map[] = ['topic_id', '=', $data['topic_id']];
+        is_client_admin() ?: $map[] = ['status', '=', 1];
 
-            $query->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->where($map)->find();
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取专题列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getTopicList($data)
     {
-        if (!$this->validateData($data, 'Topic.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['status'] = ['eq', 1];
+        $map = [];
 
         // 后台管理搜索
         if (is_client_admin()) {
-            unset($map['status']);
-            is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
-            empty($data['title']) ?: $map['title'] = ['like', '%' . $data['title'] . '%'];
-            empty($data['alias']) ?: $map['alias'] = ['like', '%' . $data['alias'] . '%'];
-            empty($data['keywords']) ?: $map['keywords'] = ['like', '%' . $data['keywords'] . '%'];
+            is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
+            empty($data['title']) ?: $map[] = ['title', 'like', '%' . $data['title'] . '%'];
+            empty($data['alias']) ?: $map[] = ['alias', 'like', '%' . $data['alias'] . '%'];
+            empty($data['keywords']) ?: $map[] = ['keywords', 'like', '%' . $data['keywords'] . '%'];
+        } else {
+            $map[] = ['status', '=', 1];
         }
 
         // 获取总数量,为空直接返回
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['topic_id' => 'desc'])
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->withoutField('content')
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'topic_id';
-
-            $query
-                ->field('content', true)
-                ->where($map)
-                ->order([$orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 
     /**
      * 批量设置专题是否显示
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setTopicStatus($data)
     {
-        if (!$this->validateData($data, 'Topic.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['topic_id'] = ['in', $data['topic_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            return true;
-        }
+        $map[] = ['topic_id', 'in', $data['topic_id']];
+        self::update(['status' => $data['status']], $map);
 
-        return false;
+        return true;
     }
 }
