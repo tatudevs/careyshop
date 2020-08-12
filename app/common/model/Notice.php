@@ -10,6 +10,10 @@
 
 namespace app\common\model;
 
+use app\common\validate\Notice as Validate;
+use think\facade\Cache;
+use think\facade\Config;
+
 class Notice extends CareyShop
 {
     /**
@@ -69,18 +73,20 @@ class Notice extends CareyShop
     /**
      * 获取一个通知系统
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function getNoticeItem($data)
     {
-        if (!$this->validateData($data, 'item')) {
+        if (!$this->validateData($data, 'item', false, Validate::class)) {
             return false;
         }
 
-        $result = Config::get($data['code'], 'notice');
-        if (!empty($result['value'])) {
-            $result['value'] = json_decode($result['value'], true);
+        $result = [];
+        $notice = Config::get('careyshop.notice.' . $data['code']);
+        if (!empty($notice)) {
+            $result['code'] = $data['code'];
+            $result['value'] = json_decode($notice, true);
         }
 
         return $result;
@@ -89,19 +95,19 @@ class Notice extends CareyShop
     /**
      * 批量设置通知系统是否启用
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function setNoticeStatus($data)
     {
-        if (!$this->validateData($data, 'Notice.status')) {
+        if (!$this->validateData($data, 'status', false, Validate::class)) {
             return false;
         }
 
         // 获取原始数据
-        $map['module'] = ['eq', 'notice'];
-        $map['code'] = ['in', $data['code']];
+        $map[] = ['module', '=', 'notice'];
+        $map[] = ['code', 'in', $data['code']];
         $result = $this->field('setting_id,code,value')->where($map)->select()->toArray();
 
         foreach ($result as $key => $value) {
@@ -111,16 +117,16 @@ class Notice extends CareyShop
                 $value['value'] = json_encode($value['value'], JSON_UNESCAPED_UNICODE);
 
                 $result[$key] = $value;
-                Config::set($value['code'] . '.value', $value['value'], 'notice');
             }
         }
 
-        if (empty($result) || false === $this->saveAll($result)) {
-            return false;
+        if (!empty($result)) {
+            $this->saveAll($result);
+            Cache::delete('setting');
+            return true;
         }
 
-        Cache::rm('setting');
-        return true;
+        return false;
     }
 
     /**
@@ -196,9 +202,8 @@ class Notice extends CareyShop
             $map['module'] = ['eq', 'notice'];
 
             $settingData = json_encode($settingData, JSON_UNESCAPED_UNICODE);
-            if (false !== $this->save(['value' => $settingData], $map)) {
-                Config::set($code . '.value', $settingData, 'notice');
-                Cache::rm('setting');
+            if ($this->save(['value' => $settingData], $map)) {
+                Cache::delete('setting');
                 return true;
             }
         }
