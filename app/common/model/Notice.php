@@ -10,9 +10,9 @@
 
 namespace app\common\model;
 
-use app\common\validate\Notice as Validate;
 use think\facade\Cache;
 use think\facade\Config;
+use app\common\validate\Notice as Validate;
 
 class Notice extends CareyShop
 {
@@ -113,7 +113,7 @@ class Notice extends CareyShop
         foreach ($result as $key => $value) {
             if (!empty($value['value'])) {
                 $value['value'] = json_decode($value['value'], true);
-                $value['value']['status']['value'] = $data['status'];
+                $value['value']['status']['value'] = (string)$data['status'];
                 $value['value'] = json_encode($value['value'], JSON_UNESCAPED_UNICODE);
 
                 $result[$key] = $value;
@@ -132,20 +132,14 @@ class Notice extends CareyShop
     /**
      * 设置一个通知系统
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setNoticeItem($data)
     {
-        $code = isset($data['code']) ? $data['code'] : '';
-        $validate = Loader::validate('Notice');
-
-        if (!$validate->hasScene('set_' . $code)) {
-            return $this->setError('通知系统编码错误');
-        }
-
-        if (!$validate->scene('set_' . $code)->check($data)) {
-            return $this->setError($validate->getError());
+        $code = !empty($data['code']) ? 'set_' . $data['code'] : null;
+        if (!$this->validateData($data, $code, false, Validate::class)) {
+            return false;
         }
 
         $settingData = [];
@@ -198,14 +192,14 @@ class Notice extends CareyShop
         }
 
         if (!empty($settingData)) {
-            $map['code'] = ['eq', $code];
-            $map['module'] = ['eq', 'notice'];
+            $map[] = ['code', '=', $data['code']];
+            $map[] = ['module', '=', 'notice'];
 
             $settingData = json_encode($settingData, JSON_UNESCAPED_UNICODE);
-            if ($this->save(['value' => $settingData], $map)) {
-                Cache::delete('setting');
-                return true;
-            }
+            self::update(['value' => $settingData], $map);
+            Cache::delete('setting');
+
+            return true;
         }
 
         return false;

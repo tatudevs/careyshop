@@ -17,7 +17,7 @@ class Notice extends CareyShop
      * @var array
      */
     protected $rule = [
-        'code'       => 'in:sms,email',
+        'code'       => 'require|in:sms,email',
         'status'     => 'in:0,1',
         'key_id'     => 'max:255',
         'key_secret' => 'max:255',
