@@ -49,7 +49,7 @@ class ArticleCat extends CareyShop
      * @access protected
      * @param int  $articleCatId 文章分类Id
      * @param bool $isLayer      是否返回本级分类
-     * @param int  $level        分类深度
+     * @param null $level        分类深度
      * @return array|bool
      */
     protected function getArticleCatList($articleCatId = 0, $isLayer = false, $level = null)

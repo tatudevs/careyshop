@@ -5,15 +5,21 @@
  * CareyShop    文章分类模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/3/29
+ * @date        2020/8/14
  */
 
 namespace app\common\model;
 
-use think\Cache;
+use think\facade\Cache;
 
 class ArticleCat extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'article_cat_id';
+
     /**
      * 只读属性
      * @var array
@@ -23,35 +29,22 @@ class ArticleCat extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'article_cat_id' => 'integer',
-        'parent_id'      => 'integer',
-        'cat_type'       => 'integer',
-        'sort'           => 'integer',
-        'is_navi'        => 'integer',
-    ];
-
-    /**
      * 添加一个文章分类
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addArticleCatItem($data)
     {
-        if (!$this->validateData($data, 'ArticleCat')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 避免无关字段
         unset($data['article_cat_id']);
 
-        if (false !== $this->allowField(true)->save($data)) {
-            Cache::clear('ArticleCat');
+        if ($this->save($data)) {
+            Cache::tag('ArticleCat')->clear();
             return $this->toArray();
         }
 
@@ -61,13 +54,12 @@ class ArticleCat extends CareyShop
     /**
      * 编辑一个文章分类
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setArticleCatItem($data)
     {
-        if (!$this->validateSetData($data, 'ArticleCat.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -77,10 +69,7 @@ class ArticleCat extends CareyShop
                 return $this->setError('上级分类不能设为自身');
             }
 
-            if (($result = self::getArticleCatList($data['article_cat_id'])) === false) {
-                return false;
-            }
-
+            $result = self::getArticleCatList($data['article_cat_id']);
             foreach ($result as $value) {
                 if ($data['parent_id'] == $value['article_cat_id']) {
                     return $this->setError('上级分类不能设为自身的子分类');
@@ -88,24 +77,22 @@ class ArticleCat extends CareyShop
             }
         }
 
-        $map['article_cat_id'] = ['eq', $data['article_cat_id']];
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            Cache::clear('ArticleCat');
-            return $this->toArray();
-        }
+        // 搜索条件
+        $map[] = ['article_cat_id', '=', $data['article_cat_id']];
 
-        return false;
+        $result = self::update($data, $map);
+        return $result->toArray();
     }
 
     /**
      * 批量删除文章分类(支持检测是否存在子节点与关联文章)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delArticleCatList($data)
     {
-        if (!$this->validateData($data, 'ArticleCat.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
@@ -114,9 +101,7 @@ class ArticleCat extends CareyShop
 
         if (!empty($data['not_empty'])) {
             $idList = $data['article_cat_id'];
-            if (($result = self::getArticleCatList()) === false) {
-                return false;
-            }
+            $result = self::getArticleCatList();
         }
 
         // 过滤不需要的分类
@@ -139,72 +124,60 @@ class ArticleCat extends CareyShop
             }
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('article_cat_id', 'in', $data['article_cat_id']);
-        });
+        self::destroy($data['article_cat_id']);
+        Cache::tag('ArticleCat')->clear();
 
-        Cache::clear('ArticleCat');
         return true;
     }
 
     /**
      * 获取一个文章分类
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getArticleCatItem($data)
     {
-        if (!$this->validateData($data, 'ArticleCat.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['article_cat_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['article_cat_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取分类所有列表
      * @access public static
-     * @param  int  $catId   分类Id
-     * @param  bool $isLayer 是否返回本级分类
-     * @param  int  $level   分类深度
-     * @param  int  $isNavi  过滤是否导航
-     * @return array|false
-     * @throws
+     * @param int  $catId   分类Id
+     * @param bool $isLayer 是否返回本级分类
+     * @param null $level   分类深度
+     * @param null $isNavi  过滤是否导航
+     * @return array
      */
     public static function getArticleCatList($catId = 0, $isLayer = false, $level = null, $isNavi = null)
     {
-        $result = self::all(function ($query) use ($isNavi) {
-            // 子查询,查询关联的文章数量
-            $article = Article::field('article_cat_id,count(*) num')
-                ->group('article_cat_id')
-                ->buildSql();
+        // 子查询,查询关联的文章数量
+        $article = Article::field('article_cat_id,count(*) num')
+            ->group('article_cat_id')
+            ->buildSql();
 
-            $map = [];
-            is_null($isNavi) ?: $map['c.is_navi'] = ['eq', $isNavi];
+        // 搜索条件
+        $map = [];
+        is_null($isNavi) ?: $map[] = ['c.is_navi', '=', $isNavi];
 
-            $query
-                ->cache(true, null, 'ArticleCat')
-                ->alias('c')
-                ->field('c.*,count(s.article_cat_id) children_total,ifnull(a.num, 0) article_total')
-                ->join('article_cat s', 's.parent_id = c.article_cat_id', 'left')
-                ->join([$article => 'a'], 'a.article_cat_id = c.article_cat_id', 'left')
-                ->where($map)
-                ->group('c.article_cat_id')
-                ->order('c.parent_id,c.sort,c.article_cat_id');
-        });
+        $result = self::cache(true, null, 'ArticleCat')
+            ->alias('c')
+            ->field('c.*,count(s.article_cat_id) children_total,ifnull(a.num, 0) article_total')
+            ->join('article_cat s', 's.parent_id = c.article_cat_id', 'left')
+            ->join([$article => 'a'], 'a.article_cat_id = c.article_cat_id', 'left')
+            ->where($map)
+            ->group('c.article_cat_id')
+            ->order('c.parent_id,c.sort,c.article_cat_id')
+            ->select();
 
-        if (false === $result) {
-            Cache::clear('ArticleCat');
-            return false;
-        }
-
+        // 生成参数缓存标签
         $treeCache = sprintf('ArticleCat:id%dis_layer%dlevel%dis_navi%d',
             $catId, $isLayer, is_null($level) ? -1 : $level, is_null($isNavi) ? -1 : $isNavi);
 
@@ -212,7 +185,7 @@ class ArticleCat extends CareyShop
             return Cache::get($treeCache);
         }
 
-        // 处理原始数据至菜单数据
+        // 处理原始数据至分类数据
         $tree = self::setArticleCatTree((int)$catId, $result, $level, $isLayer);
         Cache::tag('ArticleCat')->set($treeCache, $tree);
 
@@ -222,11 +195,11 @@ class ArticleCat extends CareyShop
     /**
      * 过滤和排序所有分类
      * @access private
-     * @param  int    $parentId   上级分类Id
-     * @param  object $list       原始模型对象
-     * @param  int    $limitLevel 显示多少级深度 null:全部
-     * @param  bool   $isLayer    是否返回本级分类
-     * @param  int    $level      分类深度
+     * @param int    $parentId   上级分类Id
+     * @param object $list       原始模型对象
+     * @param null   $limitLevel 显示多少级深度 null:全部
+     * @param bool   $isLayer    是否返回本级分类
+     * @param int    $level      分类深度
      * @return array
      */
     private static function setArticleCatTree($parentId, &$list, $limitLevel = null, $isLayer = false, $level = 0)
@@ -275,12 +248,12 @@ class ArticleCat extends CareyShop
     /**
      * 获取分类导航数据
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function getArticleCatNavi($data)
     {
-        if (!$this->validateData($data, 'ArticleCat.navi')) {
+        if (!$this->validateData($data, 'navi')) {
             return false;
         }
 
@@ -289,12 +262,8 @@ class ArticleCat extends CareyShop
         }
 
         $list = self::cache('ArticleCatNavi', null, 'ArticleCat')->column('article_cat_id,parent_id,cat_name');
-        if ($list === false) {
-            Cache::clear('ArticleCat');
-            return false;
-        }
-
         $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
+
         if (!$isLayer && isset($list[$data['article_cat_id']])) {
             $data['article_cat_id'] = $list[$data['article_cat_id']]['parent_id'];
         }
@@ -320,22 +289,22 @@ class ArticleCat extends CareyShop
     /**
      * 设置文章分类排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setArticleCatSort($data)
     {
-        if (!$this->validateData($data, 'ArticleCat.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['article_cat_id'] = ['eq', $data['article_cat_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            Cache::clear('ArticleCat');
-            return true;
-        }
+        // 搜索条件
+        $map[] = ['article_cat_id', '=', $data['article_cat_id']];
 
-        return false;
+        self::update(['sort' => $data['sort']], $map);
+        Cache::tag('ArticleCat')->clear();
+
+        return true;
     }
 
     /**
@@ -347,7 +316,7 @@ class ArticleCat extends CareyShop
      */
     public function setArticleCatIndex($data)
     {
-        if (!$this->validateData($data, 'ArticleCat.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -356,32 +325,30 @@ class ArticleCat extends CareyShop
             $list[] = ['article_cat_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            Cache::clear('ArticleCat');
-            return true;
-        }
+        $this->saveAll($list);
+        Cache::tag('ArticleCat')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 批量设置是否导航
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setArticleCatNavi($data)
     {
-        if (!$this->validateData($data, 'ArticleCat.nac')) {
+        if (!$this->validateData($data, 'nac')) {
             return false;
         }
 
-        $map['article_cat_id'] = ['in', $data['article_cat_id']];
-        if (false !== $this->save(['is_navi' => $data['is_navi']], $map)) {
-            Cache::clear('ArticleCat');
-            return true;
-        }
+        // 搜索条件
+        $map[] = ['article_cat_id', 'in', $data['article_cat_id']];
 
-        return false;
+        self::update(['is_navi' => $data['is_navi']], $map);
+        Cache::tag('ArticleCat')->clear();
+
+        return true;
     }
 }
