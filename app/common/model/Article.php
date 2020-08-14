@@ -32,18 +32,19 @@ class Article extends CareyShop
         'article_id',
     ];
 
-//    /**
-//     * hasOne cs_article_cat
-//     * @access public
-//     * @return mixed
-//     */
-//    public function getArticleCat()
-//    {
-//        return $this
-//            ->hasOne('ArticleCat', 'article_cat_id', 'article_cat_id')
-//            ->field('cat_name,cat_type')
-//            ->setEagerlyType(0);
-//    }
+    /**
+     * hasOne cs_article_cat
+     * @access public
+     * @return mixed
+     */
+    public function getArticleCat()
+    {
+        return $this
+            ->hasOne(ArticleCat::class, 'article_cat_id', 'article_cat_id')
+            ->joinType('left')
+            ->field('article_cat_id,cat_name,cat_type')
+            ->hidden(['article_cat_id']);
+    }
 
     /**
      * 添加一篇文章
@@ -143,69 +144,46 @@ class Article extends CareyShop
             return false;
         }
 
-//        // 获取分类Id,包括子分类
-//        $catIdList = [];
-//        if (isset($data['article_cat_id'])) {
-//            $catIdList[] = (int)$data['article_cat_id'];
-//            $articleCat = ArticleCat::getArticleCatList($data['article_cat_id']);
-//
-//            foreach ($articleCat as $value) {
-//                $catIdList[] = $value['article_cat_id'];
-//            }
-//        }
-//
-//        // 搜索条件
-//        $map['article.status'] = ['eq', 1];
-//        empty($catIdList) ?: $map['article.article_cat_id'] = ['in', $catIdList];
-//        empty($data['title']) ?: $map['article.title'] = ['like', '%' . $data['title'] . '%'];
-//
-//        // 后台管理搜索
-//        if (is_client_admin()) {
-//            unset($map['article.status']);
-//            is_empty_parm($data['status']) ?: $map['article.status'] = ['eq', $data['status']];
-//            is_empty_parm($data['is_top']) ?: $map['article.is_top'] = ['eq', $data['is_top']];
-//            empty($data['keywords']) ?: $map['article.keywords'] = ['like', '%' . $data['keywords'] . '%'];
-//        }
-//
-//        $totalResult = $this->with('getArticleCat')->where($map)->count();
-//        if ($totalResult <= 0) {
-//            return ['total_result' => 0];
-//        }
-//
-//        $result = self::all(function ($query) use ($data, $map) {
-//            // 翻页页数
-//            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
-//
-//            // 每页条数
-//            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-//
-//            // 排序方式
-//            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-//
-//            // 排序的字段
-//            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'article_id';
-//
-//            // 文章前后台置顶处理
-//            is_client_admin() ?: $order['article.is_top'] = 'desc';
-//            $order['article.' . $orderField] = $orderType;
-//
-//            if (!empty($data['order_field'])) {
-//                $order = array_reverse($order);
-//            }
-//
-//            $query
-//                ->field('content', true)
-//                ->with('getArticleCat')
-//                ->where($map)
-//                ->order($order)
-//                ->page($pageNo, $pageSize);
-//        });
-//
-//        if (false !== $result) {
-//            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-//        }
+        // 获取分类Id,包括子分类
+        $catIdList = [];
+        if (isset($data['article_cat_id'])) {
+            $catIdList[] = (int)$data['article_cat_id'];
+            $articleCat = ArticleCat::getArticleCatList($data['article_cat_id']);
 
-        return false;
+            foreach ($articleCat as $value) {
+                $catIdList[] = $value['article_cat_id'];
+            }
+        }
+
+        // 搜索条件
+        $map = [];
+        empty($catIdList) ?: $map['article.article_cat_id'] = ['in', $catIdList];
+        empty($data['title']) ?: $map['article.title'] = ['like', '%' . $data['title'] . '%'];
+
+        // 后台管理搜索
+        if (is_client_admin()) {
+            is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
+            is_empty_parm($data['is_top']) ?: $map[] = ['is_top', '=', $data['is_top']];
+            empty($data['keywords']) ?: $map[] = ['keywords', 'like', '%' . $data['keywords'] . '%'];
+        } else {
+            $map[] = ['status', '=', 1];
+        }
+
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
+        }
+
+        $fixed = !is_client_admin() ? ['is_top' => 'desc'] : [];
+        $result['items'] = $this->setDefaultOrder(['article_id' => 'desc'], $fixed)
+            ->with('get_article_cat')
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->withoutField('content')
+            ->select()
+            ->toArray();
+
+        return $result;
     }
 
     /**
