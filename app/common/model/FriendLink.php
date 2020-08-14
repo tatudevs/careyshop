@@ -183,7 +183,6 @@ class FriendLink extends CareyShop
         }
 
         $this->saveAll($list);
-
         return true;
     }
 }
