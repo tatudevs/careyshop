@@ -139,7 +139,7 @@ class Transaction extends CareyShop
         $with = [];
 
         // 后台管理搜索
-        if (!is_client_admin()) {
+        if (is_client_admin()) {
             $with['getUser'] = ['username', 'level_icon', 'head_pic', 'nickname'];
             empty($data['action']) ?: $map[] = ['transaction.action', '=', $data['action']];
             is_empty_parm($data['to_payment']) ?: $map[] = ['transaction.to_payment', '=', $data['to_payment']];

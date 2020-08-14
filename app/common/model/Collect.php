@@ -5,13 +5,19 @@
  * CareyShop    收藏夹模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/7/15
+ * @date        2020/8/14
  */
 
 namespace app\common\model;
 
 class Collect extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'collect_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -42,43 +48,24 @@ class Collect extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'collect_id' => 'integer',
-        'user_id'    => 'integer',
-        'goods_id'   => 'integer',
-        'is_top'     => 'integer',
-    ];
-
-    /**
      * hasOne cs_goods
      * @access public
      * @return mixed
      */
     public function getGoods()
     {
-        $field = [
-            'goods_category_id', 'name', 'short_name', 'brand_id', 'market_price', 'shop_price',
-            'store_qty', 'comment_sum', 'sales_sum', 'attachment', 'status', 'is_delete',
-        ];
-
-        return $this
-            ->hasOne('Goods', 'goods_id', 'goods_id')
-            ->field($field)
-            ->setEagerlyType(0);
+        return $this->hasOne(Goods::class, 'goods_id', 'goods_id');
     }
 
     /**
      * 添加一个商品收藏
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function addCollectItem($data)
     {
-        if (!$this->validateData($data, 'Collect')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -90,13 +77,13 @@ class Collect extends CareyShop
             return true;
         }
 
-        $map['goods_id'] = ['eq', $data['goods_id']];
-        $map['user_id'] = ['eq', $data['user_id']];
+        $map[] = ['goods_id', '=', $data['goods_id']];
+        $map[] = ['user_id', '=', $data['user_id']];
         if (self::checkUnique($map)) {
             return true;
         }
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return true;
         }
 
@@ -106,17 +93,17 @@ class Collect extends CareyShop
     /**
      * 批量删除商品收藏
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delCollectList($data)
     {
-        if (!$this->validateData($data, 'Collect.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $map['collect_id'] = ['in', $data['collect_id']];
-        $map['user_id'] = ['eq', get_client_id()];
+        $map[] = ['collect_id', 'in', $data['collect_id']];
+        $map[] = ['user_id', '=', get_client_id()];
         $this->where($map)->delete();
 
         return true;
@@ -136,75 +123,59 @@ class Collect extends CareyShop
     /**
      * 设置收藏商品是否置顶
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setCollectTop($data)
     {
-        if (!$this->validateData($data, 'Collect.top')) {
+        if (!$this->validateData($data, 'top')) {
             return false;
         }
 
-        $map['user_id'] = ['eq', get_client_id()];
-        $map['collect_id'] = ['in', $data['collect_id']];
+        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['collect_id', 'in', $data['collect_id']];
 
-        if (false !== $this->save(['is_top' => $data['is_top']], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['is_top' => $data['is_top']], $map);
+        return true;
     }
 
     /**
      * 获取商品收藏列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function getCollectList($data)
     {
-        if (!$this->validateData($data, 'Collect.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['collect.user_id'] = ['eq', get_client_id()];
-        $totalResult = $this->with('getGoods')->where($map)->count();
+        $map[] = ['collect.user_id', '=', get_client_id()];
 
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->withJoin('getGoods')->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($map, $data) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 关联表的返回字段
+        $field = [
+            'goods_category_id', 'name', 'short_name', 'brand_id', 'market_price', 'shop_price',
+            'store_qty', 'comment_sum', 'sales_sum', 'attachment', 'status', 'is_delete',
+        ];
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['collect_id' => 'desc'], ['is_top' => 'desc'])
+            ->withJoin(['getGoods' => $field])
+            ->where($map)
+            ->withSearch(['page', 'order'], $data, 'collect')
+            ->select()
+            ->toArray();
 
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'collect_id';
-
-            // 字段排序处理
-            $order['collect.is_top'] = 'desc';
-            $order['collect.' . $orderField] = $orderType;
-
-            if (!empty($data['order_field'])) {
-                $order = array_reverse($order);
-            }
-
-            $query->with('getGoods')->where($map)->order($order)->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        self::keyToSnake(['getGoods'], $result['items']);
+        return $result;
     }
 
     /**
@@ -216,8 +187,8 @@ class Collect extends CareyShop
     public function getCollectCount()
     {
         // 搜索条件
-        $map['collect.user_id'] = ['eq', get_client_id()];
-        $totalResult = $this->with('getGoods')->where($map)->count();
+        $map[] = ['collect.user_id', '=', get_client_id()];
+        $totalResult = $this->withJoin('getGoods')->where($map)->count();
 
         return ['total_result' => $totalResult];
     }
@@ -225,13 +196,12 @@ class Collect extends CareyShop
     /**
      * 检测指定商品是否被收藏
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
-     * @throws
      */
     public function isCollectGoods($data)
     {
-        if (!$this->validateData($data, 'Collect.goods')) {
+        if (!$this->validateData($data, 'goods')) {
             return false;
         }
 
@@ -241,12 +211,10 @@ class Collect extends CareyShop
         }
 
         // 查询条件
-        $map = [
-            'user_id'  => get_client_id(),
-            'goods_id' => $data['goods_id'],
-        ];
+        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['goods_id', '=', $data['goods_id']];
 
-        $result = $this->where($map)->find();
+        $result = $this->where($map)->count();
         return ['is_collect' => $result ? 1 : 0];
     }
 }
