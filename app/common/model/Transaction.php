@@ -114,7 +114,7 @@ class Transaction extends CareyShop
     /**
      * 获取交易结算列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
@@ -140,7 +140,7 @@ class Transaction extends CareyShop
 
         // 后台管理搜索
         if (!is_client_admin()) {
-            $with['get_user'] = ['username', 'level_icon', 'head_pic', 'nickname'];
+            $with['getUser'] = ['username', 'level_icon', 'head_pic', 'nickname'];
             empty($data['action']) ?: $map[] = ['transaction.action', '=', $data['action']];
             is_empty_parm($data['to_payment']) ?: $map[] = ['transaction.to_payment', '=', $data['to_payment']];
             empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
@@ -163,33 +163,7 @@ class Transaction extends CareyShop
             ->select()
             ->toArray();
 
+        self::keyToSnake(['getUser'], $result['items']);
         return $result;
-
-//        $result = self::all(function ($query) use ($data, $map, $with) {
-//            // 翻页页数
-//            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
-//
-//            // 每页条数
-//            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-//
-//            // 排序方式
-//            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-//
-//            // 排序的字段
-//            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'transaction_id';
-//
-//            $query
-//                ->alias('transaction')
-//                ->with($with)
-//                ->where($map)
-//                ->order(['transaction.' . $orderField => $orderType])
-//                ->page($pageNo, $pageSize);
-//        });
-//
-//        if (false !== $result) {
-//            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-//        }
-//
-//        return false;
     }
 }

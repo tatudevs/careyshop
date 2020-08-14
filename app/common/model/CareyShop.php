@@ -12,6 +12,7 @@ namespace app\common\model;
 
 use think\exception\ValidateException;
 use think\facade\Config;
+use think\helper\Str;
 use think\Model;
 
 abstract class CareyShop extends Model
@@ -178,5 +179,31 @@ abstract class CareyShop extends Model
         }
 
         return true;
+    }
+
+    /**
+     * 替换数组中的驼峰键名为下划线
+     * @access public
+     * @param array $name 需要修改的键名
+     * @param array $data 源数据
+     */
+    public static function keyToSnake($name, &$data)
+    {
+        if (!is_array($name)) {
+            return;
+        }
+
+        foreach ($name as $value) {
+            foreach ($data as &$item) {
+                if (!array_key_exists($value, $item)) {
+                    continue;
+                }
+
+                $temp = $item[$value];
+                unset($item[$value]);
+
+                $item[Str::snake($value)] = $temp;
+            }
+        }
     }
 }
