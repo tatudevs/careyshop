@@ -5,15 +5,21 @@
  * CareyShop    导航模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/5/7
+ * @date        2020/8/14
  */
 
 namespace app\common\model;
 
-use think\Cache;
+use think\facade\Cache;
 
 class Navigation extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'navigation_id';
+
     /**
      * 只读属性
      * @var array
@@ -23,33 +29,22 @@ class Navigation extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'navigation_id' => 'integer',
-        'sort'          => 'integer',
-        'status'        => 'integer',
-    ];
-
-    /**
      * 添加一个导航
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addNavigationItem($data)
     {
-        if (!$this->validateData($data, 'Navigation')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 避免无关字段
         unset($data['navigation_id']);
 
-        if (false !== $this->allowField(true)->save($data)) {
-            Cache::clear('Navigation');
+        if ($this->save($data)) {
+            Cache::tag('Navigation')->clear();
             return $this->toArray();
         }
 
@@ -59,175 +54,146 @@ class Navigation extends CareyShop
     /**
      * 编辑一个导航
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setNavigationItem($data)
     {
-        if (!$this->validateSetData($data, 'Navigation.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
-        $map['navigation_id'] = ['eq', $data['navigation_id']];
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            Cache::clear('Navigation');
-            return $this->toArray();
-        }
+        // 搜索条件
+        $map[] = ['navigation_id', '=', $data['navigation_id']];
 
-        return false;
+        $result = self::update($data, $map);
+        Cache::tag('Navigation')->clear();
+
+        return $result->toArray();
     }
 
     /**
      * 批量删除导航
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delNavigationList($data)
     {
-        if (!$this->validateData($data, 'Navigation.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('navigation_id', 'in', $data['navigation_id']);
-        });
+        self::destroy($data['navigation_id']);
+        Cache::tag('Navigation')->clear();
 
-        Cache::clear('Navigation');
         return true;
     }
 
     /**
      * 获取一个导航
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getNavigationItem($data)
     {
-        if (!$this->validateData($data, 'Navigation.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['navigation_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['navigation_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 批量设置是否新开窗口
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setNavigationTarget($data)
     {
-        if (!$this->validateData($data, 'Navigation.target')) {
+        if (!$this->validateData($data, 'target')) {
             return false;
         }
 
-        $map['navigation_id'] = ['in', $data['navigation_id']];
-        if (false !== $this->save(['target' => $data['target']], $map)) {
-            Cache::clear('Navigation');
-            return true;
-        }
+        $map[] = ['navigation_id', 'in', $data['navigation_id']];
+        self::update(['target' => $data['target']], $map);
+        Cache::tag('Navigation')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 批量设置是否启用
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setNavigationStatus($data)
     {
-        if (!$this->validateData($data, 'Navigation.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['navigation_id'] = ['in', $data['navigation_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            Cache::clear('Navigation');
-            return true;
-        }
+        $map[] = ['navigation_id', 'in', $data['navigation_id']];
+        self::update(['status' => $data['status']], $map);
+        Cache::tag('Navigation')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 获取导航列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getNavigationList($data)
     {
-        if (!$this->validateData($data, 'Navigation.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            // 搜索条件
-            $map['status'] = ['eq', 1];
+        // 搜索条件
+        $map = [];
 
-            // 后台管理搜索
-            if (is_client_admin()) {
-                unset($map['status']);
-                empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-                is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
-            }
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'navigation_id';
-
-            // 排序处理
-            $order['sort'] = 'asc';
-            $order[$orderField] = $orderType;
-
-            if (!empty($data['order_field'])) {
-                $order = array_reverse($order);
-            }
-
-            $query->cache(true, null, 'Navigation')->where($map)->order($order);
-        });
-
-        if (false !== $result) {
-            return $result->toArray();
+        // 后台管理搜索
+        if (is_client_admin()) {
+            empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
+            is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
+        } else {
+            $map[] = ['status', '=', 1];
         }
 
-        return false;
+        return $this->setDefaultOrder(['navigation_id' => 'asc'], ['sort' => 'asc'])
+            ->cache(true, null, 'Navigation')
+            ->where($map)
+            ->withSearch(['order'], $data)
+            ->select()
+            ->toArray();
     }
 
     /**
      * 设置导航排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setNavigationSort($data)
     {
-        if (!$this->validateData($data, 'Navigation.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['navigation_id'] = ['eq', $data['navigation_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            Cache::clear('Navigation');
-            return true;
-        }
+        $map[] = ['navigation_id', '=', $data['navigation_id']];
+        self::update(['sort' => $data['sort']], $map);
+        Cache::tag('Navigation')->clear();
 
-        return false;
+        return true;
     }
 
     /**
@@ -239,7 +205,7 @@ class Navigation extends CareyShop
      */
     public function setNavigationIndex($data)
     {
-        if (!$this->validateData($data, 'Navigation.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -248,11 +214,9 @@ class Navigation extends CareyShop
             $list[] = ['navigation_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            Cache::clear('Navigation');
-            return true;
-        }
+        $this->saveAll($list);
+        Cache::tag('Navigation')->clear();
 
-        return false;
+        return true;
     }
 }
