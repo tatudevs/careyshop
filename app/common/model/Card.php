@@ -5,13 +5,19 @@
  * CareyShop    购物卡模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/11/20
+ * @date        2020/8/14
  */
 
 namespace app\common\model;
 
 class Card extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'card_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -41,15 +47,10 @@ class Card extends CareyShop
      * @var array
      */
     protected $type = [
-        'card_id'          => 'integer',
         'money'            => 'float',
         'category'         => 'array',
         'exclude_category' => 'array',
-        'give_num'         => 'integer',
-        'active_num'       => 'integer',
         'end_time'         => 'timestamp',
-        'status'           => 'integer',
-        'is_delete'        => 'integer',
     ];
 
     /**
@@ -65,13 +66,12 @@ class Card extends CareyShop
     /**
      * 添加一条购物卡
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addCardItem($data)
     {
-        if (!$this->validateData($data, 'Card')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -85,9 +85,7 @@ class Card extends CareyShop
 
         try {
             // 添加购物卡
-            if (false === $this->allowField(true)->save($data)) {
-                throw new \Exception($this->getError());
-            }
+            $this->save($data);
 
             // 准备购物卡使用数据
             $useData = [];
@@ -116,13 +114,12 @@ class Card extends CareyShop
     /**
      * 编辑一条购物卡
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
-     * @throws
      */
     public function setCardItem($data)
     {
-        if (!$this->validateSetData($data, 'Card.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -138,134 +135,103 @@ class Card extends CareyShop
             $data['exclude_category'] = [];
         }
 
-        $map['card_id'] = ['eq', $data['card_id']];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['card_id', '=', $data['card_id']];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            return $this->toArray();
-        }
-
-        return false;
+        $result = self::update($data, $map);
+        return $result->toArray();
     }
 
     /**
      * 获取一条购物卡
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function getCardItem($data)
     {
-        if (!$this->validateData($data, 'Card.get')) {
+        if (!$this->validateData($data, 'get')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['card_id'] = ['eq', $data['card_id']];
-            $map['is_delete'] = ['eq', 0];
+        // 搜索条件
+        $map[] = ['card_id', '=', $data['card_id']];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->field('is_delete', true)->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->where($map)->withoutField('is_delete')->find();
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 批量设置购物卡状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setCardStatus($data)
     {
-        if (!$this->validateData($data, 'Card.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['card_id'] = ['in', $data['card_id']];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['card_id', 'in', $data['card_id']];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['status' => $data['status']], $map);
+        return true;
     }
 
     /**
      * 批量删除购物卡
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delCardList($data)
     {
-        if (!$this->validateData($data, 'Card.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $map['card_id'] = ['in', $data['card_id']];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['card_id', 'in', $data['card_id']];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->save(['is_delete' => 1], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['is_delete' => 1], $map);
+        return true;
     }
 
     /**
      * 获取购物卡列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getCardList($data)
     {
-        if (!$this->validateData($data, 'Card.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['is_delete'] = ['eq', 0];
-        empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        $map[] = ['is_delete', '=', 0];
+        empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['card_id' => 'desc'])
+            ->where($map)
+            ->withoutField('is_delete')
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'card_id';
-
-            $query
-                ->field('is_delete', true)
-                ->where($map)
-                ->order([$orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 }
