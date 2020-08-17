@@ -5,15 +5,21 @@
  * CareyShop    购物卡使用模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/11/20
+ * @date        2020/8/14
  */
 
 namespace app\common\model;
 
-use think\Config;
+use think\facade\Db;
 
 class CardUse extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'card_use_id';
+
     /**
      * 只读属性
      * @var array
@@ -30,12 +36,7 @@ class CardUse extends CareyShop
      * @var array
      */
     protected $type = [
-        'card_use_id' => 'integer',
-        'card_id'     => 'integer',
-        'user_id'     => 'integer',
         'money'       => 'float',
-        'is_active'   => 'integer',
-        'is_invalid'  => 'integer',
         'active_time' => 'timestamp',
     ];
 
@@ -46,7 +47,7 @@ class CardUse extends CareyShop
      */
     public function getCard()
     {
-        return $this->belongsTo('Card', 'card_id')->setEagerlyType(0);
+        return $this->belongsTo(Card::class, 'card_id');
     }
 
     /**
@@ -57,9 +58,10 @@ class CardUse extends CareyShop
     public function getUser()
     {
         return $this
-            ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('username,nickname,level_icon,head_pic')
-            ->setEagerlyType(0);
+            ->hasOne(User::class, 'user_id', 'user_id')
+            ->joinType('left')
+            ->field('user_id,username,nickname,level_icon,head_pic')
+            ->hidden(['user_id']);
     }
 
     /**
@@ -71,27 +73,21 @@ class CardUse extends CareyShop
      */
     public function bindCardUseItem($data)
     {
-        if (!$this->validateData($data, 'CardUse.bind')) {
+        if (!$this->validateData($data, 'bind')) {
             return false;
         }
+
+        // 搜索条件
+        $map[] = ['getCard.status', '=', 1];
+        $map[] = ['getCard.is_delete', '=', 0];
+        $map[] = ['card_use.number', '=', $data['number']];
 
         /*
          * 获取购物卡与购物卡使用数据
          * 卡号查找可能存在重复的情况,而重复的卡号可能导致对应的购物卡不同等问题.
          * 所以卡号和卡密必须全部对应,但不能使用AND查询SQL,返回的错误信息需要准确.
          */
-        $result = self::all(function ($query) use ($data) {
-            $map['getCard.status'] = ['eq', 1];
-            $map['getCard.is_delete'] = ['eq', 0];
-            $map['card_use.number'] = ['eq', $data['number']];
-
-            $query->with('getCard')->where($map);
-        });
-
-        if (false === $result) {
-            return false;
-        }
-
+        $result = $this->where($map)->withJoin('getCard')->select();
         if ($result->isEmpty()) {
             return $this->setError('购物卡无效或卡号不存在');
         }
@@ -125,11 +121,8 @@ class CardUse extends CareyShop
             $cardResult->setAttr('active_time', time());
 
             // 修改购物卡数据
-            $cardResult->getAttr('get_card')->setInc('active_num');
-
-            if (false === $cardResult->save()) {
-                throw new \Exception($this->getError());
-            }
+            $cardResult->getAttr('get_card')->inc('active_num')->update();
+            $cardResult->save();
 
             $cardResult::commit();
             return true;
@@ -142,31 +135,28 @@ class CardUse extends CareyShop
     /**
      * 批量设置购物卡是否有效
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setCardUseInvalid($data)
     {
-        if (!$this->validateData($data, 'CardUse.invalid')) {
+        if (!$this->validateData($data, 'invalid')) {
             return false;
         }
 
-        $map['card_use_id'] = ['in', $data['card_use_id']];
+        $map[] = ['card_use_id', 'in', $data['card_use_id']];
         unset($data['card_use_id']);
 
-        if (false !== $this->allowField(['is_invalid', 'remark'])->save($data, $map)) {
-            return true;
-        }
-
-        return false;
+        self::update($data, $map);
+        return true;
     }
 
     /**
      * 增加可用余额
      * @access public
-     * @param  string $number   卡号
-     * @param  float  $value    数值
-     * @param  int    $clientId 账号编号
+     * @param string $number   卡号
+     * @param float  $value    数值
+     * @param int    $clientId 账号编号
      * @return bool
      * @throws
      */
@@ -181,16 +171,13 @@ class CardUse extends CareyShop
         }
 
         // 搜索条件
-        $map['card_use.user_id'] = ['eq', $clientId];
-        $map['card_use.number'] = ['eq', $number];
-        $map['card_use.is_invalid'] = ['eq', 1];
+        $map[] = ['card_use.user_id', '=', $clientId];
+        $map[] = ['card_use.number', '=', $number];
+        $map[] = ['card_use.is_invalid', '=', 1];
 
-        $result = self::get(function ($query) use ($map) {
-            $query->with('getCard')->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('卡号 ' . $number . ' 已失效或不存在') : false;
+        $result = $this->where($map)->withJoin('getCard')->find();
+        if (is_null($result)) {
+            return $this->setError('卡号 ' . $number . ' 已失效或不存在');
         }
 
         // 判断是否在有效期内
@@ -199,16 +186,16 @@ class CardUse extends CareyShop
             return $this->setError(sprintf('卡号 %s 已过使用截止日期 %s', $number, date('Y-m-d H:i:s', $end_time)));
         }
 
-        $result->setInc('money', $value);
+        $result->inc('money', $value)->update();
         return true;
     }
 
     /**
      * 减少可用余额
      * @access public
-     * @param  string $number   卡号
-     * @param  float  $value    数值
-     * @param  int    $clientId 账号编号
+     * @param string $number   卡号
+     * @param float  $value    数值
+     * @param int    $clientId 账号编号
      * @return bool
      * @throws
      */
@@ -223,16 +210,13 @@ class CardUse extends CareyShop
         }
 
         // 搜索条件
-        $map['card_use.user_id'] = ['eq', $clientId];
-        $map['card_use.number'] = ['eq', $number];
-        $map['card_use.is_invalid'] = ['eq', 1];
+        $map[] = ['card_use.user_id', '=', $clientId];
+        $map[] = ['card_use.number', '=', $number];
+        $map[] = ['card_use.is_invalid', '=', 1];
 
-        $result = self::get(function ($query) use ($map) {
-            $query->with('getCard')->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('卡号 ' . $number . ' 已失效或不存在') : false;
+        $result = $this->where($map)->withJoin('getCard')->find();
+        if (is_null($result)) {
+            return $this->setError('卡号 ' . $number . ' 已失效或不存在');
         }
 
         if (bccomp($result->getAttr('money'), $value, 2) === -1) {
@@ -245,81 +229,74 @@ class CardUse extends CareyShop
             return $this->setError(sprintf('卡号 %s 已过使用截止日期 %s', $number, date('Y-m-d H:i:s', $end_time)));
         }
 
-        $result->setDec('money', $value);
+        $result->dec('money', $value)->update();
         return true;
     }
 
     /**
      * 获取可合并的购物卡列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
-     * @throws
      */
     public function getCardUseMerge($data)
     {
-        if (!$this->validateData($data, 'CardUse.merge_list')) {
+        if (!$this->validateData($data, 'merge_list')) {
             return false;
         }
 
-        $map['u.user_id'] = ['eq', get_client_id()];
-        $map['u.money'] = ['gt', 0];
-        $map['u.is_invalid'] = ['eq', 1];
-        $map['c.end_time'] = [['eq', 0], ['egt', time()], 'OR'];
+        $map[] = ['u.user_id', '=', get_client_id()];
+        $map[] = ['u.money', '>', 0];
+        $map[] = ['u.is_invalid', '=', 1];
+        $map[] = ['c.end_time', 'exp', Db::raw('= 0 OR `c`.`end_time` >= ' . time())];
 
         // 处理排除的购物卡使用
         if (!empty($data['exclude_number'])) {
-            $excludeMap['user_id'] = $map['u.user_id'];
-            $excludeMap['number'] = ['eq', $data['exclude_number']];
+            $excludeMap[] = ['user_id', '=', get_client_id()];
+            $excludeMap[] = ['number', '=', $data['exclude_number']];
             $sameCardId = $this->where($excludeMap)->value('card_id');
 
             if (!is_null($sameCardId)) {
-                $map['u.number'] = ['neq', $data['exclude_number']];
-                $map['c.card_id'] = ['eq', $sameCardId];
+                $map[] = ['u.number', '<>', $data['exclude_number']];
+                $map[] = ['c.card_id', '=', $sameCardId];
             } else {
                 return [];
             }
         }
 
-        $result = self::all(function ($query) use ($map) {
-            $query
-                ->alias('u')
-                ->field('u.number,u.money,c.name,c.description')
-                ->join('card c', 'c.card_id = u.card_id')
-                ->order(['u.money' => 'desc'])
-                ->where($map);
-        });
-
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return [];
+        return $this->alias('u')
+            ->field('u.number,u.money,c.name,c.description')
+            ->join('card c', 'c.card_id = u.card_id')
+            ->where($map)
+            ->order(['u.money' => 'desc'])
+            ->select()
+            ->toArray();
     }
 
     /**
      * 相同购物卡进行余额合并
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function setCardUseMerge($data)
     {
-        if (!$this->validateData($data, 'CardUse.merge')) {
+        if (!$this->validateData($data, 'merge')) {
             return false;
         }
 
         // 卡号相同不做处理
-        if ($data['number'] === $data['src_number']) {
+        if ($data['number'] == $data['src_number']) {
             return true;
         }
 
         // 检测是否属于同一类型卡
         $clientId = get_client_id();
-        $map['user_id'] = ['eq', $clientId];
-        $map['number'] = ['in', [$data['number'], $data['src_number']]];
+        $map[] = ['user_id', '=', $clientId];
+        $map[] = ['number', 'in', [$data['number'], $data['src_number']]];
 
+        // todo 到此处,number条件需要额外处理
         if ($this->where($map)->group('card_id')->count() > 1) {
             return $this->setError('不同类型的购物卡不能进行合并');
         }
