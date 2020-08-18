@@ -81,7 +81,7 @@ class Card extends CareyShop
         !empty($data['exclude_category']) ?: $data['exclude_category'] = [];
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 添加购物卡
@@ -103,10 +103,10 @@ class Card extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            self::commit();
+            $this->commit();
             return $this->toArray();
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }

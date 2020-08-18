@@ -10,6 +10,7 @@
 
 namespace app\common\model;
 
+use think\facade\Config;
 use think\facade\Db;
 
 class CardUse extends CareyShop
@@ -121,7 +122,7 @@ class CardUse extends CareyShop
             $cardResult->setAttr('active_time', time());
 
             // 修改购物卡数据
-            $cardResult->getAttr('get_card')->inc('active_num')->update();
+            $cardResult->getAttr('getCard')->inc('active_num')->update();
             $cardResult->save();
 
             $cardResult::commit();
@@ -181,7 +182,7 @@ class CardUse extends CareyShop
         }
 
         // 判断是否在有效期内
-        $end_time = $result->getAttr('get_card')->getData('end_time');
+        $end_time = $result->getAttr('getCard')->getData('end_time');
         if (time() > $end_time && $end_time != 0) {
             return $this->setError(sprintf('卡号 %s 已过使用截止日期 %s', $number, date('Y-m-d H:i:s', $end_time)));
         }
@@ -224,7 +225,7 @@ class CardUse extends CareyShop
         }
 
         // 判断是否在有效期内
-        $end_time = $result->getAttr('get_card')->getData('end_time');
+        $end_time = $result->getAttr('getCard')->getData('end_time');
         if (time() > $end_time && $end_time != 0) {
             return $this->setError(sprintf('卡号 %s 已过使用截止日期 %s', $number, date('Y-m-d H:i:s', $end_time)));
         }
@@ -296,23 +297,21 @@ class CardUse extends CareyShop
         $map[] = ['user_id', '=', $clientId];
         $map[] = ['number', 'in', [$data['number'], $data['src_number']]];
 
-        // todo 到此处,number条件需要额外处理
         if ($this->where($map)->group('card_id')->count() > 1) {
             return $this->setError('不同类型的购物卡不能进行合并');
         }
 
         // 合并金额不存在则需要获取来源卡金额
         if (empty($data['money'])) {
-            $map['number'] = ['eq', $data['src_number']];
-            $data['money'] = $this->where($map)->value('money', 0, true);
+            $data['money'] = $this->where('number', $data['src_number'])->value('money', 0);
         }
 
         if ($data['money'] <= 0) {
-            return $this->setError('金额未变动');
+            return $this->setError('被合并购物卡余额不足');
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 减少来源卡可用金额
@@ -325,10 +324,10 @@ class CardUse extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            self::commit();
+            $this->commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -341,7 +340,7 @@ class CardUse extends CareyShop
      */
     private function hidePassword($data)
     {
-        $cardAuth = json_decode(Config::get('card_auth.value', 'system_info'), true);
+        $cardAuth = json_decode(Config::get('careyshop.system_info.card_auth', []), true);
         if (!is_client_admin() || in_array(get_client_id(), $cardAuth)) {
             return $data;
         }
@@ -356,39 +355,36 @@ class CardUse extends CareyShop
     /**
      * 导出生成的购物卡
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getCardUseExport($data)
     {
-        if (!$this->validateData($data, 'CardUse.export')) {
+        if (!$this->validateData($data, 'export')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $query
-                ->field('card_id,user_id', true)
-                ->where(['card_id' => ['eq', $data['card_id']]]);
-        });
+        // 搜索条件
+        $map[] = ['card_id', '=', $data['card_id']];
 
-        if ($result !== false) {
-            return $this->hidePassword($result->toArray());
-        }
+        $result = $this->withoutField(['card_id', 'user_id'])
+            ->where($map)
+            ->select();
 
-        return false;
+        return $this->hidePassword($result->toArray());
     }
 
     /**
      * 获取已绑定的购物卡
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function getCardUseList($data)
     {
-        if (!$this->validateData($data, 'CardUse.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
@@ -396,33 +392,31 @@ class CardUse extends CareyShop
         $map = $mapOr = [];
 
         if (is_client_admin()) {
-            empty($data['card_id']) ?: $map['card_use.card_id'] = ['eq', $data['card_id']];
-            empty($data['number']) ?: $map['card_use.number'] = ['eq', $data['number']];
-            empty($data['name']) ?: $map['getCard.name'] = ['like', '%' . $data['name'] . '%'];
-            empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
+            empty($data['card_id']) ?: $map[] = ['card_use.card_id', '=', $data['card_id']];
+            empty($data['number']) ?: $map[] = ['card_use.number', '=', $data['number']];
+            empty($data['name']) ?: $map[] = ['getCard.name', 'like', '%' . $data['name'] . '%'];
+            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
 
-            // empty($data['is_active']) ?: $map['card_use.user_id'] = ['neq', 0];
-            // 以上条件被替换成下行
             if (!is_empty_parm($data['is_active'])) {
-                $map['card_use.user_id'] = empty($data['is_active']) ? ['eq', 0] : ['neq', 0];
+                $map[] = ['card_use.user_id', empty($data['is_active']) ? '=' : '<>', 0];
             }
         } else {
-            $map['card_use.user_id'] = ['eq', get_client_id()];
+            $map[] = ['card_use.user_id', '=', get_client_id()];
         }
 
         if (!is_empty_parm($data['type'])) {
             // 正常状态
             if ($data['type'] == 'normal') {
-                $map['getCard.end_time'] = [['eq', 0], ['egt', time()], 'OR'];
-                $map['card_use.money'] = ['gt', 0];
-                $map['card_use.is_invalid'] = ['eq', 1];
+                $map[] = ['getCard.end_time', 'exp', Db::raw('= 0 OR `getCard`.`end_time` >= ' . time())];
+                $map[] = ['card_use.money', '>', 0];
+                $map[] = ['card_use.is_invalid', '=', 1];
             }
 
             // 无效状态
             if ($data['type'] == 'invalid') {
-                $mapOr['getCard.end_time'] = [['neq', 0], ['lt', time()], 'AND'];
-                $mapOr['card_use.money'] = ['elt', 0];
-                $mapOr['card_use.is_invalid'] = ['eq', 0];
+                $map[] = ['getCard.end_time', 'exp', Db::raw('<> 0 AND `getCard`.`end_time` < ' . time())];
+                $mapOr[] = ['card_use.money', '<=', 0];
+                $mapOr[] = ['card_use.is_invalid', '=', 0];
             }
         }
 
@@ -430,64 +424,56 @@ class CardUse extends CareyShop
         $with = ['getCard'];
         !is_client_admin() ?: $with[] = 'getUser';
 
-        $totalResult = $this
-            ->with($with)
+        $result['total_result'] = $this
+            ->withJoin($with)
             ->where($map)
             ->where(function ($query) use ($mapOr) {
                 $query->whereOr($mapOr);
             })
             ->count();
 
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $with, $map, $mapOr) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        $temp = $this->setDefaultOrder(['card_use.card_use_id' => 'desc'])
+            ->withJoin($with)
+            ->where($map)
+            ->where(function ($query) use ($mapOr) {
+                $query->whereOr($mapOr);
+            })
+            ->withSearch(['page', 'order'], $data)
+            ->select();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
+        $result['items'] = $this->hidePassword($temp->toArray());
+        self::keyToSnake(['getCard'], $result['items']);
 
-            $query
-                ->with($with)
-                ->where($map)
-                ->where(function ($query) use ($mapOr) {
-                    $query->whereOr($mapOr);
-                })
-                ->order(['card_use.card_use_id' => 'desc'])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $this->hidePassword($result->toArray()), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 
     /**
      * 根据商品Id列出可使用的购物卡
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function getCardUseSelect($data)
     {
-        if (!$this->validateData($data, 'CardUse.select')) {
+        if (!$this->validateData($data, 'select')) {
             return false;
         }
 
         // 获取所有有效的购物卡使用
-        $cardResult = self::all(function ($query) use ($data) {
-            $map['getCard.end_time'] = [['eq', 0], ['egt', time()], 'OR'];
-            $map['card_use.user_id'] = ['eq', get_client_id()];
-            $map['card_use.money'] = ['gt', 0];
-            $map['card_use.is_invalid'] = ['eq', 1];
+        $map[] = ['getCard.end_time', 'exp', Db::raw('= 0 OR `getCard`.`end_time` >= ' . time())];
+        $map[] = ['card_use.user_id', '=', get_client_id()];
+        $map[] = ['card_use.money', '>', 0];
+        $map[] = ['card_use.is_invalid', '=', 1];
 
-            $query->with('getCard')->where($map)->order(['card_use.money' => 'desc']);
-        });
+        $cardResult = $this->withJoin('getCard')
+            ->where($map)
+            ->order(['card_use.money' => 'desc'])
+            ->select();
 
         if ($cardResult->isEmpty()) {
             return [];
@@ -495,14 +481,14 @@ class CardUse extends CareyShop
 
         // 获取商品分类
         $result = [];
-        $goodsResult = Goods::where(['goods_id' => ['in', $data['goods_id']]])->column('goods_category_id');
+        $goodsResult = Goods::where('goods_id', 'in', $data['goods_id'])->column('goods_category_id');
 
         foreach ($cardResult as $value) {
             $tempCard = $value->toArray();
             $tempData['number'] = $tempCard['number'];
             $tempData['money'] = $tempCard['money'];
-            $tempData['name'] = $tempCard['get_card']['name'];
-            $tempData['description'] = $tempCard['get_card']['description'];
+            $tempData['name'] = $tempCard['getCard']['name'];
+            $tempData['description'] = $tempCard['getCard']['description'];
             $tempData['is_use'] = (int)$this->checkCard($tempCard, $goodsResult);
             $tempData['not_use_error'] = 0 == $tempData['is_use'] ? $this->getError() : '';
 
@@ -516,9 +502,9 @@ class CardUse extends CareyShop
     /**
      * 验证购物卡是否可使用
      * @access private
-     * @param  array $card          购物卡数据
-     * @param  array $goodsCategory 商品分类集合
-     * @param  float $decMoney      准备减少的可用金额
+     * @param array $card          购物卡数据
+     * @param array $goodsCategory 商品分类集合
+     * @param float $decMoney      准备减少的可用金额
      * @return bool
      */
     private function checkCard($card, $goodsCategory, $decMoney = 0.0)
@@ -528,17 +514,17 @@ class CardUse extends CareyShop
         }
 
         // 达到条件可直接返回
-        if (empty($card['get_card']['category']) && empty($card['get_card']['exclude_category'])) {
+        if (empty($card['getCard']['category']) && empty($card['getCard']['exclude_category'])) {
             return true;
         }
 
-        if (!empty($card['get_card']['category'])) {
-            $categoryList = GoodsCategory::getCategorySon(['goods_category_id' => $card['get_card']['category']]);
+        if (!empty($card['getCard']['category'])) {
+            $categoryList = GoodsCategory::getCategorySon(['goods_category_id' => $card['getCard']['category']]);
             $categoryList = array_column($categoryList, 'goods_category_id');
         }
 
-        if (!empty($card['get_card']['exclude_category'])) {
-            $excludeList = GoodsCategory::getCategorySon(['goods_category_id' => $card['get_card']['exclude_category']]);
+        if (!empty($card['getCard']['exclude_category'])) {
+            $excludeList = GoodsCategory::getCategorySon(['goods_category_id' => $card['getCard']['exclude_category']]);
             $excludeList = array_column($excludeList, 'goods_category_id');
         }
 
@@ -558,13 +544,13 @@ class CardUse extends CareyShop
     /**
      * 验证购物卡是否可使用
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function getCardUseCheck($data)
     {
-        if (!$this->validateData($data, 'CardUse.check')) {
+        if (!$this->validateData($data, 'check')) {
             return false;
         }
 
@@ -572,23 +558,20 @@ class CardUse extends CareyShop
         !is_empty_parm($data['money']) ?: $data['money'] = 0;
 
         // 获取购物卡
-        $cardResult = self::get(function ($query) use ($data) {
-            $map['getCard.end_time'] = [['eq', 0], ['egt', time()], 'OR'];
-            $map['card_use.user_id'] = ['eq', get_client_id()];
-            $map['card_use.number'] = ['eq', $data['number']];
-            $map['card_use.money'] = ['gt', 0];
-            $map['card_use.is_invalid'] = ['eq', 1];
+        $map[] = ['getCard.end_time', 'exp', Db::raw('= 0 OR `getCard`.`end_time` >= ' . time())];
+        $map[] = ['card_use.user_id', '=', get_client_id()];
+        $map[] = ['card_use.number', '=', $data['number']];
+        $map[] = ['card_use.money', '>', 0];
+        $map[] = ['card_use.is_invalid', '=', 1];
 
-            $query->with('getCard')->where($map);
-        });
-
-        if (!$cardResult) {
-            return is_null($cardResult) ? $this->setError('卡号 ' . $data['number'] . ' 已失效或不存在') : false;
+        $cardResult = $this->withJoin('getCard')->where($map)->find();
+        if (is_null($cardResult)) {
+            return $this->setError('卡号 ' . $data['number'] . ' 已失效或不存在');
         }
 
         // 获取订单商品分类并进行筛选
         $result = $cardResult->toArray();
-        $goodsResult = Goods::where(['goods_id' => ['in', $data['goods_id']]])->column('goods_category_id');
+        $goodsResult = Goods::where('goods_id', 'in', $data['goods_id'])->column('goods_category_id');
 
         return $this->checkCard($result, $goodsResult, $data['money']);
     }
