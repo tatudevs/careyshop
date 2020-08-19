@@ -159,7 +159,7 @@ class Transaction extends CareyShop
             ->alias('transaction')
             ->withJoin($with)
             ->where($map)
-            ->withSearch(['page', 'order'], $data, 'transaction')
+            ->withSearch(['page', 'order'], $data)
             ->select()
             ->toArray();
 

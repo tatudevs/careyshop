@@ -170,7 +170,7 @@ class Collect extends CareyShop
         $result['items'] = $this->setDefaultOrder(['collect_id' => 'desc'], ['is_top' => 'desc'])
             ->withJoin(['getGoods' => $field])
             ->where($map)
-            ->withSearch(['page', 'order'], $data, 'collect')
+            ->withSearch(['page', 'order'], $data)
             ->select()
             ->toArray();
 
