@@ -58,11 +58,7 @@ class CardUse extends CareyShop
      */
     public function getUser()
     {
-        return $this
-            ->hasOne(User::class, 'user_id', 'user_id')
-            ->joinType('left')
-            ->field('user_id,username,nickname,level_icon,head_pic')
-            ->hidden(['user_id']);
+        return $this->hasOne(User::class, 'user_id', 'user_id')->joinType('left');
     }
 
     /**
@@ -422,12 +418,12 @@ class CardUse extends CareyShop
 
         // 关联查询
         $with = ['getCard'];
-        !is_client_admin() ?: $with[] = 'getUser';
+        !is_client_admin() ?: $with['getUser'] = ['username', 'nickname', 'level_icon', 'head_pic'];
 
         $result['total_result'] = $this
             ->withJoin($with)
             ->where($map)
-            ->where(function ($query) use ($mapOr) {
+            ->whereOr(function ($query) use ($mapOr) {
                 $query->whereOr($mapOr);
             })
             ->count();
@@ -436,17 +432,17 @@ class CardUse extends CareyShop
             return $result;
         }
 
-        $temp = $this->setDefaultOrder(['card_use.card_use_id' => 'desc'])
+        $temp = $this->setDefaultOrder(['card_use_id' => 'desc'])
             ->withJoin($with)
             ->where($map)
-            ->where(function ($query) use ($mapOr) {
+            ->whereOr(function ($query) use ($mapOr) {
                 $query->whereOr($mapOr);
             })
             ->withSearch(['page', 'order'], $data)
             ->select();
 
         $result['items'] = $this->hidePassword($temp->toArray());
-        self::keyToSnake(['getCard'], $result['items']);
+        self::keyToSnake(['getCard', 'getUser'], $result['items']);
 
         return $result;
     }
