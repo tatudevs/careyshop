@@ -60,7 +60,7 @@ class Card extends CareyShop
      */
     public function getCardUse()
     {
-        return $this->hasMany('CardUse', 'card_id');
+        return $this->hasMany(CardUse::class, 'card_id');
     }
 
     /**

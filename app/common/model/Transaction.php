@@ -149,14 +149,13 @@ class Transaction extends CareyShop
         }
 
         // 获取总数量,为空直接返回
-        $result['total_result'] = $this->alias('transaction')->withJoin($with)->where($map)->count();
+        $result['total_result'] = $this->withJoin($with)->where($map)->count();
         if ($result['total_result'] <= 0) {
             return $result;
         }
 
         // 实际查询
         $result['items'] = $this->setDefaultOrder(['transaction_id' => 'desc'])
-            ->alias('transaction')
             ->withJoin($with)
             ->where($map)
             ->withSearch(['page', 'order'], $data)
