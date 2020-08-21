@@ -5,13 +5,19 @@
  * CareyShop    商品折扣模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/5/31
+ * @date        2020/8/21
  */
 
 namespace app\common\model;
 
 class Discount extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'discount_id';
+
     /**
      * 只读属性
      * @var array
@@ -25,11 +31,8 @@ class Discount extends CareyShop
      * @var array
      */
     protected $type = [
-        'discount_id' => 'integer',
-        'type'        => 'integer',
-        'begin_time'  => 'timestamp',
-        'end_time'    => 'timestamp',
-        'status'      => 'integer',
+        'begin_time' => 'timestamp',
+        'end_time'   => 'timestamp',
     ];
 
     /**
@@ -45,29 +48,22 @@ class Discount extends CareyShop
     /**
      * 检测相同时间段内是否存在重复商品
      * @access private
-     * @param  string $beginTime 开始日期
-     * @param  string $endTime   结束日期
-     * @param  array  $goodsList 外部商品列表
-     * @param  int    $excludeId 排除折扣Id
+     * @param string $beginTime 开始日期
+     * @param string $endTime   结束日期
+     * @param array  $goodsList 外部商品列表
+     * @param int    $excludeId 排除折扣Id
      * @return bool
      * @throws
      */
     private function isRepeatGoods($beginTime, $endTime, $goodsList, $excludeId = 0)
     {
         $map = [];
-        $excludeId == 0 ?: $map['discount_id'] = ['neq', $excludeId];
-        $map['begin_time'] = ['< time', $endTime];
-        $map['end_time'] = ['> time', $beginTime];
+        $excludeId == 0 ?: $map[] = ['discount_id', '<>', $excludeId];
+        $map[] = ['begin_time', '< time', $endTime];
+        $map[] = ['end_time', '> time', $beginTime];
 
         // 获取相同日期范围内的商品
-        $result = self::all(function ($query) use ($map) {
-            $query->with('discountGoods')->where($map);
-        });
-
-        if (false === $result) {
-            return false;
-        }
-
+        $result = $this->with('discount_goods')->where($map)->select();
         foreach ($result as $value) {
             $discountGoods = $value->getAttr('discount_goods')->column('goods_id');
             $inGoods = array_intersect($discountGoods, $goodsList);
@@ -85,13 +81,12 @@ class Discount extends CareyShop
     /**
      * 添加一个商品折扣
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addDiscountItem($data)
     {
-        if (!$this->validateData($data, 'Discount')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -105,16 +100,14 @@ class Discount extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 添加主表
-            if (false === $this->allowField(true)->save($data)) {
-                throw new \Exception($this->getError());
-            }
+            $this->save($data);
+            $result = $this->toArray();
 
             // 添加折扣商品
-            $result = $this->toArray();
             $discountGoodsDb = new DiscountGoods();
             $result['discount_goods'] = $discountGoodsDb->addDiscountGoods($data['discount_goods'], $this->getAttr('discount_id'));
 
@@ -122,10 +115,10 @@ class Discount extends CareyShop
                 throw new \Exception($discountGoodsDb->getError());
             }
 
-            self::commit();
+            $this->commit();
             return $result;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -133,13 +126,13 @@ class Discount extends CareyShop
     /**
      * 编辑一个商品折扣
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function setDiscountItem($data)
     {
-        if (!$this->validateData($data, 'Discount.set')) {
+        if (!$this->validateData($data, 'set')) {
             return false;
         }
 
@@ -150,33 +143,33 @@ class Discount extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 修改主表
-            $map['discount_id'] = ['eq', $data['discount_id']];
-            if (false === $this->allowField(true)->save($data, $map)) {
-                throw new \Exception($this->getError());
-            }
+            $map[] = ['discount_id', '=', $data['discount_id']];
+//            self::update($data, $map);
+//            $this->where($map)->save($data);
 
-            // 删除关联数据
-            $discountGoodsDb = new DiscountGoods();
-            if (false === $discountGoodsDb->where($map)->delete()) {
-                throw new \Exception($discountGoodsDb->getError());
-            }
-
-            // 添加折扣商品
-            $result = $this->toArray();
-            $result['discount_goods'] = $discountGoodsDb->addDiscountGoods($data['discount_goods'], $data['discount_id']);
-
-            if (false === $result['discount_goods']) {
-                throw new \Exception($discountGoodsDb->getError());
-            }
-
-            self::commit();
-            return $result;
+//            // 删除关联数据
+//            $discountGoodsDb = new DiscountGoods();
+//            if (false === $discountGoodsDb->where($map)->delete()) {
+//                throw new \Exception($discountGoodsDb->getError());
+//            }
+//
+//            // 添加折扣商品
+//            $result = $this->toArray();
+//            $result['discount_goods'] = $discountGoodsDb->addDiscountGoods($data['discount_goods'], $data['discount_id']);
+//
+//            if (false === $result['discount_goods']) {
+//                throw new \Exception($discountGoodsDb->getError());
+//            }
+//
+//            $this->commit();
+//            return $result;
+            return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
