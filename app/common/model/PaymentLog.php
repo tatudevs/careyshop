@@ -5,13 +5,19 @@
  * CareyShop    交易日志模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/6/28
+ * @date        2020/8/21
  */
 
 namespace app\common\model;
 
 class PaymentLog extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'payment_log_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -40,11 +46,8 @@ class PaymentLog extends CareyShop
      * @var array
      */
     protected $type = [
-        'payment_log_id' => 'integer',
-        'user_id'        => 'integer',
-        'amount'         => 'float',
-        'type'           => 'integer',
-        'status'         => 'integer',
+        'amount'     => 'float',
+        'to_payment' => 'integer',
     ];
 
     /**
@@ -54,10 +57,7 @@ class PaymentLog extends CareyShop
      */
     public function getUser()
     {
-        return $this
-            ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('username,nickname,level_icon,head_pic')
-            ->setEagerlyType(0);
+        return $this->hasOne(User::class, 'user_id', 'user_id')->joinType('left');
     }
 
     /**
@@ -77,13 +77,12 @@ class PaymentLog extends CareyShop
     /**
      * 添加一笔交易日志
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addPaymentLogItem($data)
     {
-        if (!$this->validateData($data, 'PaymentLog')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -94,7 +93,7 @@ class PaymentLog extends CareyShop
         $data['user_id'] = get_client_id();
         isset($data['status']) ?: $data['status'] = 0;
 
-        if (false !== $this->isUpdate(false)->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
@@ -104,25 +103,22 @@ class PaymentLog extends CareyShop
     /**
      * 关闭一笔充值记录
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function closePaymentLogItem($data)
     {
-        if (!$this->validateData($data, 'PaymentLog.close')) {
+        if (!$this->validateData($data, 'close')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['payment_no'] = ['eq', $data['payment_no']];
-            $map['user_id'] = ['eq', get_client_id()];
+        $map[] = ['payment_no', '=', $data['payment_no']];
+        $map[] = ['user_id', '=', get_client_id()];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         if ($result->getAttr('status') !== 0) {
@@ -130,114 +126,89 @@ class PaymentLog extends CareyShop
         }
 
         $result->setAttr('status', 2);
-        if (false !== $result->save()) {
-            return true;
-        }
+        $result->save();
 
-        return false;
+        return true;
     }
 
     /**
      * 获取一笔充值记录
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getPaymentLogItem($data)
     {
-        if (!$this->validateData($data, 'PaymentLog.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['payment_no'] = ['eq', $data['payment_no']];
-            is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
-            !isset($data['type']) ?: $map['type'] = ['eq', $data['type']];
-            !isset($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        $map[] = ['payment_no', '=', $data['payment_no']];
+        is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
+        !isset($data['type']) ?: $map[] = ['type', '=', $data['type']];
+        !isset($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
-            $query->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->where($map)->find();
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取充值记录列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getPaymentLogList($data)
     {
-        if (!$this->validateData($data, 'PaymentLog.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['payment_log.user_id'] = ['eq', get_client_id()];
-        empty($data['payment_no']) ?: $map['payment_log.payment_no'] = ['eq', $data['payment_no']];
-        empty($data['order_no']) ?: $map['payment_log.order_no'] = ['eq', $data['order_no']];
-        empty($data['out_trade_no']) ?: $map['payment_log.out_trade_no'] = ['eq', $data['out_trade_no']];
-        is_empty_parm($data['type']) ?: $map['payment_log.type'] = ['eq', $data['type']];
-        is_empty_parm($data['status']) ?: $map['payment_log.status'] = ['eq', $data['status']];
+        $map = [];
+        empty($data['payment_no']) ?: $map[] = ['payment_log.payment_no', '=', $data['payment_no']];
+        empty($data['order_no']) ?: $map[] = ['payment_log.order_no', '=', $data['order_no']];
+        empty($data['out_trade_no']) ?: $map[] = ['payment_log.out_trade_no', '=', $data['out_trade_no']];
+        is_empty_parm($data['type']) ?: $map[] = ['payment_log.type', '=', $data['type']];
+        is_empty_parm($data['status']) ?: $map[] = ['payment_log.status', '=', $data['status']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
-            $map['payment_log.create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
+            $map[] = ['payment_log.create_time', 'between time', [$data['begin_time'], $data['end_time']]];
         }
 
         // 关联查询
         $with = [];
         if (is_client_admin()) {
-            $with = ['getUser'];
-            unset($map['payment_log.user_id']);
-            is_empty_parm($data['to_payment']) ?: $map['payment_log.to_payment'] = ['eq', (string)$data['to_payment']];
-            empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
+            $with['getUser'] = ['username', 'nickname', 'level_icon', 'head_pic'];
+            is_empty_parm($data['to_payment']) ?: $map[] = ['payment_log.to_payment', '=', (string)$data['to_payment']];
+            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+        } else {
+            $map[] = ['payment_log.user_id', '=', get_client_id()];
         }
 
         // 获取总数量,为空直接返回
-        $totalResult = $this->alias('payment_log')->with($with)->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->withJoin($with)->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map, $with) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        $result['items'] = $this->setDefaultOrder(['payment_log_id' => 'desc'])
+            ->withJoin($with)
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'payment_log_id';
-
-            $query
-                ->alias('payment_log')
-                ->with($with)
-                ->where($map)
-                ->order(['payment_log.' . $orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        self::keyToSnake(['getUser'], $result['items']);
+        return $result;
     }
 
     /**
      * 获取一笔订单成功付款的具体金额
      * @access public
-     * @param  string $paymentNo 交易流水号
+     * @param string $paymentNo 交易流水号
      * @return float|int
      */
     public static function getPaymentLogValue($paymentNo)
@@ -246,10 +217,10 @@ class PaymentLog extends CareyShop
             return 0;
         }
 
-        $map['payment_no'] = ['eq', $paymentNo];
-        $map['type'] = ['eq', 1];
-        $map['status'] = ['eq', 1];
+        $map[] = ['payment_no', '=', $paymentNo];
+        $map[] = ['type', '=', 1];
+        $map[] = ['status', '=', 1];
 
-        return self::where($map)->value('amount', 0, true);
+        return self::where($map)->value('amount', 0);
     }
 }
