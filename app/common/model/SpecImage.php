@@ -17,6 +17,7 @@ class SpecImage extends CareyShop
      * @var array
      */
     protected $hidden = [
+        'id',
         'goods_id',
     ];
 

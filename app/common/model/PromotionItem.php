@@ -17,6 +17,7 @@ class PromotionItem extends CareyShop
      * @var array
      */
     protected $hidden = [
+        'id',
         'promotion_id',
     ];
 

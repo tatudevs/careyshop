@@ -17,6 +17,7 @@ class DiscountGoods extends CareyShop
      * @var array
      */
     protected $hidden = [
+        'id',
         'discount_id',
     ];
 

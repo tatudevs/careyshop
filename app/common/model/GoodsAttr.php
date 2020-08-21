@@ -17,6 +17,7 @@ class GoodsAttr extends CareyShop
      * @var array
      */
     protected $hidden = [
+        'id',
         'goods_id',
     ];
 
