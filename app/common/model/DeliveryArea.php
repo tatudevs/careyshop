@@ -5,13 +5,19 @@
  * CareyShop    配送区域模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/3/28
+ * @date        2020/8/21
  */
 
 namespace app\common\model;
 
 class DeliveryArea extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'delivery_area_id';
+
     /**
      * 隐藏属性
      * @var array
@@ -34,8 +40,6 @@ class DeliveryArea extends CareyShop
      * @var array
      */
     protected $type = [
-        'delivery_area_id'    => 'integer',
-        'delivery_id'         => 'integer',
         'region'              => 'array',
         'first_weight_price'  => 'float',
         'second_weight_price' => 'float',
@@ -48,8 +52,8 @@ class DeliveryArea extends CareyShop
     /**
      * 验证并设置区域数据
      * @access private
-     * @param  array $data   外部数据
-     * @param  int   $areaId 字段delivery_area_id
+     * @param array $data   外部数据
+     * @param int   $areaId 字段delivery_area_id
      * @return bool
      */
     private function setRegionData(&$data, $areaId)
@@ -82,25 +86,18 @@ class DeliveryArea extends CareyShop
     /**
      * 验证配送区域是否存在重复
      * @access private
-     * @param  array $source     待验证数据
-     * @param  int   $deliveryId 配送方式Id
-     * @param  int   $areaId     字段delivery_area_id
+     * @param array $source     待验证数据
+     * @param int   $deliveryId 配送方式Id
+     * @param int   $areaId     字段delivery_area_id
      * @return bool true:重复 false:不重复
      * @throws
      */
     private function checkRegionUnique($source, $deliveryId, $areaId)
     {
         // 获取当前已存在的配送区域
-        $result = self::all(function ($query) use ($deliveryId, $areaId) {
-            $map['delivery_id'] = ['eq', $deliveryId];
-            $map['delivery_area_id'] = ['neq', $areaId];
-
-            $query->where($map)->field('region');
-        });
-
-        if (false === $result) {
-            return true;
-        }
+        $map[] = ['delivery_id', '=', $deliveryId];
+        $map[] = ['delivery_area_id', '<>', $areaId];
+        $result = $this->field('region')->where($map)->select();
 
         // 合并各个配送区域
         $tempData = [];
@@ -123,13 +120,12 @@ class DeliveryArea extends CareyShop
     /**
      * 添加一个配送区域
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
-     * @throws
      */
     public function addAreaItem($data)
     {
-        if (!$this->validateData($data, 'DeliveryArea') || !$this->setRegionData($data, 0)) {
+        if (!$this->validateData($data) || !$this->setRegionData($data, 0)) {
             return false;
         }
 
@@ -137,7 +133,7 @@ class DeliveryArea extends CareyShop
         unset($data['delivery_area_id']);
         !empty($data['region']) ?: $data['region'] = [];
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
@@ -147,18 +143,17 @@ class DeliveryArea extends CareyShop
     /**
      * 编辑一个配送区域
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
-     * @throws
      */
     public function setAreaItem($data)
     {
-        if (!$this->validateSetData($data, 'DeliveryArea.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
         // 搜索条件
-        $map['delivery_area_id'] = ['eq', $data['delivery_area_id']];
+        $map[] = ['delivery_area_id', '=', $data['delivery_area_id']];
 
         if (empty($data['delivery_id'])) {
             $deliveryId = $this->where($map)->value('delivery_id');
@@ -175,68 +170,58 @@ class DeliveryArea extends CareyShop
             $data['region'] = [];
         }
 
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            return $this->toArray();
-        }
-
-        return false;
+        $result = self::update($data, $map);
+        return $result->toArray();
     }
 
     /**
      * 批量删除配送区域
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delAreaList($data)
     {
-        if (!$this->validateData($data, 'DeliveryArea.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('delivery_area_id', 'in', $data['delivery_area_id']);
-        });
-
+        self::destroy($data['delivery_area_id']);
         return true;
     }
 
     /**
      * 获取一个配送区域
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function getAreaItem($data)
     {
-        if (!$this->validateData($data, 'DeliveryArea.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['delivery_area_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['delivery_area_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取配送区域列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function getAreaList($data)
     {
-        if (!$this->validateData($data, 'DeliveryArea.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 获取配送方式基础数据
-        $deliveryData = Delivery::get($data['delivery_id']);
+        $deliveryData = Delivery::find($data['delivery_id']);
         if (!$deliveryData) {
             return $this->setError('配送方式不存在');
         }
@@ -253,22 +238,15 @@ class DeliveryArea extends CareyShop
             'second_volume_price' => $deliveryData->getAttr('second_volume_price'),
         ];
 
-        // 获取对应配送方式下的配送区域
-        $result = self::all(function ($query) use ($data) {
-            $map['delivery_id'] = ['eq', $data['delivery_id']];
-            empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
+        // 搜索条件
+        $map[] = ['delivery_id', '=', $data['delivery_id']];
+        empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
 
-            $query->where($map);
-        });
-
-        if (false !== $result) {
-            if (empty($data['name'])) {
-                $result->unshift($baseData);
-            }
-
-            return $result->toArray();
+        $result = $this->where($map)->select();
+        if (empty($data['name'])) {
+            $result->unshift($baseData);
         }
 
-        return false;
+        return $result->toArray();
     }
 }
