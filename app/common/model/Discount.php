@@ -42,7 +42,7 @@ class Discount extends CareyShop
      */
     public function discountGoods()
     {
-        return $this->hasMany('DiscountGoods', 'discount_id');
+        return $this->hasMany(DiscountGoods::class, 'discount_id');
     }
 
     /**
@@ -128,11 +128,10 @@ class Discount extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setDiscountItem($data)
     {
-        if (!$this->validateData($data, 'set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -148,26 +147,22 @@ class Discount extends CareyShop
         try {
             // 修改主表
             $map[] = ['discount_id', '=', $data['discount_id']];
-//            self::update($data, $map);
-//            $this->where($map)->save($data);
+            $temp = self::update($data, $map);
 
-//            // 删除关联数据
-//            $discountGoodsDb = new DiscountGoods();
-//            if (false === $discountGoodsDb->where($map)->delete()) {
-//                throw new \Exception($discountGoodsDb->getError());
-//            }
-//
-//            // 添加折扣商品
-//            $result = $this->toArray();
-//            $result['discount_goods'] = $discountGoodsDb->addDiscountGoods($data['discount_goods'], $data['discount_id']);
-//
-//            if (false === $result['discount_goods']) {
-//                throw new \Exception($discountGoodsDb->getError());
-//            }
-//
-//            $this->commit();
-//            return $result;
-            return true;
+            // 删除关联数据
+            $discountGoodsDb = new DiscountGoods();
+            $discountGoodsDb->where($map)->delete();
+
+            // 添加折扣商品
+            $result = $temp->toArray();
+            $result['discount_goods'] = $discountGoodsDb->addDiscountGoods($data['discount_goods'], $data['discount_id']);
+
+            if (false === $result['discount_goods']) {
+                throw new \Exception($discountGoodsDb->getError());
+            }
+
+            $this->commit();
+            return $result;
         } catch (\Exception $e) {
             $this->rollback();
             return $this->setError($e->getMessage());
@@ -177,46 +172,37 @@ class Discount extends CareyShop
     /**
      * 获取一个商品折扣
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getDiscountItem($data)
     {
-        if (!$this->validateData($data, 'Discount.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['discount_id'], 'discountGoods');
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->with('discount_goods')->find($data['discount_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 批量删除商品折扣
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function delDiscountList($data)
     {
-        if (!$this->validateData($data, 'Discount.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $result = self::all($data['discount_id']);
-        if (!$result) {
-            return true;
-        }
+        // 搜索条件
+        $map[] = ['discount_id', 'in', $data['discount_id']];
 
-        foreach ($result as $value) {
-            $value->delete();
-            $value->discountGoods()->delete();
-        }
+        $this->where($map)->delete();
+        DiscountGoods::where($map)->delete();
 
         return true;
     }
@@ -224,73 +210,55 @@ class Discount extends CareyShop
     /**
      * 批量设置商品折扣状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setDiscountStatus($data)
     {
-        if (!$this->validateData($data, 'Discount.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['discount_id'] = ['in', $data['discount_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            return true;
-        }
+        $map[] = ['discount_id', 'in', $data['discount_id']];
+        self::update(['status' => $data['status']], $map);
 
-        return false;
+        return true;
     }
 
     /**
      * 获取商品折扣列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getDiscountList($data)
     {
-        if (!$this->validateData($data, 'Discount.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
         $map = [];
-        empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-        empty($data['type']) ?: $map['type'] = ['in', $data['type']];
-        empty($data['begin_time']) ?: $map['begin_time'] = ['< time', $data['end_time']];
-        empty($data['end_time']) ?: $map['end_time'] = ['> time', $data['begin_time']];
-        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
+        empty($data['type']) ?: $map[] = ['type', 'in', $data['type']];
+        empty($data['begin_time']) ?: $map[] = ['begin_time', '< time', $data['end_time']];
+        empty($data['end_time']) ?: $map[] = ['end_time', '> time', $data['begin_time']];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['discount_id' => 'desc'])
+            ->with('discount_goods')
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'discount_id';
-
-            $query
-                ->with('discountGoods')
-                ->where($map)
-                ->order([$orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 }
