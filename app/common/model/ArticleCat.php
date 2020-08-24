@@ -261,7 +261,7 @@ class ArticleCat extends CareyShop
             return [];
         }
 
-        $list = self::cache('ArticleCatNavi', null, 'ArticleCat')->column('article_cat_id,parent_id,cat_name');
+        $list = $this->cache('ArticleCatNavi', null, 'ArticleCat')->column('article_cat_id,parent_id,cat_name');
         $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
 
         if (!$isLayer && isset($list[$data['article_cat_id']])) {
