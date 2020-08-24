@@ -5,16 +5,22 @@
  * CareyShop    应用安装包模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/3/9
+ * @date        2020/8/24
  */
 
 namespace app\common\model;
 
-use think\Cache;
-use think\Config;
+use think\facade\Cache;
+use think\facade\Config;
 
 class AppInstall extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'app_install_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -30,21 +36,12 @@ class AppInstall extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'app_install_id' => 'integer',
-        'count'          => 'integer',
-    ];
-
-    /**
      * 系统标识修改器
-     * @access protected
-     * @param  string $value 值
+     * @access public
+     * @param string $value 值
      * @return string
      */
-    protected function setUserAgentAttr($value)
+    public function setUserAgentAttr($value)
     {
         return mb_strtolower($value, 'utf-8');
     }
@@ -52,21 +49,20 @@ class AppInstall extends CareyShop
     /**
      * 添加一个应用安装包
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addAppInstallItem($data)
     {
-        if (!$this->validateData($data, 'AppInstall')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 避免无关数据
         unset($data['app_install_id'], $data['count']);
 
-        if (false !== $this->allowField(true)->save($data)) {
-            Cache::clear('AppInstall');
+        if ($this->save($data)) {
+            Cache::tag('AppInstall')->clear();
             return $this->toArray();
         }
 
@@ -76,136 +72,113 @@ class AppInstall extends CareyShop
     /**
      * 编辑一个应用安装包
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setAppInstallItem($data)
     {
-        if (!$this->validateSetData($data, 'AppInstall.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
         $field = ['user_agent', 'name', 'ver', 'url'];
-        $map['app_install_id'] = ['eq', $data['app_install_id']];
+        $map[] = ['app_install_id', '=', $data['app_install_id']];
 
-        if (false !== $this->allowField($field)->save($data, $map)) {
-            Cache::clear('AppInstall');
-            return $this->toArray();
-        }
+        $result = self::update($data, $map, $field);
+        Cache::tag('AppInstall')->clear();
 
-        return false;
+        return $result->toArray();
     }
 
     /**
      * 获取一个应用安装包
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAppInstallItem($data)
     {
-        if (!$this->validateData($data, 'AppInstall.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['app_install_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['app_install_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 批量删除应用安装包
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delAppInstallList($data)
     {
-        if (!$this->validateData($data, 'AppInstall.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('app_install_id', 'in', $data['app_install_id']);
-        });
+        self::destroy($data['app_install_id']);
+        Cache::tag('AppInstall')->clear();
 
-        Cache::clear('AppInstall');
         return true;
     }
 
     /**
      * 获取应用安装包列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAppInstallList($data)
     {
-        if (!$this->validateData($data, 'AppInstall.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
         $map = [];
-        empty($data['user_agent']) ?: $map['user_agent'] = ['eq', $data['user_agent']];
-        empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
+        empty($data['user_agent']) ?: $map[] = ['user_agent', '=', $data['user_agent']];
+        empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['app_install_id' => 'desc'])
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'app_install_id';
-
-            $query
-                ->where($map)
-                ->order([$orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 
     /**
      * 根据条件查询是否有更新
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|bool
      * @throws
      */
     public function queryAppInstallUpdated($data)
     {
-        if (!$this->validateData($data, 'AppInstall.updated')) {
+        if (!$this->validateData($data, 'updated')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $query
-                ->cache(true, null, 'AppInstall')
-                ->field('name,ver,url')
-                ->where(['user_agent' => ['eq', $data['user_agent']]]);
-        });
+        // 搜索条件
+        $map[] = ['user_agent', '=', $data['user_agent']];
+
+        // 实际查询
+        $result = $this->cache(true, null, 'AppInstall')
+            ->field('name,ver,url')
+            ->where($map)
+            ->select();
 
         foreach ($result as $value) {
             if (version_compare($value->getAttr('ver'), $data['ver'], '>')) {
@@ -221,16 +194,12 @@ class AppInstall extends CareyShop
      * 根据请求获取一个应用安装包
      * @access public
      * @return array|false
-     * @throws
      */
     public function requestAppInstallItem()
     {
         // 获取所有安装包列表
-        $result = self::cache(true, null, 'AppInstall')->column('user_agent,ver,url', 'app_install_id');
-        if (false === $result) {
-            Cache::clear('AppInstall');
-            return false;
-        }
+        $result = $this->cache(true, null, 'AppInstall')
+            ->column('user_agent,ver,url', 'app_install_id');
 
         $data = [];
         $maxVersion = '';
@@ -250,11 +219,12 @@ class AppInstall extends CareyShop
         if (!empty($data)) {
             // 如果是安卓微信,则返回自定义中间页
             if (mb_stripos($agent, 'Android', null, 'utf-8') && mb_stripos($agent, 'MicroMessenger', null, 'utf-8')) {
-                $data['url'] = Config::get('weixin_url.value', 'system_info');
+                $data['url'] = Config::get('careyshop.system_info.weixin_url', '');
             }
 
             // 自增访问次数
-            $this->where(['app_install_id' => ['eq', $data['app_install_id']]])->setInc('count');
+            $map[] = ['app_install_id', '=', $data['app_install_id']];
+            $this->where($map)->inc('count');
         }
 
         return $data;
