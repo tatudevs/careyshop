@@ -42,7 +42,7 @@ class Promotion extends CareyShop
      */
     public function promotionItem()
     {
-        return $this->hasMany('PromotionItem', 'promotion_id');
+        return $this->hasMany(PromotionItem::class, 'promotion_id');
     }
 
     /**
