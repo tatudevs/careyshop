@@ -5,13 +5,19 @@
  * CareyShop    广告模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/3/29
+ * @date        2020/8/24
  */
 
 namespace app\common\model;
 
 class Ads extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'ads_id';
+
     /**
      * 只读属性
      * @var array
@@ -25,14 +31,8 @@ class Ads extends CareyShop
      * @var array
      */
     protected $type = [
-        'ads_id'          => 'integer',
-        'ads_position_id' => 'integer',
-        'platform'        => 'integer',
-        'type'            => 'integer',
-        'begin_time'      => 'timestamp',
-        'end_time'        => 'timestamp',
-        'sort'            => 'integer',
-        'status'          => 'integer',
+        'begin_time' => 'timestamp',
+        'end_time'   => 'timestamp',
     ];
 
     /**
@@ -67,29 +67,29 @@ class Ads extends CareyShop
         return $value;
     }
 
-    /**
-     * hasOne cs_ads_position
-     * @access public
-     * @return mixed
-     */
-    public function getAdsPosition()
-    {
-        return $this
-            ->hasOne('AdsPosition', 'ads_position_id', 'ads_position_id')
-            ->field('ads_position_id,name')
-            ->setEagerlyType(0);
-    }
+//    /**
+//     * hasOne cs_ads_position
+//     * @access public
+//     * @return mixed
+//     */
+//    public function getAdsPosition()
+//    {
+//        return $this
+//            ->hasOne('AdsPosition', 'ads_position_id', 'ads_position_id')
+//            ->field('ads_position_id,name')
+//            ->setEagerlyType(0);
+//    }
 
     /**
      * 添加一个广告
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function addAdsItem($data)
     {
-        if (!$this->validateData($data, 'Ads')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -98,16 +98,16 @@ class Ads extends CareyShop
         isset($data['content']) ?: $data['content'] = '';
 
         // 获取广告位
-        $result = AdsPosition::get($data['ads_position_id']);
-        if (!$result) {
-            return is_null($result) ? $this->setError('广告位不存在') : false;
+        $result = AdsPosition::find($data['ads_position_id']);
+        if (is_null($result)) {
+            return $this->setError('广告位不存在');
         }
 
         // 将广告位的属性赋值到广告
         $data['platform'] = $result->getAttr('platform');
         $data['type'] = $result->getAttr('type');
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
@@ -117,34 +117,34 @@ class Ads extends CareyShop
     /**
      * 编辑一个广告
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function setAdsItem($data)
     {
-        if (!$this->validateSetData($data, 'Ads.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
         if (!empty($data['code'])) {
-            $map['ads_id'] = ['neq', $data['ads_id']];
-            $map['code'] = ['eq', $data['code']];
+            $map[] = ['ads_id', '<>', $data['ads_id']];
+            $map[] = ['code', '=', $data['code']];
 
             if (self::checkUnique($map)) {
                 return $this->setError('广告编码已存在');
             }
         }
 
-        $result = self::get($data['ads_id']);
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->find($data['ads_id']);
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         if (isset($data['ads_position_id']) && $result->getAttr('ads_position_id') != $data['ads_position_id']) {
-            $position = AdsPosition::where(['ads_position_id' => ['eq', $data['ads_position_id']]])->find();
-            if (!$position) {
-                return is_null($position) ? $this->setError('广告位不存在') : false;
+            $position = AdsPosition::where('ads_position_id', $data['ads_position_id'])->find();
+            if (is_null($position)) {
+                return $this->setError('广告位不存在');
             }
 
             $result->setAttr('platform', $position['platform']);
@@ -152,50 +152,42 @@ class Ads extends CareyShop
 
         }
 
-        if (false !== $result->allowField(true)->save($data)) {
-            return $result->toArray();
-        }
-
-        return false;
+        $result->save($data);
+        return $result->toArray();
     }
 
     /**
      * 批量删除广告
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delAdsList($data)
     {
-        if (!$this->validateData($data, 'Ads.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('ads_id', 'in', $data['ads_id']);
-        });
-
+        self::destroy($data['ads_id']);
         return true;
     }
 
     /**
      * 设置广告排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setAdsSort($data)
     {
-        if (!$this->validateData($data, 'Ads.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['ads_id'] = ['eq', $data['ads_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            return true;
-        }
+        $map[] = ['ads_id', '=', $data['ads_id']];
+        self::update(['sort' => $data['sort']], $map);
 
-        return false;
+        return true;
     }
 
     /**
@@ -207,7 +199,7 @@ class Ads extends CareyShop
      */
     public function setAdsIndex($data)
     {
-        if (!$this->validateData($data, 'Ads.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -216,52 +208,43 @@ class Ads extends CareyShop
             $list[] = ['ads_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            return true;
-        }
-
-        return false;
+        $this->saveAll($list);
+        return true;
     }
 
     /**
      * 批量设置是否显示
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setAdsStatus($data)
     {
-        if (!$this->validateData($data, 'Ads.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['ads_id'] = ['in', $data['ads_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            return true;
-        }
+        $map[] = ['ads_id', 'in', $data['ads_id']];
+        self::update(['status' => $data['status']], $map);
 
-        return false;
+        return true;
     }
 
     /**
      * 获取一个广告
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAdsItem($data)
     {
-        if (!$this->validateData($data, 'Ads.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['ads_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['ads_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
@@ -331,32 +314,26 @@ class Ads extends CareyShop
     /**
      * 根据编码获取广告
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAdsCode($data)
     {
-        if (!$this->validateData($data, 'Ads.code')) {
+        if (!$this->validateData($data, 'code')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['code'] = ['eq', $data['code']];
-            $map['begin_time'] = ['<= time', time()];
-            $map['end_time'] = ['>= time', time()];
-            $map['status'] = ['eq', 1];
+        $map[] = ['code', '=', $data['code']];
+        $map[] = ['begin_time', '<= time', time()];
+        $map[] = ['end_time', '>= time', time()];
+        $map[] = ['status', '=', 1];
 
-            $query
-                ->field('code,ads_position_id,begin_time,end_time,sort,status', true)
-                ->where($map);
-        });
+        $result = $this->where($map)
+            ->withoutField('code,ads_position_id,begin_time,end_time,sort,status')
+            ->find();
 
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
