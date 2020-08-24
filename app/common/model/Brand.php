@@ -5,17 +5,23 @@
  * CareyShop    品牌模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/1
+ * @date        2020/8/25
  */
 
 namespace app\common\model;
 
-use util\Phonetic;
+use think\facade\Cache;
 use think\helper\Str;
-use think\Cache;
+use util\Phonetic;
 
 class Brand extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'brand_id';
+
     /**
      * 只读属性
      * @var array
@@ -25,26 +31,14 @@ class Brand extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'brand_id'          => 'integer',
-        'goods_category_id' => 'integer',
-        'sort'              => 'integer',
-        'status'            => 'integer',
-    ];
-
-    /**
      * 添加一个品牌
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addBrandItem($data)
     {
-        if (!$this->validateData($data, 'Brand')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -61,8 +55,8 @@ class Brand extends CareyShop
             $data['phonetic'] = Str::lower($data['phonetic']);
         }
 
-        if (false !== $this->allowField(true)->save($data)) {
-            Cache::clear('Brand');
+        if ($this->save($data)) {
+            Cache::tag('Brand')->clear();
             return $this->toArray();
         }
 
@@ -72,20 +66,19 @@ class Brand extends CareyShop
     /**
      * 编辑一个品牌
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setBrandItem($data)
     {
-        if (!$this->validateSetData($data, 'Brand.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
         if (!empty($data['name'])) {
-            $map['brand_id'] = ['neq', $data['brand_id']];
-            $map['name'] = ['eq', $data['name']];
-            $map['goods_category_id'] = ['eq', !empty($data['goods_category_id']) ? $data['goods_category_id'] : 0];
+            $map[] = ['brand_id', '<>', $data['brand_id']];
+            $map[] = ['name', '=', $data['name']];
+            $map[] = ['goods_category_id', '=', !empty($data['goods_category_id']) ? $data['goods_category_id'] : 0];
 
             if (self::checkUnique($map)) {
                 return $this->setError('品牌名称已存在');
@@ -98,71 +91,64 @@ class Brand extends CareyShop
             }
         }
 
-        $map = ['brand_id' => ['eq', $data['brand_id']]];
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            Cache::clear('Brand');
-            return $this->toArray();
-        }
+        $result = self::update($data, ['brand_id' => $data['brand_id']]);
+        Cache::tag('Brand')->clear();
 
-        return false;
+        return $result->toArray();
     }
 
     /**
      * 批量删除品牌
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delBrandList($data)
     {
-        if (!$this->validateData($data, 'Brand.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('brand_id', 'in', $data['brand_id']);
-        });
+        self::destroy($data['brand_id']);
+        Cache::tag('Brand')->clear();
 
-        Cache::clear('Brand');
         return true;
     }
 
     /**
      * 批量设置品牌是否显示
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setBrandStatus($data)
     {
-        if (!$this->validateData($data, 'Brand.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['brand_id'] = ['in', $data['brand_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            Cache::clear('Brand');
-            return true;
-        }
+        $map[] = ['brand_id', 'in', $data['brand_id']];
+        self::update(['status' => $data['status']], $map);
+        Cache::tag('Brand')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 验证品牌名称是否唯一
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function uniqueBrandName($data)
     {
-        if (!$this->validateData($data, 'Brand.unique')) {
+        if (!$this->validateData($data, 'unique')) {
             return false;
         }
 
-        $map['name'] = ['eq', $data['name']];
-        $map['goods_category_id'] = ['eq', !empty($data['goods_category_id']) ? $data['goods_category_id'] : 0];
-        !isset($data['exclude_id']) ?: $map['ads_id'] = ['neq', $data['exclude_id']];
+        $map[] = ['name', '=', $data['name']];
+        $map[] = ['goods_category_id', '=', !empty($data['goods_category_id']) ? $data['goods_category_id'] : 0];
+        !isset($data['exclude_id']) ?: $map[] = ['ads_id', '<>', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('品牌名称已存在');
@@ -174,40 +160,32 @@ class Brand extends CareyShop
     /**
      * 获取一个品牌
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getBrandItem($data)
     {
-        if (!$this->validateData($data, 'Brand.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['brand_id'] = ['eq', $data['brand_id']];
-            is_client_admin() ?: $map['status'] = ['eq', 1];
+        $map[] = ['brand_id', '=', $data['brand_id']];
+        is_client_admin() ?: $map[] = ['status', '=', 1];
 
-            $query->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->where($map)->find();
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取品牌列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function getBrandList($data)
     {
-        if (!$this->validateData($data, 'Brand.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
@@ -223,123 +201,83 @@ class Brand extends CareyShop
         }
 
         // 搜索条件
-        $map['b.status'] = ['eq', 1];
-        empty($data['name']) ?: $map['b.name'] = ['like', '%' . $data['name'] . '%'];
-        empty($catIdList) ?: $map['b.goods_category_id'] = ['in', $catIdList];
+        $map = [];
+        empty($data['name']) ?: $map[] = ['b.name', 'like', '%' . $data['name'] . '%'];
+        empty($catIdList) ?: $map[] = ['b.goods_category_id', 'in', $catIdList];
 
-        if (is_client_admin()) {
-            if (is_empty_parm($data['status'])) {
-                unset($map['b.status']);
-            } else {
-                $map['b.status'] = ['eq', $data['status']];
-            }
+        if (is_client_admin() && !is_empty_parm($data['status'])) {
+            $map[] = ['b.status', '=', $data['status']];
+        } else {
+            $map[] = ['b.status', '=', 1];
         }
 
-        $totalResult = $this->cache(true, null, 'Brand')->alias('b')->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->cache(true, null, 'Brand')->alias('b')->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['brand_id' => 'desc'], ['sort' => 'asc'])
+            ->cache(true, null, 'Brand')
+            ->alias('b')
+            ->field('b.*,ifnull(c.name, \'\') category_name,ifnull(c.alias, \'\') category_alias')
+            ->join('goods_category c', 'c.status = 1 AND c.goods_category_id = b.goods_category_id', 'left')
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'brand_id';
-
-            // 排序处理
-            $order['b.sort'] = 'asc';
-            $order['b.' . $orderField] = $orderType;
-
-            if (!empty($data['order_field'])) {
-                $order = array_reverse($order);
-            }
-
-            $query
-                ->cache(true, null, 'Brand')
-                ->alias('b')
-                ->field('b.*,ifnull(c.name, \'\') category_name,ifnull(c.alias, \'\') category_alias')
-                ->join('goods_category c', 'c.status = 1 AND c.goods_category_id = b.goods_category_id', 'left')
-                ->where($map)
-                ->order($order)
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 
     /**
      * 获取品牌选择列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function getBrandSelect($data)
     {
-        if (!$this->validateData($data, 'Brand.select')) {
+        if (!$this->validateData($data, 'select')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $map['b.status'] = ['eq', 1];
-            !isset($data['goods_category_id']) ?: $map['b.goods_category_id'] = ['in', $data['goods_category_id']];
+        // 搜索条件
+        $map[] = ['b.status', '=', 1];
+        !isset($data['goods_category_id']) ?: $map[] = ['b.goods_category_id', 'in', $data['goods_category_id']];
 
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
+        // 返回字段
+        $field = 'b.goods_category_id,b.brand_id,b.name,b.phonetic,b.logo,';
+        $field .= 'ifnull(c.name, \'\') category_name,ifnull(c.alias, \'\') category_alias';
 
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'brand_id';
-
-            // 返回字段
-            $field = 'b.goods_category_id,b.brand_id,b.name,b.phonetic,b.logo,';
-            $field .= 'ifnull(c.name, \'\') category_name,ifnull(c.alias, \'\') category_alias';
-
-            $query
-                ->cache(true, null, 'Brand')
-                ->alias('b')
-                ->field($field)
-                ->join('goods_category c', 'c.status = 1 AND c.goods_category_id = b.goods_category_id', 'left')
-                ->where($map)
-                ->order(['b.' . $orderField => $orderType]);
-        });
-
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return false;
+        return $this->setDefaultOrder(['brand_id' => 'asc'])
+            ->cache(true, null, 'Brand')
+            ->alias('b')
+            ->field($field)
+            ->join('goods_category c', 'c.status = 1 AND c.goods_category_id = b.goods_category_id', 'left')
+            ->where($map)
+            ->withSearch(['order'], $data)
+            ->select()
+            ->toArray();
     }
 
     /**
      * 设置品牌排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setBrandSort($data)
     {
-        if (!$this->validateData($data, 'Brand.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['brand_id'] = ['eq', $data['brand_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            Cache::clear('Brand');
-            return true;
-        }
+        $map[] = ['brand_id', '=', $data['brand_id']];
+        self::update(['sort' => $data['sort']], $map);
+        Cache::tag('Brand')->clear();
 
-        return false;
+        return true;
     }
 
     /**
@@ -351,7 +289,7 @@ class Brand extends CareyShop
      */
     public function setBrandIndex($data)
     {
-        if (!$this->validateData($data, 'Brand.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -360,11 +298,9 @@ class Brand extends CareyShop
             $list[] = ['brand_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            Cache::clear('Brand');
-            return true;
-        }
+        $this->saveAll($list);
+        Cache::tag('Brand')->clear();
 
-        return false;
+        return true;
     }
 }
