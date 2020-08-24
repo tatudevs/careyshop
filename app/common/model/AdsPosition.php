@@ -13,6 +13,12 @@ namespace app\common\model;
 class AdsPosition extends CareyShop
 {
     /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'ads_position_id';
+
+    /**
      * 只读属性
      * @var array
      */

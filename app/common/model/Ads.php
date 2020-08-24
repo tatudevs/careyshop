@@ -67,18 +67,15 @@ class Ads extends CareyShop
         return $value;
     }
 
-//    /**
-//     * hasOne cs_ads_position
-//     * @access public
-//     * @return mixed
-//     */
-//    public function getAdsPosition()
-//    {
-//        return $this
-//            ->hasOne('AdsPosition', 'ads_position_id', 'ads_position_id')
-//            ->field('ads_position_id,name')
-//            ->setEagerlyType(0);
-//    }
+    /**
+     * hasOne cs_ads_position
+     * @access public
+     * @return mixed
+     */
+    public function getAdsPosition()
+    {
+        return $this->hasOne(AdsPosition::class, 'ads_position_id', 'ads_position_id');
+    }
 
     /**
      * 添加一个广告
@@ -250,65 +247,42 @@ class Ads extends CareyShop
     /**
      * 获取广告列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAdsList($data)
     {
-        if (!$this->validateData($data, 'Ads.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
         $map = [];
-        is_empty_parm($data['platform']) ?: $map['ads.platform'] = ['eq', $data['platform']];
-        is_empty_parm($data['ads_position_id']) ?: $map['ads.ads_position_id'] = ['eq', $data['ads_position_id']];
-        empty($data['code']) ?: $map['ads.code'] = ['eq', $data['code']];
-        empty($data['name']) ?: $map['ads.name'] = ['like', '%' . $data['name'] . '%'];
-        is_empty_parm($data['type']) ?: $map['ads.type'] = ['eq', $data['type']];
-        is_empty_parm($data['status']) ?: $map['ads.status'] = ['eq', $data['status']];
-        empty($data['begin_time']) ?: $map['ads.begin_time'] = ['< time', $data['end_time']];
-        empty($data['end_time']) ?: $map['ads.end_time'] = ['> time', $data['begin_time']];
+        is_empty_parm($data['platform']) ?: $map[] = ['ads.platform', '=', $data['platform']];
+        is_empty_parm($data['ads_position_id']) ?: $map[] = ['ads.ads_position_id', '=', $data['ads_position_id']];
+        empty($data['code']) ?: $map[] = ['ads.code', '=', $data['code']];
+        empty($data['name']) ?: $map[] = ['ads.name', 'like', '%' . $data['name'] . '%'];
+        is_empty_parm($data['type']) ?: $map[] = ['ads.type', '=', $data['type']];
+        is_empty_parm($data['status']) ?: $map[] = ['ads.status', '=', $data['status']];
+        empty($data['begin_time']) ?: $map[] = ['ads.begin_time', '< time', $data['end_time']];
+        empty($data['end_time']) ?: $map[] = ['ads.end_time', '> time', $data['begin_time']];
 
-        $totalResult = $this->with('getAdsPosition')->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->withJoin('getAdsPosition')->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['ads_id' => 'desc'], ['sort' => 'asc'])
+            ->withJoin(['getAdsPosition' => ['ads_position_id', 'name']])
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'ads_id';
-
-            // 排序处理
-            $order['ads.sort'] = 'asc';
-            $order['ads.' . $orderField] = $orderType;
-
-            if (!empty($data['order_field'])) {
-                $order = array_reverse($order);
-            }
-
-            $query
-                ->with('getAdsPosition')
-                ->where($map)
-                ->order($order)
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        self::keyToSnake(['getAdsPosition'], $result['items']);
+        return $result;
     }
 
     /**
@@ -339,17 +313,17 @@ class Ads extends CareyShop
     /**
      * 验证广告编码是否唯一
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function uniqueAdsCode($data)
     {
-        if (!$this->validateData($data, 'Ads.unique')) {
+        if (!$this->validateData($data, 'unique')) {
             return false;
         }
 
-        $map['code'] = ['eq', $data['code']];
-        !isset($data['exclude_id']) ?: $map['ads_id'] = ['neq', $data['exclude_id']];
+        $map[] = ['code', '=', $data['code']];
+        !isset($data['exclude_id']) ?: $map[] = ['ads_id', '<>', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('广告编码已存在');
