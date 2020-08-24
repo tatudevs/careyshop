@@ -364,7 +364,7 @@ class CardUse extends CareyShop
         // 搜索条件
         $map[] = ['card_id', '=', $data['card_id']];
 
-        $result = $this->withoutField(['card_id', 'user_id'])
+        $result = $this->withoutField('card_id,user_id')
             ->where($map)
             ->select();
 
