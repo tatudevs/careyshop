@@ -5,13 +5,19 @@
  * CareyShop    配送方式模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/3/27
+ * @date        2020/8/25
  */
 
 namespace app\common\model;
 
 class Delivery extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'delivery_id';
+
     /**
      * 只读属性
      * @var array
@@ -25,22 +31,16 @@ class Delivery extends CareyShop
      * @var array
      */
     protected $type = [
-        'delivery_id'         => 'integer',
-        'delivery_item_id'    => 'integer',
         'first_weight'        => 'float',
         'first_weight_price'  => 'float',
         'second_weight'       => 'float',
         'second_weight_price' => 'float',
-        'first_item'          => 'integer',
         'first_item_price'    => 'float',
-        'second_item'         => 'integer',
         'second_item_price'   => 'float',
         'first_volume'        => 'float',
         'first_volume_price'  => 'float',
         'second_volume'       => 'float',
         'second_volume_price' => 'float',
-        'sort'                => 'integer',
-        'status'              => 'integer',
     ];
 
     /**
@@ -55,7 +55,7 @@ class Delivery extends CareyShop
             'second_item_price', 'first_volume_price', 'second_volume_price',
         ];
 
-        return $this->hasMany('DeliveryArea')->field($field);
+        return $this->hasMany(DeliveryArea::class)->field($field);
     }
 
     /**
@@ -65,28 +65,25 @@ class Delivery extends CareyShop
      */
     public function getDeliveryItem()
     {
-        return $this
-            ->hasOne('deliveryItem', 'delivery_item_id', 'delivery_item_id')
-            ->setEagerlyType(0);
+        return $this->hasOne(DeliveryItem::class, 'delivery_item_id', 'delivery_item_id');
     }
 
     /**
      * 添加一个配送方式
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addDeliveryItem($data)
     {
-        if (!$this->validateData($data, 'Delivery')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 避免无关字段
         unset($data['delivery_id']);
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
@@ -96,32 +93,36 @@ class Delivery extends CareyShop
     /**
      * 编辑一个配送方式
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setDeliveryItem($data)
     {
-        if (!$this->validateSetData($data, 'Delivery.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
         if (!empty($data['delivery_item_id'])) {
-            $map['delivery_id'] = ['neq', $data['delivery_id']];
-            $map['delivery_item_id'] = ['eq', $data['delivery_item_id']];
+            $map = [
+                ['delivery_id', '<>', $data['delivery_id']],
+                ['delivery_item_id', '=', $data['delivery_item_id']],
+            ];
 
             if (self::checkUnique($map)) {
                 return $this->setError('快递公司编号已存在');
             }
         }
 
-        $map = ['delivery_id' => ['eq', $data['delivery_id']]];
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            return $this->toArray();
-        }
+        $map = [
+            ['delivery_id', '=', $data['delivery_id']],
+            ['delivery_item_id', '=', $data['delivery_item_id']],
+        ];
 
-        return false;
+        $result = self::update($data, $map);
+        return $result->toArray();
     }
+
+    // todo 
 
     /**
      * 批量删除配送方式
