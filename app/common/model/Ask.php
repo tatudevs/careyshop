@@ -5,13 +5,19 @@
  * CareyShop    问答模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/3/30
+ * @date        2020/8/25
  */
 
 namespace app\common\model;
 
 class Ask extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'ask_id';
+
     /**
      * 主题
      * @var int
@@ -52,41 +58,13 @@ class Ask extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'ask_id'    => 'integer',
-        'user_id'   => 'integer',
-        'parent_id' => 'integer',
-        'ask_type'  => 'integer',
-        'type'      => 'integer',
-        'status'    => 'integer',
-        'is_delete' => 'integer',
-    ];
-
-    /**
-     * 全局查询条件
-     * @access protected
-     * @param  object $query 模型
-     * @return void
-     */
-    protected function base($query)
-    {
-        $query->where(['is_delete' => ['eq', 0]]);
-    }
-
-    /**
      * hasOne cs_user
      * @access public
      * @return mixed
      */
     public function getUser()
     {
-        return $this
-            ->hasOne('User', 'user_id', 'user_id', 'left')
-            ->field('username,nickname,level_icon,head_pic')
-            ->setEagerlyType(0);
+        return $this->hasOne(User::class, 'user_id', 'user_id')->joinType('left');
     }
 
     /**
@@ -96,45 +74,42 @@ class Ask extends CareyShop
      */
     public function getItems()
     {
-        return $this->hasMany('Ask', 'parent_id');
+        return $this->hasMany(Ask::class, 'parent_id');
     }
 
     /**
      * 添加一个提问
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addAskItem($data)
     {
-        if (!$this->validateData($data, 'Ask')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             $data['user_id'] = get_client_id();
             $data['type'] = self::ASK_TYPT_THEME;
 
-            if (false === $this->allowField(['user_id', 'ask_type', 'type', 'title'])->save($data)) {
+            if (!$this->allowField(['user_id', 'ask_type', 'type', 'title'])->save($data)) {
                 throw new \Exception($this->getError());
             }
 
             $data['type'] = self::ASK_TYPT_ASK;
             $data['parent_id'] = $this->getAttr('ask_id');
+
             $field = ['user_id', 'parent_id', 'ask_type', 'type', 'ask'];
+            Ask::create($data, $field);
 
-            if (false === $this->isUpdate(false)->allowField($field)->save($data)) {
-                throw new \Exception($this->getError());
-            }
-
-            self::commit();
+            $this->commit();
             return $this->toArray();
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -142,29 +117,28 @@ class Ask extends CareyShop
     /**
      * 删除一条记录
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function delAskItem($data)
     {
-        if (!$this->validateData($data, 'Ask.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['ask_id'] = ['eq', $data['ask_id']];
-            is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
+        // 搜索条件
+        $map[] = ['ask_id', '=', $data['ask_id']];
+        is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
             return true;
         }
 
         if ($result->getAttr('type') === self::ASK_TYPT_THEME) {
-            $this->save(['is_delete' => 1], ['ask_id|parent_id' => ['eq', $data['ask_id']]]);
+            self::update(['is_delete' => 1], ['ask_id|parent_id' => $data['ask_id']]);
         } else {
             $result->save(['is_delete' => 1]);
         }
@@ -175,52 +149,49 @@ class Ask extends CareyShop
     /**
      * 在主题上提交一个提问或回答
      * @access private
-     * @param  array $data 提交数据
-     * @param  bool  $isQa true:咨询 false:回复
+     * @param array $data 提交数据
+     * @param bool  $isQa true:咨询 false:回复
      * @return false|array
      * @throws
      */
     private function addAskOrAnswer($data, $isQa)
     {
-        $result = self::get(function ($query) use ($data, $isQa) {
-            $map['parent_id'] = ['eq', 0];
-            $map['ask_id'] = ['eq', $data['ask_id']];
-            !$isQa ?: $map['user_id'] = ['eq', get_client_id()];
+        // 搜索条件
+        $map[] = ['parent_id', '=', 0];
+        $map[] = ['ask_id', '=', $data['ask_id']];
+        !$isQa ?: $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
-            if (false === $result->save(['status' => !$isQa])) {
-                throw new \Exception($this->getError());
-            }
+            // 更新主题
+            $result->save(['status' => (int)!$isQa]);
 
             // 准备回复的内容
-            $result->setAttr('parent_id', $result->getAttr('ask_id'));
-            $result->setAttr('type', $isQa ? self::ASK_TYPT_ASK : self::ASK_TYPT_ANSWER);
-            $isQa ? $result->setAttr('ask', $data['ask']) : $result->setAttr('answer', $data['answer']);
+            $newData = $result->toArray();
+            $newData['parent_id'] = $newData['ask_id'];
+            $newData['type'] = $isQa ? self::ASK_TYPT_ASK : self::ASK_TYPT_ANSWER;
+            $isQa ? $newData['ask'] = $data['ask'] : $newData['answer'] = $data['answer'];
 
             // 避免无关数据
-            unset($result['ask_id']);
-            unset($result['title']);
-            unset($result['status']);
-            unset($result['create_time']);
+            unset($newData['ask_id']);
+            unset($newData['title']);
+            unset($newData['status']);
+            unset($newData['create_time']);
 
-            if (false === $result->isUpdate(false)->save()) {
-                throw new \Exception($this->getError());
-            }
+            $newDB = Ask::create($newData);
+            $this->commit();
 
-            self::commit();
-            return $result->toArray();
+            return $newDB->toArray();
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -228,12 +199,12 @@ class Ask extends CareyShop
     /**
      * 回答一个提问
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function replyAskItem($data)
     {
-        if (!$this->validateData($data, 'Ask.reply')) {
+        if (!$this->validateData($data, 'reply')) {
             return false;
         }
 
@@ -248,12 +219,12 @@ class Ask extends CareyShop
     /**
      * 在提问上继续提问
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function continueAskItem($data)
     {
-        if (!$this->validateData($data, 'Ask.continue')) {
+        if (!$this->validateData($data, 'continue')) {
             return false;
         }
 
@@ -268,116 +239,91 @@ class Ask extends CareyShop
     /**
      * 获取一个问答明细
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAskItem($data)
     {
-        if (!$this->validateData($data, 'Ask.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
+        // 搜索条件
+        $map[] = ['ask.ask_id', '=', $data['ask_id']];
+        $map[] = ['ask.is_delete', '=', 0];
+        is_client_admin() ?: $map[] = ['ask.user_id', '=', get_client_id()];
+
+        // 关联数据
+        $withUser['getUser'] = ['username', 'nickname', 'level_icon', 'head_pic'];
+        $withItem['get_items'] = function ($query) {
+            $query->withoutField('user_id,ask_type,title,status')->order('ask_id');
+        };
+
         // 获取主题与账号信息
-        $result = self::useGlobalScope(false)->find(function ($query) use ($data) {
-            $map['ask.ask_id'] = ['eq', $data['ask_id']];
-            $map['ask.is_delete'] = ['eq', 0];
-            is_client_admin() ?: $map['ask.user_id'] = ['eq', get_client_id()];
+        $result = self::withoutGlobalScope()
+            ->withoutField('ask,answer')
+            ->withJoin($withUser)
+            ->with($withItem)
+            ->where($map)
+            ->find();
 
-            $with = ['getUser'];
-            $with['getItems'] = function ($query) {
-                $query->field('user_id,ask_type,title,status', true)->order('ask_id');
-            };
+        if (!is_null($result)) {
+            $temp = [$result->toArray()];
+            self::keyToSnake(['getUser'], $temp);
 
-            $query->where($map)->field('ask,answer', true)->with($with);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
+            return $temp[0];
         }
 
-        return false;
+        return null;
     }
 
     /**
      * 获取问答主题列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAskList($data)
     {
-        if (!$this->validateData($data, 'Ask.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['ask.parent_id'] = ['eq', 0];
-        $map['ask.user_id'] = ['eq', get_client_id()];
-        $map['ask.type'] = ['eq', self::ASK_TYPT_THEME];
-        $map['ask.is_delete'] = ['eq', 0];
-        is_empty_parm($data['ask_type']) ?: $map['ask.ask_type'] = ['eq', $data['ask_type']];
-        is_empty_parm($data['status']) ?: $map['ask.status'] = ['eq', $data['status']];
+        $map[] = ['ask.parent_id', '=', 0];
+        $map[] = ['ask.type', '=', self::ASK_TYPT_THEME];
+        $map[] = ['ask.is_delete', '=', 0];
+        is_empty_parm($data['ask_type']) ?: $map[] = ['ask.ask_type', '=', $data['ask_type']];
+        is_empty_parm($data['status']) ?: $map[] = ['ask.status', '=', $data['status']];
 
         // 关联查询
         $with = [];
 
         // 后台管理搜索
         if (is_client_admin()) {
-            $with = ['getUser'];
-            unset($map['ask.user_id']);
-            empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
+            $with['getUser'] = ['username', 'nickname', 'level_icon', 'head_pic'];
+            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+        } else {
+            $map[] = ['ask.user_id', '=', get_client_id()];
         }
 
-        $totalResult = self::useGlobalScope(false)->alias('ask')->with($with)->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->withJoin($with, 'inner')->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::useGlobalScope(false)
-            ->field('ask,answer', true)
-            ->select(function ($query) use ($data, $map, $with) {
-                // 翻页页数
-                $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['ask_id' => 'desc'])
+            ->withoutField('ask,answer')
+            ->withJoin($with, 'inner')
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-                // 每页条数
-                $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-                // 排序方式
-                $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-                // 排序的字段
-                $orderField = 'ask.ask_id';
-                if (isset($data['order_field'])) {
-                    switch ($data['order_field']) {
-                        case 'ask_id':
-                        case 'ask_type':
-                        case 'title':
-                        case 'status':
-                        case 'create_time':
-                            $orderField = 'ask.' . $data['order_field'];
-                            break;
-
-                        case 'username':
-                        case 'nickname':
-                            $orderField = 'getUser.' . $data['order_field'];
-                            break;
-                    }
-                }
-
-                $query
-                    ->alias('ask')
-                    ->with($with)
-                    ->where($map)
-                    ->order([$orderField => $orderType])
-                    ->page($pageNo, $pageSize);
-            });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        self::keyToSnake(['getUser'], $result['items']);
+        return $result;
     }
 }
