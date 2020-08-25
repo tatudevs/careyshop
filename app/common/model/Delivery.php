@@ -55,7 +55,9 @@ class Delivery extends CareyShop
             'second_item_price', 'first_volume_price', 'second_volume_price',
         ];
 
-        return $this->hasMany(DeliveryArea::class)->field($field);
+        return $this
+            ->hasMany(DeliveryArea::class)
+            ->field($field);
     }
 
     /**
@@ -122,150 +124,113 @@ class Delivery extends CareyShop
         return $result->toArray();
     }
 
-    // todo 
-
     /**
      * 批量删除配送方式
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delDeliveryList($data)
     {
-        if (!$this->validateData($data, 'Delivery.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('delivery_id', 'in', $data['delivery_id']);
-        });
-
+        self::destroy($data['delivery_id']);
         return true;
     }
 
     /**
      * 获取一个配送方式
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getDeliveryItems($data)
     {
-        if (!$this->validateData($data, 'Delivery.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['delivery_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['delivery_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取配送方式列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getDeliveryList($data)
     {
-        if (!$this->validateData($data, 'Delivery.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            // 搜索条件
-            $map['delivery.status'] = ['eq', 1];
+        // 搜索条件
+        $map = [];
 
-            // 后台管理搜索
-            if (is_client_admin()) {
-                unset($map['delivery.status']);
-                is_empty_parm($data['status']) ?: $map['delivery.status'] = ['eq', $data['status']];
-                empty($data['name']) ?: $map['delivery.alias|getDeliveryItem.name'] = ['like', '%' . $data['name'] . '%'];
-            }
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = 'delivery.delivery_id';
-            if (isset($data['order_field'])) {
-                switch ($data['order_field']) {
-                    case 'delivery_id':
-                    case 'content':
-                    case 'sort':
-                    case 'status':
-                        $orderField = 'delivery.' . $data['order_field'];
-                        break;
-
-                    case 'name':
-                        $orderField = 'getDeliveryItem.' . $data['order_field'];
-                        break;
-                }
-            }
-
-            // 排序处理
-            $order['delivery.sort'] = 'asc';
-            $order[$orderField] = $orderType;
-
-            if (!empty($data['order_field'])) {
-                $order = array_reverse($order);
-            }
-
-            $query->with('getDeliveryItem')->where($map)->order($order);
-        });
-
-        if (false !== $result) {
-            return $result->toArray();
+        // 后台管理搜索
+        if (is_client_admin()) {
+            is_empty_parm($data['status']) ?: $map[] = ['delivery.status', '=', $data['status']];
+            empty($data['name']) ?: $map[] = ['delivery.alias|getDeliveryItem.name', 'like', '%' . $data['name'] . '%'];
+        } else {
+            $map[] = ['delivery.status', '=', 1];
         }
 
-        return false;
+        $result = $this->setDefaultOrder(['delivery_id' => 'desc'], ['sort' => 'asc'])
+            ->withJoin(['getDeliveryItem'])
+            ->where($map)
+            ->withSearch(['order'], $data)
+            ->select()
+            ->toArray();
+
+        self::keyToSnake(['getDeliveryItem'], $result);
+        return $result;
     }
 
     /**
      * 获取配送方式选择列表
      * @access public
      * @return array
-     * @throws
      */
     public function getDeliverySelect()
     {
-        $result = self::all(function ($query) {
-            $query
-                ->alias('d')
-                ->field('d.delivery_id,i.name,d.alias,i.code')
-                ->join('delivery_item i', 'i.delivery_item_id = d.delivery_item_id', 'inner')
-                ->where(['d.status' => ['eq', 1], 'i.is_delete' => ['eq', 0]])
-                ->order('d.sort asc');
-        });
+        $map[] = ['d.status', '=', 1];
+        $map[] = ['i.is_delete', '=', 0];
 
-        return $result->toArray();
+        return $this->alias('d')
+            ->field('d.delivery_id,i.name,d.alias,i.code')
+            ->join('delivery_item i', 'i.delivery_item_id = d.delivery_item_id', 'inner')
+            ->where($map)
+            ->order('d.sort asc')
+            ->select()
+            ->toArray();
     }
 
     /**
      * 根据配送方式获取运费
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getDeliveryFreight($data)
     {
-        if (!$this->validateData($data, 'Delivery.freight')) {
+        if (!$this->validateData($data, 'freight')) {
             return false;
         }
 
         // 获取基础数据
-        $delivery = self::get(function ($query) use ($data) {
-            $query->where(['delivery_id' => ['eq', $data['delivery_id']], 'status' => ['eq', 1]]);
-        });
+        $map[] = ['delivery_id', '=', $data['delivery_id']];
+        $map[] = ['status', '=', 1];
 
-        if (!$delivery) {
-            return is_null($delivery) ? $this->setError('配送方式不存在') : false;
+        $delivery = $this->where($map)->find();
+        if (is_null($delivery)) {
+            return $this->setError('配送方式不存在');
         }
 
         // 获取配送区域数据
@@ -363,37 +328,35 @@ class Delivery extends CareyShop
     /**
      * 批量设置配送方式状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setDeliveryStatus($data)
     {
-        if (!$this->validateData($data, 'Delivery.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['delivery_id'] = ['in', $data['delivery_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            return true;
-        }
+        $map[] = ['delivery_id', 'in', $data['delivery_id']];
+        self::update(['status' => $data['status']], $map);
 
-        return false;
+        return true;
     }
 
     /**
      * 验证快递公司编号是否已存在
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function uniqueDeliveryItem($data)
     {
-        if (!$this->validateData($data, 'Delivery.unique')) {
+        if (!$this->validateData($data, 'unique')) {
             return false;
         }
 
-        $map['delivery_item_id'] = ['eq', $data['delivery_item_id']];
-        !isset($data['exclude_id']) ?: $map['delivery_id'] = ['neq', $data['exclude_id']];
+        $map[] = ['delivery_item_id', '=', $data['delivery_item_id']];
+        !isset($data['exclude_id']) ?: $map[] = ['delivery_id', '<>', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('快递公司编号已存在');
@@ -405,21 +368,19 @@ class Delivery extends CareyShop
     /**
      * 设置配送方式排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setDeliverySort($data)
     {
-        if (!$this->validateData($data, 'Delivery.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['delivery_id'] = ['eq', $data['delivery_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            return true;
-        }
+        $map[] = ['delivery_id', '=', $data['delivery_id']];
+        self::update(['sort' => $data['sort']], $map);
 
-        return false;
+        return true;
     }
 
     /**
@@ -431,7 +392,7 @@ class Delivery extends CareyShop
      */
     public function setDeliveryIndex($data)
     {
-        if (!$this->validateData($data, 'Delivery.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -440,10 +401,7 @@ class Delivery extends CareyShop
             $list[] = ['delivery_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            return true;
-        }
-
-        return false;
+        $this->saveAll($list);
+        return true;
     }
 }

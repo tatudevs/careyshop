@@ -42,7 +42,7 @@ class Delivery extends CareyShop
         'exclude_id'          => 'integer|gt:0',
         'name'                => 'max:50',
         'order_type'          => 'requireWith:order_field|in:asc,desc',
-        'order_field'         => 'requireWith:order_type|in:delivery_id,name,content,sort,status',
+        'order_field'         => 'requireWith:order_type|in:delivery_id,content,sort,status',
     ];
 
     /**
