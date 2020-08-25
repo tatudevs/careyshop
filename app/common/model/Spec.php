@@ -5,13 +5,19 @@
  * CareyShop    商品规格模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/10
+ * @date        2020/8/25
  */
 
 namespace app\common\model;
 
 class Spec extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'spec_id';
+
     /**
      * 只读属性
      * @var array
@@ -21,25 +27,13 @@ class Spec extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'spec_id'       => 'integer',
-        'goods_type_id' => 'integer',
-        'spec_index'    => 'integer',
-        'spec_type'     => 'integer',
-        'sort'          => 'integer',
-    ];
-
-    /**
      * hasMany cs_spec_item
      * @access public
      * @return mixed
      */
     public function specItem()
     {
-        return $this->hasMany('SpecItem', 'spec_id');
+        return $this->hasMany(SpecItem::class, 'spec_id');
     }
 
     /**
@@ -50,20 +44,19 @@ class Spec extends CareyShop
     public function getGoodsType()
     {
         return $this
-            ->hasOne('GoodsType', 'goods_type_id', 'goods_type_id', [], 'left')
-            ->setEagerlyType(0);
+            ->hasOne(GoodsType::class, 'goods_type_id', 'goods_type_id')
+            ->joinType('left');
     }
 
     /**
      * 添加一个商品规格
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addSpecItem($data)
     {
-        if (!$this->validateData($data, 'Spec')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -83,23 +76,19 @@ class Spec extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 添加规格主表
-            if (false === $this->allowField(true)->save($data)) {
-                throw new \Exception($this->getError());
-            }
+            $this->save($data);
 
             // 添加规格项表
-            if (!$this->specItem()->saveAll($itemData)) {
-                throw new \Exception($this->getError());
-            }
+            $this->specItem()->saveAll($itemData);
 
-            self::commit();
+            $this->commit();
             return $this->toArray();
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -107,36 +96,34 @@ class Spec extends CareyShop
     /**
      * 编辑一个商品规格
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setSpecItem($data)
     {
-        if (!$this->validateSetData($data, 'Spec.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 修改规格主表
-            $map['spec_id'] = ['eq', $data['spec_id']];
-            if (false === $this->allowField(true)->save($data, $map)) {
-                throw new \Exception($this->getError());
-            }
+            $map[] = ['spec_id', '=', $data['spec_id']];
+            $result = self::update($data, $map);
 
             if (!empty($data['spec_item'])) {
+                // todo 此处待调试
                 if (!SpecItem::updateItem($data['spec_id'], $data['spec_item'])) {
                     throw new \Exception();
                 }
             }
 
-            self::commit();
-            return $this->toArray();
+            $this->commit();
+            return $result->toArray();
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
