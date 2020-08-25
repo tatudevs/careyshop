@@ -64,7 +64,9 @@ class Ask extends CareyShop
      */
     public function getUser()
     {
-        return $this->hasOne(User::class, 'user_id', 'user_id')->joinType('left');
+        return $this
+            ->hasOne(User::class, 'user_id', 'user_id')
+            ->joinType('left');
     }
 
     /**
