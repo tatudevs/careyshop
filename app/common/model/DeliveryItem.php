@@ -5,14 +5,14 @@
  * CareyShop    快递公司模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/25
+ * @date        2020/8/25
  */
 
 namespace app\common\model;
 
-use util\Phonetic;
+use think\facade\Config;
 use think\helper\Str;
-use think\Config;
+use util\Phonetic;
 
 class DeliveryItem extends CareyShop
 {
@@ -21,6 +21,12 @@ class DeliveryItem extends CareyShop
      * @var string
      */
     const KDNIAO_URL = 'http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx';
+
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'delivery_item_id';
 
     /**
      * 隐藏属性
@@ -39,25 +45,14 @@ class DeliveryItem extends CareyShop
     ];
 
     /**
-     * 字段类型或者格式转换
-     * @var array
-     */
-    protected $type = [
-        'delivery_item_id' => 'integer',
-        'type'             => 'integer',
-        'is_delete'        => 'integer',
-    ];
-
-    /**
      * 添加一个快递公司
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addCompanyItem($data)
     {
-        if (!$this->validateData($data, 'DeliveryItem')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -65,9 +60,9 @@ class DeliveryItem extends CareyShop
         unset($data['delivery_item_id'], $data['is_delete']);
 
         // 检测编码是否重复
-        $map['code'] = ['eq', $data['code']];
-        $map['type'] = ['eq', $data['type']];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['code', '=', $data['code']];
+        $map[] = ['type', '=', $data['type']];
+        $map[] = ['is_delete', '=', 0];
 
         if (self::checkUnique($map)) {
             return $this->setError('快递公司编码已存在');
@@ -79,7 +74,7 @@ class DeliveryItem extends CareyShop
             $data['phonetic'] = Str::lower($data['phonetic']);
         }
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
@@ -89,33 +84,35 @@ class DeliveryItem extends CareyShop
     /**
      * 编辑一个快递公司
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function setCompanyItem($data)
     {
-        if (!$this->validateSetData($data, 'DeliveryItem.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['delivery_item_id'] = ['eq', $data['delivery_item_id']];
-            $map['is_delete'] = ['eq', 0];
+        // 获取主数据
+        $map = [
+            ['delivery_item_id', '=', $data['delivery_item_id']],
+            ['is_delete', '=', 0],
+        ];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         // 编码是否重复检测
         if (!empty($data['code']) || isset($data['type'])) {
-            $map['delivery_item_id'] = ['neq', $data['delivery_item_id']];
-            $map['code'] = !empty($data['code']) ? $data['code'] : $result->getAttr('code');
-            $map['type'] = isset($data['type']) ? $data['type'] : $result->getAttr('type');
-            $map['is_delete'] = ['eq', 0];
+            $map = [
+                ['delivery_item_id', '<>', $data['delivery_item_id']],
+                ['code', '=', !empty($data['code']) ? $data['code'] : $result->getAttr('code')],
+                ['type', '=', isset($data['type']) ? $data['type'] : $result->getAttr('type')],
+                ['is_delete', '=', 0],
+            ];
 
             if (self::checkUnique($map)) {
                 return $this->setError('快递公司编码已存在');
@@ -128,7 +125,7 @@ class DeliveryItem extends CareyShop
             $data['phonetic'] = Str::lower($data['phonetic']);
         }
 
-        if (false !== $result->allowField(true)->isUpdate(true)->save($data)) {
+        if ($result->save($data)) {
             return $result->toArray();
         }
 
@@ -138,23 +135,20 @@ class DeliveryItem extends CareyShop
     /**
      * 批量删除快递公司
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function delCompanyList($data)
     {
-        if (!$this->validateData($data, 'DeliveryItem.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $query
-                ->alias('i')
-                ->field('i.delivery_item_id,i.name')
-                ->join('delivery d', 'd.delivery_item_id = i.delivery_item_id')
-                ->where(['i.delivery_item_id' => ['in', $data['delivery_item_id']]]);
-        });
+        $result = $this->alias('i')
+            ->field('i.delivery_item_id,i.name')
+            ->join('delivery d', 'd.delivery_item_id = i.delivery_item_id')
+            ->where('i.delivery_item_id', 'in', $data['delivery_item_id'])
+            ->find();
 
         if ($result) {
             $error = 'Id:' . $result->getAttr('delivery_item_id') . ' "';
@@ -162,57 +156,48 @@ class DeliveryItem extends CareyShop
             return $this->setError($error);
         }
 
-        $map['delivery_item_id'] = ['in', $data['delivery_item_id']];
-        if (false !== $this->save(['is_delete' => 1], $map)) {
-            return true;
-        }
+        $map[] = ['delivery_item_id', 'in', $data['delivery_item_id']];
+        self::update(['is_delete' => 1], $map);
 
-        return false;
+        return true;
     }
 
     /**
      * 获取一个快递公司
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getCompanyItem($data)
     {
-        if (!$this->validateData($data, 'DeliveryItem.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['delivery_item_id'] = ['eq', $data['delivery_item_id']];
-            $map['is_delete'] = ['eq', 0];
+        $map[] = ['delivery_item_id', '=', $data['delivery_item_id']];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->where($map)->find();
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 查询快递公司编码是否已存在
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function uniqueCompanyCode($data)
     {
-        if (!$this->validateData($data, 'DeliveryItem.unique')) {
+        if (!$this->validateData($data, 'unique')) {
             return false;
         }
 
-        $map['code'] = ['eq', $data['code']];
-        $map['type'] = ['eq', $data['type']];
-        $map['is_delete'] = ['eq', 0];
-        !isset($data['exclude_id']) ?: $map['delivery_item_id'] = ['neq', $data['exclude_id']];
+        $map[] = ['code', '=', $data['code']];
+        $map[] = ['type', '=', $data['type']];
+        $map[] = ['is_delete', '=', 0];
+        !isset($data['exclude_id']) ?: $map['delivery_item_id'] = ['<>', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('快递公司编码已存在');
@@ -224,98 +209,70 @@ class DeliveryItem extends CareyShop
     /**
      * 获取快递公司列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getCompanyList($data)
     {
-        if (!$this->validateData($data, 'DeliveryItem.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
         $map = [];
-        empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-        empty($data['code']) ?: $map['code'] = ['eq', $data['code']];
-        is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
-        isset($data['company_all']) && $data['company_all'] == 1 ?: $map['is_delete'] = ['eq', 0];
+        empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
+        empty($data['code']) ?: $map[] = ['code', '=', $data['code']];
+        is_empty_parm($data['type']) ?: $map[] = ['type', '=', $data['type']];
+        isset($data['company_all']) && $data['company_all'] == 1 ?: $map[] = ['is_delete', '=', 0];
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['type' => 'asc'])
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'type';
-
-            $query
-                ->where($map)
-                ->order([$orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 
     /**
      * 获取快递公司选择列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getCompanySelect($data)
     {
-        if (!$this->validateData($data, 'DeliveryItem.select')) {
+        if (!$this->validateData($data, 'select')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $map['is_delete'] = ['eq', 0];
-            is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
+        $map[] = ['is_delete', '=', 0];
+        is_empty_parm($data['type']) ?: $map[] = ['type', '=', $data['type']];
 
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'delivery_item_id';
-
-            $query
-                ->where($map)
-                ->order([$orderField => $orderType]);
-        });
-
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return false;
+        return $this->setDefaultOrder(['delivery_item_id' => 'asc'])
+            ->where($map)
+            ->withSearch(['order'], $data)
+            ->select()
+            ->toArray();
     }
 
     /**
      * 根据快递单号识别快递公司
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function getCompanyRecognise($data)
     {
-        if (!$this->validateData($data, 'DeliveryItem.recognise')) {
+        if (!$this->validateData($data, 'recognise')) {
             return false;
         }
 
@@ -326,7 +283,7 @@ class DeliveryItem extends CareyShop
         // 请求系统参数
         $postData = [
             'RequestData' => urlencode($requestData),
-            'EBusinessID' => Config::get('api_id.value', 'delivery_dist'),
+            'EBusinessID' => Config::get('careyshop.delivery_dist.api_id'),
             'RequestType' => '2002',
             'DataSign'    => \app\common\service\DeliveryDist::getCallbackSign($requestData),
             'DataType'    => '2',
@@ -348,42 +305,40 @@ class DeliveryItem extends CareyShop
     /**
      * 复制一个快递公司为"热门类型"
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function copyCompanyHot($data)
     {
-        if (!$this->validateData($data, 'DeliveryItem.hot')) {
+        if (!$this->validateData($data, 'hot')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['delivery_item_id'] = ['eq', $data['delivery_item_id']];
-            $map['is_delete'] = ['eq', 0];
+        // 获取主数据
+        $map = [
+            ['delivery_item_id', '=', $data['delivery_item_id']],
+            ['is_delete', '=', 0],
+        ];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ?$this->setError('数据不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
-        $map['code'] = ['eq', $result->getAttr('code')];
-        $map['type'] = ['eq', 0];
-        $map['is_delete'] = ['eq', 0];
+        $map = [
+            ['code', '=', $result->getAttr('code')],
+            ['type', '=', 0],
+            ['is_delete', '=', 0],
+        ];
 
         if (self::checkUnique($map)) {
             return $this->setError('该快递公司已在热门列表中');
         }
 
         $result->setAttr('type', 0);
-        $result->setAttr('delivery_item_id', null);
+        $newData = $result->hidden(['delivery_item_id'])->toArray();
 
-        if (false !== $result->isUpdate(false)->save()) {
-            return $result->toArray();
-        }
-
-        return false;
+        return DeliveryItem::create($newData)->toArray();
     }
 }
