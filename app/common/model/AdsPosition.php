@@ -159,7 +159,7 @@ class AdsPosition extends CareyShop
             $result = $this->alias('p')
                 ->field('p.ads_position_id,p.name')
                 ->join('ads a', 'a.ads_position_id = p.ads_position_id')
-                ->where([['p.ads_position_id', 'in', $data['ads_position_id']]])
+                ->where('p.ads_position_id', 'in', $data['ads_position_id'])
                 ->group('p.ads_position_id')
                 ->find();
 

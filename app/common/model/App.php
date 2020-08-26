@@ -65,7 +65,7 @@ class App extends CareyShop
      */
     public function scopeDelete($query)
     {
-        $query->where(['is_delete' => 0]);
+        $query->where('is_delete', '=', 0);
     }
 
     /**
@@ -295,7 +295,7 @@ class App extends CareyShop
             return $result;
         }
 
-        $appResult = self::where(['app_key' => $key])->find();
+        $appResult = self::where('app_key', '=', $key)->find();
         if (!is_null($appResult)) {
             if ($appResult->getAttr('captcha') === 0) {
                 $result['captcha'] = false;

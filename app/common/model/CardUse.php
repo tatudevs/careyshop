@@ -306,7 +306,7 @@ class CardUse extends CareyShop
 
         // 合并金额不存在则需要获取来源卡金额
         if (empty($data['money'])) {
-            $data['money'] = $this->where('number', $data['src_number'])->value('money', 0);
+            $data['money'] = $this->where('number', '=', $data['src_number'])->value('money', 0);
         }
 
         if ($data['money'] <= 0) {

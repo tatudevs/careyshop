@@ -294,7 +294,7 @@ class UserMoney extends CareyShop
         }
 
         // 获取当前账号信息
-        $result = $this->where(['user_id' => $clientId])->find();
+        $result = $this->where('user_id', '=', $clientId)->find();
         if (is_null($result)) {
             return $this->setError('数据不存在');
         }
@@ -322,7 +322,7 @@ class UserMoney extends CareyShop
         }
 
         // 获取当前账号信息
-        $result = $this->where(['user_id' => $clientId])->find();
+        $result = $this->where('user_id', '=', $clientId)->find();
         if (is_null($result)) {
             return $this->setError('数据不存在');
         }
@@ -345,7 +345,7 @@ class UserMoney extends CareyShop
      */
     private function setUserLevel($totalMoney, $clientId)
     {
-        $result = UserLevel::where([['amount', '<=', $totalMoney]])
+        $result = UserLevel::where('amount', '<=', $totalMoney)
             ->order(['amount' => 'desc'])
             ->find();
 
@@ -356,7 +356,7 @@ class UserMoney extends CareyShop
         $data['level_icon'] = $result->getAttr('icon');
         $data['user_level_id'] = $result->getAttr('user_level_id');
 
-        User::where(['user_id' => $clientId])->update($data);
+        User::where('user_id', '=', $clientId)->update($data);
     }
 
     /**

@@ -100,7 +100,7 @@ class OrderLog extends CareyShop
             }
         }
 
-        return $this->where(['order_no' => $data['order_no']])
+        return $this->where('order_no', '=', $data['order_no'])
             ->order(['order_log_id' => 'desc'])
             ->select()
             ->toArray();

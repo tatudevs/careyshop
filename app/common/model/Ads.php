@@ -145,7 +145,7 @@ class Ads extends CareyShop
         }
 
         if (isset($data['ads_position_id']) && $result->getAttr('ads_position_id') != $data['ads_position_id']) {
-            $position = AdsPosition::where('ads_position_id', $data['ads_position_id'])->find();
+            $position = AdsPosition::where('ads_position_id', '=', $data['ads_position_id'])->find();
             if (is_null($position)) {
                 return $this->setError('广告位不存在');
             }

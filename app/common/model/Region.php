@@ -64,7 +64,7 @@ class Region extends CareyShop
      */
     public function scopeDelete($query)
     {
-        $query->where(['is_delete' => 0]);
+        $query->where('is_delete', '=', 0);
     }
 
     /**

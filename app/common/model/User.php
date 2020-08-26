@@ -79,7 +79,7 @@ class User extends CareyShop
      */
     public function scopeDelete($query)
     {
-        $query->where(['is_delete' => 0]);
+        $query->where('is_delete', '=', 0);
     }
 
     /**
@@ -200,7 +200,7 @@ class User extends CareyShop
             }
 
             is_client_admin() ?: $data['group_id'] = AUTH_CLIENT;
-            $data['level_icon'] = UserLevel::where('user_level_id', 1)->value('icon', '');
+            $data['level_icon'] = UserLevel::where('user_level_id', '=', 1)->value('icon', '');
 
             $field = [
                 'password', 'head_pic', 'sex', 'birthday', 'level_icon',

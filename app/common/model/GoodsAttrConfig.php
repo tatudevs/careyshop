@@ -45,7 +45,7 @@ class GoodsAttrConfig extends CareyShop
      */
     public static function updateAttrConfig($goodsId, $configData)
     {
-        $result = self::where(['goods_id' => $goodsId])->find();
+        $result = self::where('goods_id', '=', $goodsId)->find();
         if (is_null($result)) {
             self::create(['goods_id' => $goodsId, 'config_data' => $configData]);
         } else {
