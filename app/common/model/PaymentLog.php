@@ -75,7 +75,7 @@ class PaymentLog extends CareyShop
     {
         do {
             $paymentNo = get_order_no('ZF_');
-        } while (self::checkUnique(['payment_no' => ['eq', $paymentNo]]));
+        } while (self::checkUnique(['payment_no' => $paymentNo]));
 
         return $paymentNo;
     }

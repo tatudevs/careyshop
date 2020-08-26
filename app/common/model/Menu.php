@@ -390,7 +390,7 @@ class Menu extends CareyShop
             return false;
         }
 
-        $map[] = ['menu_id', 'eq', $data['menu_id']];
+        $map[] = ['menu_id', '=', $data['menu_id']];
         self::update(['sort' => $data['sort']], $map);
         Cache::tag('CommonAuth')->clear();
 
