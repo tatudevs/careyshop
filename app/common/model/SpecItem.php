@@ -38,8 +38,8 @@ class SpecItem extends CareyShop
     /**
      * 断开关联或更新商品规格项
      * @access public static
-     * @param  int   $specId 商品规格Id
-     * @param  array $item   规格项列表
+     * @param int   $specId 商品规格Id
+     * @param array $item   规格项列表
      * @return bool
      */
     public static function updateItem($specId, $item)
@@ -50,7 +50,7 @@ class SpecItem extends CareyShop
         // 获取有关联的规格项列表
         $map[] = ['spec_id', '=', $specId];
         $map[] = ['is_contact', '=', 1];
-        $result = self::order(['sort' => 'asc'])->where($map)->column('spec_item_id,item_name');
+        $result = self::order(['sort' => 'asc'])->where($map)->column('item_name', 'spec_item_id');
 
         // 取消关联项
         foreach ($result as $key => $value) {
