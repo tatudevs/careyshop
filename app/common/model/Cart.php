@@ -78,8 +78,7 @@ class Cart extends CareyShop
 
         return $this
             ->hasOne(Goods::class, 'goods_id', 'goods_id')
-            ->field($field)
-            ->joinType('left');
+            ->field($field);
     }
 
     /**
@@ -105,8 +104,8 @@ class Cart extends CareyShop
     /**
      * 添加或编辑购物车商品
      * @access public
-     * @param  array $data     外部数据
-     * @param  bool  $isBuyNow 是否立即购买
+     * @param array $data     外部数据
+     * @param bool  $isBuyNow 是否立即购买
      * @return false|array
      * @throws
      */
@@ -121,15 +120,16 @@ class Cart extends CareyShop
             return false;
         }
 
-        $map['user_id'] = [['neq', 0], ['eq', $data['user_id']]];
-        $map['is_show'] = ['eq', $isBuyNow ? 0 : 1];
+        $map[] = ['user_id', '<>', 0];
+        $map[] = ['user_id', '=', $data['user_id']];
+        $map[] = ['is_show', '=', $isBuyNow ? 0 : 1];
 
         // 立即购买通过检测后可直接返回
         if (true === $isBuyNow) {
             $data['is_show'] = 0;
             $this->where($map)->delete();
 
-            if (false !== $this->allowField(true)->save($data)) {
+            if ($this->save($data)) {
                 return $this->toArray();
             }
 
@@ -137,34 +137,29 @@ class Cart extends CareyShop
         }
 
         // 获取已储存的购物车商品
-        $map['goods_id'] = ['eq', $data['goods_id']];
-        empty($data['former_spec']) ?: $map['key_name'] = ['eq', $data['former_spec']];
-
+        $map[] = ['goods_id', '=', $data['goods_id']];
         if (!empty($data['key_name']) && empty($data['former_spec'])) {
-            $map['key_name'] = ['eq', $data['key_name']];
+            $map[] = ['key_name', '=', $data['key_name']];
+        } else if (!empty($data['former_spec'])) {
+            $map[] = ['key_name', '=', $data['former_spec']];
         }
 
         // 进一步检测
         $cartResult = $this->where($map)->find();
-        if (false === $cartResult) {
-            return false;
-        }
-
         if (!empty($data['former_spec']) && !$cartResult) {
             return $this->setError('购物车商品不存在');
         }
 
         if (!empty($data['former_spec'])) {
-            $map['key_name'] = ['eq', $data['key_name']];
-            if (self::checkUnique($map)) {
+            if (self::checkUnique(['key_name' => $data['key_name']])) {
                 return $this->setError('购物车中已有相同规格的商品');
             }
         }
 
         // 存在相同规格商品则更新,否则新增
-        if (!$cartResult && false !== $this->allowField(true)->save($data)) {
+        if (!$cartResult && $this->save($data)) {
             return $this->toArray();
-        } else if ($cartResult && false !== $cartResult->allowField(true)->save($data)) {
+        } else if ($cartResult && $cartResult->save($data)) {
             return $cartResult->toArray();
         }
 
@@ -252,13 +247,13 @@ class Cart extends CareyShop
     /**
      * 批量添加商品到购物车
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function addCartList($data)
     {
-        if (!$this->validateData($data, 'Cart.add')) {
+        if (!$this->validateData($data, 'add')) {
             return false;
         }
 
@@ -289,9 +284,10 @@ class Cart extends CareyShop
         }
 
         // 获取已存在的购物车商品
-        $map['user_id'] = [['neq', 0], ['eq', $userId]];
-        $map['goods_id'] = ['in', $goodsList];
-        $map['is_show'] = ['eq', 1];
+        $map[] = ['user_id', '<>', 0];
+        $map[] = ['user_id', '=', $userId];
+        $map[] = ['goods_id', 'in', $goodsList];
+        $map[] = ['is_show', '=', 1];
         $cartResult = $this->where($map)->select()->toArray();
 
         // 筛选出相同商品相同规格的商品
@@ -305,60 +301,59 @@ class Cart extends CareyShop
             }
         }
 
-        empty($delCartList) ?: $this->where(['cart_id' => ['in', $delCartList]])->delete();
-        if (false !== $this->insertAll($cartData)) {
-            return true;
-        }
+        empty($delCartList) ?: $this->where('cart_id', 'in', $delCartList)->delete();
+        $this->insertAll($cartData);
 
-        return false;
+        return true;
     }
 
     /**
      * 获取购物车列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function getCartList($data)
     {
-        if (!$this->validateData($data, 'Cart.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
-        $map['user_id'] = [['neq', 0], ['eq', get_client_id()]];
-        $map['is_show'] = ['eq', 1];
+        $map[] = ['user_id', '<>', 0];
+        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['is_show', '=', 1];
 
         $result = $this
-            ->with('goods,goodsSpecItem,goodsSpecImage')
+            ->with(['goods', 'goods_spec_item', 'goods_spec_image'])
             ->where($map)
             ->limit(empty($data['show_size']) ? 0 : $data['show_size'])
             ->order(['update_time' => 'desc'])
             ->select();
 
-        if (false !== $result) {
+        if (!$result->isEmpty()) {
             $cartSer = new \app\common\service\Cart();
             return $cartSer->checkCartGoodsList($result->toArray(), false);
         }
 
-        return false;
+        return [];
     }
 
     /**
      * 获取购物车商品数量
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
-     * @throws
      */
     public static function getCartCount($data)
     {
-        $map['user_id'] = [['neq', 0], ['eq', get_client_id()]];
-        $map['is_show'] = ['eq', 1];
+        $map[] = ['cart.user_id', '<>', 0];
+        $map[] = ['cart.user_id', '=', get_client_id()];
+        $map[] = ['cart.is_show', '=', 1];
 
         $totalResult = isset($data['total_type']) && 'number' == $data['total_type']
-            ? self::where($map)->with('goods')->sum('goods_num')
-            : self::where($map)->with('goods')->count();
+            ? self::where($map)->withJoin('goods')->sum('goods_num')
+            : self::where($map)->withJoin('goods')->count();
 
         return ['total_result' => (int)$totalResult];
     }
@@ -366,47 +361,43 @@ class Cart extends CareyShop
     /**
      * 设置购物车商品是否选中
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setCartSelect($data)
     {
-        if (!$this->validateData($data, 'Cart.select')) {
+        if (!$this->validateData($data, 'select')) {
             return false;
         }
 
-        $map['cart_id'] = ['in', $data['cart_id']];
-        $map['user_id'] = [['neq', 0], ['eq', get_client_id()]];
+        $map[] = ['cart_id', 'in', $data['cart_id']];
+        $map[] = ['user_id', '<>', 0];
+        $map[] = ['user_id', '=', get_client_id()];
         !empty($data['is_selected']) ?: $data['is_selected'] = 0;
 
-        if (false !== $this->save(['is_selected' => $data['is_selected']], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['is_selected' => $data['is_selected']], $map);
+        return true;
     }
 
     /**
      * 批量删除购物车商品
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delCartList($data)
     {
-        if (!$this->validateData($data, 'Cart.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $map['cart_id'] = ['in', $data['cart_id']];
-        $map['user_id'] = [['neq', 0], ['eq', get_client_id()]];
-        $map['is_show'] = ['eq', 1];
+        $map[] = ['cart_id', 'in', $data['cart_id']];
+        $map[] = ['user_id', '<>', 0];
+        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['is_show', '=', 1];
 
-        if (false !== $this->where($map)->delete()) {
-            return true;
-        }
-
-        return false;
+        $this->where($map)->delete();
+        return true;
     }
 
     /**
@@ -416,29 +407,22 @@ class Cart extends CareyShop
      */
     public function clearCartList()
     {
-        $map['user_id'] = [['neq', 0], ['eq', get_client_id()]];
-        $map['is_show'] = ['eq', 1];
+        $map[] = ['user_id', '<>', 0];
+        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['is_show', '=', 1];
 
-        if (false !== $this->where($map)->delete()) {
-            return true;
-        }
-
-        return false;
+        $this->where($map)->delete();
+        return true;
     }
 
     /**
      * 请求商品立即购买
      * @access public
-     * @param  array $data 外部数据
-     * @return bool
+     * @param array $data 外部数据
+     * @return false|array
      */
     public function createCartBuynow($data)
     {
-        $result = $this->setCartItem($data, true);
-        if (false !== $result) {
-            return $result;
-        }
-
-        return false;
+        return $this->setCartItem($data, true);
     }
 }
