@@ -46,8 +46,12 @@ class PaymentLog extends CareyShop
      * @var array
      */
     protected $type = [
-        'amount'     => 'float',
-        'to_payment' => 'integer',
+        'payment_log_id' => 'integer',
+        'user_id'        => 'integer',
+        'amount'         => 'float',
+        'type'           => 'integer',
+        'status'         => 'integer',
+        'to_payment'     => 'integer',
     ];
 
     /**

@@ -31,8 +31,10 @@ class Promotion extends CareyShop
      * @var array
      */
     protected $type = [
-        'begin_time' => 'timestamp',
-        'end_time'   => 'timestamp',
+        'promotion_id' => 'integer',
+        'begin_time'   => 'timestamp',
+        'end_time'     => 'timestamp',
+        'status'       => 'integer',
     ];
 
     /**

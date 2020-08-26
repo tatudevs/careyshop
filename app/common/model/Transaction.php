@@ -47,8 +47,12 @@ class Transaction extends CareyShop
      * @var array
      */
     protected $type = [
-        'amount'  => 'float',
-        'balance' => 'float',
+        'transaction_id' => 'integer',
+        'user_id'        => 'integer',
+        'type'           => 'integer',
+        'amount'         => 'float',
+        'balance'        => 'float',
+        'to_payment'     => 'integer',
     ];
 
     /**

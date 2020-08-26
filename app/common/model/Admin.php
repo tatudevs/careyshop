@@ -50,7 +50,11 @@ class Admin extends CareyShop
      * @var array
      */
     protected $type = [
+        'admin_id'   => 'integer',
+        'group_id'   => 'integer',
         'last_login' => 'timestamp',
+        'status'     => 'integer',
+        'is_delete'  => 'integer',
     ];
 
     /**

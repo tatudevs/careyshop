@@ -26,8 +26,9 @@ class PromotionItem extends CareyShop
      * @var array
      */
     protected $type = [
-        'quota'    => 'float',
-        'settings' => 'array',
+        'promotion_id' => 'integer',
+        'quota'        => 'float',
+        'settings'     => 'array',
     ];
 
     /**

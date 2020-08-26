@@ -27,6 +27,14 @@ class GoodsType extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'goods_type_id' => 'integer',
+    ];
+
+    /**
      * 添加一个商品模型
      * @access public
      * @param array $data 外部数据

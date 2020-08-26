@@ -40,6 +40,9 @@ class History extends CareyShop
      * @var array
      */
     protected $type = [
+        'history_id'  => 'integer',
+        'user_id'     => 'integer',
+        'goods_id'    => 'integer',
         'update_time' => 'timestamp',
     ];
 

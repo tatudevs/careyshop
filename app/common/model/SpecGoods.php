@@ -34,7 +34,9 @@ class SpecGoods extends CareyShop
      * @var array
      */
     protected $type = [
-        'price' => 'float',
+        'goods_id'  => 'integer',
+        'price'     => 'float',
+        'store_qty' => 'integer',
     ];
 
     /**

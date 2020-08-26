@@ -52,7 +52,16 @@ class User extends CareyShop
      * @var array
      */
     protected $type = [
-        'last_login' => 'timestamp',
+        'user_id'         => 'integer',
+        'is_mobile'       => 'integer',
+        'is_email'        => 'integer',
+        'sex'             => 'integer',
+        'user_level_id'   => 'integer',
+        'user_address_id' => 'integer',
+        'group_id'        => 'integer',
+        'last_login'      => 'timestamp',
+        'status'          => 'integer',
+        'is_delete'       => 'integer',
     ];
 
     /**

@@ -31,8 +31,11 @@ class Discount extends CareyShop
      * @var array
      */
     protected $type = [
-        'begin_time' => 'timestamp',
-        'end_time'   => 'timestamp',
+        'discount_id' => 'integer',
+        'type'        => 'integer',
+        'begin_time'  => 'timestamp',
+        'end_time'    => 'timestamp',
+        'status'      => 'integer',
     ];
 
     /**

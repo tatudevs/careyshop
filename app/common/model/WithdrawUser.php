@@ -43,6 +43,16 @@ class WithdrawUser extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'withdraw_user_id' => 'integer',
+        'user_id'          => 'integer',
+        'is_delete'        => 'integer',
+    ];
+
+    /**
      * 定义全局的查询范围
      * @var string[]
      */

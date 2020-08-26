@@ -34,7 +34,9 @@ class DiscountGoods extends CareyShop
      * @var array
      */
     protected $type = [
-        'discount' => 'float',
+        'discount_id' => 'integer',
+        'goods_id'    => 'integer',
+        'discount'    => 'float',
     ];
 
     /**

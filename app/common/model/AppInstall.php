@@ -36,6 +36,15 @@ class AppInstall extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'app_install_id' => 'integer',
+        'count'          => 'integer',
+    ];
+
+    /**
      * 系统标识修改器
      * @access public
      * @param string $value 值

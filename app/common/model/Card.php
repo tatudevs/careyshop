@@ -47,10 +47,15 @@ class Card extends CareyShop
      * @var array
      */
     protected $type = [
+        'card_id'          => 'integer',
         'money'            => 'float',
         'category'         => 'array',
         'exclude_category' => 'array',
+        'give_num'         => 'integer',
+        'active_num'       => 'integer',
         'end_time'         => 'timestamp',
+        'status'           => 'integer',
+        'is_delete'        => 'integer',
     ];
 
     /**

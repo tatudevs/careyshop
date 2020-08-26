@@ -27,6 +27,16 @@ class Support extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'support_id' => 'integer',
+        'sort'       => 'integer',
+        'status'     => 'integer',
+    ];
+
+    /**
      * 添加一名客服
      * @access public
      * @param array $data 外部数据

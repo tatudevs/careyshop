@@ -31,7 +31,9 @@ class UserLevel extends CareyShop
      * @var array
      */
     protected $type = [
-        'amount' => 'float',
+        'user_level_id' => 'integer',
+        'amount'        => 'float',
+        'discount'      => 'integer',
     ];
 
     /**

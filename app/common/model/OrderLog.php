@@ -40,6 +40,19 @@ class OrderLog extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'order_log_id'    => 'integer',
+        'order_id'        => 'integer',
+        'trade_status'    => 'integer',
+        'delivery_status' => 'integer',
+        'payment_status'  => 'integer',
+        'client_type'     => 'integer',
+    ];
+
+    /**
      * 添加订单操作日志
      * @access public
      * @param array $data 外部数据

@@ -32,9 +32,13 @@ class UserMoney extends CareyShop
      * @var array
      */
     protected $type = [
-        'total_money'  => 'float',
-        'balance'      => 'float',
-        'lock_balance' => 'float',
+        'user_money_id' => 'integer',
+        'user_id'       => 'integer',
+        'total_money'   => 'float',
+        'balance'       => 'float',
+        'lock_balance'  => 'float',
+        'points'        => 'integer',
+        'lock_points'   => 'integer',
     ];
 
     /**

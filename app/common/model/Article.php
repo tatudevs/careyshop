@@ -33,6 +33,18 @@ class Article extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'article_id'     => 'integer',
+        'article_cat_id' => 'integer',
+        'is_top'         => 'integer',
+        'status'         => 'integer',
+        'page_views'     => 'integer',
+    ];
+
+    /**
      * hasOne cs_article_cat
      * @access public
      * @return mixed

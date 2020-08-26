@@ -37,7 +37,12 @@ class CardUse extends CareyShop
      * @var array
      */
     protected $type = [
+        'card_use_id' => 'integer',
+        'card_id'     => 'integer',
+        'user_id'     => 'integer',
         'money'       => 'float',
+        'is_active'   => 'integer',
+        'is_invalid'  => 'integer',
         'active_time' => 'timestamp',
     ];
 

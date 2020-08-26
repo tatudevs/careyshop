@@ -27,6 +27,20 @@ class AdsPosition extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'ads_position_id' => 'integer',
+        'platform'        => 'integer',
+        'width'           => 'integer',
+        'height'          => 'integer',
+        'type'            => 'integer',
+        'display'         => 'integer',
+        'status'          => 'integer',
+    ];
+
+    /**
      * 修改器对内容处理
      * @access public
      * @param  $value

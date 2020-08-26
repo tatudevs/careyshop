@@ -42,6 +42,19 @@ class Token extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'token_id'        => 'integer',
+        'client_id'       => 'integer',
+        'group_id'        => 'integer',
+        'client_type'     => 'integer',
+        'token_expires'   => 'integer',
+        'refresh_expires' => 'integer',
+    ];
+
+    /**
      * 产生Token
      * @access public
      * @param int    $id       编号

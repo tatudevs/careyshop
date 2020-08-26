@@ -45,6 +45,16 @@ class DeliveryItem extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'delivery_item_id' => 'integer',
+        'type'             => 'integer',
+        'is_delete'        => 'integer',
+    ];
+
+    /**
      * 添加一个快递公司
      * @access public
      * @param array $data 外部数据

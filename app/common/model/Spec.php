@@ -27,6 +27,18 @@ class Spec extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'spec_id'       => 'integer',
+        'goods_type_id' => 'integer',
+        'spec_index'    => 'integer',
+        'spec_type'     => 'integer',
+        'sort'          => 'integer',
+    ];
+
+    /**
      * hasMany cs_spec_item
      * @access public
      * @return mixed

@@ -29,6 +29,18 @@ class ArticleCat extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'article_cat_id' => 'integer',
+        'parent_id'      => 'integer',
+        'cat_type'       => 'integer',
+        'sort'           => 'integer',
+        'is_navi'        => 'integer',
+    ];
+
+    /**
      * 添加一个文章分类
      * @access public
      * @param array $data 外部数据

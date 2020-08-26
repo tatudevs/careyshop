@@ -31,7 +31,9 @@ class SpecConfig extends CareyShop
      * @var array
      */
     protected $type = [
-        'config_data' => 'array',
+        'spec_config_id' => 'integer',
+        'goods_id'       => 'integer',
+        'config_data'    => 'array',
     ];
 
     /**

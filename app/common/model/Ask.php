@@ -58,6 +58,20 @@ class Ask extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'ask_id'    => 'integer',
+        'user_id'   => 'integer',
+        'parent_id' => 'integer',
+        'ask_type'  => 'integer',
+        'type'      => 'integer',
+        'status'    => 'integer',
+        'is_delete' => 'integer',
+    ];
+
+    /**
      * hasOne cs_user
      * @access public
      * @return mixed

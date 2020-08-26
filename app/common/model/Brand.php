@@ -31,6 +31,17 @@ class Brand extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'brand_id'          => 'integer',
+        'goods_category_id' => 'integer',
+        'sort'              => 'integer',
+        'status'            => 'integer',
+    ];
+
+    /**
      * 添加一个品牌
      * @access public
      * @param array $data 外部数据

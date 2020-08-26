@@ -36,6 +36,17 @@ class SpecItem extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'spec_item_id' => 'integer',
+        'spec_id'      => 'integer',
+        'is_contact'   => 'integer',
+        'sort'         => 'integer',
+    ];
+
+    /**
      * 断开关联或更新商品规格项
      * @access public static
      * @param int   $specId 商品规格Id

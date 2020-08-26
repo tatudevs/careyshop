@@ -31,16 +31,22 @@ class Delivery extends CareyShop
      * @var array
      */
     protected $type = [
+        'delivery_id'         => 'integer',
+        'delivery_item_id'    => 'integer',
         'first_weight'        => 'float',
         'first_weight_price'  => 'float',
         'second_weight'       => 'float',
         'second_weight_price' => 'float',
+        'first_item'          => 'integer',
         'first_item_price'    => 'float',
+        'second_item'         => 'integer',
         'second_item_price'   => 'float',
         'first_volume'        => 'float',
         'first_volume_price'  => 'float',
         'second_volume'       => 'float',
         'second_volume_price' => 'float',
+        'sort'                => 'integer',
+        'status'              => 'integer',
     ];
 
     /**

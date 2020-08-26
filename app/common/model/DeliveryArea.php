@@ -40,6 +40,8 @@ class DeliveryArea extends CareyShop
      * @var array
      */
     protected $type = [
+        'delivery_area_id'    => 'integer',
+        'delivery_id'         => 'integer',
         'region'              => 'array',
         'first_weight_price'  => 'float',
         'second_weight_price' => 'float',

@@ -48,6 +48,17 @@ class Collect extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'collect_id' => 'integer',
+        'user_id'    => 'integer',
+        'goods_id'   => 'integer',
+        'is_top'     => 'integer',
+    ];
+
+    /**
      * hasOne cs_goods
      * @access public
      * @return mixed

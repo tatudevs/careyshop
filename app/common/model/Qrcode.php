@@ -29,6 +29,15 @@ class Qrcode extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'qrcode_id' => 'integer',
+        'size'      => 'integer',
+    ];
+
+    /**
      * 获取一个二维码
      * @access public
      * @param array $data 外部数据

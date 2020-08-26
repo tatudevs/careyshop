@@ -47,7 +47,10 @@ class UserAddress extends CareyShop
      * @var array
      */
     protected $type = [
-        'region_list' => 'array',
+        'user_address_id' => 'integer',
+        'country'         => 'integer',
+        'region_list'     => 'array',
+        'is_delete'       => 'integer',
     ];
 
     /**

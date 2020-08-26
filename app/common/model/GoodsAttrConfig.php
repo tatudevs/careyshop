@@ -31,7 +31,9 @@ class GoodsAttrConfig extends CareyShop
      * @var array
      */
     protected $type = [
-        'config_data' => 'array',
+        'goods_attr_config_id' => 'integer',
+        'goods_id'             => 'integer',
+        'config_data'          => 'array',
     ];
 
     /**

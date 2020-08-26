@@ -40,6 +40,16 @@ class ServiceLog extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'service_log_id'   => 'integer',
+        'order_service_id' => 'integer',
+        'client_type'      => 'integer',
+    ];
+
+    /**
      * 添加售后操作日志
      * @access public
      * @param array $data 外部数据

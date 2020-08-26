@@ -34,8 +34,12 @@ class AuthRule extends CareyShop
      * @var array
      */
     protected $type = [
+        'rule_id'   => 'integer',
+        'group_id'  => 'integer',
         'menu_auth' => 'array',
         'log_auth'  => 'array',
+        'sort'      => 'integer',
+        'status'    => 'integer',
     ];
 
     /**

@@ -39,6 +39,18 @@ class App extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'app_id'    => 'integer',
+        'app_key'   => 'integer',
+        'captcha'   => 'integer',
+        'status'    => 'integer',
+        'is_delete' => 'integer',
+    ];
+
+    /**
      * 定义全局的查询范围
      * @var string[]
      */

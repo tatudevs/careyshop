@@ -36,6 +36,19 @@ class Menu extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'menu_id'   => 'integer',
+        'parent_id' => 'integer',
+        'type'      => 'integer',
+        'is_navi'   => 'integer',
+        'sort'      => 'integer',
+        'status'    => 'integer',
+    ];
+
+    /**
      * URL驼峰转下划线修改器
      * @access protected
      * @param string $value 值

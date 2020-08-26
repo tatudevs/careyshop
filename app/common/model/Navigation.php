@@ -29,6 +29,16 @@ class Navigation extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'navigation_id' => 'integer',
+        'sort'          => 'integer',
+        'status'        => 'integer',
+    ];
+
+    /**
      * 添加一个导航
      * @access public
      * @param array $data 外部数据

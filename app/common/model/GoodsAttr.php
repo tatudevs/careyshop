@@ -32,6 +32,18 @@ class GoodsAttr extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'goods_id'           => 'integer',
+        'goods_attribute_id' => 'integer',
+        'parent_id'          => 'integer',
+        'is_important'       => 'integer',
+        'sort'               => 'integer',
+    ];
+
+    /**
      * 添加商品属性列表
      * @access public
      * @param int   $goodsId 商品编号

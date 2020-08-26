@@ -37,4 +37,13 @@ class NoticeItem extends CareyShop
         'replace_name',
         'type',
     ];
+
+    /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'notice_item_id' => 'integer',
+        'type'           => 'integer',
+    ];
 }

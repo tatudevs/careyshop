@@ -30,6 +30,17 @@ class AuthGroup extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'group_id' => 'integer',
+        'system'   => 'integer',
+        'sort'     => 'integer',
+        'status'   => 'integer',
+    ];
+
+    /**
      * hasMany cs_auth_rule
      * @access public
      * @return mixed

@@ -33,6 +33,15 @@ class Topic extends CareyShop
     ];
 
     /**
+     * 字段类型或者格式转换
+     * @var array
+     */
+    protected $type = [
+        'topic_id'    => 'integer',
+        'status'      => 'integer',
+    ];
+
+    /**
      * 添加一个专题
      * @access public
      * @param array $data 外部数据
