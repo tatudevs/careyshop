@@ -114,7 +114,6 @@ class Spec extends CareyShop
             $result = self::update($data, $map);
 
             if (!empty($data['spec_item'])) {
-                // todo 此处待调试
                 if (!SpecItem::updateItem($data['spec_id'], $data['spec_item'])) {
                     throw new \Exception();
                 }
@@ -131,158 +130,126 @@ class Spec extends CareyShop
     /**
      * 获取一条商品规格
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getSpecItem($data)
     {
-        if (!$this->validateData($data, 'Spec.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['spec_id'] = ['eq', $data['spec_id']];
-            $with['specItem'] = function ($query) {
-                $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
-            };
+        // 搜索与关联
+        $map[] = ['spec_id', '=', $data['spec_id']];
+        $with['spec_item'] = function ($query) {
+            $query->where('is_contact', '=', 1)->order(['sort' => 'asc']);
+        };
 
-            $query->with($with)->where($map);
-        });
-
-        if (false !== $result) {
-            if (is_null($result)) {
-                return null;
-            }
-
-            $specData = $result->toArray();
-            if (empty($data['is_detail'])) {
-                $specData['spec_item'] = array_column($specData['spec_item'], 'item_name');
-            }
-
-            return $specData;
+        $result = $this->with($with)->where($map)->find();
+        if (is_null($result)) {
+            return null;
         }
 
-        return false;
+        $specData = $result->toArray();
+        if (empty($data['is_detail'])) {
+            $specData['spec_item'] = array_column($specData['spec_item'], 'item_name');
+        }
+
+        return $specData;
     }
 
     /**
      * 获取商品规格列表(可翻页)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getSpecPage($data)
     {
-        if (!$this->validateData($data, 'Spec.page')) {
+        if (!$this->validateData($data, 'page')) {
             return false;
         }
 
         // 搜索条件
-        $map['goods_type_id'] = ['neq', 0];
-        empty($data['goods_type_id']) ?: $map['goods_type_id'] = ['eq', $data['goods_type_id']];
+        $map[] = ['goods_type_id', '<>', 0];
+        empty($data['goods_type_id']) ?: $map[] = ['goods_type_id', '=', $data['goods_type_id']];
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 重置搜索条件
+        $map = [['spec.goods_type_id', '<>', 0]];
+        empty($data['goods_type_id']) ?: $map[] = ['getGoodsType.goods_type_id', '=', $data['goods_type_id']];
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
+        // 关联查询
+        $with['spec_item'] = function ($query) {
+            $query->where('is_contact', '=', 1)->order(['sort' => 'asc']);
+        };
 
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
+        // 实际查询
+        $result['item'] = $this->setDefaultOrder(['spec_id' => 'asc'], ['sort' => 'asc'])
+            ->withJoin('getGoodsType')
+            ->with($with)
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'spec_id';
-
-            // 排序处理
-            $order['sort'] = 'asc';
-            $order[$orderField] = $orderType;
-
-            if (!empty($data['order_field'])) {
-                $order = array_reverse($order);
+        if (empty($data['is_detail'])) {
+            foreach ($result['item'] as $key => $value) {
+                $result['item'][$key]['spec_item'] = array_column($value['spec_item'], 'item_name');
             }
-
-            // 搜索条件
-            $map['spec.goods_type_id'] = ['neq', 0];
-            empty($data['goods_type_id']) ?: $map['getGoodsType.goods_type_id'] = ['eq', $data['goods_type_id']];
-
-            $with = ['getGoodsType'];
-            $with['specItem'] = function ($query) {
-                $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
-            };
-
-            $query
-                ->with($with)
-                ->where($map)
-                ->order($order)
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            $specData = $result->toArray();
-            if (empty($data['is_detail'])) {
-                foreach ($specData as $key => $value) {
-                    $specData[$key]['spec_item'] = array_column($value['spec_item'], 'item_name');
-                }
-            }
-
-            return ['items' => $specData, 'total_result' => $totalResult];
         }
 
-        return false;
+        self::keyToSnake(['getGoodsType'], $result['item']);
+        return $result;
     }
 
     /**
      * 获取商品规格列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getSpecList($data)
     {
-        if (!$this->validateData($data, 'Spec.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $with['specItem'] = function ($query) {
-                $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
-            };
+        // 搜索条件
+        $map[] = ['goods_type_id', '=', $data['goods_type_id']];
 
-            $map['goods_type_id'] = ['eq', $data['goods_type_id']];
+        // 关联查询
+        $with['spec_item'] = function ($query) {
+            $query->where('is_contact', '=', 1)->order(['sort' => 'asc']);
+        };
 
-            $order['sort'] = 'asc';
-            $order['spec_id'] = 'asc';
+        $result = $this->setDefaultOrder(['spec_id' => 'asc'], ['sort' => 'asc'])
+            ->with($with)
+            ->where($map)
+            ->withSearch(['order'])
+            ->select()
+            ->toArray();
 
-            $query->with($with)->where($map)->order($order);
-        });
-
-        if (false !== $result) {
-            $specData = $result->toArray();
-            foreach ($specData as &$value) {
-                $value['check_list'] = [];
-                foreach ($value['spec_item'] as &$item) {
-                    $item['image'] = [];
-                    $item['color'] = '';
-                }
+        foreach ($result as &$value) {
+            $value['check_list'] = [];
+            foreach ($value['spec_item'] as &$item) {
+                $item['image'] = [];
+                $item['color'] = '';
             }
-
-            unset($value);
-            return [
-                'spec_config' => $specData,
-                'spec_key'    => array_column($specData, 'spec_id'),
-            ];
         }
 
-        return false;
+        unset($value);
+        return [
+            'spec_config' => $result,
+            'spec_key'    => array_column($result, 'spec_id'),
+        ];
     }
 
     /**
@@ -293,79 +260,72 @@ class Spec extends CareyShop
      */
     public function getSpecAll()
     {
-        $result = self::all(function ($query) {
-            $with = ['getGoodsType'];
-            $with['specItem'] = function ($query) {
-                $query->where(['is_contact' => ['eq', 1]])->order(['sort' => 'asc']);
-            };
+        // 搜索条件
+        $map[] = ['spec.goods_type_id', '<>', 0];
 
-            $map['spec.goods_type_id'] = ['neq', 0];
+        // 关联查询
+        $with['spec_item'] = function ($query) {
+            $query->where('is_contact', '=', 1)->order(['sort' => 'asc']);
+        };
 
-            $order['sort'] = 'asc';
-            $order['spec_id'] = 'asc';
+        $resultData = [];
+        $result = $this->setDefaultOrder(['spec_id' => 'asc'], ['sort' => 'asc'])
+            ->withJoin('getGoodsType')
+            ->with($with)
+            ->where($map)
+            ->withSearch(['order'])
+            ->select()
+            ->toArray();
 
-            $query->with($with)->where($map)->order($order);
-        });
-
-        if (false !== $result) {
-            $resultData = [];
-            $result = $result->toArray();
-
-            foreach ($result as $value) {
-                if (!array_key_exists($value['goods_type_id'], $resultData)) {
-                    $resultData[$value['goods_type_id']] = [
-                        'name'          => $value['get_goods_type']['type_name'],
-                        'goods_type_id' => $value['goods_type_id'],
-                    ];
-                }
-
-                foreach ($value['spec_item'] as &$item) {
-                    $item['image'] = [];
-                    $item['color'] = '';
-                }
-
-                unset($item);
-                unset($value['get_goods_type']);
-                $resultData[$value['goods_type_id']]['item'][] = $value;
+        foreach ($result as $value) {
+            if (!array_key_exists($value['goods_type_id'], $resultData)) {
+                $resultData[$value['goods_type_id']] = [
+                    'name'          => $value['getGoodsType']['type_name'],
+                    'goods_type_id' => $value['goods_type_id'],
+                ];
             }
 
-            return array_values($resultData);
+            foreach ($value['spec_item'] as &$item) {
+                $item['image'] = [];
+                $item['color'] = '';
+            }
+
+            unset($item);
+            unset($value['getGoodsType']);
+            $resultData[$value['goods_type_id']]['item'][] = $value;
         }
 
-        return false;
+        return array_values($resultData);
     }
 
     /**
      * 批量删除商品规格
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function delSpecList($data)
     {
-        if (!$this->validateData($data, 'Spec.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 修改规格主表
-            $map['spec_id'] = ['in', $data['spec_id']];
-            if (false === $this->save(['goods_type_id' => 0, 'spec_index' => 0], $map)) {
-                throw new \Exception($this->getError());
-            }
+            $map[] = ['spec_id', 'in', $data['spec_id']];
+            self::update(['goods_type_id' => 0, 'spec_index' => 0], $map);
 
             // 断开模型字段
-            $map['is_contact'] = ['neq', 0];
+            $map[] = ['is_contact', '<>', 0];
             SpecItem::update(['is_contact' => 0], $map);
 
-            self::commit();
+            $this->commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -373,41 +333,37 @@ class Spec extends CareyShop
     /**
      * 批量设置商品规格检索
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function setSpecKey($data)
     {
-        if (!$this->validateData($data, 'Spec.key')) {
+        if (!$this->validateData($data, 'key')) {
             return false;
         }
 
-        $map['spec_id'] = ['in', $data['spec_id']];
-        if (false !== $this->save(['spec_index' => $data['spec_index']], $map)) {
-            return true;
-        }
+        $map[] = ['spec_id', 'in', $data['spec_id']];
+        self::update(['spec_index' => $data['spec_index']], $map);
 
-        return false;
+        return true;
     }
 
     /**
      * 设置商品规格排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setSpecSort($data)
     {
-        if (!$this->validateData($data, 'Spec.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['spec_id'] = ['eq', $data['spec_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            return true;
-        }
+        $map[] = ['spec_id', '=', $data['spec_id']];
+        self::update(['sort' => $data['sort']], $map);
 
-        return false;
+        return true;
     }
 
     /**
@@ -419,7 +375,7 @@ class Spec extends CareyShop
      */
     public function setSpecIndex($data)
     {
-        if (!$this->validateData($data, 'Spec.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -428,10 +384,7 @@ class Spec extends CareyShop
             $list[] = ['spec_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            return true;
-        }
-
-        return false;
+        $this->saveAll($list);
+        return true;
     }
 }
