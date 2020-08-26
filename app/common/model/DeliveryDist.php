@@ -5,17 +5,21 @@
  * CareyShop    配送轨迹模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/27
+ * @date        2020/8/27
  */
 
 namespace app\common\model;
 
-use think\Config;
-use util\Http;
 use app\common\service\DeliveryDist as Dist;
 
 class DeliveryDist extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'delivery_dist_id';
+
     /**
      * 快递鸟查询URL
      * @var string
@@ -72,9 +76,8 @@ class DeliveryDist extends CareyShop
     public function getDeliveryItem()
     {
         return $this
-            ->hasOne('DeliveryItem', 'delivery_item_id', 'delivery_item_id')
-            ->field('name,code')
-            ->setEagerlyType(0);
+            ->hasOne(DeliveryItem::class, 'delivery_item_id', 'delivery_item_id')
+            ->field('name,code');
     }
 
     /**
@@ -85,11 +88,11 @@ class DeliveryDist extends CareyShop
     public function getUser()
     {
         return $this
-            ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('username,nickname,level_icon,head_pic')
-            ->setEagerlyType(0);
+            ->hasOne(User::class, 'user_id', 'user_id')
+            ->joinType('left');
     }
 
+    //todo 修改至此处
     /**
      * 添加一条配送轨迹
      * @access public
