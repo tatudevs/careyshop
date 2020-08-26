@@ -5,13 +5,19 @@
  * CareyShop    购物车模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/7/12
+ * @date        2020/8/26
  */
 
 namespace app\common\model;
 
 class Cart extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'cart_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -71,9 +77,9 @@ class Cart extends CareyShop
         ];
 
         return $this
-            ->hasOne('Goods', 'goods_id', 'goods_id')
+            ->hasOne(Goods::class, 'goods_id', 'goods_id')
             ->field($field)
-            ->setEagerlyType(0);
+            ->joinType('left');
     }
 
     /**
@@ -83,7 +89,7 @@ class Cart extends CareyShop
      */
     public function goodsSpecItem()
     {
-        return $this->hasMany('SpecGoods', 'goods_id', 'goods_id');
+        return $this->hasMany(SpecGoods::class, 'goods_id', 'goods_id');
     }
 
     /**
@@ -93,7 +99,7 @@ class Cart extends CareyShop
      */
     public function goodsSpecImage()
     {
-        return $this->hasMany('SpecImage', 'goods_id', 'goods_id');
+        return $this->hasMany(SpecImage::class, 'goods_id', 'goods_id');
     }
 
     /**
@@ -106,10 +112,6 @@ class Cart extends CareyShop
      */
     public function setCartItem($data, $isBuyNow = false)
     {
-        if (!$this->validateData($data, 'Cart')) {
-            return false;
-        }
-
         // 避免无关字段,并初始化部分数据
         $data['user_id'] = get_client_id();
         unset($data['cart_id']);
@@ -172,22 +174,22 @@ class Cart extends CareyShop
     /**
      * 验证是否允许添加或编辑购物车
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function checkCartGoods($data)
     {
-        if (!$this->validateData($data, 'Cart')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 获取商品详细信息
         $goodsDb = new Goods();
-        $goodsResult = $goodsDb->with('goodsSpecItem')->where(['goods_id' => ['eq', $data['goods_id']]])->find();
+        $goodsResult = $goodsDb->with('goods_spec_item')->where('goods_id', '=', $data['goods_id'])->find();
 
-        if (!$goodsResult) {
-            return $this->setError(is_null($goodsResult) ? '商品不存在' : $goodsDb->getError());
+        if (is_null($goodsResult)) {
+            return $this->setError('商品不存在');
         } else {
             $goodsResult = $goodsResult->toArray();
         }
