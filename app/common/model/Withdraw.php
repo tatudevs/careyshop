@@ -5,15 +5,21 @@
  * CareyShop    提现模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/6/21
+ * @date        2020/8/26
  */
 
 namespace app\common\model;
 
-use think\Config;
+use think\facade\Config;
 
 class Withdraw extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'withdraw_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -42,12 +48,12 @@ class Withdraw extends CareyShop
      * @var array
      */
     protected $type = [
-        'withdraw_id'      => 'integer',
-        'user_id'          => 'integer',
-        'money'            => 'float',
-        'fee'              => 'float',
-        'amount'           => 'float',
-        'status'           => 'integer',
+        'withdraw_id' => 'integer',
+        'user_id'     => 'integer',
+        'money'       => 'float',
+        'fee'         => 'float',
+        'amount'      => 'float',
+        'status'      => 'integer',
     ];
 
     /**
@@ -58,9 +64,8 @@ class Withdraw extends CareyShop
     public function getUser()
     {
         return $this
-            ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('username,nickname,level_icon,head_pic')
-            ->setEagerlyType(0);
+            ->hasOne(User::class, 'user_id', 'user_id')
+            ->joinType('left');
     }
 
     /**
@@ -72,7 +77,7 @@ class Withdraw extends CareyShop
     {
         do {
             $withdrawNo = get_order_no('TX_');
-        } while (self::checkUnique(['withdraw_no' => ['eq', $withdrawNo]]));
+        } while (self::checkUnique(['withdraw_no' => $withdrawNo]));
 
         return $withdrawNo;
     }
@@ -80,11 +85,11 @@ class Withdraw extends CareyShop
     /**
      * 添加交易记录
      * @access public
-     * @param  int    $type       收入或支出
-     * @param  float  $amount     总金额
-     * @param  int    $userId     账号编号
-     * @param  string $withdrawNo 提现单号
-     * @param  string $remark     备注
+     * @param int    $type       收入或支出
+     * @param float  $amount     总金额
+     * @param int    $userId     账号编号
+     * @param string $withdrawNo 提现单号
+     * @param string $remark     备注
      * @return bool
      */
     private function addTransaction($type, $amount, $userId, $withdrawNo, $remark)
@@ -93,7 +98,7 @@ class Withdraw extends CareyShop
             'user_id'    => $userId,
             'type'       => $type,
             'amount'     => $amount,
-            'balance'    => UserMoney::where(['user_id' => ['eq', $userId]])->value('balance'),
+            'balance'    => UserMoney::where('user_id', '=', $userId)->value('balance'),
             'source_no'  => $withdrawNo,
             'remark'     => $remark,
             'module'     => 'money',
@@ -111,50 +116,55 @@ class Withdraw extends CareyShop
     /**
      * 获取一个提现请求
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getWithdrawItem($data)
     {
-        if (!$this->validateData($data, 'Withdraw.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['withdraw.withdraw_no'] = ['eq', $data['withdraw_no']];
-            is_client_admin() ? $query->with('getUser') : $map['withdraw.user_id'] = ['eq', get_client_id()];
+        $with = [];
+        $map[] = ['withdraw.withdraw_no', '=', $data['withdraw_no']];
 
-            $query->alias('withdraw')->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
+        if (is_client_admin()) {
+            $with['getUser'] = ['username', 'level_icon', 'head_pic', 'nickname'];
+        } else {
+            $map[] = ['withdraw.user_id', '=', get_client_id()];
         }
 
-        return false;
+        $result = $this->alias('withdraw')->withJoin($with)->where($map)->find();
+        if (!is_null($result)) {
+            $temp = [$result->toArray()];
+            self::keyToSnake(['getUser'], $temp);
+            return $temp[0];
+        }
+
+        return null;
     }
 
     /**
      * 获取提现请求列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getWithdrawList($data)
     {
-        if (!$this->validateData($data, 'Withdraw.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['withdraw.user_id'] = ['eq', get_client_id()];
-        empty($data['withdraw_no']) ?: $map['withdraw.withdraw_no'] = ['eq', $data['withdraw_no']];
-        is_empty_parm($data['status']) ?: $map['withdraw.status'] = ['eq', $data['status']];
+        $map = [];
+        empty($data['withdraw_no']) ?: $map[] = ['withdraw.withdraw_no', '=', $data['withdraw_no']];
+        is_empty_parm($data['status']) ?: $map[] = ['withdraw.status', '=', $data['status']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
-            $map['withdraw.create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
+            $map[] = ['withdraw.create_time', 'between time', [$data['begin_time'], $data['end_time']]];
         }
 
         // 关联查询
@@ -162,59 +172,44 @@ class Withdraw extends CareyShop
 
         // 后台管理搜索
         if (is_client_admin()) {
-            $with = ['getUser'];
-            unset($map['withdraw.user_id']);
-            empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
+            $with['getUser'] = ['username', 'level_icon', 'head_pic', 'nickname'];
+            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+        } else {
+            $map[] = ['withdraw.user_id', '=', get_client_id()];
         }
 
-        $totalResult = $this->alias('withdraw')->with($with)->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->withJoin($with)->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map, $with) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['withdraw_id' => 'desc'])
+            ->withJoin($with)
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'withdraw_id';
-
-            $query
-                ->alias('withdraw')
-                ->with($with)
-                ->where($map)
-                ->order(['withdraw.' . $orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        self::keyToSnake(['getUser'], $result['items']);
+        return $result;
     }
 
     /**
      * 申请一个提现请求
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function addWithdrawItem($data)
     {
-        if (!$this->validateData($data, 'Withdraw')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
-        $map['withdraw_user_id'] = ['eq', $data['withdraw_user_id']];
-        $map['user_id'] = ['eq', get_client_id()];
+        $map[] = ['withdraw_user_id', '=', $data['withdraw_user_id']];
+        $map[] = ['user_id', '=', get_client_id()];
 
         $userResult = WithdrawUser::where($map)->find();
         if (!$userResult) {
@@ -223,7 +218,7 @@ class Withdraw extends CareyShop
 
         // 处理数据
         unset($data['withdraw_id'], $data['remark']);
-        $data['fee'] = Config::get('withdraw_fee.value', 'system_shopping');
+        $data['fee'] = Config::get('careyshop.system_shopping.withdraw_fee', 0);
         $data['withdraw_no'] = $this->getWithdrawNo();
         $data['user_id'] = get_client_id();
         $data['amount'] = round($data['money'] + (($data['fee'] / 100) * $data['money']), 2);
@@ -234,13 +229,11 @@ class Withdraw extends CareyShop
         $data['account'] = $userResult['account'];
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 添加主表
-            if (false === $this->allowField(true)->save($data)) {
-                throw new \Exception($this->getError());
-            }
+            $this->save($data);
 
             // 减少可用余额,并增加锁定余额
             $userMoneyDb = new UserMoney();
@@ -253,10 +246,10 @@ class Withdraw extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            self::commit();
+            $this->commit();
             return $this->hidden(['withdraw_user_id'])->toArray();
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -264,25 +257,23 @@ class Withdraw extends CareyShop
     /**
      * 取消一个提现请求
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function cancelWithdrawItem($data)
     {
-        if (!$this->validateData($data, 'Withdraw.cancel')) {
+        if (!$this->validateData($data, 'cancel')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['withdraw_no'] = ['eq', $data['withdraw_no']];
-            $map['user_id'] = ['eq', get_client_id()];
+        // 获取主数据
+        $map[] = ['withdraw_no', '=', $data['withdraw_no']];
+        $map[] = ['user_id', '=', get_client_id()];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         if ($result->getAttr('status') !== 0) {
@@ -290,13 +281,12 @@ class Withdraw extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 修改主表
-            if (false === $result->setAttr('status', 2)->save()) {
-                throw new \Exception($this->getError());
-            }
+            $result->setAttr('status', 2);
+            $result->save();
 
             // 增加可用余额,并减少锁定余额
             $userMoneyDb = new UserMoney();
@@ -311,10 +301,10 @@ class Withdraw extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            self::commit();
+            $this->commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -322,26 +312,27 @@ class Withdraw extends CareyShop
     /**
      * 处理一个提现请求
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function processWithdrawItem($data)
     {
-        if (!$this->validateData($data, 'Withdraw.process')) {
+        if (!$this->validateData($data, 'process')) {
             return false;
         }
 
-        $result = self::get(['withdraw_no' => $data['withdraw_no']]);
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->where('withdraw_no', '=', $data['withdraw_no'])->find();
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         if ($result->getAttr('status') !== 0) {
             return $this->setError('提现状态已不可处理');
         }
 
-        if (false !== $result->setAttr('status', 1)->save()) {
+        $result->setAttr('status', 1);
+        if (false !== $result->save()) {
             return true;
         }
 
@@ -351,19 +342,19 @@ class Withdraw extends CareyShop
     /**
      * 完成一个提现请求
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function completeWithdrawItem($data)
     {
-        if (!$this->validateData($data, 'Withdraw.complete')) {
+        if (!$this->validateData($data, 'complete')) {
             return false;
         }
 
-        $result = self::get(['withdraw_no' => $data['withdraw_no']]);
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->where('withdraw_no', '=', $data['withdraw_no'])->find();
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         if ($result->getAttr('status') !== 1) {
@@ -371,13 +362,11 @@ class Withdraw extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 修改主表
-            if (false === $result->save(['status' => 3, 'remark' => $data['remark']])) {
-                throw new \Exception($this->getError());
-            }
+            $result->save(['status' => 3, 'remark' => $data['remark']]);
 
             // 减少锁定余额
             $userMoneyDb = new UserMoney();
@@ -385,10 +374,10 @@ class Withdraw extends CareyShop
                 throw new \Exception($userMoneyDb->getError());
             }
 
-            self::commit();
+            $this->commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -396,19 +385,19 @@ class Withdraw extends CareyShop
     /**
      * 拒绝一个提现请求
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function refuseWithdrawItem($data)
     {
-        if (!$this->validateData($data, 'Withdraw.refuse')) {
+        if (!$this->validateData($data, 'refuse')) {
             return false;
         }
 
-        $result = self::get(['withdraw_no' => $data['withdraw_no']]);
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->where('withdraw_no', '=', $data['withdraw_no'])->find();
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         if ($result->getAttr('status') !== 0 && $result->getAttr('status') !== 1) {
@@ -416,13 +405,11 @@ class Withdraw extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 修改主表
-            if (false === $result->save(['status' => 4, 'remark' => $data['remark']])) {
-                throw new \Exception($this->getError());
-            }
+            $result->save(['status' => 4, 'remark' => $data['remark']]);
 
             // 增加可用余额,并减少锁定余额
             $userMoneyDb = new UserMoney();
@@ -437,10 +424,10 @@ class Withdraw extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            self::commit();
+            $this->commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
