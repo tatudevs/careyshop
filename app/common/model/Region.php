@@ -60,7 +60,7 @@ class Region extends CareyShop
     /**
      * 全局是否删除查询条件
      * @access public
-     * @param User $query 模型
+     * @param Region $query 模型
      */
     public function scopeDelete($query)
     {
