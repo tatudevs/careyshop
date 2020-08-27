@@ -11,6 +11,8 @@
 namespace app\common\model;
 
 use app\common\service\DeliveryDist as Dist;
+use think\facade\Config;
+use util\Http;
 
 class DeliveryDist extends CareyShop
 {
@@ -75,9 +77,7 @@ class DeliveryDist extends CareyShop
      */
     public function getDeliveryItem()
     {
-        return $this
-            ->hasOne(DeliveryItem::class, 'delivery_item_id', 'delivery_item_id')
-            ->field('name,code');
+        return $this->hasOne(DeliveryItem::class, 'delivery_item_id', 'delivery_item_id');
     }
 
     /**
@@ -92,17 +92,16 @@ class DeliveryDist extends CareyShop
             ->joinType('left');
     }
 
-    //todo 修改至此处
     /**
      * 添加一条配送轨迹
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function addDeliveryDistItem($data)
     {
-        if (!$this->validateData($data, 'DeliveryDist')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -122,17 +121,13 @@ class DeliveryDist extends CareyShop
         $deliveryResult = null;
         if (!empty($data['delivery_id'])) {
             // 根据配送方式编号获取快递公司编码
-            $deliveryResult = Delivery::get(function ($query) use ($data) {
-                $query
-                    ->alias('d')
-                    ->field('i.delivery_item_id,i.code')
-                    ->join('delivery_item i', 'i.delivery_item_id = d.delivery_item_id')
-                    ->where(['d.delivery_id' => ['eq', $data['delivery_id']]]);
-            });
-        } else if (!empty($data['delivery_item_id'])) {
-            $deliveryResult = DeliveryItem
-                ::where(['delivery_item_id' => ['eq', $data['delivery_item_id']]])
+            $deliveryResult = Delivery::alias('d')
+                ->field('i.delivery_item_id,i.code')
+                ->join('delivery_item i', 'i.delivery_item_id = d.delivery_item_id')
+                ->where('d.delivery_id', '=', $data['delivery_id'])
                 ->find();
+        } else if (!empty($data['delivery_item_id'])) {
+            $deliveryResult = DeliveryItem::find($data['delivery_item_id']);
         }
 
         if (!$deliveryResult) {
@@ -142,20 +137,17 @@ class DeliveryDist extends CareyShop
         // 对数据再次进行处理
         $data['delivery_code'] = $deliveryResult->getAttr('code');
         $data['delivery_item_id'] = $deliveryResult->getAttr('delivery_item_id');
-        $data['is_sub'] = Config::get('is_sub.value', 'delivery_dist');
+        $data['is_sub'] = Config::get('careyshop.delivery_dist.is_sub', 0);
         unset($data['client_id'], $data['delivery_id']);
 
         // 配送轨迹存在则直接返回
-        $distResult = self::get(function ($query) use ($data) {
-            $map['user_id'] = ['eq', $data['user_id']];
-            $map['order_code'] = ['eq', $data['order_code']];
-            $map['delivery_code'] = ['eq', $data['delivery_code']];
-            $map['logistic_code'] = ['eq', $data['logistic_code']];
+        $map[] = ['user_id', '=', $data['user_id']];
+        $map[] = ['order_code', '=', $data['order_code']];
+        $map[] = ['delivery_code', '=', $data['delivery_code']];
+        $map[] = ['logistic_code', '=', $data['logistic_code']];
 
-            $query->where($map);
-        });
-
-        if ($distResult) {
+        $distResult = $this->where($map)->find();
+        if (!is_null($distResult)) {
             return $distResult->toArray();
         }
 
@@ -173,7 +165,7 @@ class DeliveryDist extends CareyShop
             // 请求系统参数
             $postData = [
                 'RequestData' => urlencode($requestData),
-                'EBusinessID' => Config::get('api_id.value', 'delivery_dist'),
+                'EBusinessID' => Config::get('careyshop.delivery_dist.api_id'),
                 'RequestType' => '1008',
                 'DataSign'    => Dist::getCallbackSign($requestData),
                 'DataType'    => '2',
@@ -187,7 +179,7 @@ class DeliveryDist extends CareyShop
             }
         }
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
@@ -197,14 +189,14 @@ class DeliveryDist extends CareyShop
     /**
      * 接收推送过来的配送轨迹
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      */
     public function putDeliveryDistData($data)
     {
         $result['callback_return_type'] = 'json';
         $result['is_callback'] = [
-            'EBusinessID' => Config::get('api_id.value', 'delivery_dist'),
+            'EBusinessID' => Config::get('careyshop.delivery_dist.api_id'),
             'UpdateTime'  => date('Y-m-d H:i:s'),
             'Success'     => true,
         ];
@@ -238,9 +230,9 @@ class DeliveryDist extends CareyShop
                     'trace' => Dist::snake($value['Traces']),
                 ];
 
-                $map['delivery_code'] = ['eq', $value['ShipperCode']];
-                $map['logistic_code'] = ['eq', $value['LogisticCode']];
-                $this->data($update, true)->isUpdate(true)->save($update, $map);
+                $map[] = ['delivery_code', '=', $value['ShipperCode']];
+                $map[] = ['logistic_code', '=', $value['LogisticCode']];
+                self::update($update, $map);
             }
         }
 
@@ -250,8 +242,8 @@ class DeliveryDist extends CareyShop
     /**
      * 查询实时物流轨迹
      * @access private
-     * @param  string $deliveryCode 快递公司编码
-     * @param  string $logisticCode 快递单号
+     * @param string $deliveryCode 快递公司编码
+     * @param string $logisticCode 快递单号
      * @return false|array
      */
     private function getOrderTracesByJson($deliveryCode, $logisticCode)
@@ -263,7 +255,7 @@ class DeliveryDist extends CareyShop
         // 请求系统参数
         $postData = [
             'RequestData' => urlencode($requestData),
-            'EBusinessID' => Config::get('api_id.value', 'delivery_dist'),
+            'EBusinessID' => Config::get('careyshop.delivery_dist.api_id'),
             'RequestType' => '1002',
             'DataSign'    => Dist::getCallbackSign($requestData),
             'DataType'    => '2',
@@ -285,12 +277,12 @@ class DeliveryDist extends CareyShop
     /**
      * 根据快递单号即时查询配送轨迹
      * @access public
-     * @param  array $data 外部数据
-     * @return array|bool|false
+     * @param array $data 外部数据
+     * @return array|bool
      */
     public function getDeliveryDistTrace($data)
     {
-        if (!$this->validateData($data, 'DeliveryDist.trace')) {
+        if (!$this->validateData($data, 'trace')) {
             return false;
         }
 
@@ -300,34 +292,32 @@ class DeliveryDist extends CareyShop
     /**
      * 根据流水号获取配送轨迹
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function getDeliveryDistCode($data)
     {
-        if (!$this->validateData($data, 'DeliveryDist.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $map['delivery_dist.order_code'] = ['eq', $data['order_code']];
-            empty($data['logistic_code']) ?: $map['delivery_dist.logistic_code'] = ['eq', $data['logistic_code']];
-            empty($data['exclude_code']) ?: $map['delivery_dist.logistic_code'] = ['not in', $data['exclude_code']];
+        // 搜索条件
+        $map[] = ['delivery_dist.order_code', '=', $data['order_code']];
+        empty($data['logistic_code']) ?: $map[] = ['delivery_dist.logistic_code', '=', $data['logistic_code']];
+        empty($data['exclude_code']) ?: $map[] = ['delivery_dist.logistic_code', 'not in', $data['exclude_code']];
+        is_client_admin() ?: $map[] = ['delivery_dist.user_id', '=', get_client_id()];
 
-            $with = ['getDeliveryItem'];
-            is_client_admin() ? $with[] = 'getUser' : $map['delivery_dist.user_id'] = ['eq', get_client_id()];
+        // 关联查询
+        $with['getDeliveryItem'] = ['name', 'code'];
+        !is_client_admin() ?: $with['getUser'] = ['username', 'level_icon', 'head_pic', 'nickname'];
 
-            $query->with($with)->where($map);
-        });
-
-        if (false === $result) {
-            return false;
+        $result = $this->withJoin($with)->where($map)->select()->toArray();
+        if (empty($result)) {
+            return [];
         }
 
         $update = [];
-        $result = $result->toArray();
-
         foreach ($result as $key => $value) {
             // 忽略已订阅或已签收的配送轨迹
             if (1 === $value['is_sub'] || 3 === $value['state']) {
@@ -351,79 +341,62 @@ class DeliveryDist extends CareyShop
         }
 
         if (!empty($update)) {
-            self::saveAll($update);
+            $this->saveAll($update);
         }
 
+        self::keyToSnake(['getDeliveryItem', 'getUser'], $result);
         return $result;
     }
 
     /**
      * 获取配送轨迹列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
     public function getDeliveryDistList($data)
     {
-        if (!$this->validateData($data, 'DeliveryDist.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
         $map = [];
-        empty($data['order_code']) ?: $map['delivery_dist.order_code'] = ['eq', $data['order_code']];
-        empty($data['logistic_code']) ?: $map['delivery_dist.logistic_code'] = ['eq', $data['logistic_code']];
-        is_empty_parm($data['state']) ?: $map['delivery_dist.state'] = ['eq', $data['state']];
-        is_empty_parm($data['is_sub']) ?: $map['delivery_dist.is_sub'] = ['eq', $data['is_sub']];
+        empty($data['order_code']) ?: $map[] = ['delivery_dist.order_code', '=', $data['order_code']];
+        empty($data['logistic_code']) ?: $map[] = ['delivery_dist.logistic_code', '=', $data['logistic_code']];
+        is_empty_parm($data['is_sub']) ?: $map[] = ['delivery_dist.is_sub', '=', $data['is_sub']];
 
         if (!empty($data['timeout'])) {
-            $map['delivery_dist.state'] = ['neq', 3];
-            $map['delivery_dist.create_time'] = ['elt', time() - ($data['timeout'] * 86400)];
+            $map[] = ['delivery_dist.state', '<>', 3];
+            $map[] = ['delivery_dist.create_time', '<=', time() - ($data['timeout'] * 86400)];
+        } else {
+            is_empty_parm($data['state']) ?: $map[] = ['delivery_dist.state', '=', $data['state']];
         }
 
         if (is_client_admin() && !empty($data['account'])) {
-            $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
+            $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
         }
 
         // 关联查询
-        $with = ['getDeliveryItem'];
-        !is_client_admin() ?: $with[] = 'getUser';
+        $with['getDeliveryItem'] = ['name', 'code'];
+        !is_client_admin() ?: $with['getUser'] = ['username', 'level_icon', 'head_pic', 'nickname'];
 
-        $totalResult = $this->with($with)->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->withJoin($with)->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map, $with) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['delivery_dist_id' => 'desc'])
+            ->withoutField(empty($data['is_trace']) ? 'trace' : null) // 默认不返回"trace"字段
+            ->withJoin($with)
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'delivery_dist_id';
-
-            // 默认不返回"trace"字段
-            if (empty($data['is_trace'])) {
-                $query->field('trace', true);
-            }
-
-            $query
-                ->with($with)
-                ->where($map)
-                ->order(['delivery_dist.' . $orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        self::keyToSnake(['getDeliveryItem', 'getUser'], $result['items']);
+        return $result;
     }
 }
