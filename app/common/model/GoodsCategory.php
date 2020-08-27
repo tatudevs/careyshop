@@ -5,12 +5,12 @@
  * CareyShop    商品分类模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/1
+ * @date        2020/8/27
  */
 
 namespace app\common\model;
 
-use think\Cache;
+use think\facade\Cache;
 use think\helper\Str;
 use util\Phonetic;
 
@@ -21,6 +21,12 @@ class GoodsCategory extends CareyShop
      * @var int
      */
     private static $tree = [];
+
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'goods_category_id';
 
     /**
      * 只读属性
@@ -46,13 +52,12 @@ class GoodsCategory extends CareyShop
     /**
      * 添加一个商品分类
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addCategoryItem($data)
     {
-        if (!$this->validateData($data, 'GoodsCategory')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -71,8 +76,8 @@ class GoodsCategory extends CareyShop
             $data['alias_phonetic'] = Str::lower($data['alias_phonetic']);
         }
 
-        if (false !== $this->allowField(true)->save($data)) {
-            Cache::clear('GoodsCategory');
+        if ($this->save($data)) {
+            Cache::tag('GoodsCategory')->clear();
             return $this->toArray();
         }
 
@@ -82,13 +87,12 @@ class GoodsCategory extends CareyShop
     /**
      * 编辑一个商品分类
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setCategoryItem($data)
     {
-        if (!$this->validateSetData($data, 'GoodsCategory.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -98,7 +102,7 @@ class GoodsCategory extends CareyShop
                 return $this->setError('上级分类不能设为自身');
             }
 
-            if (($result = self::getCategoryList($data['goods_category_id'])) === false) {
+            if (false === ($result = self::getCategoryList($data['goods_category_id']))) {
                 return false;
             }
 
@@ -119,24 +123,22 @@ class GoodsCategory extends CareyShop
             $data['alias_phonetic'] = Str::lower($data['alias_phonetic']);
         }
 
-        $map['goods_category_id'] = ['eq', $data['goods_category_id']];
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            Cache::clear('GoodsCategory');
-            return $this->toArray();
-        }
+        $map[] = ['goods_category_id', '=', $data['goods_category_id']];
+        $result = self::update($data, $map);
+        Cache::tag('GoodsCategory')->clear();
 
-        return false;
+        return $result->toArray();
     }
 
     /**
      * 批量删除商品分类(支持检测是否存在子节点与关联商品)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delCategoryList($data)
     {
-        if (!$this->validateData($data, 'GoodsCategory.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
@@ -145,7 +147,7 @@ class GoodsCategory extends CareyShop
 
         if (1 == $data['not_empty']) {
             $idList = $data['goods_category_id'];
-            if (($result = self::getCategoryList(0, true)) === false) {
+            if (false === ($result = self::getCategoryList(0, true))) {
                 return false;
             }
         }
@@ -170,44 +172,38 @@ class GoodsCategory extends CareyShop
             }
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('goods_category_id', 'in', $data['goods_category_id']);
-        });
+        self::destroy($data['goods_category_id']);
+        Cache::tag('GoodsCategory')->clear();
 
-        Cache::clear('GoodsCategory');
         return true;
     }
 
     /**
      * 获取一个商品分类
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getCategoryItem($data)
     {
-        if (!$this->validateData($data, 'GoodsCategory.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['goods_category_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['goods_category_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取分类导航数据
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function getCategoryNavi($data)
     {
-        if (!$this->validateData($data, 'GoodsCategory.navi')) {
+        if (!$this->validateData($data, 'navi')) {
             return false;
         }
 
@@ -218,12 +214,7 @@ class GoodsCategory extends CareyShop
         $catList = $this
             ->cache('GoodsCategoryNavi', null, 'GoodsCategory')
             ->order('sort,goods_category_id')
-            ->column('goods_category_id,parent_id,name,alias');
-
-        if (false === $catList) {
-            Cache::clear('GoodsCategory');
-            return false;
-        }
+            ->column('goods_category_id,parent_id,name,alias', 'goods_category_id');
 
         $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         if (!$isLayer && isset($catList[$data['goods_category_id']])) {
@@ -265,32 +256,30 @@ class GoodsCategory extends CareyShop
     /**
      * 批量设置是否显示
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setCategoryStatus($data)
     {
-        if (!$this->validateData($data, 'GoodsCategory.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['goods_category_id'] = ['in', $data['goods_category_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            Cache::clear('GoodsCategory');
-            return true;
-        }
+        $map[] = ['goods_category_id', 'in', $data['goods_category_id']];
+        self::update(['status' => $data['status']], $map);
+        Cache::tag('GoodsCategory')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 过滤和排序所有商品分类
      * @access private
-     * @param  int    $parentId   上级分类Id
-     * @param  object &$list      原始模型对象
-     * @param  int    $limitLevel 显示多少级深度 null:全部
-     * @param  bool   $isLayer    是否返回本级分类
-     * @param  int    $level      分类深度
+     * @param int     $parentId   上级分类Id
+     * @param object &$list       原始模型对象
+     * @param null    $limitLevel 显示多少级深度 null:全部
+     * @param bool    $isLayer    是否返回本级分类
+     * @param int     $level      分类深度
      * @return array
      */
     private static function setCategoryTree($parentId, &$list, $limitLevel = null, $isLayer = false, $level = 0)
@@ -337,55 +326,49 @@ class GoodsCategory extends CareyShop
     /**
      * 获取所有商品分类
      * @access public
-     * @param  int  $catId        分类Id
-     * @param  bool $isGoodsTotal 是否获取关联商品数
-     * @param  bool $isLayer      是否返回本级分类
-     * @param  int  $level        分类深度
+     * @param int  $catId        分类Id
+     * @param bool $isGoodsTotal 是否获取关联商品数
+     * @param bool $isLayer      是否返回本级分类
+     * @param null $level        分类深度
      * @return false|array
      * @throws
      */
     public static function getCategoryList($catId = 0, $isGoodsTotal = false, $isLayer = false, $level = null)
     {
-        // 获取商品全部分类
-        $result = self::all(function ($query) use ($isGoodsTotal) {
-            // 搜索条件
-            $map = [];
-            $joinMap = '';
+        // 搜索条件
+        $map = [];
+        $joinMap = '';
 
-            if (!is_client_admin()) {
-                $map['c.status'] = ['eq', 1];
-                $joinMap = ' AND s.status = ' . 1;
-            }
-
-            $goodsSql = $goodsTotal = '';
-            if ($isGoodsTotal) {
-                $goodsTotal = ',ifnull(g.num, 0) goods_total';
-                $goodsSql = Goods::field('goods_category_id,count(*) num')
-                    ->where('is_delete', 0)
-                    ->group('goods_category_id')
-                    ->buildSql();
-            }
-
-            $query
-                ->alias('c')
-                ->field('c.*,count(s.goods_category_id) children_total' . $goodsTotal)
-                ->join('goods_category s', 's.parent_id = c.goods_category_id' . $joinMap, 'left');
-
-            if ($isGoodsTotal) {
-                $query->join([$goodsSql => 'g'], 'g.goods_category_id = c.goods_category_id', 'left');
-            }
-
-            $query
-                ->where($map)
-                ->group('c.goods_category_id')
-                ->order('c.parent_id,c.sort,c.goods_category_id')
-                ->cache(true, null, 'GoodsCategory');
-        });
-
-        if (false === $result) {
-            Cache::clear('GoodsCategory');
-            return false;
+        if (!is_client_admin()) {
+            $map[] = ['c.status', '=', 1];
+            $joinMap = ' AND s.status = ' . 1;
         }
+
+        // 构建子查询
+        $goodsSql = $goodsTotal = '';
+        if ($isGoodsTotal) {
+            $goodsTotal = ',ifnull(g.num, 0) goods_total';
+            $goodsSql = Goods::field('goods_category_id,count(*) num')
+                ->where('is_delete', '=', 0)
+                ->group('goods_category_id')
+                ->buildSql();
+        }
+
+        // 构建主查询
+        $db = self::where($map)
+            ->alias('c')
+            ->field('c.*,count(s.goods_category_id) children_total' . $goodsTotal)
+            ->join('goods_category s', 's.parent_id = c.goods_category_id' . $joinMap, 'left')
+            ->group('c.goods_category_id')
+            ->order('c.parent_id,c.sort,c.goods_category_id')
+            ->cache(true, null, 'GoodsCategory');
+
+        if ($isGoodsTotal) {
+            $db->join([$goodsSql => 'g'], 'g.goods_category_id = c.goods_category_id', 'left');
+        }
+
+        // 获取商品全部分类
+        $result = $db->select();
 
         // 缓存名称
         $treeCache = sprintf('GoodsCat:admin%dtotal%d', is_client_admin(), $isGoodsTotal);
@@ -405,7 +388,7 @@ class GoodsCategory extends CareyShop
     /**
      * 根据主Id集合获取所有子级
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array
      */
     public static function getCategorySon($data)
@@ -434,22 +417,20 @@ class GoodsCategory extends CareyShop
     /**
      * 设置商品分类排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setCategorySort($data)
     {
-        if (!$this->validateData($data, 'GoodsCategory.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['goods_category_id'] = ['eq', $data['goods_category_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            Cache::clear('GoodsCategory');
-            return true;
-        }
+        $map[] = ['goods_category_id', '=', $data['goods_category_id']];
+        self::update(['sort' => $data['sort']], $map);
+        Cache::tag('GoodsCategory')->clear();
 
-        return false;
+        return true;
     }
 
     /**
@@ -461,7 +442,7 @@ class GoodsCategory extends CareyShop
      */
     public function setCategoryIndex($data)
     {
-        if (!$this->validateData($data, 'GoodsCategory.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -470,32 +451,28 @@ class GoodsCategory extends CareyShop
             $list[] = ['goods_category_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            Cache::clear('GoodsCategory');
-            return true;
-        }
+        $this->saveAll($list);
+        Cache::tag('GoodsCategory')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 批量设置是否导航
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setCategoryNavi($data)
     {
-        if (!$this->validateData($data, 'GoodsCategory.nac')) {
+        if (!$this->validateData($data, 'nac')) {
             return false;
         }
 
-        $map['goods_category_id'] = ['in', $data['goods_category_id']];
-        if (false !== $this->save(['is_navi' => $data['is_navi']], $map)) {
-            Cache::clear('GoodsCategory');
-            return true;
-        }
+        $map[] = ['goods_category_id', 'in', $data['goods_category_id']];
+        self::update(['is_navi' => $data['is_navi']], $map);
+        Cache::tag('GoodsCategory')->clear();
 
-        return false;
+        return true;
     }
 }
