@@ -100,39 +100,35 @@ class MessageUser extends CareyShop
         $map[] = [$clientType, '=', get_client_id()];
         $unreadList = $this->where($map)->column('message_id');
 
-//        // 补齐不存在记录
-//        $notExistsId = array_diff($messageId, $unreadList);
-//        if (!empty($notExistsId)) {
-//            $dataUser = null;
-//            foreach ($notExistsId as $item) {
-//                $dataUser[] = [
-//                    'message_id'  => $item,
-//                    $clientType   => get_client_id(),
-//                    $field        => 1,
-//                    'create_time' => time(),
-//                ];
-//            }
-//
-//            if (false === $this->isUpdate(false)->insertAll($dataUser)) {
-//                return false;
-//            }
-//        }
-//
-//        // 更新已存在记录
-//        if (true === $isAll) {
-//            $mapAll[$clientType] = ['eq', get_client_id()];
-//            if (false === self::update([$field => 1], $mapAll)) {
-//                return false;
-//            }
-//        } else {
-//            $existsId = array_intersect($messageId, $unreadList);
-//            if (!empty($existsId)) {
-//                $map['message_id'] = ['in', $existsId];
-//                if (false === self::update([$field => 1], $map)) {
-//                    return false;
-//                }
-//            }
-//        }
+        // 补齐不存在记录
+        $notExistsId = array_diff($messageId, $unreadList);
+        if (!empty($notExistsId)) {
+            $dataUser = null;
+            foreach ($notExistsId as $item) {
+                $dataUser[] = [
+                    'message_id'  => $item,
+                    $clientType   => get_client_id(),
+                    $field        => 1,
+                    'create_time' => time(),
+                ];
+            }
+
+            if ($dataUser) {
+                $this->insertAll($dataUser);
+            }
+        }
+
+        // 更新已存在记录
+        if (true === $isAll) {
+            $mapAll[] = [$clientType, '=', get_client_id()];
+            self::update([$field => 1], $mapAll);
+        } else {
+            $existsId = array_intersect($messageId, $unreadList);
+            if (!empty($existsId)) {
+                $map[] = ['message_id', 'in', $existsId];
+                self::update([$field => 1], $map);
+            }
+        }
 
         return true;
     }
