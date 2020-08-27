@@ -5,13 +5,19 @@
  * CareyShop    消息模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/11/27
+ * @date        2020/8/27
  */
 
 namespace app\common\model;
 
 class Message extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'message_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
