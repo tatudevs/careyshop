@@ -62,26 +62,25 @@ class Message extends CareyShop
      */
     public function getMessageUser()
     {
-        return $this->hasOne('MessageUser', 'message_id');
+        return $this->hasOne(MessageUser::class, 'message_id');
     }
 
     /**
      * 添加一条消息
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addMessageItem($data)
     {
-        if (!$this->validateData($data, 'Message')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 避免无关参数及初始化部分数据
         unset($data['message_id'], $data['page_views']);
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
@@ -91,15 +90,14 @@ class Message extends CareyShop
     /**
      * 添加一条私有函(内部调用)
      * @access public
-     * @param  array $data       消息结构数据
-     * @param  array $clientId   账号编号
-     * @param  int   $clientType 消息成员组 0=顾客组 1=管理组
+     * @param array $data       消息结构数据
+     * @param array $clientId   账号编号
+     * @param int   $clientType 消息成员组 0=顾客组 1=管理组
      * @return bool
-     * @throws
      */
     public function inAddMessageItem($data, $clientId, $clientType)
     {
-        if (!$this->validateData($data, 'Message')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -108,12 +106,11 @@ class Message extends CareyShop
         unset($data['message_id'], $data['page_views']);
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
-            if (false === $this->allowField(true)->save($data)) {
-                throw new \Exception($this->getError());
-            }
+            // 保存主数据
+            $this->save($data);
 
             $messageUserData = [];
             $clientType = $clientType == 0 ? 'user_id' : 'admin_id';
@@ -127,15 +124,12 @@ class Message extends CareyShop
                 ];
             }
 
-            $messageUserDb = new MessageUser();
-            if (false === $messageUserDb->insertAll($messageUserData)) {
-                throw new \Exception($messageUserDb->getError());
-            }
+            MessageUser::insertAll($messageUserData);
+            $this->commit();
 
-            self::commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -143,33 +137,31 @@ class Message extends CareyShop
     /**
      * 编辑一条消息
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function setMessageItem($data)
     {
-        if (!$this->validateSetData($data, 'Message.set')) {
+        if (!$this->validateSetData($data, 'set')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['message_id'] = ['eq', $data['message_id']];
-            $map['member'] = ['neq', 0];
-            $map['is_delete'] = ['eq', 0];
+        // 搜索条件
+        $map[] = ['message_id', '=', $data['message_id']];
+        $map[] = ['member', '<>', 0];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('消息不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('消息不存在');
         }
 
         if ($result->getAttr('status') === 1) {
             return $this->setError('消息已发布，不允许编辑！');
         }
 
-        if (false !== $result->allowField(true)->isUpdate(true)->save($data)) {
+        if ($result->save($data)) {
             return $result->toArray();
         }
 
@@ -179,78 +171,66 @@ class Message extends CareyShop
     /**
      * 批量删除消息
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delMessageList($data)
     {
-        if (!$this->validateData($data, 'Message.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $map['message_id'] = ['in', $data['message_id']];
-        $map['member'] = ['neq', 0];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['message_id', 'in', $data['message_id']];
+        $map[] = ['member', '<>', 0];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->save(['is_delete' => 1], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['is_delete' => 1], $map);
+        return true;
     }
 
     /**
      * 批量正式发布消息
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setMessageStatus($data)
     {
-        if (!$this->validateData($data, 'Message.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['message_id'] = ['in', $data['message_id']];
-        $map['member'] = ['neq', 0];
-        $map['status'] = ['eq', 0];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['message_id', 'in', $data['message_id']];
+        $map[] = ['member', '<>', 0];
+        $map[] = ['status', '=', 0];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->save(['status' => 1], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['status' => 1], $map);
+        return true;
     }
 
     /**
      * 获取一条消息(后台)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getMessageItem($data)
     {
-        if (!$this->validateData($data, 'Message.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['message_id'] = ['eq', $data['message_id']];
-            $map['member'] = ['neq', 0];
-            $map['is_delete'] = ['eq', 0];
+        $map[] = ['message_id', '=', $data['message_id']];
+        $map[] = ['member', '<>', 0];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->where($map)->find();
+        return is_null($result) ? null : $result->toArray();
     }
 
+    // todo 不想继续了,暂存
     /**
      * 用户获取一条消息
      * @access public
