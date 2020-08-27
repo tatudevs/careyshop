@@ -284,7 +284,7 @@ class UserAddress extends CareyShop
      */
     public function isAddressMaximum($data)
     {
-        if (!$this->validateData($data, 'UserAddress.maximum')) {
+        if (!$this->validateData($data, 'maximum')) {
             return false;
         }
 
