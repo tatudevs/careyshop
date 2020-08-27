@@ -5,13 +5,19 @@
  * CareyShop    商品属性模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/7
+ * @date        2020/8/27
  */
 
 namespace app\common\model;
 
 class GoodsAttribute extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'goods_attribute_id';
+
     /**
      * 隐藏属性
      * @var array
@@ -46,14 +52,13 @@ class GoodsAttribute extends CareyShop
     ];
 
     /**
-     * 查询范围
-     * @access protected
-     * @param  object $query 模型
-     * @return void
+     * 全局是否删除查询条件
+     * @access public
+     * @param GoodsAttribute $query 模型
      */
-    protected function scopeDelete($query)
+    public function scopeDelete($query)
     {
-        $query->where(['is_delete' => ['eq', 0]]);
+        $query->where('is_delete', '=', 0);
     }
 
     /**
@@ -63,26 +68,25 @@ class GoodsAttribute extends CareyShop
      */
     public function getAttribute()
     {
-        return $this->hasMany('GoodsAttribute', 'parent_id');
+        return $this->hasMany(GoodsAttribute::class, 'parent_id');
     }
 
     /**
      * 添加一个商品属性主体
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addAttributeBodyItem($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.body')) {
+        if (!$this->validateData($data, 'body')) {
             return false;
         }
 
         $field = ['attr_name', 'description', 'icon', 'goods_type_id', 'sort'];
         $hidden = ['attr_index', 'attr_input_type', 'attr_values', 'is_important'];
 
-        if (false !== $this->allowField($field)->save($data)) {
+        if ($this->allowField($field)->save($data)) {
             return $this->hidden($hidden)->toArray();
         }
 
@@ -92,97 +96,81 @@ class GoodsAttribute extends CareyShop
     /**
      * 编辑一个商品属性主体
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setAttributeBodyItem($data)
     {
-        if (!$this->validateSetData($data, 'GoodsAttribute.bodyset')) {
+        if (!$this->validateData($data, 'bodyset', true)) {
             return false;
         }
 
-        $map['goods_attribute_id'] = ['eq', $data['goods_attribute_id']];
-        $map['parent_id'] = ['eq', 0];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['goods_attribute_id', '=', $data['goods_attribute_id']];
+        $map[] = ['parent_id', '=', 0];
+        $map[] = ['is_delete', '=', 0];
 
         $field = ['goods_type_id', 'attr_name', 'description', 'icon', 'sort'];
-        if (false !== $this->allowField($field)->save($data, $map)) {
-            return $this->toArray();
-        }
+        $result = self::update($data, $map, $field);
 
-        return false;
+        return $result->toArray();
     }
 
     /**
      * 获取一个商品属性主体
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAttributeBodyItem($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $map['goods_attribute_id'] = ['eq', $data['goods_attribute_id']];
-        $map['parent_id'] = ['eq', 0];
+        $map[] = ['goods_attribute_id', '=', $data['goods_attribute_id']];
+        $map[] = ['parent_id', '=', 0];
 
         $field = 'goods_attribute_id,attr_name,description,icon,goods_type_id,sort';
-        $result = self::scope('delete')->field($field)->where($map)->find();
+        $result = $this->scope('delete')->field($field)->where($map)->find();
 
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取商品属性主体列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAttributeBodyList($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
-        $map['goods_type_id'] = ['eq', $data['goods_type_id']];
-        $map['parent_id'] = ['eq', 0];
-        isset($data['attribute_all']) && $data['attribute_all'] == 1 ?: $map['is_delete'] = ['eq', 0];
+        $map[] = ['goods_type_id', '=', $data['goods_type_id']];
+        $map[] = ['parent_id', '=', 0];
+        isset($data['attribute_all']) && $data['attribute_all'] == 1 ?: $map[] = ['is_delete', '=', 0];
 
-        $order['sort'] = 'asc';
-        $order['goods_attribute_id'] = 'asc';
-
-        $result = $this
+        return $this->setDefaultOrder(['goods_attribute_id' => 'asc'], ['sort' => 'asc'])
             ->field('goods_attribute_id,attr_name,description,icon,goods_type_id,sort')
             ->where($map)
-            ->order($order)
-            ->select();
-
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return false;
+            ->withSearch(['order'])
+            ->select()
+            ->toArray();
     }
 
     /**
      * 添加一个商品属性
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addAttributeItem($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -199,7 +187,7 @@ class GoodsAttribute extends CareyShop
             $data['attr_index'] = 0;
         }
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
@@ -209,13 +197,12 @@ class GoodsAttribute extends CareyShop
     /**
      * 编辑一个商品属性
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setAttributeItem($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -232,79 +219,65 @@ class GoodsAttribute extends CareyShop
             $data['attr_index'] = 0;
         }
 
-        $map['goods_attribute_id'] = ['eq', $data['goods_attribute_id']];
-        $map['parent_id'] = ['neq', 0];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['goods_attribute_id', '=', $data['goods_attribute_id']];
+        $map[] = ['parent_id', '<>', 0];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            return $this->toArray();
-        }
-
-        return false;
+        $result = self::update($data, $map);
+        return $result->toArray();
     }
 
     /**
      * 获取一个商品属性
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAttributeItem($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $map['goods_attribute_id'] = ['eq', $data['goods_attribute_id']];
-        $map['parent_id'] = ['neq', 0];
+        $map[] = ['goods_attribute_id', '=', $data['goods_attribute_id']];
+        $map[] = ['parent_id', '<>', 0];
 
-        $result = self::scope('delete')->where($map)->find();
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->scope('delete')->where($map)->find();
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取商品属性列表(可翻页)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAttributePage($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.page')) {
+        if (!$this->validateData($data, 'page')) {
             return false;
         }
 
         // 搜索条件
-        $map = [];
-        $map['parent_id'] = ['eq', 0];
-        empty($data['goods_type_id']) ?: $map['goods_type_id'] = ['eq', $data['goods_type_id']];
-        isset($data['attribute_all']) && $data['attribute_all'] == 1 ?: $map['is_delete'] = ['eq', 0];
+        $map['parent_id'] = 0;
+        empty($data['goods_type_id']) ?: $map['goods_type_id'] = $data['goods_type_id'];
+        isset($data['attribute_all']) && $data['attribute_all'] == 1 ?: $map['is_delete'] = 0;
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 关联查询
+        $with = ['get_attribute' => function ($query) use ($data, $map) {
+            $withMap = [];
+            !isset($map['is_delete']) ?: $withMap['is_delete'] = $map['is_delete'];
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
             $orderType = !empty($data['order_type']) ? $data['order_type'] : 'asc';
-
-            // 排序的字段
             $orderField = !empty($data['order_field']) ? $data['order_field'] : 'goods_attribute_id';
 
-            // 排序处理
             $order['sort'] = 'asc';
             $order[$orderField] = $orderType;
 
@@ -312,140 +285,128 @@ class GoodsAttribute extends CareyShop
                 $order = array_reverse($order);
             }
 
-            $with = ['getAttribute' => function ($query) use ($order, $map) {
-                $withMap = [];
-                !isset($map['is_delete']) ?: $withMap['is_delete'] = $map['is_delete'];
+            $query->where($withMap)->order($order);
+        }];
 
-                $query->where($withMap)->order($order);
-            }];
+        // 返回字段
+        $field = 'goods_attribute_id,attr_name,description,icon,goods_type_id,sort';
 
-            $query
-                ->field('goods_attribute_id,attr_name,description,icon,goods_type_id,sort')
-                ->with($with)
-                ->where($map)
-                ->order($order)
-                ->page($pageNo, $pageSize);
-        });
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['goods_attribute_id' => 'asc'], ['sort' => 'asc'])
+            ->field($field)
+            ->with($with)
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 
     /**
      * 获取商品属性列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getAttributeList($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $map['goods_type_id'] = ['eq', $data['goods_type_id']];
-            $map['parent_id'] = ['eq', 0];
-            isset($data['attribute_all']) && $data['attribute_all'] == 1 ?: $map['is_delete'] = ['eq', 0];
+        // 搜索条件
+        $map['goods_type_id'] = $data['goods_type_id'];
+        $map['parent_id'] = 0;
+        isset($data['attribute_all']) && $data['attribute_all'] == 1 ?: $map['is_delete'] = 0;
 
-            $order['sort'] = 'asc';
-            $order['goods_attribute_id'] = 'asc';
+        // 排序方式
+        $order['sort'] = 'asc';
+        $order['goods_attribute_id'] = 'asc';
 
-            $with = ['getAttribute' => function ($query) use ($order, $map) {
-                $withMap['is_delete'] = isset($map['is_delete']) ? $map['is_delete'] : [];
-                $query->where($withMap)->order($order);
-            }];
+        // 关联查询
+        $with = ['get_attribute' => function ($query) use ($order, $map) {
+            $withMap['is_delete'] = isset($map['is_delete']) ? $map['is_delete'] : [];
+            $query->where($withMap)->order($order);
+        }];
 
-            $query
-                ->field('goods_attribute_id,attr_name,description,icon,goods_type_id,sort')
-                ->with($with)
-                ->where($map)
-                ->order($order);
-        });
+        // 返回字段
+        $field = 'goods_attribute_id,attr_name,description,icon,goods_type_id,sort';
 
-        if (false !== $result) {
-            $attrData = $result->toArray();
-            foreach ($attrData as $value) {
-                foreach ($value['get_attribute'] as &$item) {
-                    $item['result'] = '';
-                }
+        $result = $this->field($field)
+            ->with($with)
+            ->where($map)
+            ->order($order)
+            ->select()
+            ->toArray();
+
+        foreach ($result as $value) {
+            foreach ($value['get_attribute'] as &$item) {
+                $item['result'] = '';
             }
-
-            return [
-                'attr_config' => $attrData,
-                'attr_key'    => array_column($attrData, 'goods_attribute_id'),
-            ];
         }
 
-        return false;
+        return [
+            'attr_config' => $result,
+            'attr_key'    => array_column($result, 'goods_attribute_id'),
+        ];
     }
 
     /**
      * 批量设置商品属性检索
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setAttributeKey($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.key')) {
+        if (!$this->validateData($data, 'key')) {
             return false;
         }
 
-        $map['goods_attribute_id'] = ['in', $data['goods_attribute_id']];
-        $map['parent_id'] = ['neq', 0];
+        $map[] = ['goods_attribute_id', 'in', $data['goods_attribute_id']];
+        $map[] = ['parent_id', '<>', 0];
 
-        if (false !== $this->save(['attr_index' => $data['attr_index']], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['attr_index' => $data['attr_index']], $map);
+        return true;
     }
 
     /**
      * 批量设置商品属性是否核心
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setAttributeImportant($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.important')) {
+        if (!$this->validateData($data, 'important')) {
             return false;
         }
 
-        $map['goods_attribute_id'] = ['in', $data['goods_attribute_id']];
-        $map['parent_id'] = ['neq', 0];
+        $map[] = ['goods_attribute_id', 'in', $data['goods_attribute_id']];
+        $map[] = ['parent_id', '<>', 0];
 
-        if (false !== $this->save(['is_important' => $data['is_important']], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['is_important' => $data['is_important']], $map);
+        return true;
     }
 
     /**
      * 设置主体或属性的排序值
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setAttributeSort($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['goods_attribute_id'] = ['eq', $data['goods_attribute_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            return true;
-        }
+        $map[] = ['goods_attribute_id', '=', $data['goods_attribute_id']];
+        self::update(['sort' => $data['sort']], $map);
 
-        return false;
+        return true;
     }
 
     /**
@@ -457,7 +418,7 @@ class GoodsAttribute extends CareyShop
      */
     public function setAttributeIndex($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -466,40 +427,33 @@ class GoodsAttribute extends CareyShop
             $list[] = ['goods_attribute_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            return true;
-        }
-
-        return false;
+        $this->saveAll($list);
+        return true;
     }
 
     /**
      * 批量删除商品主体或属性
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
     public function delAttributeList($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $result = self::all($data['goods_attribute_id']);
-        if (false === $result) {
-            return false;
-        }
-
+        $result = $this->select($data['goods_attribute_id']);
         foreach ($result as $value) {
             // 获取当前商品属性Id
             $attributeId = $value->getAttr('goods_attribute_id');
 
             if ($value->getAttr('parent_id') === 0) {
-                $this->update(['is_delete' => 1], ['parent_id' => ['eq', $attributeId]]);
+                self::update(['is_delete' => 1], ['parent_id' => $attributeId]);
             }
 
-            $value->save(['is_delete' => 1], ['goods_attribute_id' => ['eq', $attributeId]]);
+            $value::update(['is_delete' => 1], ['goods_attribute_id' => $attributeId]);
         }
 
         return true;
@@ -508,24 +462,19 @@ class GoodsAttribute extends CareyShop
     /**
      * 获取基础数据索引列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
     public function getAttributeData($data)
     {
-        if (!$this->validateData($data, 'GoodsAttribute.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
-        $map['goods_type_id'] = ['eq', $data['goods_type_id']];
-        isset($data['attribute_all']) && $data['attribute_all'] == 1 ?: $map['is_delete'] = ['eq', 0];
+        $map[] = ['goods_type_id', '=', $data['goods_type_id']];
+        isset($data['attribute_all']) && $data['attribute_all'] == 1 ?: $map[] = ['is_delete', '=', 0];
 
         $field = 'goods_attribute_id,parent_id,attr_name,description,icon,is_important';
-        $result = $this->where($map)->column($field);
-        if (false !== $result) {
-            return $result;
-        }
-
-        return false;
+        return $this->where($map)->column($field, 'goods_attribute_id');
     }
 }
