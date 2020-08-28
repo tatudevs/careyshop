@@ -254,12 +254,12 @@ class Message extends CareyShop
 
         // 验证是否有阅读权限
         $map = [
-            ['message_id', '=', $result->getAttr('message_id')],
+            ['message_id', '=', $data['message_id']],
             [is_client_admin() ? 'admin_id' : 'user_id', '=', get_client_id()],
         ];
 
         $userDb = new MessageUser();
-        $userResult = $userDb->where($map)->value('is_delete', 1);
+        $userResult = $userDb->where($map)->value('is_delete');
 
         switch ($result->getAttr('member')) {
             case 0:
