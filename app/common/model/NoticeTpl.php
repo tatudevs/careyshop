@@ -5,15 +5,15 @@
  * CareyShop    通知系统模板模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/7/18
+ * @date        2020/8/28
  */
 
 namespace app\common\model;
 
 use app\common\service\Notice;
 use PHPMailer\PHPMailer\PHPMailer;
-use think\Cache;
-use think\Config;
+use think\facade\Cache;
+use think\facade\Config;
 use aliyun\SendSmsRequest;
 use aliyun\core\Config as AliyunConfig;
 use aliyun\core\profile\DefaultProfile;
@@ -46,6 +46,12 @@ class NoticeTpl extends CareyShop
     private $noticeItem;
 
     /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'notice_tpl_id';
+
+    /**
      * 只读属性
      * @var array
      */
@@ -73,114 +79,102 @@ class NoticeTpl extends CareyShop
      */
     public function getNoticeItem()
     {
-        return $this->hasMany('NoticeItem', 'type', 'type');
+        return $this->hasMany(NoticeItem::class, 'type', 'type');
     }
 
     /**
      * 获取通知系统模板列表(不包括关联数据,不对外,模型内部调用)
      * @access public
-     * @param  int    $type 通知类型
-     * @param  string $code 通知编码
+     * @param int  $type 通知类型
+     * @param null $code 通知编码
      * @return array|false
      * @throws
      */
     public function getNoticeTplData($type, $code = null)
     {
-        $map['type'] = ['eq', $type];
-        !isset($code) ?: $map['code'] = ['eq', $code];
-        $result = $this->cache(true, null, 'NoticeTpl')->where($map)->select();
+        $map[] = ['type', '=', $type];
+        !isset($code) ?: $map[] = ['code', '=', $code];
 
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return false;
+        return $this->cache(true, null, 'NoticeTpl')
+            ->where($map)
+            ->select()
+            ->toArray();
     }
 
     /**
      * 获取一个通知系统模板
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getNoticeTplItem($data)
     {
-        if (!$this->validateData($data, 'NoticeTpl.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
         // 搜索条件
-        $map['notice_tpl_id'] = ['eq', $data['notice_tpl_id']];
+        $map[] = ['notice_tpl_id', '=', $data['notice_tpl_id']];
+
+        // 关联查询
+        $with['get_notice_item'] = function ($query) {
+            $query->cache(true, null, 'NoticeTpl');
+        };
 
         // 获取数据
-        $result = self::get(function ($query) use ($map) {
-            $with['getNoticeItem'] = function ($query) {
-                $query->cache(true, null, 'NoticeTpl');
-            };
+        $result = $this->cache(true, null, 'NoticeTpl')
+            ->with($with)
+            ->where($map)
+            ->find();
 
-            $query
-                ->cache(true, null, 'NoticeTpl')
-                ->with($with)
-                ->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取通知系统模板列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getNoticeTplList($data)
     {
-        if (!$this->validateData($data, 'NoticeTpl.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
-        // 获取数据
-        $result = self::all(function ($query) use ($data) {
-            $map = [];
-            !isset($data['code']) ?: $map['code'] = ['eq', $data['code']];
+        // 搜索条件
+        $map = [];
+        !isset($data['code']) ?: $map[] = ['code', '=', $data['code']];
 
-            $query->with('getNoticeItem')->where($map);
-        });
-
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return false;
+        return $this->with('get_notice_item')
+            ->where($map)
+            ->select()
+            ->toArray();
     }
 
     /**
      * 编辑一个通知系统模板
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function setNoticeTplItem($data)
     {
-        if (!$this->validateData($data, 'NoticeTpl.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['notice_tpl_id']);
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->find($data['notice_tpl_id']);
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         // 再次验证数据是否规范
         $code = $result->getAttr('code');
-        if (!$this->validateData($data, 'NoticeTpl.set_' . $code)) {
+        if (!$this->validateData($data, 'set_' . $code)) {
             return false;
         }
 
@@ -189,8 +183,8 @@ class NoticeTpl extends CareyShop
             unset($data['sms_sign']);
         }
 
-        if (false !== $result->allowField(true)->save($data)) {
-            Cache::clear('NoticeTpl');
+        if ($result->save($data)) {
+            Cache::tag('NoticeTpl')->clear();
             return $result->toArray();
         }
 
@@ -200,35 +194,33 @@ class NoticeTpl extends CareyShop
     /**
      * 批量设置通知系统模板是否启用
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setNoticeTplStatus($data)
     {
-        if (!$this->validateData($data, 'NoticeTpl.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['notice_tpl_id'] = ['in', $data['notice_tpl_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            Cache::clear('NoticeTpl');
-            return true;
-        }
+        $map[] = ['notice_tpl_id', 'in', $data['notice_tpl_id']];
+        self::update(['status' => $data['status']], $map);
+        Cache::tag('NoticeTpl')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 发送通知
      * @access public
-     * @param  string $mobile 手机号
-     * @param  string $email  邮箱地址
-     * @param  int    $type   通知类型
-     * @param  string $code   通知编码 sms或email(为空则根据设置判断,否则为指定发送)
-     * @param  array  $data   发送数据(如订单号则需要从外部传入,而验证码就不需要)
+     * @param string $mobile 手机号
+     * @param string $email  邮箱地址
+     * @param int    $type   通知类型
+     * @param null   $code   通知编码 sms或email(为空则根据设置判断,否则为指定发送)
+     * @param array  $data   发送数据(如订单号则需要从外部传入,而验证码就不需要)
      * @return bool
      */
-    public function sendNotice($mobile = '', $email = '', $type, $code = null, $data = [])
+    public function sendNotice($mobile, $email, $type, $code = null, $data = [])
     {
         if (empty($mobile) && empty($email)) {
             return $this->setError('手机号或邮箱地址不能为空');
@@ -238,11 +230,11 @@ class NoticeTpl extends CareyShop
         $isSmsClose = $isEmailClose = false;
         $this->setting = Notice::getNoticeList();
 
-        if (empty($this->setting['sms']['value']['status']['value'])) {
+        if (empty($this->setting['sms']['status']['value'])) {
             $isSmsClose = true;
         }
 
-        if (empty($this->setting['email']['value']['status']['value'])) {
+        if (empty($this->setting['email']['status']['value'])) {
             $isEmailClose = true;
         }
 
@@ -263,10 +255,6 @@ class NoticeTpl extends CareyShop
 
         // 获取通知系统模板数据
         $tplResult = $this->getNoticeTplData($type, $code);
-        if (false === $tplResult) {
-            return false;
-        }
-
         foreach ($tplResult as $value) {
             if ('sms' == $value['code'] && !$isSmsClose) {
                 $this->smsSetting = $value;
@@ -303,8 +291,8 @@ class NoticeTpl extends CareyShop
         // 根据通知类型获取可用变量(缓存)
         $error = '';
         $this->noticeItem = NoticeItem::cache()
-            ->where(['type' => ['eq', $type]])
-            ->column('item_name,replace_name', 'item_name');
+            ->where('type', '=', $type)
+            ->column('replace_name', 'item_name');
 
         if (!empty($mobile) && !$isSmsClose && isset($this->smsSetting) && 1 == $this->smsSetting['status']) {
             if (!$this->snedNoticeSms($mobile, $data)) {
@@ -324,8 +312,8 @@ class NoticeTpl extends CareyShop
     /**
      * 模板转实际发送数据
      * @access private
-     * @param  string $code  通知编码
-     * @param  array  &$data 内部提交数据
+     * @param string  $code 通知编码
+     * @param array  &$data 内部提交数据
      * @return mixed
      */
     private function templateToSendContent($code, &$data)
@@ -338,7 +326,7 @@ class NoticeTpl extends CareyShop
                     break;
 
                 case '{商城名称}':
-                    $value = Config::get('name.value', 'system_info');
+                    $value = Config::get('careyshop.system_info.name', '');
                     break;
 
                 case '{用户账号}':
@@ -429,8 +417,8 @@ class NoticeTpl extends CareyShop
     /**
      * 发送手机短信
      * @access private
-     * @param  string $mobile 手机号
-     * @param  array  &$data  发送数据
+     * @param string  $mobile 手机号
+     * @param array  &$data   发送数据
      * @return bool
      */
     private function snedNoticeSms($mobile, &$data)
@@ -451,10 +439,10 @@ class NoticeTpl extends CareyShop
         $endPointName = 'cn-hangzhou';
 
         // AccessKeyId
-        $keyId = $this->setting['sms']['value']['key_id']['value'];
+        $keyId = $this->setting['sms']['key_id']['value'];
 
         // AccessKeySecret
-        $keySecret = $this->setting['sms']['value']['key_secret']['value'];
+        $keySecret = $this->setting['sms']['key_secret']['value'];
 
         // 初始化用户Profile实例
         $profile = DefaultProfile::getProfile($region, $keyId, $keySecret);
@@ -496,10 +484,10 @@ class NoticeTpl extends CareyShop
     /**
      * 发送邮件
      * @access private
-     * @param  string $email      邮箱号码
-     * @param  string $subject    邮件主题
-     * @param  array  &$data      发送数据
-     * @param  string $attachment 附件列表
+     * @param string  $email      邮箱号码
+     * @param string  $subject    邮件主题
+     * @param array  &$data       发送数据
+     * @param null    $attachment 附件列表
      * @return bool
      * @throws
      */
@@ -527,23 +515,23 @@ class NoticeTpl extends CareyShop
         $mail->SMTPAuth = true;
 
         // 使用安全协议
-        $mail->SMTPSecure = $this->setting['email']['value']['email_ssl']['value'] == 0 ? 'tls' : 'ssl';
+        $mail->SMTPSecure = $this->setting['email']['email_ssl']['value'] == 0 ? 'tls' : 'ssl';
 
         // SMTP服务器
-        $mail->Host = $this->setting['email']['value']['email_host']['value'];
+        $mail->Host = $this->setting['email']['email_host']['value'];
 
         // SMTP服务器的端口号
-        $mail->Port = $this->setting['email']['value']['email_port']['value'];
+        $mail->Port = $this->setting['email']['email_port']['value'];
 
         // SMTP服务器用户名
-        $mail->Username = $this->setting['email']['value']['email_id']['value'];
+        $mail->Username = $this->setting['email']['email_id']['value'];
 
         // SMTP服务器密码
-        $mail->Password = $this->setting['email']['value']['email_pass']['value'];
+        $mail->Password = $this->setting['email']['email_pass']['value'];
 
-        $name = Config::get('name.value', 'system_info');
-        $mail->setFrom($this->setting['email']['value']['email_addr']['value'], $name);
-        $mail->addReplyTo($this->setting['email']['value']['email_addr']['value'], $name);
+        $name = Config::get('careyshop.system_info.name', '');
+        $mail->setFrom($this->setting['email']['email_addr']['value'], $name);
+        $mail->addReplyTo($this->setting['email']['email_addr']['value'], $name);
 
         // 设置收件人
         $mail->addAddress($email);

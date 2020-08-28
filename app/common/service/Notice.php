@@ -21,8 +21,8 @@ class Notice extends CareyShop
     {
         $result = config('careyshop.notice');
         foreach ($result as $key => $value) {
-            if (!empty($value['value'])) {
-                $result[$key]['value'] = json_decode($value['value'], true);
+            if (!empty($value)) {
+                $result[$key] = json_decode($value, true);
             }
         }
 
