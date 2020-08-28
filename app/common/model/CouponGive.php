@@ -5,13 +5,19 @@
  * CareyShop    优惠劵发放模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/5/20
+ * @date        2020/8/28
  */
 
 namespace app\common\model;
 
 class CouponGive extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'coupon_give_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -20,7 +26,7 @@ class CouponGive extends CareyShop
 
     /**
      * 更新日期字段
-     * @var bool/string
+     * @var bool|string
      */
     protected $updateTime = false;
 
@@ -54,10 +60,7 @@ class CouponGive extends CareyShop
      */
     public function getCoupon()
     {
-        return $this
-            ->belongsTo('Coupon', 'coupon_id')
-            ->field('is_delete', true)
-            ->setEagerlyType(0);
+        return $this->belongsTo('Coupon', 'coupon_id');
     }
 
     /**
@@ -68,11 +71,11 @@ class CouponGive extends CareyShop
     public function getUser()
     {
         return $this
-            ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('username,nickname,level_icon,head_pic')
-            ->setEagerlyType(0);
+            ->hasOne('User', 'user_id', 'user_id')
+            ->joinType('left');
     }
 
+    // todo
     /**
      * 使用优惠劵
      * @access public
