@@ -233,7 +233,7 @@ class AppInstall extends CareyShop
 
             // 自增访问次数
             $map[] = ['app_install_id', '=', $data['app_install_id']];
-            $this->where($map)->inc('count');
+            $this->where($map)->inc('count')->update();
         }
 
         return $data;

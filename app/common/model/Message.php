@@ -143,7 +143,7 @@ class Message extends CareyShop
      */
     public function setMessageItem($data)
     {
-        if (!$this->validateSetData($data, 'set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -230,38 +230,36 @@ class Message extends CareyShop
         return is_null($result) ? null : $result->toArray();
     }
 
-    // todo 不想继续了,暂存
     /**
      * 用户获取一条消息
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getMessageUserItem($data)
     {
-        if (!$this->validateData($data, 'Message.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['message_id'] = ['eq', $data['message_id']];
-            $map['status'] = ['eq', 1];
-            $map['is_delete'] = ['eq', 0];
+        $map[] = ['message_id', '=', $data['message_id']];
+        $map[] = ['status', '=', 1];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? null : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return null;
         }
 
         // 验证是否有阅读权限
-        $map['message_id'] = ['eq', $result->getAttr('message_id')];
-        $map[is_client_admin() ? 'admin_id' : 'user_id'] = ['eq', get_client_id()];
+        $map = [
+            ['message_id', '=', $result->getAttr('message_id')],
+            [is_client_admin() ? 'admin_id' : 'user_id', '=', get_client_id()],
+        ];
 
         $userDb = new MessageUser();
-        $userResult = $userDb->where($map)->value('is_delete', 1, true);
+        $userResult = $userDb->where($map)->value('is_delete', 1);
 
         switch ($result->getAttr('member')) {
             case 0:
@@ -282,7 +280,7 @@ class Message extends CareyShop
         }
 
         // 存在权限则需要插入记录与更新
-        $result->setInc('page_views');
+        $result->inc('page_views')->update();
         $userDb->updateMessageUserItem($data['message_id']);
 
         return $result->toArray();
@@ -291,86 +289,72 @@ class Message extends CareyShop
     /**
      * 获取消息列表(后台)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getMessageList($data)
     {
-        if (!$this->validateData($data, 'Message.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
-        empty($data['title']) ?: $map['title'] = ['like', '%' . $data['title'] . '%'];
-        is_empty_parm($data['is_top']) ?: $map['is_top'] = ['eq', $data['is_top']];
-        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
-        $map['member'] = !is_empty_parm($data['member']) ? ['eq', $data['member']] : ['neq', 0];
-        $map['is_delete'] = ['eq', 0];
+        $isMember = is_empty_parm($data['member']);
+        is_empty_parm($data['type']) ?: $map[] = ['type', '=', $data['type']];
+        empty($data['title']) ?: $map[] = ['title', 'like', '%' . $data['title'] . '%'];
+        is_empty_parm($data['is_top']) ?: $map[] = ['is_top', '=', $data['is_top']];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
+        $map[] = ['member', !$isMember ? '=' : '<>', !$isMember ? $data['member'] : 0];
+        $map[] = ['is_delete', '=', 0];
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['message_id' => 'desc'])
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'message_id';
-
-            $query
-                ->where($map)
-                ->order([$orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 
     /**
      * 用户获取未读消息数
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
-     * @throws
      */
     public function getMessageUserUnread($data)
     {
-        if (!$this->validateData($data, 'Message.unread')) {
+        if (!$this->validateData($data, 'unread')) {
             return false;
         }
 
+        // 获取用户编号(管理组或顾客组)
         $clientId = get_client_id();
+
         if (is_client_admin()) {
             $member = '= 2';
             $clientType = 'admin_id';
-            $createTime = Admin::where([$clientType => ['eq', $clientId]])->value('create_time');
+            $createTime = Admin::where($clientType, '=', $clientId)->value('create_time');
         } else {
             $member = '< 2';
             $clientType = 'user_id';
-            $createTime = User::where([$clientType => ['eq', $clientId]])->value('create_time');
+            $createTime = User::where($clientType, '=', $clientId)->value('create_time');
         }
 
-        is_empty_parm($data['type']) ?: $map['m.type'] = ['eq', $data['type']];
-        $map['m.status'] = ['eq', 1];
-        $map['m.is_delete'] = ['eq', 0];
-        $map['m.create_time'] = ['egt', $createTime];
+        is_empty_parm($data['type']) ?: $map[] = ['m.type', '=', $data['type']];
+        $map[] = ['m.status', '=', 1];
+        $map[] = ['m.is_delete', '=', 0];
+        $map[] = ['m.create_time', '>=', $createTime];
 
         // 构建子语句
-        $userSQL = MessageUser::where([$clientType => ['eq', $clientId]])->buildSql();
+        $userSQL = MessageUser::where($clientType, '=', $clientId)->buildSql();
 
         // 联合查询语句
         $userWhere_1 = '`u`.' . $clientType . ' IS NULL OR `u`.' . $clientType . ' = :' . $clientType;
@@ -389,44 +373,41 @@ class Message extends CareyShop
             ->group('`m`.`type`')
             ->select();
 
-        if (false !== $result) {
-            $total = $result->column('total', 'type');
-            $total['total'] = array_sum($total);
+        $total = $result->column('total', 'type');
+        $total['total'] = array_sum($total);
 
-            return $total;
-        }
-
-        return false;
+        return $total;
     }
 
     /**
      * 用户获取消息列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function getMessageUserList($data)
     {
-        if (!$this->validateData($data, 'Message.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
+        // 获取用户编号(管理组或顾客组)
         $clientId = get_client_id();
+
         if (is_client_admin()) {
             $member = '= 2';
             $clientType = 'admin_id';
-            $createTime = Admin::where([$clientType => ['eq', $clientId]])->value('create_time');
+            $createTime = Admin::where($clientType, '=', $clientId)->value('create_time');
         } else {
             $member = '< 2';
             $clientType = 'user_id';
-            $createTime = User::where([$clientType => ['eq', $clientId]])->value('create_time');
+            $createTime = User::where($clientType, '=', $clientId)->value('create_time');
         }
 
-        is_empty_parm($data['type']) ?: $map['m.type'] = ['eq', $data['type']];
-        $map['m.status'] = ['eq', 1];
-        $map['m.is_delete'] = ['eq', 0];
-        $map['m.create_time'] = ['egt', $createTime];
+        is_empty_parm($data['type']) ?: $map[] = ['m.type', '=', $data['type']];
+        $map[] = ['m.status', '=', 1];
+        $map[] = ['m.is_delete', '=', 0];
+        $map[] = ['m.create_time', '>=', $createTime];
         $mapRead = null;
 
         // 是否已读需要特殊对待
@@ -437,13 +418,13 @@ class Message extends CareyShop
                     break;
 
                 case 1:
-                    $mapRead = ['u.is_read' => ['eq', 1]];
+                    $mapRead[] = ['u.is_read', '=', 1];
                     break;
             }
         }
 
         // 构建子语句
-        $userSQL = MessageUser::where([$clientType => ['eq', $clientId]])->buildSql();
+        $userSQL = MessageUser::where($clientType, '=', $clientId)->buildSql();
 
         // 联合查询语句
         $userWhere_1 = '`u`.' . $clientType . ' IS NULL OR `u`.' . $clientType . ' = :' . $clientType;
@@ -472,27 +453,8 @@ class Message extends CareyShop
             return $message;
         }
 
-        // 翻页页数
-        $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
-
-        // 每页条数
-        $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-        // 排序方式
-        $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-        // 排序的字段
-        $orderField = !empty($data['order_field']) ? $data['order_field'] : 'message_id';
-
-        // 排序处理
-        $order['m.is_top'] = 'desc';
-        $order['m.' . $orderField] = $orderType;
-
-        if (!empty($data['order_field'])) {
-            $order = array_reverse($order);
-        }
-
-        $result = $this
+        // 实际查询
+        $result = $this->setDefaultOrder(['message_id' => 'desc'], ['is_top' => 'desc'])
             ->alias('m')
             ->field('m.message_id,m.type,m.title,m.url,m.is_top,m.target,ifnull(`u`.is_read, 0) is_read,m.create_time')
             ->join([$userSQL => 'u'], 'u.message_id = m.message_id', 'left')
@@ -501,15 +463,10 @@ class Message extends CareyShop
             ->where($userWhere_3)
             ->where($mapRead)
             ->where($map)
-            ->order($order)
-            ->page($pageNo, $pageSize)
+            ->withSearch(['page', 'order'], $data)
             ->select();
 
-        if (false !== $result) {
-            $message['items'] = $result->toArray();
-            return $message;
-        }
-
-        return false;
+        $message['items'] = $result->toArray();
+        return $message;
     }
 }
