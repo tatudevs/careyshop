@@ -244,7 +244,7 @@ class Upload extends UploadBase
      * @param string $resize 缩放方式
      * @return string
      */
-    private function getSizeParam($width, $height, $resize)
+    private function getSizeParam(int $width, int $height, string $resize)
     {
         $options = 'thumbnail/';
         if ('proportion' === $resize) {
@@ -267,7 +267,7 @@ class Upload extends UploadBase
      * @param int $height 高度
      * @return string
      */
-    private function getExtentParam($width, $height)
+    private function getExtentParam(int $width, int $height)
     {
         $options = '';
         if ($width != 0 && $height != 0) {
@@ -288,7 +288,7 @@ class Upload extends UploadBase
      * @param int $height 高度
      * @return string
      */
-    private function getCropParam($width, $height)
+    private function getCropParam(int $width, int $height)
     {
         $options = 'gravity/Center/crop/';
         $options .= $width != 0 ? (int)$width : '';
