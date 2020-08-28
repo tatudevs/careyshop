@@ -5,16 +5,22 @@
  * CareyShop    系统配置模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/2/12
+ * @date        2020/8/28
  */
 
 namespace app\common\model;
 
-use think\Config;
-use think\Cache;
+use think\facade\Cache;
+use think\facade\Config;
 
 class Setting extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'setting_id';
+
     /**
      * 只读属性
      * @var array
@@ -37,33 +43,25 @@ class Setting extends CareyShop
     /**
      * 获取某个模块的设置
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
+     * @throws
      */
     public function getSettingList($data)
     {
-        if (!$this->validateData($data, 'Setting.get')) {
+        if (!$this->validateData($data, 'get')) {
             return false;
         }
 
-        $result = Config::get(null, $data['module']);
+        $map[] = ['module', '=', $data['module']];
+        empty($data['code']) ?: $map[] = ['code', 'in', $data['code']];
+
+        $result = $this->where($map)->column('code,value,module,description,help_text', 'code');
         foreach ($result as &$value) {
             $temp = json_decode($value['value'], true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $value['value'] = $temp;
             }
-        }
-
-        unset($value);
-
-        if (!empty($data['code'])) {
-            foreach ($result as $key => $value) {
-                if (!in_array($key, $data['code'])) {
-                    unset($result[$key]);
-                }
-            }
-
-            unset($key, $value);
         }
 
         return $result;
@@ -72,56 +70,52 @@ class Setting extends CareyShop
     /**
      * 设置某个模块下的配置参数
      * @access private
-     * @param  string $key    键名
-     * @param  mixed  $value  值
-     * @param  string $module 模块
-     * @param  string $rule   规则
-     * @param  bool   $toJson 是否转为json
+     * @param string $key    键名
+     * @param mixed  $value  值
+     * @param string $module 模块
+     * @param string $scene  验证场景
+     * @param bool   $toJson 是否转为json
      * @throws \Exception
      */
-    private function setSettingItem($key, $value, $module, $rule, $toJson = false)
+    private function setSettingItem($key, $value, $module, $scene, $toJson = false)
     {
-        if (!$this->validateData(['value' => $value], $rule)) {
+        $data = ['value' => $value];
+        if (!$this->validateData($data, $scene)) {
             throw new \Exception($key . $this->getError());
         }
 
-        $map['code'] = ['eq', $key];
-        $map['module'] = ['eq', $module];
+        $map[] = ['code', '=', $key];
+        $map[] = ['module', '=', $module];
 
         !$toJson ?: $value = json_encode($value, JSON_UNESCAPED_UNICODE);
-        if (false === $this->where($map)->update(['value' => $value])) {
-            throw new \Exception($this->getError());
-        }
-
-        Config::set($key . '.value', $value, $module);
+        self::update(['value' => $value], $map);
     }
 
     /**
      * 设置配送轨迹
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function setDeliveryDistList($data)
     {
-        if (!$this->validateData($data, 'Setting.rule')) {
+        if (!$this->validateData($data, 'rule')) {
             return false;
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             foreach ($data['data'] as $key => $value) {
                 switch ($key) {
                     case 'api_id':
                     case 'api_key':
-                        $this->setSettingItem($key, $value, 'delivery_dist', 'Setting.string');
+                        $this->setSettingItem($key, $value, 'delivery_dist', 'string');
                         break;
 
                     case 'is_sub':
-                        $this->setSettingItem($key, $value, 'delivery_dist', 'Setting.status');
+                        $this->setSettingItem($key, $value, 'delivery_dist', 'status');
                         break;
 
                     default:
@@ -129,11 +123,11 @@ class Setting extends CareyShop
                 }
             }
 
-            self::commit();
-            Cache::rm('setting');
+            $this->commit();
+            Cache::delete('setting');
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -141,25 +135,24 @@ class Setting extends CareyShop
     /**
      * 设置支付完成提示页
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function setPaymentList($data)
     {
-        if (!$this->validateData($data, 'Setting.rule')) {
+        if (!$this->validateData($data, 'rule')) {
             return false;
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             foreach ($data['data'] as $key => $value) {
                 switch ($key) {
                     case 'success':
                     case 'error':
-                        $this->setSettingItem($key, $value, 'payment', 'Setting.string');
+                        $this->setSettingItem($key, $value, 'payment', 'string');
                         break;
 
                     default:
@@ -167,11 +160,11 @@ class Setting extends CareyShop
                 }
             }
 
-            self::commit();
-            Cache::rm('setting');
+            $this->commit();
+            Cache::delete('setting');
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -179,18 +172,17 @@ class Setting extends CareyShop
     /**
      * 设置配送优惠
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function setDeliveryList($data)
     {
-        if (!$this->validateData($data, 'Setting.rule')) {
+        if (!$this->validateData($data, 'rule')) {
             return false;
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             foreach ($data['data'] as $key => $value) {
@@ -200,24 +192,24 @@ class Setting extends CareyShop
                     case 'money':
                     case 'quota':
                     case 'dec_money':
-                        $this->setSettingItem($key, $value, 'delivery', 'Setting.float');
+                        $this->setSettingItem($key, $value, 'delivery', 'float');
                         break;
 
                     case 'number':
-                        $this->setSettingItem($key, $value, 'delivery', 'Setting.integer');
+                        $this->setSettingItem($key, $value, 'delivery', 'integer');
                         break;
 
                     case 'money_status':
                     case 'number_status':
                     case 'dec_status':
-                        $this->setSettingItem($key, $value, 'delivery', 'Setting.status');
+                        $this->setSettingItem($key, $value, 'delivery', 'status');
                         break;
 
                     case 'money_exclude':
                     case 'number_exclude':
                     case 'dec_exclude':
                         !empty($value) ?: $value = [];
-                        $this->setSettingItem($key, $value, 'delivery', 'Setting.int_array', true);
+                        $this->setSettingItem($key, $value, 'delivery', 'int_array', true);
                         break;
 
                     default:
@@ -225,11 +217,11 @@ class Setting extends CareyShop
                 }
             }
 
-            self::commit();
-            Cache::rm('setting');
+            $this->commit();
+            Cache::delete('setting');
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -237,18 +229,17 @@ class Setting extends CareyShop
     /**
      * 设置购物系统
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function setShoppingList($data)
     {
-        if (!$this->validateData($data, 'Setting.rule')) {
+        if (!$this->validateData($data, 'rule')) {
             return false;
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             foreach ($data['data'] as $key => $value) {
@@ -257,22 +248,22 @@ class Setting extends CareyShop
                     case 'integral':
                     case 'timeout':
                     case 'complete':
-                        $this->setSettingItem($key, $value, 'system_shopping', 'Setting.integer');
+                        $this->setSettingItem($key, $value, 'system_shopping', 'integer');
                         break;
 
                     case 'is_country':
-                        $this->setSettingItem($key, $value, 'system_shopping', 'Setting.status');
+                        $this->setSettingItem($key, $value, 'system_shopping', 'status');
                         break;
 
                     case 'spacer':
                     case 'source':
                         empty($value) && $value = '';
-                        $this->setSettingItem($key, $value, 'system_shopping', 'Setting.string');
+                        $this->setSettingItem($key, $value, 'system_shopping', 'string');
                         break;
 
                     case 'invoice':
                     case 'withdraw_fee':
-                        $this->setSettingItem($key, $value, 'system_shopping', 'Setting.between');
+                        $this->setSettingItem($key, $value, 'system_shopping', 'between');
                         break;
 
                     default:
@@ -280,11 +271,11 @@ class Setting extends CareyShop
                 }
             }
 
-            self::commit();
-            Cache::rm('setting');
+            $this->commit();
+            Cache::delete('setting');
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -292,32 +283,31 @@ class Setting extends CareyShop
     /**
      * 设置售后服务
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function setServiceList($data)
     {
-        if (!$this->validateData($data, 'Setting.rule')) {
+        if (!$this->validateData($data, 'rule')) {
             return false;
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             foreach ($data['data'] as $key => $value) {
                 switch ($key) {
                     case 'days':
                         !empty($value) ?: $value = 0;
-                        $this->setSettingItem($key, $value, 'service', 'Setting.integer');
+                        $this->setSettingItem($key, $value, 'service', 'integer');
                         break;
 
                     case 'address':
                     case 'consignee':
                     case 'zipcode':
                     case 'mobile':
-                        $this->setSettingItem($key, $value, 'service', 'Setting.string');
+                        $this->setSettingItem($key, $value, 'service', 'string');
                         break;
 
                     default:
@@ -325,11 +315,11 @@ class Setting extends CareyShop
                 }
             }
 
-            self::commit();
-            Cache::rm('setting');
+            $this->commit();
+            Cache::delete('setting');
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -337,18 +327,17 @@ class Setting extends CareyShop
     /**
      * 设置系统配置
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function setSystemList($data)
     {
-        if (!$this->validateData($data, 'Setting.rule')) {
+        if (!$this->validateData($data, 'rule')) {
             return false;
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             foreach ($data['data'] as $key => $value) {
@@ -360,7 +349,7 @@ class Setting extends CareyShop
                     case 'home_captcha':
                     case 'admin_captcha':
                         !empty($value) ?: $value = 0;
-                        $this->setSettingItem($key, $value, 'system_info', 'Setting.status');
+                        $this->setSettingItem($key, $value, 'system_info', 'status');
                         break;
 
                     case 'close_reason':
@@ -381,13 +370,13 @@ class Setting extends CareyShop
                     case 'third_count':
                     case 'qrcode_logo':
                     case 'platform':
-                        $this->setSettingItem($key, $value, 'system_info', 'Setting.string');
+                        $this->setSettingItem($key, $value, 'system_info', 'string');
                         break;
 
                     case 'allow_origin':
                     case 'card_auth':
                         !empty($value) ?: $value = [];
-                        $this->setSettingItem($key, $value, 'system_info', 'Setting.array', true);
+                        $this->setSettingItem($key, $value, 'system_info', 'array', true);
                         break;
 
                     default:
@@ -395,11 +384,11 @@ class Setting extends CareyShop
                 }
             }
 
-            self::commit();
-            Cache::rm('setting');
+            $this->commit();
+            Cache::delete('setting');
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -407,7 +396,7 @@ class Setting extends CareyShop
     /**
      * 检测上传大小是否符合服务器限制
      * @access private
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     private function checkPostMaxSize($data)
@@ -418,7 +407,7 @@ class Setting extends CareyShop
 
         $module = array_key_exists('default', $data)
             ? $data['default']
-            : Config::get('default.value', 'upload');
+            : Config::get('careyshop.upload.default');
 
         if (\oss\careyshop\Upload::MODULE !== $module) {
             return true;
@@ -426,7 +415,7 @@ class Setting extends CareyShop
 
         $fileSize = array_key_exists('file_size', $data)
             ? $data['file_size']
-            : Config::get('file_size.value', 'upload');
+            : Config::get('careyshop.upload.file_size');
 
         $serverSize = ini_get('upload_max_filesize');
         if (string_to_byte($fileSize) > string_to_byte($serverSize)) {
@@ -467,13 +456,12 @@ class Setting extends CareyShop
     /**
      * 设置上传配置
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function setUploadList($data)
     {
-        if (!$this->validateData($data, 'Setting.rule')) {
+        if (!$this->validateData($data, 'rule')) {
             return false;
         }
 
@@ -482,18 +470,18 @@ class Setting extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             foreach ($data['data'] as $key => $value) {
                 switch ($key) {
                     case 'default':
-                        $this->setSettingItem($key, $value, 'upload', 'Setting.default_oss');
+                        $this->setSettingItem($key, $value, 'upload', 'default_oss');
                         break;
 
                     case 'file_size':
                         !empty($value) ?: $value = '0M';
-                        $this->setSettingItem($key, $value, 'upload', 'Setting.string');
+                        $this->setSettingItem($key, $value, 'upload', 'string');
                         break;
 
                     case 'oss':
@@ -501,7 +489,7 @@ class Setting extends CareyShop
                     case 'qiniu_url':
                     case 'aliyun_url':
                         $this->checkUrl($key, $value);
-                        $this->setSettingItem($key, $value, 'upload', 'Setting.string');
+                        $this->setSettingItem($key, $value, 'upload', 'string');
                         break;
 
                     case 'image_ext':
@@ -514,12 +502,12 @@ class Setting extends CareyShop
                     case 'aliyun_bucket':
                     case 'aliyun_endpoint':
                     case 'aliyun_rolearn':
-                        $this->setSettingItem($key, $value, 'upload', 'Setting.string');
+                        $this->setSettingItem($key, $value, 'upload', 'string');
                         break;
 
                     case 'token_expires':
                         empty($value) && $value = 0;
-                        $this->setSettingItem($key, $value, 'upload', 'Setting.integer');
+                        $this->setSettingItem($key, $value, 'upload', 'integer');
                         break;
 
                     default:
@@ -527,11 +515,11 @@ class Setting extends CareyShop
                 }
             }
 
-            self::commit();
-            Cache::rm('setting');
+            $this->commit();
+            Cache::delete('setting');
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
