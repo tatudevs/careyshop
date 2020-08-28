@@ -5,13 +5,21 @@
  * CareyShop    优惠劵模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/5/18
+ * @date        2020/8/28
  */
 
 namespace app\common\model;
 
+use think\facade\Db;
+
 class Coupon extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'coupon_id';
+
     /**
      * 只读属性
      * @var array
@@ -47,26 +55,18 @@ class Coupon extends CareyShop
     ];
 
     /**
-     * 新增自动完成列表
-     * @var array
-     */
-    protected $insert = [
-        'give_code',
-    ];
-
-    /**
      * 领取码自动完成
-     * @access protected
-     * @param  array $args 参数
+     * @access private
+     * @param mixed $type 参数
      * @return string
      */
-    protected function setGiveCodeAttr(...$args)
+    private function getGiveCode($type)
     {
         $value = '';
-        if (isset($args[1]['type']) && 2 == $args[1]['type']) {
+        if (2 == $type) {
             do {
                 $value = get_randstr(10);
-            } while (self::checkUnique(['give_code' => ['eq', $value]]));
+            } while (self::checkUnique(['give_code' => $value]));
         }
 
         return $value;
@@ -75,13 +75,12 @@ class Coupon extends CareyShop
     /**
      * 添加一张优惠劵
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function addCouponItem($data)
     {
-        if (!$this->validateData($data, 'Coupon')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -90,8 +89,9 @@ class Coupon extends CareyShop
         !empty($data['category']) ?: $data['category'] = [];
         !empty($data['exclude_category']) ?: $data['exclude_category'] = [];
         !empty($data['level']) ?: $data['level'] = [];
+        $data['give_code'] = $this->getGiveCode($data['type']);
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return $this->toArray();
         }
 
@@ -101,13 +101,12 @@ class Coupon extends CareyShop
     /**
      * 编辑一张优惠劵
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function setCouponItem($data)
     {
-        if (!$this->validateSetData($data, 'Coupon.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -127,193 +126,155 @@ class Coupon extends CareyShop
             $data['level'] = [];
         }
 
-        $map['coupon_id'] = ['eq', $data['coupon_id']];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['coupon_id', '=', $data['coupon_id']];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            return $this->toArray();
-        }
-
-        return false;
+        $result = self::update($data, $map);
+        return $result->toArray();
     }
 
     /**
      * 获取一张优惠劵
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getCouponItem($data)
     {
-        if (!$this->validateData($data, 'Coupon.get')) {
+        if (!$this->validateData($data, 'get')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['coupon_id'] = ['eq', $data['coupon_id']];
-            $map['is_delete'] = ['eq', 0];
+        $map[] = ['coupon_id', '=', $data['coupon_id']];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->field('is_delete', true)->where($map);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->withoutField('is_delete')->where($map)->find();
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取优惠劵列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getCouponList($data)
     {
-        if (!$this->validateData($data, 'Coupon.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['is_delete'] = ['eq', 0];
-        empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-        is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
-        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
-        is_empty_parm($data['is_invalid']) ?: $map['is_invalid'] = ['eq', $data['is_invalid']];
+        $map[] = ['is_delete', '=', 0];
+        empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
+        is_empty_parm($data['type']) ?: $map[] = ['type', '=', $data['type']];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
+        is_empty_parm($data['is_invalid']) ?: $map[] = ['is_invalid', '=', $data['is_invalid']];
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['coupon_id' => 'desc'])
+            ->withoutField('is_delete')
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'coupon_id';
-
-            $query
-                ->field('is_delete', true)
-                ->where($map)
-                ->order([$orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 
     /**
      * 获取优惠劵选择列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
     public function getCouponSelect($data)
     {
-        if (!$this->validateData($data, 'Coupon.select')) {
+        if (!$this->validateData($data, 'select')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $map['is_delete'] = ['eq', 0];
-            is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
-            is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
-            is_empty_parm($data['is_invalid']) ?: $map['is_invalid'] = ['eq', $data['is_invalid']];
+        // 搜索条件
+        $map[] = ['is_delete', '=', 0];
+        is_empty_parm($data['type']) ?: $map[] = ['type', '=', $data['type']];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
+        is_empty_parm($data['is_invalid']) ?: $map[] = ['is_invalid', '=', $data['is_invalid']];
 
-            if (!empty($data['is_shelf_life'])) {
-                $map['give_end_time'] = ['> time', time()];
-                $map['use_end_time'] = ['> time', time()];
-            }
-
-            $query->where($map)->order(['coupon_id' => 'desc']);
-        });
-
-        if (false !== $result) {
-            return $result->toArray();
+        if (!empty($data['is_shelf_life'])) {
+            $map[] = ['give_end_time', '> time', time()];
+            $map[] = ['use_end_time', '> time', time()];
         }
 
-        return false;
+        return $this
+            ->where($map)
+            ->order(['coupon_id' => 'desc'])
+            ->select()
+            ->toArray();
     }
 
     /**
      * 批量删除优惠劵
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function delCouponList($data)
     {
-        if (!$this->validateData($data, 'Coupon.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $map['coupon_id'] = ['in', $data['coupon_id']];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['coupon_id', 'in', $data['coupon_id']];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->save(['is_delete' => 1], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['is_delete' => 1], $map);
+        return true;
     }
 
     /**
      * 批量设置优惠劵状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setCouponStatus($data)
     {
-        if (!$this->validateData($data, 'Coupon.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['coupon_id'] = ['in', $data['coupon_id']];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['coupon_id', 'in', $data['coupon_id']];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['status' => $data['status']], $map);
+        return true;
     }
 
     /**
      * 批量设置优惠劵是否失效
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
     public function setCouponInvalid($data)
     {
-        if (!$this->validateData($data, 'Coupon.invalid')) {
+        if (!$this->validateData($data, 'invalid')) {
             return false;
         }
 
-        $map['coupon_id'] = ['in', $data['coupon_id']];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['coupon_id', 'in', $data['coupon_id']];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->save(['is_invalid' => $data['is_invalid']], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['is_invalid' => $data['is_invalid']], $map);
+        return true;
     }
 
     /**
@@ -324,24 +285,23 @@ class Coupon extends CareyShop
      */
     public function getCouponActive()
     {
-        $map['type'] = ['eq', 2];
-        $map['give_num'] = ['exp', $this->raw('> `receive_num`')];
-        $map['give_begin_time'] = ['<= time', time()];
-        $map['give_end_time'] = ['> time', time()];
-        $map['status'] = ['eq', 1];
-        $map['is_invalid'] = ['eq', 0];
-        $map['is_delete'] = ['eq', 0];
+        // 搜索条件
+        $map[] = ['type', '=', 2];
+        $map[] = ['give_num', 'exp', Db::raw('> `receive_num`')];
+        $map[] = ['give_begin_time', '<= time', time()];
+        $map[] = ['give_end_time', '> time', time()];
+        $map[] = ['status', '=', 1];
+        $map[] = ['is_invalid', '=', 0];
+        $map[] = ['is_delete', '=', 0];
 
-        $result = self::all(function ($query) use ($map) {
-            $query
-                ->field('coupon_id,type,use_num,status,is_invalid,is_delete', true)
-                ->where($map);
-        });
+        // 过滤字段
+        $field = 'coupon_id,type,use_num,status,is_invalid,is_delete';
 
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return [];
+        // 实际查询
+        return $this
+            ->withoutField($field)
+            ->where($map)
+            ->select()
+            ->toArray();
     }
 }
