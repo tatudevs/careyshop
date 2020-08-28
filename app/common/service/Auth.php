@@ -46,7 +46,7 @@ class Auth extends CareyShop
      * @param string $module  所属模块
      * @param int    $groupId 用户组编号
      */
-    public function __construct($module, $groupId)
+    public function __construct(string $module, int $groupId)
     {
         // 获取权限数据
         $rule = AuthRule::getMenuAuthRule($module, $groupId);
@@ -69,7 +69,7 @@ class Auth extends CareyShop
      * @param string $url Url(模块/控制器/操作名)
      * @return bool
      */
-    public function check($url)
+    public function check(string $url)
     {
         /**
          * 不能直接返回,否则后台的权限勾选失去了意义
@@ -106,7 +106,7 @@ class Auth extends CareyShop
      * @param string $url Url(模块/控制器/操作名)
      * @return bool
      */
-    public function checkWhite($url)
+    public function checkWhite(string $url)
     {
         if (empty($this->whiteList)) {
             return false;
@@ -129,12 +129,12 @@ class Auth extends CareyShop
      * @access public
      * @param string $url     Url(模块/控制器/操作名)
      * @param object $request 请求对象
-     * @param array  $result  处理结果
+     * @param mixed  $result  处理结果
      * @param string $class   手动输入当前类
      * @param string $error   错误信息
      * @return void
      */
-    public function saveLog($url, $request, $result, $class, $error = '')
+    public function saveLog(string $url, $request, $result, string $class, $error = '')
     {
         // 转为小写
         $url = mb_strtolower($url, 'utf-8');

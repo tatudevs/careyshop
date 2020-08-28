@@ -58,7 +58,7 @@ class DeliveryArea extends CareyShop
      * @param int   $areaId 字段delivery_area_id
      * @return bool
      */
-    private function setRegionData(&$data, $areaId)
+    private function setRegionData(array &$data, int $areaId)
     {
         if (isset($data['region']) && is_array($data['region'])) {
             $data['region'] = array_unique($data['region']);
@@ -94,7 +94,7 @@ class DeliveryArea extends CareyShop
      * @return bool true:重复 false:不重复
      * @throws
      */
-    private function checkRegionUnique($source, $deliveryId, $areaId)
+    private function checkRegionUnique(array $source, int $deliveryId, int $areaId)
     {
         // 获取当前已存在的配送区域
         $map[] = ['delivery_id', '=', $deliveryId];
@@ -125,7 +125,7 @@ class DeliveryArea extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public function addAreaItem($data)
+    public function addAreaItem(array $data)
     {
         if (!$this->validateData($data) || !$this->setRegionData($data, 0)) {
             return false;
@@ -148,7 +148,7 @@ class DeliveryArea extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public function setAreaItem($data)
+    public function setAreaItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -182,7 +182,7 @@ class DeliveryArea extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAreaList($data)
+    public function delAreaList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -199,7 +199,7 @@ class DeliveryArea extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getAreaItem($data)
+    public function getAreaItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -216,7 +216,7 @@ class DeliveryArea extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getAreaList($data)
+    public function getAreaList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

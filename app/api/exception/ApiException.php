@@ -12,7 +12,6 @@ namespace app\api\exception;
 
 use think\exception\Handle;
 use think\exception\HttpException;
-use think\Request;
 use think\Response;
 use Throwable;
 
@@ -20,8 +19,8 @@ class ApiException extends Handle
 {
     /**
      * Render an exception into an HTTP response.
-     * @param Request   $request
-     * @param Throwable $e
+     * @param $request
+     * @param $e
      * @return Response
      */
     public function render($request, Throwable $e): Response

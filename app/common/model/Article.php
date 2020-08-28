@@ -64,7 +64,7 @@ class Article extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addArticleItem($data)
+    public function addArticleItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -86,7 +86,7 @@ class Article extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setArticleItem($data)
+    public function setArticleItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -104,7 +104,7 @@ class Article extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delArticleList($data)
+    public function delArticleList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -121,7 +121,7 @@ class Article extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getArticleItem($data)
+    public function getArticleItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -150,7 +150,7 @@ class Article extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getArticleList($data)
+    public function getArticleList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -204,7 +204,7 @@ class Article extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setArticleTop($data)
+    public function setArticleTop(array $data)
     {
         if (!$this->validateData($data, 'top')) {
             return false;
@@ -222,7 +222,7 @@ class Article extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setArticleStatus($data)
+    public function setArticleStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;

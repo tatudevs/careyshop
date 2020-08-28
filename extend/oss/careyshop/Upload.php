@@ -199,11 +199,10 @@ class Upload extends UploadBase
     /**
      * 保存资源并写入库
      * @access private
-     * @param  File $file 上传文件对象
+     * @param File $file 上传文件对象
      * @return array|string
-     * @throws
      */
-    private function saveFile($file)
+    private function saveFile(File $file)
     {
         if (!$file || !$file instanceof File) {
             return '请选择需要上传的附件';
@@ -323,11 +322,11 @@ class Upload extends UploadBase
     /**
      * 根据请求参数组合成hash值
      * @access private
-     * @param  array  $param 请求参数
-     * @param  string $path  资源路径
+     * @param array  $param 请求参数
+     * @param string $path  资源路径
      * @return string|false
      */
-    private function getFileSign($param, $path)
+    private function getFileSign(array $param, string $path)
     {
         if (!is_file($path)) {
             return false;
@@ -359,14 +358,14 @@ class Upload extends UploadBase
     /**
      * 组合新的URL或PATH
      * @access private
-     * @param  string $fileName 文件名
-     * @param  string $suffix   后缀
-     * @param  array  $fileInfo 原文件信息
-     * @param  array  $urlArray 外部URL信息
-     * @param  string $type     新的路径方式
+     * @param string $fileName 文件名
+     * @param string $suffix   后缀
+     * @param array  $fileInfo 原文件信息
+     * @param null   $urlArray 外部URL信息
+     * @param string $type     新的路径方式
      * @return string
      */
-    private function getNewUrl($fileName, $suffix, $fileInfo, $urlArray = null, $type = 'url')
+    private function getNewUrl(string $fileName, string $suffix, array $fileInfo, $urlArray = null, $type = 'url')
     {
         if ($type === 'url') {
             $url = $urlArray['scheme'] . '://';
@@ -403,7 +402,7 @@ class Upload extends UploadBase
      * @param mixed  $imageFile 图片文件
      * @param string $resize    缩放方式
      */
-    private function getSizeParam(&$width, &$height, $imageFile, $resize)
+    private function getSizeParam(int &$width, int &$height, $imageFile, string $resize)
     {
         if ('pad' === $resize) {
             $width <= 0 && $width = $height;
@@ -421,10 +420,10 @@ class Upload extends UploadBase
     /**
      * 获取资源缩略图实际路径
      * @access public
-     * @param  array $urlArray 路径结构
+     * @param array $urlArray 路径结构
      * @return string
      */
-    public function getThumbUrl($urlArray)
+    public function getThumbUrl(array $urlArray)
     {
         // 获取自定义后缀,不合法则使用原后缀
         $fileInfo = pathinfo($urlArray['path']);
@@ -539,10 +538,10 @@ class Upload extends UploadBase
     /**
      * 清除缩略图文件夹
      * @access public
-     * @param  string $path 路径
+     * @param string $path 路径
      * @return void
      */
-    public function clearThumb($path)
+    public function clearThumb(string $path)
     {
         // 去掉后缀名,获得目录路径
         $thumb = mb_substr($path, 0, mb_strripos($path, '.', null, 'utf-8'), 'utf-8');
@@ -557,10 +556,10 @@ class Upload extends UploadBase
     /**
      * 验证是否为图片
      * @access private
-     * @param  string $path 路径
+     * @param string $path 路径
      * @return bool
      */
-    private function checkImg($path)
+    private function checkImg(string $path)
     {
         $info = @getimagesize($path);
         if (false === $info || (IMAGETYPE_GIF === $info[2] && empty($info['bits']))) {
@@ -573,11 +572,11 @@ class Upload extends UploadBase
     /**
      * 响应实际下载路径
      * @access public
-     * @param  string $url      路径
-     * @param  string $filename 文件名
+     * @param string $url      路径
+     * @param string $filename 文件名
      * @return void
      */
-    public function getDownload($url, $filename = '')
+    public function getDownload(string $url, string $filename)
     {
         $fileInfo = parse_url($url);
         $filePath = ROOT_PATH . 'public' . $fileInfo['path'];
@@ -628,10 +627,10 @@ class Upload extends UploadBase
     /**
      * 获取资源缩略图信息
      * @access public
-     * @param  string $url 路径
+     * @param string $url 路径
      * @return array
      */
-    public function getThumbInfo($url)
+    public function getThumbInfo(string $url)
     {
         $info = [
             'size'   => 0,

@@ -40,7 +40,7 @@ class Help extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueHelpItem($data)
+    public function uniqueHelpItem(array $data)
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -64,7 +64,7 @@ class Help extends CareyShop
      * @param array $data 外部数据
      * @return bool|array
      */
-    public function addHelpItem($data)
+    public function addHelpItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -91,7 +91,7 @@ class Help extends CareyShop
      * @param array $data 外部数据
      * @return bool|array
      */
-    public function setHelpItem($data)
+    public function setHelpItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -115,7 +115,7 @@ class Help extends CareyShop
      * @return bool|array
      * @throws
      */
-    public function getHelpItem($data)
+    public function getHelpItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -132,7 +132,7 @@ class Help extends CareyShop
      * @return bool|array
      * @throws
      */
-    public function getHelpRouter($data)
+    public function getHelpRouter(array $data)
     {
         if (!$this->validateData($data, 'router')) {
             return false;
@@ -153,7 +153,7 @@ class Help extends CareyShop
      * @return bool|array
      * @throws
      */
-    public function getHelpList($data)
+    public function getHelpList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

@@ -123,7 +123,7 @@ class Qrcode extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addQrcodeItem($data)
+    public function addQrcodeItem(array $data)
     {
         if (!$this->validateData($data, 'add')) {
             return false;
@@ -145,7 +145,7 @@ class Qrcode extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setQrcodeItem($data)
+    public function setQrcodeItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -164,7 +164,7 @@ class Qrcode extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getQrcodeConfig($data)
+    public function getQrcodeConfig(array $data)
     {
         if (!$this->validateData($data, 'config')) {
             return false;
@@ -180,7 +180,7 @@ class Qrcode extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delQrcodeList($data)
+    public function delQrcodeList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -197,7 +197,7 @@ class Qrcode extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getQrcodeList($data)
+    public function getQrcodeList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

@@ -343,7 +343,7 @@ class UserMoney extends CareyShop
      * @return void
      * @throws
      */
-    private function setUserLevel($totalMoney, $clientId)
+    private function setUserLevel(float $totalMoney, int $clientId)
     {
         $result = UserLevel::where('amount', '<=', $totalMoney)
             ->order(['amount' => 'desc'])
@@ -366,7 +366,7 @@ class UserMoney extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getUserMoneyInfo($data)
+    public function getUserMoneyInfo(array $data)
     {
         if (!$this->validateData($data)) {
             return false;

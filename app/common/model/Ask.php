@@ -99,7 +99,7 @@ class Ask extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addAskItem($data)
+    public function addAskItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -137,7 +137,7 @@ class Ask extends CareyShop
      * @return bool
      * @throws
      */
-    public function delAskItem($data)
+    public function delAskItem(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -165,12 +165,12 @@ class Ask extends CareyShop
     /**
      * 在主题上提交一个提问或回答
      * @access private
-     * @param array $data 提交数据
-     * @param bool  $isQa true:咨询 false:回复
+     * @param array    $data 提交数据
+     * @param bool|int $isQa true:咨询 false:回复
      * @return false|array
      * @throws
      */
-    private function addAskOrAnswer($data, $isQa)
+    private function addAskOrAnswer(array $data, $isQa)
     {
         // 搜索条件
         $map[] = ['parent_id', '=', 0];
@@ -218,7 +218,7 @@ class Ask extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function replyAskItem($data)
+    public function replyAskItem(array $data)
     {
         if (!$this->validateData($data, 'reply')) {
             return false;
@@ -238,7 +238,7 @@ class Ask extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function continueAskItem($data)
+    public function continueAskItem(array $data)
     {
         if (!$this->validateData($data, 'continue')) {
             return false;
@@ -259,7 +259,7 @@ class Ask extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAskItem($data)
+    public function getAskItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -301,7 +301,7 @@ class Ask extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAskList($data)
+    public function getAskList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

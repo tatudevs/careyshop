@@ -41,7 +41,7 @@ abstract class CareyShop extends Model
      * @param array $map 查询条件
      * @return bool false:不存在
      */
-    public static function checkUnique($map)
+    public static function checkUnique(array $map)
     {
         if (empty($map)) {
             return true;
@@ -71,7 +71,7 @@ abstract class CareyShop extends Model
      * @param string $value 错误信息
      * @return bool
      */
-    public function setError($value)
+    public function setError(string $value)
     {
         $this->error = $value;
         return false;
@@ -80,9 +80,9 @@ abstract class CareyShop extends Model
     /**
      * 翻页搜索器
      * @access public
-     * @param CareyShop $query
-     * @param string    $value
-     * @param array     $data
+     * @param object $query
+     * @param mixed  $value
+     * @param mixed  $data
      */
     public function searchPageAttr($query, $value, $data)
     {
@@ -95,9 +95,9 @@ abstract class CareyShop extends Model
     /**
      * 排序搜索器
      * @access public
-     * @param CareyShop $query
-     * @param array     $value
-     * @param array     $data
+     * @param object $query
+     * @param mixed  $value
+     * @param mixed  $data
      */
     public function searchOrderAttr($query, $value, $data)
     {
@@ -128,7 +128,7 @@ abstract class CareyShop extends Model
      * @param array $fixed 固定排序
      * @return $this
      */
-    public function setDefaultOrder($order, $fixed = [])
+    public function setDefaultOrder(array $order, $fixed = [])
     {
         $this->defaultOrder = $order;
         $this->fixedOrder = $fixed;
@@ -145,7 +145,7 @@ abstract class CareyShop extends Model
      * @param string       $validate 验证器规则或类
      * @return bool
      */
-    public function validateData(&$data, $scene = null, $clean = false, $validate = '')
+    public function validateData(array &$data, $scene = null, $clean = false, $validate = '')
     {
         try {
             // 确定规则来源
@@ -189,7 +189,7 @@ abstract class CareyShop extends Model
      * @param array $name 需要修改的键名
      * @param array $data 源数据
      */
-    public static function keyToSnake($name, &$data)
+    public static function keyToSnake(array $name, array &$data)
     {
         if (!is_array($name)) {
             return;

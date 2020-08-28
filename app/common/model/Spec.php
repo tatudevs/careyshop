@@ -66,7 +66,7 @@ class Spec extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addSpecItem($data)
+    public function addSpecItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -111,7 +111,7 @@ class Spec extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setSpecItem($data)
+    public function setSpecItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -146,7 +146,7 @@ class Spec extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getSpecItem($data)
+    public function getSpecItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -178,7 +178,7 @@ class Spec extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getSpecPage($data)
+    public function getSpecPage(array $data)
     {
         if (!$this->validateData($data, 'page')) {
             return false;
@@ -228,7 +228,7 @@ class Spec extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getSpecList($data)
+    public function getSpecList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -316,7 +316,7 @@ class Spec extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delSpecList($data)
+    public function delSpecList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -348,7 +348,7 @@ class Spec extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setSpecKey($data)
+    public function setSpecKey(array $data)
     {
         if (!$this->validateData($data, 'key')) {
             return false;
@@ -366,7 +366,7 @@ class Spec extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setSpecSort($data)
+    public function setSpecSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;

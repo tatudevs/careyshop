@@ -47,7 +47,7 @@ class SpecGoods extends CareyShop
      * @return bool
      * @throws
      */
-    public function addGoodsSpec($goodsId, $data)
+    public function addGoodsSpec(int $goodsId, array $data)
     {
         // 处理部分数据,并进行验证
         foreach ($data as $key => $value) {

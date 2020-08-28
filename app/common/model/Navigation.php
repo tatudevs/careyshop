@@ -44,7 +44,7 @@ class Navigation extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addNavigationItem($data)
+    public function addNavigationItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -67,7 +67,7 @@ class Navigation extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setNavigationItem($data)
+    public function setNavigationItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -88,7 +88,7 @@ class Navigation extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delNavigationList($data)
+    public function delNavigationList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -107,7 +107,7 @@ class Navigation extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getNavigationItem($data)
+    public function getNavigationItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -123,7 +123,7 @@ class Navigation extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setNavigationTarget($data)
+    public function setNavigationTarget(array $data)
     {
         if (!$this->validateData($data, 'target')) {
             return false;
@@ -142,7 +142,7 @@ class Navigation extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setNavigationStatus($data)
+    public function setNavigationStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -162,7 +162,7 @@ class Navigation extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getNavigationList($data)
+    public function getNavigationList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -193,7 +193,7 @@ class Navigation extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setNavigationSort($data)
+    public function setNavigationSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;

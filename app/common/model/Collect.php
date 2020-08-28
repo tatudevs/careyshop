@@ -74,7 +74,7 @@ class Collect extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function addCollectItem($data)
+    public function addCollectItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -107,7 +107,7 @@ class Collect extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCollectList($data)
+    public function delCollectList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -137,7 +137,7 @@ class Collect extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCollectTop($data)
+    public function setCollectTop(array $data)
     {
         if (!$this->validateData($data, 'top')) {
             return false;
@@ -157,7 +157,7 @@ class Collect extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getCollectList($data)
+    public function getCollectList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -210,7 +210,7 @@ class Collect extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public function isCollectGoods($data)
+    public function isCollectGoods(array $data)
     {
         if (!$this->validateData($data, 'goods')) {
             return false;

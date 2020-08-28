@@ -55,7 +55,7 @@ class ServiceLog extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public function addServiceLogItem($data)
+    public function addServiceLogItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;

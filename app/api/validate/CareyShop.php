@@ -45,10 +45,10 @@ class CareyShop extends Validate
     /**
      * 验证时间戳是否在允许范围内
      * @access protected
-     * @param int $value 验证数据
+     * @param string $value 验证数据
      * @return string|true
      */
-    protected function checkTimestamp($value)
+    protected function checkTimestamp(string $value)
     {
         $timestamp = strtotime($value);
         if (false === $timestamp) {

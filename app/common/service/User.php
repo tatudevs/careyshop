@@ -21,7 +21,7 @@ class User extends CareyShop
      * @param array $data  待验证数据
      * @return bool
      */
-    private function checkField($rules, $data)
+    private function checkField(array $rules, array $data)
     {
         try {
             validate($rules)->check($data);
@@ -38,7 +38,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function checkUserName($data)
+    public function checkUserName(array $data)
     {
         $rule = 'require|alphaDash|length:4,20|unique:user,username';
         $rule .= sprintf(',%d,user_id', isset($data['exclude_id']) ? $data['exclude_id'] : 0);
@@ -52,7 +52,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function checkUserMobile($data)
+    public function checkUserMobile(array $data)
     {
         $rule = 'require|number|length:7,15|unique:user,mobile';
         $rule .= sprintf(',%d,user_id', isset($data['exclude_id']) ? $data['exclude_id'] : 0);
@@ -66,7 +66,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function checkUserNick($data)
+    public function checkUserNick(array $data)
     {
         $rule = 'require|max:50|unique:user,nickname';
         $rule .= sprintf(',%d,user_id', isset($data['exclude_id']) ? $data['exclude_id'] : 0);

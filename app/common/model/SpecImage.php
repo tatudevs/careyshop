@@ -40,7 +40,7 @@ class SpecImage extends CareyShop
      * @return bool
      * @throws
      */
-    public function addSpecImage($goodsId, $data)
+    public function addSpecImage(int $goodsId, array $data)
     {
         // 处理部分数据,并进行验证
         foreach ($data as $key => $value) {

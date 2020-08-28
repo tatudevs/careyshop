@@ -40,7 +40,7 @@ class GoodsType extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addTypeItem($data)
+    public function addTypeItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -62,7 +62,7 @@ class GoodsType extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setTypeItem($data)
+    public function setTypeItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -91,7 +91,7 @@ class GoodsType extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueTypeName($data)
+    public function uniqueTypeName(array $data)
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -114,7 +114,7 @@ class GoodsType extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getTypeItem($data)
+    public function getTypeItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -131,7 +131,7 @@ class GoodsType extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getTypeSelect($data)
+    public function getTypeSelect(array $data)
     {
         if (!$this->validateData($data, 'select')) {
             return false;
@@ -150,7 +150,7 @@ class GoodsType extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getTypeList($data)
+    public function getTypeList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -181,7 +181,7 @@ class GoodsType extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delTypeList($data)
+    public function delTypeList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;

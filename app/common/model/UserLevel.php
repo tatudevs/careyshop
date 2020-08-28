@@ -43,7 +43,7 @@ class UserLevel extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getLevelItem($data)
+    public function getLevelItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -60,7 +60,7 @@ class UserLevel extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getLevelList($data)
+    public function getLevelList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -79,7 +79,7 @@ class UserLevel extends CareyShop
      * @return array|false
      * @throws
      */
-    public function addLevelItem($data)
+    public function addLevelItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -102,7 +102,7 @@ class UserLevel extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setLevelItem($data)
+    public function setLevelItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -138,7 +138,7 @@ class UserLevel extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delLevelList($data)
+    public function delLevelList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;

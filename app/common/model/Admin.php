@@ -68,7 +68,7 @@ class Admin extends CareyShop
     /**
      * 全局是否删除查询条件
      * @access public
-     * @param Admin $query 模型
+     * @param object $query 模型
      */
     public function scopeDelete($query)
     {
@@ -81,7 +81,7 @@ class Admin extends CareyShop
      * @param string $value 值
      * @return string
      */
-    public function setPasswordAttr($value)
+    public function setPasswordAttr(string $value)
     {
         return user_md5($value);
     }
@@ -174,7 +174,7 @@ class Admin extends CareyShop
      * @param array $data 外部数据
      * @return array|bool
      */
-    public function addAdminItem($data)
+    public function addAdminItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -198,7 +198,7 @@ class Admin extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setAdminItem($data)
+    public function setAdminItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -239,7 +239,7 @@ class Admin extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAdminStatus($data)
+    public function setAdminStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -274,7 +274,7 @@ class Admin extends CareyShop
      * @return bool
      * @throws
      */
-    public function setAdminPassword($data)
+    public function setAdminPassword(array $data)
     {
         if (!$this->validateData($data, 'change')) {
             return false;
@@ -308,7 +308,7 @@ class Admin extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public function resetAdminItem($data)
+    public function resetAdminItem(array $data)
     {
         if (!$this->validateData($data, 'reset')) {
             return false;
@@ -334,7 +334,7 @@ class Admin extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAdminList($data)
+    public function delAdminList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -369,7 +369,7 @@ class Admin extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAdminItem($data)
+    public function getAdminItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -386,7 +386,7 @@ class Admin extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAdminList($data)
+    public function getAdminList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -422,7 +422,7 @@ class Admin extends CareyShop
      * @param array $data 外部数据
      * @return array|bool
      */
-    public function getAdminSelect($data)
+    public function getAdminSelect(array $data)
     {
         if (!$this->validateData($data, 'select')) {
             return false;
@@ -472,7 +472,7 @@ class Admin extends CareyShop
      * @return array|false
      * @throws
      */
-    public function loginAdmin($data, $isGetToken = true)
+    public function loginAdmin(array $data, $isGetToken = true)
     {
         if (!$this->validateData($data, 'login')) {
             return false;
@@ -529,7 +529,7 @@ class Admin extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function refreshToken($data)
+    public function refreshToken(array $data)
     {
         if (!$this->validateData($data, 'refresh')) {
             return false;

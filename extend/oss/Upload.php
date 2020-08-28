@@ -79,7 +79,7 @@ abstract class Upload
      * @param string $error 错误信息
      * @return false
      */
-    public function setError($error)
+    public function setError(string $error)
     {
         $this->error = $error;
         return false;
@@ -91,7 +91,7 @@ abstract class Upload
      * @param string $path 资源路径
      * @return void
      */
-    public function addDelFile($path)
+    public function addDelFile(string $path)
     {
         $this->delFileList[] = $path;
     }
@@ -185,7 +185,7 @@ abstract class Upload
      * @param array $urlArray 路径结构
      * @return void
      */
-    abstract protected function getThumbUrl($urlArray);
+    abstract protected function getThumbUrl(array $urlArray);
 
     /**
      * 批量删除资源
@@ -200,7 +200,7 @@ abstract class Upload
      * @param string $path 路径
      * @return void
      */
-    abstract protected function clearThumb($path);
+    abstract protected function clearThumb(string $path);
 
     /**
      * 响应实际下载路径
@@ -209,7 +209,7 @@ abstract class Upload
      * @param string $filename 文件名
      * @return void
      */
-    abstract protected function getDownload($url, $filename);
+    abstract protected function getDownload(string $url, string $filename);
 
     /**
      * 获取资源缩略图信息
@@ -217,5 +217,5 @@ abstract class Upload
      * @param string $url 路径
      * @return array
      */
-    abstract protected function getThumbInfo($url);
+    abstract protected function getThumbInfo(string $url);
 }

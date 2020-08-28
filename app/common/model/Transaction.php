@@ -73,7 +73,7 @@ class Transaction extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addTransactionItem($data)
+    public function addTransactionItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -102,7 +102,7 @@ class Transaction extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getTransactionItem($data)
+    public function getTransactionItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -122,7 +122,7 @@ class Transaction extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getTransactionList($data)
+    public function getTransactionList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

@@ -75,7 +75,7 @@ class User extends CareyShop
     /**
      * 全局是否删除查询条件
      * @access public
-     * @param User $query 模型
+     * @param object $query 模型
      */
     public function scopeDelete($query)
     {
@@ -85,7 +85,7 @@ class User extends CareyShop
     /**
      * 密码修改器
      * @access public
-     * @param string $value 值
+     * @param mixed $value 值
      * @return string
      */
     public function setPasswordAttr($value)
@@ -184,7 +184,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return array|bool
      */
-    public function addUserItem($data)
+    public function addUserItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -227,7 +227,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setUserItem($data)
+    public function setUserItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -270,7 +270,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setUserStatus($data)
+    public function setUserStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -300,7 +300,7 @@ class User extends CareyShop
      * @return bool
      * @throws
      */
-    public function setUserPassword($data)
+    public function setUserPassword(array $data)
     {
         if (!$this->validateData($data, 'change')) {
             return false;
@@ -340,7 +340,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delUserList($data)
+    public function delUserList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -370,7 +370,7 @@ class User extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getUserItem($data)
+    public function getUserItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -389,7 +389,7 @@ class User extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getUserInfo($data)
+    public function getUserInfo(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -406,7 +406,7 @@ class User extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getUserList($data)
+    public function getUserList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -443,7 +443,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return array|bool
      */
-    public function getUserSelect($data)
+    public function getUserSelect(array $data)
     {
         if (!$this->validateData($data, 'select')) {
             return false;
@@ -494,7 +494,7 @@ class User extends CareyShop
      * @return array|false
      * @throws
      */
-    public function loginUser($data, $isGetToken = true)
+    public function loginUser(array $data, $isGetToken = true)
     {
         if (!$this->validateData($data, 'login')) {
             return false;
@@ -551,7 +551,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function refreshToken($data)
+    public function refreshToken(array $data)
     {
         if (!$this->validateData($data, 'refresh')) {
             return false;
@@ -578,7 +578,7 @@ class User extends CareyShop
      * @return bool
      * @throws
      */
-    public function findUserPassword($data)
+    public function findUserPassword(array $data)
     {
         if (!$this->validateData($data, 'find')) {
             return false;

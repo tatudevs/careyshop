@@ -79,7 +79,7 @@ class AdsPosition extends CareyShop
      * @return array|false
      * @throws
      */
-    public function addPositionItem($data)
+    public function addPositionItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -103,7 +103,7 @@ class AdsPosition extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setPositionItem($data)
+    public function setPositionItem(array $data)
     {
         if (!$this->validateSetData($data, 'set', true)) {
             return false;
@@ -148,7 +148,7 @@ class AdsPosition extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delPositionList($data)
+    public function delPositionList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -180,7 +180,7 @@ class AdsPosition extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniquePositionCode($data)
+    public function uniquePositionCode(array $data)
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -202,7 +202,7 @@ class AdsPosition extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setPositionStatus($data)
+    public function setPositionStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -221,7 +221,7 @@ class AdsPosition extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getPositionItem($data)
+    public function getPositionItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -238,7 +238,7 @@ class AdsPosition extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getPositionList($data)
+    public function getPositionList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -276,7 +276,7 @@ class AdsPosition extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getPositionSelect($data)
+    public function getPositionSelect(array $data)
     {
         if (!$this->validateData($data, 'select')) {
             return false;
@@ -305,7 +305,7 @@ class AdsPosition extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getPositionCode($data)
+    public function getPositionCode(array $data)
     {
         if (!$this->validateData($data, 'code')) {
             return false;

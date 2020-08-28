@@ -39,7 +39,7 @@ class PromotionItem extends CareyShop
      * @return array|false
      * @throws
      */
-    public function addPromotionItem($settings, $promotionId)
+    public function addPromotionItem(array $settings, int $promotionId)
     {
         // 处理外部填入数据并进行验证
         foreach ($settings as $key => $item) {

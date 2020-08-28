@@ -53,7 +53,7 @@ class SpecConfig extends CareyShop
      * @param array  $configData 属性配置数据
      * @throws
      */
-    public static function updateSpecConfig($goodsId, $configData)
+    public static function updateSpecConfig($goodsId, array $configData)
     {
         $result = self::where('goods_id', '=', $goodsId)->find();
         if (is_null($result)) {
@@ -71,7 +71,7 @@ class SpecConfig extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getSpecConfigItem($data)
+    public function getSpecConfigItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;

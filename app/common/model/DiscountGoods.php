@@ -59,7 +59,7 @@ class DiscountGoods extends CareyShop
      * @return array|false
      * @throws
      */
-    public function addDiscountGoods($discountGoods, $discountId)
+    public function addDiscountGoods(array $discountGoods, int $discountId)
     {
         // 处理外部填入数据并进行验证
         foreach ($discountGoods as $key => $value) {
@@ -80,7 +80,7 @@ class DiscountGoods extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getDiscountGoodsInfo($data)
+    public function getDiscountGoodsInfo(array $data)
     {
         if (!$this->validateData($data, 'info')) {
             return false;
@@ -111,7 +111,7 @@ class DiscountGoods extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getDiscountGoodsList($data)
+    public function getDiscountGoodsList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

@@ -92,7 +92,7 @@ class Withdraw extends CareyShop
      * @param string $remark     备注
      * @return bool
      */
-    private function addTransaction($type, $amount, $userId, $withdrawNo, $remark)
+    private function addTransaction(int $type, float $amount, int $userId, string $withdrawNo, string $remark)
     {
         $transactionData = [
             'user_id'    => $userId,
@@ -120,7 +120,7 @@ class Withdraw extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getWithdrawItem($data)
+    public function getWithdrawItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -152,7 +152,7 @@ class Withdraw extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getWithdrawList($data)
+    public function getWithdrawList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -202,7 +202,7 @@ class Withdraw extends CareyShop
      * @return array|false
      * @throws
      */
-    public function addWithdrawItem($data)
+    public function addWithdrawItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -261,7 +261,7 @@ class Withdraw extends CareyShop
      * @return bool
      * @throws
      */
-    public function cancelWithdrawItem($data)
+    public function cancelWithdrawItem(array $data)
     {
         if (!$this->validateData($data, 'cancel')) {
             return false;
@@ -316,7 +316,7 @@ class Withdraw extends CareyShop
      * @return bool
      * @throws
      */
-    public function processWithdrawItem($data)
+    public function processWithdrawItem(array $data)
     {
         if (!$this->validateData($data, 'process')) {
             return false;
@@ -346,7 +346,7 @@ class Withdraw extends CareyShop
      * @return bool
      * @throws
      */
-    public function completeWithdrawItem($data)
+    public function completeWithdrawItem(array $data)
     {
         if (!$this->validateData($data, 'complete')) {
             return false;
@@ -389,7 +389,7 @@ class Withdraw extends CareyShop
      * @return bool
      * @throws
      */
-    public function refuseWithdrawItem($data)
+    public function refuseWithdrawItem(array $data)
     {
         if (!$this->validateData($data, 'refuse')) {
             return false;

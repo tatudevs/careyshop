@@ -90,7 +90,7 @@ class NoticeTpl extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getNoticeTplData($type, $code = null)
+    public function getNoticeTplData(int $type, $code = null)
     {
         $map[] = ['type', '=', $type];
         !isset($code) ?: $map[] = ['code', '=', $code];
@@ -108,7 +108,7 @@ class NoticeTpl extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getNoticeTplItem($data)
+    public function getNoticeTplItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -138,7 +138,7 @@ class NoticeTpl extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getNoticeTplList($data)
+    public function getNoticeTplList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -161,7 +161,7 @@ class NoticeTpl extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setNoticeTplItem($data)
+    public function setNoticeTplItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -197,7 +197,7 @@ class NoticeTpl extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setNoticeTplStatus($data)
+    public function setNoticeTplStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -220,7 +220,7 @@ class NoticeTpl extends CareyShop
      * @param array  $data   发送数据(如订单号则需要从外部传入,而验证码就不需要)
      * @return bool
      */
-    public function sendNotice($mobile, $email, $type, $code = null, $data = [])
+    public function sendNotice(string $mobile, string $email, int $type, $code = null, $data = [])
     {
         if (empty($mobile) && empty($email)) {
             return $this->setError('手机号或邮箱地址不能为空');
@@ -312,11 +312,11 @@ class NoticeTpl extends CareyShop
     /**
      * 模板转实际发送数据
      * @access private
-     * @param string  $code 通知编码
-     * @param array  &$data 内部提交数据
+     * @param string $code 通知编码
+     * @param array  $data 内部提交数据
      * @return mixed
      */
-    private function templateToSendContent($code, &$data)
+    private function templateToSendContent(string $code, array $data)
     {
         $realValue = function ($item_name) use ($data) {
             $value = '';
@@ -417,11 +417,11 @@ class NoticeTpl extends CareyShop
     /**
      * 发送手机短信
      * @access private
-     * @param string  $mobile 手机号
-     * @param array  &$data   发送数据
+     * @param string $mobile 手机号
+     * @param array  $data   发送数据
      * @return bool
      */
-    private function snedNoticeSms($mobile, &$data)
+    private function snedNoticeSms(string $mobile, array $data)
     {
         // 加载区域结点配置
         AliyunConfig::load();
@@ -484,14 +484,14 @@ class NoticeTpl extends CareyShop
     /**
      * 发送邮件
      * @access private
-     * @param string  $email      邮箱号码
-     * @param string  $subject    邮件主题
-     * @param array  &$data       发送数据
-     * @param null    $attachment 附件列表
+     * @param string $email      邮箱号码
+     * @param string $subject    邮件主题
+     * @param array  $data       发送数据
+     * @param null   $attachment 附件列表
      * @return bool
      * @throws
      */
-    private function snedNoticeEmail($email, $subject, &$data, $attachment = null)
+    private function snedNoticeEmail(string $email, string $subject, array $data, $attachment = null)
     {
         // 实例化PHPMailer对象
         $mail = new PHPMailer();

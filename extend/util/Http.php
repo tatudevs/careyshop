@@ -19,7 +19,7 @@ class Http
      * @param bool   $isGzip 是否gzip压缩
      * @return string
      */
-    public static function httpGet($url, $isGzip = false)
+    public static function httpGet(string $url, $isGzip = false)
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -51,7 +51,7 @@ class Http
      * @param bool   $isGzip 是否gzip压缩
      * @return string
      */
-    public static function httpPost($url, $data, $type = 'form', $isGzip = false)
+    public static function httpPost(string $url, array $data, $type = 'form', $isGzip = false)
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);

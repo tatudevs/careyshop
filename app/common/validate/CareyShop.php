@@ -20,7 +20,7 @@ class CareyShop extends Validate
      * @param string $field 参数
      * @return bool
      */
-    public function getField($field)
+    public function getField(string $field)
     {
         return isset($this->field[$field]) ? $this->field[$field] : $field;
     }
@@ -41,7 +41,7 @@ class CareyShop extends Validate
      * @param string $name 场景名称
      * @throws \Exception
      */
-    public function extractScene($name)
+    public function extractScene(string $name)
     {
         // 为了兼容数组格式的场景验证,不对函数式场景做检测
         if (!isset($this->scene[$name])) {

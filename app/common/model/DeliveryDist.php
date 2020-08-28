@@ -99,7 +99,7 @@ class DeliveryDist extends CareyShop
      * @return false|array
      * @throws
      */
-    public function addDeliveryDistItem($data)
+    public function addDeliveryDistItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -192,7 +192,7 @@ class DeliveryDist extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public function putDeliveryDistData($data)
+    public function putDeliveryDistData(array $data)
     {
         $result['callback_return_type'] = 'json';
         $result['is_callback'] = [
@@ -246,7 +246,7 @@ class DeliveryDist extends CareyShop
      * @param string $logisticCode 快递单号
      * @return false|array
      */
-    private function getOrderTracesByJson($deliveryCode, $logisticCode)
+    private function getOrderTracesByJson(string $deliveryCode, string $logisticCode)
     {
         // 请求正文内容
         $requestData = ['ShipperCode' => $deliveryCode, 'LogisticCode' => $logisticCode];
@@ -280,7 +280,7 @@ class DeliveryDist extends CareyShop
      * @param array $data 外部数据
      * @return array|bool
      */
-    public function getDeliveryDistTrace($data)
+    public function getDeliveryDistTrace(array $data)
     {
         if (!$this->validateData($data, 'trace')) {
             return false;
@@ -296,7 +296,7 @@ class DeliveryDist extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getDeliveryDistCode($data)
+    public function getDeliveryDistCode(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -355,7 +355,7 @@ class DeliveryDist extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getDeliveryDistList($data)
+    public function getDeliveryDistList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

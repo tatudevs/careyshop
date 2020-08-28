@@ -115,7 +115,7 @@ if (!function_exists('user_md5')) {
      * @param string $key      盐
      * @return string
      */
-    function user_md5($password, $key = 'Carey_Shop#')
+    function user_md5(string $password, $key = 'Carey_Shop#')
     {
         return isset($password) ? md5(sha1($password) . $key) : '';
     }
@@ -247,7 +247,7 @@ if (!function_exists('auto_hid_substr')) {
      * @param int    $len 模糊的长度
      * @return string
      */
-    function auto_hid_substr($str, $len = 3)
+    function auto_hid_substr(string $str, $len = 3)
     {
         if (empty($str)) {
             return null;
@@ -274,7 +274,7 @@ if (!function_exists('string_to_byte')) {
      * @param int    $dec 小数位数
      * @return int
      */
-    function string_to_byte($var, $dec = 2)
+    function string_to_byte(string $var, $dec = 2)
     {
         preg_match('/(^[0-9.]+)(\w+)/', $var, $info);
         $size = $info[1];
@@ -316,7 +316,7 @@ if (!function_exists('unique_and_delzero')) {
      * @param array $var 数组
      * @return void
      */
-    function unique_and_delzero(&$var)
+    function unique_and_delzero(array &$var)
     {
         if (!is_array($var) || empty($var)) {
             return;
@@ -349,7 +349,7 @@ if (!function_exists('get_ip2region_str')) {
      * @param string $ip IP地址
      * @return string
      */
-    function get_ip2region_str($ip)
+    function get_ip2region_str(string $ip)
     {
         $ipStr = '';
         [$country, , $region, $city, $isp] = explode('|', $ip);

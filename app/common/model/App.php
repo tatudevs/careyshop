@@ -61,7 +61,7 @@ class App extends CareyShop
     /**
      * 全局是否删除查询条件
      * @access public
-     * @param App $query 模型
+     * @param object $query 模型
      */
     public function scopeDelete($query)
     {
@@ -112,7 +112,7 @@ class App extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public function setAppItem($data)
+    public function setAppItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -144,7 +144,7 @@ class App extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAppItem($data)
+    public function getAppItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -161,7 +161,7 @@ class App extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAppList($data)
+    public function getAppList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -181,7 +181,7 @@ class App extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAppList($data)
+    public function delAppList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -203,7 +203,7 @@ class App extends CareyShop
      * @return bool
      * @throws \Exception
      */
-    public function uniqueAppName($data)
+    public function uniqueAppName(array $data)
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -222,10 +222,10 @@ class App extends CareyShop
     /**
      * 更换应用Secret
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
-    public function replaceAppSecret($data)
+    public function replaceAppSecret(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -244,7 +244,7 @@ class App extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAppCaptcha($data)
+    public function setAppCaptcha(array $data)
     {
         if (!$this->validateData($data, 'captcha')) {
             return false;
@@ -263,7 +263,7 @@ class App extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAppStatus($data)
+    public function setAppStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -284,7 +284,7 @@ class App extends CareyShop
      * @return array
      * @throws
      */
-    public static function getAppCaptcha($key, $is_key = true)
+    public static function getAppCaptcha(string $key, $is_key = true)
     {
         $result = [
             'captcha'    => true,

@@ -47,7 +47,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addBrandItem($data)
+    public function addBrandItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -80,7 +80,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setBrandItem($data)
+    public function setBrandItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -114,7 +114,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delBrandList($data)
+    public function delBrandList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -132,7 +132,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setBrandStatus($data)
+    public function setBrandStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -151,7 +151,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueBrandName($data)
+    public function uniqueBrandName(array $data)
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -175,7 +175,7 @@ class Brand extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getBrandItem($data)
+    public function getBrandItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -194,7 +194,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getBrandList($data)
+    public function getBrandList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -247,7 +247,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getBrandSelect($data)
+    public function getBrandSelect(array $data)
     {
         if (!$this->validateData($data, 'select')) {
             return false;
@@ -278,7 +278,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setBrandSort($data)
+    public function setBrandSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;

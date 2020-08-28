@@ -305,7 +305,7 @@ class Upload extends UploadBase
      * @param array $urlArray 路径结构
      * @return string
      */
-    public function getThumbUrl($urlArray)
+    public function getThumbUrl(array $urlArray)
     {
         // 初始化数据并拼接不带查询条件的URL
         $fileInfo = pathinfo($urlArray['path']);
@@ -443,7 +443,7 @@ class Upload extends UploadBase
      * @param string $path 路径
      * @return void
      */
-    public function clearThumb($path)
+    public function clearThumb(string $path)
     {
         // 暂不需要
     }
@@ -455,7 +455,7 @@ class Upload extends UploadBase
      * @param string $filename 文件名
      * @return void
      */
-    public function getDownload($url, $filename = '')
+    public function getDownload(string $url, string $filename)
     {
         $filename = urlencode($filename);
         $filename = str_replace('+', '%20', $filename);
@@ -471,7 +471,7 @@ class Upload extends UploadBase
      * @param string $url 路径
      * @return array
      */
-    public function getThumbInfo($url)
+    public function getThumbInfo(string $url)
     {
         $info = [
             'size'   => 0,

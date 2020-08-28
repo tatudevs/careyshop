@@ -42,7 +42,7 @@ class FriendLink extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addFriendLinkItem($data)
+    public function addFriendLinkItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -64,7 +64,7 @@ class FriendLink extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setFriendLinkItem($data)
+    public function setFriendLinkItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -82,7 +82,7 @@ class FriendLink extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delFriendLinkList($data)
+    public function delFriendLinkList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -99,7 +99,7 @@ class FriendLink extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getFriendLinkItem($data)
+    public function getFriendLinkItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -116,7 +116,7 @@ class FriendLink extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getFriendLinkList($data)
+    public function getFriendLinkList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -144,7 +144,7 @@ class FriendLink extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setFriendLinkStatus($data)
+    public function setFriendLinkStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -162,7 +162,7 @@ class FriendLink extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setFriendLinkSort($data)
+    public function setFriendLinkSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;

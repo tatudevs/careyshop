@@ -71,7 +71,7 @@ class Message extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addMessageItem($data)
+    public function addMessageItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -95,7 +95,7 @@ class Message extends CareyShop
      * @param int   $clientType 消息成员组 0=顾客组 1=管理组
      * @return bool
      */
-    public function inAddMessageItem($data, $clientId, $clientType)
+    public function inAddMessageItem(array $data, array $clientId, int $clientType)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -141,7 +141,7 @@ class Message extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setMessageItem($data)
+    public function setMessageItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -174,7 +174,7 @@ class Message extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delMessageList($data)
+    public function delMessageList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -194,7 +194,7 @@ class Message extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setMessageStatus($data)
+    public function setMessageStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -216,7 +216,7 @@ class Message extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getMessageItem($data)
+    public function getMessageItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -237,7 +237,7 @@ class Message extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getMessageUserItem($data)
+    public function getMessageUserItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -293,7 +293,7 @@ class Message extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getMessageList($data)
+    public function getMessageList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -329,7 +329,7 @@ class Message extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public function getMessageUserUnread($data)
+    public function getMessageUserUnread(array $data)
     {
         if (!$this->validateData($data, 'unread')) {
             return false;
@@ -385,7 +385,7 @@ class Message extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getMessageUserList($data)
+    public function getMessageUserList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

@@ -78,7 +78,7 @@ class Coupon extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addCouponItem($data)
+    public function addCouponItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -104,7 +104,7 @@ class Coupon extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setCouponItem($data)
+    public function setCouponItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -140,7 +140,7 @@ class Coupon extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getCouponItem($data)
+    public function getCouponItem(array $data)
     {
         if (!$this->validateData($data, 'get')) {
             return false;
@@ -160,7 +160,7 @@ class Coupon extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getCouponList($data)
+    public function getCouponList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -196,7 +196,7 @@ class Coupon extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getCouponSelect($data)
+    public function getCouponSelect(array $data)
     {
         if (!$this->validateData($data, 'select')) {
             return false;
@@ -226,7 +226,7 @@ class Coupon extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCouponList($data)
+    public function delCouponList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -245,7 +245,7 @@ class Coupon extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCouponStatus($data)
+    public function setCouponStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -264,7 +264,7 @@ class Coupon extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCouponInvalid($data)
+    public function setCouponInvalid(array $data)
     {
         if (!$this->validateData($data, 'invalid')) {
             return false;

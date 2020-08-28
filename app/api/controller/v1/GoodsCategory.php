@@ -71,7 +71,7 @@ class GoodsCategory extends CareyShop
      * @param int  $catId        分类Id
      * @param bool $isGoodsTotal 是否获取关联商品数
      * @param bool $isLayer      是否返回本级分类
-     * @param int  $level        分类深度
+     * @param null $level        分类深度
      * @return array|bool
      */
     protected function getCategoryList($catId = 0, $isGoodsTotal = false, $isLayer = false, $level = null)

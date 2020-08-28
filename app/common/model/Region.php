@@ -60,7 +60,7 @@ class Region extends CareyShop
     /**
      * 全局是否删除查询条件
      * @access public
-     * @param Region $query 模型
+     * @param object $query 模型
      */
     public function scopeDelete($query)
     {
@@ -86,7 +86,7 @@ class Region extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addRegionItem($data)
+    public function addRegionItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -107,7 +107,7 @@ class Region extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setRegionItem($data)
+    public function setRegionItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -128,7 +128,7 @@ class Region extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delRegionList($data)
+    public function delRegionList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -150,7 +150,7 @@ class Region extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getRegionItem($data)
+    public function getRegionItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -170,7 +170,7 @@ class Region extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getRegionList($data)
+    public function getRegionList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -193,7 +193,7 @@ class Region extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getRegionSonList($data)
+    public function getRegionSonList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -219,7 +219,7 @@ class Region extends CareyShop
      * @param bool   $isDelete 是否提取已删除区域
      * @return void
      */
-    private static function getRegionChildrenList($id, &$tree, &$list, $isDelete)
+    private static function getRegionChildrenList(int $id, array &$tree, array &$list, bool $isDelete)
     {
         static $keyList = null;
         if (is_null($keyList)) {
@@ -252,7 +252,7 @@ class Region extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setRegionSort($data)
+    public function setRegionSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -297,7 +297,7 @@ class Region extends CareyShop
      * @param array $data 外部数据
      * @return string
      */
-    public function getRegionName($data)
+    public function getRegionName(array $data)
     {
         if (!$this->validateData($data, 'name')) {
             return '';

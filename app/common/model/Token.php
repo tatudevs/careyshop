@@ -64,7 +64,7 @@ class Token extends CareyShop
      * @param string $platform 来源平台
      * @return false|array
      */
-    public static function setToken($id, $group, $type, $username, $platform)
+    public static function setToken(int $id, int $group, int $type, string $username, string $platform)
     {
         $code = rand_string();
         $token = user_md5(sprintf('%d%d%s', $id, $type, $code));
@@ -104,7 +104,7 @@ class Token extends CareyShop
      * @return false|array
      * @throws
      */
-    public function refreshUser($type, $refresh, $oldToken)
+    public function refreshUser(int $type, string $refresh, string $oldToken)
     {
         // 搜索条件
         $map[] = ['client_id', '=', get_client_id()];

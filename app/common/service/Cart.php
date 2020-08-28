@@ -18,7 +18,7 @@ class Cart extends CareyShop
      * @param array $goods 商品数据
      * @return mixed
      */
-    private function getGoodsImage($goods)
+    private function getGoodsImage(array $goods)
     {
         $default = '';
         if (isset($goods['goods']['attachment'][0])) {
@@ -55,7 +55,7 @@ class Cart extends CareyShop
      * @param bool  $isConcise  是否返回简洁数据
      * @return false|array
      */
-    public function checkCartGoodsList($goodsData, $isCheckout, $isConcise = false)
+    public function checkCartGoodsList(array $goodsData, bool $isCheckout, $isConcise = false)
     {
         // 此处并非不再检测是否限购,在添加至购物车时已进行过检测,
         // 只有在用户已添加至购物车,而管理组进行了调整才会出现,几率很小,但影响效率

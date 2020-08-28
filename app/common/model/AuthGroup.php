@@ -56,7 +56,7 @@ class AuthGroup extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addAuthGroupItem($data)
+    public function addAuthGroupItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -79,7 +79,7 @@ class AuthGroup extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setAuthGroupItem($data)
+    public function setAuthGroupItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -100,7 +100,7 @@ class AuthGroup extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAuthGroupItem($data)
+    public function getAuthGroupItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -117,7 +117,7 @@ class AuthGroup extends CareyShop
      * @return bool
      * @throws
      */
-    public function delAuthGroupItem($data)
+    public function delAuthGroupItem(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -155,7 +155,7 @@ class AuthGroup extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAuthGroupList($data)
+    public function getAuthGroupList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -181,7 +181,7 @@ class AuthGroup extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAuthGroupStatus($data)
+    public function setAuthGroupStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -201,7 +201,7 @@ class AuthGroup extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAuthGroupSort($data)
+    public function setAuthGroupSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;

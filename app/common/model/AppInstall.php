@@ -50,7 +50,7 @@ class AppInstall extends CareyShop
      * @param string $value 值
      * @return string
      */
-    public function setUserAgentAttr($value)
+    public function setUserAgentAttr(string $value)
     {
         return mb_strtolower($value, 'utf-8');
     }
@@ -61,7 +61,7 @@ class AppInstall extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addAppInstallItem($data)
+    public function addAppInstallItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -84,7 +84,7 @@ class AppInstall extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setAppInstallItem($data)
+    public function setAppInstallItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -106,7 +106,7 @@ class AppInstall extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAppInstallItem($data)
+    public function getAppInstallItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -122,7 +122,7 @@ class AppInstall extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAppInstallList($data)
+    public function delAppInstallList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -141,7 +141,7 @@ class AppInstall extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAppInstallList($data)
+    public function getAppInstallList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -174,7 +174,7 @@ class AppInstall extends CareyShop
      * @return array|bool
      * @throws
      */
-    public function queryAppInstallUpdated($data)
+    public function queryAppInstallUpdated(array $data)
     {
         if (!$this->validateData($data, 'updated')) {
             return false;

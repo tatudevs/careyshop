@@ -18,10 +18,10 @@ class DeliveryDist extends CareyShop
     /**
      * 生成快递鸟签名
      * @access public
-     * @param  string $data 请求内容
+     * @param string $data 请求内容
      * @return string
      */
-    public static function getCallbackSign($data)
+    public static function getCallbackSign(string $data)
     {
         return urlencode(base64_encode(md5($data . config('careyshop.delivery_dist.api_key', ''))));
     }
@@ -45,7 +45,7 @@ class DeliveryDist extends CareyShop
      * @param array $data 数据
      * @return array
      */
-    public static function snake($data)
+    public static function snake(array $data)
     {
         if (empty($data)) {
             return [];

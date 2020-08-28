@@ -56,7 +56,7 @@ class Promotion extends CareyShop
      * @return bool
      * @throws
      */
-    private function isRepeatPromotion($beginTime, $endTime, $excludeId = 0)
+    private function isRepeatPromotion(string $beginTime, string $endTime, $excludeId = 0)
     {
         $map = [];
         $excludeId == 0 ?: $map[] = ['promotion_id', '<>', $excludeId];
@@ -79,7 +79,7 @@ class Promotion extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addPromotionItem($data)
+    public function addPromotionItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -122,7 +122,7 @@ class Promotion extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setPromotionItem($data)
+    public function setPromotionItem(array $data)
     {
         if (!$this->validateSetData($data, 'set', true)) {
             return false;
@@ -172,7 +172,7 @@ class Promotion extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getPromotionItem($data)
+    public function getPromotionItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -188,7 +188,7 @@ class Promotion extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setPromotionStatus($data)
+    public function setPromotionStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -206,7 +206,7 @@ class Promotion extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delPromotionList($data)
+    public function delPromotionList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -228,7 +228,7 @@ class Promotion extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getPromotionList($data)
+    public function getPromotionList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

@@ -58,7 +58,7 @@ class Discount extends CareyShop
      * @return bool
      * @throws
      */
-    private function isRepeatGoods($beginTime, $endTime, $goodsList, $excludeId = 0)
+    private function isRepeatGoods(string $beginTime, string $endTime, array $goodsList, $excludeId = 0)
     {
         $map = [];
         $excludeId == 0 ?: $map[] = ['discount_id', '<>', $excludeId];
@@ -87,7 +87,7 @@ class Discount extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addDiscountItem($data)
+    public function addDiscountItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -132,7 +132,7 @@ class Discount extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setDiscountItem($data)
+    public function setDiscountItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -179,7 +179,7 @@ class Discount extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getDiscountItem($data)
+    public function getDiscountItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -195,7 +195,7 @@ class Discount extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delDiscountList($data)
+    public function delDiscountList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -216,7 +216,7 @@ class Discount extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setDiscountStatus($data)
+    public function setDiscountStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -235,7 +235,7 @@ class Discount extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getDiscountList($data)
+    public function getDiscountList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

@@ -48,7 +48,7 @@ class AuthRule extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addAuthRuleItem($data)
+    public function addAuthRuleItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -81,7 +81,7 @@ class AuthRule extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAuthRuleItem($data)
+    public function getAuthRuleItem(array $data)
     {
         if (!$this->validateData($data, 'get')) {
             return false;
@@ -98,7 +98,7 @@ class AuthRule extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setAuthRuleItem($data)
+    public function setAuthRuleItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -144,7 +144,7 @@ class AuthRule extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAuthRuleList($data)
+    public function delAuthRuleList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -163,7 +163,7 @@ class AuthRule extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAuthRuleList($data)
+    public function getAuthRuleList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -189,7 +189,7 @@ class AuthRule extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAuthRuleStatus($data)
+    public function setAuthRuleStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -209,7 +209,7 @@ class AuthRule extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAuthRuleSort($data)
+    public function setAuthRuleSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -255,7 +255,7 @@ class AuthRule extends CareyShop
      * @return array|false
      * @throws
      */
-    public static function getMenuAuthRule($module, $groupId)
+    public static function getMenuAuthRule(string $module, int $groupId)
     {
         // 需要加入游客组的权限(已登录账号也可以使用游客权限)
         if (AUTH_GUEST !== $groupId) {

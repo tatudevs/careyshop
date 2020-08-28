@@ -55,7 +55,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addCategoryItem($data)
+    public function addCategoryItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -90,7 +90,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setCategoryItem($data)
+    public function setCategoryItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -136,7 +136,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCategoryList($data)
+    public function delCategoryList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -185,7 +185,7 @@ class GoodsCategory extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getCategoryItem($data)
+    public function getCategoryItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -201,7 +201,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getCategoryNavi($data)
+    public function getCategoryNavi(array $data)
     {
         if (!$this->validateData($data, 'navi')) {
             return false;
@@ -259,7 +259,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCategoryStatus($data)
+    public function setCategoryStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -282,7 +282,7 @@ class GoodsCategory extends CareyShop
      * @param int     $level      分类深度
      * @return array
      */
-    private static function setCategoryTree($parentId, &$list, $limitLevel = null, $isLayer = false, $level = 0)
+    private static function setCategoryTree(int $parentId, &$list, $limitLevel = null, $isLayer = false, $level = 0)
     {
         $parentId != 0 ?: $isLayer = false; // 返回全部分类不需要本级
         foreach ($list as $key => $value) {
@@ -391,7 +391,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return array
      */
-    public static function getCategorySon($data)
+    public static function getCategorySon(array $data)
     {
         if (empty($data['goods_category_id'])) {
             return [];
@@ -420,7 +420,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCategorySort($data)
+    public function setCategorySort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -463,7 +463,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCategoryNavi($data)
+    public function setCategoryNavi(array $data)
     {
         if (!$this->validateData($data, 'nac')) {
             return false;

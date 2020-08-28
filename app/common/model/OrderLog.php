@@ -59,7 +59,7 @@ class OrderLog extends CareyShop
      * @return false|array
      * @throws
      */
-    public function addOrderItem($data)
+    public function addOrderItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;

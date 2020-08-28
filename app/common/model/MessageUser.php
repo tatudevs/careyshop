@@ -63,7 +63,7 @@ class MessageUser extends CareyShop
      * @return bool
      * @throws
      */
-    public function updateMessageUserItem($messageId)
+    public function updateMessageUserItem(int $messageId)
     {
         $clientType = is_client_admin() ? 'admin_id' : 'user_id';
         $map[] = ['message_id', '=', $messageId];
@@ -92,7 +92,7 @@ class MessageUser extends CareyShop
      * @param bool   $isAll     是否操作所有
      * @return bool
      */
-    private function updateMessageUserList($messageId, $field, $isAll = false)
+    private function updateMessageUserList(array $messageId, string $field, $isAll = false)
     {
         // 获取已存在的消息
         $clientType = is_client_admin() ? 'admin_id' : 'user_id';
@@ -139,7 +139,7 @@ class MessageUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setMessageUserRead($data)
+    public function setMessageUserRead(array $data)
     {
         if (!$this->validateData($data, 'user', false, Validate::class)) {
             return false;
@@ -165,7 +165,7 @@ class MessageUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setMessageUserAllRead($data)
+    public function setMessageUserAllRead(array $data)
     {
         if (!$this->validateData($data, 'unread', false, Validate::class)) {
             return false;
@@ -190,7 +190,7 @@ class MessageUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delMessageUserList($data)
+    public function delMessageUserList(array $data)
     {
         if (!$this->validateData($data, 'user', false, Validate::class)) {
             return false;
@@ -216,7 +216,7 @@ class MessageUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delMessageUserAll($data)
+    public function delMessageUserAll(array $data)
     {
         if (!$this->validateData($data, 'unread', false, Validate::class)) {
             return false;

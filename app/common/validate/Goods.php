@@ -251,12 +251,12 @@ class Goods extends CareyShop
     /**
      * 验证最少起订量
      * @access public
-     * @param  mixed $value 验证数据
-     * @param  mixed $rule  验证规则(purchase_sum)
-     * @param  array $data  全部数据
+     * @param mixed $value 验证数据
+     * @param mixed $rule  验证规则(purchase_sum)
+     * @param array $data  全部数据
      * @return mixed
      */
-    public function checkLeast($value, $rule, $data)
+    public function checkLeast($value, $rule, array $data)
     {
         if (!empty($data[$rule]) && $value > $data[$rule]) {
             return $this->field['least_sum'] . '必须大于等于 ' . $this->field[$rule];
@@ -268,12 +268,12 @@ class Goods extends CareyShop
     /**
      * 验证商品积分
      * @access public
-     * @param  mixed $value 验证数据
-     * @param  mixed $rule  验证规则(integral_type)
-     * @param  array $data  全部数据
+     * @param mixed $value 验证数据
+     * @param mixed $rule  验证规则(integral_type)
+     * @param array $data  全部数据
      * @return mixed
      */
-    public function checkIntegral($value, $rule, $data)
+    public function checkIntegral($value, $rule, array $data)
     {
         if (!$this->check($data, [$rule => 'require|in:0,1'])) {
             return $this->getError();

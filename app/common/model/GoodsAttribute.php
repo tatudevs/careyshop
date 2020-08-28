@@ -54,7 +54,7 @@ class GoodsAttribute extends CareyShop
     /**
      * 全局是否删除查询条件
      * @access public
-     * @param GoodsAttribute $query 模型
+     * @param object $query 模型
      */
     public function scopeDelete($query)
     {
@@ -77,7 +77,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addAttributeBodyItem($data)
+    public function addAttributeBodyItem(array $data)
     {
         if (!$this->validateData($data, 'body')) {
             return false;
@@ -99,7 +99,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setAttributeBodyItem($data)
+    public function setAttributeBodyItem(array $data)
     {
         if (!$this->validateData($data, 'bodyset', true)) {
             return false;
@@ -122,7 +122,7 @@ class GoodsAttribute extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAttributeBodyItem($data)
+    public function getAttributeBodyItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -144,7 +144,7 @@ class GoodsAttribute extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAttributeBodyList($data)
+    public function getAttributeBodyList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -168,7 +168,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addAttributeItem($data)
+    public function addAttributeItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -200,7 +200,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setAttributeItem($data)
+    public function setAttributeItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -234,7 +234,7 @@ class GoodsAttribute extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAttributeItem($data)
+    public function getAttributeItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -254,7 +254,7 @@ class GoodsAttribute extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAttributePage($data)
+    public function getAttributePage(array $data)
     {
         if (!$this->validateData($data, 'page')) {
             return false;
@@ -310,7 +310,7 @@ class GoodsAttribute extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAttributeList($data)
+    public function getAttributeList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -359,7 +359,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAttributeKey($data)
+    public function setAttributeKey(array $data)
     {
         if (!$this->validateData($data, 'key')) {
             return false;
@@ -378,7 +378,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAttributeImportant($data)
+    public function setAttributeImportant(array $data)
     {
         if (!$this->validateData($data, 'important')) {
             return false;
@@ -397,7 +397,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAttributeSort($data)
+    public function setAttributeSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -438,7 +438,7 @@ class GoodsAttribute extends CareyShop
      * @return bool
      * @throws
      */
-    public function delAttributeList($data)
+    public function delAttributeList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -465,7 +465,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getAttributeData($data)
+    public function getAttributeData(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

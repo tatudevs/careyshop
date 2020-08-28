@@ -63,7 +63,7 @@ class WithdrawUser extends CareyShop
     /**
      * 全局是否删除查询条件
      * @access public
-     * @param WithdrawUser $query 模型
+     * @param object $query 模型
      */
     public function scopeDelete($query)
     {
@@ -76,7 +76,7 @@ class WithdrawUser extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addWithdrawUserItem($data)
+    public function addWithdrawUserItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -100,7 +100,7 @@ class WithdrawUser extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setWithdrawUserItem($data)
+    public function setWithdrawUserItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -124,7 +124,7 @@ class WithdrawUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delWithdrawUserList($data)
+    public function delWithdrawUserList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -144,7 +144,7 @@ class WithdrawUser extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getWithdrawUserItem($data)
+    public function getWithdrawUserItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -164,7 +164,7 @@ class WithdrawUser extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getWithdrawUserList($data)
+    public function getWithdrawUserList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -182,7 +182,7 @@ class WithdrawUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function isWithdrawUserMaximum($data)
+    public function isWithdrawUserMaximum(array $data)
     {
         if (!$this->validateData($data, 'maximum')) {
             return false;

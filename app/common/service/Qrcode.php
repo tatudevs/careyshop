@@ -33,7 +33,7 @@ class Qrcode extends CareyShop
      * @param string $path 路径
      * @return string
      */
-    public static function getQrcodeLogoPath($path)
+    public static function getQrcodeLogoPath(string $path)
     {
         // 如果是网络文件直接返回
         if (filter_var($path, FILTER_VALIDATE_URL)) {

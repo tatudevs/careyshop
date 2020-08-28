@@ -90,7 +90,7 @@ class Ads extends CareyShop
      * @return array|false
      * @throws
      */
-    public function addAdsItem($data)
+    public function addAdsItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -124,7 +124,7 @@ class Ads extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setAdsItem($data)
+    public function setAdsItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -165,7 +165,7 @@ class Ads extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAdsList($data)
+    public function delAdsList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -181,7 +181,7 @@ class Ads extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAdsSort($data)
+    public function setAdsSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -221,7 +221,7 @@ class Ads extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAdsStatus($data)
+    public function setAdsStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -240,7 +240,7 @@ class Ads extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAdsItem($data)
+    public function getAdsItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -257,7 +257,7 @@ class Ads extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAdsList($data)
+    public function getAdsList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -298,7 +298,7 @@ class Ads extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAdsCode($data)
+    public function getAdsCode(array $data)
     {
         if (!$this->validateData($data, 'code')) {
             return false;
@@ -322,7 +322,7 @@ class Ads extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueAdsCode($data)
+    public function uniqueAdsCode(array $data)
     {
         if (!$this->validateData($data, 'unique')) {
             return false;

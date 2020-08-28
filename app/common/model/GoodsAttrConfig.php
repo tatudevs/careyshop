@@ -43,7 +43,7 @@ class GoodsAttrConfig extends CareyShop
      * @param array  $configData 属性配置数据
      * @throws
      */
-    public static function updateAttrConfig($goodsId, $configData)
+    public static function updateAttrConfig($goodsId, array $configData)
     {
         $result = self::where('goods_id', '=', $goodsId)->find();
         if (is_null($result)) {
@@ -61,7 +61,7 @@ class GoodsAttrConfig extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAttrConfigItem($data)
+    public function getAttrConfigItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;

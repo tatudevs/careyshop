@@ -378,7 +378,7 @@ class Upload extends UploadBase
      * @param string $resize 缩放方式
      * @return string
      */
-    private function getSizeParam($width, $height, $resize)
+    private function getSizeParam(int $width, int $height, string $resize)
     {
         $options = 'resize,';
         if ('proportion' === $resize) {
@@ -401,7 +401,7 @@ class Upload extends UploadBase
      * @param int $height 高度
      * @return string
      */
-    private function getCropParam($width, $height)
+    private function getCropParam(int $width, int $height)
     {
         $options = 'crop,';
         $options .= $width != 0 ? sprintf('w_%d,', $width) : '';
@@ -417,7 +417,7 @@ class Upload extends UploadBase
      * @param array $urlArray 路径结构
      * @return string
      */
-    public function getThumbUrl($urlArray)
+    public function getThumbUrl(array $urlArray)
     {
         // 初始化数据并拼接不带查询条件的URL
         $fileInfo = pathinfo($urlArray['path']);
@@ -534,7 +534,7 @@ class Upload extends UploadBase
      * @param string $path 路径
      * @return void
      */
-    public function clearThumb($path)
+    public function clearThumb(string $path)
     {
         // 暂不需要
     }
@@ -546,7 +546,7 @@ class Upload extends UploadBase
      * @param string $filename 文件名
      * @return void
      */
-    public function getDownload($url, $filename = '')
+    public function getDownload(string $url, string $filename)
     {
         // 拆分 URL 链接
         $urlArray = parse_url($url);
@@ -587,7 +587,7 @@ class Upload extends UploadBase
      * @param string $url 路径
      * @return array
      */
-    public function getThumbInfo($url)
+    public function getThumbInfo(string $url)
     {
         $info = [
             'size'   => 0,

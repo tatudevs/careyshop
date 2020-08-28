@@ -87,7 +87,7 @@ class ActionLog extends CareyShop
      * @param string $value 修改值
      * @throws \throwable
      */
-    private function setMenuMap($key, &$value)
+    private function setMenuMap(string $key, string &$value)
     {
         static $menuMap = null;
         if (empty($menuMap)) {
@@ -192,7 +192,7 @@ class ActionLog extends CareyShop
      * @access private
      * @param array $arr 原始数组
      */
-    private function privacyField(&$arr)
+    private function privacyField(array &$arr)
     {
         foreach ($arr as $key => $val) {
             if (is_array($val)) {
@@ -210,7 +210,7 @@ class ActionLog extends CareyShop
      * @return mixed
      * @throws
      */
-    public function getActionLogItem($data)
+    public function getActionLogItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -227,7 +227,7 @@ class ActionLog extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getActionLogList($data)
+    public function getActionLogList(array $data)
     {
         if (!$this->validateData($data)) {
             return false;

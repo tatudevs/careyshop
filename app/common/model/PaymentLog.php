@@ -86,7 +86,7 @@ class PaymentLog extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addPaymentLogItem($data)
+    public function addPaymentLogItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -113,7 +113,7 @@ class PaymentLog extends CareyShop
      * @return bool
      * @throws
      */
-    public function closePaymentLogItem($data)
+    public function closePaymentLogItem(array $data)
     {
         if (!$this->validateData($data, 'close')) {
             return false;
@@ -144,7 +144,7 @@ class PaymentLog extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getPaymentLogItem($data)
+    public function getPaymentLogItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -166,7 +166,7 @@ class PaymentLog extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getPaymentLogList($data)
+    public function getPaymentLogList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -217,7 +217,7 @@ class PaymentLog extends CareyShop
      * @param string $paymentNo 交易流水号
      * @return float|int
      */
-    public static function getPaymentLogValue($paymentNo)
+    public static function getPaymentLogValue(string $paymentNo)
     {
         if (empty($paymentNo)) {
             return 0;

@@ -53,7 +53,7 @@ class SpecItem extends CareyShop
      * @param array $item   规格项列表
      * @return bool
      */
-    public static function updateItem($specId, $item)
+    public static function updateItem(int $specId, array $item)
     {
         // 去重规格项
         $item = array_unique($item);

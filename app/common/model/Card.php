@@ -74,7 +74,7 @@ class Card extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addCardItem($data)
+    public function addCardItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -122,7 +122,7 @@ class Card extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public function setCardItem($data)
+    public function setCardItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -154,7 +154,7 @@ class Card extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getCardItem($data)
+    public function getCardItem(array $data)
     {
         if (!$this->validateData($data, 'get')) {
             return false;
@@ -174,7 +174,7 @@ class Card extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCardStatus($data)
+    public function setCardStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -193,7 +193,7 @@ class Card extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCardList($data)
+    public function delCardList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -213,7 +213,7 @@ class Card extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getCardList($data)
+    public function getCardList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;

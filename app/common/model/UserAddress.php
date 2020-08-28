@@ -64,7 +64,7 @@ class UserAddress extends CareyShop
     /**
      * 全局是否删除查询条件
      * @access public
-     * @param UserAddress $query 模型
+     * @param object $query 模型
      */
     public function scopeDelete($query)
     {
@@ -78,7 +78,7 @@ class UserAddress extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAddressList($data)
+    public function getAddressList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -95,7 +95,7 @@ class UserAddress extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAddressItem($data)
+    public function getAddressItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -115,7 +115,7 @@ class UserAddress extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getAddressDefault($data)
+    public function getAddressDefault(array $data)
     {
         if (!$this->validateData($data, 'get_default')) {
             return false;
@@ -139,7 +139,7 @@ class UserAddress extends CareyShop
      * @return array|false
      * @throws
      */
-    public function addAddressItem($data)
+    public function addAddressItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -177,7 +177,7 @@ class UserAddress extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setAddressItem($data)
+    public function setAddressItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -224,7 +224,7 @@ class UserAddress extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAddressList($data)
+    public function delAddressList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -244,7 +244,7 @@ class UserAddress extends CareyShop
      * @param int $addressId 收货地址Id
      * @return void
      */
-    private function setUserAddressDefault($clientId, $addressId)
+    private function setUserAddressDefault(int $clientId, int $addressId)
     {
         User::update(['user_address_id' => $addressId], ['user_id' => $clientId]);
     }
@@ -256,7 +256,7 @@ class UserAddress extends CareyShop
      * @return bool
      * @throws
      */
-    public function setAddressDefault($data)
+    public function setAddressDefault(array $data)
     {
         if (!$this->validateData($data, 'default')) {
             return false;
@@ -282,7 +282,7 @@ class UserAddress extends CareyShop
      * @return bool
      * @throws
      */
-    public function isAddressMaximum($data)
+    public function isAddressMaximum(array $data)
     {
         if (!$this->validateData($data, 'maximum')) {
             return false;

@@ -42,7 +42,7 @@ class Support extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addSupportItem($data)
+    public function addSupportItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -64,7 +64,7 @@ class Support extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setSupportItem($data)
+    public function setSupportItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -82,7 +82,7 @@ class Support extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delSupportList($data)
+    public function delSupportList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -99,7 +99,7 @@ class Support extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getSupportItem($data)
+    public function getSupportItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -119,7 +119,7 @@ class Support extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getSupportList($data)
+    public function getSupportList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -149,7 +149,7 @@ class Support extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setSupportStatus($data)
+    public function setSupportStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -167,7 +167,7 @@ class Support extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setSupportSort($data)
+    public function setSupportSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;

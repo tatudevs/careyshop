@@ -80,7 +80,7 @@ class Refund extends Payment
      * @param array $setting 配置信息
      * @return bool
      */
-    public function setConfig($setting)
+    public function setConfig(array $setting)
     {
         foreach ($setting as $key => $value) {
             $this->$key = $value['value'];
@@ -126,7 +126,7 @@ class Refund extends Payment
      * @access public
      * @param string $refundNo 退款流水号
      */
-    public function setRefundNo($refundNo)
+    public function setRefundNo(string $refundNo)
     {
         $this->refundNo = $refundNo;
     }
@@ -136,7 +136,7 @@ class Refund extends Payment
      * @access public
      * @param string $amount 退款金额
      */
-    public function setRefundAmount($amount)
+    public function setRefundAmount(string $amount)
     {
         $this->refundAmount = $amount;
     }

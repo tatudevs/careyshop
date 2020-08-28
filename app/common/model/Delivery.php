@@ -82,7 +82,7 @@ class Delivery extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addDeliveryItem($data)
+    public function addDeliveryItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -104,7 +104,7 @@ class Delivery extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setDeliveryItem($data)
+    public function setDeliveryItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -136,7 +136,7 @@ class Delivery extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delDeliveryList($data)
+    public function delDeliveryList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -153,7 +153,7 @@ class Delivery extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getDeliveryItems($data)
+    public function getDeliveryItems(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -170,7 +170,7 @@ class Delivery extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getDeliveryList($data)
+    public function getDeliveryList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -224,7 +224,7 @@ class Delivery extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getDeliveryFreight($data)
+    public function getDeliveryFreight(array $data)
     {
         if (!$this->validateData($data, 'freight')) {
             return false;
@@ -337,7 +337,7 @@ class Delivery extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setDeliveryStatus($data)
+    public function setDeliveryStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -355,7 +355,7 @@ class Delivery extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueDeliveryItem($data)
+    public function uniqueDeliveryItem(array $data)
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -377,7 +377,7 @@ class Delivery extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setDeliverySort($data)
+    public function setDeliverySort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;

@@ -70,7 +70,7 @@ class Payment
      * @param string $returnUrl 同步返回URL
      * @return bool
      */
-    public function setReturnUrl($returnUrl)
+    public function setReturnUrl(string $returnUrl)
     {
         if (is_string($returnUrl)) {
             $this->returnUrl = $returnUrl;
@@ -86,7 +86,7 @@ class Payment
      * @param string $notifyUrl 异步返回URL
      * @return bool
      */
-    public function setNotifyUrl($notifyUrl)
+    public function setNotifyUrl(string $notifyUrl)
     {
         if (is_string($notifyUrl)) {
             $this->notifyUrl = $notifyUrl;
@@ -101,7 +101,7 @@ class Payment
      * @access public
      * @param string $paymentNo 流水号
      */
-    public function setOutTradeNo($paymentNo)
+    public function setOutTradeNo(string $paymentNo)
     {
         $this->outTradeNo = $paymentNo;
     }
@@ -111,7 +111,7 @@ class Payment
      * @access public
      * @param string $subject 订单名称
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject)
     {
         $this->subject = $subject;
     }
@@ -121,7 +121,7 @@ class Payment
      * @access public
      * @param float $amount 支付金额
      */
-    public function setTotalAmount($amount)
+    public function setTotalAmount(float $amount)
     {
         $this->totalAmount = $amount;
     }

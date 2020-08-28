@@ -24,7 +24,7 @@ class CareyShop
      * @param string $value 错误信息
      * @return false
      */
-    public function setError($value)
+    public function setError(string $value)
     {
         $this->error = $value;
         return false;

@@ -60,7 +60,7 @@ class DeliveryItem extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addCompanyItem($data)
+    public function addCompanyItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -98,7 +98,7 @@ class DeliveryItem extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setCompanyItem($data)
+    public function setCompanyItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -148,7 +148,7 @@ class DeliveryItem extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCompanyList($data)
+    public function delCompanyList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -179,7 +179,7 @@ class DeliveryItem extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getCompanyItem($data)
+    public function getCompanyItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -198,7 +198,7 @@ class DeliveryItem extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueCompanyCode($data)
+    public function uniqueCompanyCode(array $data)
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -223,7 +223,7 @@ class DeliveryItem extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getCompanyList($data)
+    public function getCompanyList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -258,7 +258,7 @@ class DeliveryItem extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getCompanySelect($data)
+    public function getCompanySelect(array $data)
     {
         if (!$this->validateData($data, 'select')) {
             return false;
@@ -280,7 +280,7 @@ class DeliveryItem extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getCompanyRecognise($data)
+    public function getCompanyRecognise(array $data)
     {
         if (!$this->validateData($data, 'recognise')) {
             return false;
@@ -319,7 +319,7 @@ class DeliveryItem extends CareyShop
      * @return array|false
      * @throws
      */
-    public function copyCompanyHot($data)
+    public function copyCompanyHot(array $data)
     {
         if (!$this->validateData($data, 'hot')) {
             return false;

@@ -72,7 +72,7 @@ class Alipay extends Payment
      * @param string $request 请求来源
      * @return object
      */
-    public function setQequest($request)
+    public function setQequest(string $request)
     {
         $this->request = $request;
         $this->productCode = $request == 'app' ? 'QUICK_MSECURITY_PAY' : 'FAST_INSTANT_TRADE_PAY';
@@ -86,7 +86,7 @@ class Alipay extends Payment
      * @param array $setting 配置信息
      * @return bool
      */
-    public function setConfig($setting)
+    public function setConfig(array $setting)
     {
         foreach ($setting as $key => $value) {
             $this->$key = $value['value'];

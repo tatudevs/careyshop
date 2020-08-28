@@ -54,7 +54,7 @@ class Menu extends CareyShop
      * @param string $value 值
      * @return string
      */
-    private function strToSnake($value)
+    private function strToSnake(string $value)
     {
         if (empty($value) || !is_string($value)) {
             return $value;
@@ -72,7 +72,7 @@ class Menu extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addMenuItem($data)
+    public function addMenuItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -107,7 +107,7 @@ class Menu extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getMenuItem($data)
+    public function getMenuItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -124,7 +124,7 @@ class Menu extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setMenuItem($data)
+    public function setMenuItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -183,7 +183,7 @@ class Menu extends CareyShop
      * @param null   $filter  过滤'is_navi'与'status'
      * @return array|mixed
      */
-    public static function getMenuListData($module, $menuId = 0, $isLayer = false, $level = null, $filter = null)
+    public static function getMenuListData(string $module, $menuId = 0, $isLayer = false, $level = null, $filter = null)
     {
         // 缓存名称
         $treeCache = 'MenuTree:' . $module;
@@ -241,7 +241,7 @@ class Menu extends CareyShop
      * @param int    $level      层级深度
      * @return array
      */
-    private static function setMenuTree($parentId, &$list, $limitLevel = null, $isLayer = false, $level = 0)
+    private static function setMenuTree(int $parentId, &$list, $limitLevel = null, $isLayer = false, $level = 0)
     {
         static $tree = [];
         $parentId != 0 ?: $isLayer = false; // 返回全部菜单不需要本级
@@ -299,7 +299,7 @@ class Menu extends CareyShop
      * @return false|array
      * @throws
      */
-    public function delMenuItem($data)
+    public function delMenuItem(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -325,7 +325,7 @@ class Menu extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getMenuIdNavi($data)
+    public function getMenuIdNavi(array $data)
     {
         if (!$this->validateData($data, 'navi')) {
             return false;
@@ -345,7 +345,7 @@ class Menu extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getMenuUrlNavi($data)
+    public function getMenuUrlNavi(array $data)
     {
         if (!$this->validateData($data, 'url')) {
             return false;
@@ -365,7 +365,7 @@ class Menu extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setMenuNavi($data)
+    public function setMenuNavi(array $data)
     {
         if (!$this->validateData($data, 'nac')) {
             return false;
@@ -384,7 +384,7 @@ class Menu extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setMenuSort($data)
+    public function setMenuSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -404,7 +404,7 @@ class Menu extends CareyShop
      * @return bool
      * @throws \Exception
      */
-    public function setMenuIndex($data)
+    public function setMenuIndex(array $data)
     {
         if (!$this->validateData($data, 'index')) {
             return false;
@@ -430,7 +430,7 @@ class Menu extends CareyShop
      * @param null   $filter  过滤'is_navi'与'status'
      * @return array
      */
-    public static function getParentList($module, $menuId, $isLayer = false, $filter = null)
+    public static function getParentList(string $module, int $menuId, $isLayer = false, $filter = null)
     {
         // 搜索条件
         $map[] = ['module', '=', $module];
@@ -484,7 +484,7 @@ class Menu extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setMenuStatus($data)
+    public function setMenuStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -527,9 +527,9 @@ class Menu extends CareyShop
      * 获取菜单列表
      * @access public
      * @param array $data 外部数据
-     * @return array|bool|mixed
+     * @return mixed
      */
-    public function getMenuList($data)
+    public function getMenuList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -552,7 +552,7 @@ class Menu extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getMenuAuthList($data)
+    public function getMenuAuthList(array $data)
     {
         if (!$this->validateData($data, 'auth')) {
             return false;
@@ -580,7 +580,7 @@ class Menu extends CareyShop
      * @param int    $status 菜单状态
      * @return array
      */
-    public static function getUrlMenuList($module, $status = 1)
+    public static function getUrlMenuList(string $module, $status = 1)
     {
         // 缓存名称
         $key = 'urlMenuList' . $module . $status;

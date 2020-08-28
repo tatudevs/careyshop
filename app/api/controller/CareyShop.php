@@ -600,7 +600,7 @@ abstract class CareyShop
     /**
      * 删除指定的公共参数
      * @access protected
-     * @param string/array $key 键值
+     * @param string|array $key 键值
      * @return mixed
      */
     protected function unParams($key)
@@ -624,7 +624,7 @@ abstract class CareyShop
      * @param string $key 键值
      * @return bool
      */
-    protected function hasParams($key)
+    protected function hasParams(string $key)
     {
         return isset($this->params[$key]);
     }

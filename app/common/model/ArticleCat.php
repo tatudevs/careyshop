@@ -46,7 +46,7 @@ class ArticleCat extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addArticleCatItem($data)
+    public function addArticleCatItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -69,7 +69,7 @@ class ArticleCat extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setArticleCatItem($data)
+    public function setArticleCatItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -102,7 +102,7 @@ class ArticleCat extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delArticleCatList($data)
+    public function delArticleCatList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -149,7 +149,7 @@ class ArticleCat extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getArticleCatItem($data)
+    public function getArticleCatItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -214,7 +214,7 @@ class ArticleCat extends CareyShop
      * @param int    $level      分类深度
      * @return array
      */
-    private static function setArticleCatTree($parentId, &$list, $limitLevel = null, $isLayer = false, $level = 0)
+    private static function setArticleCatTree(int $parentId, &$list, $limitLevel = null, $isLayer = false, $level = 0)
     {
         static $tree = [];
         $parentId != 0 ?: $isLayer = false; // 返回全部分类不需要本级
@@ -263,7 +263,7 @@ class ArticleCat extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getArticleCatNavi($data)
+    public function getArticleCatNavi(array $data)
     {
         if (!$this->validateData($data, 'navi')) {
             return false;
@@ -304,7 +304,7 @@ class ArticleCat extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setArticleCatSort($data)
+    public function setArticleCatSort(array $data)
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -349,7 +349,7 @@ class ArticleCat extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setArticleCatNavi($data)
+    public function setArticleCatNavi(array $data)
     {
         if (!$this->validateData($data, 'nac')) {
             return false;

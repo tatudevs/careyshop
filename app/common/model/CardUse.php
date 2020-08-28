@@ -75,7 +75,7 @@ class CardUse extends CareyShop
      * @return bool
      * @throws
      */
-    public function bindCardUseItem($data)
+    public function bindCardUseItem(array $data)
     {
         if (!$this->validateData($data, 'bind')) {
             return false;
@@ -142,7 +142,7 @@ class CardUse extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCardUseInvalid($data)
+    public function setCardUseInvalid(array $data)
     {
         if (!$this->validateData($data, 'invalid')) {
             return false;
@@ -243,7 +243,7 @@ class CardUse extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public function getCardUseMerge($data)
+    public function getCardUseMerge(array $data)
     {
         if (!$this->validateData($data, 'merge_list')) {
             return false;
@@ -284,7 +284,7 @@ class CardUse extends CareyShop
      * @return bool
      * @throws
      */
-    public function setCardUseMerge($data)
+    public function setCardUseMerge(array $data)
     {
         if (!$this->validateData($data, 'merge')) {
             return false;
@@ -341,7 +341,7 @@ class CardUse extends CareyShop
      * @param array $data 购物卡数据
      * @return mixed
      */
-    private function hidePassword($data)
+    private function hidePassword(array $data)
     {
         $cardAuth = json_decode(Config::get('careyshop.system_info.card_auth', []), true);
         if (!is_client_admin() || in_array(get_client_id(), $cardAuth)) {
@@ -362,7 +362,7 @@ class CardUse extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getCardUseExport($data)
+    public function getCardUseExport(array $data)
     {
         if (!$this->validateData($data, 'export')) {
             return false;
@@ -385,7 +385,7 @@ class CardUse extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getCardUseList($data)
+    public function getCardUseList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -461,7 +461,7 @@ class CardUse extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getCardUseSelect($data)
+    public function getCardUseSelect(array $data)
     {
         if (!$this->validateData($data, 'select')) {
             return false;
@@ -510,7 +510,7 @@ class CardUse extends CareyShop
      * @param float $decMoney      准备减少的可用金额
      * @return bool
      */
-    private function checkCard($card, $goodsCategory, $decMoney = 0.0)
+    private function checkCard(array $card, array $goodsCategory, $decMoney = 0.0)
     {
         if ($decMoney > 0 && bccomp($decMoney, $card['money'], 2) === 1) {
             return $this->setError('卡号 ' . $card['number'] . ' 可用余额不足');
@@ -551,7 +551,7 @@ class CardUse extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getCardUseCheck($data)
+    public function getCardUseCheck(array $data)
     {
         if (!$this->validateData($data, 'check')) {
             return false;

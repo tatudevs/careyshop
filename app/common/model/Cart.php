@@ -109,7 +109,7 @@ class Cart extends CareyShop
      * @return false|array
      * @throws
      */
-    public function setCartItem($data, $isBuyNow = false)
+    public function setCartItem(array $data, $isBuyNow = false)
     {
         // 避免无关字段,并初始化部分数据
         $data['user_id'] = get_client_id();
@@ -173,7 +173,7 @@ class Cart extends CareyShop
      * @return false|array
      * @throws
      */
-    public function checkCartGoods($data)
+    public function checkCartGoods(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -251,7 +251,7 @@ class Cart extends CareyShop
      * @return bool
      * @throws
      */
-    public function addCartList($data)
+    public function addCartList(array $data)
     {
         if (!$this->validateData($data, 'add')) {
             return false;
@@ -314,7 +314,7 @@ class Cart extends CareyShop
      * @return false|array
      * @throws
      */
-    public function getCartList($data)
+    public function getCartList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -345,7 +345,7 @@ class Cart extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public static function getCartCount($data)
+    public static function getCartCount(array $data)
     {
         $map[] = ['cart.user_id', '<>', 0];
         $map[] = ['cart.user_id', '=', get_client_id()];
@@ -364,7 +364,7 @@ class Cart extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCartSelect($data)
+    public function setCartSelect(array $data)
     {
         if (!$this->validateData($data, 'select')) {
             return false;
@@ -385,7 +385,7 @@ class Cart extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCartList($data)
+    public function delCartList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -421,7 +421,7 @@ class Cart extends CareyShop
      * @param array $data 外部数据
      * @return false|array
      */
-    public function createCartBuynow($data)
+    public function createCartBuynow(array $data)
     {
         return $this->setCartItem($data, true);
     }

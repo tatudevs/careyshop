@@ -121,7 +121,7 @@ class ReturnUrl
     /**
      * 验签方法
      * @access public
-     * @param array $setting 配置参数
+     * @param null $setting 配置参数
      * @return bool
      */
     public function checkReturn($setting = null)

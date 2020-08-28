@@ -47,7 +47,7 @@ class Topic extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addTopicItem($data)
+    public function addTopicItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
@@ -69,7 +69,7 @@ class Topic extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setTopicItem($data)
+    public function setTopicItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
@@ -87,7 +87,7 @@ class Topic extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delTopicList($data)
+    public function delTopicList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -104,7 +104,7 @@ class Topic extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getTopicItem($data)
+    public function getTopicItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -124,7 +124,7 @@ class Topic extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getTopicList($data)
+    public function getTopicList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -166,7 +166,7 @@ class Topic extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setTopicStatus($data)
+    public function setTopicStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;

@@ -76,7 +76,7 @@ class Notice extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getNoticeItem($data)
+    public function getNoticeItem(array $data)
     {
         if (!$this->validateData($data, 'item', false, Validate::class)) {
             return false;
@@ -99,7 +99,7 @@ class Notice extends CareyShop
      * @return bool
      * @throws
      */
-    public function setNoticeStatus($data)
+    public function setNoticeStatus(array $data)
     {
         if (!$this->validateData($data, 'status', false, Validate::class)) {
             return false;
@@ -135,7 +135,7 @@ class Notice extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setNoticeItem($data)
+    public function setNoticeItem(array $data)
     {
         $code = !empty($data['code']) ? 'set_' . $data['code'] : null;
         if (!$this->validateData($data, $code, false, Validate::class)) {
