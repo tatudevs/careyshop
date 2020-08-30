@@ -60,7 +60,7 @@ class CouponGive extends CareyShop
      */
     public function getCoupon()
     {
-        return $this->belongsTo('Coupon', 'coupon_id');
+        return $this->belongsTo(Coupon::class, 'coupon_id');
     }
 
     /**
@@ -71,21 +71,19 @@ class CouponGive extends CareyShop
     public function getUser()
     {
         return $this
-            ->hasOne('User', 'user_id', 'user_id')
+            ->hasOne(User::class, 'user_id', 'user_id')
             ->joinType('left');
     }
 
-    // todo
     /**
      * 使用优惠劵
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
-    public function useCouponItem($data)
+    public function useCouponItem(array $data)
     {
-        if (!$this->validateData($data, 'CouponGive.use')) {
+        if (!$this->validateData($data, 'use')) {
             return false;
         }
 
@@ -99,21 +97,18 @@ class CouponGive extends CareyShop
 
         if (!empty($data['exchange_code'])) {
             $data['user_id'] = get_client_id();
-            $map['exchange_code'] = ['eq', $data['exchange_code']];
+            $map[] = ['exchange_code', '=', $data['exchange_code']];
         } else {
-            $map['user_id'] = ['eq', get_client_id()];
-            $map['coupon_give_id'] = ['eq', $data['coupon_give_id']];
+            $map[] = ['user_id', '=', get_client_id()];
+            $map[] = ['coupon_give_id', '=', $data['coupon_give_id']];
         }
 
         $data['use_time'] = time();
         $field = ['user_id', 'order_id', 'order_no', 'use_time'];
 
-        if (false === $this->allowField($field)->save($data, $map)) {
-            return false;
-        }
-
-        $mapCoupon['coupon_id'] = ['eq', $this->where($map)->value('coupon_id', 0, true)];
-        Coupon::where($mapCoupon)->setInc('use_num');
+        self::update($data, $map, $field);
+        $mapCoupon[] = ['coupon_id', '=', $this->where($map)->value('coupon_id', 0)];
+        Coupon::where($mapCoupon)->inc('use_num')->update();
 
         return true;
     }
@@ -121,23 +116,23 @@ class CouponGive extends CareyShop
     /**
      * 发放优惠劵
      * @access public
-     * @param  int   $couponId 优惠劵编号
-     * @param  array $userId   发放用户(等同于发放数)
-     * @param  int   $type     优惠劵类型
+     * @param int   $couponId 优惠劵编号
+     * @param array $userId   发放用户(等同于发放数)
+     * @param int   $type     优惠劵类型
      * @return false|object
      * @throws
      */
-    private function addCouponGive($couponId, $userId, $type)
+    private function addCouponGive(int $couponId, array $userId, int $type)
     {
         // 获取优惠劵信息
-        $map['coupon_id'] = ['eq', $couponId];
-        $map['status'] = ['eq', 1];
-        $map['is_invalid'] = ['eq', 0];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['coupon_id', '=', $couponId];
+        $map[] = ['status', '=', 1];
+        $map[] = ['is_invalid', '=', 0];
+        $map[] = ['is_delete', '=', 0];
 
         $couponResult = Coupon::where($map)->find();
-        if (!$couponResult) {
-            return is_null($couponResult) ? $this->setError('优惠劵已失效') : false;
+        if (is_null($couponResult)) {
+            return $this->setError('优惠劵已失效');
         }
 
         if ($couponResult->getAttr('type') !== $type) {
@@ -147,8 +142,8 @@ class CouponGive extends CareyShop
         if (2 === $type) {
             $frequency = $couponResult->getAttr('frequency');
             if ($frequency !== 0) {
-                $mapUser['coupon_id'] = ['eq', $couponId];
-                $mapUser['user_id'] = ['in', $userId];
+                $mapUser[] = ['coupon_id', '=', $couponId];
+                $mapUser[] = ['user_id', 'in', $userId];
 
                 if ($this->where($mapUser)->count() >= $frequency) {
                     return $this->setError('每人最多只能领取 ' . $frequency . ' 张');
@@ -185,25 +180,19 @@ class CouponGive extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
+            // 写入发放记录
             $result = $type == 3 ? $this->saveAll($data) : $this->insertAll($data);
-            if (false === $result) {
-                throw new \Exception($this->getError());
-            }
 
-            unset($map);
-            $map['coupon_id'] = ['eq', $couponId];
+            // 更新主记录
+            $couponResult->where('coupon_id', '=', $couponId)->inc('receive_num', count($userId))->update();
 
-            if (!$couponResult->where($map)->setInc('receive_num', count($userId))) {
-                throw new \Exception($couponResult->getError());
-            }
-
-            self::commit();
+            $this->commit();
             return $result;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -211,12 +200,12 @@ class CouponGive extends CareyShop
     /**
      * 向指定用户发放优惠劵
      * @access public
-     * @param  array $data 外部数据
-     * @return bool
+     * @param array $data 外部数据
+     * @return mixed
      */
-    public function giveCouponUser($data)
+    public function giveCouponUser(array $data)
     {
-        if (!$this->validateData($data, 'CouponGive.user')) {
+        if (!$this->validateData($data, 'user')) {
             return false;
         }
 
@@ -230,13 +219,13 @@ class CouponGive extends CareyShop
 
         // 获取账号资料
         $map = [];
-        empty($data['username']) ?: $map['username'] = ['in', $data['username']];
-        empty($data['user_level_id']) ?: $map['user_level_id'] = ['in', $data['user_level_id']];
+        empty($data['username']) ?: $map[] = ['username', 'in', $data['username']];
+        empty($data['user_level_id']) ?: $map[] = ['user_level_id', 'in', $data['user_level_id']];
 
         $userIdResult = User::where($map)->column('user_id');
         if (!$userIdResult) {
             if (!empty($data['username'])) {
-                return $this->setError('账号数据存在');
+                return $this->setError('账号数据不存在');
             }
 
             if (!empty($data['user_level_id'])) {
@@ -257,12 +246,12 @@ class CouponGive extends CareyShop
     /**
      * 生成线下优惠劵
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function giveCouponLive($data)
+    public function giveCouponLive(array $data)
     {
-        if (!$this->validateData($data, 'CouponGive.live')) {
+        if (!$this->validateData($data, 'live')) {
             return false;
         }
 
@@ -276,19 +265,19 @@ class CouponGive extends CareyShop
     /**
      * 领取码领取优惠劵
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
-    public function giveCouponCode($data)
+    public function giveCouponCode(array $data)
     {
-        if (!$this->validateData($data, 'CouponGive.code')) {
+        if (!$this->validateData($data, 'code')) {
             return false;
         }
 
-        $result = Coupon::where(['give_code' => ['eq', $data['give_code']]])->find();
-        if (!$result) {
-            return is_null($result) ? $this->setError('优惠劵领取码无效') : false;
+        $result = Coupon::where('give_code', '=', $data['give_code'])->find();
+        if (is_null($result)) {
+            return $this->setError('优惠劵领取码无效');
         }
 
         if ($this->addCouponGive($result->getAttr('coupon_id'), [get_client_id()], 2)) {
@@ -301,11 +290,11 @@ class CouponGive extends CareyShop
     /**
      * 下单送优惠劵(非对外接口)
      * @access public
-     * @param  int $couponId 优惠劵编号
-     * @param  int $userId   发放账号Id
+     * @param int $couponId 优惠劵编号
+     * @param int $userId   发放账号Id
      * @return false|array
      */
-    public function giveCouponOrder($couponId, $userId)
+    public function giveCouponOrder(int $couponId, int $userId)
     {
         $result = $this->addCouponGive($couponId, [$userId], 3);
         if ($result) {
@@ -315,6 +304,7 @@ class CouponGive extends CareyShop
         return false;
     }
 
+    //todo
     /**
      * 获取已领取优惠劵列表
      * @access public
@@ -324,7 +314,7 @@ class CouponGive extends CareyShop
      */
     public function getCouponGiveList($data)
     {
-        if (!$this->validateData($data, 'CouponGive.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
