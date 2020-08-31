@@ -177,11 +177,11 @@ class FriendLink extends CareyShop
     /**
      * 根据编号自动排序
      * @access public
-     * @param  $data
+     * @param array $data
      * @return bool
      * @throws \Exception
      */
-    public function setFriendLinkIndex($data)
+    public function setFriendLinkIndex(array $data)
     {
         if (!$this->validateData($data, 'index')) {
             return false;

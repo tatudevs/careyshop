@@ -209,11 +209,11 @@ class Navigation extends CareyShop
     /**
      * 根据编号自动排序
      * @access public
-     * @param  $data
+     * @param array $data
      * @return bool
      * @throws \Exception
      */
-    public function setNavigationIndex($data)
+    public function setNavigationIndex(array $data)
     {
         if (!$this->validateData($data, 'index')) {
             return false;

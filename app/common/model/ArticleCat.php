@@ -322,11 +322,11 @@ class ArticleCat extends CareyShop
     /**
      * 根据编号自动排序
      * @access public
-     * @param  $data
+     * @param array $data
      * @return bool
      * @throws \Exception
      */
-    public function setArticleCatIndex($data)
+    public function setArticleCatIndex(array $data)
     {
         if (!$this->validateData($data, 'index')) {
             return false;

@@ -381,11 +381,11 @@ class Spec extends CareyShop
     /**
      * 根据编号自动排序
      * @access public
-     * @param  $data
+     * @param array $data
      * @return bool
      * @throws \Exception
      */
-    public function setSpecIndex($data)
+    public function setSpecIndex(array $data)
     {
         if (!$this->validateData($data, 'index')) {
             return false;

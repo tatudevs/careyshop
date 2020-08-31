@@ -218,11 +218,11 @@ class AuthGroup extends CareyShop
     /**
      * 根据编号自动排序
      * @access public
-     * @param  $data
+     * @param array $data
      * @return bool
      * @throws \Exception
      */
-    public function setAuthGroupIndex($data)
+    public function setAuthGroupIndex(array $data)
     {
         if (!$this->validateData($data, 'index')) {
             return false;

@@ -182,11 +182,11 @@ class Support extends CareyShop
     /**
      * 根据编号自动排序
      * @access public
-     * @param  $data
+     * @param array $data
      * @return bool
      * @throws \Exception
      */
-    public function setSupportIndex($data)
+    public function setSupportIndex(array $data)
     {
         if (!$this->validateData($data, 'index')) {
             return false;
