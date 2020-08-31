@@ -304,212 +304,195 @@ class CouponGive extends CareyShop
         return false;
     }
 
-    //todo
     /**
      * 获取已领取优惠劵列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
-    public function getCouponGiveList($data)
+    public function getCouponGiveList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $mapOr = [];
-        $map['coupon_give.is_delete'] = ['eq', 0];
+        $map = $mapOr = [];
 
         if (is_client_admin()) {
-            empty($data['coupon_id']) ?: $map['coupon_give.coupon_id'] = ['eq', $data['coupon_id']];
-            empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
+            empty($data['coupon_id']) ?: $map[] = ['coupon_give.coupon_id', '=', $data['coupon_id']];
+            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
         } else {
-            $map['coupon_give.user_id'] = ['eq', get_client_id()];
+            $map[] = ['coupon_give.user_id', '=', get_client_id()];
         }
 
         if (!is_empty_parm($data['type'])) {
             // 正常状态优惠劵
             if ($data['type'] == 'normal') {
-                $map['coupon_give.use_time'] = ['eq', 0];
-                $map['getCoupon.use_end_time'] = ['gt', time()];
-                $map['getCoupon.is_invalid'] = ['eq', 0];
+                $map[] = ['coupon_give.use_time', '=', 0];
+                $map[] = ['getCoupon.use_end_time', '>', time()];
+                $map[] = ['getCoupon.is_invalid', '=', 0];
+                $map[] = ['coupon_give.is_delete', '=', 0];
             }
 
             // 已使用优惠劵
             if ($data['type'] == 'used') {
-                $map['coupon_give.use_time'] = ['neq', 0];
+                $map[] = ['coupon_give.use_time', '<>', 0];
+                $map[] = ['coupon_give.is_delete', '=', 0];
             }
 
             // 无效优惠劵
             if ($data['type'] == 'invalid') {
-                $map['coupon_give.use_time'] = ['eq', 0];
-                $mapOr['getCoupon.use_end_time'] = ['lt', time()];
-                $mapOr['getCoupon.is_invalid'] = ['eq', 1];
+                $map[] = ['coupon_give.use_time', '=', 0];
+                $mapOr[] = ['getCoupon.use_end_time', '<', time()];
+                $mapOr[] = ['getCoupon.is_invalid', '=', 1];
+                $map[] = ['coupon_give.is_delete', '=', 0];
             }
 
             // 回收站优惠劵
             if ($data['type'] == 'delete') {
-                $map['coupon_give.is_delete'] = ['eq', 1];
+                $map[] = ['coupon_give.is_delete', '=', 1];
             }
+        } else {
+            $map[] = ['coupon_give.is_delete', '=', 0];
         }
 
         // 关联查询
         $with = ['getCoupon'];
-        !is_client_admin() ?: $with[] = 'getUser';
+        !is_client_admin() ?: $with['getUser'] = ['username', 'nickname', 'level_icon', 'head_pic'];
 
-        $totalResult = $this->with($with)->where($map)->where(function ($query) use ($mapOr) {
-            $query->whereOr($mapOr);
-        })->count();
+        $result['total_result'] = $this
+            ->withJoin($with)
+            ->where($map)
+            ->where(function ($query) use ($mapOr) {
+                $query->whereOr($mapOr);
+            })
+            ->count();
 
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $with, $map, $mapOr) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['coupon_give_id' => 'desc'])
+            ->withoutField('is_delete')
+            ->withJoin($with)
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->hidden(['getCoupon.is_delete'])
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            $query
-                ->field('is_delete', true)
-                ->with($with)
-                ->where($map)
-                ->where(function ($query) use ($mapOr) {
-                    $query->whereOr($mapOr);
-                })
-                ->order(['coupon_give.coupon_give_id' => 'desc'])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        self::keyToSnake(['getCoupon', 'getUser'], $result['items']);
+        return $result;
     }
 
     /**
      * 批量删除已领取优惠劵
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function delCouponGiveList($data)
+    public function delCouponGiveList(array $data)
     {
-        if (!$this->validateData($data, 'CouponGive.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
         // 搜索条件
-        $map['coupon_give_id'] = ['in', $data['coupon_give_id']];
+        $map[] = ['coupon_give_id', 'in', $data['coupon_give_id']];
 
         if (is_client_admin()) {
             // 未使用的进行物理删除
-            $map['use_time'] = ['eq', 0];
-            self::where($map)->delete();
-
+            $this->where($map)->where('use_time', '=', 0)->delete();
             // 已使用的放入回收站
-            $map['use_time'] = ['neq', 0];
-            if (false !== $this->save(['is_delete' => 1], $map)) {
-                return true;
-            }
+            $this->where($map)->where('use_time', '<>', 0)->save(['is_delete' => 1]);
         } else {
-            $map['user_id'] = ['eq', get_client_id()];
-            if (false !== $this->save(['is_delete' => 1], $map)) {
-                return true;
-            }
+            $this->where($map)->where('user_id', '=', get_client_id())->save(['is_delete' => 1]);
         }
 
-        return false;
+        return true;
     }
 
     /**
      * 批量恢复已删优惠劵
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function recCouponGiveList($data)
+    public function recCouponGiveList(array $data)
     {
-        if (!$this->validateData($data, 'CouponGive.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $map['coupon_give_id'] = ['in', $data['coupon_give_id']];
-        is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
+        $map[] = ['coupon_give_id', 'in', $data['coupon_give_id']];
+        is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
+        self::update(['is_delete' => 0], $map);
 
-        if (false !== $this->save(['is_delete' => 0], $map)) {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     /**
      * 导出线下生成的优惠劵
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
-    public function getCouponGiveExport($data)
+    public function getCouponGiveExport(array $data)
     {
-        if (!$this->validateData($data, 'CouponGive.export')) {
+        if (!$this->validateData($data, 'export')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $query
-                ->field('coupon_id,user_id,order_id', true)
-                ->where(['coupon_id' => ['eq', $data['coupon_id']]]);
-        });
-
-        if ($result !== false) {
-            return $result->toArray();
-        }
-
-        return false;
+        return $this
+            ->withoutField('coupon_id,user_id,order_id')
+            ->where('coupon_id', '=', $data['coupon_id'])
+            ->select()
+            ->toArray();
     }
 
     /**
      * 根据商品Id列出可使用的优惠劵
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
-    public function getCouponGiveSelect($data)
+    public function getCouponGiveSelect(array $data)
     {
-        if (!$this->validateData($data, 'CouponGive.select')) {
+        if (!$this->validateData($data, 'select')) {
             return false;
         }
 
         // 获取未使用的优惠劵
-        $couponResult = self::all(function ($query) use ($data) {
-            $map['coupon_give.user_id'] = ['eq', get_client_id()];
-            $map['coupon_give.use_time'] = ['eq', 0];
-            $map['coupon_give.is_delete'] = ['eq', 0];
+        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['use_time', '=', 0];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->with('getCoupon')->where($map)->order(['getCoupon.money' => 'desc']);
-        });
+        $couponResult = $this
+            ->with(['get_coupon' => function ($query) {
+                $query->order('money', 'desc');
+            }])
+            ->where($map)
+            ->select()
+            ->hidden(['is_delete', 'get_coupon.is_delete'])
+            ->toArray();
 
-        if ($couponResult->isEmpty()) {
+        if (empty($couponResult)) {
             return [];
         }
 
         // 获取订单商品分类并进行筛选
         $result = [];
-        $goodsResult = Goods::where(['goods_id' => ['in', $data['goods_id']]])->column('goods_category_id');
+        $goodsResult = Goods::where('goods_id', 'in', $data['goods_id'])->column('goods_category_id');
 
         // 优惠劵发放服务层实例化
         $giveSer = new \app\common\service\CouponGive();
-
         foreach ($couponResult as $value) {
-            $temp = $value->hidden(['is_delete'])->toArray();
+            $temp = $value;
             $temp['is_use'] = (int)$giveSer->checkCoupon($temp, $goodsResult, $data['pay_amount']);
             $temp['not_use_error'] = 0 == $temp['is_use'] ? $giveSer->getError() : '';
 
@@ -523,13 +506,13 @@ class CouponGive extends CareyShop
     /**
      * 验证优惠劵是否可使用
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getCouponGiveCheck($data)
+    public function getCouponGiveCheck(array $data)
     {
-        if (!$this->validateData($data, 'CouponGive.check')) {
+        if (!$this->validateData($data, 'check')) {
             return false;
         }
 
@@ -542,29 +525,27 @@ class CouponGive extends CareyShop
         }
 
         // 获取优惠劵数据
-        $map['coupon_give.use_time'] = ['eq', 0];
-        $map['coupon_give.is_delete'] = ['eq', 0];
+        $map[] = ['use_time', '=', 0];
+        $map[] = ['is_delete', '=', 0];
 
         if (!empty($data['exchange_code'])) {
-            $map['coupon_give.exchange_code'] = ['eq', $data['exchange_code']];
+            $map[] = ['exchange_code', '=', $data['exchange_code']];
         } else {
-            $map['coupon_give.user_id'] = ['eq', get_client_id()];
-            $map['coupon_give.coupon_give_id'] = ['eq', $data['coupon_give_id']];
+            $map[] = ['user_id', '=', get_client_id()];
+            $map[] = ['coupon_give_id', '=', $data['coupon_give_id']];
         }
 
         // 获取未使用的优惠劵
-        $couponResult = self::get(function ($query) use ($map) {
-            $query->with('getCoupon')->where($map);
-        });
-
-        if (!$couponResult) {
-            return is_null($couponResult) ? $this->setError('优惠劵不存在') : false;
+        $couponResult = $this->with('get_coupon')->where($map)->find();
+        if (is_null($couponResult)) {
+            return $this->setError('优惠劵不存在');
         }
 
         // 获取订单商品分类并进行筛选
-        $result = $couponResult->hidden(['is_delete'])->toArray();
-        $goodsResult = Goods::where(['goods_id' => ['in', $data['goods_id']]])->column('goods_category_id');
+        $result = $couponResult->hidden(['is_delete', 'get_coupon.is_delete'])->toArray();
+        $goodsResult = Goods::where('goods_id', 'in', $data['goods_id'])->column('goods_category_id');
 
+        // 优惠劵发放服务层实例化
         $giveSer = new \app\common\service\CouponGive();
         if (!$giveSer->checkCoupon($result, $goodsResult, $data['pay_amount'])) {
             return $this->setError($giveSer->getError());
