@@ -5,13 +5,12 @@
  * CareyShop    商品评价模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/11
+ * @date        2020/8/31
  */
 
 namespace app\common\model;
 
-use think\Request;
-use util\Ip2Region;
+use careyshop\Ip2Region;
 
 class GoodsComment extends CareyShop
 {
@@ -40,6 +39,12 @@ class GoodsComment extends CareyShop
     const COMMENT_TYPE_ADDITION_REPLY = 3;
 
     /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'goods_comment_id';
+
+    /**
      * 是否需要自动写入时间戳
      * @var bool
      */
@@ -50,47 +55,6 @@ class GoodsComment extends CareyShop
      * @var bool/string
      */
     protected $updateTime = false;
-
-    /**
-     * 新增自动完成列表
-     * @var array
-     */
-    protected $insert = [
-        'ip_address',
-    ];
-
-    /**
-     * IP地址自动完成
-     * @access protected
-     * @return string
-     */
-    protected function setIpAddressAttr()
-    {
-        return Request::instance()->ip();
-    }
-
-    /**
-     * 获取器ip地址
-     * @param $value
-     * @param $data
-     * @return string
-     * @throws \Exception
-     */
-    protected function getIpAddressRegionAttr($value, $data)
-    {
-        if (empty($data['ip_address'])) {
-            return '';
-        }
-
-        $ip2region = new Ip2Region();
-        $result = $ip2region->btreeSearch($data['ip_address']);
-
-        if ($result) {
-            $value = get_ip2region_str($result['region']);
-        }
-
-        return $value;
-    }
 
     /**
      * 隐藏属性
@@ -129,13 +93,40 @@ class GoodsComment extends CareyShop
     ];
 
     /**
+     * 获取器ip地址
+     * @access public
+     * @param $value
+     * @param $data
+     * @return string
+     */
+    public function getIpAddressRegionAttr($value, $data)
+    {
+        if (empty($data['ip_address'])) {
+            return '';
+        }
+
+        try {
+            $ip2region = new Ip2Region();
+            $result = $ip2region->btreeSearch($data['ip_address']);
+
+            if ($result) {
+                $value = get_ip2region_str($result['region']);
+            }
+        } catch (\Exception $e) {
+            return '';
+        }
+
+        return $value;
+    }
+
+    /**
      * hasOne cs_goods_comment
      * @access public
      * @return mixed
      */
     public function getAddition()
     {
-        return $this->hasOne('GoodsComment', 'parent_id');
+        return $this->hasOne(GoodsComment::class, 'parent_id');
     }
 
     /**
@@ -145,7 +136,7 @@ class GoodsComment extends CareyShop
      */
     public function getMainReply()
     {
-        return $this->hasMany('GoodsComment', 'parent_id');
+        return $this->hasMany(GoodsComment::class, 'parent_id');
     }
 
     /**
@@ -155,7 +146,7 @@ class GoodsComment extends CareyShop
      */
     public function getAdditionReply()
     {
-        return $this->hasMany('GoodsComment', 'parent_id');
+        return $this->hasMany(GoodsComment::class, 'parent_id');
     }
 
     /**
@@ -165,10 +156,10 @@ class GoodsComment extends CareyShop
      */
     public function getOrderGoods()
     {
+        // field('goods_id,goods_name,goods_image,key_value')
         return $this
-            ->hasOne('OrderGoods', 'order_goods_id', 'order_goods_id', [], 'left')
-            ->field('goods_id,goods_name,goods_image,key_value')
-            ->setEagerlyType(0);
+            ->hasOne(OrderGoods::class, 'order_goods_id', 'order_goods_id')
+            ->joinType('left');
     }
 
     /**
@@ -178,11 +169,30 @@ class GoodsComment extends CareyShop
      */
     public function getUser()
     {
+        // field('username,nickname,level_icon,user_level_id,head_pic')
         return $this
-            ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('username,nickname,level_icon,user_level_id,head_pic')
-            ->setEagerlyType(0);
+            ->hasOne(User::class, 'user_id', 'user_id')
+            ->joinType('left');
     }
+
+    //todo
+//    /**
+//     * 新增自动完成列表
+//     * @var array
+//     */
+//    protected $insert = [
+//        'ip_address',
+//    ];
+//
+//    /**
+//     * IP地址自动完成
+//     * @access protected
+//     * @return string
+//     */
+//    protected function setIpAddressAttr()
+//    {
+//        return Request::instance()->ip();
+//    }
 
     /**
      * 添加一条新的商品评价
