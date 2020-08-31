@@ -26,7 +26,7 @@ class Cart extends CareyShop
 
     /**
      * 创建日期字段
-     * @var bool/string
+     * @var bool|string
      */
     protected $createTime = false;
 

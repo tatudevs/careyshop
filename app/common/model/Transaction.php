@@ -38,7 +38,7 @@ class Transaction extends CareyShop
 
     /**
      * 更新日期字段
-     * @var bool/string
+     * @var bool|string
      */
     protected $updateTime = false;
 
