@@ -5,7 +5,7 @@
  * CareyShop    商品规格列表服务层
  *
  * @author      zxm <252404501@qq.com>
- * @date        2019/10/24
+ * @date        2020/9/1
  */
 
 namespace app\common\service;
@@ -19,12 +19,12 @@ class SpecGoods extends CareyShop
     /**
      * 将商品规格项还原成菜单结构数据
      * @access public
-     * @param  array  $data    待处理数据
-     * @param  number $goodsId 商品编号
+     * @param array $data    待处理数据
+     * @param null  $goodsId 商品编号
      * @return array
      * @throws
      */
-    public static function specItemToMenu($data, $goodsId = null)
+    public static function specItemToMenu(array $data, $goodsId = null)
     {
         if (!is_array($data) || empty($data)) {
             return [];
@@ -43,7 +43,7 @@ class SpecGoods extends CareyShop
         // 去重之后"$keyList"保持了项的排序先后
         $keyList = array_unique($keyList);
 
-        $map = ['spec_item_id' => ['in', $keyList]];
+        $map = [['spec_item_id', 'in', $keyList]];
         $specItemResult = SpecItem::where($map)->column('spec_id,item_name', 'spec_item_id');
 
         $idList = array_column($specItemResult, 'spec_id');
@@ -52,7 +52,7 @@ class SpecGoods extends CareyShop
         }
 
         $idList = array_unique($idList);
-        $map = ['spec_id' => ['in', $idList]];
+        $map = [['spec_id', 'in', $idList]];
         $specResult = Spec::where($map)->column('name,spec_type', 'spec_id');
 
         if (empty($specResult)) {
@@ -62,7 +62,7 @@ class SpecGoods extends CareyShop
         // 如果存在图片或色彩数据
         $imageList = [];
         if ($goodsId) {
-            $imageResult = SpecImage::where(['goods_id' => ['eq', $goodsId]])->select();
+            $imageResult = SpecImage::where('goods_id', '=', $goodsId)->select();
             $imageList = array_column($imageResult->toArray(), null, 'spec_item_id');
         }
 
@@ -121,9 +121,9 @@ class SpecGoods extends CareyShop
     /**
      * 检测规格菜单是否存在自定义,并且替换原始数据
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      */
-    public static function validateSpecMenu(&$data)
+    public static function validateSpecMenu(array &$data)
     {
         if (empty($data['spec_config'])) {
             return;
