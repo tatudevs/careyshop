@@ -5,7 +5,7 @@
  * CareyShop    订单退款服务层
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/1/26
+ * @date        2020/9/1
  */
 
 namespace app\common\service;
@@ -17,11 +17,11 @@ class OrderRefund extends CareyShop
     /**
      * 创建退款模块
      * @access private
-     * @param  string $file  支付目录
-     * @param  string $model 退款模块
+     * @param string $file  支付目录
+     * @param string $model 退款模块
      * @return object|false
      */
-    private function createRefundModel($file, $model)
+    private function createRefundModel(string $file, string $model)
     {
         // 转换模块的名称
         $file = Str::lower($file);
@@ -42,13 +42,13 @@ class OrderRefund extends CareyShop
     /**
      * 创建订单原路退款请求
      * @access public
-     * @param  array  &$data    订单数据
-     * @param  array  &$setting 支付配置
-     * @param  float  $amount   退款金额
-     * @param  string $refundNo 退款流水号
+     * @param array  &$data     订单数据
+     * @param array  &$setting  支付配置
+     * @param float   $amount   退款金额
+     * @param string  $refundNo 退款流水号
      * @return object|false
      */
-    public function createRefundRequest(&$data, &$setting, $amount, $refundNo = '')
+    public function createRefundRequest(array &$data, array &$setting, float $amount, $refundNo = '')
     {
         if (empty($data) || !is_array($setting)) {
             return $this->setError('数据错误');
@@ -86,11 +86,11 @@ class OrderRefund extends CareyShop
     /**
      * 创建退款查询请求
      * @access public
-     * @param  array $refundLog 退款记录数据结构
-     * @param  array &$setting  支付配置
+     * @param array  $refundLog 退款记录数据结构
+     * @param array &$setting   支付配置
      * @return array|false
      */
-    public function createFastpayRefundQueryRequest($refundLog, &$setting)
+    public function createFastpayRefundQueryRequest(array $refundLog, array &$setting)
     {
         if (empty($refundLog) || !is_array($setting)) {
             return $this->setError('数据错误');

@@ -10,7 +10,6 @@
 
 namespace app\common\model;
 
-
 class Order extends CareyShop
 {
     /**
@@ -18,12 +17,6 @@ class Order extends CareyShop
      * @var string
      */
     protected $pk = 'order_id';
-
-    /**
-     * 是否需要自动写入时间戳
-     * @var bool
-     */
-    protected $autoWriteTimestamp = true;
 
     /**
      * 隐藏属性
@@ -85,4 +78,5 @@ class Order extends CareyShop
         'finished_time'   => 'timestamp',
         'is_delete'       => 'integer',
     ];
+
 }
