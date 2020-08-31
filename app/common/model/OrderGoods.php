@@ -161,7 +161,6 @@ class OrderGoods extends CareyShop
         }
 
         // 搜索条件
-        $mapJoin = [];
         $map[] = ['order_goods.order_goods_id', '=', $data['order_goods_id']];
         is_client_admin() ?: $map[] = ['order_goods.user_id', '=', get_client_id()];
 
@@ -169,7 +168,7 @@ class OrderGoods extends CareyShop
         $with = [];
         if ($hasOrderGoods) {
             $with = ['getOrder'];
-            $mapJoin[] = ['getOrder.is_delete', '<>', 2];
+            $map[] = ['getOrder.is_delete', '<>', 2];
         }
 
         // 实际查询
@@ -177,7 +176,6 @@ class OrderGoods extends CareyShop
             ->alias('order_goods')
             ->withJoin($with)
             ->where($map)
-            ->where($mapJoin)
             ->find();
 
         if (is_null($result)) {
