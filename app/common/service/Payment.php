@@ -5,33 +5,36 @@
  * CareyShop    支付配置服务层
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/1/27
+ * @date        2020/8/31
  */
 
 namespace app\common\service;
 
-use think\Url;
+use think\exception\ValidateException;
+use think\facade\Route;
 use think\helper\Str;
-use think\Loader;
 
 class Payment extends CareyShop
 {
     /**
      * 获取支付异步URL接口
      * @access public
-     * @param  array $data     外部数据
-     * @param  bool  $isString 是否直接返回URL地址
+     * @param array $data     外部数据
+     * @param bool  $isString 是否直接返回URL地址
      * @return mixed
      */
-    public function getPaymentNotify($data, $isString = false)
+    public function getPaymentNotify(array $data, $isString = false)
     {
-        $validate = Loader::validate('Recharge');
-        if (!$validate->scene('return')->check($data)) {
-            return $this->setError($validate->getError());
+        // 规则验证
+        try {
+            validate(\app\common\validate\Recharge::class)->scene('return')->check($data);
+        } catch (ValidateException $e) {
+            return $this->setError($e->getMessage());
         }
 
+        // 生成链接
         $vars = ['method' => 'put.payment.data', 'to_payment' => $data['to_payment'], 'type' => 'notify'];
-        $notifyUrl = Url::bUild('/api/v1/payment', $vars, true, true);
+        $notifyUrl = Route::buildUrl('api/v1/payment', $vars)->domain(true)->build();
 
         return $isString ? $notifyUrl : ['notify_url' => $notifyUrl, 'to_payment' => $data['to_payment']];
     }
@@ -39,19 +42,22 @@ class Payment extends CareyShop
     /**
      * 获取支付同步URL接口
      * @access public
-     * @param  array $data     外部数据
-     * @param  bool  $isString 是否直接返回URL地址
+     * @param array $data     外部数据
+     * @param bool  $isString 是否直接返回URL地址
      * @return mixed
      */
-    public function getPaymentReturn($data, $isString = false)
+    public function getPaymentReturn(array $data, $isString = false)
     {
-        $validate = Loader::validate('Recharge');
-        if (!$validate->scene('return')->check($data)) {
-            return $this->setError($validate->getError());
+        // 规则验证
+        try {
+            validate(\app\common\validate\Recharge::class)->scene('return')->check($data);
+        } catch (ValidateException $e) {
+            return $this->setError($e->getMessage());
         }
 
+        // 生成链接
         $vars = ['method' => 'put.payment.data', 'to_payment' => $data['to_payment'], 'type' => 'return'];
-        $notifyUrl = Url::bUild('/api/v1/payment', $vars, true, true);
+        $notifyUrl = Route::buildUrl('api/v1/payment', $vars)->domain(true)->build();
 
         return $isString ? $notifyUrl : ['return_url' => $notifyUrl, 'to_payment' => $data['to_payment']];
     }
@@ -59,11 +65,11 @@ class Payment extends CareyShop
     /**
      * 创建支付模块
      * @access public
-     * @param  string $file  支付目录
-     * @param  string $model 支付模块
+     * @param string $file  支付目录
+     * @param string $model 支付模块
      * @return object|false
      */
-    public function createPaymentModel($file, $model)
+    public function createPaymentModel(string $file, string $model)
     {
         // 转换模块的名称
         $file = Str::lower($file);
@@ -84,14 +90,14 @@ class Payment extends CareyShop
     /**
      * 创建支付请求
      * @access public
-     * @param  array  &$data    支付日志
-     * @param  array  &$setting 支付配置
-     * @param  string $request  请求来源
-     * @param  string $subject  订单名称
-     * @param  string $body     订单描述
+     * @param array  &$data    支付日志
+     * @param array  &$setting 支付配置
+     * @param string  $request 请求来源
+     * @param string  $subject 订单名称
+     * @param string  $body    订单描述
      * @return array|false
      */
-    public function createPaymentPay(&$data, &$setting, $request, $subject, $body = '')
+    public function createPaymentPay(array &$data, array &$setting, string $request, string $subject, $body = '')
     {
         if (empty($data) || !is_array($setting)) {
             return $this->setError('数据错误');

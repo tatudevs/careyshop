@@ -5,12 +5,12 @@
  * CareyShop    支付配置模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/6/26
+ * @date        2020/8/31
  */
 
 namespace app\common\model;
 
-use think\Cache;
+use think\facade\Cache;
 
 class Payment extends CareyShop
 {
@@ -57,6 +57,12 @@ class Payment extends CareyShop
     const PAYMENT_CODE_OTHER = 6;
 
     /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'payment_id';
+
+    /**
      * 只读属性
      * @var array
      */
@@ -86,13 +92,12 @@ class Payment extends CareyShop
     /**
      * 添加一个支付配置
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
-    public function addPaymentItem($data)
+    public function addPaymentItem(array $data)
     {
-        if (!$this->validateData($data, 'Payment')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -100,8 +105,8 @@ class Payment extends CareyShop
         unset($data['payment_id']);
         !empty($data['setting']) ?: $data['setting'] = [];
 
-        if (false !== $this->allowField(true)->save($data)) {
-            Cache::clear('Payment');
+        if ($this->save($data)) {
+            Cache::tag('Payment')->clear();
             return $this->toArray();
         }
 
@@ -111,13 +116,12 @@ class Payment extends CareyShop
     /**
      * 编辑一个支付配置
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
-    public function setPaymentItem($data)
+    public function setPaymentItem(array $data)
     {
-        if (!$this->validateSetData($data, 'Payment.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
@@ -125,170 +129,150 @@ class Payment extends CareyShop
             $data['setting'] = [];
         }
 
-        $map['payment_id'] = ['eq', $data['payment_id']];
-        if (false !== $this->allowField(true)->save($data, $map)) {
-            Cache::clear('Payment');
-            return $this->toArray();
-        }
+        $map[] = ['payment_id', '=', $data['payment_id']];
+        $result = self::update($data, $map);
+        Cache::tag('Payment')->clear();
 
-        return false;
+        return $result->toArray();
     }
 
     /**
      * 批量删除支付配置
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function delPaymentList($data)
+    public function delPaymentList(array $data)
     {
-        if (!$this->validateData($data, 'Payment.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('payment_id', 'in', $data['payment_id']);
-        });
+        self::destroy($data['payment_id']);
+        Cache::tag('Payment')->clear();
 
-        Cache::clear('Payment');
         return true;
     }
 
     /**
      * 获取一个支付配置
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getPaymentItem($data)
+    public function getPaymentItem(array $data)
     {
-        if (!$this->validateData($data, 'Payment.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $query->cache(true, null, 'Payment')->where(['payment_id' => ['eq', $data['payment_id']]]);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->cache(true, null, 'Payment')->find($data['payment_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 根据Code获取支付配置详情(不对外开放)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getPaymentInfo($data)
+    public function getPaymentInfo(array $data)
     {
-        if (!$this->validateData($data, 'Payment.info')) {
+        if (!$this->validateData($data, 'info')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['code'] = ['eq', $data['code']];
-            $map['status'] = ['eq', $data['status']];
+        $map[] = ['code', '=', $data['code']];
+        $map[] = ['status', '=', $data['status']];
 
-            $query->cache(true, null, 'Payment')->field('image,sort,status', true)->where($map);
-        });
+        $result = $this->cache(true, null, 'Payment')
+            ->withoutField('image,sort,status')
+            ->where($map)
+            ->find();
 
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取支付配置列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getPaymentList($data)
+    public function getPaymentList(array $data)
     {
-        if (!$this->validateData($data, 'Payment.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 查询条件
         $map = [];
-        is_client_admin() ?: $map['status'] = ['eq', 1];
-        empty($data['exclude_code']) ?: $map['code'] = ['not in', $data['exclude_code']];
+        is_client_admin() ?: $map[] = ['status', '=', 1];
+        empty($data['exclude_code']) ?: $map[] = ['code', 'not in', $data['exclude_code']];
 
         if (!is_empty_parm($data['type'])) {
             switch ($data['type']) {
                 case 'deposit':
-                    $map['is_deposit'] = ['eq', 1];
+                    $map[] = ['is_deposit', '=', 1];
                     break;
                 case 'inpour':
-                    $map['is_inpour'] = ['eq', 1];
+                    $map[] = ['is_inpour', '=', 1];
                     break;
                 case 'payment':
-                    $map['is_payment'] = ['eq', 1];
+                    $map[] = ['is_payment', '=', 1];
                     break;
                 case 'refund':
-                    $map['is_refund'] = ['eq', 1];
+                    $map[] = ['is_refund', '=', 1];
                     break;
             }
         }
 
+        // 返回字段
         $field = 'payment_id,name,code,image,is_deposit,is_inpour,is_payment,is_refund,setting,model,sort,status';
         !empty($data['is_select']) && $field = 'name,code,image';
 
-        $result = self::all(function ($query) use ($map, $field) {
-            // 排序处理
-            $order['sort'] = 'asc';
-            $order['payment_id'] = 'asc';
-
-            $query->cache(true, null, 'Payment')->field($field)->where($map)->order($order);
-        });
-
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return false;
+        // 实际查询
+        return $this->setDefaultOrder(['payment_id' => 'asc'], ['sort' => 'asc'])
+            ->cache(true, null, 'Payment')
+            ->field($field)
+            ->where($map)
+            ->withSearch(['order'])
+            ->select()
+            ->toArray();
     }
 
     /**
      * 设置支付配置排序
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setPaymentSort($data)
+    public function setPaymentSort(array $data)
     {
-        if (!$this->validateData($data, 'Payment.sort')) {
+        if (!$this->validateData($data, 'sort')) {
             return false;
         }
 
-        $map['payment_id'] = ['eq', $data['payment_id']];
-        if (false !== $this->save(['sort' => $data['sort']], $map)) {
-            Cache::clear('Payment');
-            return true;
-        }
+        $map[] = ['payment_id', '=', $data['payment_id']];
+        self::update(['sort' => $data['sort']], $map);
+        Cache::tag('Payment')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 根据编号自动排序
      * @access public
-     * @param  $data
+     * @param array $data
      * @return bool
      * @throws \Exception
      */
-    public function setPaymentIndex($data)
+    public function setPaymentIndex(array $data)
     {
-        if (!$this->validateData($data, 'Payment.index')) {
+        if (!$this->validateData($data, 'index')) {
             return false;
         }
 
@@ -297,45 +281,40 @@ class Payment extends CareyShop
             $list[] = ['payment_id' => $value, 'sort' => $key + 1];
         }
 
-        if (false !== $this->isUpdate()->saveAll($list)) {
-            Cache::clear('Payment');
-            return true;
-        }
+        $this->saveAll($list);
+        Cache::tag('Payment')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 批量设置支付配置状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setPaymentStatus($data)
+    public function setPaymentStatus(array $data)
     {
-        if (!$this->validateData($data, 'Payment.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['payment_id'] = ['in', $data['payment_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            Cache::clear('Payment');
-            return true;
-        }
+        $map[] = ['payment_id', 'in', $data['payment_id']];
+        self::update(['status' => $data['status']], $map);
+        Cache::tag('Payment')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 财务对账号进行资金调整
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
-    public function setPaymentFinance($data)
+    public function setPaymentFinance(array $data)
     {
-        if (!$this->validateData($data, 'Recharge.finance')) {
+        if (!$this->validateData($data, 'finance')) {
             return false;
         }
 
@@ -348,13 +327,15 @@ class Payment extends CareyShop
             return $this->setError('支付方式不可用');
         }
 
-        $userMap = ['user_id' => ['eq', $data['client_id']], 'status' => ['eq', 1]];
+        $userMap[] = ['user_id', '=', $data['client_id']];
+        $userMap[] = ['status', '=', 1];
+
         if (!User::checkUnique($userMap)) {
             return $this->setError('账号不存在或已被禁用');
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             $userMoneyDb = new UserMoney();
@@ -370,7 +351,7 @@ class Payment extends CareyShop
                     'user_id'    => $data['client_id'],
                     'type'       => $data['money'] > 0 ? 0 : 1,
                     'amount'     => sprintf('%.2f', $data['money'] > 0 ? $data['money'] : -$data['money']),
-                    'balance'    => $userMoneyDb->where(['user_id' => ['eq', $data['client_id']]])->value('balance'),
+                    'balance'    => $userMoneyDb->where('user_id', '=', $data['client_id'])->value('balance', 0),
                     'source_no'  => !empty($data['source_no']) ? $data['source_no'] : get_order_no('TZ_'),
                     'remark'     => '财务调整',
                     'cause'      => $data['cause'],
@@ -393,7 +374,7 @@ class Payment extends CareyShop
                     'user_id'    => $data['client_id'],
                     'type'       => $data['points'] > 0 ? 0 : 1,
                     'amount'     => $data['points'] > 0 ? $data['points'] : -$data['points'],
-                    'balance'    => $userMoneyDb->where(['user_id' => ['eq', $data['client_id']]])->value('points'),
+                    'balance'    => $userMoneyDb->where('user_id', '=', $data['client_id'])->value('points', 0),
                     'source_no'  => !empty($data['source_no']) ? $data['source_no'] : get_order_no('TZ_'),
                     'remark'     => '财务调整',
                     'cause'      => $data['cause'],
@@ -406,10 +387,10 @@ class Payment extends CareyShop
                 }
             }
 
-            self::commit();
+            $this->commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -417,12 +398,12 @@ class Payment extends CareyShop
     /**
      * 账号在线充值余额
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      */
-    public function userPaymentPay($data)
+    public function userPaymentPay(array $data)
     {
-        if (!$this->validateData($data, 'Recharge.user')) {
+        if (!$this->validateData($data, 'user')) {
             return false;
         }
 
@@ -443,7 +424,7 @@ class Payment extends CareyShop
             $logData['status'] = 0;
             $paymentLogResult = $paymentLogDb->getPaymentLogItem($logData);
 
-            if (false === $paymentLogResult) {
+            if (!$paymentLogResult) {
                 return $this->setError($paymentLogDb->getError());
             }
 
@@ -458,7 +439,7 @@ class Payment extends CareyShop
             $logData['amount'] = $data['money'];
             $paymentLogResult = $paymentLogDb->addPaymentLogItem($logData);
 
-            if (false === $paymentLogResult) {
+            if (!$paymentLogResult) {
                 return $this->setError($paymentLogDb->getError());
             }
         }
@@ -476,26 +457,26 @@ class Payment extends CareyShop
     /**
      * 订单付款在线支付
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function orderPaymentPay($data)
+    public function orderPaymentPay(array $data)
     {
-        if (!$this->validateData($data, 'Recharge.order')) {
+        if (!$this->validateData($data, 'order')) {
             return false;
         }
 
         // 获取订单信息
-        $map['order_no'] = ['eq', $data['order_no']];
-        $map['user_id'] = ['eq', get_client_id()];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['is_delete', '=', 0];
 
         $orderDb = new Order();
         $result = $orderDb->where($map)->find();
 
-        if (!$result) {
-            return $this->setError(is_null($result) ? '订单不存在' : $orderDb->getError());
+        if (is_null($result)) {
+            return $this->setError('订单不存在');
         }
 
         if ($result->getAttr('trade_status') !== 0) {
@@ -517,7 +498,7 @@ class Payment extends CareyShop
         $paymentLogDb = new PaymentLog();
         $paymentLogResult = $paymentLogDb->addPaymentLogItem($logData);
 
-        if (false === $paymentLogResult) {
+        if (!$paymentLogResult) {
             return $this->setError($paymentLogDb->getError());
         }
 
@@ -550,13 +531,13 @@ class Payment extends CareyShop
     /**
      * 接收支付返回内容
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool|string
      * @throws
      */
-    public function putPaymentData($data)
+    public function putPaymentData(array $data)
     {
-        if (!$this->validateData($data, 'Recharge.put')) {
+        if (!$this->validateData($data, 'put')) {
             return false;
         }
 
@@ -581,8 +562,8 @@ class Payment extends CareyShop
         }
 
         // 获取支付日志信息
-        $paymentLogResult = PaymentLog::get(['payment_no' => $payment->getPaymentNo()]);
-        if (!$paymentLogResult) {
+        $paymentLogResult = PaymentLog::where('payment_no', '=', $payment->getPaymentNo())->find();
+        if (is_null($paymentLogResult)) {
             return $payment->getError('数据不存在');
         }
 
@@ -609,13 +590,12 @@ class Payment extends CareyShop
     /**
      * 结算订单付款
      * @access private
-     * @param  object &$model        支付模块
-     * @param  object &$paymentLogDb 支付日志
-     * @param  int    $toPayment     支付方式
+     * @param object &$model        支付模块
+     * @param object &$paymentLogDb 支付日志
+     * @param int     $toPayment    支付方式
      * @return bool
-     * @throws
      */
-    private function settleOrder(&$model, &$paymentLogDb, $toPayment)
+    private function settleOrder(&$model, &$paymentLogDb, int $toPayment)
     {
         // 共用参数提取
         $userId = $paymentLogDb->getAttr('user_id');
@@ -631,20 +611,16 @@ class Payment extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 保存支付日志
-            $logData = [
+            $paymentLogDb->save([
                 'out_trade_no' => $model->getTradeNo(),
                 'payment_time' => $model->getTimestamp(),
                 'to_payment'   => $toPayment,
                 'status'       => 1,
-            ];
-
-            if (false === $paymentLogDb->isUpdate(true)->save($logData)) {
-                throw new \Exception();
-            }
+            ]);
 
             // 调整订单状态
             $orderDb = new Order();
@@ -654,16 +630,13 @@ class Payment extends CareyShop
                 throw new \Exception();
             }
 
-            $orderData = [
+            // 保存订单数据
+            $orderResult->save([
                 'payment_no'     => $model->getPaymentNo(),
                 'payment_code'   => $toPayment,
                 'payment_status' => 1,
                 'payment_time'   => strtotime($model->getTimestamp()),
-            ];
-
-            if (false === $orderResult->isUpdate(true)->save($orderData)) {
-                throw new \Exception();
-            }
+            ]);
 
             // 保存订单操作日志
             $orderLogData = [
@@ -678,10 +651,10 @@ class Payment extends CareyShop
                 throw new \Exception();
             }
 
-            self::commit();
+            $this->commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -689,34 +662,29 @@ class Payment extends CareyShop
     /**
      * 结算账号充值
      * @access private
-     * @param  object &$model        支付模块
-     * @param  object &$paymentLogDb 支付日志
-     * @param  int    $toPayment     支付方式
+     * @param object &$model        支付模块
+     * @param object &$paymentLogDb 支付日志
+     * @param int     $toPayment    支付方式
      * @return bool
-     * @throws
      */
-    private function settlePay(&$model, &$paymentLogDb, $toPayment)
+    private function settlePay(&$model, &$paymentLogDb, int $toPayment)
     {
         // 共用参数提取
         $userId = $paymentLogDb->getAttr('user_id');
         $amount = $model->getTotalAmount();
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 保存支付日志
-            $logData = [
+            $paymentLogDb->save([
                 'out_trade_no' => $model->getTradeNo(),
                 'amount'       => $amount,
                 'payment_time' => $model->getTimestamp(),
                 'to_payment'   => $toPayment,
                 'status'       => 1,
-            ];
-
-            if (!$paymentLogDb->save($logData)) {
-                throw new \Exception();
-            }
+            ]);
 
             // 调整账号充值金额
             if (!(new UserMoney())->setBalance($amount, $userId)) {
@@ -724,25 +692,21 @@ class Payment extends CareyShop
             }
 
             // 保存交易结算日志
-            $txData = [
+            (new Transaction())->addTransactionItem([
                 'user_id'    => $userId,
                 'type'       => Transaction::TRANSACTION_INCOME,
                 'amount'     => $amount,
-                'balance'    => UserMoney::where(['user_id' => ['eq', $userId]])->value('balance'),
+                'balance'    => UserMoney::where('user_id', '=', $userId)->value('balance', 0),
                 'source_no'  => $model->getPaymentNo(),
                 'remark'     => '账号充值',
                 'module'     => 'money',
                 'to_payment' => $toPayment,
-            ];
+            ]);
 
-            if (!(new Transaction())->addTransactionItem($txData)) {
-                throw new \Exception();
-            }
-
-            self::commit();
+            $this->commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
