@@ -52,7 +52,7 @@ class GoodsComment extends CareyShop
 
     /**
      * 更新日期字段
-     * @var bool/string
+     * @var bool|string
      */
     protected $updateTime = false;
 
@@ -175,42 +175,24 @@ class GoodsComment extends CareyShop
             ->joinType('left');
     }
 
-    //todo
-//    /**
-//     * 新增自动完成列表
-//     * @var array
-//     */
-//    protected $insert = [
-//        'ip_address',
-//    ];
-//
-//    /**
-//     * IP地址自动完成
-//     * @access protected
-//     * @return string
-//     */
-//    protected function setIpAddressAttr()
-//    {
-//        return Request::instance()->ip();
-//    }
-
     /**
      * 添加一条新的商品评价
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function addCommentItem($data)
+    public function addCommentItem(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
-        $map['order_goods_id'] = ['eq', $data['order_goods_id']];
-        $map['order_no'] = ['eq', $data['order_no']];
-        $map['user_id'] = ['eq', get_client_id()];
-        $map['type'] = ['eq', self::COMMENT_TYPE_MAIN];
+        // 搜索条件
+        $map[] = ['order_goods_id', '=', $data['order_goods_id']];
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['type', '=', self::COMMENT_TYPE_MAIN];
 
         if (self::checkUnique($map)) {
             return $this->setError('订单商品评价已存在');
@@ -231,30 +213,29 @@ class GoodsComment extends CareyShop
         // 系统数据内容
         $data['user_id'] = get_client_id();
         $data['type'] = self::COMMENT_TYPE_MAIN;
+        $data['ip_address'] = request()->ip();
         empty($data['image']) ? $data['image'] = [] : $data['is_image'] = 1;
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 添加订单商品评价
-            if (false === $this->allowField($field)->save($data)) {
+            if (!$this->allowField($field)->save($data)) {
                 throw new \Exception($this->getError());
             }
 
             // 修改订单商品数据
-            unset($map['type']);
-            if (false === $orderGoodsDb->isUpdate(true)->save(['is_comment' => 1], $map)) {
-                throw new \Exception($orderGoodsDb->getError());
-            }
+            array_pop($map);
+            OrderGoods::update(['is_comment' => 1], $map);
 
             // 累计增加商品评价数
-            Goods::where(['goods_id' => ['eq', $data['goods_id']]])->setInc('comment_sum');
+            Goods::where('goods_id', '=', $data['goods_id'])->inc('comment_sum')->update();
 
-            self::commit();
+            $this->commit();
             return $this->toArray();
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -262,41 +243,42 @@ class GoodsComment extends CareyShop
     /**
      * 追加一条商品评价
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function addAdditionItem($data)
+    public function addAdditionItem(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment.addition')) {
+        if (!$this->validateData($data, 'addition')) {
             return false;
         }
 
-        $map['parent_id'] = ['neq', 0];
-        $map['order_goods_id'] = ['eq', $data['order_goods_id']];
-        $map['order_no'] = ['eq', $data['order_no']];
-        $map['user_id'] = ['eq', get_client_id()];
-        $map['type'] = ['eq', self::COMMENT_TYPE_ADDITION];
+        $map = [
+            ['parent_id', '<>', 0],
+            ['order_goods_id', '=', $data['order_goods_id']],
+            ['order_no', '=', $data['order_no']],
+            ['user_id', '=', get_client_id()],
+            ['type', '=', self::COMMENT_TYPE_ADDITION],
+        ];
 
         if (self::checkUnique($map)) {
             return $this->setError('订单商品追加评价已存在');
         }
 
         // 获取主评价
-        $result = self::get(function ($query) use ($map) {
-            $map['parent_id'] = ['eq', 0];
-            $map['type'] = ['eq', self::COMMENT_TYPE_MAIN];
-            $map['is_delete'] = ['eq', 0];
+        $map = [
+            ['parent_id', '=', 0],
+            ['type', '=', self::COMMENT_TYPE_MAIN],
+            ['is_delete', '=', 0],
+        ];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('主评价不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('主评价不存在');
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 设置主评为未读,并且判断追评是否存在图片
@@ -304,48 +286,40 @@ class GoodsComment extends CareyShop
             $update['is_append'] = 1;
             empty($data['image']) ?: $update['is_image'] = 1;
 
-            if (false === $result->save($update)) {
+            if (!$result->save($update)) {
                 throw new \Exception($this->getError());
             }
 
             // 准备插入数据
-            $result->setAttr('score', 0);
-            $result->setAttr('praise', 0);
-            $result->setAttr('reply_count', 0);
-            $result->setAttr('is_append', 0);
-            $result->setAttr('is_show', 0);
-            $result->setAttr('is_top', 0);
-            $result->setAttr('status', 0);
-            $result->setAttr('ip_address', '');
-            $result->setAttr('parent_id', $result->getAttr('goods_comment_id'));
-            $result->setAttr('goods_comment_id', null);
-            $result->setAttr('type', self::COMMENT_TYPE_ADDITION);
-            $result->setAttr('content', $data['content']);
-            $result->setAttr('is_image', !empty($data['image']) ? 1 : 0);
-            $result->setAttr('image', !empty($data['image']) ? $data['image'] : []);
-            $result->setAttr('create_time', time());
+            $newData = $result->toArray();
+            unset($newData['goods_comment_id']);
 
-            if (false === $result->isUpdate(false)->save()) {
-                throw new \Exception($this->getError());
-            }
+            $newData['score'] = 0;
+            $newData['praise'] = 0;
+            $newData['reply_count'] = 0;
+            $newData['is_append'] = 0;
+            $newData['is_show'] = 0;
+            $newData['is_top'] = 0;
+            $newData['status'] = 0;
+            $newData['ip_address'] = request()->ip();
+            $newData['parent_id'] = $result->getAttr('goods_comment_id');
+            $newData['type'] = self::COMMENT_TYPE_ADDITION;
+            $newData['content'] = $data['content'];
+            $newData['is_image'] = !empty($data['image']) ? 1 : 0;
+            $newData['image'] = !empty($data['image']) ? $data['image'] : [];
+            $newData['create_time'] = time();
+            $result = self::create($newData);
 
             // 修改订单商品数据
-            $mapGoods['order_goods_id'] = ['eq', $result->getAttr('order_goods_id')];
-            $mapGoods['order_no'] = ['eq', $data['order_no']];
-            $mapGoods['user_id'] = ['eq', get_client_id()];
+            $mapGoods[] = ['order_goods_id', '=', $data['order_goods_id']];
+            $mapGoods[] = ['order_no', '=', $data['order_no']];
+            $mapGoods[] = ['user_id', '=', get_client_id()];
+            OrderGoods::update(['is_comment' => 2], $mapGoods);
 
-            $orderGoodsDb = new OrderGoods();
-            if (false === $orderGoodsDb->isUpdate(true)->save(['is_comment' => 2], $mapGoods)) {
-                throw new \Exception($orderGoodsDb->getError());
-            }
-
-            // 隐藏不返回的字段
-            $hidden = ['is_show', 'is_top', 'status', 'praise', 'reply_count'];
-
-            self::commit();
-            return $result->hidden($hidden)->toArray();
+            $this->commit();
+            return $result->hidden(['is_show', 'is_top', 'status', 'praise', 'reply_count'])->toArray();
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -353,26 +327,23 @@ class GoodsComment extends CareyShop
     /**
      * 回复或追评一条商品评价
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function replyCommentItem($data)
+    public function replyCommentItem(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment.reply')) {
+        if (!$this->validateData($data, 'reply')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['goods_comment_id'] = ['eq', $data['goods_comment_id']];
-            $map['type'] = ['in', [self::COMMENT_TYPE_MAIN, self::COMMENT_TYPE_ADDITION]];
-            $map['is_delete'] = ['eq', 0];
+        $map[] = ['goods_comment_id', '=', $data['goods_comment_id']];
+        $map[] = ['type', 'in', [self::COMMENT_TYPE_MAIN, self::COMMENT_TYPE_ADDITION]];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         // 设置状态为已读
@@ -381,69 +352,63 @@ class GoodsComment extends CareyShop
             $readId = $result->getAttr('goods_comment_id');
         }
 
+        // 修改主数据
         $this->batchSetting(['status'], ['goods_comment_id' => [$readId], 'status' => 1]);
 
         // 准备插入数据
-        $result->setAttr('goods_comment_id', null);
-        $result->setAttr('score', 0);
-        $result->setAttr('praise', 0);
-        $result->setAttr('reply_count', 0);
-        $result->setAttr('ip_address', '');
-        $result->setAttr('is_append', 0);
-        $result->setAttr('is_show', 0);
-        $result->setAttr('is_top', 0);
-        $result->setAttr('status', 0);
-        $result->setAttr('is_image', 0);
-        $result->setAttr('content', $data['content']);
-        $result->setAttr('is_image', !empty($data['image']) ? 1 : 0);
-        $result->setAttr('image', !empty($data['image']) ? $data['image'] : []);
-        $result->setAttr('create_time', time());
+        $newData = $this->toArray();
+        unset($newData['goods_comment_id']);
+
+        $newData['score'] = 0;
+        $newData['praise'] = 0;
+        $newData['reply_count'] = 0;
+        $newData['ip_address'] = request()->ip();
+        $newData['is_append'] = 0;
+        $newData['is_show'] = 0;
+        $newData['is_top'] = 0;
+        $newData['status'] = 0;
+        $newData['content'] = $data['content'];
+        $newData['is_image'] = !empty($data['image']) ? 1 : 0;
+        $newData['image'] = !empty($data['image']) ? $data['image'] : [];
+        $newData['create_time'] = time();
 
         // 回复和追加共用数据结构
-        if ($result->getAttr('type') === self::COMMENT_TYPE_MAIN) {
-            $result->setAttr('type', self::COMMENT_TYPE_MAIN_REPLY);
-            $result->setAttr('parent_id', $data['goods_comment_id']);
+        if ($newData['type'] === self::COMMENT_TYPE_MAIN) {
+            $newData['type'] = self::COMMENT_TYPE_MAIN_REPLY;
+            $newData['parent_id'] = $data['goods_comment_id'];
         } else {
-            $result->setAttr('type', self::COMMENT_TYPE_ADDITION_REPLY);
-            $result->setAttr('parent_id', $result->getAttr('parent_id'));
+            $newData['type'] = self::COMMENT_TYPE_ADDITION_REPLY;
+            $newData['parent_id'] = $result->getAttr('parent_id');
         }
 
-        if (false !== $result->isUpdate(false)->save()) {
-            // 隐藏不返回的字段
-            $hidden = ['is_show', 'is_top', 'status', 'reply_count'];
-            return $result->hidden($hidden)->toArray();
-        }
-
-        return false;
+        $result = self::create($newData);
+        return $result->hidden(['is_show', 'is_top', 'status', 'reply_count'])->toArray();
     }
 
     /**
      * 删除任意一条商品评价(主评,主回,追评,追回)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
-    public function delCommentItem($data)
+    public function delCommentItem(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['goods_comment_id'] = ['eq', $data['goods_comment_id']];
-            $map['is_delete'] = ['eq', 0];
+        $map[] = ['goods_comment_id', '=', $data['goods_comment_id']];
+        $map[] = ['is_delete', '=', 0];
 
-            if (!is_client_admin()) {
-                $map['user_id'] = ['eq', get_client_id()];
-                $map['type'] = ['in', [self::COMMENT_TYPE_MAIN, self::COMMENT_TYPE_ADDITION]];
-            }
+        if (!is_client_admin()) {
+            $map[] = ['user_id', '=', get_client_id()];
+            $map[] = ['type', 'in', [self::COMMENT_TYPE_MAIN, self::COMMENT_TYPE_ADDITION]];
+        }
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         // 软删除评价
@@ -451,13 +416,14 @@ class GoodsComment extends CareyShop
 
         // 如果是追评需要处理主评是否有图
         if ($result->getAttr('type') === self::COMMENT_TYPE_ADDITION) {
-            $map['goods_comment_id'] = ['eq', $result->getAttr('parent_id')];
-            $map['is_delete'] = ['eq', 0];
+            $map = [
+                ['goods_comment_id', '=', $result->getAttr('parent_id')],
+                ['is_delete', '=', 0],
+            ];
 
-            $setData = ['is_append' => 0];
             $parent = $this->where($map)->find();
-
-            if ($parent) {
+            if (!is_null($parent)) {
+                $setData = ['is_append' => 0];
                 if ($result->getAttr('is_image') === 1 && empty($parent->getAttr('image'))) {
                     $setData['is_image'] = 0;
                 }
@@ -472,33 +438,38 @@ class GoodsComment extends CareyShop
     /**
      * 点赞任意一条商品评价(主评,主回,追评,追回)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
-     * @throws
      */
-    public function addPraiseItem($data)
+    public function addPraiseItem(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment.praise')) {
+        if (!$this->validateData($data, 'praise')) {
             return false;
         }
+
+        $map = [
+            ['p.user_id', '=', get_client_id()],
+            ['c.goods_comment_id', '=', $data['goods_comment_id']],
+        ];
 
         $count = $this
             ->alias('c')
             ->join('praise p', 'p.goods_comment_id = c.goods_comment_id')
-            ->where(['p.user_id' => ['eq', get_client_id()], 'c.goods_comment_id' => ['eq', $data['goods_comment_id']]])
+            ->where($map)
             ->count();
 
         if ($count > 0) {
             return $this->setError('您已经点过赞了');
         }
 
-        $map['goods_comment_id'] = ['eq', $data['goods_comment_id']];
-        $map['is_delete'] = ['eq', 0];
+        $map = [
+            ['goods_comment_id', '=', $data['goods_comment_id']],
+            ['is_delete', '=', 0],
+        ];
 
         // 更新成功则添加记录到praise表
-        if ($this->where($map)->setInc('praise') > 0) {
-            Praise::insert(['user_id' => get_client_id(), 'goods_comment_id' => $data['goods_comment_id']]);
-        }
+        $this->where($map)->inc('praise')->update();
+        Praise::insert(['user_id' => get_client_id(), 'goods_comment_id' => $data['goods_comment_id']]);
 
         return true;
     }
@@ -506,13 +477,12 @@ class GoodsComment extends CareyShop
     /**
      * 获取一个商品评价得分
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
-    public function getCommentScore($data)
+    public function getCommentScore(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment.score')) {
+        if (!$this->validateData($data, 'score')) {
             return false;
         }
 
@@ -528,16 +498,16 @@ class GoodsComment extends CareyShop
         ];
 
         // 公共查询条件
-        $map['parent_id'] = ['eq', 0];
-        $map['goods_id'] = ['eq', $data['goods_id']];
-        $map['type'] = ['eq', self::COMMENT_TYPE_MAIN];
-        $map['is_show'] = ['eq', 1];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['parent_id', '=', 0];
+        $map[] = ['goods_id', '=', $data['goods_id']];
+        $map[] = ['type', '=', self::COMMENT_TYPE_MAIN];
+        $map[] = ['is_show', '=', 1];
+        $map[] = ['is_delete', '=', 0];
 
         // 1~2=差评 3~4=中评 5=好评
-        $result['poor_count'] = $this->where($map)->where(['score' => ['elt', 2]])->count();
-        $result['general_count'] = $this->where($map)->where(['score' => ['between', '3,4']])->count();
-        $result['good_count'] = $this->where($map)->where(['score' => ['eq', 5]])->count();
+        $result['poor_count'] = $this->where($map)->where('score', '<=', 2)->count();
+        $result['general_count'] = $this->where($map)->where('score', 'between', '3,4')->count();
+        $result['good_count'] = $this->where($map)->where('score', '=', 5)->count();
         $result['count'] = $result['poor_count'] + $result['general_count'] + $result['good_count'];
 
         if ($result['count'] > 0) {
@@ -552,80 +522,77 @@ class GoodsComment extends CareyShop
     /**
      * 批量设置某个字段值
      * @access private
-     * @param  array $field 修改的字段
-     * @param  array $data  原始数据
-     * @return bool
+     * @param array $field 修改的字段
+     * @param array $data  原始数据
      */
-    private function batchSetting($field, $data)
+    private function batchSetting(array $field, array $data)
     {
-        $map['goods_comment_id'] = ['in', $data['goods_comment_id']];
-        $map['parent_id'] = ['eq', 0];
-        $map['type'] = ['eq', self::COMMENT_TYPE_MAIN];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['goods_comment_id', 'in', $data['goods_comment_id']];
+        $map[] = ['parent_id', '=', 0];
+        $map[] = ['type', '=', self::COMMENT_TYPE_MAIN];
+        $map[] = ['is_delete', '=', 0];
 
         unset($data['goods_comment_id']);
-        if (false !== $this->allowField($field)->save($data, $map)) {
-            return true;
-        }
-
-        return false;
+        self::update($data, $map, $field);
     }
 
     /**
      * 批量设置是否前台显示
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setCommentShow($data)
+    public function setCommentShow(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment.show')) {
+        if (!$this->validateData($data, 'show')) {
             return false;
         }
 
-        return $this->batchSetting(['is_show'], $data);
+        $this->batchSetting(['is_show'], $data);
+        return true;
     }
 
     /**
      * 批量设置评价是否置顶
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setCommentTop($data)
+    public function setCommentTop(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment.top')) {
+        if (!$this->validateData($data, 'top')) {
             return false;
         }
 
-        return $this->batchSetting(['is_top'], $data);
+        $this->batchSetting(['is_top'], $data);
+        return true;
     }
 
     /**
      * 批量设置评价是否已读
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setCommentStatus($data)
+    public function setCommentStatus(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        return $this->batchSetting(['status'], $data);
+        $this->batchSetting(['status'], $data);
+        return true;
     }
 
     /**
      * 获取一个商品"全部"、"晒图"、"追评"、"好评"、"中评"、差评"的数量
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
-    public function getCommentCount($data)
+    public function getCommentCount(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment.count')) {
+        if (!$this->validateData($data, 'count')) {
             return false;
         }
 
@@ -640,24 +607,25 @@ class GoodsComment extends CareyShop
         ];
 
         // 公共筛选条件
-        $map['goods_id'] = ['eq', $data['goods_id']];
-        $map['type'] = ['eq', self::COMMENT_TYPE_MAIN];
-        $map['is_show'] = ['eq', 1];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['goods_id', '=', $data['goods_id']];
+        $map[] = ['type', '=', self::COMMENT_TYPE_MAIN];
+        $map[] = ['is_show', '=', 1];
+        $map[] = ['is_delete', '=', 0];
 
         $result['all_count'] = $this->where($map)->count();
-        $result['image_count'] = $this->where($map)->where(['is_image' => ['eq', 1]])->count();
-        $result['poor_count'] = $this->where($map)->where(['score' => ['elt', 2]])->count();
-        $result['general_count'] = $this->where($map)->where(['score' => ['between', '3,4']])->count();
-        $result['good_count'] = $this->where($map)->where(['score' => ['eq', 5]])->count();
+        $result['image_count'] = $this->where($map)->where('is_image', '=', 1)->count();
+        $result['poor_count'] = $this->where($map)->where('score', '<=', 2)->count();
+        $result['general_count'] = $this->where($map)->where('score', 'between', '3,4')->count();
+        $result['good_count'] = $this->where($map)->where('score', '=', 5)->count();
 
         // 带有追加评论的
-        $map['type'] = ['eq', self::COMMENT_TYPE_ADDITION];
+        $map[] = ['type', '=', self::COMMENT_TYPE_ADDITION];
         $result['addition_count'] = $this->where($map)->count();
 
         return $result;
     }
 
+    //todo
     /**
      * 获取某个评价的明细("是否已读"不关联,关联不代表看完,所以需手动设置)
      * @access public
