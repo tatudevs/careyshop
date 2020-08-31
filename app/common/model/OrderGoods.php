@@ -10,7 +10,7 @@
 
 namespace app\common\model;
 
-use app\common\validate\Order;
+use app\common\validate\Order as Validate;
 
 class OrderGoods extends CareyShop
 {
@@ -145,47 +145,59 @@ class OrderGoods extends CareyShop
         return true;
     }
 
-//    /**
-//     * 获取一个订单商品明细
-//     * @access public
-//     * @param  $data          外部数据
-//     * @param  $returnArray   是否以数组的形式返回
-//     * @param  $hasOrderGoods 是否关联订单数据
-//     * @return false|array|object
-//     * @throws
-//     */
-//    public function getOrderGoodsItem($data, $returnArray = true, $hasOrderGoods = false)
-//    {
-////        if (!$this->validateData($data, 'goods_item', false, Order::class)) {
-////            return false;
-////        }
-//
-//        // 搜索条件
-//        $map[] = ['order_goods.order_goods_id', '=', $data['order_goods_id']];
-//        is_client_admin() ?: $map[] = ['order_goods.user_id', '=', get_client_id()];
-//
-//        // 关联查询
-////        $with = [];
-////        if (!$hasOrderGoods) {
-////            $with['getOrder'] = function ($query) {
-////                $query->where('is_delete', '<>', 2);
-////            };
-////        }
-//
-//        // 实际查询
-//        $result = $this->withJoin('getOrder')->where($map)->find();
-//        if (is_null($result)) {
-//            return $this->setError('订单商品不存在');
-//        }
-//
-//        // 隐藏不需要输出的字段
-////        $hidden = [
-////            'order_id',
-////            'get_order.order_id', 'get_order.order_no', 'get_order.user_id',
-////        ];
-//
-//        return $result;
-//
-////        return $returnArray ? $result->hidden($hidden)->toArray() : $result;
-//    }
+    /**
+     * 获取一个订单商品明细
+     * @access public
+     * @param array $data          外部数据
+     * @param bool  $returnArray   是否以数组的形式返回
+     * @param bool  $hasOrderGoods 是否关联订单数据
+     * @return false|array|object
+     * @throws
+     */
+    public function getOrderGoodsItem(array $data, $returnArray = true, $hasOrderGoods = false)
+    {
+        if (!$this->validateData($data, 'goods_item', false, Validate::class)) {
+            return false;
+        }
+
+        // 搜索条件
+        $mapJoin = [];
+        $map[] = ['order_goods.order_goods_id', '=', $data['order_goods_id']];
+        is_client_admin() ?: $map[] = ['order_goods.user_id', '=', get_client_id()];
+
+        // 关联查询
+        $with = [];
+        if ($hasOrderGoods) {
+            $with = ['getOrder'];
+            $mapJoin[] = ['getOrder.is_delete', '<>', 2];
+        }
+
+        // 实际查询
+        $result = $this
+            ->alias('order_goods')
+            ->withJoin($with)
+            ->where($map)
+            ->where($mapJoin)
+            ->find();
+
+        if (is_null($result)) {
+            return $this->setError('订单商品不存在');
+        }
+
+        // 返回数据
+        if ($returnArray) {
+            // 隐藏不需要输出的字段
+            $hidden = [
+                'order_id', 'getOrder.order_id', 'getOrder.parent_id',
+                'getOrder.order_no', 'getOrder.user_id', 'getOrder.create_user_id',
+            ];
+
+            $temp = [$result->hidden($hidden)->toArray()];
+            self::keyToSnake(['getOrder'], $temp);
+
+            return $temp[0];
+        }
+
+        return $result;
+    }
 }

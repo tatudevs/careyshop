@@ -186,8 +186,8 @@ abstract class CareyShop extends Model
     /**
      * 替换数组中的驼峰键名为下划线
      * @access public
-     * @param array $name 需要修改的键名
-     * @param array $data 源数据
+     * @param array  $name 需要修改的键名
+     * @param array &$data 源数据
      */
     public static function keyToSnake(array $name, array &$data)
     {
