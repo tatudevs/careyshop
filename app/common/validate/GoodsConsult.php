@@ -30,7 +30,7 @@ class GoodsConsult extends CareyShop
         'page_no'          => 'integer|gt:0',
         'page_size'        => 'integer|gt:0',
         'order_type'       => 'requireWith:order_field|in:asc,desc',
-        'order_field'      => 'requireWith:order_type|in:goods_consult_id,type,content,is_show,is_anon,status,create_time,username,nickname',
+        'order_field'      => 'requireWith:order_type|in:goods_consult_id,type,is_show,is_anon,status,create_time',
     ];
 
     /**

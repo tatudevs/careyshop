@@ -5,13 +5,19 @@
  * CareyShop    商品咨询模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/10
+ * @date        2020/9/1
  */
 
 namespace app\common\model;
 
 class GoodsConsult extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'goods_consult_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -20,7 +26,7 @@ class GoodsConsult extends CareyShop
 
     /**
      * 更新日期字段
-     * @var bool/string
+     * @var bool|string
      */
     protected $updateTime = false;
 
@@ -59,7 +65,7 @@ class GoodsConsult extends CareyShop
      */
     public function getAnswer()
     {
-        return $this->hasMany('GoodsConsult', 'parent_id');
+        return $this->hasMany(GoodsConsult::class, 'parent_id');
     }
 
     /**
@@ -70,9 +76,8 @@ class GoodsConsult extends CareyShop
     public function getUser()
     {
         return $this
-            ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('username,nickname,level_icon,head_pic')
-            ->setEagerlyType(0);
+            ->hasOne(User::class, 'user_id', 'user_id')
+            ->joinType('left');
     }
 
     /**
@@ -83,21 +88,19 @@ class GoodsConsult extends CareyShop
     public function getGoods()
     {
         return $this
-            ->hasOne('Goods', 'goods_id', 'goods_id', [], 'left')
-            ->field('goods_id,name,attachment')
-            ->setEagerlyType(0);
+            ->hasOne(Goods::class, 'goods_id', 'goods_id')
+            ->joinType('left');
     }
 
     /**
      * 添加一个新的商品咨询
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
-    public function addConsultItem($data)
+    public function addConsultItem(array $data)
     {
-        if (!$this->validateData($data, 'GoodsConsult')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -105,7 +108,7 @@ class GoodsConsult extends CareyShop
         $data['user_id'] = get_client_id();
         $field = ['goods_id', 'user_id', 'type', 'content', 'is_show', 'is_anon'];
 
-        if (false !== $this->allowField($field)->save($data)) {
+        if ($this->allowField($field)->save($data)) {
             return $this->toArray();
         }
 
@@ -115,96 +118,86 @@ class GoodsConsult extends CareyShop
     /**
      * 批量删除商品咨询
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function delConsultList($data)
+    public function delConsultList(array $data)
     {
-        if (!$this->validateData($data, 'GoodsConsult.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
         // 允许删除所有Id,包括咨询与回答
-        $map['goods_consult_id'] = ['in', $data['goods_consult_id']];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['goods_consult_id', 'in', $data['goods_consult_id']];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->save(['is_delete' => 1], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['is_delete' => 1], $map);
+        return true;
     }
 
     /**
      * 批量设置是否前台显示
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setConsultShow($data)
+    public function setConsultShow(array $data)
     {
-        if (!$this->validateData($data, 'GoodsConsult.show')) {
+        if (!$this->validateData($data, 'show')) {
             return false;
         }
 
         // 只允许将咨询主题设置是否显示,设置回答毫无意义
-        $map['goods_consult_id'] = ['in', $data['goods_consult_id']];
-        $map['parent_id'] = ['eq', 0];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['goods_consult_id', 'in', $data['goods_consult_id']];
+        $map[] = ['parent_id', '=', 0];
+        $map[] = ['is_delete', '=', 0];
 
-        if (false !== $this->save(['is_show' => $data['is_show']], $map)) {
-            return true;
-        }
-
-        return false;
+        self::update(['is_show' => $data['is_show']], $map);
+        return true;
     }
 
     /**
      * 回复一个商品咨询
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function replyConsultItem($data)
+    public function replyConsultItem(array $data)
     {
-        if (!$this->validateData($data, 'GoodsConsult.reply')) {
+        if (!$this->validateData($data, 'reply')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['goods_consult_id'] = ['eq', $data['goods_consult_id']];
-            $map['parent_id'] = ['eq', 0];
-            $map['is_delete'] = ['eq', 0];
+        // 搜索条件
+        $map[] = ['goods_consult_id', '=', $data['goods_consult_id']];
+        $map[] = ['parent_id', '=', 0];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
-            if (false === $result->save(['status' => 1])) {
-                throw new \Exception($this->getError());
-            }
+            // 保存主数据
+            $result->save(['status' => 1]);
 
             // 准备回复的内容
-            unset($result['goods_consult_id']);
-            $result->setAttr('parent_id', $data['goods_consult_id']);
-            $result->setAttr('content', $data['content']);
+            $newData = $result->getData();
+            unset($newData['goods_consult_id'], $newData['create_time']);
 
-            if (false === $result->isUpdate(false)->save()) {
-                throw new \Exception($this->getError());
-            }
+            $newData['parent_id'] = $data['goods_consult_id'];
+            $newData['content'] = $data['content'];
+            $result = self::create($newData);
 
-            self::commit();
+            $this->commit();
             return $result->toArray();
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -212,32 +205,36 @@ class GoodsConsult extends CareyShop
     /**
      * 获取一个商品咨询问答明细
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getConsultItem($data)
+    public function getConsultItem(array $data)
     {
-        if (!$this->validateData($data, 'GoodsConsult.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['goods_consult.goods_consult_id'] = ['eq', $data['goods_consult_id']];
-            $map['goods_consult.parent_id'] = ['eq', 0];
-            $map['goods_consult.is_delete'] = ['eq', 0];
-            is_client_admin() ?: $map['goods_consult.user_id'] = ['eq', get_client_id()];
+        // 搜索条件
+        $map[] = ['goods_consult.goods_consult_id', '=', $data['goods_consult_id']];
+        $map[] = ['goods_consult.parent_id', '=', 0];
+        $map[] = ['goods_consult.is_delete', '=', 0];
+        is_client_admin() ?: $map[] = ['goods_consult.user_id', '=', get_client_id()];
 
-            $with = ['getUser', 'getGoods'];
-            $with['getAnswer'] = function($query) {
-                $query->field('is_show,status,type', true)->where(['is_delete' => 0]);
-            };
+        // 关联查询
+        $withJoin['getUser'] = ['username', 'nickname', 'level_icon', 'head_pic'];
+        $withJoin['getGoods'] = ['goods_id', 'name', 'attachment'];
 
-            $query->with($with)->where($map);
-        });
+        $with['get_answer'] = function ($query) {
+            $query->withoutField('is_show,status,type')->where('is_delete', '=', 0);
+        };
 
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
+        $result = $this->withJoin($withJoin)->with($with)->where($map)->find();
+        if ($result) {
+            $temp = [$result->toArray()];
+            self::keyToSnake(['getUser', 'getGoods'], $temp);
+
+            return $temp[0];
         }
 
         return false;
@@ -246,34 +243,34 @@ class GoodsConsult extends CareyShop
     /**
      * 获取商品咨询列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getConsultList($data)
+    public function getConsultList(array $data)
     {
-        if (!$this->validateData($data, 'GoodsConsult.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['goods_consult.parent_id'] = ['eq', 0];
-        $map['goods_consult.is_delete'] = ['eq', 0];
+        $map[] = ['goods_consult.parent_id', '=', 0];
+        $map[] = ['goods_consult.is_delete', '=', 0];
 
         // 管理组:为空表示获取所有的咨询列表
         // 客户组:为空表示获取当前客户自己的咨询列表
-        empty($data['goods_id']) ?: $map['goods_consult.goods_id'] = ['eq', $data['goods_id']];
+        empty($data['goods_id']) ?: $map[] = ['goods_consult.goods_id', '=', $data['goods_id']];
 
         // 区分前后台
         if (is_client_admin()) {
             // 允许管理组根据用户搜索商品咨询
             if (!empty($data['account'])) {
-                $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
+                $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
             }
         } else {
             // 当goods_id为空,表示顾客组想要获取属于他自己的咨询列表
             if (empty($data['goods_id'])) {
-                $map['getUser.user_id'] = ['eq', get_client_id()];
+                $map[] = ['getUser.user_id', '=', get_client_id()];
                 unset($data['is_show']);
             } else {
                 // 否则表示获取指定商品下的咨询列表,所以需要加上is_show为条件
@@ -281,79 +278,52 @@ class GoodsConsult extends CareyShop
             }
         }
 
-        is_empty_parm($data['type']) ?: $map['goods_consult.type'] = ['eq', $data['type']];
-        is_empty_parm($data['status']) ?: $map['goods_consult.status'] = ['eq', $data['status']];
-        is_empty_parm($data['is_show']) ?: $map['goods_consult.is_show'] = ['eq', $data['is_show']];
-        empty($data['content']) ?: $map['goods_consult.content'] = ['like', '%' . $data['content'] . '%'];
+        is_empty_parm($data['type']) ?: $map[] = ['goods_consult.type', '=', $data['type']];
+        is_empty_parm($data['status']) ?: $map[] = ['goods_consult.status', '=', $data['status']];
+        is_empty_parm($data['is_show']) ?: $map[] = ['goods_consult.is_show', '=', $data['is_show']];
+        empty($data['content']) ?: $map[] = ['goods_consult.content', 'like', '%' . $data['content'] . '%'];
 
-        $totalResult = $this->with('getUser')->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->withJoin('getUser')->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = $this->all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 关联查询
+//        $withJoin['getUser'] = ['username', 'nickname', 'level_icon', 'head_pic'];
+        $withJoin[] = 'getUser';
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
+//        // 判断是否需要关联Goods(当指定商品后不再关联"getGoods")
+//        !empty($data['goods_id']) ?: $withJoin['getGoods'] = ['goods_id', 'name', 'attachment'];
+//
+//        // 是否需要提取答复列表
+//        $with = [];
+//        if (isset($data['is_answer']) && $data['is_answer'] == 1) {
+//            $with['get_answer'] = function ($query) {
+//                $query->withoutField('is_show,status')->where('is_delete', '=', 0);
+//            };
+//        }
 
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
+        // 实际查询
+        $temp = $this//->setDefaultOrder(['goods_consult_id' => 'desc'])
+            ->withJoin($withJoin)
+//            ->with($with)
+//            ->where($map)
+//            ->withSearch(['page', 'order'], $data)
+            ->select();
 
-            // 排序的字段
-            $orderField = 'goods_consult.goods_consult_id';
-            if (!is_empty_parm($data['order_field'])) {
-                switch ($data['order_field']) {
-                    case 'goods_consult_id':
-                    case 'type':
-                    case 'content':
-                    case 'is_show':
-                    case 'is_anon':
-                    case 'status':
-                    case 'create_time':
-                        $orderField = 'goods_consult.' . $data['order_field'];
-                        break;
-
-                    case 'username':
-                    case 'nickname':
-                        $orderField = 'getUser.' . $data['order_field'];
-                        break;
+        // 账号资料匿名处理
+        if (is_client_admin()) {
+            foreach ($temp as $value) {
+                if ($value->getAttr('is_anon') !== 0) {
+                    $value['getUser']->setAttr('username', auto_hid_substr($value['getUser']->getAttr('username')));
+                    $value['getUser']->setAttr('nickname', auto_hid_substr($value['getUser']->getAttr('nickname')));
                 }
             }
-
-            // 判断是否需要关联Goods(为空表示获取列表,列表中需要商品信息,方便查看)
-            $with = ['getUser'];
-            !empty($data['goods_id']) ?: $with[] = 'getGoods';
-
-            // 是否需要提取答复列表
-            if (isset($data['is_answer']) && $data['is_answer'] == 1) {
-                $with['getAnswer'] = function ($query) {
-                    $query->field('is_show,status', true)->where(['is_delete' => 0]);
-                };
-            }
-
-            $query
-                ->with($with)
-                ->where($map)
-                ->order([$orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            // 账号资料匿名处理
-            if (!is_client_admin()) {
-                foreach ($result as $value) {
-                    if ($value->getAttr('is_anon') !== 0) {
-                        $value['get_user']->setAttr('username', auto_hid_substr($value['get_user']->getAttr('username')));
-                        $value['get_user']->setAttr('nickname', auto_hid_substr($value['get_user']->getAttr('nickname')));
-                    }
-                }
-            }
-
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
         }
 
-        return false;
+        $result['items'] = $temp->toArray();
+        self::keyToSnake(['getUser', 'getGoods'], $result['items']);
+
+        return $result;
     }
 }
