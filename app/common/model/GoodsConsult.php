@@ -311,7 +311,7 @@ class GoodsConsult extends CareyShop
             ->toArray();
 
         // 账号资料匿名处理
-        if (is_client_admin()) {
+        if (!is_client_admin()) {
             foreach ($result['items'] as &$value) {
                 if ($value['is_anon'] !== 0 && !empty($value['getUser'])) {
                     $value['getUser']['username'] = auto_hid_substr($value['getUser']['username']);
