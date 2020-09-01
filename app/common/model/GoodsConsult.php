@@ -37,7 +37,6 @@ class GoodsConsult extends CareyShop
     protected $hidden = [
         'parent_id',
         'user_id',
-        'is_anon',
         'goods_id',
         'is_delete',
     ];
@@ -289,41 +288,39 @@ class GoodsConsult extends CareyShop
         }
 
         // 关联查询
-//        $withJoin['getUser'] = ['username', 'nickname', 'level_icon', 'head_pic'];
-        $withJoin[] = 'getUser';
+        $withJoin['getUser'] = ['username', 'nickname', 'level_icon', 'head_pic'];
 
-//        // 判断是否需要关联Goods(当指定商品后不再关联"getGoods")
-//        !empty($data['goods_id']) ?: $withJoin['getGoods'] = ['goods_id', 'name', 'attachment'];
-//
-//        // 是否需要提取答复列表
-//        $with = [];
-//        if (isset($data['is_answer']) && $data['is_answer'] == 1) {
-//            $with['get_answer'] = function ($query) {
-//                $query->withoutField('is_show,status')->where('is_delete', '=', 0);
-//            };
-//        }
+        // 判断是否需要关联Goods(当指定商品后不再关联"getGoods")
+        !empty($data['goods_id']) ?: $withJoin['getGoods'] = ['goods_id', 'name', 'attachment'];
+
+        // 是否需要提取答复列表
+        $with = [];
+        if (isset($data['is_answer']) && $data['is_answer'] == 1) {
+            $with['get_answer'] = function ($query) {
+                $query->withoutField('is_show,status')->where('is_delete', '=', 0);
+            };
+        }
 
         // 实际查询
-        $temp = $this//->setDefaultOrder(['goods_consult_id' => 'desc'])
+        $result['items'] = $this->setDefaultOrder(['goods_consult_id' => 'desc'])
             ->withJoin($withJoin)
-//            ->with($with)
-//            ->where($map)
-//            ->withSearch(['page', 'order'], $data)
-            ->select();
+            ->with($with)
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
         // 账号资料匿名处理
         if (is_client_admin()) {
-            foreach ($temp as $value) {
-                if ($value->getAttr('is_anon') !== 0) {
-                    $value['getUser']->setAttr('username', auto_hid_substr($value['getUser']->getAttr('username')));
-                    $value['getUser']->setAttr('nickname', auto_hid_substr($value['getUser']->getAttr('nickname')));
+            foreach ($result['items'] as &$value) {
+                if ($value['is_anon'] !== 0 && !empty($value['getUser'])) {
+                    $value['getUser']['username'] = auto_hid_substr($value['getUser']['username']);
+                    $value['getUser']['nickname'] = auto_hid_substr($value['getUser']['nickname']);
                 }
             }
         }
 
-        $result['items'] = $temp->toArray();
         self::keyToSnake(['getUser', 'getGoods'], $result['items']);
-
         return $result;
     }
 }
