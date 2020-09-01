@@ -5,15 +5,21 @@
  * CareyShop    资源样式模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/5/31
+ * @date        2020/9/2
  */
 
 namespace app\common\model;
 
-use think\Cache;
+use think\facade\Cache;
 
 class StorageStyle extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'storage_style_id';
+
     /**
      * 只读属性
      * @var array
@@ -37,17 +43,17 @@ class StorageStyle extends CareyShop
     /**
      * 验证资源样式编码是否唯一
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueStorageStyleCode($data)
+    public function uniqueStorageStyleCode(array $data)
     {
-        if (!$this->validateData($data, 'StorageStyle.unique')) {
+        if (!$this->validateData($data, 'unique')) {
             return false;
         }
 
-        $map['code'] = ['eq', $data['code']];
-        !isset($data['exclude_id']) ?: $map['storage_style_id'] = ['neq', $data['exclude_id']];
+        $map[] = ['code', '=', $data['code']];
+        !isset($data['exclude_id']) ?: $map[] = ['storage_style_id', '<>', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('资源样式编码已存在');
@@ -59,20 +65,20 @@ class StorageStyle extends CareyShop
     /**
      * 添加一个资源样式
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
-    public function addStorageStyleItem($data)
+    public function addStorageStyleItem(array $data)
     {
-        if (!$this->validateData($data, 'StorageStyle')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 避免无关字段
         unset($data['storage_style_id']);
 
-        if (false !== $this->allowField(true)->save($data)) {
+        if ($this->save($data)) {
+            Cache::tag('StorageStyle')->clear();
             return $this->toArray();
         }
 
@@ -82,180 +88,143 @@ class StorageStyle extends CareyShop
     /**
      * 编辑一个资源样式
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
-    public function setStorageStyleItem($data)
+    public function setStorageStyleItem(array $data)
     {
-        if (!$this->validateSetData($data, 'StorageStyle.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
         // 验证编码是否重复
         if (!empty($data['code'])) {
-            $map['storage_style_id'] = ['neq', $data['storage_style_id']];
-            $map['code'] = ['eq', $data['code']];
+            $map[] = ['storage_style_id', '<>', $data['storage_style_id']];
+            $map[] = ['code', '=', $data['code']];
 
             if (self::checkUnique($map)) {
                 return $this->setError('资源样式编码已存在');
             }
         }
 
-        $result = self::get($data['storage_style_id']);
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
-        }
+        $map[] = ['storage_style_id', '=', $data['storage_style_id']];
+        $result = self::update($data, $map);
+        Cache::tag('StorageStyle')->clear();
 
-        if (false !== $result->allowField(true)->save($data)) {
-            Cache::clear('StorageStyle');
-            return $result->toArray();
-        }
-
-        return $this->setError($result->getError());
+        return $result->toArray();
     }
 
     /**
      * 获取一个资源样式
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getStorageStyleItem($data)
+    public function getStorageStyleItem(array $data)
     {
-        if (!$this->validateData($data, 'StorageStyle.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get($data['storage_style_id']);
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['storage_style_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 根据编码获取资源样式
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getStorageStyleCode($data)
+    public function getStorageStyleCode(array $data)
     {
-        if (!$this->validateData($data, 'StorageStyle.code')) {
+        if (!$this->validateData($data, 'code')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['code'] = ['eq', $data['code']];
-            $map['status'] = ['eq', 1];
-            !isset($data['platform']) ?: $map['platform'] = ['eq', $data['platform']];
+        $map[] = ['code', '=', $data['code']];
+        $map[] = ['status', '=', 1];
+        !isset($data['platform']) ?: $map[] = ['platform', '=', $data['platform']];
 
-            $query
-                ->cache(true, null, 'StorageStyle')
-                ->field('scale,resize,quality,suffix,style')
-                ->where($map);
-        });
+        $result = $this->cache(true, null, 'StorageStyle')
+            ->field('scale,resize,quality,suffix,style')
+            ->where($map)
+            ->find();
 
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 获取资源样式列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getStorageStyleList($data)
+    public function getStorageStyleList(array $data)
     {
-        if (!$this->validateData($data, 'StorageStyle.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
         $map = [];
-        empty($data['name']) ?: $map['name'] = ['like', '%' . $data['name'] . '%'];
-        empty($data['code']) ?: $map['code'] = ['eq', $data['code']];
-        is_empty_parm($data['platform']) ?: $map['platform'] = ['eq', $data['platform']];
-        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
+        empty($data['code']) ?: $map[] = ['code', '=', $data['code']];
+        is_empty_parm($data['platform']) ?: $map[] = ['platform', '=', $data['platform']];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['storage_style_id' => 'desc'])
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'storage_style_id';
-
-            $query
-                ->where($map)
-                ->order([$orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 
     /**
      * 批量删除资源样式
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function delStorageStyleList($data)
+    public function delStorageStyleList(array $data)
     {
-        if (!$this->validateData($data, 'StorageStyle.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        self::destroy(function ($query) use ($data) {
-            $query->where('storage_style_id', 'in', $data['storage_style_id']);
-        });
+        self::destroy($data['storage_style_id']);
+        Cache::tag('StorageStyle')->clear();
 
-        Cache::clear('StorageStyle');
         return true;
     }
 
     /**
      * 批量设置资源样式状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setStorageStyleStatus($data)
+    public function setStorageStyleStatus(array $data)
     {
-        if (!$this->validateData($data, 'StorageStyle.status')) {
+        if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map['storage_style_id'] = ['in', $data['storage_style_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            Cache::clear('StorageStyle');
-            return true;
-        }
+        $map[] = ['storage_style_id', 'in', $data['storage_style_id']];
+        self::update(['status' => $data['status']], $map);
+        Cache::tag('StorageStyle')->clear();
 
-        return false;
+        return true;
     }
 }
