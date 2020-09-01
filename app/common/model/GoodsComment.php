@@ -289,7 +289,7 @@ class GoodsComment extends CareyShop
             }
 
             // 准备插入数据
-            $newData = $result->toArray();
+            $newData = $result->getData();
             unset($newData['goods_comment_id']);
 
             $newData['score'] = 0;
@@ -354,7 +354,7 @@ class GoodsComment extends CareyShop
         $this->batchSetting(['status'], ['goods_comment_id' => [$readId], 'status' => 1]);
 
         // 准备插入数据
-        $newData = $this->toArray();
+        $newData = $result->getData();
         unset($newData['goods_comment_id']);
 
         $newData['score'] = 0;
