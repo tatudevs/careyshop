@@ -803,7 +803,7 @@ class GoodsComment extends CareyShop
             ->select();
 
         // 账号资料匿名处理
-        if (is_client_admin()) {
+        if (!is_client_admin()) {
             foreach ($temp as $value) {
                 if ($value->getAttr('is_anon') !== 0) {
                     $value['getUser']->setAttr('username', auto_hid_substr($value['getUser']->getAttr('username')));
