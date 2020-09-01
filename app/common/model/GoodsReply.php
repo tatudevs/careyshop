@@ -5,13 +5,19 @@
  * CareyShop    商品评价回复模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/11
+ * @date        2020/9/1
  */
 
 namespace app\common\model;
 
 class GoodsReply extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'goods_reply_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -20,7 +26,7 @@ class GoodsReply extends CareyShop
 
     /**
      * 更新日期字段
-     * @var bool/string
+     * @var bool|string
      */
     protected $updateTime = false;
 
@@ -56,21 +62,23 @@ class GoodsReply extends CareyShop
     /**
      * 对商品评价添加一个回复(管理组不参与评价回复)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
-    public function addReplyItem($data)
+    public function addReplyItem(array $data)
     {
-        if (!$this->validateData($data, 'GoodsReply')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
+        // 搜索条件
+        $mapComment[] = ['goods_comment_id', '=', $data['goods_comment_id']];
+
         // 获取被回复者Id,如果"goods_reply_id"空则默认获取主评价者Id
         if (empty($data['goods_reply_id'])) {
-            $userId = GoodsComment::where(['goods_comment_id' => ['eq', $data['goods_comment_id']]])->value('user_id');
+            $userId = GoodsComment::where($mapComment)->value('user_id');
         } else {
-            $userId = $this->where(['goods_reply_id' => ['eq', $data['goods_reply_id']]])->value('user_id');
+            $userId = $this->where('goods_reply_id', '=', $data['goods_reply_id'])->value('user_id');
         }
 
         // 避免无关字段及初始化数据
@@ -94,8 +102,8 @@ class GoodsReply extends CareyShop
             (new Message())->inAddMessageItem($messageData, [$userId], 0);
         }
 
-        if (false !== $this->allowField(true)->save($data)) {
-            GoodsComment::where(['goods_comment_id' => ['eq', $data['goods_comment_id']]])->setInc('reply_count');
+        if ($this->save($data)) {
+            GoodsComment::where($mapComment)->inc('reply_count')->update();
             return $this->hidden(['is_anon'])->toArray();
         }
 
@@ -105,78 +113,67 @@ class GoodsReply extends CareyShop
     /**
      * 批量删除商品评价的回复
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
-    public function delReplyList($data)
+    public function delReplyList(array $data)
     {
-        if (!$this->validateData($data, 'GoodsReply.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $result = self::all($data['goods_reply_id']);
-        if (false !== $result) {
+        $result = $this->select($data['goods_reply_id']);
+        if (!$result->isEmpty()) {
             foreach ($result as $value) {
-                $map['goods_comment_id'] = ['eq', $value->getAttr('goods_comment_id')];
-                GoodsComment::where($map)->setDec('reply_count');
+                $map = [['goods_comment_id', '=', $value->getAttr('goods_comment_id')]];
+                GoodsComment::where($map)->dec('reply_count')->update();
                 $value->delete();
             }
-
-            return true;
         }
 
-        return false;
+        return true;
     }
 
     /**
      * 获取商品评价回复列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getReplyList($data)
+    public function getReplyList(array $data)
     {
         if (!$this->validateData($data, 'GoodsReply.list')) {
             return false;
         }
 
         // 判断商品评价是否存在
-        $map['goods_comment_id'] = ['eq', $data['goods_comment_id']];
-        $map['type'] = ['eq', GoodsComment::COMMENT_TYPE_MAIN];
-        $map['is_delete'] = ['eq', 0];
-        is_client_admin() ?: $map['is_show'] = ['eq', 1];
+        $map[] = ['goods_comment_id', '=', $data['goods_comment_id']];
+        $map[] = ['type', '=', GoodsComment::COMMENT_TYPE_MAIN];
+        $map[] = ['is_delete', '=', 0];
+        is_client_admin() ?: $map[] = ['is_show', '=', 1];
 
-        if (false === GoodsComment::checkUnique($map)) {
-            return ['total_result' => 0];
+        $result['total_result'] = 0;
+        if (!GoodsComment::checkUnique($map)) {
+            return $result;
         }
 
         // 开始获取评价回复数据
-        $map = ['goods_comment_id' => ['eq', $data['goods_comment_id']]];
-        $totalResult = $this->where($map)->count();
+        $map = [['goods_comment_id', '=', $data['goods_comment_id']]];
+        $result['total_result'] = $this->where($map)->count();
 
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['goods_reply_id' => 'asc'])
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            $query
-                ->where($map)
-                ->order(['goods_reply_id' => 'asc'])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        return $result;
     }
 }
