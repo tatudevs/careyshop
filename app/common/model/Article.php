@@ -10,6 +10,8 @@
 
 namespace app\common\model;
 
+use think\facade\Cache;
+
 class Article extends CareyShop
 {
     /**
@@ -74,6 +76,7 @@ class Article extends CareyShop
         unset($data['article_id']);
 
         if ($this->save($data)) {
+            Cache::tag('ArticleCat')->clear();
             return $this->toArray();
         }
 
@@ -94,6 +97,7 @@ class Article extends CareyShop
 
         $map[] = ['article_id', '=', $data['article_id']];
         $result = self::update($data, $map);
+        Cache::tag('ArticleCat')->clear();
 
         return $result->toArray();
     }
@@ -111,6 +115,8 @@ class Article extends CareyShop
         }
 
         self::destroy($data['article_id']);
+        Cache::tag('ArticleCat')->clear();
+
         return true;
     }
 
@@ -230,6 +236,7 @@ class Article extends CareyShop
 
         $map[] = ['article_id', 'in', $data['article_id']];
         self::update(['status' => $data['status']], $map);
+        Cache::tag('ArticleCat')->clear();
 
         return true;
     }

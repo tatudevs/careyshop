@@ -173,6 +173,7 @@ class ArticleCat extends CareyShop
         // 子查询,查询关联的文章数量
         $article = Article::field('article_cat_id,count(*) num')
             ->group('article_cat_id')
+            ->where(is_client_admin() ? [] : [['status', '=', 1]])
             ->buildSql();
 
         // 搜索条件
