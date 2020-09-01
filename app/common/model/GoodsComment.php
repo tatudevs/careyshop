@@ -156,7 +156,6 @@ class GoodsComment extends CareyShop
      */
     public function getOrderGoods()
     {
-        // field('goods_id,goods_name,goods_image,key_value')
         return $this
             ->hasOne(OrderGoods::class, 'order_goods_id', 'order_goods_id')
             ->joinType('left');
@@ -169,7 +168,6 @@ class GoodsComment extends CareyShop
      */
     public function getUser()
     {
-        // field('username,nickname,level_icon,user_level_id,head_pic')
         return $this
             ->hasOne(User::class, 'user_id', 'user_id')
             ->joinType('left');
@@ -625,214 +623,198 @@ class GoodsComment extends CareyShop
         return $result;
     }
 
-    //todo
     /**
      * 获取某个评价的明细("是否已读"不关联,关联不代表看完,所以需手动设置)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getCommentItem($data)
+    public function getCommentItem(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
         // 获取条件
-        $map['goods_comment.goods_comment_id'] = ['eq', $data['goods_comment_id']];
-        $map['goods_comment.type'] = ['eq', self::COMMENT_TYPE_MAIN];
-        is_client_admin() ?: $map['goods_comment.is_show'] = ['eq', 1];
-        $map['goods_comment.is_delete'] = ['eq', 0];
+        $map[] = ['goods_comment.goods_comment_id', '=', $data['goods_comment_id']];
+        $map[] = ['goods_comment.type', '=', self::COMMENT_TYPE_MAIN];
+        is_client_admin() ?: $map[] = ['goods_comment.is_show', '=', 1];
+        $map[] = ['goods_comment.is_delete', '=', 0];
 
-        $result = self::get(function ($query) use ($map) {
-            // 关联数据
-            $with = ['getUser', 'getOrderGoods'];
+        // 过滤不返回的字段
+        $field = 'goods_id,order_goods_id,is_append,is_show,is_top';
+        is_client_admin() ?: $field .= ',status,order_no';
 
-            // 关联表不返回的字段
-            $replyField = 'goods_id,order_goods_id,order_no,score,is_top,is_append,status,is_show,reply_count';
+        // 关联表不返回的字段
+        $replyField = 'goods_id,order_goods_id,order_no,score,is_top,is_append,status,is_show,reply_count';
 
-            // 关联表搜索条件
-            $replyMap['is_delete'] = ['eq', 0];
+        // 关联数据
+        $withJoin['getUser'] = ['username', 'nickname', 'level_icon', 'user_level_id', 'head_pic'];
+        $withJoin['getOrderGoods'] = ['goods_id', 'goods_name', 'goods_image', 'key_value'];
 
-            // 返回主评回复
-            $with['getMainReply'] = function ($query) use ($replyField, $replyMap) {
-                $replyMap['type'] = ['eq', self::COMMENT_TYPE_MAIN_REPLY];
-                $query->field($replyField . ',ip_address', true)->where($replyMap);
-            };
+        // 返回主评回复
+        $with['get_main_reply'] = function ($query) use ($replyField) {
+            $query->withoutField($replyField . ',ip_address')
+                ->where('type', '=', self::COMMENT_TYPE_MAIN_REPLY)
+                ->where('is_delete', '=', 0);
+        };
 
-            // 返回追加评价
-            $with['getAddition'] = function ($query) use ($replyField, $replyMap) {
-                $replyMap['type'] = ['eq', self::COMMENT_TYPE_ADDITION];
-                $query->field($replyField, true)->where($replyMap);
-            };
+        // 返回追加评价
+        $with['get_addition'] = function ($query) use ($replyField) {
+            $query->withoutField($replyField)
+                ->where('type', '=', self::COMMENT_TYPE_ADDITION)
+                ->where('is_delete', '=', 0);
+        };
 
-            // 返回追评回复
-            $with['getAdditionReply'] = function ($query) use ($replyField, $replyMap) {
-                $replyMap['type'] = ['eq', self::COMMENT_TYPE_ADDITION_REPLY];
-                $query->field($replyField . ',ip_address', true)->where($replyMap);
-            };
+        // 返回追评回复
+        $with['get_addition_reply'] = function ($query) use ($replyField) {
+            $query->withoutField($replyField . ',ip_address')
+                ->where('type', '=', self::COMMENT_TYPE_ADDITION_REPLY)
+                ->where('is_delete', '=', 0);
+        };
 
-            // 过滤不返回的字段
-            $field = 'goods_id,order_goods_id,is_append,is_show,is_top';
-            is_client_admin() ?: $field .= ',status,order_no';
+        $result = $this->withoutField($field)
+            ->withJoin($withJoin)
+            ->with($with)
+            ->where($map)
+            ->find();
 
-            $query->field($field, true)->with($with)->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('数据不存在') : false;
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
         }
 
         // 处理客户信息是否匿名
         if ($result->getAttr('is_anon') !== 0 && !is_client_admin()) {
-            $result['get_user']->setAttr('username', auto_hid_substr($result['get_user']->getAttr('username')));
-            $result['get_user']->setAttr('nickname', auto_hid_substr($result['get_user']->getAttr('nickname')));
+            $result['getUser']->setAttr('username', auto_hid_substr($result['getUser']->getAttr('username')));
+            $result['getUser']->setAttr('nickname', auto_hid_substr($result['getUser']->getAttr('nickname')));
         }
 
         if ($result['get_addition']) {
             $result['get_addition']->append(['ip_address_region']);
         }
 
-        return $result->append(['ip_address_region'])->toArray();
+        $temp = [$result->append(['ip_address_region'])->toArray()];
+        self::keyToSnake(['getUser', 'getOrderGoods'], $temp);
+
+        return $temp[0];
     }
 
     /**
      * 获取商品评价列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getCommentList($data)
+    public function getCommentList(array $data)
     {
-        if (!$this->validateData($data, 'GoodsComment.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['goods_comment.type'] = ['eq', self::COMMENT_TYPE_MAIN];
-        $map['goods_comment.is_delete'] = ['eq', 0];
+        $map[] = ['goods_comment.type', '=', self::COMMENT_TYPE_MAIN];
+        $map[] = ['goods_comment.is_delete', '=', 0];
 
-        empty($data['goods_id']) ?: $map['goods_comment.goods_id'] = ['eq', $data['goods_id']];
-        is_empty_parm($data['is_image']) ?: $map['goods_comment.is_image'] = ['eq', $data['is_image']];
-        is_empty_parm($data['is_append']) ?: $map['goods_comment.is_append'] = ['eq', $data['is_append']];
-        is_client_admin() ?: $map['goods_comment.is_show'] = ['eq', 1];
+        empty($data['goods_id']) ?: $map[] = ['goods_comment.goods_id', '=', $data['goods_id']];
+        is_empty_parm($data['is_image']) ?: $map[] = ['goods_comment.is_image', '=', $data['is_image']];
+        is_empty_parm($data['is_append']) ?: $map[] = ['goods_comment.is_append', '=', $data['is_append']];
+        is_client_admin() ?: $map[] = ['goods_comment.is_show', '=', 1];
 
         // 处理"好中差"评价搜索(0=好评 1=中评 其他=差评)
         if (isset($data['score'])) {
             switch ($data['score']) {
                 case 0:
-                    $map['goods_comment.score'] = ['eq', 5];
+                    $map[] = ['goods_comment.score', '=', 5];
                     break;
                 case 1:
-                    $map['goods_comment.score'] = ['between', '3,4'];
+                    $map[] = ['goods_comment.score', 'between', '3,4'];
                     break;
                 default:
-                    $map['goods_comment.score'] = ['elt', 2];
+                    $map[] = ['goods_comment.score', '<=', 2];
             }
         }
 
         // 后台搜索条件
         if (is_client_admin()) {
-            is_empty_parm($data['is_show']) ?: $map['goods_comment.is_show'] = ['eq', $data['is_show']];
-            is_empty_parm($data['is_top']) ?: $map['goods_comment.is_top'] = ['eq', $data['is_top']];
-            is_empty_parm($data['status']) ?: $map['goods_comment.status'] = ['eq', $data['status']];
-            empty($data['order_no']) ?: $map['goods_comment.order_no'] = ['eq', $data['order_no']];
-            empty($data['content']) ?: $map['goods_comment.content'] = ['like', '%' . $data['content'] . '%'];
-            empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
+            is_empty_parm($data['is_show']) ?: $map[] = ['goods_comment.is_show', '=', $data['is_show']];
+            is_empty_parm($data['is_top']) ?: $map[] = ['goods_comment.is_top', '=', $data['is_top']];
+            is_empty_parm($data['status']) ?: $map[] = ['goods_comment.status', '=', $data['status']];
+            empty($data['order_no']) ?: $map[] = ['goods_comment.order_no', '=', $data['order_no']];
+            empty($data['content']) ?: $map[] = ['goods_comment.content', 'like', '%' . $data['content'] . '%'];
+            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
         }
 
         // 查看指定商品规格评价
         if (!empty($data['goods_id']) && !empty($data['goods_spec'])) {
-            $with[] = 'getOrderGoods';
             $data['goods_spec'] = implode('_', $data['goods_spec']);
-            $map['getOrderGoods.key_name'] = ['eq', $data['goods_spec']];
+            $map[] = ['getOrderGoods.key_name', '=', $data['goods_spec']];
         }
 
-        $with[] = 'getUser';
-        $totalResult = $this->with($with)->where($map)->count();
+        // Join关联查询
+        $withJoin['getUser'] = ['username', 'nickname', 'level_icon', 'user_level_id', 'head_pic'];
+        $withJoin['getOrderGoods'] = ['goods_id', 'goods_name', 'goods_image', 'key_value'];
 
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        // 数量统计
+        $result['total_result'] = $this->withJoin($withJoin)->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 关联表不返回的字段
+        $replyField = 'goods_id,order_goods_id,order_no,score,is_top,status,is_show,reply_count';
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
+        // 过滤不需要返回的字段
+        $field = 'goods_id,order_goods_id';
+        is_client_admin() ?: $field .= ',status,order_no';
 
-            // 关联数据
-            $with = ['getUser', 'getOrderGoods'];
+        // 获取追加评价
+        $with['get_addition'] = function ($query) use ($replyField) {
+            $query->withoutField($replyField)
+                ->where('type', '=', self::COMMENT_TYPE_ADDITION)
+                ->where('is_delete', '=', 0);
+        };
 
-            // 关联表不返回的字段
-            $replyField = 'goods_id,order_goods_id,order_no,score,is_top,status,is_show,reply_count';
-
-            // 关联表搜索条件
-            $replyMap['is_delete'] = ['eq', 0];
-
-            // 获取追加评价
-            $with['getAddition'] = function ($query) use ($replyField, $replyMap) {
-                $replyMap['type'] = ['eq', self::COMMENT_TYPE_ADDITION];
-                $query->field($replyField, true)->where($replyMap);
+        // 列表模式的区分(当"goods_id"为空表示简洁列表,否则为明细列表)
+        if (!empty($data['goods_id'])) {
+            // 获取主评回复
+            $with['getMainReply'] = function ($query) use ($replyField) {
+                $query->withoutField($replyField . ',ip_address')
+                    ->where('type', '=', self::COMMENT_TYPE_MAIN_REPLY)
+                    ->where('is_delete', '=', 0);
             };
 
-            // 列表模式的区分(当"goods_id"为空表示简洁列表,否则为明细列表)
-            if (!empty($data['goods_id'])) {
-                // 获取主评回复
-                $with['getMainReply'] = function ($query) use ($replyField, $replyMap) {
-                    $replyMap['type'] = ['eq', self::COMMENT_TYPE_MAIN_REPLY];
-                    $query->field($replyField . ',ip_address', true)->where($replyMap);
-                };
-
-                // 获取追评回复
-                $with['getAdditionReply'] = function ($query) use ($replyField, $replyMap) {
-                    $replyMap['type'] = ['eq', self::COMMENT_TYPE_ADDITION_REPLY];
-                    $query->field($replyField . ',ip_address', true)->where($replyMap);
-                };
-            }
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'goods_comment_id';
-
-            // 排序处理
-            $order['goods_comment.' . $orderField] = $orderType;
-            $order['goods_comment.goods_comment_id'] = $orderType;
-
-            // 过滤不需要返回的字段
-            $field = 'goods_id,order_goods_id';
-            is_client_admin() ?: $field .= ',status,order_no';
-
-            $query
-                ->field($field, true)
-                ->with($with)
-                ->where($map)
-                ->order($order)
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            // 账号资料匿名处理
-            if (!is_client_admin()) {
-                foreach ($result as $value) {
-                    if ($value->getAttr('is_anon') !== 0) {
-                        $value['get_user']->setAttr('username', auto_hid_substr($value['get_user']->getAttr('username')));
-                        $value['get_user']->setAttr('nickname', auto_hid_substr($value['get_user']->getAttr('nickname')));
-                    }
-                }
-            }
-
-            return [
-                'items'        => $result->append(['ip_address_region'])->toArray(),
-                'total_result' => $totalResult,
-            ];
+            // 获取追评回复
+            $with['getAdditionReply'] = function ($query) use ($replyField) {
+                $query->withoutField($replyField . ',ip_address')
+                    ->where('type', '=', self::COMMENT_TYPE_ADDITION_REPLY)
+                    ->where('is_delete', '=', 0);
+            };
         }
 
-        return false;
+        // 实际查询
+        $temp = $this->setDefaultOrder(['goods_comment_id' => 'desc'], ['goods_comment_id' => 'desc'])
+            ->withoutField($field)
+            ->withJoin($withJoin)
+            ->with($with)
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select();
+
+        // 账号资料匿名处理
+        if (is_client_admin()) {
+            foreach ($temp as $value) {
+                if ($value->getAttr('is_anon') !== 0) {
+                    $value['getUser']->setAttr('username', auto_hid_substr($value['getUser']->getAttr('username')));
+                    $value['getUser']->setAttr('nickname', auto_hid_substr($value['getUser']->getAttr('nickname')));
+                }
+            }
+        }
+
+        $result['items'] = $temp->append(['ip_address_region'])->toArray();
+        self::keyToSnake(['getUser', 'getOrderGoods'], $result['items']);
+
+        return $result;
     }
 }
