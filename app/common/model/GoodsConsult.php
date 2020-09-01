@@ -37,6 +37,7 @@ class GoodsConsult extends CareyShop
     protected $hidden = [
         'parent_id',
         'user_id',
+        'is_anon',
         'goods_id',
         'is_delete',
     ];
@@ -302,25 +303,26 @@ class GoodsConsult extends CareyShop
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['goods_consult_id' => 'desc'])
+        $temp = $this->setDefaultOrder(['goods_consult_id' => 'desc'])
             ->withJoin($withJoin)
             ->with($with)
             ->where($map)
             ->withSearch(['page', 'order'], $data)
-            ->select()
-            ->toArray();
+            ->select();
 
         // 账号资料匿名处理
         if (!is_client_admin()) {
-            foreach ($result['items'] as &$value) {
+            foreach ($temp as $value) {
                 if ($value['is_anon'] !== 0 && !empty($value['getUser'])) {
-                    $value['getUser']['username'] = auto_hid_substr($value['getUser']['username']);
-                    $value['getUser']['nickname'] = auto_hid_substr($value['getUser']['nickname']);
+                    $value['getUser']->setAttr('username', auto_hid_substr($value['getUser']->getAttr('username')));
+                    $value['getUser']->setAttr('nickname', auto_hid_substr($value['getUser']->getAttr('nickname')));
                 }
             }
         }
 
+        $result['items'] = $temp->toArray();
         self::keyToSnake(['getUser', 'getGoods'], $result['items']);
+
         return $result;
     }
 }
