@@ -5,13 +5,19 @@
  * CareyShop    验证码模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/7/20
+ * @date        2020/9/2
  */
 
 namespace app\common\model;
 
 class Verification extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'verification_id';
+
     /**
      * 是否需要自动写入时间戳
      * @var bool
@@ -36,16 +42,17 @@ class Verification extends CareyShop
     /**
      * 发送验证码
      * @access public
-     * @param  string $code   通知编码 sms或email
-     * @param  string $number 手机号或邮箱地址
+     * @param string $code   通知编码 sms或email
+     * @param string $number 手机号或邮箱地址
      * @return bool
      * @throws
      */
-    private function sendNotice($code, $number)
+    private function sendNotice(string $code, string $number)
     {
-        $result = self::get(function ($query) use ($number) {
-            $query->where(['number' => ['eq', $number]])->order(['verification_id' => 'desc']);
-        });
+        $result = $this
+            ->where('number', '=', $number)
+            ->order(['verification_id' => 'desc'])
+            ->find();
 
         if ($result) {
             // 现在时间与创建日期
@@ -71,45 +78,37 @@ class Verification extends CareyShop
             'type'   => $code,
         ];
 
-        if (false === $this->isUpdate(false)->save($data)) {
-            return false;
-        }
-
+        self::create($data);
         return true;
     }
 
     /**
      * 使用验证码
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
-    public function useVerificationItem($data)
+    public function useVerificationItem(array $data)
     {
-        if (!$this->validateData($data, 'Verification.use')) {
+        if (!$this->validateData($data, 'use')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['number'] = ['eq', $data['number']];
-            $map['status'] = ['eq', 1];
+        $map[] = ['number', '=', $data['number']];
+        $map[] = ['status', '=', 1];
 
-            $query->where($map)->order(['verification_id' => 'desc']);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('验证码已无效') : false;
+        $result = $this->where($map)->order(['verification_id' => 'desc'])->find();
+        if (is_null($result)) {
+            return $this->setError('验证码已无效');
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 完成主业务数据
-            if (false === $result->save(['status' => 0])) {
-                throw new \Exception($this->getError());
-            }
+            $result->save(['status' => 0]);
 
             // 变更账户验证状态
             if (!empty($data['is_check'])) {
@@ -118,19 +117,17 @@ class Verification extends CareyShop
 
                 $userData = [$type == 'sms' ? 'is_mobile' : 'is_email' => 1];
                 $userMap = [
-                    $type == 'sms' ? 'mobile' : 'email' => ['eq', $data['number']],
-                    'is_delete'                         => ['eq', 0],
+                    [$type == 'sms' ? 'mobile' : 'email', '=', $data['number']],
+                    ['is_delete', '=', 0],
                 ];
 
-                if (false === $userDb->update($userData, $userMap)) {
-                    throw new \Exception($userDb->getError());
-                }
+                $userDb->update($userData, $userMap);
             }
 
-            self::commit();
+            $this->commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -138,12 +135,12 @@ class Verification extends CareyShop
     /**
      * 发送短信验证码
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function sendVerificationSms($data)
+    public function sendVerificationSms(array $data)
     {
-        if (!$this->validateData($data, 'Verification.sms')) {
+        if (!$this->validateData($data, 'sms')) {
             return false;
         }
 
@@ -153,12 +150,12 @@ class Verification extends CareyShop
     /**
      * 发送邮件验证码
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function sendVerificationEmail($data)
+    public function sendVerificationEmail(array $data)
     {
-        if (!$this->validateData($data, 'Verification.email')) {
+        if (!$this->validateData($data, 'email')) {
             return false;
         }
 
@@ -168,20 +165,17 @@ class Verification extends CareyShop
     /**
      * 验证验证码
      * @access public
-     * @param  string $number 手机号或邮箱地址
-     * @param  string $code   通知编码 sms或email
+     * @param string $number 手机号或邮箱地址
+     * @param string $code   通知编码 sms或email
      * @return bool
      * @throws
      */
-    public function verVerification($number, $code)
+    public function verVerification(string $number, string $code)
     {
-        $map['number'] = ['eq', $number];
-        $map['code'] = ['eq', $code];
+        $map[] = ['number', '=', $number];
+        $map[] = ['code', '=', $code];
 
-        $result = self::get(function ($query) use ($map) {
-            $query->where($map)->order(['verification_id' => 'desc']);
-        });
-
+        $result = $this->where($map)->order(['verification_id' => 'desc'])->find();
         if (is_null($result)) {
             return $this->setError('验证码错误');
         }
@@ -200,12 +194,12 @@ class Verification extends CareyShop
     /**
      * 验证短信验证码
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function verVerificationSms($data)
+    public function verVerificationSms(array $data)
     {
-        if (!$this->validateData($data, 'Verification.ver_sms')) {
+        if (!$this->validateData($data, 'ver_sms')) {
             return false;
         }
 
@@ -215,12 +209,12 @@ class Verification extends CareyShop
     /**
      * 验证邮件验证码
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function verVerificationEmail($data)
+    public function verVerificationEmail(array $data)
     {
-        if (!$this->validateData($data, 'Verification.ver_email')) {
+        if (!$this->validateData($data, 'ver_email')) {
             return false;
         }
 
