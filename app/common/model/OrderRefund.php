@@ -13,6 +13,12 @@ namespace app\common\model;
 class OrderRefund extends CareyShop
 {
     /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'order_refund_id';
+
+    /**
      * 是否需要自动写入时间戳
      * @var bool
      */
@@ -56,9 +62,8 @@ class OrderRefund extends CareyShop
     public function getUser()
     {
         return $this
-            ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('username,nickname,level_icon,head_pic')
-            ->setEagerlyType(0);
+            ->hasOne('User', 'user_id', 'user_id')
+            ->joinType('left');
     }
 
     /**
@@ -70,7 +75,7 @@ class OrderRefund extends CareyShop
     {
         do {
             $refundNo = get_order_no('TK_');
-        } while (self::checkUnique(['refund_no' => ['eq', $refundNo]]));
+        } while (self::checkUnique(['refund_no' => $refundNo]));
 
         return $refundNo;
     }
@@ -78,22 +83,21 @@ class OrderRefund extends CareyShop
     /**
      * 添加一个订单退款记录
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function addOrderRefundItem($data)
+    public function addOrderRefundItem(array $data)
     {
-        if (!$this->validateData($data, 'OrderRefund')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 初始化部分数据
         unset($data['order_refund_id']);
-        $this->setAttr('order_refund_id', null);
         isset($data['refund_no']) ?: $data['refund_no'] = $this->getRefundNo();
         isset($data['status']) ?: $data['status'] = 0;
 
-        if (false !== $this->isUpdate(false)->allowField(true)->save($data)) {
+        if ($this->save($data)) {
             return true;
         }
 
@@ -103,14 +107,14 @@ class OrderRefund extends CareyShop
     /**
      * 取消订单后支付金额原路退回
      * @access public
-     * @param  array  $orderData 订单结构数据
-     * @param  float  $amount    自定义金额
-     * @param  string &$refundNo 退款单号
+     * @param array $orderData 订单结构数据
+     * @param float $amount    自定义金额
+     * @param null  $refundNo  退款单号
      * @return bool
      */
-    public function refundOrderPayment($orderData, $amount = 0.0, &$refundNo = null)
+    public function refundOrderPayment(array $orderData, $amount = 0.0, &$refundNo = null)
     {
-        if (!$this->validateData($orderData, 'OrderRefund.refund')) {
+        if (!$this->validateData($orderData, 'refund')) {
             return false;
         }
 
@@ -156,26 +160,23 @@ class OrderRefund extends CareyShop
     /**
      * 原路退款申请失败后尝试重试
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
-    public function retryRefundItem($data)
+    public function retryRefundItem(array $data)
     {
-        if (!$this->validateData($data, 'OrderRefund.retry')) {
+        if (!$this->validateData($data, 'retry')) {
             return false;
         }
 
-        $refundDb = self::get(function ($query) use ($data) {
-            $map['refund_no'] = ['eq', $data['refund_no']];
-            $map['status'] = ['eq', 2];
-            is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
+        $map[] = ['refund_no', '=', $data['refund_no']];
+        $map[] = ['status', '=', 2];
+        is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
 
-            $query->where($map);
-        });
-
-        if (!$refundDb) {
-            return is_null($refundDb) ? $this->setError('数据不存在') : false;
+        $refundDb = $this->where($map)->find();
+        if (is_null($refundDb)) {
+            return $this->setError('数据不存在');
         }
 
         // 获取支付配置信息
@@ -208,26 +209,23 @@ class OrderRefund extends CareyShop
     /**
      * 查询一笔退款信息
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function queryRefundItem($data)
+    public function queryRefundItem(array $data)
     {
-        if (!$this->validateData($data, 'OrderRefund.query')) {
+        if (!$this->validateData($data, 'query')) {
             return false;
         }
 
-        $refundLog = self::get(function ($query) use ($data) {
-            $map['refund_no'] = ['eq', $data['refund_no']];
-            $map['status'] = ['eq', 1];
-            is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
+        $map[] = ['refund_no', '=', $data['refund_no']];
+        $map[] = ['status', '=', 1];
+        is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
 
-            $query->where($map);
-        });
-
-        if (!$refundLog) {
-            return is_null($refundLog) ? $this->setError('数据不存在') : false;
+        $refundLog = $this->where($map)->find();
+        if (is_null($refundLog)) {
+            return $this->setError('数据不存在');
         }
 
         // 获取支付配置信息
@@ -252,68 +250,54 @@ class OrderRefund extends CareyShop
     /**
      * 获取退款记录列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getRefundList($data)
+    public function getRefundList(array $data)
     {
-        if (!$this->validateData($data, 'OrderRefund.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['order_refund.user_id'] = ['eq', get_client_id()];
-        empty($data['refund_no']) ?: $map['order_refund.refund_no'] = ['eq', $data['refund_no']];
-        empty($data['order_no']) ?: $map['order_refund.order_no'] = ['eq', $data['order_no']];
-        empty($data['out_trade_no']) ?: $map['order_refund.out_trade_no'] = ['eq', $data['out_trade_no']];
-        empty($data['payment_no']) ?: $map['order_refund.payment_no'] = ['eq', $data['payment_no']];
-        is_empty_parm($data['status']) ?: $map['order_refund.status'] = ['eq', $data['status']];
+        $map = [];
+        empty($data['refund_no']) ?: $map[] = ['order_refund.refund_no', '=', $data['refund_no']];
+        empty($data['order_no']) ?: $map[] = ['order_refund.order_no', '=', $data['order_no']];
+        empty($data['out_trade_no']) ?: $map[] = ['order_refund.out_trade_no', '=', $data['out_trade_no']];
+        empty($data['payment_no']) ?: $map[] = ['order_refund.payment_no', '=', $data['payment_no']];
+        is_empty_parm($data['status']) ?: $map[] = ['order_refund.status', '=', $data['status']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
-            $map['order_refund.create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
+            $map[] = ['order_refund.create_time', 'between time', [$data['begin_time'], $data['end_time']]];
+        }
+
+        if (is_client_admin()) {
+            !isset($data['to_payment']) ?: $map[] = ['order_refund.to_payment', '=', $data['to_payment']];
+            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+        } else {
+            $map[] = ['order_refund.user_id', '=', get_client_id()];
         }
 
         // 关联查询
-        $with = [];
-        if (is_client_admin()) {
-            $with = ['getUser'];
-            unset($map['order_refund.user_id']);
-            !isset($data['to_payment']) ?: $map['order_refund.to_payment'] = ['eq', $data['to_payment']];
-            empty($data['account']) ?: $map['getUser.username|getUser.nickname'] = ['eq', $data['account']];
-        }
+        $with = is_client_admin() ? ['getUser' => ['username', 'nickname', 'level_icon', 'head_pic']] : [];
 
         // 获取总数量,为空直接返回
-        $totalResult = $this->alias('order_refund')->with($with)->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->alias('order_refund')->withJoin($with)->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map, $with) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['order_refund_id' => 'desc'])
+            ->alias('order_refund')
+            ->withJoin($with)
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'order_refund_id';
-
-            $query
-                ->alias('order_refund')
-                ->with($with)
-                ->where($map)
-                ->order(['order_refund.' . $orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            return ['items' => $result->toArray(), 'total_result' => $totalResult];
-        }
-
-        return false;
+        self::keyToSnake(['getUser'], $result['items']);
+        return $result;
     }
 }
