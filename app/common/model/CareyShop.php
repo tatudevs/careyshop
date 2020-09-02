@@ -111,7 +111,7 @@ abstract class CareyShop extends Model
         if (!empty($this->fixedOrder)) {
             // 固定排序必须在前,否则将导致自定义排序无法覆盖
             $order = array_merge($this->fixedOrder, $order);
-            if (!empty($data['order_field'])) {
+            if (!empty($data['order_field']) && !array_key_exists($data['order_field'], $this->defaultOrder)) {
                 $order = array_reverse($order);
             }
         }
