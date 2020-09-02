@@ -5,13 +5,16 @@
  * CareyShop    资源上传服务层
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/1/26
+ * @date        2020/9/2
  */
 
 namespace app\common\service;
 
 use app\common\model\Storage;
 use app\common\model\StorageStyle;
+use think\exception\ValidateException;
+use think\facade\Config;
+use think\helper\Str;
 
 class Upload extends CareyShop
 {
@@ -40,7 +43,7 @@ class Upload extends CareyShop
             ],
         ];
 
-        $default = Config::get('default.value', 'upload');
+        $default = Config::get('careyshop.upload.default');
         foreach ($moduleList as &$module) {
             if ($default === $module['module']) {
                 $module['default'] = 1;
@@ -54,11 +57,11 @@ class Upload extends CareyShop
     /**
      * 创建资源上传对象
      * @access public
-     * @param  string $file  目录
-     * @param  string $model 模块
+     * @param string $file  目录
+     * @param string $model 模块
      * @return object|false
      */
-    public function createOssObject($file, $model = 'Upload')
+    public function createOssObject(string $file, $model = 'Upload')
     {
         // 转换模块的名称
         $file = Str::lower($file);
@@ -124,9 +127,9 @@ class Upload extends CareyShop
         }
 
         // 附加可上传后缀及附件大小限制
-        $result['image_ext'] = Config::get('image_ext.value', 'upload');
-        $result['file_ext'] = Config::get('file_ext.value', 'upload');
-        $result['file_size'] = Config::get('file_size.value', 'upload');
+        $result['image_ext'] = Config::get('careyshop.upload.image_ext');
+        $result['file_ext'] = Config::get('careyshop.upload.file_ext');
+        $result['file_size'] = Config::get('careyshop.upload.file_size');
 
         return $result;
     }
@@ -134,20 +137,22 @@ class Upload extends CareyShop
     /**
      * 替换上传资源
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function replaceUploadItem($data)
+    public function replaceUploadItem(array $data)
     {
-        $validate = Loader::validate('Storage');
-        if (!$validate->scene('replace')->check($data)) {
-            return $this->setError($validate->getError());
+        // 规则验证
+        try {
+            validate(\app\common\validate\Storage::class)->scene('replace')->check($data);
+        } catch (ValidateException $e) {
+            return $this->setError($e->getMessage());
         }
 
         // 获取已存在资源数据
-        $map['storage_id'] = ['eq', $data['storage_id']];
-        $map['type'] = ['neq', 2];
+        $map[] = ['storage_id', '=', $data['storage_id']];
+        $map[] = ['type', '<>', 2];
 
         $storageDB = new Storage();
         $storageData = $storageDB->field('path,protocol')->where($map)->find();
@@ -167,9 +172,9 @@ class Upload extends CareyShop
         }
 
         // 附加可上传后缀及附件大小限制
-        $result['image_ext'] = Config::get('image_ext.value', 'upload');
-        $result['file_ext'] = Config::get('file_ext.value', 'upload');
-        $result['file_size'] = Config::get('file_size.value', 'upload');
+        $result['image_ext'] = Config::get('careyshop.upload.image_ext');
+        $result['file_ext'] = Config::get('careyshop.upload.file_ext');
+        $result['file_size'] = Config::get('careyshop.upload.file_size');
 
         return $result;
     }
@@ -181,11 +186,9 @@ class Upload extends CareyShop
      */
     private function getModuleName()
     {
-        $request = Request::instance();
-        $module = $request->param('module');
-
+        $module = input('param.module');
         if (empty($module)) {
-            return Config::get('default.value', 'upload');
+            return Config::get('careyshop.upload.default');
         }
 
         $moduleList = array_column($this->getUploadModule(), 'module');
@@ -223,7 +226,7 @@ class Upload extends CareyShop
      */
     public function putUploadData()
     {
-        $ossObject = $this->createOssObject(Request::instance()->param('module', ''));
+        $ossObject = $this->createOssObject(input('param.module', ''));
         if (false === $ossObject) {
             return false;
         }
@@ -245,10 +248,7 @@ class Upload extends CareyShop
     {
         $url = $this->getThumbUrl();
         if (false === $url) {
-            $request = Request::instance();
-            $oldUrl = $request->param('url');
-
-            header('Location:' . $oldUrl, true, 301);
+            header('Location:' . input('param.url', ''), true, 301);
             exit;
         }
 
@@ -264,14 +264,14 @@ class Upload extends CareyShop
     /**
      * 获取资源缩略图实际路径
      * @access public
-     * @param  bool $getObject 是否返回OSS组件对象
+     * @param bool $getObject 是否返回OSS组件对象
      * @return mixed
      */
     public function getThumbUrl($getObject = false)
     {
         // 补齐协议地址
-        $request = Request::instance();
-        $url = $request->param('url');
+        $request = request();
+        $url = $request->param('url', '');
 
         $pattern = '/^((http|https)?:\/\/)/i';
         if (!preg_match($pattern, $url)) {
@@ -344,7 +344,7 @@ class Upload extends CareyShop
     public function getThumbInfo()
     {
         // 协议头
-        $request = Request::instance();
+        $request = request();
 
         $url = $request->param('url');
         if (!$url) {
@@ -376,8 +376,8 @@ class Upload extends CareyShop
     public function getDownload()
     {
         // 下载的资源还是需要经过样式处理
+        $request = request();
         $url = $this->getThumbUrl(true);
-        $request = Request::instance();
 
         // 文件不存在,则返回 404 错误提示
         if (empty($url['url_prefix'])) {
