@@ -294,6 +294,9 @@ class Upload extends CareyShop
             return $this->setError('type协议错误');
         }
 
+        // 样式组合
+        $patterns = [];
+
         // 是否定义资源样式
         if ($request->has('code', 'param', true)) {
             $style = new StorageStyle();
@@ -301,16 +304,18 @@ class Upload extends CareyShop
 
             if ($styleResult) {
                 foreach ($styleResult as $key => $value) {
+                    // 提取设定资源样式
                     if ('scale' === $key) {
                         $isMobile = $request->isMobile() ? 'mobile' : 'pc';
                         if (array_key_exists($isMobile, $value)) {
-                            $request->get($value[$isMobile]);
+                            $patterns = $value[$isMobile];
                         }
 
                         continue;
                     }
 
-                    $request->get([$key => $value]);
+                    // 提取其他样式
+                    $patterns[$key] = $value;
                 }
             }
         }
@@ -320,7 +325,8 @@ class Upload extends CareyShop
             return false;
         }
 
-        $url = $ossObject->getThumbUrl($urlArray);
+        $patterns = array_merge($patterns, $request->param('', []));
+        $url = $ossObject->getThumbUrl($urlArray, $patterns);
         $notPrefix = preg_replace($pattern, '', $url);
 
         $data = [

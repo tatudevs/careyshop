@@ -420,15 +420,15 @@ class Upload extends UploadBase
     /**
      * 获取资源缩略图实际路径
      * @access public
-     * @param array $urlArray 路径结构
+     * @param array $urlArray  路径结构
+     * @param array $styleList 样式集合
      * @return string
      */
-    public function getThumbUrl(array $urlArray)
+    public function getThumbUrl(array $urlArray, array $styleList)
     {
         // 获取自定义后缀,不合法则使用原后缀
         $fileInfo = pathinfo($urlArray['path']);
         $suffix = $fileInfo['extension'];
-        $param = $this->request->param();
         $extension = ['jpg', 'png', 'svg', 'bmp', 'tiff', 'webp'];
         $url = $this->getNewUrl($fileInfo['filename'], $fileInfo['extension'], $fileInfo, $urlArray);
 
@@ -438,22 +438,22 @@ class Upload extends UploadBase
         }
 
         // 不支持第三方样式,如果存在样式则直接返回
-        if (!empty($param['style'])) {
+        if (!empty($styleList['style'])) {
             return $url;
         }
 
         // 获取源文件位置,并且生成缩略图文件名,验证源文件是否存在
         $source = $this->getNewUrl('', '', $fileInfo, null, null);
-        $fileSign = $this->getFileSign($param, $source);
+        $fileSign = $this->getFileSign($styleList, $source);
 
         if (false === $fileSign) {
             return $url . '?error=' . rawurlencode('资源文件不存在');
         }
 
         // 处理输出格式
-        if (!empty($param['suffix'])) {
-            if (in_array($param['suffix'], $extension, true)) {
-                $suffix = $param['suffix'];
+        if (!empty($styleList['suffix'])) {
+            if (in_array($styleList['suffix'], $extension, true)) {
+                $suffix = $styleList['suffix'];
             }
         }
 
@@ -464,8 +464,8 @@ class Upload extends UploadBase
         }
 
         // 检测尺寸是否正确
-        [$sWidth, $sHeight] = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
-        [$cWidth, $cHeight] = @array_pad(isset($param['crop']) ? $param['crop'] : [], 2, 0);
+        [$sWidth, $sHeight] = @array_pad(isset($styleList['size']) ? $styleList['size'] : [], 2, 0);
+        [$cWidth, $cHeight] = @array_pad(isset($styleList['crop']) ? $styleList['crop'] : [], 2, 0);
 
         try {
             // 创建图片实例(并且是图片才创建缩略图文件夹)
@@ -477,11 +477,11 @@ class Upload extends UploadBase
 
             if ($sWidth || $sHeight) {
                 // 处理缩放样式
-                $resize = isset($param['resize']) ? $param['resize'] : 'scaling';
+                $resize = isset($styleList['resize']) ? $styleList['resize'] : 'scaling';
                 $type = 'pad' === $resize ? Image::THUMB_PAD : Image::THUMB_SCALING;
 
                 // 处理缩放尺寸、裁剪尺寸
-                foreach ($param as $key => $value) {
+                foreach ($styleList as $key => $value) {
                     switch ($key) {
                         case 'size':
                             $this->getSizeParam($sWidth, $sHeight, $imageFile, $resize);
@@ -503,8 +503,8 @@ class Upload extends UploadBase
 
             // 处理图片质量
             $quality = 100;
-            if (!empty($param['quality'])) {
-                $quality = $param['quality'] > 100 ? 100 : $param['quality'];
+            if (!empty($styleList['quality'])) {
+                $quality = $styleList['quality'] > 100 ? 100 : $styleList['quality'];
             }
 
             // 保存缩略图片

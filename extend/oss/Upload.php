@@ -182,10 +182,11 @@ abstract class Upload
     /**
      * 获取资源缩略图实际路径
      * @access protected
-     * @param array $urlArray 路径结构
+     * @param array $urlArray  路径结构
+     * @param array $styleList 样式集合
      * @return void
      */
-    abstract protected function getThumbUrl(array $urlArray);
+    abstract protected function getThumbUrl(array $urlArray, array $styleList);
 
     /**
      * 批量删除资源

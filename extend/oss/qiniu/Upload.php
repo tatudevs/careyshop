@@ -302,14 +302,14 @@ class Upload extends UploadBase
     /**
      * 获取资源缩略图实际路径
      * @access public
-     * @param array $urlArray 路径结构
+     * @param array $urlArray  路径结构
+     * @param array $styleList 样式集合
      * @return string
      */
-    public function getThumbUrl(array $urlArray)
+    public function getThumbUrl(array $urlArray, array $styleList)
     {
         // 初始化数据并拼接不带查询条件的URL
         $fileInfo = pathinfo($urlArray['path']);
-        $param = $this->request->param();
         $extension = ['jpg', 'png', 'svg', 'gif', 'bmp', 'tiff', 'webp'];
 
         // 是否带有随机值,用于强制刷新
@@ -327,12 +327,12 @@ class Upload extends UploadBase
         $url = sprintf('%s://%s%s%s', $urlArray['scheme'], $urlArray['host'], $port, $urlArray['path']);
 
         // 带样式则直接返回
-        if (!empty($param['style'])) {
-            $style = mb_substr($param['style'], 0, 1, 'utf-8');
+        if (!empty($styleList['style'])) {
+            $style = mb_substr($styleList['style'], 0, 1, 'utf-8');
             if (in_array($style, ['-', '_', '!', '/'])) {
-                $url .= $param['style'];
+                $url .= $styleList['style'];
             } else {
-                $url .= sprintf('-%s', $param['style']);
+                $url .= sprintf('-%s', $styleList['style']);
             }
 
             if (array_key_exists('rand', $query)) {
@@ -348,8 +348,8 @@ class Upload extends UploadBase
         }
 
         // 检测尺寸是否正确
-        [$sWidth, $sHeight] = @array_pad(isset($param['size']) ? $param['size'] : [], 2, 0);
-        [$cWidth, $cHeight] = @array_pad(isset($param['crop']) ? $param['crop'] : [], 2, 0);
+        [$sWidth, $sHeight] = @array_pad(isset($styleList['size']) ? $styleList['size'] : [], 2, 0);
+        [$cWidth, $cHeight] = @array_pad(isset($styleList['crop']) ? $styleList['crop'] : [], 2, 0);
 
         if ($sWidth || $sHeight) {
             // 画布最后的尺寸初始化
@@ -357,11 +357,11 @@ class Upload extends UploadBase
             $extent = [0, 0];
 
             // 处理缩放尺寸、裁剪尺寸
-            foreach ($param as $key => $value) {
+            foreach ($styleList as $key => $value) {
                 switch ($key) {
                     case 'size':
                         $last = 'size';
-                        $resize = isset($param['resize']) ? $param['resize'] : '';
+                        $resize = isset($styleList['resize']) ? $styleList['resize'] : '';
 
                         if ('pad' === $resize) {
                             empty($sWidth) && $sWidth = $sHeight;
@@ -387,22 +387,22 @@ class Upload extends UploadBase
             }
 
             // 处理画布尺寸
-            if (isset($param['resize']) && 'pad' === $param['resize']) {
+            if (isset($styleList['resize']) && 'pad' === $styleList['resize']) {
                 $options .= $this->getExtentParam($extent[0], $extent[1]);
             }
         }
 
         // 处理图片质量
-        if (empty($param['quality'])) {
+        if (empty($styleList['quality'])) {
             $options .= 'quality/100!/';
         } else {
-            $options .= sprintf('quality/%d!/', (int)$param['quality'] > 100 ? 100 : $param['quality']);
+            $options .= sprintf('quality/%d!/', (int)$styleList['quality'] > 100 ? 100 : $styleList['quality']);
         }
 
         // 处理输出格式
-        if (!empty($param['suffix'])) {
-            if (in_array($param['suffix'], $extension, true)) {
-                $options .= 'format/' . $param['suffix'] . '/';
+        if (!empty($styleList['suffix'])) {
+            if (in_array($styleList['suffix'], $extension, true)) {
+                $options .= 'format/' . $styleList['suffix'] . '/';
             }
         }
 
