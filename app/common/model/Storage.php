@@ -375,6 +375,10 @@ class Storage extends CareyShop
             $posNode = array_search($data['parent_id'], $data['storage_id']);
             if (false !== $posNode) {
                 unset($data['storage_id'][$posNode]);
+
+                if (empty($data['storage_id'])) {
+                    return [];
+                }
             }
 
             if (0 != $data['parent_id']) {
