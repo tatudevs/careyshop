@@ -36,6 +36,12 @@ abstract class CareyShop extends Model
     protected $fixedOrder = [];
 
     /**
+     * 是否调整顺序
+     * @var bool
+     */
+    protected $isReverse = false;
+
+    /**
      * 检测是否存在相同值
      * @access public
      * @param array $map 查询条件
@@ -111,7 +117,7 @@ abstract class CareyShop extends Model
         if (!empty($this->fixedOrder)) {
             // 固定排序必须在前,否则将导致自定义排序无法覆盖
             $order = array_merge($this->fixedOrder, $order);
-            if (!empty($data['order_field']) && !array_key_exists($data['order_field'], $this->defaultOrder)) {
+            if (!empty($data['order_field']) && $this->isReverse) {
                 $order = array_reverse($order);
             }
         }
@@ -124,14 +130,16 @@ abstract class CareyShop extends Model
     /**
      * 设置默认排序
      * @access public
-     * @param array $order 默认排序
-     * @param array $fixed 固定排序
+     * @param array $order   默认排序
+     * @param array $fixed   固定排序
+     * @param bool  $reverse 是否调整顺序
      * @return $this
      */
-    public function setDefaultOrder(array $order, $fixed = [])
+    public function setDefaultOrder(array $order, $fixed = [], $reverse = false)
     {
         $this->defaultOrder = $order;
         $this->fixedOrder = $fixed;
+        $this->isReverse = $reverse;
 
         return $this;
     }

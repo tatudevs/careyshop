@@ -131,7 +131,7 @@ class FriendLink extends CareyShop
             $map[] = ['status', '=', 1];
         }
 
-        return $this->setDefaultOrder(['friend_link_id' => 'desc'], ['sort' => 'asc'])
+        return $this->setDefaultOrder(['friend_link_id' => 'desc'], ['sort' => 'asc'], true)
             ->where($map)
             ->withSearch(['order'], $data)
             ->select()

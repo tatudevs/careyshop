@@ -136,7 +136,7 @@ class Support extends CareyShop
         }
 
         // 实际查询
-        return $this->setDefaultOrder(['support_id' => 'asc'], ['sort' => 'asc'])
+        return $this->setDefaultOrder(['support_id' => 'asc'], ['sort' => 'asc'], true)
             ->where($map)
             ->withSearch(['order'], $data)
             ->select()

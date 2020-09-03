@@ -175,7 +175,7 @@ class AuthRule extends CareyShop
         is_empty_parm($data['module']) ?: $map[] = ['module', '=', $data['module']];
         is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
-        return $this->setDefaultOrder(['rule_id' => 'asc'], ['sort' => 'asc'])
+        return $this->setDefaultOrder(['rule_id' => 'asc'], ['sort' => 'asc'], true)
             ->cache(true, null, 'CommonAuth')
             ->where($map)
             ->withSearch(['order'], $data)

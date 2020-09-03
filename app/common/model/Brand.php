@@ -228,7 +228,7 @@ class Brand extends CareyShop
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['brand_id' => 'desc'], ['sort' => 'asc'])
+        $result['items'] = $this->setDefaultOrder(['brand_id' => 'desc'], ['sort' => 'asc'], true)
             ->cache(true, null, 'Brand')
             ->alias('b')
             ->field('b.*,ifnull(c.name, \'\') category_name,ifnull(c.alias, \'\') category_alias')

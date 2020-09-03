@@ -112,7 +112,7 @@ class Storage extends CareyShop
         }
 
         // 获取实际数据
-        $result = $this->setDefaultOrder(['storage_id' => 'desc'], ['sort' => 'asc'])
+        $result = $this->setDefaultOrder(['storage_id' => 'desc'], ['sort' => 'asc'], true)
             ->cache(true, null, 'StorageDirectory')
             ->field(['storage_id', 'parent_id', 'name', 'cover', 'sort', 'is_default'])
             ->where('type', '=', 2)

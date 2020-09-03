@@ -292,7 +292,7 @@ class GoodsAttribute extends CareyShop
         $field = 'goods_attribute_id,attr_name,description,icon,goods_type_id,sort';
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['goods_attribute_id' => 'asc'], ['sort' => 'asc'])
+        $result['items'] = $this->setDefaultOrder(['goods_attribute_id' => 'asc'], ['sort' => 'asc'], true)
             ->field($field)
             ->with($with)
             ->where($map)

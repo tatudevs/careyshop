@@ -179,7 +179,7 @@ class Navigation extends CareyShop
             $map[] = ['status', '=', 1];
         }
 
-        return $this->setDefaultOrder(['navigation_id' => 'asc'], ['sort' => 'asc'])
+        return $this->setDefaultOrder(['navigation_id' => 'asc'], ['sort' => 'asc'], true)
             ->cache(true, null, 'Navigation')
             ->where($map)
             ->withSearch(['order'], $data)

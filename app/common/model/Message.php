@@ -454,7 +454,7 @@ class Message extends CareyShop
         }
 
         // 实际查询
-        $result = $this->setDefaultOrder(['message_id' => 'desc'], ['is_top' => 'desc'])
+        $result = $this->setDefaultOrder(['message_id' => 'desc'], ['is_top' => 'desc'], true)
             ->alias('m')
             ->field('m.message_id,m.type,m.title,m.url,m.is_top,m.target,ifnull(`u`.is_read, 0) is_read,m.create_time')
             ->join([$userSQL => 'u'], 'u.message_id = m.message_id', 'left')

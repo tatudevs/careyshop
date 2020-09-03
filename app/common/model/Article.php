@@ -193,7 +193,7 @@ class Article extends CareyShop
         }
 
         $fixed = !is_client_admin() ? ['is_top' => 'desc'] : [];
-        $result['items'] = $this->setDefaultOrder(['article_id' => 'desc'], $fixed)
+        $result['items'] = $this->setDefaultOrder(['article_id' => 'desc'], $fixed, true)
             ->with('get_article_cat')
             ->where($map)
             ->withSearch(['page', 'order'], $data)
