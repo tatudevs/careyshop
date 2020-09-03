@@ -362,3 +362,14 @@ if (!function_exists('get_ip2region_str')) {
         return trim($ipStr);
     }
 }
+
+if (!function_exists('is_windows')) {
+    /**
+     * 判断是否为Windows系统
+     * @return bool
+     */
+    function is_windows()
+    {
+        return strpos(PHP_OS, 'WIN') !== false;
+    }
+}
