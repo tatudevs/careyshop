@@ -5,17 +5,19 @@
  * CareyShop    商品模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/11
+ * @date        2020/9/3
  */
 
 namespace app\common\model;
 
-use think\Cache;
-use util\Http;
-use think\helper\Str;
-
 class Goods extends CareyShop
 {
+    /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'goods_id';
+
     /**
      * 商品属性模型对象
      * @var object
@@ -89,7 +91,7 @@ class Goods extends CareyShop
      */
     public function goodsAttrItem()
     {
-        return $this->hasMany('GoodsAttr', 'goods_id');
+        return $this->hasMany(GoodsAttr::class, 'goods_id');
     }
 
     /**
@@ -99,7 +101,7 @@ class Goods extends CareyShop
      */
     public function goodsSpecItem()
     {
-        return $this->hasMany('SpecGoods', 'goods_id');
+        return $this->hasMany(SpecGoods::class, 'goods_id');
     }
 
     /**
@@ -109,7 +111,7 @@ class Goods extends CareyShop
      */
     public function specImage()
     {
-        return $this->hasMany('SpecImage', 'goods_id');
+        return $this->hasMany(SpecImage::class, 'goods_id');
     }
 
     /**
@@ -124,6 +126,7 @@ class Goods extends CareyShop
         !is_null(self::$specImage) ?: self::$specImage = new SpecImage();
     }
 
+    //todo next
     /**
      * 通用全局查询条件
      * @access protected
