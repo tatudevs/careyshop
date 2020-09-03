@@ -10,6 +10,8 @@
 
 namespace app\common\model;
 
+use think\facade\Cache;
+
 class Goods extends CareyShop
 {
     /**
@@ -20,19 +22,19 @@ class Goods extends CareyShop
 
     /**
      * 商品属性模型对象
-     * @var object
+     * @var GoodsAttr
      */
     private static $goodsAttr = null;
 
     /**
      * 商品规格模型对象
-     * @var object
+     * @var SpecGoods
      */
     private static $specGoods = null;
 
     /**
      * 商品规格图片模型对象
-     * @var object
+     * @var SpecImage
      */
     private static $specImage = null;
 
@@ -126,16 +128,18 @@ class Goods extends CareyShop
         !is_null(self::$specImage) ?: self::$specImage = new SpecImage();
     }
 
-    //todo next
     /**
      * 通用全局查询条件
-     * @access protected
-     * @param  object $query 模型
-     * @return void
+     * @access public
+     * @param object $query 模型
      */
-    protected function scopeGlobal($query)
+    public function scopeGlobal($query)
     {
-        $query->where(['status' => ['eq', 1], 'is_delete' => ['eq', 0], 'store_qty' => ['gt', 0]]);
+        $query->where([
+            ['status', '=', 1],
+            ['is_delete', '=', 0],
+            ['store_qty', '>', 0],
+        ]);
     }
 
     /**
@@ -147,7 +151,7 @@ class Goods extends CareyShop
     {
         do {
             $goodsCode = 'CS' . rand_number(8);
-        } while (self::checkUnique(['goods_code' => ['eq', $goodsCode]]));
+        } while (self::checkUnique(['goods_code' => $goodsCode]));
 
         return $goodsCode;
     }
@@ -155,17 +159,17 @@ class Goods extends CareyShop
     /**
      * 检测商品货号是否唯一
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueGoodsCode($data)
+    public function uniqueGoodsCode(array $data)
     {
-        if (!$this->validateData($data, 'Goods.unique')) {
+        if (!$this->validateData($data, 'unique')) {
             return false;
         }
 
-        $map['goods_code'] = ['eq', $data['goods_code']];
-        !isset($data['exclude_id']) ?: $map['goods_id'] = ['neq', $data['exclude_id']];
+        $map[] = ['goods_code', '=', $data['goods_code']];
+        !isset($data['exclude_id']) ?: $map[] = ['goods_id', '<>', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
             return $this->setError('商品货号已存在');
@@ -177,12 +181,12 @@ class Goods extends CareyShop
     /**
      * 添加商品附加属性与规格
      * @access private
-     * @param  int   $goodsId 商品编号
-     * @param  array &$result 商品自身数据集
-     * @param  array $data    外部数据
+     * @param int    $goodsId 商品编号
+     * @param array &$result  商品自身数据集
+     * @param array  $data    外部数据
      * @return bool
      */
-    private function addGoodSubjoin($goodsId, &$result, $data)
+    private function addGoodSubjoin(int $goodsId, array &$result, array $data)
     {
         // 检测规格是否存在自定义,存在则更新,并且返回会附带规格图集合
         \app\common\service\SpecGoods::validateSpecMenu($data);
@@ -231,7 +235,7 @@ class Goods extends CareyShop
 
             // 计算实际商品库存并更新
             $result['store_qty'] = (int)array_sum(array_column($data['spec_combo'], 'store_qty'));
-            $this->where(['goods_id' => ['eq', $goodsId]])->setField('store_qty', $result['store_qty']);
+            $this->where('goods_id', '=', $goodsId)->save(['store_qty' => $result['store_qty']]);
         }
 
         // 插入商品规格图片
@@ -247,13 +251,12 @@ class Goods extends CareyShop
     /**
      * 添加一个商品
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
-    public function addGoodsItem($data)
+    public function addGoodsItem(array $data)
     {
-        if (!$this->validateData($data, 'Goods')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -263,25 +266,24 @@ class Goods extends CareyShop
         !empty($data['goods_code']) ?: $data['goods_code'] = $this->setGoodsCode();
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 写入主表
-            if (!$this->allowField(true)->save($data)) {
-                throw new \Exception($this->getError());
-            }
+            $this->save($data);
+            $result = $this->toArray();
 
             // 写入属性与规格
-            $result = $this->toArray();
             if (!$this->addGoodSubjoin($this->getAttr('goods_id'), $result, $data)) {
                 throw new \Exception($this->getError());
             }
 
-            self::commit();
-            Cache::clear('GoodsCategory');
+            $this->commit();
+            Cache::tag('GoodsCategory')->clear();
+
             return $result;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -289,19 +291,18 @@ class Goods extends CareyShop
     /**
      * 编辑一个商品
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
-    public function setGoodsItem($data)
+    public function setGoodsItem(array $data)
     {
-        if (!$this->validateSetData($data, 'Goods.set')) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
         if (isset($data['goods_code'])) {
-            $map['goods_id'] = ['neq', $data['goods_id']];
-            $map['goods_code'] = ['eq', $data['goods_code']];
+            $map[] = ['goods_id', '<>', $data['goods_id']];
+            $map[] = ['goods_code', '=', $data['goods_code']];
 
             if (self::checkUnique($map)) {
                 return $this->setError('商品货号已存在');
@@ -311,16 +312,15 @@ class Goods extends CareyShop
             !empty($data['goods_code']) ?: $data['goods_code'] = $this->setGoodsCode();
         }
 
-        $map['goods_id'] = ['eq', $data['goods_id']];
-        unset($map['goods_code']);
+        unset($map);
+        $map[] = ['goods_id', '=', $data['goods_id']];
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
-            if (false === $this->allowField(true)->save($data, $map)) {
-                throw new \Exception($this->getError());
-            }
+            // 更新主数据
+            $goodsDB = self::update($data, $map);
 
             if (!empty($data['attr_config'])) {
                 if (false === self::$goodsAttr->where($map)->delete()) {
@@ -340,15 +340,15 @@ class Goods extends CareyShop
                 }
             }
 
-            $result = $this->toArray();
+            $result = $goodsDB->toArray();
             if (!$this->addGoodSubjoin($data['goods_id'], $result, $data)) {
                 throw new \Exception($this->getError());
             }
 
-            self::commit();
+            $this->commit();
             return $result;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -356,61 +356,52 @@ class Goods extends CareyShop
     /**
      * 获取一个商品
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getGoodsItem($data)
+    public function getGoodsItem(array $data)
     {
-        if (!$this->validateData($data, 'Goods.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $query->where(['goods_id' => ['eq', $data['goods_id']]]);
-        });
-
-        if (false !== $result) {
-            return is_null($result) ? null : $result->toArray();
-        }
-
-        return false;
+        $result = $this->find($data['goods_id']);
+        return is_null($result) ? null : $result->toArray();
     }
 
     /**
      * 批量删除或恢复商品(回收站)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function delGoodsList($data)
+    public function delGoodsList(array $data)
     {
-        if (!$this->validateData($data, 'Goods.del')) {
+        if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        $map['goods_id'] = ['in', $data['goods_id']];
-        if (false !== $this->save(['is_delete' => $data['is_delete']], $map)) {
-            Cache::clear('GoodsCategory');
-            return true;
-        }
+        $map[] = ['goods_id', 'in', $data['goods_id']];
+        self::update(['is_delete' => $data['is_delete']], $map);
+        Cache::tag('GoodsCategory')->clear();
 
-        return false;
+        return true;
     }
 
     /**
      * 获取指定编号商品的基础数据
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|bool
      */
-    public function getGoodsSelect($data)
+    public function getGoodsSelect(array $data)
     {
-        if (!$this->validateData($data, 'Goods.select')) {
+        if (!$this->validateData($data, 'select')) {
             return false;
         }
 
-        $map['goods_id'] = ['in', $data['goods_id']];
+        $map[] = ['goods_id', 'in', $data['goods_id']];
         $field = 'goods_id,name,short_name,attachment,store_qty,sales_sum,status,is_delete';
 
         $order = [];
@@ -429,127 +420,110 @@ class Goods extends CareyShop
     /**
      * 批量设置或关闭商品可积分抵扣
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setIntegralGoodsList($data)
+    public function setIntegralGoodsList(array $data)
     {
-        if (!$this->validateData($data, 'Goods.integral')) {
+        if (!$this->validateData($data, 'integral')) {
             return false;
         }
 
-        $map['goods_id'] = ['in', $data['goods_id']];
-        if (false !== $this->save(['is_integral' => $data['is_integral']], $map)) {
-            return true;
-        }
+        $map[] = ['goods_id', 'in', $data['goods_id']];
+        self::update(['is_integral' => $data['is_integral']], $map);
 
-        return false;
+        return true;
     }
 
     /**
      * 批量设置商品是否推荐
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setRecommendGoodsList($data)
+    public function setRecommendGoodsList(array $data)
     {
-        if (!$this->validateData($data, 'Goods.recommend')) {
+        if (!$this->validateData($data, 'recommend')) {
             return false;
         }
 
-        $map['goods_id'] = ['in', $data['goods_id']];
-        if (false !== $this->save(['is_recommend' => $data['is_recommend']], $map)) {
-            return true;
-        }
+        $map[] = ['goods_id', 'in', $data['goods_id']];
+        self::update(['is_recommend' => $data['is_recommend']], $map);
 
-        return false;
+        return true;
     }
 
     /**
      * 批量设置商品是否为新品
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setNewGoodsList($data)
+    public function setNewGoodsList(array $data)
     {
-        if (!$this->validateData($data, 'Goods.new')) {
+        if (!$this->validateData($data, 'new')) {
             return false;
         }
 
-        $map['goods_id'] = ['in', $data['goods_id']];
-        if (false !== $this->save(['is_new' => $data['is_new']], $map)) {
-            return true;
-        }
+        $map[] = ['goods_id', 'in', $data['goods_id']];
+        self::update(['is_new' => $data['is_new']], $map);
 
-        return false;
+        return true;
     }
 
     /**
      * 批量设置商品是否为热卖
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setHotGoodsList($data)
+    public function setHotGoodsList(array $data)
     {
-        if (!$this->validateData($data, 'Goods.hot')) {
+        if (!$this->validateData($data, 'hot')) {
             return false;
         }
 
-        $map['goods_id'] = ['in', $data['goods_id']];
-        if (false !== $this->save(['is_hot' => $data['is_hot']], $map)) {
-            return true;
-        }
+        $map[] = ['goods_id', 'in', $data['goods_id']];
+        self::update(['is_hot' => $data['is_hot']], $map);
 
-        return false;
+        return true;
     }
 
     /**
      * 批量设置商品是否上下架
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setShelvesGoodsList($data)
+    public function setShelvesGoodsList(array $data)
     {
-        if (!$this->validateData($data, 'Goods.shelves')) {
+        if (!$this->validateData($data, 'shelves')) {
             return false;
         }
 
-        $map['goods_id'] = ['in', $data['goods_id']];
-        if (false !== $this->save(['status' => $data['status']], $map)) {
-            return true;
-        }
+        $map[] = ['goods_id', 'in', $data['goods_id']];
+        self::update(['status' => $data['status']], $map);
 
-        return false;
+        return true;
     }
 
     /**
      * 获取指定商品的属性列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getGoodsAttrList($data)
+    public function getGoodsAttrList(array $data)
     {
-        if (!$this->validateData($data, 'Goods.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = GoodsAttr::all(function ($query) use ($data) {
-            $query->where(['goods_id' => ['eq', $data['goods_id']]]);
-        });
-
-        if (false !== $result) {
-            return $result->toArray();
-        }
-
-        return false;
+        return GoodsAttr::where('goods_id', '=', $data['goods_id'])->select()->toArray();
     }
 
+    // todo next
     /**
      * 获取指定商品的规格组合列表
      * @access public
