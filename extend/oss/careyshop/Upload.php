@@ -13,6 +13,7 @@ namespace oss\careyshop;
 const DS = DIRECTORY_SEPARATOR;
 
 use app\common\model\Storage;
+use careyshop\Image;
 use oss\Upload as UploadBase;
 use think\facade\Config;
 use think\facade\Filesystem;
@@ -201,6 +202,7 @@ class Upload extends UploadBase
      * @access private
      * @param File $file 上传文件对象
      * @return array|string
+     * @throws
      */
     private function saveFile(File $file)
     {
@@ -224,38 +226,38 @@ class Upload extends UploadBase
             return '禁止上传非法附件';
         }
 
-        // todo 不再继续,需要边调试边修改
-//        $savename = \think\facade\Filesystem::putFileAs( 'topic', $file,'abc.jpg');
-//        Filesystem::disk('public')->putFileAs();
+        // 保存附件到磁盘目录
+        $fileDriver = Filesystem::disk('public');
 
-        // 保存附件到项目目录
-        $filePath = DS . 'uploads' . DS . 'files' . DS;
         if ($this->request->has('x:replace', 'param', true)) {
+            $tempRoot = Filesystem::getDiskConfig('public')['url'];
             $movePath = pathinfo($this->request->param('x:replace'));
-            $filePath = $movePath['dirname'] . DS;
-            $info = $file->move(ROOT_PATH . 'public' . $filePath, $movePath['basename']);
+            $movePath['dirname'] = mb_substr($movePath['dirname'], mb_strlen($tempRoot), null, 'UTF-8');
+
+            $savename = $fileDriver->putFileAs($movePath['dirname'], $file, $movePath['basename']);
         } else {
-            $saveName = date('Ymd') . DS . guid_v4();
-            $info = $file->move(ROOT_PATH . 'public' . $filePath, $saveName);
+            $savename = $fileDriver->putFile('files', $file, function () {
+                return date('Ymd') . DS . guid_v4();
+            });
         }
 
-        if (false === $info) {
-            return $file->getError();
+        if (false === $savename) {
+            return '异常错误，请重新尝试上传';
         }
 
         // 判断是否为图片
-        [$width, $height] = @getimagesize($info->getPathname());
+        [$width, $height] = @getimagesize($fileDriver->path($savename));
         $isImage = (int)$width > 0 && (int)$height > 0;
 
         // 附件相对路径,并统一斜杠为'/'
-        $path = APP_PUBLIC_PATH . $filePath . $info->getSaveName();
+        $path = Filesystem::getDiskConfig('public')['url'] . DS . $savename;
         $path = str_replace('\\', '/', $path);
 
         // 自定义附件名
         $filename = $this->request->param('x:filename');
 
         // 对外访问域名
-        $host = Config::get('careyshop_url.value', 'upload');
+        $host = Config::get('careyshop.upload.careyshop_url');
         if (!$host) {
             $host = $this->request->host();
         }
@@ -263,23 +265,25 @@ class Upload extends UploadBase
         // 写入库数据准备
         $data = [
             'parent_id' => (int)$this->request->param('x:parent_id', 0),
-            'name'      => !empty($filename) ? $filename : $file->getInfo('name'),
-            'mime'      => $file->getInfo('type'),
-            'ext'       => mb_strtolower($info->getExtension(), 'utf-8'),
-            'size'      => $info->getSize(),
+            'name'      => !empty($filename) ? $filename : $file->getOriginalName(),
+            'mime'      => $file->getMime(),
+            'ext'       => mb_strtolower($file->extension(), 'utf-8'),
+            'size'      => $file->getSize(),
             'pixel'     => $isImage ? ['width' => $width, 'height' => $height] : [],
-            'hash'      => $info->hash('sha1'),
+            'hash'      => $file->sha1(),
             'path'      => $path,
             'url'       => $host . $path . '?type=' . self::MODULE,
             'protocol'  => self::MODULE,
-            'type'      => $isImage ? 0 : $this->getFileType($file->getInfo('type')),
+            'type'      => $isImage ? 0 : $this->getFileType($file->getMime()),
         ];
 
+        // 如果是替换,则增加随机数值,以便更新前台缓存
         if ($this->request->has('x:replace', 'param', true)) {
             unset($data['parent_id']);
             $data['url'] .= sprintf('&rand=%s', mt_rand(0, time()));
         }
 
+        // 数据记录操作
         $map[] = ['path', '=', $data['path']];
         $map[] = ['protocol', '=', self::MODULE];
         $map[] = ['type', '<>', 2];
@@ -294,28 +298,30 @@ class Upload extends UploadBase
         if (!is_null($result)) {
             // 删除被替换资源的缩略图文件
             if (0 === $result->getAttr('type')) {
-                $thumb = ROOT_PATH . 'public' . $data['path'];
-                $thumb = str_replace(IS_WIN ? '/' : '\\', DS, $thumb);
+                $thumb = $fileDriver->path($savename);
+                $thumb = str_replace(is_windows() ? '/' : '\\', DS, $thumb);
 
                 $this->clearThumb($thumb);
             }
 
             // 替换资源进行更新
-            if (false === $result->save($data)) {
+            if (!$result->save($data)) {
                 return $this->setError($storageDb->getError());
             }
 
-            $ossResult = $result->setAttr('status', 200)->toArray();
+            $result->setAttr('status', 200);
+            $ossResult = $result->toArray();
         } else {
             // 插入新记录
-            if (false === $storageDb->isUpdate(false)->save($data)) {
+            if (!$storageDb->save($data)) {
                 return $this->setError($storageDb->getError());
             }
 
-            $ossResult = $storageDb->setAttr('status', 200)->toArray();
+            $storageDb->setAttr('status', 200);
+            $ossResult = $storageDb->toArray();
         }
 
-        $ossResult['oss'] = Config::get('oss.value', 'upload');
+        $ossResult['oss'] = Config::get('careyshop.upload.oss');
         return $ossResult;
     }
 
@@ -382,13 +388,13 @@ class Upload extends UploadBase
                 }
             }
         } else if ($type === 'path') {
-            $url = ROOT_PATH . 'public';
-            $url .= str_replace(IS_WIN ? '/' : '\\', DS, $fileInfo['dirname']);
+            $url = public_path();
+            $url .= str_replace(is_windows() ? '/' : '\\', DS, $fileInfo['dirname']);
             $url .= DS . $fileName;
             $url .= '.' . $suffix;
         } else {
-            $url = ROOT_PATH . 'public';
-            $url .= str_replace(IS_WIN ? '/' : '\\', DS, $fileInfo['dirname']);
+            $url = public_path();
+            $url .= str_replace(is_windows() ? '/' : '\\', DS, $fileInfo['dirname']);
             $url .= DS . $fileInfo['basename'];
         }
 
@@ -471,8 +477,8 @@ class Upload extends UploadBase
             // 创建图片实例(并且是图片才创建缩略图文件夹)
             $imageFile = Image::open($source);
 
-            $thumb = ROOT_PATH . 'public' . $fileInfo['dirname'];
-            $thumb = str_replace(IS_WIN ? '/' : '\\', DS, $thumb);
+            $thumb = public_path() . $fileInfo['dirname'];
+            $thumb = str_replace(is_windows() ? '/' : '\\', DS, $thumb);
             !is_dir($thumb) && mkdir($thumb, 0755, true);
 
             if ($sWidth || $sHeight) {
@@ -525,8 +531,8 @@ class Upload extends UploadBase
     public function delFileList()
     {
         foreach ($this->delFileList as $value) {
-            $path = ROOT_PATH . 'public' . $value;
-            $path = str_replace(IS_WIN ? '/' : '\\', DS, $path);
+            $path = public_path() . $value;
+            $path = str_replace(is_windows() ? '/' : '\\', DS, $path);
 
             $this->clearThumb($path);
             is_file($path) && @unlink($path);
@@ -579,8 +585,8 @@ class Upload extends UploadBase
     public function getDownload(string $url, string $filename)
     {
         $fileInfo = parse_url($url);
-        $filePath = ROOT_PATH . 'public' . $fileInfo['path'];
-        $filePath = str_replace(IS_WIN ? '/' : '\\', DS, $filePath);
+        $filePath = public_path() . $fileInfo['path'];
+        $filePath = str_replace(is_windows() ? '/' : '\\', DS, $filePath);
 
         if (!is_readable($filePath)) {
             header('status: 404 Not Found', true, 404);
@@ -642,8 +648,8 @@ class Upload extends UploadBase
             $fileInfo = parse_url($url);
             $pos = mb_strpos($fileInfo['path'], '/');
 
-            $filePath = ROOT_PATH . 'public' . mb_substr($fileInfo['path'], $pos, null, 'utf-8');
-            $result = str_replace(IS_WIN ? '/' : '\\', DS, $filePath);
+            $filePath = public_path() . mb_substr($fileInfo['path'], $pos, null, 'utf-8');
+            $result = str_replace(is_windows() ? '/' : '\\', DS, $filePath);
 
             if (!file_exists($result)) {
                 return $info;
