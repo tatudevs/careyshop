@@ -525,7 +525,7 @@ class Storage extends CareyShop
         $result->save(['url' => $newUrl]);
 
         $path = public_path() . $result['path'];
-        $path = str_replace(strpos(PHP_OS, 'WIN') !== false ? '/' : '\\', DIRECTORY_SEPARATOR, $path);
+        $path = str_replace(is_windows() ? '/' : '\\', DIRECTORY_SEPARATOR, $path);
 
         $ossObject = (new Upload())->createOssObject($result['protocol']);
         $ossObject->clearThumb($path);
