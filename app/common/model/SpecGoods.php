@@ -52,7 +52,7 @@ class SpecGoods extends CareyShop
         foreach ($data as $key => $value) {
             $data[$key]['goods_id'] = $goodsId;
 
-            if (!$this->validateData($data[$key])) {
+            if (!$this->validateData($data[$key], null, true)) {
                 return false;
             }
 
