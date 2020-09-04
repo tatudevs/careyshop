@@ -324,7 +324,7 @@ class DeliveryDist extends CareyShop
                 continue;
             }
 
-            $track = $this->getOrderTracesByJson($value['get_delivery_item']['code'], $value['logistic_code']);
+            $track = $this->getOrderTracesByJson($value['getDeliveryItem']['code'], $value['logistic_code']);
             if (false !== $track) {
                 $result[$key]['state'] = (int)$track['state'];
                 $result[$key]['trace'] = $track['trace'];
