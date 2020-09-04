@@ -56,6 +56,18 @@ class OrderService extends CareyShop
             'set.order.service.cancel'   => ['setOrderServiceCancel'],
             // 完成一个售后服务单
             'set.order.service.complete' => ['setOrderServiceComplete'],
+            // debug
+            'test'                       => ['test', false],
         ];
+    }
+
+    protected function test()
+    {
+        $orderServiceDb = new \app\common\model\OrderService();
+        if (!$orderServiceDb->inCancelOrderService('PO_A4170629109000020001', 'delivery')) {
+            return $this->setError($orderServiceDb->getError());
+        }
+
+        return true;
     }
 }
