@@ -5,17 +5,21 @@
  * CareyShop    售后服务模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/10/10
+ * @date        2020/9/4
  */
 
 namespace app\common\model;
 
-use think\Config;
-
 class OrderService extends CareyShop
 {
     /**
-     * hasOne 的关联方式
+     * 主键
+     * @var string
+     */
+    protected $pk = 'order_service_id';
+
+    /**
+     * hasOne 的关联方式(0 JOIN查询 1 IN查询)
      * @var int
      */
     private static $hasOneType = 0;
@@ -70,10 +74,8 @@ class OrderService extends CareyShop
      */
     public function getOrder()
     {
-        return $this
-            ->belongsTo('Order', 'order_no', 'order_no')
-            ->field('order_no,trade_status,delivery_status,payment_status,finished_time')
-            ->setEagerlyType(0);
+        // field('order_no,trade_status,delivery_status,payment_status,finished_time')
+        return $this->belongsTo(Order::class, 'order_no', 'order_no');
     }
 
     /**
@@ -83,10 +85,8 @@ class OrderService extends CareyShop
      */
     public function getOrderGoods()
     {
-        return $this
-            ->belongsTo('OrderGoods')
-            ->field('order_goods_id,goods_name,goods_id,goods_image,key_value,qty,is_service,status')
-            ->setEagerlyType(self::$hasOneType);
+        // field('order_goods_id,goods_name,goods_id,goods_image,key_value,qty,is_service,status')
+        return $this->belongsTo(OrderGoods::class);
     }
 
     /**
@@ -96,10 +96,10 @@ class OrderService extends CareyShop
      */
     public function getOrderRefund()
     {
+        // field('order_refund_id,refund_no,status')
         return $this
-            ->belongsTo('OrderRefund', 'refund_no', 'refund_no', [], 'left')
-            ->field('order_refund_id,refund_no,status')
-            ->setEagerlyType(0);
+            ->belongsTo(OrderRefund::class, 'refund_no', 'refund_no')
+            ->joinType('left');
     }
 
     /**
@@ -109,9 +109,10 @@ class OrderService extends CareyShop
      */
     public function getUser()
     {
+        // field('user_id,username,nickname,level_icon,head_pic')
         return $this
-            ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('user_id,username,nickname,level_icon,head_pic');
+            ->hasOne(User::class, 'user_id', 'user_id')
+            ->joinType('left');
     }
 
     /**
@@ -121,9 +122,10 @@ class OrderService extends CareyShop
      */
     public function getAdmin()
     {
+        // field('admin_id,username,nickname,head_pic')
         return $this
-            ->hasOne('Admin', 'admin_id', 'admin_id', [], 'left')
-            ->field('admin_id,username,nickname,head_pic');
+            ->hasOne(Admin::class, 'admin_id', 'admin_id')
+            ->joinType('left');
     }
 
     /**
@@ -134,7 +136,7 @@ class OrderService extends CareyShop
     public function getServiceLog()
     {
         return $this
-            ->hasMany('ServiceLog')
+            ->hasMany(ServiceLog::class)
             ->order(['service_log_id' => 'desc']);
     }
 
@@ -147,7 +149,7 @@ class OrderService extends CareyShop
     {
         do {
             $serviceNo = get_order_no('SH_');
-        } while (self::checkUnique(['service_no' => ['eq', $serviceNo]]));
+        } while (self::checkUnique(['service_no' => $serviceNo]));
 
         return $serviceNo;
     }
@@ -155,12 +157,12 @@ class OrderService extends CareyShop
     /**
      * 添加售后服务日志
      * @access public
-     * @param  array  $serviceData 售后单数据
-     * @param  string $comment     备注
-     * @param  string $desc        描述
+     * @param array  $serviceData 售后单数据
+     * @param string $comment     备注
+     * @param string $desc        描述
      * @return bool
      */
-    public function addServiceLog($serviceData, $comment, $desc)
+    public function addServiceLog(array $serviceData, string $comment, string $desc)
     {
         $data = [
             'order_service_id' => $serviceData['order_service_id'],
@@ -181,41 +183,50 @@ class OrderService extends CareyShop
             $saveData['admin_event'] = 1;
         }
 
-        $this->isUpdate(true)->save($saveData, ['service_no' => ['eq', $data['service_no']]]);
+        $map[] = ['service_no', '=', $data['service_no']];
+        self::update($saveData, $map);
+
         return true;
     }
 
     /**
      * 根据订单号撤销符合条件的售后单(内部调用)
      * @access public
-     * @param  string $orderNo 订单号
-     * @param  string $type    撤销类型
+     * @param string $orderNo 订单号
+     * @param string $type    撤销类型
      * @return bool
      * @throws
      */
-    public function inCancelOrderService($orderNo, $type)
+    public function inCancelOrderService(string $orderNo, string $type)
     {
-        $result = self::all(function ($query) use ($orderNo) {
-            $map['order_service.order_no'] = ['eq', $orderNo];
-            $map['order_service.status'] = ['not in', '2,5,6'];
-
-            // 过滤不需要的字段
-            $field = [
-                'reason', 'description', 'image', 'address', 'consignee',
-                'zipcode', 'mobile', 'logistic_code',
-            ];
-
-            $query->field($field, true)->with('getOrderGoods,getOrderRefund')->where($map);
-        });
-
-        if (false === $result || !in_array($type, ['delivery', 'complete'])) {
-            return false;
+        if (!in_array($type, ['delivery', 'complete'])) {
+            return $this->setError('错误的撤销类型');
         }
 
+        // 搜索条件
+        $map[] = ['order_service.order_no', '=', $orderNo];
+        $map[] = ['order_service.status', 'not in', '2,5,6'];
+
+        // 过滤不需要的字段
+        $field = [
+            'reason', 'description', 'image', 'address', 'consignee',
+            'zipcode', 'mobile', 'logistic_code',
+        ];
+
+        // 关联查询
+        $with['getOrderRefund'] = ['order_refund_id', 'refund_no', 'status'];
+        $with['getOrderGoods'] = [
+            'order_goods_id', 'goods_name', 'goods_id', 'goods_image',
+            'key_value', 'qty', 'is_service', 'status',
+        ];
+
         // 无处理数据直接返回
+        $result = $this->withoutField($field)->withJoin($with)->where($map)->select();
         if ($result->isEmpty()) {
             return true;
         }
+
+        halt($result->toArray());exit();
 
         // 准备初始化数据
         $logData = [];
@@ -223,12 +234,14 @@ class OrderService extends CareyShop
 
         foreach ($result as $value) {
             // 修改售后服务单
-            if (false === $value->isUpdate(true)->save(['status' => 5, 'result' => '撤销申请'])) {
-                return $this->setError($value->getError());
-            }
+//            if (false === $value->save(['status' => 5, 'result' => '撤销申请'])) {
+//                return $this->setError($value->getError());
+//            }
 
             // 修改订单商品售后状态
             $goodsDb = $value->getAttr('get_order_goods');
+            print_r($goodsDb->toArray());exit();
+
             if ($goodsDb->getAttr('is_service') === 1) {
                 if (false === $goodsDb->isUpdate(true)->save(['is_service' => 0])) {
                     return $this->setError($goodsDb->getError());
@@ -334,7 +347,7 @@ class OrderService extends CareyShop
         }
 
         // 此"get_order"来自"OrderGoods",因此不受字段限制
-        $orderDb = $orderGoodsDb->getAttr('get_order');
+        $orderDb = $orderGoodsDb->getAttr('get_order'); //todo 返回的可能是getOrder
         switch ($orderDb->getAttr('trade_status')) {
             case 2: // 处理已发货,未确认收货
                 $service['is_refund'] = 1;
