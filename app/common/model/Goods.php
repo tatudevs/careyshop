@@ -611,7 +611,7 @@ class Goods extends CareyShop
             return $result;
         }
 
-        $result = $this->setDefaultOrder(['goods_id' => 'desc'])
+        $result['items'] = $this->setDefaultOrder(['goods_id' => 'desc'])
             ->where($map)
             ->withSearch(['page', 'order'], $data)
             ->select()

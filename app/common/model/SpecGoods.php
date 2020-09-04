@@ -45,7 +45,6 @@ class SpecGoods extends CareyShop
      * @param int   $goodsId 商品编号
      * @param array $data    外部数据
      * @return bool
-     * @throws
      */
     public function addGoodsSpec(int $goodsId, array $data)
     {
@@ -63,7 +62,7 @@ class SpecGoods extends CareyShop
             }
         }
 
-        $result = $this->saveAll($data);
-        return false !== $result;
+        $this->insertAll($data);
+        return true;
     }
 }
