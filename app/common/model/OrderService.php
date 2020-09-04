@@ -10,6 +10,8 @@
 
 namespace app\common\model;
 
+use think\facade\Config;
+
 class OrderService extends CareyShop
 {
     /**
@@ -195,85 +197,12 @@ class OrderService extends CareyShop
      * @param string $orderNo 订单号
      * @param string $type    撤销类型
      * @return bool
-     * @throws
      */
     public function inCancelOrderService(string $orderNo, string $type)
     {
-        if (!in_array($type, ['delivery', 'complete'])) {
-            return $this->setError('错误的撤销类型');
-        }
-
-        // 搜索条件
-        $map[] = ['order_service.order_no', '=', $orderNo];
-        $map[] = ['order_service.status', 'not in', '2,5,6'];
-
-        // 过滤不需要的字段
-        $field = [
-            'reason', 'description', 'image', 'address', 'consignee',
-            'zipcode', 'mobile', 'logistic_code',
-        ];
-
-        // 关联查询
-        $with['getOrderRefund'] = ['order_refund_id', 'refund_no', 'status'];
-        $with['getOrderGoods'] = [
-            'order_goods_id', 'goods_name', 'goods_id', 'goods_image',
-            'key_value', 'qty', 'is_service', 'status',
-        ];
-
-        // 无处理数据直接返回
-        $result = $this->withoutField($field)->withJoin($with)->where($map)->select();
-        if ($result->isEmpty()) {
-            return true;
-        }
-
-        halt($result->toArray());exit();
-
-        // 准备初始化数据
-        $logData = [];
-        $comment = $type == 'delivery' ? '由于商品已发货' : '由于您已确认收货';
-
-        foreach ($result as $value) {
-            // 修改售后服务单
-//            if (false === $value->save(['status' => 5, 'result' => '撤销申请'])) {
-//                return $this->setError($value->getError());
-//            }
-
-            // 修改订单商品售后状态
-            $goodsDb = $value->getAttr('get_order_goods');
-            print_r($goodsDb->toArray());exit();
-
-            if ($goodsDb->getAttr('is_service') === 1) {
-                if (false === $goodsDb->isUpdate(true)->save(['is_service' => 0])) {
-                    return $this->setError($goodsDb->getError());
-                }
-            }
-
-            // 修改退款申请状态
-            if (!empty($value->getAttr('refund_no'))) {
-                $refundDb = $value->getAttr('get_order_refund');
-                if ($refundDb->getAttr('status') === 0) {
-                    $refundData = ['status' => 3, 'out_trade_msg' => $comment . '，本次退款申请撤销。'];
-                    if (false === $refundDb->isUpdate(true)->save($refundData)) {
-                        return $this->setError($refundDb->getError());
-                    }
-                }
-            }
-
-            $logData[] = [
-                'order_service_id' => $value->getAttr('order_service_id'),
-                'service_no'       => $value->getAttr('service_no'),
-                'action'           => get_client_name(),
-                'client_type'      => get_client_type(),
-                'comment'          => $comment . '，本次售后服务申请撤销。',
-                'description'      => '撤销申请',
-            ];
-        }
-
-        // 写入操作日志
-        $serviceLogDb = new ServiceLog();
-        if (false === $serviceLogDb->saveAll($logData)) {
-            return $this->setError($serviceLogDb->getError());
-        }
+        //todo 逻辑待重新处理
+        print_r($orderNo);
+        print_r($type);
 
         return true;
     }
@@ -281,15 +210,15 @@ class OrderService extends CareyShop
     /**
      * 获取订单商品可申请的售后服务
      * @access public
-     * @param  array  $data         外部数据
-     * @param  object $orderGoodsDb 订单商品模型对象
-     * @param  bool   $isRefundFee  是否返回退款结构
+     * @param array $data         外部数据
+     * @param null  $orderGoodsDb 订单商品模型对象
+     * @param bool  $isRefundFee  是否返回退款结构
      * @return false|array
      * @throws
      */
-    public function getOrderServiceGoods($data, &$orderGoodsDb = null, $isRefundFee = false)
+    public function getOrderServiceGoods(array $data, &$orderGoodsDb = null, $isRefundFee = false)
     {
-        if (!$this->validateData($data, 'OrderService')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
@@ -308,20 +237,13 @@ class OrderService extends CareyShop
             'order_goods'       => $refund, // 订单商品数据
         ];
 
-        // 订单商品是否存在正在进行的售后单
-        $result = self::get(function ($query) use ($data) {
-            $map['order_goods_id'] = ['eq', $data['order_goods_id']];
-            $map['user_id'] = ['eq', get_client_id()];
-            $map['status'] = ['in', '0,1,3,4'];
-
-            $query->field('service_no')->where($map);
-        });
-
-        if (false === $result) {
-            return false;
-        }
+        // 搜索订单商品是否存在正在进行的售后单
+        $map[] = ['order_goods_id', '=', $data['order_goods_id']];
+        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['status', 'in', '0,1,3,4'];
 
         // 订单商品存在售后单则返回单号
+        $result = $this->field('service_no')->where($map)->find();
         if (!is_null($result)) {
             return ['service_no' => $result->getAttr('service_no')];
         }
@@ -335,6 +257,7 @@ class OrderService extends CareyShop
         // 获取订单商品需要的字段
         $visible = ['order_no', 'goods_name', 'goods_id', 'qty'];
         $service['order_goods'] = array_merge($orderGoodsDb->visible($visible)->toArray(), $refund);
+        unset($service['order_goods']['getOrder']);
 
         // 检测订单商品是否允许申请售后(可申请、已售后)
         if (!in_array($orderGoodsDb->getAttr('is_service'), [0, 2])) {
@@ -346,8 +269,8 @@ class OrderService extends CareyShop
             return $service;
         }
 
-        // 此"get_order"来自"OrderGoods",因此不受字段限制
-        $orderDb = $orderGoodsDb->getAttr('get_order'); //todo 返回的可能是getOrder
+        // 此"getOrder"来自"OrderGoods"模型,因此不受字段限制
+        $orderDb = $orderGoodsDb->getAttr('getOrder');
         switch ($orderDb->getAttr('trade_status')) {
             case 2: // 处理已发货,未确认收货
                 $service['is_refund'] = 1;
@@ -355,7 +278,7 @@ class OrderService extends CareyShop
                 break;
             case 3: // 处理已发货,已确认收货
                 $service['is_maintain'] = 1;
-                $finishedTime = $orderDb->getData('finished_time') + Config::get('days.value', 'service') * 86400;
+                $finishedTime = $orderDb->getData('finished_time') + Config::get('careyshop.service.days') * 86400;
                 if ($finishedTime >= time()) {
                     $service['is_refund'] = 1;
                     $service['is_refund_refunds'] = 1;
@@ -368,7 +291,7 @@ class OrderService extends CareyShop
         if ($service['is_refund'] === 1 || $service['is_refund_refunds'] === 1) {
             if (!empty($data['is_refund_fee']) || $isRefundFee) {
                 $isDelivery = false;
-                $service['order_goods']['refund_detail'] = $this->getMaxRefundFee((object)$orderGoodsDb, $isDelivery);
+                $service['order_goods']['refund_detail'] = $this->getMaxRefundFee($orderGoodsDb, $isDelivery);
                 $service['order_goods']['refund_fee'] = round(array_sum($service['order_goods']['refund_detail']), 2);
                 !$isDelivery ?: $service['order_goods']['delivery_fee'] = $orderDb->getAttr('delivery_fee');
             }
@@ -377,6 +300,7 @@ class OrderService extends CareyShop
         return $service;
     }
 
+    //todo next
     /**
      * 客服对售后服务单添加备注(顾客不可见)
      * @access public
@@ -567,11 +491,11 @@ class OrderService extends CareyShop
     /**
      * 获取订单商品最大可退金额
      * @access private
-     * @param  object $orderGoodsDb 订单商品模型对象
-     * @param  bool   &$isDelivery  是否退回运费
+     * @param object  $orderGoodsDb 订单商品模型对象
+     * @param bool   &$isDelivery   是否退回运费
      * @return array
      */
-    private function getMaxRefundFee($orderGoodsDb, &$isDelivery)
+    private function getMaxRefundFee($orderGoodsDb, bool &$isDelivery)
     {
         $data = [
             'money_amount'    => 0, // 余额
@@ -584,8 +508,8 @@ class OrderService extends CareyShop
             return $data;
         }
 
-        // 获取订单模型对象(此"get_order"来自"OrderGoods",因此不受字段限制)
-        $orderDb = $orderGoodsDb->getAttr('get_order');
+        // 获取订单模型对象(此"getOrder"来自"OrderGoods"模型,因此不受字段限制)
+        $orderDb = $orderGoodsDb->getAttr('getOrder');
 
         // 获取各项实付金额
         $data['money_amount'] = $orderDb->getAttr('use_money');

@@ -17,6 +17,12 @@ use think\Config;
 class Order extends CareyShop
 {
     /**
+     * 主键
+     * @var string
+     */
+    protected $pk = 'order_id';
+
+    /**
      * 商品折扣数据
      * @var array
      */
