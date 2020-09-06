@@ -300,25 +300,22 @@ class OrderService extends CareyShop
         return $service;
     }
 
-    //todo next
     /**
      * 客服对售后服务单添加备注(顾客不可见)
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      */
-    public function setOrderServiceRemark($data)
+    public function setOrderServiceRemark(array $data)
     {
-        if (!$this->validateData($data, 'OrderService.remark')) {
+        if (!$this->validateData($data, 'remark')) {
             return false;
         }
 
-        $map['service_no'] = ['eq', $data['service_no']];
-        if (false !== $this->where($map)->setField('remark', $data['remark'])) {
-            return true;
-        }
+        $map[] = ['service_no', '=', $data['service_no']];
+        self::update(['remark' => $data['remark']], $map);
 
-        return false;
+        return true;
     }
 
     /**
@@ -330,15 +327,22 @@ class OrderService extends CareyShop
      */
     public function getOrderServiceItem($data)
     {
-        if (!$this->validateData($data, 'OrderService.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
+        // 搜索条件
+        $map[] = ['service_no', '=', $data['service_no']];
+        if (!is_client_admin()) {
+            $map['user_id'] = ['eq', get_client_id()];
+        }
+
+
         $result = self::get(function ($query) use ($data) {
-            $map['service_no'] = ['eq', $data['service_no']];
+
 
             if (!is_client_admin()) {
-                $map['user_id'] = ['eq', get_client_id()];
+
                 $query->field('admin_id,remark,admin_event', true);
             }
 
