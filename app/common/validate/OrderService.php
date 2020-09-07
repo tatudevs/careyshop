@@ -43,6 +43,7 @@ class OrderService extends CareyShop
         'begin_time'       => 'date|betweenTime|beforeTime:end_time',
         'end_time'         => 'date|betweenTime|afterTime:begin_time',
         'my_service'       => 'in:0,1',
+        'new_event'        => 'in:0,1',
         'new_affair'       => 'in,0,1',
         'page_no'          => 'integer|gt:0',
         'page_size'        => 'integer|gt:0',

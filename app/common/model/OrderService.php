@@ -21,12 +21,6 @@ class OrderService extends CareyShop
     protected $pk = 'order_service_id';
 
     /**
-     * hasOne 的关联方式(0 JOIN查询 1 IN查询)
-     * @var int
-     */
-    private static $hasOneType = 0;
-
-    /**
      * 是否需要自动写入时间戳
      * @var bool
      */
@@ -321,11 +315,11 @@ class OrderService extends CareyShop
     /**
      * 获取一个售后服务单
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
-    public function getOrderServiceItem($data)
+    public function getOrderServiceItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
@@ -334,44 +328,54 @@ class OrderService extends CareyShop
         // 搜索条件
         $map[] = ['service_no', '=', $data['service_no']];
         if (!is_client_admin()) {
-            $map['user_id'] = ['eq', get_client_id()];
+            $map[] = ['user_id', '=', get_client_id()];
         }
 
+        // 关联查询
+        $with['getUser'] = ['user_id', 'username', 'nickname', 'level_icon', 'head_pic'];
+        $with['getAdmin'] = ['admin_id', 'username', 'nickname', 'head_pic'];
+        $with['getOrderGoods'] = [
+            'order_goods_id', 'goods_name', 'goods_id', 'goods_image',
+            'key_value', 'qty', 'is_service', 'status',
+        ];
 
-        $result = self::get(function ($query) use ($data) {
+        // 过滤字段
+        $field = !is_client_admin() ? 'admin_id,remark,admin_event' : '';
 
-
-            if (!is_client_admin()) {
-
-                $query->field('admin_id,remark,admin_event', true);
-            }
-
-            $query->with('getUser,getAdmin,getOrderGoods,getServiceLog')->where($map);
-        });
+        // 实际查询
+        $result = $this
+            ->with('get_service_log')
+            ->withJoin($with)
+            ->withoutField($field)
+            ->where($map)
+            ->find();
 
         if (false !== $result && !is_null($result)) {
             // 隐藏不需要输出的字段
             $hidden = [
                 'order_service_id',
-                'get_user.user_id',
-                'get_admin.admin_id',
-                'get_order_goods.order_goods_id',
+                'getUser.user_id',
+                'getAdmin.admin_id',
+                'getOrderGoods.order_goods_id',
                 'get_service_log.service_log_id',
                 'get_service_log.order_service_id',
                 'get_service_log.service_no',
             ];
 
-            $saveData = [];
             if (is_client_admin()) {
                 if ($result->getAttr('admin_id') == get_client_id()) {
-                    $saveData['admin_event'] = 0;
+                    $result->setAttr('admin_event', 0);
+                    $result->save();
                 }
             } else {
-                $saveData['user_event'] = 0;
+                $result->setAttr('user_event', 0);
+                $result->save();
             }
 
-            !empty($saveData) && $result->isUpdate(true)->save($saveData);
-            return $result->hidden($hidden)->toArray();
+            $temp = [$result->hidden($hidden)->toArray()];
+            self::keyToSnake(['getUser', 'getAdmin', 'getOrderGoods'], $temp);
+
+            return $temp[0];
         }
 
         return is_null($result) ? null : false;
@@ -380,114 +384,105 @@ class OrderService extends CareyShop
     /**
      * 获取售后服务单列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
-    public function getOrderServiceList($data)
+    public function getOrderServiceList(array $data)
     {
-        if (!$this->validateData($data, 'OrderService.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
+        // 搜索条件
         $map = [];
-        is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
-        is_empty_parm($data['type']) ?: $map['type'] = ['eq', $data['type']];
-        is_empty_parm($data['status']) ?: $map['status'] = ['eq', $data['status']];
+        is_empty_parm($data['type']) ?: $map[] = ['type', '=', $data['type']];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
         if (!empty($data['order_code'])) {
-            $map['service_no|order_no'] = ['eq', $data['order_code']];
+            $map[] = ['service_no|order_no', '=', $data['order_code']];
         }
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
-            $map['create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
+            $map[] = ['create_time', 'between time', [$data['begin_time'], $data['end_time']]];
         }
 
         if (is_client_admin()) {
             if (!empty($data['account'])) {
-                $mapUser['username|nickname'] = ['eq', $data['account']];
-                $userId = User::where($mapUser)->value('user_id', 0, true);
-                $map['user_id'] = ['eq', $userId];
+                $userId = User::where('username|nickname', '=', $data['account'])->value('user_id', 0);
+                $map[] = ['user_id', '=', $userId];
             }
 
             if (!empty($data['my_service'])) {
-                $map['admin_id'] = ['eq', get_client_id()];
+                $map[] = ['admin_id', '=', get_client_id()];
             }
+        } else {
+            $map[] = ['user_id', '=', get_client_id()];
         }
 
         if (!empty($data['new_event'])) {
-            $map[is_client_admin() ? 'admin_event' : 'user_event'] = ['eq', 1];
+            $map[] = [is_client_admin() ? 'admin_event' : 'user_event', '=', 1];
         }
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
         }
 
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
+        // 过滤字段
+        $field = ['description', 'image', 'refund_detail', 'refund_no'];
+        is_client_admin() ?: array_push($field, 'admin_id', 'remark', 'admin_event');
 
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
+        // 关联查询
+        $with['get_order_goods'] = function ($query) {
+            $query->field('order_goods_id,goods_name,goods_id,goods_image,key_value,qty,is_service,status');
+        };
 
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
+        if (is_client_admin()) {
+            $with['get_user'] = function ($query) {
+                $query->field('user_id,username,nickname,level_icon,head_pic');
+            };
 
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'order_service_id';
-
-            // 关联查询
-            self::$hasOneType = 1;
-            $with = ['getOrderGoods'];
-
-            // 过滤字段
-            $field = ['description', 'image', 'refund_detail', 'refund_no'];
-
-            if (!is_client_admin()) {
-                array_push($field, 'admin_id', 'remark', 'admin_event');
-            } else {
-                array_push($with, 'getUser', 'getAdmin');
-            }
-
-            $query
-                ->with($with)
-                ->field($field, true)
-                ->where($map)
-                ->order([$orderField => $orderType])
-                ->page($pageNo, $pageSize);
-        });
-
-        if (false !== $result) {
-            // 隐藏不需要输出的字段
-            $hidden = [
-                'order_service_id',
-                'get_user.user_id',
-                'get_admin.admin_id',
-                'get_order_goods.order_goods_id',
-            ];
-
-            return ['items' => $result->hidden($hidden)->toArray(), 'total_result' => $totalResult];
+            $with['get_admin'] = function ($query) {
+                $query->field('admin_id,username,nickname,head_pic');
+            };
         }
 
-        return false;
+        // 隐藏不需要输出的字段
+        $hidden = [
+            'order_service_id',
+            'get_user.user_id',
+            'get_admin.admin_id',
+            'get_order_goods.order_goods_id',
+        ];
+
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['order_service_id' => 'desc'])
+            ->with($with)
+            ->withoutField($field)
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->hidden($hidden)
+            ->toArray();
+
+        return $result;
     }
 
     /**
      * 检测售后服务单数量是否已大于等于订单商品
      * @access private
-     * @param  string $orderNo 订单号
+     * @param string $orderNo 订单号
      * @return bool
-     * @throws
      */
-    private function isServiceEgtOrderGoods($orderNo)
+    private function isServiceEgtOrderGoods(string $orderNo)
     {
-        $map['order_no'] = ['eq', $orderNo];
-        $map['type'] = ['in', '0,1'];
-        $map['status'] = ['not in', '2,5']; // 不包括"已拒绝","已撤销"
+        $map[] = ['order_no', '=', $orderNo];
+        $map[] = ['type', 'in', '0,1'];
+        $map[] = ['status', 'not in', '2,5']; // 不包括"已拒绝","已撤销"
 
         $serviceCount = $this->where($map)->group('order_goods_id')->count();
-        $goodsCount = OrderGoods::where(['order_no' => ['eq', $orderNo]])->count();
+        $goodsCount = OrderGoods::where('order_no', '=', $orderNo)->count();
 
         return $serviceCount + 1 >= $goodsCount;
     }
@@ -551,6 +546,7 @@ class OrderService extends CareyShop
         return $data;
     }
 
+    // todo next
     /**
      * 添加一个维修或换货售后服务单
      * @access private
