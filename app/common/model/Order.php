@@ -653,14 +653,13 @@ class Order extends CareyShop
         return $completeAddress;
     }
 
-    // todo next
     /**
      * 写入订单数据至数据库
      * @access private
-     * @param  int $clientId 账号编号
+     * @param int $clientId 账号编号
      * @return bool
      */
-    private function addOrderData($clientId)
+    private function addOrderData(int $clientId)
     {
         // 订单数据入库准备
         $orderData = [
@@ -704,7 +703,7 @@ class Order extends CareyShop
             return false;
         }
 
-        if (!$this->allowField(true)->isUpdate(false)->save($orderData)) {
+        if (!$this->save($orderData)) {
             return false;
         }
 
@@ -714,10 +713,10 @@ class Order extends CareyShop
     /**
      * 验证并处理发票数据
      * @access private
-     * @param  array $invoiceData 订单完整数据
+     * @param array $invoiceData 订单完整数据
      * @return bool
      */
-    private function setInvoiceData(&$invoiceData)
+    private function setInvoiceData(array &$invoiceData)
     {
         $invoiceType = isset($this->dataParams['invoice_type']) ? $this->dataParams['invoice_type'] : 0;
         if (2 == $invoiceType && empty($this->dataParams['invoice_title'])) {
@@ -774,23 +773,19 @@ class Order extends CareyShop
             ];
         }
 
-        $orderDb = new OrderGoods();
-        if (false === $orderDb->insertAll($goodsData)) {
-            return $this->setError($orderDb->getError());
-        }
-
+        OrderGoods::insertAll($goodsData);
         return true;
     }
 
     /**
      * 添加订单日志
      * @access public
-     * @param  array  $orderData 订单数据
-     * @param  string $comment   备注
-     * @param  string $desc      描述
+     * @param array  $orderData 订单数据
+     * @param string $comment   备注
+     * @param string $desc      描述
      * @return bool
      */
-    public function addOrderLog($orderData, $comment, $desc)
+    public function addOrderLog(array $orderData, string $comment, string $desc)
     {
         $data = [
             'order_id'        => $orderData['order_id'],
@@ -814,20 +809,19 @@ class Order extends CareyShop
      * 对应商品调整(库存,销量)
      * @access private
      * @return bool
-     * @throws
      */
     private function setGoodsStoreQty()
     {
         foreach ($this->cartData['goods_list'] as $value) {
             // 规格非空则需要减规格库存
             if (!empty($value['key_name'])) {
-                $map['goods_id'] = ['eq', $value['goods_id']];
-                $map['key_name'] = ['eq', $value['key_name']];
-                SpecGoods::where($map)->setDec('store_qty', $value['goods_num']);
+                $map[] = ['goods_id', '=', $value['goods_id']];
+                $map[] = ['key_name', '=', $value['key_name']];
+                SpecGoods::where($map)->dec('store_qty', $value['goods_num'])->update();
             }
 
             // 减商品库存,增商品销量
-            Goods::where(['goods_id' => ['eq', $value['goods_id']]])
+            Goods::where('goods_id', '=', $value['goods_id'])
                 ->dec('store_qty', $value['goods_num'])
                 ->inc('sales_sum', $value['goods_num'])
                 ->update();
@@ -839,10 +833,10 @@ class Order extends CareyShop
     /**
      * 调整账号相关数据(余额,积分,购物卡使用,优惠劵)
      * @access private
-     * @param  int $clientId 账号编号
+     * @param int $clientId 账号编号
      * @return bool
      */
-    private function setUserData($clientId)
+    private function setUserData(int $clientId)
     {
         $txDb = new Transaction();
         $moneyDb = new UserMoney();
@@ -864,7 +858,7 @@ class Order extends CareyShop
 
             // 补齐余额交易结算数据
             $txData['amount'] = $this->cartData['order_price']['use_money'];
-            $txData['balance'] = $moneyDb->where(['user_id' => ['eq', $clientId]])->value('balance');
+            $txData['balance'] = $moneyDb->where('user_id', '=', $clientId)->value('balance');
             $txData['module'] = 'money';
 
             if (!$txDb->addTransactionItem($txData)) {
@@ -881,7 +875,7 @@ class Order extends CareyShop
 
             // 补齐积分交易结算数据
             $txData['amount'] = $integral;
-            $txData['balance'] = $moneyDb->where(['user_id' => ['eq', $clientId]])->value('points');
+            $txData['balance'] = $moneyDb->where('user_id', '=', $clientId)->value('points');
             $txData['module'] = 'points';
 
             if (!$txDb->addTransactionItem($txData)) {
@@ -936,13 +930,16 @@ class Order extends CareyShop
     /**
      * 删除购物车商品
      * @access private
-     * @param  int $clientId 账号编号
+     * @param int $clientId 账号编号
      * @return bool
      */
-    private function delCartGoodsList($clientId)
+    private function delCartGoodsList(int $clientId)
     {
         $cartId = array_column($this->cartData['goods_list'], 'cart_id');
-        if (false === Cart::where(['user_id' => ['eq', $clientId], 'cart_id' => ['in', $cartId]])->delete()) {
+        $map[] = ['user_id', '=', $clientId];
+        $map[] = ['cart_id', 'in', $cartId];
+
+        if (false === Cart::where($map)->delete()) {
             return false;
         }
 
@@ -952,18 +949,17 @@ class Order extends CareyShop
     /**
      * 创建订单
      * @access private
-     * @param  int $clientId 账号编号
+     * @param int $clientId 账号编号
      * @return mixed
-     * @throws
      */
-    private function createOrder($clientId)
+    private function createOrder(int $clientId)
     {
-        if (!$this->validateData($this->dataParams, 'Order.create')) {
+        if (!$this->validateData($this->dataParams, 'create')) {
             return false;
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 添加订单主数据
@@ -996,10 +992,10 @@ class Order extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            self::commit();
+            $this->commit();
             return $this->hidden(['order_id'])->toArray();
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -1007,26 +1003,23 @@ class Order extends CareyShop
     /**
      * 检测订单是否可设置为已支付状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return object|false
      * @throws
      */
-    public function isPaymentStatus($data)
+    public function isPaymentStatus(array $data)
     {
-        if (!$this->validateData($data, 'Order.is_payment')) {
+        if (!$this->validateData($data, 'is_payment')) {
             return false;
         }
 
         // 获取订单数据
-        $result = self::get(function ($query) use ($data) {
-            $map['order_no'] = ['eq', $data['order_no']];
-            $map['is_delete'] = ['eq', 0];
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['is_delete', '=', 0];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('订单不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('订单不存在');
         }
 
         if ($result->getAttr('trade_status') !== 0) {
@@ -1043,25 +1036,25 @@ class Order extends CareyShop
     /**
      * 调整订单应付金额
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
-    public function changePriceOrderItem($data)
+    public function changePriceOrderItem(array $data)
     {
-        if (!$this->validateData($data, 'Order.change_price')) {
+        if (!$this->validateData($data, 'change_price')) {
             return false;
         }
 
         // 搜索条件
-        $map['order_no'] = ['eq', $data['order_no']];
-        $map['is_delete'] = ['eq', 0];
-        is_client_admin() ?: $map['user_id'] = ['eq', 0];
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['is_delete', '=', 0];
+        is_client_admin() ?: $map[] = ['user_id', '=', 0];
 
         // 获取订单数据
         $result = $this->where($map)->find();
-        if (!$result) {
-            return is_null($result) ? $this->setError('订单不存在') : false;
+        if (is_null($result)) {
+            return $this->setError('订单不存在');
         }
 
         if ($result->getAttr('trade_status') !== 0 || $result->getAttr('payment_status') !== 0) {
@@ -1079,7 +1072,7 @@ class Order extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             if (!empty($data['total_amount'])) {
@@ -1095,7 +1088,7 @@ class Order extends CareyShop
                 }
             }
 
-            self::commit();
+            $this->commit();
             return [
                 'pay_amount'     => $result->getAttr('pay_amount'),
                 'goods_amount'   => $result->getAttr('goods_amount'),
@@ -1112,7 +1105,7 @@ class Order extends CareyShop
                 'adjustment'     => $result->getAttr('adjustment'),
             ];
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -1126,26 +1119,22 @@ class Order extends CareyShop
     private function returnGoodsStoreQty()
     {
         // 搜索条件
-        $map['order_no'] = ['eq', $this->orderData['order_no']];
-
-        $orderGoodsDb = new OrderGoods();
-        $orderData = $orderGoodsDb->field('goods_id,key_name,qty')->where($map)->select()->toArray();
+        $map[] = ['order_no', '=', $this->orderData['order_no']];
+        $orderData = OrderGoods::where($map)->field('goods_id,key_name,qty')->select()->toArray();
 
         // 取消订单后需要将订单商品状态设为取消
-        if (false === $orderGoodsDb->isUpdate(true)->save(['status' => 3], $map)) {
-            return $this->setError($orderGoodsDb->getError());
-        }
+        OrderGoods::update(['status' => 3], $map);
 
         foreach ($orderData as $value) {
             // 规格非空则需要加规格库存
             if (!empty($value['key_name'])) {
-                $mapSpec['goods_id'] = ['eq', $value['goods_id']];
-                $mapSpec['key_name'] = ['eq', $value['key_name']];
-                SpecGoods::where($mapSpec)->setInc('store_qty', $value['qty']);
+                $mapSpec[] = ['goods_id', '=', $value['goods_id']];
+                $mapSpec[] = ['key_name', '=', $value['key_name']];
+                SpecGoods::where($mapSpec)->inc('store_qty', $value['qty'])->update();
             }
 
             // 加商品库存,减商品销量
-            $mapGoods['goods_id'] = ['eq', $value['goods_id']];
+            $mapGoods[] = ['goods_id', '=', $value['goods_id']];
             Goods::where($mapGoods)->inc('store_qty', $value['qty'])->dec('sales_sum', $value['qty'])->update();
         }
 
@@ -1156,7 +1145,6 @@ class Order extends CareyShop
      * 退回账号相关数据(余额,积分,购物卡使用,优惠劵)
      * @access private
      * @return bool
-     * @throws
      */
     private function returnUserData()
     {
@@ -1180,7 +1168,7 @@ class Order extends CareyShop
 
             // 补齐余额交易结算数据
             $txData['amount'] = $this->orderData['use_money'];
-            $txData['balance'] = $moneyDb->where(['user_id' => ['eq', $this->orderData['user_id']]])->value('balance');
+            $txData['balance'] = $moneyDb->where('user_id', '=', $this->orderData['user_id'])->value('balance');
             $txData['module'] = 'money';
 
             if (!$txDb->addTransactionItem($txData)) {
@@ -1197,7 +1185,7 @@ class Order extends CareyShop
 
             // 补齐积分交易结算数据
             $txData['amount'] = $integral;
-            $txData['balance'] = $moneyDb->where(['user_id' => ['eq', $this->orderData['user_id']]])->value('points');
+            $txData['balance'] = $moneyDb->where('user_id', '=', $this->orderData['user_id'])->value('points');
             $txData['module'] = 'points';
 
             if (!$txDb->addTransactionItem($txData)) {
@@ -1229,16 +1217,12 @@ class Order extends CareyShop
 
         // 退回优惠劵
         if ($this->orderData['use_coupon'] > 0) {
-            $couponMap['user_id'] = ['eq', $this->orderData['user_id']];
-            $couponMap['order_id'] = ['eq', $this->orderData['order_id']];
+            $couponMap[] = ['user_id', '=', $this->orderData['user_id']];
+            $couponMap[] = ['order_id', '=', $this->orderData['order_id']];
+            CouponGive::update(['order_id' => 0, 'use_time' => 0], $couponMap);
 
-            $couponDb = new CouponGive();
-            if (false === $couponDb->save(['order_id' => 0, 'use_time' => 0], $couponMap)) {
-                return $this->setError($couponDb->getError());
-            }
-
-            $mapCoupon['coupon_id'] = ['eq', $couponDb->where($couponMap)->value('coupon_id', 0, true)];
-            Coupon::where($mapCoupon)->setDec('use_num');
+            $mapCoupon[] = ['coupon_id', '=', CouponGive::where($couponMap)->value('coupon_id', 0)];
+            Coupon::where($mapCoupon)->dec('use_num')->update();
         }
 
         return true;
@@ -1247,27 +1231,24 @@ class Order extends CareyShop
     /**
      * 取消一个订单
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return mixed
      * @throws
      */
-    public function cancelOrderItem($data)
+    public function cancelOrderItem(array $data)
     {
-        if (!$this->validateData($data, 'Order.cancel')) {
+        if (!$this->validateData($data, 'cancel')) {
             return false;
         }
 
         // 获取订单数据
-        $result = self::get(function ($query) use ($data) {
-            $map['order_no'] = ['eq', $data['order_no']];
-            $map['is_delete'] = ['eq', 0];
-            is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['is_delete', '=', 0];
+        is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('订单不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('订单不存在');
         }
 
         if ($result->getAttr('trade_status') > 1) {
@@ -1275,13 +1256,13 @@ class Order extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 修改订单状态
             $saveData = ['trade_status' => 4, 'payment_status' => 0];
             if (false === $result->save($saveData)) {
-                throw new \Exception($this->getError());
+                throw new \Exception($result->getError());
             }
 
             // 获取订单数据
@@ -1310,10 +1291,10 @@ class Order extends CareyShop
                 }
             }
 
-            self::commit();
+            $this->commit();
             return $saveData;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -1334,12 +1315,12 @@ class Order extends CareyShop
         }
 
         // 搜索条件
-        $map['trade_status'] = ['eq', 0];
-        $map['payment_status'] = ['eq', 0];
-        $map['create_time'] = ['elt', time() - (Config::get('timeout.value', 'system_shopping') * 60)];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['trade_status', '=', 0];
+        $map[] = ['payment_status', '=', 0];
+        $map[] = ['create_time', '<=', time() - (Config::get('careyshop.system_shopping.timeout', 0) * 60)];
+        $map[] = ['is_delete', '=', 0];
 
-        self::where($map)->chunk(100, function ($order) {
+        $this->where($map)->chunk(100, function ($order) {
             foreach ($order as $value) {
                 // 应付金额为0时不需要关闭
                 if (bccomp($value->getAttr('total_amount'), 0, 2) === 0) {
@@ -1352,7 +1333,7 @@ class Order extends CareyShop
                 try {
                     // 修改订单状态
                     if (false === $value->save(['trade_status' => 4])) {
-                        throw new \Exception($this->getError());
+                        throw new \Exception($value->getError());
                     }
 
                     // 处理数据
@@ -1389,50 +1370,43 @@ class Order extends CareyShop
     /**
      * 添加或编辑卖家备注
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
-     * @throws
      */
-    public function remarkOrderItem($data)
+    public function remarkOrderItem(array $data)
     {
-        if (!$this->validateData($data, 'Order.remark')) {
+        if (!$this->validateData($data, 'remark')) {
             return false;
         }
 
-        $map['order_no'] = ['eq', $data['order_no']];
-        $map['is_delete'] = ['eq', 0];
-        is_client_admin() ?: $map['user_id'] = ['eq', 0];
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['is_delete', '=', 0];
+        is_client_admin() ?: $map[] = ['user_id', '=', 0];
 
-        if (false !== $this->save(['sellers_remark' => $data['sellers_remark']], $map)) {
-            return $this->toArray();
-        }
-
-        return false;
+        $result = self::update(['sellers_remark' => $data['sellers_remark']], $map);
+        return $result->toArray();
     }
 
     /**
      * 编辑一个订单
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
-    public function setOrderItem($data)
+    public function setOrderItem(array $data)
     {
-        if (!$this->validateData($data, 'Order.set')) {
+        if (!$this->validateData($data, 'set')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['order_no'] = ['eq', $data['order_no']];
-            $map['is_delete'] = ['eq', 0];
-            is_client_admin() ?: $map['user_id'] = ['eq', 0];
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['is_delete', '=', 0];
+        is_client_admin() ?: $map[] = ['user_id', '=', 0];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('订单不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('订单不存在');
         }
 
         if ($result->getAttr('delivery_status') !== 0) {
@@ -1455,12 +1429,13 @@ class Order extends CareyShop
 
         if (false !== $result->allowField($field)->save($data)) {
             $this->addOrderLog($result->toArray(), '订单部分信息已修改', '修改订单');
-            return $result->hidden(['order_id','is_give'])->toArray();
+            return $result->hidden(['order_id', 'is_give'])->toArray();
         }
 
         return false;
     }
 
+    // todo next
     /**
      * 获取一个订单
      * @access public
