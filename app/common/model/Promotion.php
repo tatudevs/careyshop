@@ -124,7 +124,7 @@ class Promotion extends CareyShop
      */
     public function setPromotionItem(array $data)
     {
-        if (!$this->validateSetData($data, 'set', true)) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 

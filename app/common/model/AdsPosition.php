@@ -105,7 +105,7 @@ class AdsPosition extends CareyShop
      */
     public function setPositionItem(array $data)
     {
-        if (!$this->validateSetData($data, 'set', true)) {
+        if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
