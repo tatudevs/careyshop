@@ -5,14 +5,13 @@
  * CareyShop    订单管理模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/7/29
+ * @date        2020/9/9
  */
 
 namespace app\common\model;
 
 use app\common\service\Cart as CartSer;
-use think\helper\Time;
-use think\Config;
+use think\facade\Config;
 
 class Order extends CareyShop
 {
@@ -120,7 +119,7 @@ class Order extends CareyShop
      */
     public function getOrderGoods()
     {
-        return $this->hasMany('OrderGoods');
+        return $this->hasMany(OrderGoods::class);
     }
 
     /**
@@ -131,7 +130,7 @@ class Order extends CareyShop
     public function getDelivery()
     {
         return $this
-            ->hasOne('Delivery', 'delivery_id', 'delivery_id')
+            ->hasOne(Delivery::class, 'delivery_id', 'delivery_id')
             ->field('delivery_id,alias');
     }
 
@@ -142,7 +141,7 @@ class Order extends CareyShop
      */
     public function getOrderLog()
     {
-        return $this->hasMany('OrderLog');
+        return $this->hasMany(OrderLog::class);
     }
 
     /**
@@ -153,8 +152,9 @@ class Order extends CareyShop
     public function getUser()
     {
         return $this
-            ->hasOne('User', 'user_id', 'user_id', [], 'left')
-            ->field('user_id,username,nickname,level_icon,head_pic');
+            ->hasOne(User::class, 'user_id', 'user_id')
+            ->field('user_id,username,nickname,level_icon,head_pic')
+            ->joinType('left');
     }
 
     /**
@@ -166,7 +166,7 @@ class Order extends CareyShop
     {
         do {
             $orderNo = get_order_no('PO_');
-        } while (self::checkUnique(['order_no' => ['eq', $orderNo]]));
+        } while (self::checkUnique(['order_no' => $orderNo]));
 
         return $orderNo;
     }
@@ -174,11 +174,11 @@ class Order extends CareyShop
     /**
      * 计算商品折扣额(实际返回折扣了多少金额)
      * @access private
-     * @param  int   $goodsId 商品编号
-     * @param  float $price   商品价格
+     * @param int   $goodsId 商品编号
+     * @param float $price   商品价格
      * @return float
      */
-    private function calculateDiscountGoods($goodsId, $price)
+    private function calculateDiscountGoods(int $goodsId, float $price)
     {
         foreach ($this->discountData as $value) {
             if ($value['goods_id'] !== $goodsId) {
@@ -213,24 +213,24 @@ class Order extends CareyShop
     /**
      * 获取订单确认或提交订单
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
-    public function confirmOrderList($data)
+    public function confirmOrderList(array $data)
     {
-        if (!$this->validateData($data, 'Order')) {
+        if (!$this->validateData($data)) {
             return false;
         }
 
         // 获取购物车数据,并获取关联商品与规格数据
         $clientId = get_client_id();
-        $cartMap['user_id'] = ['eq', $clientId];
-        $isBuyNow = isset($data['is_submit']) && $data['is_submit'] == 1 ? true : false;
+        $cartMap['user_id'] = $clientId;
+        $isBuyNow = isset($data['is_submit']) && $data['is_submit'] == 1;
 
         switch ($data['type']) {
             case 'cart':
-                $cartMap['is_selected'] = ['eq', 1];
+                $cartMap['is_selected'] = 1;
                 $cartMap['is_show'] = 1;
                 break;
             case 'buynow':
@@ -238,28 +238,21 @@ class Order extends CareyShop
                 break;
         }
 
-        $cartDb = new Cart();
-        $cartData = $cartDb::all(function ($query) use ($cartMap) {
-            $query
-                ->with('goods,goodsSpecItem,goodsSpecImage')
-                ->where($cartMap)
-                ->limit($cartMap['is_show'] == 0 ? 1 : 0)
-                ->order(['cart_id' => 'desc']);
-        });
+        $cartData = Cart::where($cartMap)
+            ->with(['goods', 'goods_spec_item', 'goods_spec_image'])
+            ->limit($cartMap['is_show'] == 0 ? 1 : 0)
+            ->order(['cart_id' => 'desc'])
+            ->select();
 
-        if (false === $cartData) {
-            return $this->setError($cartDb->getError());
+        if ($cartData->isEmpty()) {
+            return $this->setError('待结算商品不存在');
         }
 
         $catrSer = new CartSer();
         $orderGoods = $catrSer->checkCartGoodsList($cartData->toArray(), $isBuyNow, true);
 
-        if ($isBuyNow && false === $orderGoods) {
+        if (($isBuyNow && false === $orderGoods) || empty($orderGoods)) {
             return $this->setError($catrSer->getError());
-        }
-
-        if (empty($orderGoods)) {
-            return $this->setError('待结算商品不存在');
         }
 
         // 计算商品实际价格(订单确认可直接返回)
@@ -305,10 +298,10 @@ class Order extends CareyShop
     /**
      * 计算订单金额
      * @access private
-     * @param  int $clientId 账号编号
+     * @param int $clientId 账号编号
      * @return bool
      */
-    private function calculatePrice($clientId)
+    private function calculatePrice(int $clientId)
     {
         // 部分数据需要初始化
         $goodsNum = 0;
@@ -430,19 +423,21 @@ class Order extends CareyShop
 
             if ($deliveryData['delivery_id'] > 0 && !empty($deliveryData['region_id'])) {
                 $deliveryDb = new Delivery();
-                $this->cartData['order_price']['delivery_fee'] = $deliveryDb->getDeliveryFreight($deliveryData)['delivery_fee'];
+                $deliveryFee = $deliveryDb->getDeliveryFreight($deliveryData);
 
-                if (false === $this->cartData['order_price']['delivery_fee']) {
+                if (false === $deliveryFee) {
                     return $this->setError($deliveryDb->getError());
                 }
+
+                $this->cartData['order_price']['delivery_fee'] = $deliveryFee['delivery_fee'];
             }
         }
 
         // 满多少金额减多少运费计算
-        if ($this->cartData['order_price']['delivery_fee'] > 0 && Config::get('dec_status.value', 'delivery') != 0) {
-            if ($this->cartData['order_price']['goods_amount'] >= Config::get('quota.value', 'delivery')) {
+        if ($this->cartData['order_price']['delivery_fee'] > 0 && Config::get('careyshop.delivery.dec_status') != 0) {
+            if ($this->cartData['order_price']['goods_amount'] >= Config::get('careyshop.delivery.quota')) {
                 $isDec = true;
-                $decExclude = json_decode(Config::get('dec_exclude.value', 'delivery'), true);
+                $decExclude = json_decode(Config::get('careyshop.delivery.dec_exclude'), true);
 
                 foreach ($region as $value) {
                     if (in_array($value, $decExclude)) {
@@ -452,7 +447,7 @@ class Order extends CareyShop
                 }
 
                 if (true === $isDec) {
-                    $this->cartData['order_price']['delivery_dec'] += Config::get('dec_money.value', 'delivery');
+                    $this->cartData['order_price']['delivery_dec'] += Config::get('careyshop.delivery.dec_money');
                     $this->cartData['order_price']['delivery_fee'] -= $this->cartData['order_price']['delivery_dec'];
                     $this->cartData['order_price']['delivery_fee'] > 0 ?: $this->cartData['order_price']['delivery_fee'] = 0;
                 }
@@ -460,10 +455,10 @@ class Order extends CareyShop
         }
 
         // 满多少金额免运费计算
-        if ($this->cartData['order_price']['delivery_fee'] > 0 && Config::get('money_status.value', 'delivery') != 0) {
-            if ($this->cartData['order_price']['goods_amount'] >= Config::get('money.value', 'delivery')) {
+        if ($this->cartData['order_price']['delivery_fee'] > 0 && Config::get('careyshop.delivery.money_status') != 0) {
+            if ($this->cartData['order_price']['goods_amount'] >= Config::get('careyshop.delivery.money')) {
                 $isFree = true;
-                $moneyExclude = json_decode(Config::get('money_exclude.value', 'delivery'), true);
+                $moneyExclude = json_decode(Config::get('careyshop.delivery.money_exclude'), true);
 
                 foreach ($region as $value) {
                     if (in_array($value, $moneyExclude)) {
@@ -480,10 +475,10 @@ class Order extends CareyShop
         }
 
         // 满多少件免运费计算
-        if ($this->cartData['order_price']['delivery_fee'] > 0 && Config::get('number_status.value', 'delivery') != 0) {
-            if ($goodsNum >= Config::get('number.value', 'delivery')) {
+        if ($this->cartData['order_price']['delivery_fee'] > 0 && Config::get('careyshop.delivery.number_status') != 0) {
+            if ($goodsNum >= Config::get('careyshop.delivery.number')) {
                 $isNumber = true;
-                $numberExclude = json_decode(Config::get('number_exclude.value', 'delivery'), true);
+                $numberExclude = json_decode(Config::get('careyshop.delivery.number_exclude'), true);
 
                 foreach ($region as $value) {
                     if (in_array($value, $numberExclude)) {
@@ -502,10 +497,6 @@ class Order extends CareyShop
         // 计算订单折扣额
         $promotionDb = new Promotion();
         $promotionData = $promotionDb->getPromotionActive();
-
-        if (false === $promotionData) {
-            return $this->setError($promotionDb->getError());
-        }
 
         if (isset($promotionData['promotion_item'])) {
             foreach ($promotionData['promotion_item'] as $value) {
@@ -542,7 +533,7 @@ class Order extends CareyShop
 
         // 小计应付金额
         $totalAmount = $this->cartData['order_price']['pay_amount'] + $this->cartData['order_price']['delivery_fee'];
-        $this->orderData['integral_pct'] = Config::get('integral.value', 'system_shopping');
+        $this->orderData['integral_pct'] = Config::get('careyshop.system_shopping.integral');
 
         // 计算余额抵扣额
         if (!empty($this->dataParams['use_money'])) {
@@ -557,7 +548,7 @@ class Order extends CareyShop
 
         // 计算积分抵扣额
         if (!empty($this->dataParams['use_integral'])) {
-            if (Config::get('integral.value', 'system_shopping') <= 0) {
+            if (Config::get('careyshop.system_shopping.integral') <= 0) {
                 return $this->setError('积分支付已停用');
             }
 
@@ -599,7 +590,7 @@ class Order extends CareyShop
         }
 
         // 计算发票税率
-        $taxRate = Config::get('invoice.value', 'system_shopping');
+        $taxRate = Config::get('careyshop.system_shopping.invoice');
         if (!empty($this->dataParams['invoice_type']) && $taxRate > 0) {
             $invoice = $this->cartData['order_price']['pay_amount'] * ($taxRate / 100);
             $this->cartData['order_price']['invoice_amount'] = $invoice;
@@ -633,7 +624,7 @@ class Order extends CareyShop
     /**
      * 根据区域编号获取完整收货地址
      * @access private
-     * @param  array $data 不为空则为外部数据,否则使用内部数据
+     * @param null $data 不为空则为外部数据,否则使用内部数据
      * @return string
      */
     private function getCompleteAddress($data = null)
@@ -647,7 +638,7 @@ class Order extends CareyShop
         $regionList = $this->dataParams['region_list'];
 
         // 判断完整收货地址是否需要包含国籍
-        if (Config::get('is_country.value', 'system_shopping') != 0) {
+        if (Config::get('careyshop.system_shopping.is_country') != 0) {
             array_unshift($regionList, $country);
         }
 
@@ -656,12 +647,13 @@ class Order extends CareyShop
 
         // 如区域地址存在,则需要添加分隔符用于增加详细地址
         if ($completeAddress != '') {
-            $completeAddress .= Config::get('spacer.value', 'system_shopping');
+            $completeAddress .= Config::get('careyshop.system_shopping.spacer');
         }
 
         return $completeAddress;
     }
 
+    // todo next
     /**
      * 写入订单数据至数据库
      * @access private
