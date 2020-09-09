@@ -62,7 +62,7 @@ class OrderRefund extends CareyShop
     public function getUser()
     {
         return $this
-            ->hasOne('User', 'user_id', 'user_id')
+            ->hasOne(User::class, 'user_id', 'user_id')
             ->joinType('left');
     }
 
