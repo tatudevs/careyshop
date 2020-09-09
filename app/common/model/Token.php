@@ -5,7 +5,7 @@
  * CareyShop    Token模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/3/31
+ * @date        2020/9/9
  */
 
 namespace app\common\model;
