@@ -1861,7 +1861,7 @@ class Order extends CareyShop
         try {
             $saveData = [
                 'trade_status'  => 3,
-                'finished_time' => $this->formatDateTime(time(), $this->dateFormat),
+                'finished_time' => time(),
             ];
 
             foreach ($result as $value) {

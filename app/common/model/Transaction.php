@@ -85,7 +85,6 @@ class Transaction extends CareyShop
 
         // 避免无关字段及处理部分数据
         unset($data['transaction_id']);
-        $this->setAttr('transaction_id', null);
         $data['action'] = get_client_name();
 
         if ($this->save($data)) {

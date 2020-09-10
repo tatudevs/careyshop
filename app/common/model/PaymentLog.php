@@ -94,7 +94,6 @@ class PaymentLog extends CareyShop
 
         // 初始化部分数据
         unset($data['payment_log_id'], $data['payment_time'], $data['to_payment']);
-        $this->setAttr('payment_log_id', null);
         $data['payment_no'] = $this->getPaymentNo();
         $data['user_id'] = get_client_id();
         isset($data['status']) ?: $data['status'] = 0;
