@@ -16,12 +16,19 @@ if (version_compare(PHP_VERSION, '7.1', '<')) {
     die('PHP版本过低，最少需要PHP7.1，请升级PHP版本！');
 }
 
+// 检测是否完成安装
+$appName = '';
+const installPath = __DIR__ . '/../app/install';
+if (file_exists(installPath) && !is_file(installPath . '/data/install.lock')) {
+    $appName = 'install';
+}
+
 require __DIR__ . '/../vendor/autoload.php';
 
 // 执行HTTP应用并响应
 $http = (new App())->http;
 
-$response = $http->run();
+$response = $http->name($appName)->run();
 
 $response->send();
 
