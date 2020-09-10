@@ -1784,7 +1784,7 @@ class Order extends CareyShop
      * @param object $orderDb 订单模型
      * @return bool
      */
-    public function completeGiveCoupon(&$orderDb)
+    public function completeGiveCoupon($orderDb)
     {
         $data = [];
         $couponGiveDb = new CouponGive();
@@ -2076,6 +2076,12 @@ class Order extends CareyShop
             $map['user_id'] = ['=', $userId];
         }
 
+        // 导出数据时取最近90天内的数据
+        if (!empty($data['is_export'])) {
+            $days = time() - (90 * 86400);
+            $map['create_time'] = ['>=', $days];
+        }
+
         // 重新整理map条件
         $whereMap = [];
         foreach ($map as $key => $item) {
@@ -2088,54 +2094,38 @@ class Order extends CareyShop
             return $result;
         }
 
-        // todo next
-        $result = self::all(function ($query) use ($data, $map) {
-            // 翻页页数
-            $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
-
-            // 每页条数
-            $pageSize = isset($data['page_size']) ? $data['page_size'] : config('paginate.list_rows');
-
-            // 排序方式
-            $orderType = !empty($data['order_type']) ? $data['order_type'] : 'desc';
-
-            // 排序的字段
-            $orderField = !empty($data['order_field']) ? $data['order_field'] : 'order_id';
-
-            // 过滤字段
-            if (!is_client_admin()) {
-                $query->field('sellers_remark', true);
-            }
-
-            // 查询数据
-            $query
-                ->with('getUser,getOrderGoods,getDelivery')
-                ->where($map)
-                ->order([$orderField => $orderType]);
-
-            // 区分是否为数据导出
-            if (empty($data['is_export'])) {
-                $query->page($pageNo, $pageSize);
-            } else {
-                $query->whereTime('create_time', '>=', Time::daysAgo(90));
-            }
-        });
-
-        if (false !== $result) {
-            // 隐藏不需要输出的字段
-            $hidden = [
-                'order_id',
-                'is_give',
-                'get_order_goods.order_id',
-                'get_order_goods.user_id',
-                'get_user.user_id',
-                'get_delivery.delivery_id',
-            ];
-
-            return ['items' => $result->hidden($hidden)->toArray(), 'total_result' => $totalResult];
+        // 过滤字段
+        $field = '';
+        if (!is_client_admin()) {
+            $field = 'sellers_remark';
         }
 
-        return false;
+        // 隐藏不需要输出的字段
+        $hidden = [
+            'order_id',
+            'parent_id',
+            'is_give',
+            'create_user_id',
+            'get_order_goods.order_id',
+            'get_order_goods.user_id',
+            'get_user.user_id',
+            'get_delivery.delivery_id',
+        ];
+
+        // 关联字段
+        $with = ['get_user', 'get_order_goods', 'get_delivery'];
+
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['order_id' => 'desc'])
+            ->with($with)
+            ->withoutField($field)
+            ->where($whereMap)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->hidden($hidden)
+            ->toArray();
+
+        return $result;
     }
 
     /**
