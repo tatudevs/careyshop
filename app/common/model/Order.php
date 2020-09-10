@@ -1435,44 +1435,47 @@ class Order extends CareyShop
         return false;
     }
 
-    // todo next
     /**
      * 获取一个订单
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
-    public function getOrderItem($data)
+    public function getOrderItem(array $data)
     {
-        if (!$this->validateData($data, 'Order.item')) {
+        if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $with = ['getUser', 'getOrderGoods', 'getDelivery'];
-            if (!empty($data['is_get_log'])) {
-                $with['getOrderLog'] = function ($query) {
-                    $query->order(['order_log_id' => 'desc']);
-                };
-            }
+        // 搜索条件
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['is_delete', '<>', 2];
 
-            $map['order_no'] = ['eq', $data['order_no']];
-            $map['is_delete'] = ['neq', 2];
+        // 过滤字段
+        $field = '';
 
-            if (!is_client_admin()) {
-                $map['user_id'] = ['eq', get_client_id()];
-                $query->field('sellers_remark', true);
-            }
+        if (!is_client_admin()) {
+            $map[] = ['user_id', '=', get_client_id()];
+            $field = 'sellers_remark';
+        }
 
-            $query->with($with)->where($map);
-        });
+        // 关联查询
+        $with = ['get_user', 'get_order_goods', 'get_delivery'];
+        if (!empty($data['is_get_log'])) {
+            $with['get_order_log'] = function ($query) {
+                $query->order(['order_log_id' => 'desc']);
+            };
+        }
 
-        if (false !== $result) {
+        $result = $this->with($with)->withoutField($field)->where($map)->find();
+        if (!is_null($result)) {
             // 隐藏不需要输出的字段
             $hidden = [
                 'order_id',
+                'parent_id',
                 'is_give',
+                'create_user_id',
                 'get_order_goods.order_id',
                 'get_order_goods.order_no',
                 'get_order_goods.user_id',
@@ -1483,35 +1486,32 @@ class Order extends CareyShop
                 'get_delivery.delivery_id',
             ];
 
-            return is_null($result) ? null : $result->hidden($hidden)->toArray();
+            return $result->hidden($hidden)->toArray();
         }
 
-        return false;
+        return null;
     }
 
     /**
      * 将订单放入回收站、还原或删除
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
-    public function recycleOrderItem($data)
+    public function recycleOrderItem(array $data)
     {
-        if (!$this->validateData($data, 'Order.recycle')) {
+        if (!$this->validateData($data, 'recycle')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['order_no'] = ['eq', $data['order_no']];
-            $map['is_delete'] = ['neq', 2];
-            is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['is_delete', '<>', 2];
+        is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
 
-            $query->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('订单不存在') : false;
+        $result = $this->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('订单不存在');
         }
 
         if ($result->getAttr('trade_status') !== 3 && $result->getAttr('trade_status') !== 4) {
@@ -1519,7 +1519,7 @@ class Order extends CareyShop
         }
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 修改订单状态
@@ -1546,10 +1546,10 @@ class Order extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            self::commit();
+            $this->commit();
             return true;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -1557,30 +1557,26 @@ class Order extends CareyShop
     /**
      * 订单批量设为配货状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function pickingOrderList($data)
+    public function pickingOrderList(array $data)
     {
-        if (!$this->validateData($data, 'Order.picking')) {
+        if (!$this->validateData($data, 'picking')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $map['order_no'] = ['in', $data['order_no']];
-            $map['is_delete'] = ['eq', 0];
-            is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
+        // 搜索条件
+        $map[] = ['order_no', 'in', $data['order_no']];
+        $map[] = ['is_delete', '=', 0];
+        is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
 
-            $query->where($map);
-        });
-
-        if (false === $result) {
-            return false;
-        }
+        // 获取数据
+        $result = $this->where($map)->select();
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             foreach ($result as $value) {
@@ -1598,7 +1594,7 @@ class Order extends CareyShop
                 $orderData['picking_time'] = $data['is_picking'] == 1 ? time() : 0;
 
                 if (false === $value->save($orderData)) {
-                    throw new \Exception($this->getError());
+                    throw new \Exception($value->getError());
                 }
 
                 // 写入订单操作日志
@@ -1608,10 +1604,10 @@ class Order extends CareyShop
                 }
             }
 
-            self::commit();
+            $this->commit();
             return ['trade_status' => $data['is_picking']];
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -1619,26 +1615,23 @@ class Order extends CareyShop
     /**
      * 订单设为发货状态
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return mixed
      * @throws
      */
-    public function deliveryOrderItem($data)
+    public function deliveryOrderItem(array $data)
     {
-        if (!$this->validateData($data, 'Order.delivery')) {
+        if (!$this->validateData($data, 'delivery')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            $map['order_no'] = ['eq', $data['order_no']];
-            $map['is_delete'] = ['eq', 0];
-            is_client_admin() ?: $map['user_id'] = ['eq', 0];
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['is_delete', '=', 0];
+        is_client_admin() ?: $map[] = ['user_id', '=', 0];
 
-            $query->with('getOrderGoods')->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('订单不存在') : false;
+        $result = $this->with('get_order_goods')->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('订单不存在');
         }
 
         if ($result->getAttr('payment_status') !== 1) {
@@ -1680,12 +1673,12 @@ class Order extends CareyShop
         unset($data['order_id']);
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             // 修改订单状态
-            if (false === $result->allowField(true)->save($data)) {
-                throw new \Exception($this->getError());
+            if (false === $result->save($data)) {
+                throw new \Exception($result->getError());
             }
 
             // 重新赋值订单数据
@@ -1706,9 +1699,9 @@ class Order extends CareyShop
             // 添加一条配送记录
             if (!empty($data['logistic_code'])) {
                 $deliveryData = [
-                    'client_id'        => $this->orderData['user_id'],
-                    'order_code'       => $this->orderData['order_no'],
-                    'logistic_code'    => $data['logistic_code'],
+                    'client_id'     => $this->orderData['user_id'],
+                    'order_code'    => $this->orderData['order_no'],
+                    'logistic_code' => $data['logistic_code'],
                 ];
 
                 if (!is_empty_parm($data['delivery_id'])) {
@@ -1726,14 +1719,10 @@ class Order extends CareyShop
             }
 
             // 订单商品发货设置
-            $mapGoods['order_goods_id'] = ['in', $data['order_goods_id']];
-            $mapGoods['order_no'] = ['eq', $data['order_no']];
-            $mapGoods['status'] = ['eq', 0];
-
-            $orderGoodsDb = new OrderGoods();
-            if (false === $orderGoodsDb->isUpdate(true)->save(['status' => 1], $mapGoods)) {
-                throw new \Exception($orderGoodsDb->getError());
-            }
+            $mapGoods[] = ['order_goods_id', 'in', $data['order_goods_id']];
+            $mapGoods[] = ['order_no', '=', $data['order_no']];
+            $mapGoods[] = ['status', '=', 0];
+            OrderGoods::update(['status' => 1], $mapGoods);
 
             // 数据返回前删除不必要字段
             $orderData = $this->orderData;
@@ -1742,10 +1731,10 @@ class Order extends CareyShop
             unset($orderData['logistic_code']);
             unset($orderData['get_order_goods']);
 
-            self::commit();
+            $this->commit();
             return $orderData;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -1774,7 +1763,7 @@ class Order extends CareyShop
                 'user_id'    => $this->orderData['user_id'],
                 'type'       => $txDb::TRANSACTION_INCOME,
                 'amount'     => $this->orderData['give_integral'],
-                'balance'    => $moneyDb->where(['user_id' => ['eq', $this->orderData['user_id']]])->value('points'),
+                'balance'    => $moneyDb->where('user_id', '=', $this->orderData['user_id'])->value('points'),
                 'source_no'  => $this->orderData['order_no'],
                 'remark'     => '赠送积分',
                 'module'     => 'points',
@@ -1792,7 +1781,7 @@ class Order extends CareyShop
     /**
      * 赠送优惠劵结算
      * @access private
-     * @param  object $orderDb 订单模型
+     * @param object $orderDb 订单模型
      * @return bool
      */
     public function completeGiveCoupon(&$orderDb)
@@ -1807,7 +1796,7 @@ class Order extends CareyShop
             }
         }
 
-        if (false !== $orderDb->isUpdate(true)->save(['give_coupon' => $data])) {
+        if (false !== $orderDb->save(['give_coupon' => $data])) {
             return true;
         }
 
@@ -1817,29 +1806,25 @@ class Order extends CareyShop
     /**
      * 订单商品变更为收货状态
      * @access private
-     * @param  int $orderId 订单编号
+     * @param int $orderId 订单编号
      * @return bool
      */
-    private function completeOrderGoods($orderId)
+    private function completeOrderGoods(int $orderId)
     {
-        $map['order_id'] = ['eq', $orderId];
-        $map['status'] = ['eq', 1];
+        $map[] = ['order_id', '=', $orderId];
+        $map[] = ['status', '=', 1];
 
-        $orderGoodsDb = new OrderGoods();
-        if (false === $orderGoodsDb->isUpdate(true)->save(['status' => 2], $map)) {
-            return $this->setError($orderGoodsDb->getError());
-        }
-
+        OrderGoods::update(['status' => 2], $map);
         return true;
     }
 
     /**
      * 撤销某订单号下的所有售后服务单
      * @access private
-     * @param  string $type 撤销类型
+     * @param string $type 撤销类型
      * @return bool
      */
-    private function cancelOrderService($type)
+    private function cancelOrderService(string $type)
     {
         $orderServiceDb = new OrderService();
         if (!$orderServiceDb->inCancelOrderService($this->orderData['order_no'], $type)) {
@@ -1852,30 +1837,26 @@ class Order extends CareyShop
     /**
      * 订单批量确认收货
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return mixed
      * @throws
      */
-    public function completeOrderList($data)
+    public function completeOrderList(array $data)
     {
-        if (!$this->validateData($data, 'Order.complete')) {
+        if (!$this->validateData($data, 'complete')) {
             return false;
         }
 
-        $result = self::all(function ($query) use ($data) {
-            $map['order_no'] = ['in', $data['order_no']];
-            $map['is_delete'] = ['eq', 0];
-            is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
+        // 搜索条件
+        $map[] = ['order_no', 'in', $data['order_no']];
+        $map[] = ['is_delete', '=', 0];
+        is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
 
-            $query->where($map);
-        });
-
-        if (false === $result) {
-            return false;
-        }
+        // 查询数据
+        $result = $this->where($map)->select();
 
         // 开启事务
-        self::startTrans();
+        $this->startTrans();
 
         try {
             $saveData = [
@@ -1899,7 +1880,7 @@ class Order extends CareyShop
 
                 // 修改订单状态
                 if (false === $value->save($saveData)) {
-                    throw new \Exception($this->getError());
+                    throw new \Exception($value->getError());
                 }
 
                 // 重新赋值订单数据
@@ -1933,10 +1914,10 @@ class Order extends CareyShop
                 }
             }
 
-            self::commit();
+            $this->commit();
             return $saveData;
         } catch (\Exception $e) {
-            self::rollback();
+            $this->rollback();
             return $this->setError($e->getMessage());
         }
     }
@@ -1957,17 +1938,17 @@ class Order extends CareyShop
         }
 
         // 关联查询订单是否存在售后服务
-        $with['getOrderGoods'] = function ($query) {
-            $query->field('order_id')->where(['is_service' => ['eq', 1]]);
+        $with['get_order_goods'] = function ($query) {
+            $query->field('order_id')->where('is_service', '=', 1);
         };
 
         // 搜索条件
-        $map['trade_status'] = ['eq', 2];
-        $map['delivery_status'] = ['eq', 1];
-        $map['delivery_time'] = ['elt', time() - Config::get('complete.value', 'system_shopping') * 86400];
-        $map['is_delete'] = ['eq', 0];
+        $map[] = ['trade_status', '=', 2];
+        $map[] = ['delivery_status', '=', 1];
+        $map[] = ['delivery_time', '<=', time() - Config::get('careyshop.system_shopping.complete', 0) * 86400];
+        $map[] = ['is_delete', '=', 0];
 
-        self::with($with)->where($map)->chunk(100, function ($order) {
+        $this->with($with)->where($map)->chunk(100, function ($order) {
             foreach ($order as $value) {
                 // 订单存在售后服务则放弃确认收货
                 if (!$value->get_order_goods->isEmpty()) {
@@ -2023,83 +2004,91 @@ class Order extends CareyShop
     /**
      * 获取订单列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return false|array
      * @throws
      */
-    public function getOrderList($data)
+    public function getOrderList(array $data)
     {
-        if (!$this->validateData($data, 'Order.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 
         // 搜索条件
-        $map['is_delete'] = ['eq', 0];
-        is_client_admin() ?: $map['user_id'] = ['eq', get_client_id()];
-        empty($data['consignee']) ?: $map['consignee'] = ['eq', $data['consignee']];
-        empty($data['mobile']) ?: $map['mobile'] = ['eq', $data['mobile']];
-        empty($data['payment_code']) ?: $map['payment_code'] = ['eq', $data['payment_code']];
+        $map['is_delete'] = ['=', 0];
+        is_client_admin() ?: $map['user_id'] = ['=', get_client_id()];
+        empty($data['consignee']) ?: $map['consignee'] = ['=', $data['consignee']];
+        empty($data['mobile']) ?: $map['mobile'] = ['=', $data['mobile']];
+        empty($data['payment_code']) ?: $map['payment_code'] = ['=', $data['payment_code']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
             $map['create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
         }
 
         // 关联订单商品搜索条件
-        empty($data['keywords']) ?: $mapGoods['order_no|goods_name'] = ['like', '%' . $data['keywords'] . '%'];
+        empty($data['keywords']) ?: $mapGoods[] = ['order_no|goods_name', 'like', '%' . $data['keywords'] . '%'];
 
         // 不同的订单状态生成搜索条件
         switch (isset($data['status']) ? $data['status'] : 0) {
             case 1: // 未付款/待付款
-                $map['trade_status'] = ['eq', 0];
-                $map['payment_status'] = ['eq', 0];
+                $map['trade_status'] = ['=', 0];
+                $map['payment_status'] = ['=', 0];
                 break;
             case 2: // 已付款
-                $map['trade_status'] = ['eq', 0];
-                $map['payment_status'] = ['eq', 1];
+                $map['trade_status'] = ['=', 0];
+                $map['payment_status'] = ['=', 1];
                 break;
             case 3: // 待发货/配货中
                 $map['trade_status'] = ['in', [1, 2]];
-                $map['delivery_status'] = ['neq', 1];
+                $map['delivery_status'] = ['<>', 1];
                 break;
             case 4: // 已发货/待收货
-                $map['trade_status'] = ['eq', 2];
-                $map['delivery_status'] = ['eq', 1];
+                $map['trade_status'] = ['=', 2];
+                $map['delivery_status'] = ['=', 1];
                 break;
             case 5: // 已完成/已收货
-                $map['trade_status'] = ['eq', 3];
-                $map['delivery_status'] = ['eq', 1];
+                $map['trade_status'] = ['=', 3];
+                $map['delivery_status'] = ['=', 1];
                 break;
             case 6: // 已取消
-                $map['trade_status'] = ['eq', 4];
+                $map['trade_status'] = ['=', 4];
                 break;
             case 7: // 待评价
-                $map['trade_status'] = ['eq', 3];
-                $mapGoods['is_comment'] = ['eq', 0];
+                $map['trade_status'] = ['=', 3];
+                $mapGoods[] = ['is_comment', '=', 0];
                 break;
             case 8: // 回收站
-                $map['is_delete'] = ['eq', 1];
+                $map['is_delete'] = ['=', 1];
                 break;
         }
 
         // 关联订单商品查询,返回订单编号
         if (!empty($mapGoods)) {
-            is_client_admin() ?: $mapGoods['user_id'] = ['eq', get_client_id()];
+            is_client_admin() ?: $mapGoods[] = ['user_id', '=', get_client_id()];
             $orderId = OrderGoods::where($mapGoods)->column('order_id');
             $map['order_id'] = ['in', $orderId];
         }
 
         // 通过账号或昵称查询
         if (is_client_admin() && !empty($data['account'])) {
-            $mapUser['username|nickname'] = ['eq', $data['account']];
-            $userId = User::where($mapUser)->value('user_id', 0, true);
-            $map['user_id'] = ['eq', $userId];
+            $mapUser[] = ['username|nickname', '=', $data['account']];
+            $userId = User::where($mapUser)->value('user_id', 0);
+            $map['user_id'] = ['=', $userId];
         }
 
-        $totalResult = $this->where($map)->count();
-        if ($totalResult <= 0) {
-            return ['total_result' => 0];
+        // 重新整理map条件
+        $whereMap = [];
+        foreach ($map as $key => $item) {
+            array_unshift($item, $key);
+            $whereMap[] = $item;
         }
 
+        $result['total_result'] = $this->where($whereMap)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
+        }
+
+        // todo next
         $result = self::all(function ($query) use ($data, $map) {
             // 翻页页数
             $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
@@ -2151,12 +2140,12 @@ class Order extends CareyShop
 
     /**
      * 获取订单各个状态合计数
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @access public
      * @return array
      * @throws
      */
-    public function getOrderStatusTotal($data)
+    public function getOrderStatusTotal(array $data)
     {
         // 准备基础数据
         $result = [
@@ -2172,53 +2161,53 @@ class Order extends CareyShop
         }
 
         // 通用查询条件
-        $map['is_delete'] = ['eq', 0];
-        empty($data['consignee']) ?: $map['consignee'] = ['eq', $data['consignee']];
-        empty($data['mobile']) ?: $map['mobile'] = ['eq', $data['mobile']];
-        empty($data['payment_code']) ?: $map['payment_code'] = ['eq', $data['payment_code']];
+        $map[] = ['is_delete', '=', 0];
+        empty($data['consignee']) ?: $map[] = ['consignee', '=', $data['consignee']];
+        empty($data['mobile']) ?: $map[] = ['mobile', '=', $data['mobile']];
+        empty($data['payment_code']) ?: $map[] = ['payment_code', '=', $data['payment_code']];
 
         if (!empty($data['begin_time']) && !empty($data['end_time'])) {
-            $map['create_time'] = ['between time', [$data['begin_time'], $data['end_time']]];
+            $map[] = ['create_time', 'between time', [$data['begin_time'], $data['end_time']]];
         }
 
         // 通过账号或昵称查询
         if (is_client_admin() && !empty($data['account'])) {
-            $mapUser['username|nickname'] = ['eq', $data['account']];
-            $userId = User::where($mapUser)->value('user_id', 0, true);
-            $map['user_id'] = ['eq', $userId];
+            $mapUser[] = ['username|nickname', '=', $data['account']];
+            $userId = User::where($mapUser)->value('user_id', 0);
+            $map[] = ['user_id', '=', $userId];
         }
 
         // 通过关键词查询
         if (!empty($data['keywords'])) {
-            $mapKeywords['order_no|goods_name'] = ['like', '%' . $data['keywords'] . '%'];
+            $mapKeywords[] = ['order_no|goods_name', 'like', '%' . $data['keywords'] . '%'];
             $idList = OrderGoods::where($mapKeywords)->column('order_id');
-            $map['order_id'] = ['in', $idList];
+            $map[] = ['order_id', 'in', $idList];
         }
 
-        $mapNotPaid['trade_status'] = ['eq', 0];
-        $mapNotPaid['payment_status'] = ['eq', 0];
+        $mapNotPaid[] = ['trade_status', '=', 0];
+        $mapNotPaid[] = ['payment_status', '=', 0];
         $result['not_paid'] = $this->where($mapNotPaid)->where($map)->count();
 
-        $mapPaid['trade_status'] = ['eq', 0];
-        $mapPaid['payment_status'] = ['eq', 1];
+        $mapPaid[] = ['trade_status', '=', 0];
+        $mapPaid[] = ['payment_status', '=', 1];
         $result['paid'] = $this->where($mapPaid)->where($map)->count();
 
-        $mapNotShipped['trade_status'] = ['in', [1, 2]];
-        $mapNotShipped['delivery_status'] = ['neq', 1];
+        $mapNotShipped[] = ['trade_status', 'in', [1, 2]];
+        $mapNotShipped[] = ['delivery_status', '<>', 1];
         $result['not_shipped'] = $this->where($mapNotShipped)->where($map)->count();
 
-        $mapShipped['trade_status'] = ['eq', 2];
-        $mapShipped['delivery_status'] = ['eq', 1];
+        $mapShipped[] = ['trade_status', '=', 2];
+        $mapShipped[] = ['delivery_status', '=', 1];
         $result['shipped'] = $this->where($mapShipped)->where($map)->count();
 
         // 获取未评价订单商品
-        is_client_admin() ?: $mapGoods['user_id'] = ['eq', get_client_id()];
-        $mapGoods['is_comment'] = ['eq', 0];
-        $mapGoods['status'] = ['eq', 2];
+        is_client_admin() ?: $mapGoods[] = ['user_id', '=', get_client_id()];
+        $mapGoods[] = ['is_comment', '=', 0];
+        $mapGoods[] = ['status', '=', 2];
         $orderId = OrderGoods::where($mapGoods)->column('order_id');
 
-        $mapNotComment['order_id'] = ['in', $orderId];
-        $mapNotComment['trade_status'] = ['eq', 3];
+        $mapNotComment[] = ['order_id', 'in', $orderId];
+        $mapNotComment[] = ['trade_status', '=', 3];
         $result['not_comment'] = $this->where($mapNotComment)->where($map)->count();
 
         return $result;
@@ -2227,34 +2216,31 @@ class Order extends CareyShop
     /**
      * 再次购买与订单相同的商品
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return bool
      * @throws
      */
-    public function buyagainOrderGoods($data)
+    public function buyagainOrderGoods(array $data)
     {
-        if (!$this->validateData($data, 'Order.buy_again')) {
+        if (!$this->validateData($data, 'buy_again')) {
             return false;
         }
 
         // 获取关联订单商品列表
-        $result = self::get(function ($query) use ($data) {
-            $map['order_no'] = ['eq', $data['order_no']];
-            $map['user_id'] = ['eq', get_client_id()];
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['user_id', '=', get_client_id()];
 
-            $query->with('getOrderGoods')->where($map);
-        });
-
-        if (!$result) {
-            return is_null($result) ? $this->setError('订单不存在') : false;
+        $result = $this->with('get_order_goods')->where($map)->find();
+        if (is_null($result)) {
+            return $this->setError('订单不存在');
         }
 
         // 组合数据成购物车结构
         $cartDb = new Cart();
         $cartData['cart_goods'] = [];
-        $result = $result->toArray();
+        $goodsList = $result->getAttr('get_order_goods');
 
-        foreach ($result['get_order_goods'] as $value) {
+        foreach ($goodsList as $value) {
             $temp = $cartDb->checkCartGoods([
                 'goods_id'   => $value['goods_id'],
                 'goods_num'  => $value['qty'],
@@ -2278,38 +2264,31 @@ class Order extends CareyShop
     /**
      * 获取可评价或可追评的订单商品列表
      * @access public
-     * @param  array $data 外部数据
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getOrderGoodsComment($data)
+    public function getOrderGoodsComment(array $data)
     {
-        if (!$this->validateData($data, 'Order.comment')) {
+        if (!$this->validateData($data, 'comment')) {
             return false;
         }
 
-        $result = self::get(function ($query) use ($data) {
-            // 获取关联订单商品数据
-            $goodsMap['is_comment'] = ['eq', $data['comment_type'] == 'comment' ? 0 : 1];
-            $goodsMap['status'] = ['eq', 2];
+        // 搜索订单数据
+        $map[] = ['order_no', '=', $data['order_no']];
+        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['trade_status', '=', 3];
+        $map[] = ['is_delete', '<>', 2];
 
-            $with['getOrderGoods'] = function ($goodsDb) use ($goodsMap) {
-                $goodsDb->field('order_no,user_id,is_comment,status', true)->where($goodsMap);
-            };
+        // 关联查询
+        $with['get_order_goods'] = function ($goodsDb) use ($data) {
+            $goodsMap[] = ['is_comment', '=', $data['comment_type'] == 'comment' ? 0 : 1];
+            $goodsMap[] = ['status', '=', 2];
 
-            // 搜索订单数据
-            $map['order_no'] = ['eq', $data['order_no']];
-            $map['user_id'] = ['eq', get_client_id()];
-            $map['trade_status'] = ['eq', 3];
-            $map['is_delete'] = ['neq', 2];
+            $goodsDb->withoutField('order_no,user_id,is_comment,status')->where($goodsMap);
+        };
 
-            $query->with($with)->field('order_id,order_no')->where($map);
-        });
-
-        if (false === $result) {
-            return false;
-        }
-
+        $result = $this->with($with)->field('order_id,order_no')->where($map)->find();
         return is_null($result) ? null : $result->hidden(['order_id', 'get_order_goods.order_id'])->toArray();
     }
 }
