@@ -1,17 +1,17 @@
 [
     {
         "name": "aliyuncs/oss-sdk-php",
-        "version": "v2.3.1",
-        "version_normalized": "2.3.1.0",
+        "version": "v2.4.0",
+        "version_normalized": "2.4.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/aliyun/aliyun-oss-php-sdk.git",
-            "reference": "053d7ba9e798e4c09b9c5c1edab153d25ea9643a"
+            "reference": "bd9c2bba3d167de821cbb33b5c03fe6e41e8e363"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/aliyun/aliyun-oss-php-sdk/zipball/053d7ba9e798e4c09b9c5c1edab153d25ea9643a",
-            "reference": "053d7ba9e798e4c09b9c5c1edab153d25ea9643a",
+            "url": "https://api.github.com/repos/aliyun/aliyun-oss-php-sdk/zipball/bd9c2bba3d167de821cbb33b5c03fe6e41e8e363",
+            "reference": "bd9c2bba3d167de821cbb33b5c03fe6e41e8e363",
             "shasum": "",
             "mirrors": [
                 {
@@ -27,7 +27,7 @@
             "phpunit/phpunit": "~4.0",
             "satooshi/php-coveralls": "~1.0"
         },
-        "time": "2019-11-15T11:05:42+00:00",
+        "time": "2020-08-31T08:39:59+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -396,17 +396,17 @@
     },
     {
         "name": "opis/closure",
-        "version": "3.5.5",
-        "version_normalized": "3.5.5.0",
+        "version": "3.5.7",
+        "version_normalized": "3.5.7.0",
         "source": {
             "type": "git",
             "url": "https://github.com/opis/closure.git",
-            "reference": "dec9fc5ecfca93f45cd6121f8e6f14457dff372c"
+            "reference": "4531e53afe2fc660403e76fb7644e95998bff7bf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/opis/closure/zipball/dec9fc5ecfca93f45cd6121f8e6f14457dff372c",
-            "reference": "dec9fc5ecfca93f45cd6121f8e6f14457dff372c",
+            "url": "https://api.github.com/repos/opis/closure/zipball/4531e53afe2fc660403e76fb7644e95998bff7bf",
+            "reference": "4531e53afe2fc660403e76fb7644e95998bff7bf",
             "shasum": "",
             "mirrors": [
                 {
@@ -422,7 +422,7 @@
             "jeremeamia/superclosure": "^2.0",
             "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
         },
-        "time": "2020-06-17T14:59:55+00:00",
+        "time": "2020-09-06T17:02:15+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -816,8 +816,8 @@
     },
     {
         "name": "symfony/polyfill-mbstring",
-        "version": "v1.18.0",
-        "version_normalized": "1.18.0.0",
+        "version": "v1.18.1",
+        "version_normalized": "1.18.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-mbstring.git",
@@ -883,12 +883,26 @@
             "polyfill",
             "portable",
             "shim"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
         "name": "symfony/polyfill-php72",
-        "version": "v1.18.0",
-        "version_normalized": "1.18.0.0",
+        "version": "v1.18.1",
+        "version_normalized": "1.18.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-php72.git",
@@ -950,12 +964,26 @@
             "polyfill",
             "portable",
             "shim"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
         "name": "symfony/polyfill-php80",
-        "version": "v1.18.0",
-        "version_normalized": "1.18.0.0",
+        "version": "v1.18.1",
+        "version_normalized": "1.18.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-php80.git",
@@ -1024,21 +1052,35 @@
             "polyfill",
             "portable",
             "shim"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
         "name": "symfony/var-dumper",
-        "version": "v4.4.11",
-        "version_normalized": "4.4.11.0",
+        "version": "v4.4.13",
+        "version_normalized": "4.4.13.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/var-dumper.git",
-            "reference": "2125805a1a4e57f2340bc566c3013ca94d2722dc"
+            "reference": "1bef32329f3166486ab7cb88599cae4875632b99"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/2125805a1a4e57f2340bc566c3013ca94d2722dc",
-            "reference": "2125805a1a4e57f2340bc566c3013ca94d2722dc",
+            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/1bef32329f3166486ab7cb88599cae4875632b99",
+            "reference": "1bef32329f3166486ab7cb88599cae4875632b99",
             "shasum": "",
             "mirrors": [
                 {
@@ -1068,7 +1110,7 @@
             "ext-intl": "To show region name in time zone dump",
             "symfony/console": "To use the ServerDumpCommand and/or the bin/var-dump-server script"
         },
-        "time": "2020-06-24T13:34:53+00:00",
+        "time": "2020-08-17T07:31:35+00:00",
         "bin": [
             "Resources/bin/var-dump-server"
         ],
