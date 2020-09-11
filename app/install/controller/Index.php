@@ -13,6 +13,8 @@ declare (strict_types=1);
 namespace app\install\controller;
 
 use think\facade\Cache;
+use think\facade\Db;
+use think\facade\Validate;
 use think\facade\View;
 
 class Index
@@ -91,112 +93,98 @@ class Index
         return View::fetch();
     }
 
-//    /**
-//     * 步骤四，创建配置
-//     * @return mixed
-//     */
-//    public function step4()
-//    {
-//        // POST 用于验证
-//        if ($this->request->isPost()) {
-//            // 验证配置数据
-//            $rule = [
-//                'hostname'       => 'require',
-//                'database'       => 'require',
-//                'username'       => 'require',
-//                'password'       => 'require',
-//                'hostport'       => 'require|number',
-//                'prefix'         => 'require',
-//                'admin_user'     => 'require|length:4,20',
-//                'admin_password' => 'require|min:6|confirm',
-//                'base_api'       => 'require',
-//                'is_cover'       => 'require|in:0,1',
-//                'is_demo'        => 'require|in:0,1',
-//            ];
-//
-//            $field = [
-//                'hostname'       => '数据库服务器',
-//                'database'       => '数据库名',
-//                'username'       => '数据库用户名',
-//                'password'       => '数据库密码',
-//                'hostport'       => '数据库端口',
-//                'prefix'         => '数据表前缀',
-//                'admin_user'     => '管理员账号',
-//                'admin_password' => '管理员密码',
-//                'base_api'       => 'API接口路径',
-//                'is_cover'       => '覆盖同名数据库',
-//                'is_demo'        => '导入演示数据',
-//            ];
-//
-//            $data = $this->request->post();
-//            $validate = new Validate($rule, [], $field);
-//
-//            if (false === $validate->check($data)) {
-//                $this->error($validate->getError());
-//            }
-//
-//            // 缓存配置数据
-//            $data['type'] = 'mysql';
-//            session('installData', $data);
-//
-//            try {
-//                // 创建数据库连接
-//                $dbInstance = Db::connect([
-//                    'type'     => $data['type'],
-//                    'hostname' => $data['hostname'],
-//                    'username' => $data['username'],
-//                    'password' => $data['password'],
-//                    'hostport' => $data['hostport'],
-//                    'charset'  => 'utf8mb4',
-//                    'prefix'   => $data['prefix'],
-//                ]);
-//
-//                // 检测数据库连接并检测版本
-//                $version = $dbInstance->query('select version() as version limit 1;');
-//                if (version_compare(reset($version)['version'], '5.5.3', '<')) {
-//                    throw new \Exception('数据库版本过低，必须 5.5.3 及以上');
-//                }
-//
-//                // 检测是否已存在数据库
-//                if (!$data['is_cover']) {
-//                    $sql = 'SELECT * FROM information_schema.schemata WHERE schema_name=?';
-//                    $result = $dbInstance->execute($sql, [$data['database']]);
-//
-//                    if ($result) {
-//                        throw new \Exception('数据库名已存在，请更换名称或选择覆盖');
-//                    }
-//                }
-//
-//                // 创建数据库
-//                $sql = "CREATE DATABASE IF NOT EXISTS `{$data['database']}` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
-//                if (!$dbInstance->execute($sql)) {
-//                    throw new \Exception($dbInstance->getError());
-//                }
-//            } catch (\Exception $e) {
-//                $error = $e->getMessage();
-//                $textType = mb_detect_encoding($error, ['UTF-8', 'GBK', 'LATIN1', 'BIG5']);
-//
-//                if ($textType != 'UTF-8') {
-//                    $error = mb_convert_encoding($error, 'UTF-8', $textType);
-//                }
-//
-//                $this->error($error);
-//            }
-//
-//            // 准备工作完成
-//            $this->success('success', get_url('step4'));
-//        }
-//
-//        if (session('step') != 3) {
-//            $this->redirect(get_url());
-//        }
-//
-//        session('step', 4);
-//        Cache::clear('install');
-//
-//        return $this->fetch();
-//    }
-//
+    /**
+     * 步骤四，创建配置
+     * @return mixed
+     */
+    public function step4()
+    {
+        // POST 用于验证
+        if ($this->request->isPost()) {
+            // 验证配置数据
+            $rule = [
+                'hostname|数据库服务器'      => 'require',
+                'database|数据库名'        => 'require',
+                'username|数据库用户名'      => 'require',
+                'password|数据库密码'       => 'require',
+                'hostport|数据库端口'       => 'require|number',
+                'prefix|数据表前缀'         => 'require',
+                'admin_user|管理员账号'     => 'require|length:4,20',
+                'admin_password|管理员密码' => 'require|min:6|confirm',
+                'base_api|API接口路径'     => 'require',
+                'is_cover|覆盖同名数据库'     => 'require|in:0,1',
+                'is_demo|导入演示数据'       => 'require|in:0,1',
+            ];
+
+            $validate = Validate::rule($rule);
+            $data = $this->request->post();
+
+            if (!$validate->check($data)) {
+                $this->error($validate->getError());
+            }
+
+            // 缓存配置数据
+            $data['type'] = 'mysql';
+            session('installData', $data);
+
+            // 创建配置文件
+            $dataPath = app_path() . 'data' . DIRECTORY_SEPARATOR;
+            $envFile = file_get_contents($dataPath . 'env.tpl');
+            $envFile = macro_str_replace($envFile, $data);
+
+            if (!file_put_contents(root_path() . '.env', $envFile)) {
+                $this->error('配置文件写入失败');
+            }
+
+            // 数据库检测
+            try {
+                // 连接数据库
+                $mysqli = @mysqli_connect(
+                    $data['hostname'],
+                    $data['username'],
+                    $data['password'],
+                    '',
+                    (int)$data['hostport']
+                );
+
+                if (!$mysqli) {
+                    throw new \Exception(mysqli_connect_error());
+                }
+
+                // 设置编码
+                mysqli_set_charset($mysqli, 'utf8mb4');
+                $version = mysqli_get_server_info($mysqli);
+
+                // 检查数据库版本号
+                if (version_compare($version, '5.5.3', '<')) {
+                    throw new \Exception('数据库版本过低，必须 5.5.3 及以上');
+                }
+
+            } catch (\Exception $e) {
+                $error = $e->getMessage();
+                $textType = mb_detect_encoding($error, ['UTF-8', 'GBK', 'LATIN1', 'BIG5']);
+
+                if ($textType != 'UTF-8') {
+                    $error = mb_convert_encoding($error, 'UTF-8', $textType);
+                }
+
+                $this->error($error);
+            }
+
+            // 准备工作完成
+            $this->success('success', get_url('step4'));
+        }
+
+        if (session('step') != 3) {
+            $this->redirect(get_url());
+        }
+
+        session('step', 4);
+        Cache::tag('install')->clear();
+
+        return View::fetch();
+    }
+
 //    public function install()
 //    {
 //        if (session('step') != 4 || !$this->request->isAjax()) {

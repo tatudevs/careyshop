@@ -37,9 +37,9 @@
             dataType: "json",
             success: function (res) {
                 try {
-                    if (res.code && res.data) {
-                        if (res.msg) {
-                            insert_log(res.msg);
+                    if (res.status === 200 && res.data) {
+                        if (res.message) {
+                            insert_log(res.message);
                         }
 
                         if (res.data.status) {
@@ -50,7 +50,7 @@
                             }, 2000);
                         }
                     } else {
-                        insert_log(res.msg, true);
+                        insert_log(res.message, true);
                     }
                 } catch(e) {
                     insert_log(e.message, true);

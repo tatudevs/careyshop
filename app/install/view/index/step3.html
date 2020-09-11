@@ -32,13 +32,13 @@
 
                 <tr>
                     <td class="tar">数据库用户名</td>
-                    <td><label><input type="text" name="username" value="" class="input"></label></td>
+                    <td><label><input type="text" name="username" value="root" class="input"></label></td>
                     <td></td>
                 </tr>
 
                 <tr>
                     <td class="tar">数据库密码</td>
-                    <td><label><input type="password" name="password" value="" class="input"></label></td>
+                    <td><label><input type="password" name="password" value="root" class="input"></label></td>
                     <td></td>
                 </tr>
 
@@ -64,19 +64,19 @@
 
                 <tr>
                     <td class="tar">管理员账号</td>
-                    <td><label><input type="text" name="admin_user" value="" class="input"></label></td>
+                    <td><label><input type="text" name="admin_user" value="admin" class="input"></label></td>
                     <td></td>
                 </tr>
 
                 <tr>
                     <td class="tar">管理员密码</td>
-                    <td><label><input type="password" name="admin_password" value="" class="input"></label></td>
+                    <td><label><input type="password" name="admin_password" value="admin888" class="input"></label></td>
                     <td></td>
                 </tr>
 
                 <tr>
                     <td class="tar">确认密码</td>
-                    <td><label><input type="password" name="admin_password_confirm" value="" class="input"></label></td>
+                    <td><label><input type="password" name="admin_password_confirm" value="admin888" class="input"></label></td>
                     <td></td>
                 </tr>
             </table>
@@ -140,10 +140,10 @@
                 $('#submit').attr('disabled', true).addClass('btn_old');
             },
             success: function (res) {
-                if (res.code === 1) {
+                if (res.status === 200) {
                     self.location.href = res.url;
                 } else {
-                    $('#response_tips').show().html('<span class="tips_error">' + res.msg + '</span>');
+                    $('#response_tips').show().html('<span class="tips_error">' + res.message + '</span>');
                 }
             },
             complete: function () {
