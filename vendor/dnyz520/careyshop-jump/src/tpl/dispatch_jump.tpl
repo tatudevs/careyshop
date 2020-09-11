@@ -9,14 +9,14 @@
 </head>
 <body>
     <div class="system-message">
-        <?php switch ($code) {?>
-            <?php case 1:?>
+        <?php switch ($status) {?>
+            <?php case 200:?>
             <h1>:)</h1>
-            <p class="success"><?php echo(strip_tags($msg));?></p>
+            <p class="success"><?php echo(strip_tags($message));?></p>
             <?php break;?>
-            <?php case 0:?>
+            <?php case 500:?>
             <h1>:(</h1>
-            <p class="error"><?php echo(strip_tags($msg));?></p>
+            <p class="error"><?php echo(strip_tags($message));?></p>
             <?php break;?>
         <?php } ?>
         <p class="detail"></p>

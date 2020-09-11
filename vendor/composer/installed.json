@@ -243,17 +243,17 @@
     },
     {
         "name": "dnyz520/careyshop-jump",
-        "version": "v1.0.1",
-        "version_normalized": "1.0.1.0",
+        "version": "v1.0.2",
+        "version_normalized": "1.0.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-jump.git",
-            "reference": "3ea9fd8bda0e8d1952b35557d8f43c9d38e3fd9d"
+            "reference": "6d70dc967430a41e38bce0cf5e15ed5ea36ce949"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-jump/zipball/3ea9fd8bda0e8d1952b35557d8f43c9d38e3fd9d",
-            "reference": "3ea9fd8bda0e8d1952b35557d8f43c9d38e3fd9d",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-jump/zipball/6d70dc967430a41e38bce0cf5e15ed5ea36ce949",
+            "reference": "6d70dc967430a41e38bce0cf5e15ed5ea36ce949",
             "shasum": "",
             "mirrors": [
                 {
@@ -267,7 +267,7 @@
             "topthink/framework": "^6.0",
             "topthink/think-view": "^1.0"
         },
-        "time": "2020-09-11T02:22:57+00:00",
+        "time": "2020-09-11T03:23:38+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
