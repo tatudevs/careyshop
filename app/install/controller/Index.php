@@ -127,26 +127,10 @@ class Index
             $data['type'] = 'mysql';
             session('installData', $data);
 
-            // 创建配置文件
-            $dataPath = app_path() . 'data' . DIRECTORY_SEPARATOR;
-            $envFile = file_get_contents($dataPath . 'env.tpl');
-            $envFile = macro_str_replace($envFile, $data);
-
-            if (!file_put_contents(root_path() . '.env', $envFile)) {
-                $this->error('配置文件写入失败');
-            }
-
             // 数据库检测
             try {
                 // 连接数据库
-                $mysqli = @mysqli_connect(
-                    $data['hostname'],
-                    $data['username'],
-                    $data['password'],
-                    '',
-                    (int)$data['hostport']
-                );
-
+                $mysqli = @mysqli_connect($data['hostname'], $data['username'], $data['password'], '', (int)$data['hostport']);
                 if (!$mysqli) {
                     throw new \Exception(mysqli_connect_error());
                 }
@@ -155,11 +139,32 @@ class Index
                 mysqli_set_charset($mysqli, 'utf8mb4');
                 $version = mysqli_get_server_info($mysqli);
 
-                // 检查数据库版本号
+                // 检测数据库版本号
                 if (version_compare($version, '5.5.3', '<')) {
                     throw new \Exception('数据库版本过低，必须 5.5.3 及以上');
                 }
 
+                // 检测是否已存在数据库
+                if (!$data['is_cover'] && mysqli_select_db($mysqli, $data['database'])) {
+                    throw new \Exception('数据库名已存在，请更换名称或选择覆盖');
+                }
+
+                // 创建数据库
+                if (!mysqli_query($mysqli, "CREATE DATABASE IF NOT EXISTS `{$data['database']}` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;")) {
+                    throw new \Exception(mysqli_error($mysqli));
+                }
+
+                // 断开数据库
+                $mysqli->close();
+
+                // 创建配置文件
+                $dataPath = app_path() . 'data' . DIRECTORY_SEPARATOR;
+                $envFile = file_get_contents($dataPath . 'env.tpl');
+                $envFile = macro_str_replace($envFile, $data);
+
+                if (!file_put_contents(root_path() . '.env', $envFile)) {
+                    $this->error('配置文件写入失败');
+                }
             } catch (\Exception $e) {
                 $error = $e->getMessage();
                 $textType = mb_detect_encoding($error, ['UTF-8', 'GBK', 'LATIN1', 'BIG5']);
@@ -185,171 +190,140 @@ class Index
         return View::fetch();
     }
 
-//    public function install()
-//    {
-//        if (session('step') != 4 || !$this->request->isAjax()) {
-//            $this->error('请按步骤安装');
-//        }
-//
-//        // 数据准备
-//        $data = session('installData');
-//        $type = $this->request->post('type');
-//        $result = ['status' => 1, 'type' => $type];
-//        $path = APP_PATH . 'install' . DS . 'data' . DS;
-//
-//        if (!$type) {
-//            $result['type'] = 'function';
-//            $this->success('开始安装数据库函数', get_url('install'), $result);
-//        }
-//
-//        // 安装数据库函数
-//        if ('function' == $type) {
-//            try {
-//                $sql = file_get_contents($path . 'function_sql.tpl');
-//                $sql = macro_str_replace($sql, $data);
-//
-//                $mysqli = mysqli_connect(
-//                    $data['hostname'],
-//                    $data['username'],
-//                    $data['password'],
-//                    $data['database'],
-//                    $data['hostport']
-//                );
-//
-//                $mysqli->set_charset('utf8mb4');
-//                if (!$mysqli->multi_query($sql)) {
-//                    throw new \Exception($mysqli->error);
-//                }
-//
-//                $mysqli->close();
-//            } catch (\Exception $e) {
-//                $this->error($e->getMessage());
-//            }
-//
-//            $result['type'] = 'database';
-//            $this->success('开始安装数据库表', get_url('install', 0), $result);
-//        }
-//
-//        // 连接数据库
-//        $db = null;
-//        if (in_array($type, ['database', 'config'])) {
-//            try {
-//                $db = Db::connect([
-//                    'type'     => $data['type'],
-//                    'hostname' => $data['hostname'],
-//                    'database' => $data['database'],
-//                    'username' => $data['username'],
-//                    'password' => $data['password'],
-//                    'hostport' => $data['hostport'],
-//                    'charset'  => 'utf8mb4',
-//                    'prefix'   => $data['prefix'],
-//                ]);
-//            } catch (\Exception $e) {
-//                $this->error($e->getMessage());
-//            }
-//        }
-//
-//        // 安装数据库表
-//        if ('database' == $type) {
-//            $database = Cache::remember('database', function () use ($data, $path) {
-//                $sql = file_get_contents($path . sprintf('careyshop%s.tpl', $data['is_demo'] == 1 ? '_demo' : ''));
-//                $sql = macro_str_replace($sql, $data);
-//                $sql = str_replace("\r", "\n", $sql);
-//                $sql = explode(";\n", $sql);
-//
-//                Cache::tag('install', 'database');
-//                return $sql;
-//            });
-//
-//            // 数据库表安装完成
-//            $msg = '';
-//            $idx = $this->request->param('idx');
-//
-//            if ($idx >= count($database)) {
-//                $result['type'] = 'config';
-//                $this->success('开始安装配置文件', get_url('install'), $result);
-//            }
-//
-//            // 插入数据库表
-//            if (array_key_exists($idx, $database)) {
-//                $sql = $value = trim($database[$idx]);
-//
-//                if (!empty($value)) {
-//                    try {
-//                        if (false !== $db->execute($sql)) {
-//                            $msg = get_sql_message($sql);
-//                        } else {
-//                            throw new \Exception($db->getError());
-//                        }
-//                    } catch (\Exception $e) {
-//                        $this->error($e->getMessage());
-//                    }
-//                }
-//            }
-//
-//            // 返回下一步
-//            $this->success($msg, get_url('install', $idx + 1), $result);
-//        }
-//
-//        // 安装配置文件
-//        if ('config' == $type) {
-//            // 创建超级管理员
-//            $adminData = [
-//                'admin_id'    => 1,
-//                'username'    => $data['admin_user'],
-//                'password'    => user_md5($data['admin_password']),
-//                'group_id'    => AUTH_SUPER_ADMINISTRATOR,
-//                'nickname'    => 'CareyShop',
-//                'create_time' => '1530289832',
-//                'update_time' => time(),
-//            ];
-//
-//            try {
-//                $db->name('admin')->insert($adminData);
-//            } catch (\Exception $e) {
-//                $this->error($e->getMessage());
-//            }
-//
-//            // 创建APP
-//            $appData = [
-//                'app_id'     => 1,
-//                'app_name'   => 'Admin(后台管理)',
-//                'app_key'    => rand_number(8),
-//                'app_secret' => rand_string(),
-//                'captcha'    => 1,
-//            ];
-//
-//            try {
-//                $db->name('app')->insert($appData);
-//                $appData['base_api'] = $data['base_api'];
-//            } catch (\Exception $e) {
-//                $this->error($e->getMessage());
-//            }
-//
-//            // 创建数据库配置文件
-//            $fileConfig = file_get_contents($path . 'env.tpl');
-//            $fileConfig = macro_str_replace($fileConfig, $data);
-//
-//            if (!file_put_contents(APP_PATH . 'database.php', $fileConfig)) {
-//                $this->error('数据库配置文件写入失败');
-//            }
-//
-//            // 创建后台配置文件
-//            $fileAdmin = file_get_contents($path . 'production.tpl');
-//            $fileAdmin = macro_str_replace($fileAdmin, $appData);
-//
-//            $pathPro = ROOT_PATH . 'public' . DS . 'static' . DS . 'admin' . DS . 'static' . DS . 'config';
-//            if (!file_put_contents($pathPro . DS . 'production.js', $fileAdmin)) {
-//                $this->error('后台配置文件写入失败');
-//            }
-//
-//            $result['status'] = 0;
-//            $this->success('安装完成！', get_url('complete'), $result);
-//        }
-//
-//        // 结束
-//        $this->error('异常结束，安装未完成');
-//    }
+    /**
+     * 数据导入
+     * @throws \Throwable
+     */
+    public function install()
+    {
+        if (session('step') != 4 || !$this->request->isAjax()) {
+            $this->error('请按步骤安装');
+        }
+
+        // 数据准备
+        $data = session('installData');
+        $type = $this->request->post('type');
+        $result = ['status' => 1, 'type' => $type];
+        $dataPath = app_path() . 'data' . DIRECTORY_SEPARATOR;
+
+        if (!$type) {
+            $result['type'] = 'function';
+            $this->success('开始安装数据库函数', get_url('install'), $result);
+        }
+
+        // 安装数据库函数
+        if ('function' == $type) {
+            try {
+                $sql = file_get_contents($dataPath . 'function_sql.tpl');
+                $sql = macro_str_replace($sql, $data);
+
+                $mysqli = mysqli_connect($data['hostname'], $data['username'], $data['password'], $data['database'], (int)$data['hostport']);
+                $mysqli->set_charset('utf8mb4');
+
+                if (!$mysqli->multi_query($sql)) {
+                    throw new \Exception(mysqli_error($mysqli));
+                }
+
+                $mysqli->close();
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
+            }
+
+            $result['type'] = 'database';
+            $this->success('开始安装数据库表', get_url('install', 0), $result);
+        }
+
+        // 安装数据库表
+        if ('database' == $type) {
+            $database = Cache::remember('database', function () use ($data, $dataPath) {
+                $sql = file_get_contents($dataPath . sprintf('careyshop%s.tpl', $data['is_demo'] == 1 ? '_demo' : ''));
+                $sql = macro_str_replace($sql, $data);
+                $sql = str_replace("\r", "\n", $sql);
+                $sql = explode(";\n", $sql);
+
+                Cache::tag('install')->append('database');
+                return $sql;
+            });
+
+            // 数据库表安装完成
+            $msg = '';
+            $idx = $this->request->param('idx');
+
+            if ($idx >= count($database)) {
+                $result['type'] = 'config';
+                $this->success('开始安装配置文件', get_url('install'), $result);
+            }
+
+            // 插入数据库表
+            if (array_key_exists($idx, $database)) {
+                $sql = $value = trim($database[$idx]);
+
+                if (!empty($value)) {
+                    try {
+                        if (false !== Db::execute($sql)) {
+                            $msg = get_sql_message($sql);
+                        }
+                    } catch (\Exception $e) {
+                        $this->error($e->getMessage());
+                    }
+                }
+            }
+
+            // 返回下一步
+            $this->success($msg, get_url('install', $idx + 1), $result);
+        }
+
+        // 安装配置文件
+        if ('config' == $type) {
+            // 创建超级管理员
+            $adminData = [
+                'admin_id'    => 1,
+                'username'    => $data['admin_user'],
+                'password'    => user_md5($data['admin_password']),
+                'group_id'    => AUTH_SUPER_ADMINISTRATOR,
+                'nickname'    => 'CareyShop',
+                'create_time' => '1530289832',
+                'update_time' => time(),
+            ];
+
+            try {
+                Db::name('admin')->insert($adminData);
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
+            }
+
+            // 创建APP
+            $appData = [
+                'app_id'     => 1,
+                'app_name'   => 'Admin(后台管理)',
+                'app_key'    => rand_number(8),
+                'app_secret' => rand_string(),
+                'captcha'    => 1,
+            ];
+
+            try {
+                Db::name('app')->insert($appData);
+                $appData['base_api'] = $data['base_api'];
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
+            }
+
+            // 创建后台配置文件
+            $fileAdmin = file_get_contents($dataPath . 'production.tpl');
+            $fileAdmin = macro_str_replace($fileAdmin, $appData);
+
+            $pathPro = public_path() . 'static' . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR . 'config';
+            if (!file_put_contents($pathPro . DIRECTORY_SEPARATOR . 'production.js', $fileAdmin)) {
+                $this->error('后台配置文件写入失败');
+            }
+
+            $result['status'] = 0;
+            $this->success('安装完成！', get_url('complete'), $result);
+        }
+
+        // 结束
+        $this->error('异常结束，安装未完成');
+    }
 
     /**
      * 完成安装

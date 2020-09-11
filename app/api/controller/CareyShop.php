@@ -186,8 +186,11 @@ abstract class CareyShop
         $this->params = $this->request->param();
         unset($this->params['version']);
         unset($this->params['controller']);
-        unset($this->params[str_replace('.', '_', $_SERVER['REDIRECT_URL'])]);
-        unset($this->params[$_SERVER['REDIRECT_URL']]);
+
+        if (isset($_SERVER['REDIRECT_URL'])) {
+            unset($this->params[str_replace('.', '_', $_SERVER['REDIRECT_URL'])]);
+            unset($this->params[$_SERVER['REDIRECT_URL']]);
+        }
 
         // 公共参数赋值
         $this->appkey = isset($this->params['appkey']) ? $this->params['appkey'] : '';

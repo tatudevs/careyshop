@@ -143,6 +143,7 @@ function check_func()
         ['bcmath', '支持', 'check', '模块'],
         ['mbstring', '支持', 'check', '模块'],
         ['scandir', '支持', 'check', '函数'],
+        ['mysqli_connect', '支持', 'check', '函数'],
         ['file_get_contents', '支持', 'check', '函数'],
         ['version_compare', '支持', 'check', '函数'],
     ];
