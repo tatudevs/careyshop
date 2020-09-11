@@ -12,8 +12,14 @@ declare (strict_types=1);
 
 namespace app\install\controller;
 
+use think\facade\Cache;
+use think\facade\View;
+
 class Index
 {
+    // 引入Jump
+    use \careyshop\Jump;
+
     /**
      * 安装首页
      * @return mixed
@@ -27,64 +33,64 @@ class Index
             $this->error('已安装，如需重新安装，请删除 install 模块 data 目录下的 install.lock 文件');
         }
 
-//        if (is_file(APP_PATH . 'database.php')) {
-//            session('step', 2);
-//            $this->assign('next', '重新安装');
-//            $this->assign('nextUrl', get_url('step3'));
-//        } else {
-//            session('step', 1);
-//            $this->assign('next', '接 受');
-//            $this->assign('nextUrl', get_url('step2'));
-//        }
-//
-//        session('error', false);
-//
-//        return $this->fetch();
+        if (is_file(root_path() . '.env')) {
+            session('step', 2);
+            View::assign('next', '重新安装');
+            View::assign('nextUrl', get_url('step3'));
+        } else {
+            session('step', 1);
+            View::assign('next', '接 受');
+            View::assign('nextUrl', get_url('step2'));
+        }
+
+        session('error', false);
+        return View::fetch();
     }
 
-//    /**
-//     * 步骤二，检查环境
-//     * @return mixed
-//     */
-//    public function step2()
-//    {
-//        session('step', 2);
-//        session('error', false);
-//
-//        // 环境检测
-//        $env = check_env();
-//        $this->assign('env', $env);
-//
-//        // 目录文件读写检测
-//        $dirFile = check_dirfile();
-//        $this->assign('dirFile', $dirFile);
-//
-//        // 函数检测
-//        $func = check_func();
-//        $this->assign('func', $func);
-//
-//        // 是否可执行下一步
-//        $this->assign('isNext', false === session('error'));
-//
-//        return $this->fetch();
-//    }
-//
-//    /**
-//     * 步骤三，设置数据
-//     * @return mixed
-//     */
-//    public function step3()
-//    {
-//        if (session('step') != 2) {
-//            $this->redirect(get_url());
-//        }
-//
-//        session('step', 3);
-//        session('error', false);
-//
-//        return $this->fetch();
-//    }
-//
+    /**
+     * 步骤二，检查环境
+     * @return mixed
+     */
+    public function step2()
+    {
+        session('step', 2);
+        session('error', false);
+
+        // 环境检测
+        $env = check_env();
+        View::assign('env', $env);
+
+        // 目录文件读写检测
+        $dirFile = check_dirfile();
+        View::assign('dirFile', $dirFile);
+
+        // 函数检测
+        $func = check_func();
+        View::assign('func', $func);
+
+        // 是否可执行下一步
+        View::assign('isNext', false === session('error'));
+
+        return View::fetch();
+    }
+
+    /**
+     * 步骤三，设置数据
+     * @return mixed
+     */
+    public function step3()
+    {
+        if (session('step') != 2) {
+            $this->redirect(get_url());
+        }
+
+        session('step', 3);
+        session('error', false);
+
+        View::assign('apiBase', url('/api', [], false, true)->build());
+        return View::fetch();
+    }
+
 //    /**
 //     * 步骤四，创建配置
 //     * @return mixed
@@ -356,37 +362,38 @@ class Index
 //        // 结束
 //        $this->error('异常结束，安装未完成');
 //    }
-//
-//    /**
-//     * 完成安装
-//     * @return mixed
-//     */
-//    public function complete()
-//    {
-//        if (session('step') != 4) {
-//            $this->error('请按步骤安装系统', get_url());
-//        }
-//
-//        if (session('error')) {
-//            $this->error('安装出错，请重新安装！', get_url());
-//        }
-//
-//        // 安装锁定文件
-//        $lockPath = APP_PATH . 'install' . DS . 'data' . DS . 'install.lock';
-//        file_put_contents($lockPath, 'lock');
-//
-//        // 清理记录
-//        session('step', null);
-//        session('error', null);
-//        session('installData', null);
-//
-//        // 清理缓存资源(Cache::clear()其实可以不写,clear命令同样清理缓存)
-//        // 但防止系统不支持"shell_exec"还是需要单独清理
-//        Cache::clear();
-//        if (!ini_get('safe_mode') && function_exists('shell_exec')) {
-//            shell_exec(sprintf('php "%s" %s', ROOT_PATH . 'careyshop', 'clear'));
-//        }
-//
-//        return $this->fetch();
-//    }
+
+    /**
+     * 完成安装
+     * @return mixed
+     */
+    public function complete()
+    {
+        if (session('step') != 4) {
+            $this->error('请按步骤安装系统', get_url());
+        }
+
+        if (session('error')) {
+            $this->error('安装出错，请重新安装！', get_url());
+        }
+
+        // 安装锁定文件
+        $lockPath = app_path() . 'data' . DIRECTORY_SEPARATOR . 'install.lock';
+        file_put_contents($lockPath, 'lock');
+
+        // 清理记录
+        session('step', null);
+        session('error', null);
+        session('installData', null);
+
+        // 清理缓存资源(Cache::clear()其实可以不写,clear命令同样清理缓存)
+        // 但防止系统不支持"shell_exec"还是需要单独清理
+        Cache::clear();
+
+        if (!ini_get('safe_mode') && function_exists('shell_exec')) {
+            shell_exec(sprintf('php "%s" %s', root_path() . 'think', 'clear'));
+        }
+
+        return View::fetch();
+    }
 }

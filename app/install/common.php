@@ -69,7 +69,7 @@ function check_env()
 
     // 磁盘空间检测
     if (function_exists('disk_free_space')) {
-        $disk_size = floor(disk_free_space(INSTALL_APP_PATH) / (1024 * 1024));
+        $disk_size = floor(disk_free_space(public_path()) / (1024 * 1024));
         $items['disk'][3] = $disk_size . 'M';
         if ($disk_size < 100) {
             $items['disk'][4] = 'error';
@@ -87,14 +87,14 @@ function check_env()
 function check_dirfile()
 {
     $items = [
-        ['dir', '可写', 'check', '../application'],
+        ['dir', '可写', 'check', '../app'],
         ['dir', '可写', 'check', '../runtime'],
         ['dir', '可写', 'check', './static'],
         ['dir', '可写', 'check', './uploads'],
     ];
 
     foreach ($items as &$val) {
-        $item = INSTALL_APP_PATH . $val[3];
+        $item = public_path() . $val[3];
         if ('dir' == $val[0]) {
             if (!is_writable($item)) {
                 if (is_dir($item)) {
