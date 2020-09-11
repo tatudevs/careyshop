@@ -198,17 +198,17 @@
     },
     {
         "name": "dnyz520/careyshop-ip2region",
-        "version": "v1.0.2",
-        "version_normalized": "1.0.2.0",
+        "version": "v1.0.3",
+        "version_normalized": "1.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-ip2region.git",
-            "reference": "758dd11f0cc3670d98015945fe4a47d7b2f693b2"
+            "reference": "ef1426828245fc64edfb0cdc40984f75247ba708"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/758dd11f0cc3670d98015945fe4a47d7b2f693b2",
-            "reference": "758dd11f0cc3670d98015945fe4a47d7b2f693b2",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/ef1426828245fc64edfb0cdc40984f75247ba708",
+            "reference": "ef1426828245fc64edfb0cdc40984f75247ba708",
             "shasum": "",
             "mirrors": [
                 {
@@ -219,9 +219,9 @@
         },
         "require": {
             "php": ">=7.1.0",
-            "phpmailer/phpmailer": "^6.1"
+            "topthink/framework": "^6.0.0"
         },
-        "time": "2020-07-22T08:53:20+00:00",
+        "time": "2020-09-11T02:22:39+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -240,6 +240,52 @@
             }
         ],
         "description": "The CareyShop Ip2Region Package"
+    },
+    {
+        "name": "dnyz520/careyshop-jump",
+        "version": "v1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/dnyz520/careyshop-jump.git",
+            "reference": "3ea9fd8bda0e8d1952b35557d8f43c9d38e3fd9d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-jump/zipball/3ea9fd8bda0e8d1952b35557d8f43c9d38e3fd9d",
+            "reference": "3ea9fd8bda0e8d1952b35557d8f43c9d38e3fd9d",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "php": ">=7.1.0",
+            "topthink/framework": "^6.0",
+            "topthink/think-view": "^1.0"
+        },
+        "time": "2020-09-11T02:22:57+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "careyshop\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "AGPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "careyshop",
+                "email": "dnyz520@126.com"
+            }
+        ],
+        "description": "适用于thinkphp6.0的跳转扩展"
     },
     {
         "name": "league/flysystem",
@@ -331,12 +377,6 @@
             "s3",
             "sftp",
             "storage"
-        ],
-        "funding": [
-            {
-                "url": "https://offset.earth/frankdejonge",
-                "type": "other"
-            }
         ]
     },
     {
@@ -883,20 +923,6 @@
             "polyfill",
             "portable",
             "shim"
-        ],
-        "funding": [
-            {
-                "url": "https://symfony.com/sponsor",
-                "type": "custom"
-            },
-            {
-                "url": "https://github.com/fabpot",
-                "type": "github"
-            },
-            {
-                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                "type": "tidelift"
-            }
         ]
     },
     {
@@ -964,20 +990,6 @@
             "polyfill",
             "portable",
             "shim"
-        ],
-        "funding": [
-            {
-                "url": "https://symfony.com/sponsor",
-                "type": "custom"
-            },
-            {
-                "url": "https://github.com/fabpot",
-                "type": "github"
-            },
-            {
-                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                "type": "tidelift"
-            }
         ]
     },
     {
@@ -1052,20 +1064,6 @@
             "polyfill",
             "portable",
             "shim"
-        ],
-        "funding": [
-            {
-                "url": "https://symfony.com/sponsor",
-                "type": "custom"
-            },
-            {
-                "url": "https://github.com/fabpot",
-                "type": "github"
-            },
-            {
-                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                "type": "tidelift"
-            }
         ]
     },
     {
@@ -1151,20 +1149,6 @@
         "keywords": [
             "debug",
             "dump"
-        ],
-        "funding": [
-            {
-                "url": "https://symfony.com/sponsor",
-                "type": "custom"
-            },
-            {
-                "url": "https://github.com/fabpot",
-                "type": "github"
-            },
-            {
-                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                "type": "tidelift"
-            }
         ]
     },
     {

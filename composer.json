@@ -34,7 +34,8 @@
         "dnyz520/careyshop-ip2region": "^1.0",
         "dnyz520/careyshop-image": "^1.0",
         "dnyz520/careyshop-barcode": "^1.0",
-        "dnyz520/careyshop-captcha": "^1.0"
+        "dnyz520/careyshop-captcha": "^1.0",
+        "dnyz520/careyshop-jump": "^1.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2"
