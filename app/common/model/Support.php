@@ -184,7 +184,6 @@ class Support extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setSupportIndex(array $data)
     {
@@ -192,12 +191,10 @@ class Support extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['support_id'] as $key => $value) {
-            $list[] = ['support_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['support_id' => $value]);
         }
 
-        $this->saveAll($list);
         return true;
     }
 }

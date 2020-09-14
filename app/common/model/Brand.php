@@ -296,7 +296,6 @@ class Brand extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setBrandIndex(array $data)
     {
@@ -304,14 +303,11 @@ class Brand extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['brand_id'] as $key => $value) {
-            $list[] = ['brand_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['brand_id' => $value]);
         }
 
-        $this->saveAll($list);
         Cache::tag('Brand')->clear();
-
         return true;
     }
 }

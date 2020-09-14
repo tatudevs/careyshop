@@ -402,7 +402,6 @@ class Menu extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return bool
-     * @throws \Exception
      */
     public function setMenuIndex(array $data)
     {
@@ -410,14 +409,11 @@ class Menu extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['menu_id'] as $key => $value) {
-            $list[] = ['menu_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['menu_id' => $value]);
         }
 
-        $this->saveAll($list);
         Cache::tag('CommonAuth')->clear();
-
         return true;
     }
 

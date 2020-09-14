@@ -272,7 +272,6 @@ class Region extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setRegionIndex(array $data)
     {
@@ -280,14 +279,11 @@ class Region extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['region_id'] as $key => $value) {
-            $list[] = ['region_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['region_id' => $value]);
         }
 
-        $this->saveAll($list);
         Cache::delete('DeliveryArea');
-
         return true;
     }
 

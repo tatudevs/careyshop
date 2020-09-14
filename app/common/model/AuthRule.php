@@ -228,7 +228,6 @@ class AuthRule extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setAuthRuleIndex(array $data)
     {
@@ -236,14 +235,11 @@ class AuthRule extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['rule_id'] as $key => $value) {
-            $list[] = ['rule_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['rule_id' => $value]);
         }
 
-        $this->saveAll($list);
         Cache::tag('CommonAuth')->clear();
-
         return true;
     }
 

@@ -325,7 +325,6 @@ class ArticleCat extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setArticleCatIndex(array $data)
     {
@@ -333,14 +332,11 @@ class ArticleCat extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['article_cat_id'] as $key => $value) {
-            $list[] = ['article_cat_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['article_cat_id' => $value]);
         }
 
-        $this->saveAll($list);
         Cache::tag('ArticleCat')->clear();
-
         return true;
     }
 

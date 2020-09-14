@@ -211,7 +211,6 @@ class Navigation extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setNavigationIndex(array $data)
     {
@@ -219,14 +218,11 @@ class Navigation extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['navigation_id'] as $key => $value) {
-            $list[] = ['navigation_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['navigation_id' => $value]);
         }
 
-        $this->saveAll($list);
         Cache::tag('Navigation')->clear();
-
         return true;
     }
 }

@@ -438,7 +438,6 @@ class GoodsCategory extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setCategoryIndex(array $data)
     {
@@ -446,14 +445,11 @@ class GoodsCategory extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['goods_category_id'] as $key => $value) {
-            $list[] = ['goods_category_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['goods_category_id' => $value]);
         }
 
-        $this->saveAll($list);
         Cache::tag('GoodsCategory')->clear();
-
         return true;
     }
 

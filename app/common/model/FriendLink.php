@@ -179,7 +179,6 @@ class FriendLink extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setFriendLinkIndex(array $data)
     {
@@ -187,12 +186,10 @@ class FriendLink extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['friend_link_id'] as $key => $value) {
-            $list[] = ['friend_link_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['friend_link_id' => $value]);
         }
 
-        $this->saveAll($list);
         return true;
     }
 }

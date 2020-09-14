@@ -383,7 +383,6 @@ class Spec extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setSpecIndex(array $data)
     {
@@ -391,12 +390,10 @@ class Spec extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['spec_id'] as $key => $value) {
-            $list[] = ['spec_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['spec_id' => $value]);
         }
 
-        $this->saveAll($list);
         return true;
     }
 }

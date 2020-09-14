@@ -198,7 +198,6 @@ class Ads extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setAdsIndex(array $data)
     {
@@ -206,12 +205,10 @@ class Ads extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['ads_id'] as $key => $value) {
-            $list[] = ['ads_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['ads_id' => $value]);
         }
 
-        $this->saveAll($list);
         return true;
     }
 

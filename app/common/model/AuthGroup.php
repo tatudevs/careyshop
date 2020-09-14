@@ -220,7 +220,6 @@ class AuthGroup extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setAuthGroupIndex(array $data)
     {
@@ -228,14 +227,11 @@ class AuthGroup extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['group_id'] as $key => $value) {
-            $list[] = ['group_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['group_id' => $value]);
         }
 
-        $this->saveAll($list);
         Cache::tag('CommonAuth')->clear();
-
         return true;
     }
 }

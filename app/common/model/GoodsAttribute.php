@@ -414,7 +414,6 @@ class GoodsAttribute extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setAttributeIndex(array $data)
     {
@@ -422,12 +421,10 @@ class GoodsAttribute extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['goods_attribute_id'] as $key => $value) {
-            $list[] = ['goods_attribute_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['goods_attribute_id' => $value]);
         }
 
-        $this->saveAll($list);
         return true;
     }
 

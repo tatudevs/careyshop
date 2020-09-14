@@ -394,7 +394,6 @@ class Delivery extends CareyShop
      * @access public
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     public function setDeliveryIndex(array $data)
     {
@@ -402,12 +401,10 @@ class Delivery extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['delivery_id'] as $key => $value) {
-            $list[] = ['delivery_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['delivery_id' => $value]);
         }
 
-        $this->saveAll($list);
         return true;
     }
 }

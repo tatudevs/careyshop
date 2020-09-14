@@ -276,14 +276,11 @@ class Payment extends CareyShop
             return false;
         }
 
-        $list = [];
         foreach ($data['payment_id'] as $key => $value) {
-            $list[] = ['payment_id' => $value, 'sort' => $key + 1];
+            self::update(['sort' => $key + 1], ['payment_id' => $value]);
         }
 
-        $this->saveAll($list);
         Cache::tag('Payment')->clear();
-
         return true;
     }
 
