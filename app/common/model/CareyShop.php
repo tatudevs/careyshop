@@ -161,14 +161,14 @@ abstract class CareyShop extends Model
                 $class = '\\app\\common\\validate\\' . $this->getName();
                 if ($scene) {
                     $v = new $class();
-                    $v->extractScene($scene);
+                    $v->extractScene($data, $scene, $clean, $this->getPk());
                 } else {
                     $v = validate($class);
                 }
             } else {
                 $v = validate($validate);
                 if ($scene) {
-                    $v->extractScene($scene);
+                    $v->extractScene($data, $scene, $clean, $this->getPk());
                 }
             }
 

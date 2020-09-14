@@ -38,10 +38,13 @@ class CareyShop extends Validate
     /**
      * 提取场景字段载入到规则
      * @access public
-     * @param string $name 场景名称
+     * @param array  $data  验证数据
+     * @param string $name  场景名
+     * @param bool   $clean 当需要清理$data时场景过滤启用
+     * @param string $pk    模型主键
      * @throws \Exception
      */
-    public function extractScene(string $name)
+    public function extractScene(array $data, string $name, bool $clean, string $pk)
     {
         // 为了兼容数组格式的场景验证,不对函数式场景做检测
         if (!isset($this->scene[$name])) {
@@ -52,6 +55,13 @@ class CareyShop extends Validate
         $scene = $this->scene[$name];
 
         foreach ($scene as $key => $value) {
+            $sceneKey = is_numeric($key) ? $value : $key;
+            if ($clean && $sceneKey != $pk) {
+                if (!array_key_exists($sceneKey, $data)) {
+                    continue;
+                }
+            }
+
             if (is_numeric($key)) {
                 $rule[$value] = $this->rule[$value];
             } else {
