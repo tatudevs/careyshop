@@ -83,11 +83,11 @@ class ActionLog extends CareyShop
     /**
      * 设置菜单操作动作
      * @access private
-     * @param string $key   来源值
-     * @param string $value 修改值
+     * @param string      $key   来源值
+     * @param string|null $value 修改值
      * @throws \throwable
      */
-    private function setMenuMap(string $key, string &$value)
+    private function setMenuMap(string $key, ?string &$value)
     {
         static $menuMap = null;
         if (empty($menuMap)) {
@@ -137,15 +137,11 @@ class ActionLog extends CareyShop
      * @param $value
      * @param $data
      * @return string
+     * @throws
      */
     public function getActionAttr($value, $data)
     {
-        try {
-            $this->setMenuMap($data['path'], $value);
-        } catch (\throwable $e) {
-            $value = '未知操作';
-        }
-
+        $this->setMenuMap($data['path'], $value);
         return $value;
     }
 
