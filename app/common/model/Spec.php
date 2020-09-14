@@ -203,7 +203,7 @@ class Spec extends CareyShop
         };
 
         // 实际查询
-        $result['item'] = $this->setDefaultOrder(['spec_id' => 'asc'], ['sort' => 'asc'], true)
+        $result['items'] = $this->setDefaultOrder(['spec_id' => 'asc'], ['sort' => 'asc'], true)
             ->withJoin('getGoodsType')
             ->with($with)
             ->where($map)
@@ -212,12 +212,12 @@ class Spec extends CareyShop
             ->toArray();
 
         if (empty($data['is_detail'])) {
-            foreach ($result['item'] as $key => $value) {
-                $result['item'][$key]['spec_item'] = array_column($value['spec_item'], 'item_name');
+            foreach ($result['items'] as $key => $value) {
+                $result['items'][$key]['spec_item'] = array_column($value['spec_item'], 'item_name');
             }
         }
 
-        self::keyToSnake(['getGoodsType'], $result['item']);
+        self::keyToSnake(['getGoodsType'], $result['items']);
         return $result;
     }
 
