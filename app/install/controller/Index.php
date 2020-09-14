@@ -14,6 +14,7 @@ namespace app\install\controller;
 
 use think\facade\Cache;
 use think\facade\Db;
+use think\facade\Session;
 use think\facade\Validate;
 use think\facade\View;
 
@@ -36,16 +37,16 @@ class Index
         }
 
         if (is_file(root_path() . '.env')) {
-            session('step', 2);
+            Session::set('step', 2);
             View::assign('next', '重新安装');
             View::assign('nextUrl', get_url('step3'));
         } else {
-            session('step', 1);
+            Session::set('step', 1);
             View::assign('next', '接 受');
             View::assign('nextUrl', get_url('step2'));
         }
 
-        session('error', false);
+        Session::set('error', false);
         return View::fetch();
     }
 
@@ -55,8 +56,8 @@ class Index
      */
     public function step2()
     {
-        session('step', 2);
-        session('error', false);
+        Session::set('step', 2);
+        Session::set('error', false);
 
         // 环境检测
         $env = check_env();
@@ -71,7 +72,7 @@ class Index
         View::assign('func', $func);
 
         // 是否可执行下一步
-        View::assign('isNext', false === session('error'));
+        View::assign('isNext', !Session::get('error'));
 
         return View::fetch();
     }
@@ -82,12 +83,12 @@ class Index
      */
     public function step3()
     {
-        if (session('step') != 2) {
+        if (Session::get('step') != 2) {
             $this->redirect(get_url());
         }
 
-        session('step', 3);
-        session('error', false);
+        Session::set('step', 3);
+        Session::set('error', false);
 
         View::assign('apiBase', url('/api', [], false, true)->build());
         return View::fetch();
@@ -125,7 +126,7 @@ class Index
 
             // 缓存配置数据
             $data['type'] = 'mysql';
-            session('installData', $data);
+            Session::set('installData', $data);
 
             // 数据库检测
             try {
@@ -180,11 +181,11 @@ class Index
             $this->success('success', get_url('step4'));
         }
 
-        if (session('step') != 3) {
+        if (Session::get('step') != 3) {
             $this->redirect(get_url());
         }
 
-        session('step', 4);
+        Session::set('step', 4);
         Cache::tag('install')->clear();
 
         return View::fetch();
@@ -196,12 +197,12 @@ class Index
      */
     public function install()
     {
-        if (session('step') != 4 || !$this->request->isAjax()) {
+        if (Session::get('step') != 4 || !$this->request->isAjax()) {
             $this->error('请按步骤安装');
         }
 
         // 数据准备
-        $data = session('installData');
+        $data = Session::get('installData');
         $type = $this->request->post('type');
         $result = ['status' => 1, 'type' => $type];
         $dataPath = app_path() . 'data' . DIRECTORY_SEPARATOR;
@@ -318,6 +319,14 @@ class Index
             }
 
             $result['status'] = 0;
+            $adminData['password'] = $data['admin_password'];
+
+            $baseData = [
+                'admin' => $adminData,
+                'app'   => $appData,
+            ];
+
+            Session::set('system_data', $baseData);
             $this->success('安装完成！', get_url('complete'), $result);
         }
 
@@ -331,11 +340,11 @@ class Index
      */
     public function complete()
     {
-        if (session('step') != 4) {
+        if (Session::get('step') != 4) {
             $this->error('请按步骤安装系统', get_url());
         }
 
-        if (session('error')) {
+        if (Session::get('error')) {
             $this->error('安装出错，请重新安装！', get_url());
         }
 
@@ -343,19 +352,21 @@ class Index
         $lockPath = app_path() . 'data' . DIRECTORY_SEPARATOR . 'install.lock';
         file_put_contents($lockPath, 'lock');
 
-        // 清理记录
-        session('step', null);
-        session('error', null);
-        session('installData', null);
-
         // 清理缓存资源(Cache::clear()其实可以不写,clear命令同样清理缓存)
         // 但防止系统不支持"shell_exec"还是需要单独清理
         Cache::clear();
+
+        // 获取系统生成数据
+        $data = Session::get('system_data', []);
+
+        // 清理Session
+        Session::clear();
 
         if (!ini_get('safe_mode') && function_exists('shell_exec')) {
             shell_exec(sprintf('php "%s" %s', root_path() . 'think', 'clear'));
         }
 
+        View::assign('system_data', $data);
         return View::fetch();
     }
 }

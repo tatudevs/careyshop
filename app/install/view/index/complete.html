@@ -4,7 +4,12 @@
     <div class="success_tip cc">
         <a href="{:request()->baseFile()}/admin/" class="f16 b">安装完成，进入后台管理</a>
         <p>删除"app\install\data"目录下的"install.lock"可再次重新安装。<p>
-        <p>再次感谢您选择 CareyShop，希望您会喜欢我们的产品！<p>
+        <p>再次感谢您选择 CareyShop，希望您会喜欢我们的产品！<p><br>
+        <p><span>管理员账号：</span>{$system_data['admin']['username']}</p>
+        <p><span>管理员密码：</span>{$system_data['admin']['password']}</p><br>
+        <p><span>API_BASE：</span>{$system_data['app']['base_api']}</p>
+        <p><span>APP_KEY：</span>{$system_data['app']['app_key']}</p>
+        <p><span>APP_SECRET：</span>{$system_data['app']['app_secret']}</p>
     </div>
 
     <div class="bottom tac">
