@@ -156,7 +156,7 @@ class ApiOutput
             self::$format = $data['callback_return_type'];
             $result = $data['is_callback'];
         } else {
-            // 正常请求返回
+            // 返回结构确定
             $result = [
                 'status'  => $code,
                 'message' => $error == true ? empty($message) ? '发生未知异常' : $message : 'success',
