@@ -216,8 +216,10 @@ class Brand extends CareyShop
         empty($data['name']) ?: $map[] = ['b.name', 'like', '%' . $data['name'] . '%'];
         empty($catIdList) ?: $map[] = ['b.goods_category_id', 'in', $catIdList];
 
-        if (is_client_admin() && !is_empty_parm($data['status'])) {
-            $map[] = ['b.status', '=', $data['status']];
+        if (is_client_admin()) {
+            if (!is_empty_parm($data['status'])) {
+                $map[] = ['b.status', '=', $data['status']];
+            }
         } else {
             $map[] = ['b.status', '=', 1];
         }
