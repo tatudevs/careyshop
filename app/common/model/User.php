@@ -179,6 +179,26 @@ class User extends CareyShop
     }
 
     /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetUserLevelAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetAuthGroupAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
      * 注册一个新账号
      * @access public
      * @param array $data 外部数据

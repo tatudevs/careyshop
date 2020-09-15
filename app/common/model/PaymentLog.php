@@ -67,6 +67,16 @@ class PaymentLog extends CareyShop
     }
 
     /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetUserAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
      * 生成唯一交易流水号
      * @access private
      * @return string

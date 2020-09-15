@@ -174,6 +174,36 @@ class GoodsComment extends CareyShop
     }
 
     /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetAdditionAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetOrderGoodsAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetUserAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
      * 添加一条新的商品评价
      * @access public
      * @param array $data 外部数据
@@ -690,7 +720,7 @@ class GoodsComment extends CareyShop
             $result['getUser']->setAttr('nickname', auto_hid_substr($result['getUser']->getAttr('nickname')));
         }
 
-        if ($result['get_addition']) {
+        if ($result->getData('get_addition')) {
             $result['get_addition']->append(['ip_address_region']);
         }
 

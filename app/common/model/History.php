@@ -66,6 +66,16 @@ class History extends CareyShop
     }
 
     /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetGoodsAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
      * 添加一个我的足迹
      * @access public
      * @param array $data 外部数据

@@ -69,6 +69,16 @@ class CardUse extends CareyShop
     }
 
     /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetUserAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
      * 绑定购物卡
      * @access public
      * @param  array $data 外部数据

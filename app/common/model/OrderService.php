@@ -132,6 +132,36 @@ class OrderService extends CareyShop
     }
 
     /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetOrderRefundAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetUserAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetAdminAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
      * 生成唯一售后单号
      * @access private
      * @return string

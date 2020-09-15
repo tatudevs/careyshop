@@ -93,6 +93,26 @@ class GoodsConsult extends CareyShop
     }
 
     /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetUserAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetGoodsAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
      * 添加一个新的商品咨询
      * @access public
      * @param array $data 外部数据

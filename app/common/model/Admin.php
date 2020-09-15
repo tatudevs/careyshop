@@ -135,6 +135,16 @@ class Admin extends CareyShop
     }
 
     /**
+     * 关联查询NULL处理
+     * @param mixed $value
+     * @return \stdClass
+     */
+    public function getGetAuthGroupAttr($value)
+    {
+        return is_null($value) ? new \stdClass : $value;
+    }
+
+    /**
      * 验证当前账户是否有越级操作
      * @access private
      * @param null $adminID admin_id

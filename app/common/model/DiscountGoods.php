@@ -46,9 +46,7 @@ class DiscountGoods extends CareyShop
      */
     public function getGoods()
     {
-        return $this
-            ->hasOne(Goods::class, 'goods_id', 'goods_id')
-            ->field('goods_id,name,store_qty,sales_sum,status,is_delete');
+        return $this->hasOne(Goods::class, 'goods_id', 'goods_id');
     }
 
     /**
@@ -118,11 +116,20 @@ class DiscountGoods extends CareyShop
         }
 
         // 搜索条件
-        $map[] = ['discount_id', '=', $data['discount_id']];
+        $map[] = ['discount_goods.discount_id', '=', $data['discount_id']];
+        $map[] = ['getGoods.status', '=', 1];
+        $map[] = ['getGoods.is_delete', '=', 0];
+        $map[] = ['getGoods.store_qty', '>', 0];
 
-        return $this->with('get_goods')
+        // 关联查询
+        $with['getGoods'] = ['name', 'store_qty', 'sales_sum', 'attachment'];
+
+        $result = $this->withJoin($with)
             ->where($map)
             ->select()
             ->toArray();
+
+        self::keyToSnake(['getGoods'], $result);
+        return $result;
     }
 }
