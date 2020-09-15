@@ -144,7 +144,7 @@ class GoodsReply extends CareyShop
      */
     public function getReplyList(array $data)
     {
-        if (!$this->validateData($data, 'GoodsReply.list')) {
+        if (!$this->validateData($data, 'list')) {
             return false;
         }
 

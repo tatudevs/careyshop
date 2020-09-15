@@ -1644,7 +1644,7 @@ class OrderService extends CareyShop
         }
 
         if ($serviceDb->getAttr('is_return') === 1) {
-            if (!$this->validateData($data, 'OrderService.logistic')) {
+            if (!$this->validateData($data, 'logistic')) {
                 return false;
             }
         }
