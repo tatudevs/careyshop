@@ -31,59 +31,6 @@ class ApiOutput
     public static $headerValue;
 
     /**
-     * 初始化
-     */
-    public static function init()
-    {
-        self::$headerKey = base64_decode('WC1Qb3dlcmVkLUJ5');
-        self::$headerValue = base64_decode('Q2FyZXlTaG9w');
-    }
-
-    /**
-     * 响应头
-     */
-    public static function setCrossDomain()
-    {
-        $isOrigin = Request::has('origin', 'header');
-        $allowOrigin = json_decode(Config::get('careyshop.system_info.allow_origin'), true);
-        self::$header[self::$headerKey] = self::$headerValue . '/' . get_version();
-
-        // 未配置跨域或"origin"不存在时不返回访问控制(CORS)
-        if (empty($allowOrigin) || !$isOrigin) {
-            return;
-        }
-
-        $origin = Request::header('origin');
-        if (empty($origin)) {
-            /**
-             * "origin"键名存在,但缺少键值,可能是由于30x跳转或其他各方面原因
-             * 所以在这里对"origin"键值进行模拟生成,但也有被游览器拦截的可能
-             * 比如Chrome对30x跳转后"origin=null"处理,导致诸多问题
-             * 使用SSL就没有那么多麻烦,或者指定url协议头不进行重定向.
-             */
-            $referer = Request::header('referer');
-            if (empty($referer)) {
-                return;
-            }
-
-            $url = parse_url($referer);
-            $origin = sprintf('%s://%s', $url['scheme'], $url['host']);
-            isset($url['port']) && $origin .= ':' . $url['port'];
-        }
-
-        if (!in_array('*', $allowOrigin) && !in_array($origin, $allowOrigin)) {
-            return;
-        }
-
-        self::$header['Access-Control-Allow-Origin'] = $origin;
-        self::$header['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS';
-        self::$header['Access-Control-Allow-Credentials'] = 'true';
-        self::$header['Access-Control-Allow-Headers'] = 'Content-Type, Accept';
-        self::$header['Access-Control-Expose-Headers'] = '*';
-        self::$header['Access-Control-Max-Age'] = '86400'; // 1天
-    }
-
-    /**
      * @param $result
      * @param $code
      * @return \think\response\Json
@@ -172,8 +119,9 @@ class ApiOutput
         }
 
         // 按请求格式返回
-        self::init();
-        self::setCrossDomain();
+        self::$headerKey = base64_decode('WC1Qb3dlcmVkLUJ5');
+        self::$headerValue = base64_decode('Q2FyZXlTaG9w');
+        self::$header[self::$headerKey] = self::$headerValue . '/' . get_version();
 
         switch (self::$format) {
             case 'view':

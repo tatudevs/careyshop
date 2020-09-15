@@ -122,7 +122,7 @@ class Notice extends CareyShop
 
         if (!empty($result)) {
             $this->saveAll($result);
-            Cache::delete('setting');
+            Cache::tag('setting')->clear();
             return true;
         }
 
@@ -197,7 +197,7 @@ class Notice extends CareyShop
 
             $settingData = json_encode($settingData, JSON_UNESCAPED_UNICODE);
             self::update(['value' => $settingData], $map);
-            Cache::delete('setting');
+            Cache::tag('setting')->clear();
 
             return true;
         }

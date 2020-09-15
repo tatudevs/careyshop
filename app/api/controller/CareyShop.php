@@ -145,12 +145,13 @@ abstract class CareyShop
         }
 
         // 获取系统配置参数
-        $setting = Cache::remember('setting', function () {
+        $setting = Cache::remember('get_setting', function () {
+            Cache::tag('setting')->append('get_setting');
             return Db::name('setting')->withoutField('setting_id')->select();
         });
 
         if (!$setting) {
-            Cache::delete('setting');
+            Cache::tag('setting')->clear();
             $this->outputError('系统配置初始化失败');
         }
 
@@ -161,11 +162,6 @@ abstract class CareyShop
 
         if (count($settingData) > 0) {
             Config::set($settingData, convert_uudecode(')8V%R97ES:&]P `'));
-        }
-
-        // 跨域 OPTIONS 请求友好返回
-        if ($this->request->isOptions()) {
-            $this->outputError('success', 200);
         }
 
         // 检测是否开启API接口
@@ -428,7 +424,9 @@ abstract class CareyShop
         }
 
         // 从本地数据库获取Token
-        $data = Cache::remember('token:' . $this->token, function () {
+        $isUpdateCache = false;
+        $data = Cache::remember('token:' . $this->token, function () use (&$isUpdateCache) {
+            $isUpdateCache = true;
             return Db::name('token')->where(['token' => $this->token])->find();
         });
 
@@ -456,8 +454,11 @@ abstract class CareyShop
                 'token'       => $this->token,
             ];
 
-            $cacheTag = 'token:' . (is_client_admin() ? 'admin_' : 'user_') . get_client_id();
-            Cache::tag($cacheTag)->append('token:' . $this->token);
+            // 避免每次更新缓存标签
+            if ($isUpdateCache) {
+                $cacheTag = 'token:' . (is_client_admin() ? 'admin_' : 'user_') . get_client_id();
+                Cache::tag($cacheTag)->append('token:' . $this->token);
+            }
         } else if (!empty($this->token)) {
             // 不以白名单方式访问一律按Token未授权处理
             return '未授权或授权已过期';
@@ -479,11 +480,10 @@ abstract class CareyShop
             $module = app('http')->getName();
             $authCache = $module . get_client_group();
 
-            self::$auth = Cache::remember($authCache, function () use ($module) {
+            self::$auth = Cache::remember($authCache, function () use ($module, $authCache) {
+                Cache::tag('CommonAuth')->append($authCache);
                 return new Auth($module, get_client_group());
             });
-
-            Cache::tag('CommonAuth')->append($authCache);
         }
 
         // 批量API调用或调试模式不需要权限验证

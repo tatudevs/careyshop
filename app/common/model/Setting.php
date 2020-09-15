@@ -124,7 +124,7 @@ class Setting extends CareyShop
             }
 
             $this->commit();
-            Cache::delete('setting');
+            Cache::tag('setting')->clear();
             return true;
         } catch (\Exception $e) {
             $this->rollback();
@@ -161,7 +161,7 @@ class Setting extends CareyShop
             }
 
             $this->commit();
-            Cache::delete('setting');
+            Cache::tag('setting')->clear();
             return true;
         } catch (\Exception $e) {
             $this->rollback();
@@ -218,7 +218,7 @@ class Setting extends CareyShop
             }
 
             $this->commit();
-            Cache::delete('setting');
+            Cache::tag('setting')->clear();
             return true;
         } catch (\Exception $e) {
             $this->rollback();
@@ -272,7 +272,7 @@ class Setting extends CareyShop
             }
 
             $this->commit();
-            Cache::delete('setting');
+            Cache::tag('setting')->clear();
             return true;
         } catch (\Exception $e) {
             $this->rollback();
@@ -316,7 +316,7 @@ class Setting extends CareyShop
             }
 
             $this->commit();
-            Cache::delete('setting');
+            Cache::tag('setting')->clear();
             return true;
         } catch (\Exception $e) {
             $this->rollback();
@@ -385,7 +385,7 @@ class Setting extends CareyShop
             }
 
             $this->commit();
-            Cache::delete('setting');
+            Cache::tag('setting')->clear();
             return true;
         } catch (\Exception $e) {
             $this->rollback();
@@ -516,7 +516,7 @@ class Setting extends CareyShop
             }
 
             $this->commit();
-            Cache::delete('setting');
+            Cache::tag('setting')->clear();
             return true;
         } catch (\Exception $e) {
             $this->rollback();
