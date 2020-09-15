@@ -184,6 +184,7 @@ class DeliveryDist extends CareyShop
             $result = Http::httpPost(self::FOLLOW_URL, $postData);
             $result = json_decode($result, true);
 
+            // todo 快递格式不允许订阅时如何处理?
             if (!isset($result['Success']) || true != $result['Success']) {
                 return $this->setError(isset($result['Reason']) ? $result['Reason'] : '订阅配送轨迹出错');
             }
