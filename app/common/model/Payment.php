@@ -587,12 +587,12 @@ class Payment extends CareyShop
     /**
      * 结算订单付款
      * @access private
-     * @param object &$model        支付模块
-     * @param object &$paymentLogDb 支付日志
-     * @param int     $toPayment    支付方式
+     * @param object $model        支付模块
+     * @param object $paymentLogDb 支付日志
+     * @param int    $toPayment    支付方式
      * @return bool
      */
-    private function settleOrder(&$model, &$paymentLogDb, int $toPayment)
+    private function settleOrder($model, $paymentLogDb, int $toPayment)
     {
         // 共用参数提取
         $userId = $paymentLogDb->getAttr('user_id');
@@ -659,12 +659,12 @@ class Payment extends CareyShop
     /**
      * 结算账号充值
      * @access private
-     * @param object &$model        支付模块
-     * @param object &$paymentLogDb 支付日志
-     * @param int     $toPayment    支付方式
+     * @param object $model        支付模块
+     * @param object $paymentLogDb 支付日志
+     * @param int    $toPayment    支付方式
      * @return bool
      */
-    private function settlePay(&$model, &$paymentLogDb, int $toPayment)
+    private function settlePay($model, $paymentLogDb, int $toPayment)
     {
         // 共用参数提取
         $userId = $paymentLogDb->getAttr('user_id');

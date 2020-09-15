@@ -1406,12 +1406,12 @@ class OrderService extends CareyShop
     /**
      * 退回购物卡可用余额
      * @access private
-     * @param float   $value     值
-     * @param object &$orderDb   订单模型
-     * @param string  $serviceNo 售后单号
+     * @param float  $value     值
+     * @param object $orderDb   订单模型
+     * @param string $serviceNo 售后单号
      * @return bool
      */
-    private function refundCardUser(float $value, &$orderDb, string $serviceNo)
+    private function refundCardUser(float $value, $orderDb, string $serviceNo)
     {
         if ($value <= 0) {
             return true;
@@ -1448,12 +1448,12 @@ class OrderService extends CareyShop
     /**
      * 原路退回在线支付
      * @access private
-     * @param float   $value     值
-     * @param array   $orderData 订单数据
-     * @param object &$serviceDb 售后单模型
+     * @param float  $value     值
+     * @param array  $orderData 订单数据
+     * @param object $serviceDb 售后单模型
      * @return bool
      */
-    private function refundPayment(float $value, array $orderData, &$serviceDb)
+    private function refundPayment(float $value, array $orderData, $serviceDb)
     {
         if ($value <= 0 || $orderData['total_amount'] <= 0 || empty($orderData['payment_no'])) {
             return true;
@@ -1476,10 +1476,10 @@ class OrderService extends CareyShop
     /**
      * 当仅退款或退款退货总金额到达订单金额时关闭订单
      * @access private
-     * @param object &$orderDb 订单模型
+     * @param object $orderDb 订单模型
      * @return bool
      */
-    private function isCancelOrder(&$orderDb)
+    private function isCancelOrder($orderDb)
     {
         // 查询是否已全部退款
         $map[] = ['order_no', '=', $orderDb->getAttr('order_no')];
@@ -1508,11 +1508,11 @@ class OrderService extends CareyShop
     /**
      * 完成仅退款、退款退货售后服务单
      * @access private
-     * @param array   $data      外部数据
-     * @param object &$serviceDb 售后单模型
+     * @param array  $data      外部数据
+     * @param object $serviceDb 售后单模型
      * @return bool
      */
-    private function completeContainsFeeService(array $data, &$serviceDb)
+    private function completeContainsFeeService(array $data, $serviceDb)
     {
         if (!is_object($serviceDb)) {
             return $this->setError('参数异常');
@@ -1633,11 +1633,11 @@ class OrderService extends CareyShop
     /**
      * 完成换货、维修售后服务单
      * @access private
-     * @param array   $data      外部数据
-     * @param object &$serviceDb 数据模型
+     * @param array  $data      外部数据
+     * @param object $serviceDb 数据模型
      * @return bool
      */
-    private function completeNotFeeService(array $data, &$serviceDb)
+    private function completeNotFeeService(array $data, $serviceDb)
     {
         if (!is_object($serviceDb)) {
             return $this->setError('参数异常');
