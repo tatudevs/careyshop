@@ -91,8 +91,9 @@ class ArticleCat extends CareyShop
 
         // 搜索条件
         $map[] = ['article_cat_id', '=', $data['article_cat_id']];
-
         $result = self::update($data, $map);
+
+        Cache::tag('ArticleCat')->clear();
         return $result->toArray();
     }
 
