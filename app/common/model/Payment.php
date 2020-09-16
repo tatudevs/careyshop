@@ -11,6 +11,7 @@
 namespace app\common\model;
 
 use think\facade\Cache;
+use app\common\validate\Recharge as Validate;
 
 class Payment extends CareyShop
 {
@@ -311,7 +312,7 @@ class Payment extends CareyShop
      */
     public function setPaymentFinance(array $data)
     {
-        if (!$this->validateData($data, 'finance')) {
+        if (!$this->validateData($data, 'finance', false, Validate::class)) {
             return false;
         }
 
@@ -400,7 +401,7 @@ class Payment extends CareyShop
      */
     public function userPaymentPay(array $data)
     {
-        if (!$this->validateData($data, 'user')) {
+        if (!$this->validateData($data, 'user', false, Validate::class)) {
             return false;
         }
 
@@ -460,7 +461,7 @@ class Payment extends CareyShop
      */
     public function orderPaymentPay(array $data)
     {
-        if (!$this->validateData($data, 'order')) {
+        if (!$this->validateData($data, 'order', false, Validate::class)) {
             return false;
         }
 
@@ -534,7 +535,7 @@ class Payment extends CareyShop
      */
     public function putPaymentData(array $data)
     {
-        if (!$this->validateData($data, 'put')) {
+        if (!$this->validateData($data, 'put', false, Validate::class)) {
             return false;
         }
 
