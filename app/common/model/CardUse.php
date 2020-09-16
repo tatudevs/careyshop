@@ -427,7 +427,7 @@ class CardUse extends CareyShop
 
             // 无效状态
             if ($data['type'] == 'invalid') {
-                $map[] = ['getCard.end_time', 'exp', Db::raw('<> 0 AND `getCard`.`end_time` < ' . time())];
+                $mapOr[] = ['getCard.end_time', 'exp', Db::raw('<> 0 AND `getCard`.`end_time` < ' . time())];
                 $mapOr[] = ['card_use.money', '<=', 0];
                 $mapOr[] = ['card_use.is_invalid', '=', 0];
             }
@@ -440,7 +440,7 @@ class CardUse extends CareyShop
         $result['total_result'] = $this
             ->withJoin($with)
             ->where($map)
-            ->whereOr(function ($query) use ($mapOr) {
+            ->where(function ($query) use ($mapOr) {
                 $query->whereOr($mapOr);
             })
             ->count();
@@ -452,7 +452,7 @@ class CardUse extends CareyShop
         $temp = $this->setDefaultOrder(['card_use_id' => 'desc'])
             ->withJoin($with)
             ->where($map)
-            ->whereOr(function ($query) use ($mapOr) {
+            ->where(function ($query) use ($mapOr) {
                 $query->whereOr($mapOr);
             })
             ->withSearch(['page', 'order'], $data)

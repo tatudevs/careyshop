@@ -389,6 +389,9 @@ class CouponGive extends CareyShop
             ->withoutField('is_delete')
             ->withJoin($with)
             ->where($map)
+            ->where(function ($query) use ($mapOr) {
+                $query->whereOr($mapOr);
+            })
             ->withSearch(['page', 'order'], $data)
             ->select()
             ->hidden(['getCoupon.is_delete'])
