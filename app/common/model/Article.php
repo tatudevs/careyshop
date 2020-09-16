@@ -185,8 +185,8 @@ class Article extends CareyShop
 
         // 搜索条件
         $map = [];
-        empty($catIdList) ?: $map['article.article_cat_id'] = ['in', $catIdList];
-        empty($data['title']) ?: $map['article.title'] = ['like', '%' . $data['title'] . '%'];
+        empty($catIdList) ?: $map[] = ['article_cat_id', 'in', $catIdList];
+        empty($data['title']) ?: $map[] = ['title', 'like', '%' . $data['title'] . '%'];
 
         // 后台管理搜索
         if (is_client_admin()) {

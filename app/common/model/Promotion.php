@@ -238,8 +238,8 @@ class Promotion extends CareyShop
         $map = [];
         empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
         is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
-        empty($data['begin_time']) ?: $map['begin_time'] = ['< time', $data['end_time']];
-        empty($data['end_time']) ?: $map['end_time'] = ['> time', $data['begin_time']];
+        empty($data['begin_time']) ?: $map[] = ['begin_time', '< time', $data['end_time']];
+        empty($data['end_time']) ?: $map[] = ['end_time', '> time', $data['begin_time']];
 
         $result['total_result'] = $this->where($map)->count();
         if ($result['total_result'] <= 0) {

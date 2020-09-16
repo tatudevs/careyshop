@@ -135,7 +135,7 @@ class Region extends CareyShop
         }
 
         // 搜索条件
-        $map['region_id'] = ['in', $data['region_id']];
+        $map[] = ['region_id', 'in', $data['region_id']];
 
         self::update(['is_delete' => 1], $map);
         Cache::delete('DeliveryArea');
