@@ -11,6 +11,8 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\model\OrderGoods;
+use app\common\model\OrderLog;
 
 class Order extends CareyShop
 {
@@ -55,9 +57,9 @@ class Order extends CareyShop
             // 订单批量确认收货
             'complete.order.list'     => ['completeOrderList'],
             // 获取一个订单商品明细
-            'get.order.goods.item'    => ['getOrderGoodsItem', 'app\common\model\OrderGoods'],
+            'get.order.goods.item'    => ['getOrderGoodsItem', OrderGoods::class],
             // 获取一个订单操作日志
-            'get.order.log'           => ['getOrderLog', 'app\common\model\OrderLog'],
+            'get.order.log'           => ['getOrderLog', OrderLog::class],
         ];
     }
 }

@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\model\MessageUser;
 
 class Message extends CareyShop
 {
@@ -41,13 +42,13 @@ class Message extends CareyShop
             // 用户获取未读消息数
             'get.message.user.unread'  => ['getMessageUserUnread'],
             // 用户批量设置消息已读
-            'set.message.user.read'    => ['setMessageUserRead', 'app\common\model\MessageUser'],
+            'set.message.user.read'    => ['setMessageUserRead', MessageUser::class],
             // 用户设置消息全部已读
-            'set.message.user.allread' => ['setMessageUserAllRead', 'app\common\model\MessageUser'],
+            'set.message.user.allread' => ['setMessageUserAllRead', MessageUser::class],
             // 用户批量删除消息
-            'del.message.user.list'    => ['delMessageUserList', 'app\common\model\MessageUser'],
+            'del.message.user.list'    => ['delMessageUserList', MessageUser::class],
             // 用户删除全部消息
-            'del.message.user.all'     => ['delMessageUserAll', 'app\common\model\MessageUser'],
+            'del.message.user.all'     => ['delMessageUserAll', MessageUser::class],
         ];
     }
 }

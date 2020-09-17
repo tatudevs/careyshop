@@ -11,6 +11,8 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\model\GoodsAttrConfig;
+use app\common\model\SpecConfig;
 
 class Goods extends CareyShop
 {
@@ -63,9 +65,9 @@ class Goods extends CareyShop
             // 获取指定商品的规格图
             'get.goods.spec.image'       => ['getGoodsSpecImage'],
             // 获取指定商品的属性配置数据
-            'get.goods.attr.config'      => ['getAttrConfigItem', 'app\common\model\GoodsAttrConfig'],
+            'get.goods.attr.config'      => ['getAttrConfigItem', GoodsAttrConfig::class],
             // 获取指定商品的规格配置数据
-            'get.goods.spec.config'      => ['getSpecConfigItem', 'app\common\model\SpecConfig'],
+            'get.goods.spec.config'      => ['getSpecConfigItem', SpecConfig::class],
             // 获取指定商品的规格菜单数据
             'get.goods.spec.menu'        => ['getGoodsSpecMenu'],
         ];

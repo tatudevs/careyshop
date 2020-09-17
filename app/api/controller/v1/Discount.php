@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\model\DiscountGoods;
 
 class Discount extends CareyShop
 {
@@ -35,9 +36,9 @@ class Discount extends CareyShop
             // 获取商品折扣列表
             'get.discount.list'       => ['getDiscountList'],
             // 根据商品编号获取折扣信息
-            'get.discount.goods.info' => ['getDiscountGoodsInfo', 'app\common\model\DiscountGoods'],
+            'get.discount.goods.info' => ['getDiscountGoodsInfo', DiscountGoods::class],
             // 根据编号获取折扣商品明细
-            'get.discount.goods.list' => ['getDiscountGoodsList', 'app\common\model\DiscountGoods'],
+            'get.discount.goods.list' => ['getDiscountGoodsList', DiscountGoods::class],
         ];
     }
 }

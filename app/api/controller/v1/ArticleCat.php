@@ -32,7 +32,7 @@ class ArticleCat extends CareyShop
             // 获取一个文章分类
             'get.article.cat.item'  => ['getArticleCatItem'],
             // 获取文章分类列表
-            'get.article.cat.list'  => ['getArticleCatList'],
+            'get.article.cat.list'  => ['getArticleCatList', false],
             // 获取分类导航数据
             'get.article.cat.navi'  => ['getArticleCatNavi'],
             // 设置文章分类排序
