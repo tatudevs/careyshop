@@ -13253,23 +13253,23 @@ CREATE TABLE `{prefix}setting` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统配置';
 
 INSERT INTO `{prefix}setting` (`setting_id`, `code`, `value`, `module`, `description`, `help_text`) VALUES
-(1, 'api_id', '1286210', 'delivery_dist', '快递鸟商户ID', '填写快递鸟 <span style=\"color:#F56C6C;\">商户ID</span>'),
-(2, 'api_key', 'e5257ab3-7ac9-477d-a5d1-54cd7fc93974', 'delivery_dist', '快递鸟ApiKey', '填写快递鸟 <span style=\"color:#F56C6C;\">API key</span>'),
+(1, 'api_id', '', 'delivery_dist', '快递鸟商户ID', '填写快递鸟 <span style=\"color:#F56C6C;\">商户ID</span>'),
+(2, 'api_key', '', 'delivery_dist', '快递鸟ApiKey', '填写快递鸟 <span style=\"color:#F56C6C;\">API key</span>'),
 (3, 'is_sub', '1', 'delivery_dist', '是否启用订阅', '开启订阅后快递鸟会主动将配送轨迹推送到系统'),
 (4, 'success', 'http://www.careyshop.cn/', 'payment', '支付成功提示页', '支付成功后返回到的页面'),
 (5, 'error', 'http://www.careyshop.cn/', 'payment', '支付失败提示页', '支付失败后返回到的页面'),
-(6, 'sms', '{\"key_id\":{\"name\":\"Access Key ID\",\"value\":\"LTAIS84N5AozgaNj\"},\"key_secret\":{\"name\":\"Access Key Secret\",\"value\":\"2vaz6AmNMmgKO5oaYUs1bm2B1iYams\"},\"status\":{\"name\":\"启用状态\",\"value\":\"1\"}}', 'notice', '短信通知', '短信通知参数配置'),
-(7, 'email', '{\"email_host\":{\"name\":\"SMTP服务器\",\"value\":\"smtp.126.com\"},\"email_port\":{\"name\":\"SMTP端口\",\"value\":\"25\"},\"email_addr\":{\"name\":\"发信人邮箱地址\",\"value\":\"dnyz520@126.com\"},\"email_id\":{\"name\":\"SMTP身份验证用户名\",\"value\":\"dnyz520\"},\"email_pass\":{\"name\":\"SMTP身份验证码\",\"value\":\"123456\"},\"email_ssl\":{\"name\":\"是否使用安全链接\",\"value\":\"0\"},\"status\":{\"name\":\"启用状态\",\"value\":\"0\"}}', 'notice', '邮件通知', '邮件通知参数配置'),
+(6, 'sms', '{\"key_id\":{\"name\":\"Access Key ID\",\"value\":\"\"},\"key_secret\":{\"name\":\"Access Key Secret\",\"value\":\"\"},\"status\":{\"name\":\"启用状态\",\"value\":\"1\"}}', 'notice', '短信通知', '短信通知参数配置'),
+(7, 'email', '{\"email_host\":{\"name\":\"SMTP服务器\",\"value\":\"\"},\"email_port\":{\"name\":\"SMTP端口\",\"value\":\"\"},\"email_addr\":{\"name\":\"发信人邮箱地址\",\"value\":\"\"},\"email_id\":{\"name\":\"SMTP身份验证用户名\",\"value\":\"\"},\"email_pass\":{\"name\":\"SMTP身份验证码\",\"value\":\"\"},\"email_ssl\":{\"name\":\"是否使用安全链接\",\"value\":\"0\"},\"status\":{\"name\":\"启用状态\",\"value\":\"0\"}}', 'notice', '邮件通知', '邮件通知参数配置'),
 (8, 'money', '0', 'delivery', '满额包邮', '满多少金额启用全场包邮'),
 (9, 'money_status', '0', 'delivery', '满额是否启用', '满额是否启用'),
-(10, 'money_exclude', '[32,361,3537,3538,3539,3540,3541,3542,3543,3544,3545,3546,362,3547,3548,3549,3550,3551,363,3552,3553,3554,3555,364,3556,3557,3558,3559,365,3560,3561,3562,3563,3564,3565,3566,3567,3568,366,3569,3570,3571,3572,3573,367,3574,3575,3576,3577,3578,3579,3580,3581,3582,3583,368,3584,3585,3586,3587,3588,3589,3590,3591,3592,3593,369,3594,3595,3596,3597,3598,370,3599,3600,3601,3602,3603,3604,3605,3606,3607,3608,3609,3610,3611,371,3612,3613,3614,3615,3616,3617,3618,3619,3620,372,3621,3622,3623,3624,3625,3626,3627,3628,3629,3630,3631,373,3632,3633,3634,3635,3636,3637,3638,3639,374,3640,3641,3642,3643,3644,3645,3646,3647,34,397,4026,4027,4028,4029,398,4030,4031,4032,4033,4034,399,4035,4036,4037,4038,4039,4040,4041,4042,4043,35,400,401,33,375,3648,3649,3650,3651,3652,3653,3654,3655,3656,3657,3658,3659,3660,376,3661,3662,3663,3664,3665,3666,3667,3668,3669,3670,3671,3673,3674,3675,3676,3677,3678,3679,3680,3681,3682,3683,3684,3685,3686,3687,3688,3689,3690,3691,3692,3693,3694,3695,3696,3697,3698,3699,3700,3672,377,3701,3702,3703,3704,3705,3706,3708,3709,3710,3711,3712,3713,3714,3715,3716,3717,3718,3719,3720,3721,3722,3723,3724,3725,3726,3727,3728,3729,3730,3731,3732,3733,3734,3735,3736,3737,3738,3707,378,3739,3740,3741,3742,3743,3744,3745,3746,3748,3749,3750,3751,3752,3753,3754,3755,3756,3757,3758,3759,3760,3761,3762,3763,3764,3765,3766,3767,3768,3747,379,3769,3770,3771,3772,3773,3774,380,3775,3776,3777,3778,3779,3780,3781,3782,3783,3784,3785,3786,3787,381,3788,3789,3790,3791,3792,3793,3794,3795,382,3796,3797,3798,3799,383,3800,3801,3802,384,3803,3804,3805,3806,3807,3808,3809,3810,3811,3812,3813,3814,3815,3816,3817,3818,3819,3820,3821,3822,3823,3824,3825,3826,3827,3828,3829,3830,3831,385,3832,3833,3834,3835,3836,3837,3838,3839,3840,3841,3842,3843,3844,386,3845,3846,3847,3848,3849,3850,3851,3852,3853,3854,3855,3856,3857,387,3858,3859,3860,3861,3862,3863,3864,3865,3866,3867,3868,3869,3870,388,3871,3872,3873,3874,3875,3876,3877,3878,3879,3880,3881,3882,3883,3884,3885,3886,3887,3888,389,3889,3890,3891,3892,3893,3894,3895,3896,3897,3898,3899,3900,3901,3902,3903,3904,3905,3906,3907,3908,3909,3910,3911,3912,3913,3914,390,3915,3916,3917,3918,3919,3920,3921,3922,3923,3924,3925,3926,3927,3928,3929,3930,3931,3932,391,3933,3934,3935,3936,3937,3938,3939,3940,3941,3942,3943,3944,3945,3946,3947,3948,3949,3950,3951,3952,392,3953,3954,3955,3956,3957,3958,3959,3960,3961,3962,3963,3964,3965,3966,3967,3968,3969,3970,3971,3972,3973,3974,3975,3976,3977,3978,3979,3980,3981,3982,3983,3984,3985,393,3986,3987,3988,3989,3990,3991,3992,3993,3994,3995,3996,3997,3998,3999,4000,4001,394,4002,4003,4004,4005,4006,4007,4008,4009,4010,4011,4012,4013,4014,4015,395,4016,4017,4018,4019,4020,4021,396,4022,4023,4024,4025,4080,4081,4083,4084]', 'delivery', '满额不包邮区域', '满额不包邮区域'),
+(10, 'money_exclude', '[]', 'delivery', '满额不包邮区域', '满额不包邮区域'),
 (11, 'number', '0', 'delivery', '满件包邮', '满多少件商品启用全场包邮'),
 (12, 'number_status', '0', 'delivery', '满件是否启用', '满件是否启用'),
-(13, 'number_exclude', '[9,96,1067,1068,1069,1070,1071,1072,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1083,1084,1085,1086,1087,97,1088,1089,1090,1091,1092,1093,1094,1095,1096,1097,1098,1099,1100,1101,1102,1103,1104,98,1105,1106,1107,1108,1109,1110,1111,1112,1113,1114,99,1115,1116,1117,1118,1119,1120,1121,1122,1123,100,1124,1125,1126,1127,1128,1129,1130,1131,1132,101,1133,1134,1135,1136,1137,1138,1139,1140,1141,1142,102,1143,1144,1145,1146,1147,1148,1149,1150,1151,1152,1153,1154,1155,1156,1157,1158,1159,1160,103,1161,1162,1163,1164,1165,1166,1167,1168,1169,1170,1171,1172,104,1173,1174,1175,1176,1177,105,1178,1179,1180,1181,1182,1183,1184,1185,1186,1187,1188,106,1189,1190,1191,1192,1193,1194,1195,107,1196,1197,1198,1199,1200,1201,1202,1203,1204,1205,1206,108,1207,1208,1209,1210,1211,1212,1213,1214,6,61,760,761,762,763,764,765,766,767,768,769,62,770,771,772,773,774,775,776,777,778,779,63,780,781,782,783,64,784,785,786,787,788,789,790,791,792,793,794,795,796,65,797,798,799,800,801,802,803,804,805,66,806,807,808,809,810,811,812,813,814,67,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,68,830,831,832,833,834,835,836,837,69,838,839,840,841,842,843,844,845,846,847,848,849,70,850,851,852,853,854,855,856,71,857,858,859,860,861,862,863,864,865,866,867,868,869,72,870,871,872,873]', 'delivery', '满件不包邮区域', '满件不包邮区域'),
+(13, 'number_exclude', '[]', 'delivery', '满件不包邮区域', '满件不包邮区域'),
 (14, 'quota', '0', 'delivery', '满额减运费', '满多少金额启用全场减运费'),
 (15, 'dec_money', '0', 'delivery', '满额减多少运费', '满额减多少运费'),
 (16, 'dec_status', '0', 'delivery', '满额减是否启用', '满额减是否启用'),
-(17, 'dec_exclude', '[20,231,2387,2388,2389,2390,2391,2392,2393,2394,2395,2396,2397,2398,2399,2400,232,2401,2402,2403,2404,2405,2406,2407,2408,2409,2410,2411,233,2412,2413,2414,2415,2416,2417,2419,2420,2421,2422,2418,234,2423,2424,2425,2426,2427,2428,235,2429,2430,2431,2432,2433,2434,2435,2436,236,2437,2438,2439,2440,2441,2442,237,2443,2444,2445,2446,2447,2448,2449,2450,238,2451,2452,2453,2454,2455,2456,2457,2458,2459,2460,239,2461,2462,2463,2464,2465,2466,2467,240,2468,2469,2470,2471,2472,2473,2474,2475,2476,241,2477,2478,2479,2480,2481,2482,242,2483,2484,2485,2486,2487,2488,2489,2490,2491,243,2492,2493,2494,2495,2496,244,2497,2498,2499,2500,2501,2502,2503,245,2504,2505,2506,2507,2508,246,2509,2510,2511,2512,2513,2514,2515,2516,2517,247,248,249,250,2518,2519,2520,2521,2522,251,2523,2524,2525,2526,2527,2528,2529,252,2530,2531,2532,2533,2534,2535,21,253,2536,2537,2538,2539,2540,2541,2542,2543,2544,2545,2546,2547,2548,254,2549,2550,2551,2552,2553,2554,2555,2556,2557,2558,2559,255,2560,2561,2562,2563,2564,2565,2566,2567,2568,2569,2570,2571,2572,2573,2574,2575,2576,2577,256,2578,2579,2580,2581,2582,2583,2584,2585,2586,257,2587,2588,2589,2590,2591,258,2592,2593,2594,2595,2596,259,2597,2598,2599,2600,2601,260,2602,2603,2604,2605,2606,2607,261,2608,2609,2610,2611,2612,2613,2614,2615,262,2616,2617,2618,2619,2620,2621,2622,2623,2624,2625,2626,2627,2628,263,2629,2630,2631,2632,2633,2634,264,2635,2636,2637,2638,2639,2640,2641,2642,2643,2644,2645,2646,265,2647,2648,2649,2650,2651,2652,2653,266,2654,2655,2656,2657,2658,2659,2660,2661]', 'delivery', '满额减排除区域', '满额减排除区域'),
+(17, 'dec_exclude', '[]', 'delivery', '满额减排除区域', '满额减排除区域'),
 (18, 'withdraw_fee', '6.5', 'system_shopping', '提现手续费(%)', '申请提现时系统收取的手续费，按总金额的百分比换算'),
 (19, 'integral', '100', 'system_shopping', '积分换算比例(1:x)', '积分可抵扣金额按多少比例换算，例如 1:100'),
 (20, 'timeout', '30', 'system_shopping', '下单后未付款自动取消(分)', '订单下单后超过多少分钟自动取消订单，单位：分'),
@@ -13278,52 +13278,53 @@ INSERT INTO `{prefix}setting` (`setting_id`, `code`, `value`, `module`, `descrip
 (23, 'spacer', ' ', 'system_shopping', '完整地址分隔符', '生成完整地址时省市区之间的分隔符，例如 浙江省<span style=\"color:#F56C6C;\">-</span>宁波市'),
 (24, 'invoice', '3', 'system_shopping', '开票收取多少税率(%)', '开票收取多少税率，按票面总金额的百分比换算'),
 (25, 'source', '{\"0\":{\"name\":\"电脑端\",\"icon\":\"diannao_o\"},\"1\":{\"name\":\"移动端\",\"icon\":\"shouji1_o\"},\"2\":{\"name\":\"小程序\",\"icon\":\"xiaochengxu_o\"},\"3\":{\"name\":\"微信\",\"icon\":\"weixin_o\"}}', 'system_shopping', '订单来源自定义', ''),
-(26, 'days', '15', 'service', '有效维权期天数(天)', '订单完成后多少天内允许申请售后服务，单位：天'),
-(27, 'address', '浙江省 宁波市 江北区 XXX路', 'service', '退换货地址', '售后服务退换货的详细地址'),
-(28, 'consignee', 'carey', 'service', '退换货收件人', '售后服务退换货的收件人姓名'),
-(29, 'zipcode', '315000', 'service', '退换货邮编', '售后服务退换货地址的邮编'),
-(30, 'mobile', '87487585', 'service', '退换货联系电话', '售后服务退换货收件人的联系电话'),
-(31, 'platform', '{\"0\":\"all\",\"1\":\"pc\",\"2\":\"mobile\",\"3\":\"ios\",\"4\":\"android\"}', 'system_info', '平台自定义值', ''),
-(32, 'open_index', '0', 'system_info', '是否开启首页', ''),
-(33, 'open_api', '1', 'system_info', '是否开启API接口', ''),
-(34, 'open_mobile', '0', 'system_info', '是否开启移动页', ''),
-(35, 'close_reason', '系统维护中，请稍后访问！', 'system_info', 'API接口关闭原因', ''),
-(36, 'allow_origin', '[\"*\"]', 'system_info', '允许跨域访问的域名', ''),
-(37, 'name', 'CarayShop商城', 'system_info', '商城名称', '商城名称，将显示在前台顶部欢迎信息等位置'),
-(38, 'title', 'CarayShop商城框架系统', 'system_info', '商城标题', '商城标题，将显示在前台顶部欢迎信息等位置'),
-(39, 'keywords', '开源新零售，开源小程序，开源微商城，开源商城，商城系统，免费商城', 'system_info', '商城关键词', '商城关键词，有利于对整站的SEO优化'),
-(40, 'description', 'CareyShop（简称CS）是一套基于ThinkPHP5框架开发的高性能商城框架系统，秉承简洁、快速、极致的开发理念，对内使用面向对象模块化调用，多终端、跨平台采用REST API构架来面向移动网络趋势，可直接对接PC、移动设备、小程序、云部署，构建Android、IOS的APP。', 'system_info', '商城描述', '商城描述，将显示在前台顶部欢迎信息等位置'),
-(41, 'logo', 'aliyun.oss.careyshop.cn/uploads/files/20200330/4dd3960b-486c-4dfb-8c86-0e424ac61c32.png?type=aliyun', 'system_info', '商城LOGO', '默认商城LOGO，通用头部显示，最佳显示尺寸为240*60像素'),
-(42, 'square_logo', 'aliyun.oss.careyshop.cn/uploads/files/20200403/8b85fe59-7481-48dc-82ef-592d281b7d4b.png?type=aliyun', 'system_info', '方形LOGO', '方形商城LOGO，通用移动端居多，最佳显示尺寸为80*80像素'),
-(43, 'information', '联系电话：400-XXXXXXXX\n联系地址：xxx xxx xxx xxxxx\n如果您需要将商品寄回，请将本单据一同附上。', 'system_info', '发货信息', '打印发货单时预留的信息'),
-(44, 'card_auth', '[1,2,3]', 'system_info', '购物卡权限', '设置允许查看购物卡卡密的管理组账号'),
-(45, 'third_count', '<script>\r\nvar _hmt = _hmt || [];\r\n(function() {\r\n  var hm = document.createElement(\"script\");\r\n  hm.src = \"https://hm.baidu.com/hm.js?e325e60ca4cd358f2b424f5aecb8021a\";\r\n  var s = document.getElementsByTagName(\"script\")[0]; \r\n  s.parentNode.insertBefore(hm, s);\r\n})();</script>', 'system_info', '第三方统计代码', '第三方统计的脚本代码'),
-(46, 'miitbeian', '', 'system_info', 'ICP备案许可证号', 'ICP备案许可证号，将显示在前台底部等位置'),
-(47, 'miitbeian_url', 'http://www.beian.miit.gov.cn', 'system_info', 'ICP备案链接地址', 'ICP备案链接地址，点击后将引导到该网站'),
-(48, 'miitbeian_ico', '', 'system_info', 'ICP备案图标', 'ICP备案图标，将显示在前台底部等位置'),
-(49, 'beian', '', 'system_info', '公安机关备案号', '公安机关备案号，将显示在前台底部等位置'),
-(50, 'beian_url', 'http://www.beian.gov.cn', 'system_info', '公安机关备案链接', '公安机关备案链接，点击后将引导到该网站'),
-(51, 'beian_ico', '', 'system_info', '公安机关备案图标', '公安机关备案图标，将显示在前台底部等位置'),
-(52, 'weixin_url', 'http://www.careyshop.cn/', 'system_info', '移动中间页地址', '例如微信中无法访问实际地址，可通过该地址进行跳转'),
-(53, 'qrcode_logo', 'static/api/images/qrcode_logo.png', 'system_info', '二维码LOGO', '生成二维码时默认的LOGO，可使用 <span style=\"color:#F56C6C;\">路径</span> 或 <span style=\"color:#F56C6C;\">网址</span>'),
-(54, 'default', 'careyshop', 'upload', '默认资源上传模块', '在不指定上传模块时，系统默认启用的上传模块'),
-(55, 'oss', 'careyshop.cn/oss?url=', 'upload', '资源获取短地址', '可启用短地址获取资源，避免原地址冗长，不必添加地址前缀'),
-(56, 'image_ext', 'jpg,png,svg,gif,bmp,tiff,webp', 'upload', '允许上传的图片后缀', '设置的后缀对 <strong>上传模块</strong> <span style=\"color:#F56C6C;\">如果不支持样式处理，将返回原图</span>'),
-(57, 'file_ext', 'doc,docx,xls,xlsx,ppt,pptx,pdf,wps,txt,rar,zip,gz,bz2,7z,pem,mp4,ogg,webm,ico', 'upload', '允许上传的文件后缀', ''),
-(58, 'file_size', '1M', 'upload', '附件上传大小限制', ''),
-(59, 'token_expires', '300', 'upload', '上传令牌有效时长(秒)', '获得上传令牌后多少秒后视为无效'),
-(60, 'careyshop_url', '', 'upload', '资源绑定域名别名', 'CareyShop(本地上传)绑定资源目录域名后，Host路径将变为该值，不必添加地址前缀'),
-(61, 'qiniu_access_key', '-eibVM1dkuOQU9vbF9oMRbiMtw4t_-QUMQJgPPDJ', 'upload', 'AccessKey(AK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">AK</span>'),
-(62, 'qiniu_secret_key', 'pcDGWPh8eOvnvcWBKbBhAod0R6MiC3_OU-V4hayZ', 'upload', 'SecretKey(SK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">SK</span>'),
-(63, 'qiniu_bucket', 'careyshop', 'upload', '存储空间名称', '选择一个存储空间，请保证访问控制为 <span style=\"color:#F56C6C;\">公开空间</span>'),
-(64, 'qiniu_url', 'poask1ml1.bkt.clouddn.com', 'upload', '外链域名', '存储空间 <span style=\"color:#F56C6C;\">对外访问域名</span>，也支持填写 <span style=\"color:#F56C6C;\">自定义域名</span>，不必添加地址前缀'),
-(65, 'aliyun_access_key', 'LTAIiZASSShdoDWO', 'upload', 'AccessKey ID', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey ID</span> 值'),
-(66, 'aliyun_secret_key', 'wpEQBBZRHVRgTy87AAYy7bFTKBWgXA', 'upload', 'AccessKey Secret', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey Secret</span> 值'),
-(67, 'aliyun_bucket', 'careyshop', 'upload', 'Bucket 名称', '选择一个Bucket，请保证读写权限为 <span style=\"color:#F56C6C;\">公共读</span>'),
-(68, 'aliyun_url', 'aliyun.oss.careyshop.cn', 'upload', 'Bucket 域名', '外网访问 <span style=\"color:#F56C6C;\">Bucket域名</span>，也支持填写 <span style=\"color:#F56C6C;\">用户域名</span>，不必添加地址前缀'),
-(69, 'aliyun_endpoint', 'oss-cn-hangzhou.aliyuncs.com', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
-(70, 'aliyun_rolearn', 'acs:ram::1763866338345155:role/aliyunosstokengeneratorrole', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>'),
-(71, 'open_api_rest', '1', 'system_info', '开启Rest API调试', '');
+(26, 'platform', '{\"0\":\"all\",\"1\":\"pc\",\"2\":\"mobile\",\"3\":\"ios\",\"4\":\"android\"}', 'system_info', '平台自定义值', ''),
+(27, 'open_index', '0', 'system_info', '是否开启首页', ''),
+(28, 'open_api', '1', 'system_info', '是否开启API接口', ''),
+(29, 'open_api_rest', '1', 'system_info', '开启Rest API调试', ''),
+(30, 'open_mobile', '0', 'system_info', '是否开启移动页', ''),
+(31, 'close_reason', '系统维护中，请稍后访问！', 'system_info', 'API接口关闭原因', ''),
+(32, 'allow_origin', '[\"*\"]', 'system_info', '允许跨域访问的域名', ''),
+(33, 'name', 'CarayShop商城', 'system_info', '商城名称', '商城名称，将显示在前台顶部欢迎信息等位置'),
+(34, 'title', 'CarayShop商城框架系统', 'system_info', '商城标题', '商城标题，将显示在前台顶部欢迎信息等位置'),
+(35, 'keywords', '开源新零售，开源小程序，开源微商城，开源商城，商城系统，免费商城', 'system_info', '商城关键词', '商城关键词，有利于对整站的SEO优化'),
+(36, 'description', 'CareyShop（简称CS）是一套基于ThinkPHP5框架开发的高性能商城框架系统，秉承简洁、快速、极致的开发理念，对内使用面向对象模块化调用，多终端、跨平台采用REST API构架来面向移动网络趋势，可直接对接PC、移动设备、小程序、云部署，构建Android、IOS的APP。', 'system_info', '商城描述', '商城描述，将显示在前台顶部欢迎信息等位置'),
+(37, 'logo', 'aliyun.oss.careyshop.cn/uploads/files/20200330/4dd3960b-486c-4dfb-8c86-0e424ac61c32.png?type=aliyun', 'system_info', '商城LOGO', '默认商城LOGO，通用头部显示，最佳显示尺寸为240*60像素'),
+(38, 'square_logo', 'aliyun.oss.careyshop.cn/uploads/files/20200403/8b85fe59-7481-48dc-82ef-592d281b7d4b.png?type=aliyun', 'system_info', '方形LOGO', '方形商城LOGO，通用移动端居多，最佳显示尺寸为80*80像素'),
+(39, 'information', '联系电话：400-XXXXXXXX\n联系地址：xxx xxx xxx xxxxx\n如果您需要将商品寄回，请将本单据一同附上。', 'system_info', '发货信息', '打印发货单时预留的信息'),
+(40, 'card_auth', '[]', 'system_info', '购物卡权限', '设置允许查看购物卡卡密的管理组账号'),
+(41, 'third_count', '<script>\r\nvar _hmt = _hmt || [];\r\n(function() {\r\n  var hm = document.createElement(\"script\");\r\n  hm.src = \"https://hm.baidu.com/hm.js?e325e60ca4cd358f2b424f5aecb8021a\";\r\n  var s = document.getElementsByTagName(\"script\")[0]; \r\n  s.parentNode.insertBefore(hm, s);\r\n})();</script>', 'system_info', '第三方统计代码', '第三方统计的脚本代码'),
+(42, 'stats_time', '30', 'system_info', '数据统计缓存时效(分)', '数据统计缓存有效期'),
+(43, 'miitbeian', '', 'system_info', 'ICP备案许可证号', 'ICP备案许可证号，将显示在前台底部等位置'),
+(44, 'miitbeian_url', 'http://www.beian.miit.gov.cn', 'system_info', 'ICP备案链接地址', 'ICP备案链接地址，点击后将引导到该网站'),
+(45, 'miitbeian_ico', '', 'system_info', 'ICP备案图标', 'ICP备案图标，将显示在前台底部等位置'),
+(46, 'beian', '', 'system_info', '公安机关备案号', '公安机关备案号，将显示在前台底部等位置'),
+(47, 'beian_url', 'http://www.beian.gov.cn', 'system_info', '公安机关备案链接', '公安机关备案链接，点击后将引导到该网站'),
+(48, 'beian_ico', '', 'system_info', '公安机关备案图标', '公安机关备案图标，将显示在前台底部等位置'),
+(49, 'weixin_url', 'http://www.careyshop.cn/', 'system_info', '移动中间页地址', '例如微信中无法访问实际地址，可通过该地址进行跳转'),
+(50, 'qrcode_logo', 'static/api/images/qrcode_logo.png', 'system_info', '二维码LOGO', '生成二维码时默认的LOGO，可使用 <span style=\"color:#F56C6C;\">路径</span> 或 <span style=\"color:#F56C6C;\">网址</span>'),
+(51, 'days', '15', 'service', '有效维权期天数(天)', '订单完成后多少天内允许申请售后服务，单位：天'),
+(52, 'address', '', 'service', '退换货地址', '售后服务退换货的详细地址'),
+(53, 'consignee', '', 'service', '退换货收件人', '售后服务退换货的收件人姓名'),
+(54, 'zipcode', '', 'service', '退换货邮编', '售后服务退换货地址的邮编'),
+(55, 'mobile', '', 'service', '退换货联系电话', '售后服务退换货收件人的联系电话'),
+(56, 'default', 'careyshop', 'upload', '默认资源上传模块', '在不指定上传模块时，系统默认启用的上传模块'),
+(57, 'oss', 'careyshop.cn/oss?url=', 'upload', '资源获取短地址', '可启用短地址获取资源，避免原地址冗长，不必添加地址前缀'),
+(58, 'image_ext', 'jpg,png,svg,gif,bmp,tiff,webp', 'upload', '允许上传的图片后缀', '设置的后缀对 <strong>上传模块</strong> <span style=\"color:#F56C6C;\">如果不支持样式处理，将返回原图</span>'),
+(59, 'file_ext', 'doc,docx,xls,xlsx,ppt,pptx,pdf,wps,txt,rar,zip,gz,bz2,7z,pem,mp4,ogg,webm,ico', 'upload', '允许上传的文件后缀', ''),
+(60, 'file_size', '1M', 'upload', '附件上传大小限制', ''),
+(61, 'token_expires', '300', 'upload', '上传令牌有效时长(秒)', '获得上传令牌后多少秒后视为无效'),
+(62, 'careyshop_url', '', 'upload', '资源绑定域名别名', 'CareyShop(本地上传)绑定资源目录域名后，Host路径将变为该值，不必添加地址前缀'),
+(63, 'qiniu_access_key', '', 'upload', 'AccessKey(AK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">AK</span>'),
+(64, 'qiniu_secret_key', '', 'upload', 'SecretKey(SK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">SK</span>'),
+(65, 'qiniu_bucket', '', 'upload', '存储空间名称', '选择一个存储空间，请保证访问控制为 <span style=\"color:#F56C6C;\">公开空间</span>'),
+(66, 'qiniu_url', '', 'upload', '外链域名', '存储空间 <span style=\"color:#F56C6C;\">对外访问域名</span>，也支持填写 <span style=\"color:#F56C6C;\">自定义域名</span>，不必添加地址前缀'),
+(67, 'aliyun_access_key', '', 'upload', 'AccessKey ID', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey ID</span> 值'),
+(68, 'aliyun_secret_key', '', 'upload', 'AccessKey Secret', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey Secret</span> 值'),
+(69, 'aliyun_bucket', '', 'upload', 'Bucket 名称', '选择一个Bucket，请保证读写权限为 <span style=\"color:#F56C6C;\">公共读</span>'),
+(70, 'aliyun_url', '', 'upload', 'Bucket 域名', '外网访问 <span style=\"color:#F56C6C;\">Bucket域名</span>，也支持填写 <span style=\"color:#F56C6C;\">用户域名</span>，不必添加地址前缀'),
+(71, 'aliyun_endpoint', '', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
+(72, 'aliyun_rolearn', '', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>');
 
 DROP TABLE IF EXISTS `{prefix}spec`;
 CREATE TABLE `{prefix}spec` (
@@ -15580,138 +15581,138 @@ ALTER TABLE `{prefix}withdraw_user`
 ALTER TABLE `{prefix}action_log`
   MODIFY `action_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}admin`
-  MODIFY `admin_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `admin_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}ads`
-  MODIFY `ads_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
+  MODIFY `ads_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}ads_position`
-  MODIFY `ads_position_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=171;
+  MODIFY `ads_position_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}app`
-  MODIFY `app_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `app_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}app_install`
-  MODIFY `app_install_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `app_install_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}article`
-  MODIFY `article_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=264;
+  MODIFY `article_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}article_cat`
-  MODIFY `article_cat_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `article_cat_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}ask`
-  MODIFY `ask_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+  MODIFY `ask_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}auth_group`
-  MODIFY `group_id` mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `group_id` mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}auth_rule`
-  MODIFY `rule_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `rule_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}brand`
-  MODIFY `brand_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `brand_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}card`
-  MODIFY `card_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `card_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}card_use`
-  MODIFY `card_use_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1024;
+  MODIFY `card_use_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}cart`
-  MODIFY `cart_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `cart_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}collect`
   MODIFY `collect_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}coupon`
-  MODIFY `coupon_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `coupon_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}coupon_give`
-  MODIFY `coupon_give_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2107;
+  MODIFY `coupon_give_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}delivery`
-  MODIFY `delivery_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `delivery_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}delivery_area`
-  MODIFY `delivery_area_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `delivery_area_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}delivery_dist`
-  MODIFY `delivery_dist_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `delivery_dist_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}delivery_item`
-  MODIFY `delivery_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=512;
+  MODIFY `delivery_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}discount`
-  MODIFY `discount_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `discount_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}friend_link`
-  MODIFY `friend_link_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `friend_link_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}goods`
-  MODIFY `goods_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=294;
+  MODIFY `goods_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}goods_attribute`
-  MODIFY `goods_attribute_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `goods_attribute_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}goods_attr_config`
-  MODIFY `goods_attr_config_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `goods_attr_config_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}goods_category`
-  MODIFY `goods_category_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=844;
+  MODIFY `goods_category_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}goods_comment`
-  MODIFY `goods_comment_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+  MODIFY `goods_comment_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}goods_consult`
-  MODIFY `goods_consult_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `goods_consult_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}goods_reply`
   MODIFY `goods_reply_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}goods_type`
-  MODIFY `goods_type_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `goods_type_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}help`
-  MODIFY `help_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `help_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}history`
   MODIFY `history_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}menu`
-  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1105;
+  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}message`
-  MODIFY `message_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
+  MODIFY `message_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}message_user`
-  MODIFY `message_user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `message_user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}navigation`
-  MODIFY `navigation_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `navigation_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}notice_item`
-  MODIFY `notice_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `notice_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}notice_tpl`
-  MODIFY `notice_tpl_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `notice_tpl_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}order`
-  MODIFY `order_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
+  MODIFY `order_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}order_goods`
-  MODIFY `order_goods_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `order_goods_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}order_log`
-  MODIFY `order_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=385;
+  MODIFY `order_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}order_refund`
-  MODIFY `order_refund_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `order_refund_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}order_service`
-  MODIFY `order_service_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `order_service_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}payment`
-  MODIFY `payment_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `payment_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}payment_log`
-  MODIFY `payment_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
+  MODIFY `payment_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}praise`
   MODIFY `praise_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}promotion`
-  MODIFY `promotion_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `promotion_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}qrcode`
-  MODIFY `qrcode_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `qrcode_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}region`
-  MODIFY `region_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4085;
+  MODIFY `region_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}service_log`
-  MODIFY `service_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
+  MODIFY `service_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}setting`
-  MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}spec`
-  MODIFY `spec_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `spec_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}spec_config`
-  MODIFY `spec_config_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `spec_config_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}spec_item`
-  MODIFY `spec_item_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=453;
+  MODIFY `spec_item_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}storage`
-  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=812;
+  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}storage_style`
-  MODIFY `storage_style_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `storage_style_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}support`
-  MODIFY `support_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `support_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}token`
-  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `token_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}topic`
-  MODIFY `topic_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=225;
+  MODIFY `topic_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}transaction`
-  MODIFY `transaction_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=317;
+  MODIFY `transaction_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}user`
-  MODIFY `user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}user_address`
-  MODIFY `user_address_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `user_address_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}user_level`
-  MODIFY `user_level_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_level_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}user_money`
-  MODIFY `user_money_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `user_money_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}verification`
-  MODIFY `verification_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `verification_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}withdraw`
-  MODIFY `withdraw_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `withdraw_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}withdraw_user`
-  MODIFY `withdraw_user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `withdraw_user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;

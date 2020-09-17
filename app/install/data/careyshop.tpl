@@ -7468,52 +7468,53 @@ INSERT INTO `{prefix}setting` (`setting_id`, `code`, `value`, `module`, `descrip
 (23, 'spacer', ' ', 'system_shopping', '完整地址分隔符', '生成完整地址时省市区之间的分隔符，例如 浙江省<span style=\"color:#F56C6C;\">-</span>宁波市'),
 (24, 'invoice', '3', 'system_shopping', '开票收取多少税率(%)', '开票收取多少税率，按票面总金额的百分比换算'),
 (25, 'source', '{\"0\":{\"name\":\"电脑端\",\"icon\":\"diannao_o\"},\"1\":{\"name\":\"移动端\",\"icon\":\"shouji1_o\"},\"2\":{\"name\":\"小程序\",\"icon\":\"xiaochengxu_o\"},\"3\":{\"name\":\"微信\",\"icon\":\"weixin_o\"}}', 'system_shopping', '订单来源自定义', ''),
-(26, 'days', '15', 'service', '有效维权期天数(天)', '订单完成后多少天内允许申请售后服务，单位：天'),
-(27, 'address', '', 'service', '退换货地址', '售后服务退换货的详细地址'),
-(28, 'consignee', '', 'service', '退换货收件人', '售后服务退换货的收件人姓名'),
-(29, 'zipcode', '', 'service', '退换货邮编', '售后服务退换货地址的邮编'),
-(30, 'mobile', '', 'service', '退换货联系电话', '售后服务退换货收件人的联系电话'),
-(31, 'platform', '{\"0\":\"all\",\"1\":\"pc\",\"2\":\"mobile\",\"3\":\"ios\",\"4\":\"android\"}', 'system_info', '平台自定义值', ''),
-(32, 'open_index', '0', 'system_info', '是否开启首页', ''),
-(33, 'open_api', '1', 'system_info', '是否开启API接口', ''),
-(34, 'open_mobile', '0', 'system_info', '是否开启移动页', ''),
-(35, 'close_reason', '系统维护中，请稍后访问！', 'system_info', 'API接口关闭原因', ''),
-(36, 'allow_origin', '[\"*\"]', 'system_info', '允许跨域访问的域名', ''),
-(37, 'name', 'CarayShop商城', 'system_info', '商城名称', '商城名称，将显示在前台顶部欢迎信息等位置'),
-(38, 'title', 'CarayShop商城框架系统', 'system_info', '商城标题', '商城标题，将显示在前台顶部欢迎信息等位置'),
-(39, 'keywords', '开源新零售，开源小程序，开源微商城，开源商城，商城系统，免费商城', 'system_info', '商城关键词', '商城关键词，有利于对整站的SEO优化'),
-(40, 'description', 'CareyShop（简称CS）是一套基于ThinkPHP5框架开发的高性能商城框架系统，秉承简洁、快速、极致的开发理念，对内使用面向对象模块化调用，多终端、跨平台采用REST API构架来面向移动网络趋势，可直接对接PC、移动设备、小程序、云部署，构建Android、IOS的APP。', 'system_info', '商城描述', '商城描述，将显示在前台顶部欢迎信息等位置'),
-(41, 'logo', 'aliyun.oss.careyshop.cn/uploads/files/20200330/4dd3960b-486c-4dfb-8c86-0e424ac61c32.png?type=aliyun', 'system_info', '商城LOGO', '默认商城LOGO，通用头部显示，最佳显示尺寸为240*60像素'),
-(42, 'square_logo', 'aliyun.oss.careyshop.cn/uploads/files/20200403/8b85fe59-7481-48dc-82ef-592d281b7d4b.png?type=aliyun', 'system_info', '方形LOGO', '方形商城LOGO，通用移动端居多，最佳显示尺寸为80*80像素'),
-(43, 'information', '联系电话：400-XXXXXXXX\n联系地址：xxx xxx xxx xxxxx\n如果您需要将商品寄回，请将本单据一同附上。', 'system_info', '发货信息', '打印发货单时预留的信息'),
-(44, 'card_auth', '[]', 'system_info', '购物卡权限', '设置允许查看购物卡卡密的管理组账号'),
-(45, 'third_count', '<script>\r\nvar _hmt = _hmt || [];\r\n(function() {\r\n  var hm = document.createElement(\"script\");\r\n  hm.src = \"https://hm.baidu.com/hm.js?e325e60ca4cd358f2b424f5aecb8021a\";\r\n  var s = document.getElementsByTagName(\"script\")[0]; \r\n  s.parentNode.insertBefore(hm, s);\r\n})();</script>', 'system_info', '第三方统计代码', '第三方统计的脚本代码'),
-(46, 'miitbeian', '', 'system_info', 'ICP备案许可证号', 'ICP备案许可证号，将显示在前台底部等位置'),
-(47, 'miitbeian_url', 'http://www.beian.miit.gov.cn', 'system_info', 'ICP备案链接地址', 'ICP备案链接地址，点击后将引导到该网站'),
-(48, 'miitbeian_ico', '', 'system_info', 'ICP备案图标', 'ICP备案图标，将显示在前台底部等位置'),
-(49, 'beian', '', 'system_info', '公安机关备案号', '公安机关备案号，将显示在前台底部等位置'),
-(50, 'beian_url', 'http://www.beian.gov.cn', 'system_info', '公安机关备案链接', '公安机关备案链接，点击后将引导到该网站'),
-(51, 'beian_ico', '', 'system_info', '公安机关备案图标', '公安机关备案图标，将显示在前台底部等位置'),
-(52, 'weixin_url', 'http://www.careyshop.cn/', 'system_info', '移动中间页地址', '例如微信中无法访问实际地址，可通过该地址进行跳转'),
-(53, 'qrcode_logo', 'static/api/images/qrcode_logo.png', 'system_info', '二维码LOGO', '生成二维码时默认的LOGO，可使用 <span style=\"color:#F56C6C;\">路径</span> 或 <span style=\"color:#F56C6C;\">网址</span>'),
-(54, 'default', 'careyshop', 'upload', '默认资源上传模块', '在不指定上传模块时，系统默认启用的上传模块'),
-(55, 'oss', 'careyshop.cn/oss?url=', 'upload', '资源获取短地址', '可启用短地址获取资源，避免原地址冗长，不必添加地址前缀'),
-(56, 'image_ext', 'jpg,png,svg,gif,bmp,tiff,webp', 'upload', '允许上传的图片后缀', '设置的后缀对 <strong>上传模块</strong> <span style=\"color:#F56C6C;\">如果不支持样式处理，将返回原图</span>'),
-(57, 'file_ext', 'doc,docx,xls,xlsx,ppt,pptx,pdf,wps,txt,rar,zip,gz,bz2,7z,pem,mp4,ogg,webm,ico', 'upload', '允许上传的文件后缀', ''),
-(58, 'file_size', '1M', 'upload', '附件上传大小限制', ''),
-(59, 'token_expires', '300', 'upload', '上传令牌有效时长(秒)', '获得上传令牌后多少秒后视为无效'),
-(60, 'careyshop_url', '', 'upload', '资源绑定域名别名', 'CareyShop(本地上传)绑定资源目录域名后，Host路径将变为该值，不必添加地址前缀'),
-(61, 'qiniu_access_key', '', 'upload', 'AccessKey(AK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">AK</span>'),
-(62, 'qiniu_secret_key', '', 'upload', 'SecretKey(SK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">SK</span>'),
-(63, 'qiniu_bucket', '', 'upload', '存储空间名称', '选择一个存储空间，请保证访问控制为 <span style=\"color:#F56C6C;\">公开空间</span>'),
-(64, 'qiniu_url', '', 'upload', '外链域名', '存储空间 <span style=\"color:#F56C6C;\">对外访问域名</span>，也支持填写 <span style=\"color:#F56C6C;\">自定义域名</span>，不必添加地址前缀'),
-(65, 'aliyun_access_key', '', 'upload', 'AccessKey ID', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey ID</span> 值'),
-(66, 'aliyun_secret_key', '', 'upload', 'AccessKey Secret', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey Secret</span> 值'),
-(67, 'aliyun_bucket', '', 'upload', 'Bucket 名称', '选择一个Bucket，请保证读写权限为 <span style=\"color:#F56C6C;\">公共读</span>'),
-(68, 'aliyun_url', '', 'upload', 'Bucket 域名', '外网访问 <span style=\"color:#F56C6C;\">Bucket域名</span>，也支持填写 <span style=\"color:#F56C6C;\">用户域名</span>，不必添加地址前缀'),
-(69, 'aliyun_endpoint', '', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
-(70, 'aliyun_rolearn', '', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>'),
-(71, 'open_api_rest', '1', 'system_info', '开启Rest API调试', '');
+(26, 'platform', '{\"0\":\"all\",\"1\":\"pc\",\"2\":\"mobile\",\"3\":\"ios\",\"4\":\"android\"}', 'system_info', '平台自定义值', ''),
+(27, 'open_index', '0', 'system_info', '是否开启首页', ''),
+(28, 'open_api', '1', 'system_info', '是否开启API接口', ''),
+(29, 'open_api_rest', '1', 'system_info', '开启Rest API调试', ''),
+(30, 'open_mobile', '0', 'system_info', '是否开启移动页', ''),
+(31, 'close_reason', '系统维护中，请稍后访问！', 'system_info', 'API接口关闭原因', ''),
+(32, 'allow_origin', '[\"*\"]', 'system_info', '允许跨域访问的域名', ''),
+(33, 'name', 'CarayShop商城', 'system_info', '商城名称', '商城名称，将显示在前台顶部欢迎信息等位置'),
+(34, 'title', 'CarayShop商城框架系统', 'system_info', '商城标题', '商城标题，将显示在前台顶部欢迎信息等位置'),
+(35, 'keywords', '开源新零售，开源小程序，开源微商城，开源商城，商城系统，免费商城', 'system_info', '商城关键词', '商城关键词，有利于对整站的SEO优化'),
+(36, 'description', 'CareyShop（简称CS）是一套基于ThinkPHP5框架开发的高性能商城框架系统，秉承简洁、快速、极致的开发理念，对内使用面向对象模块化调用，多终端、跨平台采用REST API构架来面向移动网络趋势，可直接对接PC、移动设备、小程序、云部署，构建Android、IOS的APP。', 'system_info', '商城描述', '商城描述，将显示在前台顶部欢迎信息等位置'),
+(37, 'logo', 'aliyun.oss.careyshop.cn/uploads/files/20200330/4dd3960b-486c-4dfb-8c86-0e424ac61c32.png?type=aliyun', 'system_info', '商城LOGO', '默认商城LOGO，通用头部显示，最佳显示尺寸为240*60像素'),
+(38, 'square_logo', 'aliyun.oss.careyshop.cn/uploads/files/20200403/8b85fe59-7481-48dc-82ef-592d281b7d4b.png?type=aliyun', 'system_info', '方形LOGO', '方形商城LOGO，通用移动端居多，最佳显示尺寸为80*80像素'),
+(39, 'information', '联系电话：400-XXXXXXXX\n联系地址：xxx xxx xxx xxxxx\n如果您需要将商品寄回，请将本单据一同附上。', 'system_info', '发货信息', '打印发货单时预留的信息'),
+(40, 'card_auth', '[]', 'system_info', '购物卡权限', '设置允许查看购物卡卡密的管理组账号'),
+(41, 'third_count', '<script>\r\nvar _hmt = _hmt || [];\r\n(function() {\r\n  var hm = document.createElement(\"script\");\r\n  hm.src = \"https://hm.baidu.com/hm.js?e325e60ca4cd358f2b424f5aecb8021a\";\r\n  var s = document.getElementsByTagName(\"script\")[0]; \r\n  s.parentNode.insertBefore(hm, s);\r\n})();</script>', 'system_info', '第三方统计代码', '第三方统计的脚本代码'),
+(42, 'stats_time', '30', 'system_info', '数据统计缓存时效(分)', '数据统计缓存有效期'),
+(43, 'miitbeian', '', 'system_info', 'ICP备案许可证号', 'ICP备案许可证号，将显示在前台底部等位置'),
+(44, 'miitbeian_url', 'http://www.beian.miit.gov.cn', 'system_info', 'ICP备案链接地址', 'ICP备案链接地址，点击后将引导到该网站'),
+(45, 'miitbeian_ico', '', 'system_info', 'ICP备案图标', 'ICP备案图标，将显示在前台底部等位置'),
+(46, 'beian', '', 'system_info', '公安机关备案号', '公安机关备案号，将显示在前台底部等位置'),
+(47, 'beian_url', 'http://www.beian.gov.cn', 'system_info', '公安机关备案链接', '公安机关备案链接，点击后将引导到该网站'),
+(48, 'beian_ico', '', 'system_info', '公安机关备案图标', '公安机关备案图标，将显示在前台底部等位置'),
+(49, 'weixin_url', 'http://www.careyshop.cn/', 'system_info', '移动中间页地址', '例如微信中无法访问实际地址，可通过该地址进行跳转'),
+(50, 'qrcode_logo', 'static/api/images/qrcode_logo.png', 'system_info', '二维码LOGO', '生成二维码时默认的LOGO，可使用 <span style=\"color:#F56C6C;\">路径</span> 或 <span style=\"color:#F56C6C;\">网址</span>'),
+(51, 'days', '15', 'service', '有效维权期天数(天)', '订单完成后多少天内允许申请售后服务，单位：天'),
+(52, 'address', '', 'service', '退换货地址', '售后服务退换货的详细地址'),
+(53, 'consignee', '', 'service', '退换货收件人', '售后服务退换货的收件人姓名'),
+(54, 'zipcode', '', 'service', '退换货邮编', '售后服务退换货地址的邮编'),
+(55, 'mobile', '', 'service', '退换货联系电话', '售后服务退换货收件人的联系电话'),
+(56, 'default', 'careyshop', 'upload', '默认资源上传模块', '在不指定上传模块时，系统默认启用的上传模块'),
+(57, 'oss', 'careyshop.cn/oss?url=', 'upload', '资源获取短地址', '可启用短地址获取资源，避免原地址冗长，不必添加地址前缀'),
+(58, 'image_ext', 'jpg,png,svg,gif,bmp,tiff,webp', 'upload', '允许上传的图片后缀', '设置的后缀对 <strong>上传模块</strong> <span style=\"color:#F56C6C;\">如果不支持样式处理，将返回原图</span>'),
+(59, 'file_ext', 'doc,docx,xls,xlsx,ppt,pptx,pdf,wps,txt,rar,zip,gz,bz2,7z,pem,mp4,ogg,webm,ico', 'upload', '允许上传的文件后缀', ''),
+(60, 'file_size', '1M', 'upload', '附件上传大小限制', ''),
+(61, 'token_expires', '300', 'upload', '上传令牌有效时长(秒)', '获得上传令牌后多少秒后视为无效'),
+(62, 'careyshop_url', '', 'upload', '资源绑定域名别名', 'CareyShop(本地上传)绑定资源目录域名后，Host路径将变为该值，不必添加地址前缀'),
+(63, 'qiniu_access_key', '', 'upload', 'AccessKey(AK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">AK</span>'),
+(64, 'qiniu_secret_key', '', 'upload', 'SecretKey(SK)', '七牛云密钥管理创建的 <span style=\"color:#F56C6C;\">SK</span>'),
+(65, 'qiniu_bucket', '', 'upload', '存储空间名称', '选择一个存储空间，请保证访问控制为 <span style=\"color:#F56C6C;\">公开空间</span>'),
+(66, 'qiniu_url', '', 'upload', '外链域名', '存储空间 <span style=\"color:#F56C6C;\">对外访问域名</span>，也支持填写 <span style=\"color:#F56C6C;\">自定义域名</span>，不必添加地址前缀'),
+(67, 'aliyun_access_key', '', 'upload', 'AccessKey ID', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey ID</span> 值'),
+(68, 'aliyun_secret_key', '', 'upload', 'AccessKey Secret', '阿里云RAM子用户创建的 <span style=\"color:#F56C6C;\">AccessKey Secret</span> 值'),
+(69, 'aliyun_bucket', '', 'upload', 'Bucket 名称', '选择一个Bucket，请保证读写权限为 <span style=\"color:#F56C6C;\">公共读</span>'),
+(70, 'aliyun_url', '', 'upload', 'Bucket 域名', '外网访问 <span style=\"color:#F56C6C;\">Bucket域名</span>，也支持填写 <span style=\"color:#F56C6C;\">用户域名</span>，不必添加地址前缀'),
+(71, 'aliyun_endpoint', '', 'upload', 'EndPoint', '外网访问 <span style=\"color:#F56C6C;\">EndPoint (地域节点)</span>'),
+(72, 'aliyun_rolearn', '', 'upload', 'RoleArn', '阿里云RAM角色创建的 <span style=\"color:#F56C6C;\">ARN</span>');
 
 DROP TABLE IF EXISTS `{prefix}spec`;
 CREATE TABLE `{prefix}spec` (
@@ -8312,13 +8313,13 @@ ALTER TABLE `{prefix}app_install`
 ALTER TABLE `{prefix}article`
   MODIFY `article_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}article_cat`
-  MODIFY `article_cat_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `article_cat_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}ask`
   MODIFY `ask_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}auth_group`
-  MODIFY `group_id` mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `group_id` mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}auth_rule`
-  MODIFY `rule_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `rule_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}brand`
   MODIFY `brand_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}card`
@@ -8340,7 +8341,7 @@ ALTER TABLE `{prefix}delivery_area`
 ALTER TABLE `{prefix}delivery_dist`
   MODIFY `delivery_dist_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}delivery_item`
-  MODIFY `delivery_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=512;
+  MODIFY `delivery_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}discount`
   MODIFY `discount_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}friend_link`
@@ -8352,7 +8353,7 @@ ALTER TABLE `{prefix}goods_attribute`
 ALTER TABLE `{prefix}goods_attr_config`
   MODIFY `goods_attr_config_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}goods_category`
-  MODIFY `goods_category_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=844;
+  MODIFY `goods_category_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}goods_comment`
   MODIFY `goods_comment_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}goods_consult`
@@ -8362,11 +8363,11 @@ ALTER TABLE `{prefix}goods_reply`
 ALTER TABLE `{prefix}goods_type`
   MODIFY `goods_type_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}help`
-  MODIFY `help_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `help_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}history`
   MODIFY `history_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}menu`
-  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1105;
+  MODIFY `menu_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}message`
   MODIFY `message_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}message_user`
@@ -8374,9 +8375,9 @@ ALTER TABLE `{prefix}message_user`
 ALTER TABLE `{prefix}navigation`
   MODIFY `navigation_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}notice_item`
-  MODIFY `notice_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `notice_item_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}notice_tpl`
-  MODIFY `notice_tpl_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `notice_tpl_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}order`
   MODIFY `order_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}order_goods`
@@ -8388,7 +8389,7 @@ ALTER TABLE `{prefix}order_refund`
 ALTER TABLE `{prefix}order_service`
   MODIFY `order_service_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}payment`
-  MODIFY `payment_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `payment_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}payment_log`
   MODIFY `payment_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}praise`
@@ -8398,11 +8399,11 @@ ALTER TABLE `{prefix}promotion`
 ALTER TABLE `{prefix}qrcode`
   MODIFY `qrcode_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}region`
-  MODIFY `region_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4085;
+  MODIFY `region_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}service_log`
   MODIFY `service_log_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}setting`
-  MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `setting_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}spec`
   MODIFY `spec_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}spec_config`
@@ -8410,9 +8411,9 @@ ALTER TABLE `{prefix}spec_config`
 ALTER TABLE `{prefix}spec_item`
   MODIFY `spec_item_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}storage`
-  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `storage_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}storage_style`
-  MODIFY `storage_style_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `storage_style_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}support`
   MODIFY `support_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}token`
@@ -8426,7 +8427,7 @@ ALTER TABLE `{prefix}user`
 ALTER TABLE `{prefix}user_address`
   MODIFY `user_address_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}user_level`
-  MODIFY `user_level_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_level_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}user_money`
   MODIFY `user_money_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `{prefix}verification`

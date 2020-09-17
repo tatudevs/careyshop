@@ -8,11 +8,22 @@
 <body>
 <div style="padding: 24px 48px;">
     <p><span style="font-size:30px">欢迎使用CareyShop商城框架系统 - Index</span></p>
-    <a style="font-size: 14px;" href="{:url('/admin/', [], false)}">进入后台</a>
-
-    {eq name="showRest" value="1"}
-    <br><br><a style="font-size: 14px;" href="{:url('/api/', [], false)}">Rest API 接口调试</a>
-    {/eq}
+    <div style="display: inline-flex;">
+        <div style="margin-right: 50px;">
+            <a style="font-size: 14px;" href="{:url('/admin/', [], false)}" target="_blank">
+                <img src="https://aliyun.oss.careyshop.cn/poster/banner.png" height="200" alt="careyshop admin"><br>
+                <span>进入管理后台</span>
+            </a>
+        </div>
+        <div>
+            {eq name="showRest" value="1"}
+            <a style="font-size: 14px;" href="{:url('/api/', [], false)}" target="_blank">
+                <img src="https://aliyun.oss.careyshop.cn/poster/banner-rest_api.png" height="200" alt="careyshop rest api"><br>
+                <span>Rest API 接口调试</span>
+            </a>
+            {/eq}
+        </div>
+    </div>
 </div>
 </body>
 </html>
