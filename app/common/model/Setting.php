@@ -379,6 +379,11 @@ class Setting extends CareyShop
                         $this->setSettingItem($key, $value, 'system_info', 'array', true);
                         break;
 
+                    case 'stats_time':
+                        !empty($value) ?: $value = 0;
+                        $this->setSettingItem($key, $value, 'system_info', 'integer');
+                        break;
+
                     default:
                         throw new \Exception('键名' . $key . '不在允许范围内');
                 }
