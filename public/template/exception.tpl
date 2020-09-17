@@ -94,6 +94,7 @@ if (!function_exists('echo_value')) {
 <head>
     <meta charset="UTF-8">
     <title>系统发生错误</title>
+    <meta name="description" content="本站基于 CareyShop 商城框架系统搭建">
     <meta name="robots" content="noindex,nofollow" />
     <style>
         /* Base 瑞令网络科技*/
