@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\DeliveryDist as DistService;
 
 class DeliveryDist extends CareyShop
 {
@@ -33,7 +34,7 @@ class DeliveryDist extends CareyShop
             // 根据快递单号即时查询配送轨迹
             'get.delivery.dist.trace'    => ['getDeliveryDistTrace'],
             // 获取配送回调URL接口
-            'get.delivery.dist.callback' => ['getDistCallback', 'app\common\service\DeliveryDist'],
+            'get.delivery.dist.callback' => ['getDistCallback', DistService::class],
         ];
     }
 }

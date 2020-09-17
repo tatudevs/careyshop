@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\Withdraw as WithdrawService;
 
 class Withdraw extends CareyShop
 {
@@ -37,7 +38,7 @@ class Withdraw extends CareyShop
             // 拒绝一个提现请求
             'refuse.withdraw.item'   => ['refuseWithdrawItem'],
             // 获取提现手续费
-            'get.withdraw.fee'       => ['getWithdrawFee', 'app\common\service\Withdraw'],
+            'get.withdraw.fee'       => ['getWithdrawFee', WithdrawService::class],
         ];
     }
 }

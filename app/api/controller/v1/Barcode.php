@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\Barcode as BarcodeService;
 
 class Barcode extends CareyShop
 {
@@ -23,9 +24,9 @@ class Barcode extends CareyShop
     {
         return [
             // 获取条形码调用地址
-            'get.barcode.callurl' => ['getBarcodeCallurl', 'app\common\service\Barcode'],
+            'get.barcode.callurl' => ['getBarcodeCallurl', BarcodeService::class],
             // 获取一个条形码
-            'get.barcode.item'    => ['getBarcodeItem', 'app\common\service\Barcode'],
+            'get.barcode.item'    => ['getBarcodeItem', BarcodeService::class],
         ];
     }
 }

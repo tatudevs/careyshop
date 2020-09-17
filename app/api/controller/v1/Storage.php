@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\Upload as UploadService;
 
 class Storage extends CareyShop
 {
@@ -48,18 +49,18 @@ class Storage extends CareyShop
             'clear.storage.cover'           => ['clearStorageCover'],
             // 批量移动资源到指定目录
             'move.storage.list'             => ['moveStorageList'],
-            // 获取资源缩略图
-            'get.storage.thumb'             => ['getThumb', 'app\common\service\Upload'],
-            // 获取资源缩略图实际路径
-            'get.storage.thumb.url'         => ['getThumbUrl', 'app\common\service\Upload'],
-            // 获取资源缩略图信息
-            'get.storage.thumb.info'        => ['getThumbInfo', 'app\common\service\Upload'],
-            // 获取资源下载链接
-            'get.storage.download'          => ['getDownload', 'app\common\service\Upload'],
             // 批量删除资源
             'del.storage.list'              => ['delStorageList'],
             // 清除图片资源缓存
             'clear.storage.thumb'           => ['clearStorageThumb'],
+            // 获取资源缩略图
+            'get.storage.thumb'             => ['getThumb', UploadService::class],
+            // 获取资源缩略图实际路径
+            'get.storage.thumb.url'         => ['getThumbUrl', UploadService::class],
+            // 获取资源缩略图信息
+            'get.storage.thumb.info'        => ['getThumbInfo', UploadService::class],
+            // 获取资源下载链接
+            'get.storage.download'          => ['getDownload', UploadService::class],
         ];
     }
 }

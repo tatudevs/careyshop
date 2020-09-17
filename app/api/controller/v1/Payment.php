@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\Payment as PaymentService;
 
 class Payment extends CareyShop
 {
@@ -28,10 +29,6 @@ class Payment extends CareyShop
             'get.payment.item'    => ['getPaymentItem'],
             // 获取支付配置列表
             'get.payment.list'    => ['getPaymentList'],
-            // 获取支付异步URL接口
-            'get.payment.notify'  => ['getPaymentNotify', 'app\common\service\Payment'],
-            // 获取支付同步URL接口
-            'get.payment.return'  => ['getPaymentReturn', 'app\common\service\Payment'],
             // 设置支付配置排序
             'set.payment.sort'    => ['setPaymentSort'],
             // 根据编号自动排序
@@ -46,6 +43,10 @@ class Payment extends CareyShop
             'user.payment.pay'    => ['userPaymentPay'],
             // 订单付款在线支付
             'order.payment.pay'   => ['orderPaymentPay'],
+            // 获取支付异步URL接口
+            'get.payment.notify'  => ['getPaymentNotify', PaymentService::class],
+            // 获取支付同步URL接口
+            'get.payment.return'  => ['getPaymentReturn', PaymentService::class],
         ];
     }
 }

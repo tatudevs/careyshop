@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\App as AppService;
 
 class App extends CareyShop
 {
@@ -41,11 +42,11 @@ class App extends CareyShop
             // 批量设置应用状态
             'set.app.status'          => ['setAppStatus'],
             // 查询应用验证码状态
-            'get.app.captcha'         => ['getAppCaptcha'],
+            'get.app.captcha'         => ['getAppCaptcha', false],
             // 获取应用验证码调用地址
-            'get.app.captcha.callurl' => ['getCaptchaCallurl', 'app\common\service\App'],
+            'get.app.captcha.callurl' => ['getCaptchaCallurl', AppService::class],
             // 获取应用验证码
-            'image.app.captcha'       => ['imageAppCaptcha', 'app\common\service\App'],
+            'image.app.captcha'       => ['imageAppCaptcha', AppService::class],
         ];
     }
 

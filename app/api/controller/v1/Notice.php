@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\Notice as NoticeService;
 
 class Notice extends CareyShop
 {
@@ -24,12 +25,12 @@ class Notice extends CareyShop
         return [
             // 获取一个通知系统
             'get.notice.item'   => ['getNoticeItem'],
-            // 获取通知系统列表
-            'get.notice.list'   => ['getNoticeList', 'app\common\service\Notice'],
             // 批量设置通知系统是否启用
             'set.notice.status' => ['setNoticeStatus'],
             // 设置一个通知系统
             'set.notice.item'   => ['setNoticeItem'],
+            // 获取通知系统列表
+            'get.notice.list'   => ['getNoticeList', NoticeService::class],
         ];
     }
 }

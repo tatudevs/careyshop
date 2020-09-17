@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\User as UserService;
 
 class User extends CareyShop
 {
@@ -22,12 +23,6 @@ class User extends CareyShop
     protected static function initMethod()
     {
         return [
-            // 验证账号是否合法
-            'check.user.username' => ['checkUserName', 'app\common\service\User'],
-            // 验证账号手机是否合法
-            'check.user.mobile'   => ['checkUserMobile', 'app\common\service\User'],
-            // 验证账号昵称是否合法
-            'check.user.nickname' => ['checkUserNick', 'app\common\service\User'],
             // 注册一个新账号
             'add.user.item'       => ['addUserItem'],
             // 编辑一个账号
@@ -54,6 +49,12 @@ class User extends CareyShop
             'refresh.user.token'  => ['refreshToken'],
             // 忘记密码
             'find.user.password'  => ['findUserPassword'],
+            // 验证账号是否合法
+            'check.user.username' => ['checkUserName', UserService::class],
+            // 验证账号手机是否合法
+            'check.user.mobile'   => ['checkUserMobile', UserService::class],
+            // 验证账号昵称是否合法
+            'check.user.nickname' => ['checkUserNick', UserService::class],
         ];
     }
 }

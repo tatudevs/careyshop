@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\Index as IndexService;
 use think\facade\Config;
 
 class Index extends CareyShop
@@ -26,11 +27,11 @@ class Index extends CareyShop
             // API访问测试
             'get.index.host'      => ['getIndexHost', false],
             // 清空所有缓存
-            'clear.cache.all'     => ['clearCacheAll', 'app\common\service\Index'],
+            'clear.cache.all'     => ['clearCacheAll', IndexService::class],
             // 调整最优状态(正式环境有效)
-            'set.system.optimize' => ['setSystemOptimize', 'app\common\service\Index'],
+            'set.system.optimize' => ['setSystemOptimize', IndexService::class],
             // 获取系统版本号
-            'get.system.version'  => ['getVersion', 'app\common\service\Index'],
+            'get.system.version'  => ['getVersion', IndexService::class],
         ];
     }
 

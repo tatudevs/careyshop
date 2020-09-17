@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\Admin as AdminService;
 
 class Admin extends CareyShop
 {
@@ -22,10 +23,6 @@ class Admin extends CareyShop
     protected static function initMethod()
     {
         return [
-            // 验证账号是否合法
-            'check.admin.username' => ['checkAdminName', 'app\common\service\Admin'],
-            // 验证账号昵称是否合法
-            'check.admin.nickname' => ['checkAdminNick', 'app\common\service\Admin'],
             // 添加一个账号
             'add.admin.item'       => ['addAdminItem'],
             // 编辑一个账号
@@ -50,6 +47,10 @@ class Admin extends CareyShop
             'login.admin.user'     => ['loginAdmin'],
             // 刷新Token
             'refresh.admin.token'  => ['refreshToken'],
+            // 验证账号是否合法
+            'check.admin.username' => ['checkAdminName', AdminService::class],
+            // 验证账号昵称是否合法
+            'check.admin.nickname' => ['checkAdminNick', AdminService::class],
         ];
     }
 }
