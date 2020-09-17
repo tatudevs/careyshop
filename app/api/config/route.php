@@ -27,5 +27,7 @@ if (!in_array('*', $allow)) {
     $header['Access-Control-Allow-Origin'] = implode(',', $allow);
 }
 
-Route::rule(':version/:controller', ':version.:controller/index')
-    ->allowCrossDomain($header);
+Route::group(function () {
+    Route::rule('batch', 'batch/index');
+    Route::rule(':version/:controller', ':version.:controller/index');
+})->allowCrossDomain($header);
