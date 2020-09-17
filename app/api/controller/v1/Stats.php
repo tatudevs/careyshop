@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\Stats as StatsService;
 
 class Stats extends CareyShop
 {
@@ -23,7 +24,15 @@ class Stats extends CareyShop
     {
         return [
             // 获取后台首页统计数据
-            'get.stats.index' => ['getStatsIndex'],
+            'get.stats.index'  => ['getStatsIndex', StatsService::class],
+            // 获取店铺统计数据
+            'get.stats.shop'   => ['getStatsShop', StatsService::class],
+            // 获取商品统计数据
+            'get.stats.goods'  => ['getStatsGoods', StatsService::class],
+            // 获取订单统计数据
+            'get.stats.order'  => ['getStatsOrder', StatsService::class],
+            // 获取会员统计数据
+            'get.stats.client' => ['getStatsClient', StatsService::class],
         ];
     }
 }
