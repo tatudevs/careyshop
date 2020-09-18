@@ -80,7 +80,7 @@ class CareyShop extends Validate
      */
     public function betweenTime(...$args)
     {
-        if (strtotime($args[0]) >= 0 && strtotime($args[0]) <= 2147472000) {
+        if (strtotime($args[0]) >= 0 && strtotime($args[0]) <= 2147483647) {
             return true;
         }
 

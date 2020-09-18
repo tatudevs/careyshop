@@ -50,7 +50,7 @@ class CareyShop extends Validate
      */
     protected function checkTimestamp(string $value)
     {
-        $timestamp = is_numeric($value) ? (int)$value : strtotime($value);
+        $timestamp = ctype_digit($value) ? (int)$value : strtotime($value);
         if (false === $timestamp) {
             return '无效的日期格式';
         }
