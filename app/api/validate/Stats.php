@@ -8,9 +8,11 @@
  * @date        2020/9/17
  */
 
-namespace app\common\validate;
+namespace app\api\validate;
 
-class Stats extends CareyShop
+use think\Validate;
+
+class Stats extends Validate
 {
     /**
      * 验证规则

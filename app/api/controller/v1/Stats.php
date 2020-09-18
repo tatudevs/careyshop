@@ -40,7 +40,7 @@ class Stats extends CareyShop
         // 外部数据验证
         try {
             $data = $this->getParams();
-            $this->validate($data, \app\common\validate\Stats::class);
+            $this->validate($data, 'Stats');
         } catch (ValidateException $e) {
             return $this->setError($e->getMessage());
         }
