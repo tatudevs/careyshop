@@ -12,7 +12,6 @@ namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
 use careyshop\Ip2Region;
-use think\exception\ValidateException;
 
 class IpLocation extends CareyShop
 {
@@ -24,7 +23,7 @@ class IpLocation extends CareyShop
     protected static function initMethod()
     {
         return [
-            // 查询一条IPv4信息
+            // 查询一条IPv4信息(支持数字地址查询)
             'get.ip.location' => ['getIpLocation', false],
         ];
     }
@@ -36,23 +35,25 @@ class IpLocation extends CareyShop
      */
     protected function getIpLocation()
     {
-        try {
-            $data = $this->getParams();
-            $this->validate($data, 'IpLocation');
-        } catch (ValidateException $e) {
-            return $this->setError($e->getMessage());
-        }
-
         $result = [];
+        $data = $this->getParams();
         $ip2region = new Ip2Region();
 
-        foreach ($data['ip'] as $key => $value) {
+        if (isset($data['ip']) && is_array($data['ip'])) {
+            foreach ($data['ip'] as $key => $value) {
+                try {
+                    $result[$key] = $ip2region->btreeSearch($value);
+                    $result[$key]['status'] = 200;
+                } catch (\exception $e) {
+                    $result[$key]['error'] = $e->getMessage();
+                    $result[$key]['status'] = 500;
+                }
+            }
+        } else {
             try {
-                $result[$key] = $ip2region->btreeSearch($value);
-                $result[$key]['status'] = 200;
+                $result = $ip2region->btreeSearch(!empty($data['ip']) ? $data['ip'] : $this->request->ip());
             } catch (\exception $e) {
-                $result[$key]['error'] = $e->getMessage();
-                $result[$key]['status'] = 500;
+                return $this->setError($e->getMessage());
             }
         }
 
