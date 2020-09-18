@@ -50,12 +50,12 @@ class CareyShop extends Validate
      */
     protected function checkTimestamp(string $value)
     {
-        $timestamp = strtotime($value);
+        $timestamp = is_numeric($value) ? (int)$value : strtotime($value);
         if (false === $timestamp) {
-            $timestamp = $value;
+            return '无效的日期格式';
         }
 
-        if ($timestamp > strtotime("+10 minute") || $timestamp < strtotime("-10 minute")) {
+        if ($timestamp > strtotime('+10 minute') || $timestamp < strtotime('-10 minute')) {
             return 'timestamp已过期';
         }
 
