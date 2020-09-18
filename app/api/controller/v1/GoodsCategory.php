@@ -32,9 +32,9 @@ class GoodsCategory extends CareyShop
             // 获取一个商品分类
             'get.goods.category.item'   => ['getCategoryItem'],
             // 获取商品分类列表
-            'get.goods.category.list'   => ['getCategoryList', false],
+            'get.goods.category.list'   => ['getCategoryList'],
             // 获取所有子级分类
-            'get.goods.category.son'    => ['getCategorySon', false],
+            'get.goods.category.son'    => ['getCategorySon'],
             // 获取分类导航数据
             'get.goods.category.navi'   => ['getCategoryNavi'],
             // 批量设置是否显示

@@ -11,6 +11,7 @@
 namespace app\common\model;
 
 use app\common\service\Cart as CartSer;
+use careyshop\Time;
 use think\facade\Config;
 
 class Order extends CareyShop
@@ -2087,9 +2088,10 @@ class Order extends CareyShop
         }
 
         // 导出数据时取最近90天内的数据
+        $search = ['page', 'order'];
         if (!empty($data['is_export'])) {
-            $days = time() - (90 * 86400);
-            $map['create_time'] = ['>=', $days];
+            $map['create_time'] = ['>=', Time::daysAgo(90)];
+            unset($search['page']);
         }
 
         // 重新整理map条件
@@ -2130,7 +2132,7 @@ class Order extends CareyShop
             ->with($with)
             ->withoutField($field)
             ->where($whereMap)
-            ->withSearch(['page', 'order'], $data)
+            ->withSearch($search, $data)
             ->select()
             ->hidden($hidden)
             ->toArray();

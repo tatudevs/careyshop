@@ -85,10 +85,10 @@ class App extends CareyShop
     /**
      * 添加一个应用
      * @access public
-     * @param $data
+     * @param array $data 外部数据
      * @return array|false
      */
-    public function addAppItem($data)
+    public function addAppItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;

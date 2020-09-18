@@ -80,11 +80,11 @@ class OrderLog extends CareyShop
     /**
      * 获取一个订单操作日志
      * @access public
-     * @param $data
+     * @param array $data 外部数据
      * @return array|bool
      * @throws
      */
-    public function getOrderLog($data)
+    public function getOrderLog(array $data)
     {
         if (!$this->validateData($data, 'log')) {
             return false;
