@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "09d50b671fd97f9a32c474a6a4891775",
+    "content-hash": "e9d1884a93ed1779a9b8c40b24b5bf55",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -281,6 +281,48 @@
             ],
             "description": "适用于thinkphp6.0的跳转扩展",
             "time": "2020-09-11T03:23:38+00:00"
+        },
+        {
+            "name": "dnyz520/careyshop-time",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dnyz520/careyshop-time.git",
+                "reference": "77f6fb4659bfcaf1cf04fb397414e471bd64fc57"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-time/zipball/77f6fb4659bfcaf1cf04fb397414e471bd64fc57",
+                "reference": "77f6fb4659bfcaf1cf04fb397414e471bd64fc57",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "careyshop\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "careyshop",
+                    "email": "dnyz520@126.com"
+                }
+            ],
+            "description": "The CareyShop Time Package",
+            "time": "2020-09-18T06:52:31+00:00"
         },
         {
             "name": "league/flysystem",

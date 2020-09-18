@@ -89,6 +89,7 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
             1 => __DIR__ . '/..' . '/dnyz520/careyshop-image/src',
             2 => __DIR__ . '/..' . '/dnyz520/careyshop-ip2region/src',
             3 => __DIR__ . '/..' . '/dnyz520/careyshop-jump/src',
+            4 => __DIR__ . '/..' . '/dnyz520/careyshop-time/src',
         ),
         'app\\' => 
         array (
