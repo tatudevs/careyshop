@@ -70,6 +70,21 @@ class Time
     }
 
     /**
+     * 返回本月的天数
+     * @return float
+     */
+    public static function daysMonth()
+    {
+        [$begin, $end] = self::month();
+        $a_dt = getdate($begin);
+        $b_dt = getdate($end);
+        $a_new = mktime(12, 0, 0, $a_dt['mon'], $a_dt['mday'], $a_dt['year']);
+        $b_new = mktime(12, 0, 0, $b_dt['mon'], $b_dt['mday'], $b_dt['year']);
+
+        return round(abs($a_new - $b_new) / 86400);
+    }
+
+    /**
      * 返回上个月开始和结束的时间戳
      * @return array
      */
