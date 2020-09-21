@@ -33,19 +33,19 @@ class Stats extends CareyShop
             $result = [
                 // 今天
                 'today'     => [
-                    'order'    => 0,     // 订单数
-                    'sales'    => 0.00,  // 销售额
-                    'trade'    => 0,     // 已完成
-                    'goods'    => 0,     // 商品数
-                    'collect'  => 0,     // 收藏量
-                    'client'   => 0,     // 会员数
-                    'service'  => 0,     // 售后单
-                    'withdraw' => 0,     // 提现单
+                    'order'    => 0,    // 订单数
+                    'sales'    => 0,    // 销售额
+                    'trade'    => 0,    // 已完成
+                    'goods'    => 0,    // 商品数
+                    'collect'  => 0,    // 收藏量
+                    'client'   => 0,    // 会员数
+                    'service'  => 0,    // 售后单
+                    'withdraw' => 0,    // 提现单
                 ],
                 // 昨天
                 'yesterday' => [
                     'order'    => 0,
-                    'sales'    => 0.00,
+                    'sales'    => 0,
                     'trade'    => 0,
                     'goods'    => 0,
                     'collect'  => 0,
