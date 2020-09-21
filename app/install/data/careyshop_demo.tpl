@@ -5036,6 +5036,7 @@ CREATE TABLE `{prefix}goods` (
   `store_qty` int(11) NOT NULL DEFAULT '0' COMMENT '库存数量',
   `comment_sum` int(11) NOT NULL DEFAULT '0' COMMENT '评价数量',
   `sales_sum` int(11) NOT NULL DEFAULT '0' COMMENT '销售数量',
+  `page_views` int(11) NOT NULL DEFAULT '0' COMMENT '游览量',
   `measure` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品计量(重量、体积)',
   `measure_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=重量 1=计件 2=体积',
   `is_postage` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=收费 1=包邮',

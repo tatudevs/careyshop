@@ -67,6 +67,7 @@ class Goods extends CareyShop
         'store_qty'         => 'integer',
         'comment_sum'       => 'integer',
         'sales_sum'         => 'integer',
+        'page_views'        => 'integer',
         'measure'           => 'float',
         'measure_type'      => 'integer',
         'is_postage'        => 'integer',
@@ -369,6 +370,10 @@ class Goods extends CareyShop
         }
 
         $result = $this->find($data['goods_id']);
+        if (!is_client_admin() && $result) {
+            $result->inc('page_views')->update();
+        }
+
         return is_null($result) ? null : $result->toArray();
     }
 
