@@ -147,7 +147,6 @@ class Stats extends CareyShop
                 ->where($mapOrder)
                 ->whereMonth('create_time')
                 ->group('FROM_UNIXTIME(create_time, "%y%c%e")')
-                ->order('create_time', 'asc')
                 ->select()
                 ->column('count', 'day');
 
@@ -156,7 +155,6 @@ class Stats extends CareyShop
                 ->where($mapUser)
                 ->whereMonth('create_time')
                 ->group('FROM_UNIXTIME(create_time, "%y%c%e")')
-                ->order('create_time', 'asc')
                 ->select()
                 ->column('count', 'day');
 
