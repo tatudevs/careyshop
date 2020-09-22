@@ -277,15 +277,15 @@ class Stats extends CareyShop
             ->toArray();
 
         $goods = Db::name('goods')
-            ->field('FROM_UNIXTIME(create_time, "%c-%e") as day, SUM(sales_sum) as sales, SUM(page_views) as views')
+            ->field('FROM_UNIXTIME(create_time, "%Y-%m-%d") as day, SUM(sales_sum) as sales, SUM(page_views) as views')
             ->where('is_delete', '=', 0)
             ->where('create_time', 'between time', [$begin, $end])
-            ->group('FROM_UNIXTIME(create_time, "%Y%c%e")')
+            ->group('FROM_UNIXTIME(create_time, "%Y%m%d")')
             ->select()
             ->column(null, 'day');
 
         while ($begin <= $end) {
-            $key = date('n-j', ctype_digit($begin) ? (int)$begin : strtotime($begin));
+            $key = date('Y-m-d', ctype_digit($begin) ? (int)$begin : strtotime($begin));
             $begin += 86400;
 
             $result['chart'][] = array_key_exists($key, $goods)
@@ -327,11 +327,70 @@ class Stats extends CareyShop
             $data = [
                 // 今天
                 'today' => [
+                    'count'   => 0, // 合计数
+                    'enable'  => 0, // 启用数
+                    'disable' => 0, // 禁用数
+                    'new'     => 0, // 新增数
+                    'active'  => 0, // 活动数
                 ],
                 // 趋势
-                'chart' => [],
+                'chart' => [
+                    'level' => [],
+                    'login' => [],
+                ],
             ];
+
+            $data['today']['count'] = Db::name('user')
+                ->where('is_delete', '=', 0)
+                ->count();
+
+            $data['today']['enable'] = Db::name('user')
+                ->where('status', '=', 1)
+                ->where('is_delete', '=', 0)
+                ->count();
+
+            $data['today']['disable'] = Db::name('user')
+                ->where('status', '=', 0)
+                ->where('is_delete', '=', 0)
+                ->count();
+
+            $data['today']['new'] = Db::name('user')
+                ->where('is_delete', '=', 0)
+                ->whereDay('create_time')
+                ->count();
+
+            $data['today']['active'] = Db::name('user')
+                ->where('is_delete', '=', 0)
+                ->whereDay('update_time')
+                ->count();
+
+            return $data;
         }, $expire);
+
+        $result['chart']['level'] = Db::name('user')
+            ->field('user_level_id, COUNT(user_level_id) as count')
+            ->where('is_delete', '=', 0)
+            ->cache(true, $expire)
+            ->group('user_level_id')
+            ->select()
+            ->toArray();
+
+        $login = Db::name('user')
+            ->field('FROM_UNIXTIME(create_time, "%Y-%m-%d") as day, COUNT(*) as count')
+            ->where('is_delete', '=', 0)
+            ->where('create_time', 'between time', [$begin, $end])
+            ->group('FROM_UNIXTIME(create_time, "%Y%m%d")')
+            ->select()
+            ->column(null, 'day');
+
+        while ($begin <= $end) {
+            $key = date('Y-m-d', ctype_digit($begin) ? (int)$begin : strtotime($begin));
+            $begin += 86400;
+
+            $result['chart']['login'][] = array_key_exists($key, $login)
+                ? $login[$key]
+                : ['day' => $key, 'count' => 0];
+        }
 
         return $result;
     }
