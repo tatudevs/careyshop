@@ -47,7 +47,10 @@ class Stats extends CareyShop
 
         // 默认取最近7天
         if (empty($data['begin_time']) || empty($data['end_time'])) {
-            [$data['begin_time'], $data['end_time']] = Time::dayToNow(7);
+            [$data['begin_time'], $data['end_time']] = Time::dayToNow(6);
+        } else {
+            ctype_digit($data['begin_time']) ?: $data['begin_time'] = strtotime($data['begin_time']);
+            ctype_digit($data['end_time']) ?: $data['end_time'] = strtotime($data['end_time']);
         }
 
         $result = [];

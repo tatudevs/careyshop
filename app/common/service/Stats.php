@@ -146,7 +146,7 @@ class Stats extends CareyShop
                 ->field('FROM_UNIXTIME(create_time, "%c-%e") as day, count(*) as count')
                 ->where($mapOrder)
                 ->whereMonth('create_time')
-                ->group('FROM_UNIXTIME(create_time, "%y%c%e")')
+                ->group('FROM_UNIXTIME(create_time, "%Y%c%e")')
                 ->select()
                 ->column('count', 'day');
 
@@ -154,7 +154,7 @@ class Stats extends CareyShop
                 ->field('FROM_UNIXTIME(create_time, "%c-%e") as day, count(*) as count')
                 ->where($mapUser)
                 ->whereMonth('create_time')
-                ->group('FROM_UNIXTIME(create_time, "%y%c%e")')
+                ->group('FROM_UNIXTIME(create_time, "%Y%c%e")')
                 ->select()
                 ->column('count', 'day');
 
@@ -193,11 +193,12 @@ class Stats extends CareyShop
     /**
      * 获取店铺统计数据
      * @access public
-     * @param int|string $begin 起始日期
-     * @param int|string $end   截止日期
+     * @param int $begin 起始日期
+     * @param int $end   截止日期
      * @return array
+     * @throws
      */
-    public static function getStatsShop($begin, $end)
+    public static function getStatsShop(int $begin, int $end)
     {
         return [];
     }
@@ -205,23 +206,105 @@ class Stats extends CareyShop
     /**
      * 获取商品统计数据
      * @access public
-     * @param int|string $begin 起始日期
-     * @param int|string $end   截止日期
+     * @param int $begin 起始日期
+     * @param int $end   截止日期
      * @return array
+     * @throws
      */
-    public static function getStatsGoods($begin, $end)
+    public static function getStatsGoods(int $begin, int $end)
     {
-        return [];
+        // 缓存时间
+        $expire = Config::get('careyshop.system_info.stats_time', 30) * 60;
+
+        // 数据结构
+        $result = Cache::remember('statsGoods', function () {
+            $data = [
+                // 今天
+                'today' => [
+                    'new'     => 0, // 新增数
+                    'online'  => 0, // 在售数
+                    'offline' => 0, // 仓库数
+                    'views'   => 0, // 游览量
+                    'sales'   => 0, // 销售数
+                    'collect' => 0, // 收藏量
+                ],
+                // 趋势
+                'chart' => [],
+                // TOP10
+                'top'   => [],
+            ];
+
+            $data['today']['new'] = Db::name('goods')
+                ->where('status', '=', 1)
+                ->where('is_delete', '=', 0)
+                ->whereDay('create_time')
+                ->count();
+
+            $data['today']['online'] = Db::name('goods')
+                ->where('status', '=', 1)
+                ->where('is_delete', '=', 0)
+                ->count();
+
+            $data['today']['offline'] = Db::name('goods')
+                ->where('status', '=', 0)
+                ->where('is_delete', '=', 0)
+                ->count();
+
+            $data['today']['views'] = Db::name('goods')
+                ->where('is_delete', '=', 0)
+                ->whereDay('create_time')
+                ->sum('page_views');
+
+            $data['today']['sales'] = Db::name('goods')
+                ->where('is_delete', '=', 0)
+                ->whereDay('create_time')
+                ->sum('sales_sum');
+
+            $data['today']['collect'] = Db::name('collect')
+                ->whereDay('create_time')
+                ->count();
+
+            return $data;
+        }, $expire);
+
+        $result['top'] = Db::name('goods')
+            ->field('goods_id,name,short_name,sales_sum')
+            ->where('is_delete', '=', 0)
+            ->where('create_time', 'between time', [$begin, $end])
+            ->order('sales_sum', 'desc')
+            ->limit(10)
+            ->select()
+            ->toArray();
+
+        $goods = Db::name('goods')
+            ->field('FROM_UNIXTIME(create_time, "%c-%e") as day, SUM(sales_sum) as sales, SUM(page_views) as views')
+            ->where('is_delete', '=', 0)
+            ->where('create_time', 'between time', [$begin, $end])
+            ->group('FROM_UNIXTIME(create_time, "%Y%c%e")')
+            ->select()
+            ->column(null, 'day');
+
+        while ($begin <= $end) {
+            $key = date('n-j', ctype_digit($begin) ? (int)$begin : strtotime($begin));
+            $begin += 86400;
+
+            $result['chart'][] = array_key_exists($key, $goods)
+                ? ['day' => $key, 'sales' => (int)$goods[$key]['sales'], 'views' => (int)$goods[$key]['views']]
+                : ['day' => $key, 'sales' => 0, 'views' => 0];
+        }
+
+        return $result;
     }
 
     /**
      * 获取订单统计数据
      * @access public
-     * @param int|string $begin 起始日期
-     * @param int|string $end   截止日期
+     * @param int $begin 起始日期
+     * @param int $end   截止日期
      * @return array
+     * @throws
      */
-    public static function getStatsOrder($begin, $end)
+    public static function getStatsOrder(int $begin, int $end)
     {
         return [];
     }
@@ -229,12 +312,27 @@ class Stats extends CareyShop
     /**
      * 获取会员统计数据
      * @access public
-     * @param int|string $begin 起始日期
-     * @param int|string $end   截止日期
+     * @param int $begin 起始日期
+     * @param int $end   截止日期
      * @return array
+     * @throws
      */
-    public static function getStatsClient($begin, $end)
+    public static function getStatsClient(int $begin, int $end)
     {
-        return [];
+        // 缓存时间
+        $expire = Config::get('careyshop.system_info.stats_time', 30) * 60;
+
+        // 数据结构
+        $result = Cache::remember('statsClient', function () {
+            $data = [
+                // 今天
+                'today' => [
+                ],
+                // 趋势
+                'chart' => [],
+            ];
+        }, $expire);
+
+        return $result;
     }
 }
