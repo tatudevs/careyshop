@@ -10,6 +10,7 @@
 
 namespace app\common\service;
 
+use app\common\model\Order;
 use careyshop\Time;
 use think\facade\Cache;
 use think\facade\Config;
@@ -306,7 +307,89 @@ class Stats extends CareyShop
      */
     public static function getStatsOrder(int $begin, int $end)
     {
-        return [];
+        // 缓存时间
+        $expire = Config::get('careyshop.system_info.stats_time', 30) * 60;
+
+        // 数据结构
+        $result = Cache::remember('statsOrder', function () {
+            $data = [
+                'today' => [
+                    'order'       => 0, // 订单数
+                    'sales'       => 0, // 销售额
+                    'not_paid'    => 0, // 待付款
+                    'paid'        => 0, // 已付款
+                    'not_shipped' => 0, // 待发货
+                    'shipped'     => 0, // 已发货
+                    'not_comment' => 0, // 待评价
+                ],
+                'chart' => [
+                    'order'  => [],
+                    'source' => [],
+                ],
+            ];
+
+            $map = [
+                ['parent_id', '=', 0],
+                ['is_delete', '=', 0],
+            ];
+
+            $data['today']['order'] = Db::name('order')
+                ->where($map)
+                ->whereDay('create_time')
+                ->count();
+
+            $data['today']['sales'] = Db::name('order')
+                ->where($map)
+                ->whereDay('create_time')
+                ->sum('pay_amount');
+
+            $order = (new Order())->getOrderStatusTotal([]);
+            $data['today'] = array_merge($data['today'], $order);
+
+            return $data;
+        }, $expire);
+
+        $result['chart']['source'] = Db::name('order')
+            ->field('source, COUNT(source) as count')
+            ->where('is_delete', '=', 0)
+            ->where('create_time', 'between time', [$begin, $end])
+            ->group('source')
+            ->select()
+            ->toArray();
+
+        $order = Db::name('order')
+            ->field('FROM_UNIXTIME(create_time, "%Y-%m-%d") as day, COUNT(*) as count')
+            ->where('is_delete', '=', 0)
+            ->where('create_time', 'between time', [$begin, $end])
+            ->group('FROM_UNIXTIME(create_time, "%Y%m%d")')
+            ->select()
+            ->column('count', 'day');
+
+        $payment = Db::name('order')
+            ->field('FROM_UNIXTIME(create_time, "%Y-%m-%d") as day, COUNT(*) as count')
+            ->where('payment_status', '=', 1)
+            ->where('is_delete', '=', 0)
+            ->where('create_time', 'between time', [$begin, $end])
+            ->group('FROM_UNIXTIME(create_time, "%Y%m%d")')
+            ->select()
+            ->column('count', 'day');
+
+        while ($begin <= $end) {
+            $key = date('Y-m-d', ctype_digit($begin) ? (int)$begin : strtotime($begin));
+            $begin += 86400;
+
+            $orderCount = array_key_exists($key, $order) ? $order[$key] : 0;
+            $paymentCount = array_key_exists($key, $payment) ? $payment[$key] : 0;
+
+            $result['chart']['order'][] = [
+                'day'     => $key,
+                'order'   => $orderCount,
+                'payment' => $paymentCount,
+                'percent' => $orderCount > 0 ? round($paymentCount / $orderCount, 2) : 0,
+            ];
+        }
+
+        return $result;
     }
 
     /**
