@@ -350,7 +350,7 @@ class Stats extends CareyShop
         }, $expire);
 
         $result['chart']['source'] = Db::name('order')
-            ->field('source, COUNT(source) as count')
+            ->field('source as type, COUNT(source) as count')
             ->where('is_delete', '=', 0)
             ->where('create_time', 'between time', [$begin, $end])
             ->group('source')
