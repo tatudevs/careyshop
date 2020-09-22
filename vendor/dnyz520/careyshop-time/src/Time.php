@@ -184,4 +184,20 @@ class Time
     {
         return self::daysToSecond() * 7 * $week;
     }
+
+    /**
+     * 计算二个时间戳的相差天数
+     * @param int|string $begin
+     * @param int|string $end
+     * @return float
+     */
+    public static function days($begin, $end)
+    {
+        $a_dt = getdate(ctype_digit($begin) ? (int)$begin : strtotime($begin));
+        $b_dt = getdate(ctype_digit($end) ? (int)$end : strtotime($end));
+        $a_new = mktime(12, 0, 0, $a_dt['mon'], $a_dt['mday'], $a_dt['year']);
+        $b_new = mktime(12, 0, 0, $b_dt['mon'], $b_dt['mday'], $b_dt['year']);
+
+        return round(abs($a_new - $b_new) / 86400);
+    }
 }

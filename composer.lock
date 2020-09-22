@@ -284,16 +284,16 @@
         },
         {
             "name": "dnyz520/careyshop-time",
-            "version": "v1.0.1",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-time.git",
-                "reference": "52f8c34cbd6739a4fee61e4e6f325858e71256d0"
+                "reference": "6804ffb61c72b95b19b1e2c793dea691e488c560"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-time/zipball/52f8c34cbd6739a4fee61e4e6f325858e71256d0",
-                "reference": "52f8c34cbd6739a4fee61e4e6f325858e71256d0",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-time/zipball/6804ffb61c72b95b19b1e2c793dea691e488c560",
+                "reference": "6804ffb61c72b95b19b1e2c793dea691e488c560",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -322,7 +322,7 @@
                 }
             ],
             "description": "The CareyShop Time Package",
-            "time": "2020-09-21T08:22:12+00:00"
+            "time": "2020-09-22T03:15:23+00:00"
         },
         {
             "name": "league/flysystem",
