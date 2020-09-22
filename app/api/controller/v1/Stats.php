@@ -55,11 +55,8 @@ class Stats extends CareyShop
 
         $result = [];
         switch ($data['type']) {
-            case 'index':
-                $result = StatsService::getStatsIndex();
-                break;
             case 'shop':
-                $result = StatsService::getStatsShop($data['begin_time'], $data['end_time']);
+                $result = StatsService::getStatsShop();
                 break;
             case 'goods':
                 $result = StatsService::getStatsGoods($data['begin_time'], $data['end_time']);

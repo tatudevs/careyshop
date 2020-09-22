@@ -19,12 +19,12 @@ use think\facade\Db;
 class Stats extends CareyShop
 {
     /**
-     * 获取后台首页统计数据
+     * 获取店铺统计数据
      * @access public
      * @return array
      * @throws
      */
-    public static function getStatsIndex()
+    public static function getStatsShop()
     {
         // 缓存时间
         $expire = Config::get('careyshop.system_info.stats_time', 30) * 60;
@@ -192,19 +192,6 @@ class Stats extends CareyShop
     }
 
     /**
-     * 获取店铺统计数据
-     * @access public
-     * @param int $begin 起始日期
-     * @param int $end   截止日期
-     * @return array
-     * @throws
-     */
-    public static function getStatsShop(int $begin, int $end)
-    {
-        return [];
-    }
-
-    /**
      * 获取商品统计数据
      * @access public
      * @param int $begin 起始日期
@@ -350,12 +337,19 @@ class Stats extends CareyShop
         }, $expire);
 
         $result['chart']['source'] = Db::name('order')
-            ->field('source as type, COUNT(source) as count')
+            ->field('source as name, COUNT(source) as count')
             ->where('is_delete', '=', 0)
             ->where('create_time', 'between time', [$begin, $end])
             ->group('source')
             ->select()
             ->toArray();
+
+        $source = json_decode(Config::get('careyshop.system_shopping.source'), true);
+        foreach ($result['chart']['source'] as &$item) {
+            if (array_key_exists($item['name'], $source)) {
+                $item['name'] = $source[$item['name']]['name'];
+            }
+        }
 
         $order = Db::name('order')
             ->field('FROM_UNIXTIME(create_time, "%Y-%m-%d") as day, COUNT(*) as count')
@@ -457,6 +451,15 @@ class Stats extends CareyShop
             ->group('user_level_id')
             ->select()
             ->toArray();
+
+        $levels = Db::name('user_level')->column('name', 'user_level_id');
+        foreach ($result['chart']['level'] as &$item) {
+            if (array_key_exists($item['user_level_id'], $levels)) {
+                $item['name'] = $levels[$item['user_level_id']];
+            }
+
+            unset($item['user_level_id']);
+        }
 
         $login = Db::name('user')
             ->field('FROM_UNIXTIME(create_time, "%Y-%m-%d") as day, COUNT(*) as count')
