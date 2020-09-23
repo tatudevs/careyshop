@@ -7058,7 +7058,7 @@ INSERT INTO `{prefix}menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `re
 (515, 0, '订单', '', 'yemianliu', '', 'admin', 0, '/order', '', '_self', 1, 3, 1),
 (516, 0, '营销', '', 'liwu', '', 'admin', 0, '/marketing', '', '_self', 1, 4, 1),
 (517, 0, '会员', '', 'CPhezuo', '', 'admin', 0, '/member', '', '_self', 1, 5, 1),
-(518, 0, '数据', '', 'zhuzhuangtu', '/data', 'admin', 0, '', '', '_self', 1, 7, 1),
+(518, 0, '数据', '', 'zhuzhuangtu', '', 'admin', 0, '/stats', '', '_self', 1, 7, 1),
 (519, 0, '小程序', '', 'yingyongAPP', '/app', 'admin', 0, '', '', '_self', 1, 8, 0),
 (520, 0, '店铺', '', 'baoguo_shounahe', '', 'admin', 0, '/system', '', '_self', 1, 9, 1),
 (521, 0, '设置', '', 'kongzhizhongxin', '', 'admin', 0, '/setting', '', '_self', 1, 10, 1),
