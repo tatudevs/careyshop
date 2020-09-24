@@ -27,10 +27,10 @@ class Stats extends CareyShop
     public static function getStatsShop()
     {
         // 缓存时间
-        $expire = Config::get('careyshop.system_info.stats_time', 30);
+        $expire = Config::get('careyshop.system_info.stats_time', 30 * 60);
 
         // 数据结构
-        return Cache::remember('statsIndex', function () use ($expire) {
+        return Cache::remember('statsIndex', function () {
             $result = [
                 // 今天
                 'today'        => [
@@ -62,8 +62,8 @@ class Stats extends CareyShop
                 'client_month' => [],
                 // 热销TOP10
                 'goods'        => [],
-                // 缓存间隔(分)
-                'today_expire' => $expire,
+                // 今日实时统计时间
+                'update_time'  => date('Y-m-d H:i:s'),
             ];
 
             $mapOrder = ['parent_id' => 0, 'is_delete' => 0];
@@ -216,7 +216,7 @@ class Stats extends CareyShop
             }
 
             return $result;
-        }, $expire * 60);
+        }, $expire);
     }
 
     /**
@@ -230,13 +230,13 @@ class Stats extends CareyShop
     public static function getStatsGoods(int $begin, int $end)
     {
         // 缓存时间
-        $expire = Config::get('careyshop.system_info.stats_time', 30);
+        $expire = Config::get('careyshop.system_info.stats_time', 30 * 60);
 
         // 数据结构
         $result = Cache::remember('statsGoods', function () {
             $data = [
                 // 今天
-                'today'        => [
+                'today'       => [
                     'new'     => 0, // 新增数
                     'online'  => 0, // 在售数
                     'offline' => 0, // 仓库数
@@ -245,11 +245,11 @@ class Stats extends CareyShop
                     'collect' => 0, // 收藏量
                 ],
                 // 趋势
-                'chart'        => [],
+                'chart'       => [],
                 // TOP10
-                'top'          => [],
-                // 缓存间隔(分)
-                'today_expire' => 0,
+                'top'         => [],
+                // 今日实时统计时间
+                'update_time' => date('Y-m-d H:i:s'),
             ];
 
             $data['today']['new'] = Db::name('goods')
@@ -283,7 +283,7 @@ class Stats extends CareyShop
                 ->count();
 
             return $data;
-        }, $expire * 60);
+        }, $expire);
 
         $result['top'] = Db::name('goods')
             ->field('goods_id,name,short_name,sales_sum')
@@ -311,7 +311,6 @@ class Stats extends CareyShop
                 : ['day' => $key, 'sales' => 0, 'views' => 0];
         }
 
-        $result['today_expire'] = $expire;
         return $result;
     }
 
@@ -326,12 +325,12 @@ class Stats extends CareyShop
     public static function getStatsOrder(int $begin, int $end)
     {
         // 缓存时间
-        $expire = Config::get('careyshop.system_info.stats_time', 30);
+        $expire = Config::get('careyshop.system_info.stats_time', 30 * 60);
 
         // 数据结构
         $result = Cache::remember('statsOrder', function () {
             $data = [
-                'today'        => [
+                'today'       => [
                     'not_paid'    => 0, // 待付款
                     'paid'        => 0, // 已付款
                     'not_shipped' => 0, // 待发货
@@ -340,12 +339,12 @@ class Stats extends CareyShop
                     'order'       => 0, // 订单数
                     'sales'       => 0, // 销售额
                 ],
-                'chart'        => [
+                'chart'       => [
                     'order'  => [],
                     'source' => [],
                 ],
-                // 缓存间隔(分)
-                'today_expire' => 0,
+                // 今日实时统计时间
+                'update_time' => date('Y-m-d H:i:s'),
             ];
 
             $map = [
@@ -367,7 +366,7 @@ class Stats extends CareyShop
             $data['today'] = array_merge($data['today'], $order);
 
             return $data;
-        }, $expire * 60);
+        }, $expire);
 
         $result['chart']['source'] = Db::name('order')
             ->field('source as name, COUNT(source) as count')
@@ -416,7 +415,6 @@ class Stats extends CareyShop
             ];
         }
 
-        $result['today_expire'] = $expire;
         return $result;
     }
 
@@ -431,13 +429,13 @@ class Stats extends CareyShop
     public static function getStatsClient(int $begin, int $end)
     {
         // 缓存时间
-        $expire = Config::get('careyshop.system_info.stats_time', 30);
+        $expire = Config::get('careyshop.system_info.stats_time', 30 * 60);
 
         // 数据结构
         $result = Cache::remember('statsClient', function () {
             $data = [
                 // 今天
-                'today'        => [
+                'today'       => [
                     'count'   => 0, // 合计数
                     'enable'  => 0, // 启用数
                     'disable' => 0, // 禁用数
@@ -445,12 +443,12 @@ class Stats extends CareyShop
                     'active'  => 0, // 活动数
                 ],
                 // 趋势
-                'chart'        => [
+                'chart'       => [
                     'level' => [],
                     'login' => [],
                 ],
-                // 缓存间隔(分)
-                'today_expire' => 0,
+                // 今日实时统计时间
+                'update_time' => date('Y-m-d H:i:s'),
             ];
 
             $data['today']['count'] = Db::name('user')
@@ -478,7 +476,7 @@ class Stats extends CareyShop
                 ->count();
 
             return $data;
-        }, $expire * 60);
+        }, $expire);
 
         $result['chart']['level'] = Db::name('user')
             ->field('user_level_id, COUNT(user_level_id) as count')
@@ -514,7 +512,6 @@ class Stats extends CareyShop
                 : ['day' => $key, 'count' => 0];
         }
 
-        $result['today_expire'] = $expire;
         return $result;
     }
 }
