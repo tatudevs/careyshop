@@ -33,7 +33,7 @@ class Stats extends CareyShop
         return Cache::remember('statsIndex', function () {
             $result = [
                 // 今天
-                'today'     => [
+                'today'        => [
                     'order'    => 0,    // 订单数
                     'sales'    => 0,    // 销售额
                     'trade'    => 0,    // 已完成
@@ -44,7 +44,7 @@ class Stats extends CareyShop
                     'withdraw' => 0,    // 提现单
                 ],
                 // 昨天
-                'yesterday' => [
+                'yesterday'    => [
                     'order'    => 0,
                     'sales'    => 0,
                     'trade'    => 0,
@@ -54,12 +54,14 @@ class Stats extends CareyShop
                     'service'  => 0,
                     'withdraw' => 0,
                 ],
+                // 今、昨24小时订单量
+                'order_hours'  => [],
                 // 本月订单量
-                'order'     => [],
+                'order_month'  => [],
                 // 本月会员数
-                'client'    => [],
-                // 本月热销TOP10
-                'goods'     => [],
+                'client_month' => [],
+                // 热销TOP10
+                'goods'        => [],
             ];
 
             $mapOrder = ['parent_id' => 0, 'is_delete' => 0];
@@ -176,14 +178,38 @@ class Stats extends CareyShop
                     break;
                 }
 
-                $result['order'][] = [
+                $result['order_month'][] = [
                     'day'   => $key,
                     'count' => array_key_exists($key, $order) ? $order[$key] : 0,
                 ];
 
-                $result['client'][] = [
+                $result['client_month'][] = [
                     'day'   => $key,
                     'count' => array_key_exists($key, $client) ? $client[$key] : 0,
+                ];
+            }
+
+            $orderToday = Db::name('order')
+                ->field('FROM_UNIXTIME(create_time, "%k") as hour, count(*) as count')
+                ->where($mapOrder)
+                ->whereDay('create_time')
+                ->group('FROM_UNIXTIME(create_time, "%k")')
+                ->select()
+                ->column('count', 'hour');
+
+            $orderYesterday = Db::name('order')
+                ->field('FROM_UNIXTIME(create_time, "%k") as hour, count(*) as count')
+                ->where($mapOrder)
+                ->whereDay('create_time', 'yesterday')
+                ->group('FROM_UNIXTIME(create_time, "%k")')
+                ->select()
+                ->column('count', 'hour');
+
+            for ($i = 0; $i < 24; $i++) {
+                $result['order_hours'][] = [
+                    'hour'      => str_pad($i, 2, '0', STR_PAD_LEFT),
+                    'today'     => array_key_exists($i, $orderToday) ? $orderToday[$i] : 0,
+                    'yesterday' => array_key_exists($i, $orderYesterday) ? $orderYesterday[$i] : 0,
                 ];
             }
 
@@ -301,13 +327,13 @@ class Stats extends CareyShop
         $result = Cache::remember('statsOrder', function () {
             $data = [
                 'today' => [
-                    'order'       => 0, // 订单数
-                    'sales'       => 0, // 销售额
                     'not_paid'    => 0, // 待付款
                     'paid'        => 0, // 已付款
                     'not_shipped' => 0, // 待发货
                     'shipped'     => 0, // 已发货
                     'not_comment' => 0, // 待评价
+                    'order'       => 0, // 订单数
+                    'sales'       => 0, // 销售额
                 ],
                 'chart' => [
                     'order'  => [],
