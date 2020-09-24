@@ -27,7 +27,7 @@ class Stats extends CareyShop
     public static function getStatsShop()
     {
         // 缓存时间
-        $expire = Config::get('careyshop.system_info.stats_time', 30 * 60);
+        $expire = Config::get('careyshop.system_info.stats_time', 30);
 
         // 数据结构
         return Cache::remember('statsIndex', function () {
@@ -216,7 +216,7 @@ class Stats extends CareyShop
             }
 
             return $result;
-        }, $expire);
+        }, $expire * 60);
     }
 
     /**
@@ -230,7 +230,7 @@ class Stats extends CareyShop
     public static function getStatsGoods(int $begin, int $end)
     {
         // 缓存时间
-        $expire = Config::get('careyshop.system_info.stats_time', 30 * 60);
+        $expire = Config::get('careyshop.system_info.stats_time', 30);
 
         // 数据结构
         $result = Cache::remember('statsGoods', function () {
@@ -283,7 +283,7 @@ class Stats extends CareyShop
                 ->count();
 
             return $data;
-        }, $expire);
+        }, $expire * 60);
 
         $result['top'] = Db::name('goods')
             ->field('goods_id,name,short_name,sales_sum')
@@ -325,7 +325,7 @@ class Stats extends CareyShop
     public static function getStatsOrder(int $begin, int $end)
     {
         // 缓存时间
-        $expire = Config::get('careyshop.system_info.stats_time', 30 * 60);
+        $expire = Config::get('careyshop.system_info.stats_time', 30);
 
         // 数据结构
         $result = Cache::remember('statsOrder', function () {
@@ -366,7 +366,7 @@ class Stats extends CareyShop
             $data['today'] = array_merge($data['today'], $order);
 
             return $data;
-        }, $expire);
+        }, $expire * 60);
 
         $result['chart']['source'] = Db::name('order')
             ->field('source as name, COUNT(source) as count')
@@ -429,7 +429,7 @@ class Stats extends CareyShop
     public static function getStatsClient(int $begin, int $end)
     {
         // 缓存时间
-        $expire = Config::get('careyshop.system_info.stats_time', 30 * 60);
+        $expire = Config::get('careyshop.system_info.stats_time', 30);
 
         // 数据结构
         $result = Cache::remember('statsClient', function () {
@@ -476,7 +476,7 @@ class Stats extends CareyShop
                 ->count();
 
             return $data;
-        }, $expire);
+        }, $expire * 60);
 
         $result['chart']['level'] = Db::name('user')
             ->field('user_level_id, COUNT(user_level_id) as count')
