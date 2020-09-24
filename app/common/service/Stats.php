@@ -338,6 +338,7 @@ class Stats extends CareyShop
                     'not_comment' => 0, // 待评价
                     'order'       => 0, // 订单数
                     'sales'       => 0, // 销售额
+                    'service'     => 0, // 售后单
                 ],
                 'chart'       => [
                     'order'  => [],
@@ -361,6 +362,10 @@ class Stats extends CareyShop
                 ->where($map)
                 ->whereDay('create_time')
                 ->sum('pay_amount');
+
+            $data['today']['service'] = Db::name('order_service')
+                ->whereDay('create_time')
+                ->count();
 
             $order = (new Order())->getOrderStatusTotal([]);
             $data['today'] = array_merge($data['today'], $order);
