@@ -166,7 +166,7 @@ class Stats extends CareyShop
             $result['goods'] = Db::name('goods')
                 ->field('goods_id,name,short_name,sales_sum')
                 ->where($mapGoods)
-                ->order('sales_sum', 'desc')
+                ->order(['sales_sum' => 'desc', 'update_time' => 'desc'])
                 ->limit(10)
                 ->select()
                 ->toArray();
@@ -288,7 +288,7 @@ class Stats extends CareyShop
         $result['top'] = Db::name('goods')
             ->field('goods_id,name,short_name,sales_sum')
             ->where('is_delete', '=', 0)
-            ->where('create_time', 'between time', [$begin, $end])
+            ->where('update_time', 'between time', [$begin, $end])
             ->order('sales_sum', 'desc')
             ->limit(10)
             ->select()
@@ -297,7 +297,7 @@ class Stats extends CareyShop
         $goods = Db::name('goods')
             ->field('FROM_UNIXTIME(create_time, "%Y-%m-%d") as day, SUM(sales_sum) as sales, SUM(page_views) as views')
             ->where('is_delete', '=', 0)
-            ->where('create_time', 'between time', [$begin, $end])
+            ->where('update_time', 'between time', [$begin, $end])
             ->group('FROM_UNIXTIME(create_time, "%Y%m%d")')
             ->select()
             ->column(null, 'day');
@@ -306,9 +306,12 @@ class Stats extends CareyShop
             $key = date('Y-m-d', ctype_digit($begin) ? (int)$begin : strtotime($begin));
             $begin += 86400;
 
-            $result['chart'][] = array_key_exists($key, $goods)
+            $item = array_key_exists($key, $goods)
                 ? ['day' => $key, 'sales' => (int)$goods[$key]['sales'], 'views' => (int)$goods[$key]['views']]
                 : ['day' => $key, 'sales' => 0, 'views' => 0];
+
+            $item['conversion'] = $item['views'] > 0 ? round($item['sales'] / $item['views'], 2) : 0;
+            $result['chart'][] = $item;
         }
 
         return $result;
