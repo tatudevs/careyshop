@@ -19,7 +19,7 @@ class Stats extends Validate
      * @var array
      */
     protected $rule = [
-        'type'       => 'require|in:shop,goods,order,client',
+        'type'       => 'require|in:index,shop,goods,order,client',
         'begin_time' => 'requireWith:end_time|date',
         'end_time'   => 'requireWith:begin_time|date',
     ];

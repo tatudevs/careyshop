@@ -19,6 +19,179 @@ use think\facade\Db;
 class Stats extends CareyShop
 {
     /**
+     * 获取后台统计数据
+     * @access public
+     * @return array
+     * @throws
+     */
+    public static function getStatsIndex()
+    {
+        // 缓存时间
+        $expire = Config::get('careyshop.system_info.stats_time', 30);
+
+        // 数据结构
+        return Cache::remember('statsIndex', function () {
+            $result = [
+                // 今日数据
+                'today_data'    => [
+                    'order'    => 0,    // 订单数
+                    'trade'    => 0,    // 完成数
+                    'collect'  => 0,    // 收藏量
+                    'client'   => 0,    // 会员数
+                    'service'  => 0,    // 售后单
+                    'withdraw' => 0,    // 提现单
+                    'comment'  => 0,    // 评价待回复
+                    'consult'  => 0,    // 咨询待回复
+                ],
+                // 订单状态
+                'order_status'  => [],
+                // 订单来源比例
+                'order_source'  => [],
+                // 今日订单量(24H)
+                'order_today'   => [],
+                // 今日活跃会员数(24H)
+                'client_active' => [],
+                // 会员等级比例
+                'client_level'  => [],
+                // 销售状态
+                'sales_status'  => [
+                    // 昨日订单量及销售额
+                    'yesterday' => [],
+                    // 本月订单量及销售额
+                    'month'     => [],
+                ],
+                // 商品排行榜
+                'goods_top'     => [],
+                // 统计时间
+                'update_time'   => date('Y-m-d H:i:s'),
+            ];
+
+            $result['today_data']['order'] = Db::name('order')
+                ->where(['parent_id' => 0, 'is_delete' => 0])
+                ->whereDay('create_time')
+                ->count();
+
+            $result['today_data']['trade'] = Db::name('order')
+                ->where(['parent_id' => 0, 'is_delete' => 0, 'trade_status' => 3])
+                ->whereDay('finished_time')
+                ->count();
+
+            $result['today_data']['collect'] = Db::name('collect')
+                ->whereDay('create_time')
+                ->count();
+
+            $result['today_data']['client'] = Db::name('user')
+                ->where('is_delete', '=', 0)
+                ->whereDay('create_time')
+                ->count();
+
+            $result['today_data']['service'] = Db::name('order_service')
+                ->whereDay('create_time')
+                ->count();
+
+            $result['today_data']['withdraw'] = Db::name('withdraw')
+                ->whereDay('create_time')
+                ->count();
+
+            $result['today_data']['comment'] = Db::name('goods_comment')
+                ->where(['status' => 0, 'is_delete' => 0])
+                ->whereDay('create_time')
+                ->count();
+
+            $result['today_data']['consult'] = Db::name('goods_consult')
+                ->where(['status' => 0, 'is_delete' => 0])
+                ->whereDay('create_time')
+                ->count();
+
+            $orderDB = new Order();
+            $result['order_status'] = $orderDB->getOrderStatusTotal([]);
+
+            $result['order_source'] = Db::name('order')
+                ->field('source as name, COUNT(source) as count')
+                ->where(['parent_id' => 0, 'is_delete' => 0])
+                ->whereDay('create_time')
+                ->group('source')
+                ->select()
+                ->toArray();
+
+            $source = json_decode(Config::get('careyshop.system_shopping.source'), true);
+            foreach ($result['order_source'] as &$item) {
+                if (array_key_exists($item['name'], $source)) {
+                    $item['name'] = $source[$item['name']]['name'];
+                }
+            }
+
+            $orderToday = Db::name('order')
+                ->field('FROM_UNIXTIME(create_time, "%k") as hour, count(*) as count')
+                ->where(['parent_id' => 0, 'is_delete' => 0])
+                ->whereDay('create_time')
+                ->group('FROM_UNIXTIME(create_time, "%k")')
+                ->select()
+                ->column('count', 'hour');
+
+            $clientActive = Db::name('user')
+                ->field('FROM_UNIXTIME(update_time, "%k") as hour, count(*) as count')
+                ->where('is_delete', '=', 0)
+                ->whereDay('update_time')
+                ->group('FROM_UNIXTIME(update_time, "%k")')
+                ->select()
+                ->column('count', 'hour');
+
+            for ($i = 0; $i < 24; $i++) {
+                $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
+
+                $result['order_today'][] = [
+                    'hour'  => $hour,
+                    'count' => array_key_exists($i, $orderToday) ? $orderToday[$i] : 0,
+                ];
+
+                $result['client_active'][] = [
+                    'hour'  => $hour,
+                    'count' => array_key_exists($i, $clientActive) ? $clientActive[$i] : 0,
+                ];
+            }
+
+            $result['client_level'] = Db::name('user')
+                ->field('user_level_id, COUNT(user_level_id) as count')
+                ->where('is_delete', '=', 0)
+                ->group('user_level_id')
+                ->select()
+                ->toArray();
+
+            $levels = Db::name('user_level')->column('name', 'user_level_id');
+            foreach ($result['client_level'] as &$item) {
+                if (array_key_exists($item['user_level_id'], $levels)) {
+                    $item['name'] = $levels[$item['user_level_id']];
+                }
+
+                unset($item['user_level_id']);
+            }
+
+            $result['sales_status']['yesterday'] = Db::name('order')
+                ->field('COUNT(*) as count, SUM(pay_amount) as sales')
+                ->where(['parent_id' => 0, 'is_delete' => 0])
+                ->whereDay('create_time', 'yesterday')
+                ->findOrEmpty();
+
+            $result['sales_status']['month'] = Db::name('order')
+                ->field('COUNT(*) as count, SUM(pay_amount) as sales')
+                ->where(['parent_id' => 0, 'is_delete' => 0])
+                ->whereMonth('create_time')
+                ->findOrEmpty();
+
+            $result['goods_top'] = Db::name('goods')
+                ->field('goods_id,name,short_name,sales_sum')
+                ->where('is_delete', '=', 0)
+                ->order(['sales_sum' => 'desc', 'update_time' => 'desc'])
+                ->limit(10)
+                ->select()
+                ->toArray();
+
+            return $result;
+        }, $expire * 60);
+    }
+
+    /**
      * 获取店铺统计数据
      * @access public
      * @return array
@@ -30,7 +203,7 @@ class Stats extends CareyShop
         $expire = Config::get('careyshop.system_info.stats_time', 30);
 
         // 数据结构
-        return Cache::remember('statsIndex', function () {
+        return Cache::remember('statsShop', function () {
             $result = [
                 // 今天
                 'today'        => [
@@ -94,13 +267,13 @@ class Stats extends CareyShop
             $result['today']['trade'] = Db::name('order')
                 ->where($mapOrder)
                 ->where($mapTrade)
-                ->whereDay('create_time')
+                ->whereDay('finished_time')
                 ->count();
 
             $result['yesterday']['trade'] = Db::name('order')
                 ->where($mapOrder)
                 ->where($mapTrade)
-                ->whereDay('create_time', 'yesterday')
+                ->whereDay('finished_time', 'yesterday')
                 ->count();
 
             $result['today']['goods'] = Db::name('goods')
