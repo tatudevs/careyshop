@@ -290,6 +290,10 @@ class Upload extends UploadBase
      */
     private function getCropParam(int $width, int $height)
     {
+        if (!$width && !$height) {
+            return '';
+        }
+
         $options = 'gravity/Center/crop/';
         $options .= $width != 0 ? (int)$width : '';
         $options .= 'x';
@@ -460,7 +464,7 @@ class Upload extends UploadBase
         $filename = urlencode($filename);
         $filename = str_replace('+', '%20', $filename);
 
-        $url .= '&attname=' . $filename;
+        $url .= '?attname=' . $filename;
         header('Location:' . $url, true, 301);
         exit();
     }

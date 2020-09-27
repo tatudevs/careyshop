@@ -107,7 +107,7 @@ class StorageStyle extends CareyShop
             }
         }
 
-        $map[] = ['storage_style_id', '=', $data['storage_style_id']];
+        $map = [['storage_style_id', '=', $data['storage_style_id']]];
         $result = self::update($data, $map);
         Cache::tag('StorageStyle')->clear();
 

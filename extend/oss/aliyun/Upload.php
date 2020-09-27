@@ -403,6 +403,10 @@ class Upload extends UploadBase
      */
     private function getCropParam(int $width, int $height)
     {
+        if (!$width && !$height) {
+            return '';
+        }
+
         $options = 'crop,';
         $options .= $width != 0 ? sprintf('w_%d,', $width) : '';
         $options .= $height != 0 ? sprintf('h_%d,', $height) : '';
