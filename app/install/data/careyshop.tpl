@@ -2498,7 +2498,7 @@ INSERT INTO `{prefix}menu` (`menu_id`, `parent_id`, `name`, `alias`, `icon`, `re
 (519, 0, '小程序', '', 'yingyongAPP', '/app', 'admin', 0, '', '', '_self', 1, 8, 0),
 (520, 0, '店铺', '', 'baoguo_shounahe', '', 'admin', 0, '/system', '', '_self', 1, 9, 1),
 (521, 0, '设置', '', 'kongzhizhongxin', '', 'admin', 0, '/setting', '', '_self', 1, 10, 1),
-(522, 0, '云端', '', 'yun', '/cloud', 'admin', 0, 'https://www.careyshop.cn/', '', '_blank', 1, 11, 1),
+(522, 0, '云端', '', 'yun', '/cloud', 'admin', 0, 'https://www.careyshop.cn/', '', '_blank', 1, 11, 0),
 (523, 521, '运营人员', '', 'guanliyuansousuo_o', '', 'admin', 0, '/setting/admin', '', '_self', 1, 2, 1),
 (524, 523, '管理人员', '', 'jingliren_o', '对管理组成员账号进行管理', 'admin', 0, '/setting/admin/member', '', '_self', 1, 1, 1),
 (525, 521, '权限分配', '', 'RectangleCopy173', '', 'admin', 0, '/setting/auth', '', '_self', 1, 3, 1),
