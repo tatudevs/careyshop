@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>404 Page Not Found</title>
-    <meta name="description" content="本站基于瑞令网络商城框架系统搭建">
+    <meta name="description" content="<?php echo base64_decode('5pys56uZ5Z+65LqOIENhcmV5U2hvcCDllYbln47moYbmnrbns7vnu5/mkK3lu7o=') ?>">
     {load href="https://zh-static.oss-accelerate.aliyuncs.com/css/error.css"/}
 </head>
 <body>

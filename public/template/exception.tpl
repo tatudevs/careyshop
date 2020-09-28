@@ -94,7 +94,7 @@ if (!function_exists('echo_value')) {
 <head>
     <meta charset="UTF-8">
     <title>系统发生错误</title>
-    <meta name="description" content="本站基于 CareyShop 商城框架系统搭建">
+    <meta name="description" content="<?php echo base64_decode('5pys56uZ5Z+65LqOIENhcmV5U2hvcCDllYbln47moYbmnrbns7vnu5/mkK3lu7o=') ?>">
     <meta name="robots" content="noindex,nofollow" />
     <style>
         /* Base 瑞令网络科技*/
@@ -480,7 +480,7 @@ if (!function_exists('echo_value')) {
                 }
             })();
 
-            $.getScript('//cdn.bootcss.com/prettify/r298/prettify.min.js', function(){
+            $.getScript('//zh-static.oss-accelerate.aliyuncs.com/js/prettify.min.js', function(){
                 prettyPrint();
             });
         })();
