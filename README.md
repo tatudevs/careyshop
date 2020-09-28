@@ -132,6 +132,7 @@ CareyShop Rest接口调试 [Github 仓库](https://github.com/dnyz520/careyshop-
 ![](https://aliyun.oss.careyshop.cn/poster/rest_api.png)
 
 ## 管理后台
+![](https://aliyun.oss.careyshop.cn/poster/gray/%E9%A6%96%E9%A1%B5-%E7%81%B0.png)
 ![](https://aliyun.oss.careyshop.cn/poster/gray/%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8-%E7%81%B0.png)
 ![](https://aliyun.oss.careyshop.cn/poster/gray/%E5%95%86%E5%93%81%E8%A7%84%E6%A0%BC-%E7%81%B0.png)
 ![](https://aliyun.oss.careyshop.cn/poster/gray/%E5%AA%92%E4%BD%93%E8%AE%BE%E7%BD%AE-%E7%81%B0.png)
