@@ -8,7 +8,6 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
 {
     public static $files = array (
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
-        '538ca81a9a966a6716601ecf48f4eaef' => __DIR__ . '/..' . '/opis/closure/functions.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -53,7 +52,6 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         ),
         'O' => 
         array (
-            'Opis\\Closure\\' => 13,
             'OSS\\' => 4,
         ),
         'L' => 
@@ -134,10 +132,6 @@ class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
-        ),
-        'Opis\\Closure\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/opis/closure/src',
         ),
         'OSS\\' => 
         array (

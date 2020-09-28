@@ -12,7 +12,7 @@ namespace think;
 
 // PHP版本检查
 if (version_compare(PHP_VERSION, '7.1', '<')) {
-    header("Content-type: text/html; charset=utf-8");
+    header('Content-type: text/html; charset=utf-8');
     die('PHP版本过低，最少需要PHP7.1，请升级PHP版本！');
 }
 

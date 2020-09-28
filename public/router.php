@@ -12,13 +12,13 @@
  * 启动命令：php think run
  * 如有特殊指定：php think run -H tp.com -p 80
  */
-if (is_file($_SERVER["DOCUMENT_ROOT"] . $_SERVER["SCRIPT_NAME"])) {
+if (is_file($_SERVER['DOCUMENT_ROOT'] . $_SERVER['SCRIPT_NAME'])) {
     return false;
 } else {
-    $_SERVER["SCRIPT_FILENAME"] = __DIR__ . '/index.php';
+    $_SERVER['SCRIPT_FILENAME'] = __DIR__ . '/index.php';
     if (!isset($_SERVER['PATH_INFO'])) {
         $_SERVER['PATH_INFO'] = $_SERVER['SCRIPT_NAME'];
     }
 
-    require __DIR__ . "/index.php";
+    require __DIR__ . '/index.php';
 }
