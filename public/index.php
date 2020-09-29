@@ -5,20 +5,32 @@
  * CareyShop    应用入口文件
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/4/24
+ * @date        2020/7/20
  */
 
+namespace think;
+
 // PHP版本检查
-if (version_compare(PHP_VERSION, '5.6', '<')) {
-    header("Content-type: text/html; charset=utf-8");
-    die('PHP版本过低，最少需要PHP5.6，请升级PHP版本！');
+if (version_compare(PHP_VERSION, '7.1', '<')) {
+    header('Content-type: text/html; charset=utf-8');
+    die('PHP版本过低，最少需要PHP7.1，请升级PHP版本！');
 }
 
-// 定义应用目录
-define('APP_PATH', __DIR__ . '/../application/');
+// 检测是否完成安装
+$appName = '';
+$installPath = __DIR__ . '/../app/install';
 
-// 加载全局配置宏定义
-require __DIR__ . '/config.php';
+if (file_exists($installPath) && !is_file($installPath . '/data/install.lock')) {
+    $appName = 'install';
+}
 
-// 加载框架引导文件
-require __DIR__ . '/../thinkphp/start.php';
+require __DIR__ . '/../vendor/autoload.php';
+
+// 执行HTTP应用并响应
+$http = (new App())->http;
+
+$response = $http->name($appName)->run();
+
+$response->send();
+
+$http->end($response);

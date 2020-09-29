@@ -5,7 +5,7 @@
  * CareyShop    货到付款
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/9/3
+ * @date        2020/7/22
  */
 
 namespace payment\cod;
@@ -17,17 +17,17 @@ class Cod extends Payment
 {
     /**
      * 请求来源
-     * @var array/bool
+     * @var array|bool
      */
     private $request;
 
     /**
      * 设置请求来源
      * @access public
-     * @param  string $request 请求
+     * @param string $request 请求
      * @return object
      */
-    public function setQequest($request)
+    public function setQequest(string $request)
     {
         $this->request = $request;
         return $this;

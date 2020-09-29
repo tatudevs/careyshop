@@ -5,10 +5,12 @@
  * CareyShop    支付宝异步返回
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/7/3
+ * @date        2020/7/23
  */
 
 namespace payment\alipay;
+
+use AopClient;
 
 require_once __DIR__ . '/lib/AopClient.php';
 
@@ -81,7 +83,7 @@ class NotifyUrl
     /**
      * 返回支付成功响应
      * @access public
-     * @param  string $msg 消息内容
+     * @param string $msg 消息内容
      * @return array
      */
     public function getSuccess($msg = '')
@@ -96,7 +98,7 @@ class NotifyUrl
     /**
      * 返回支付失败响应
      * @access public
-     * @param  string $msg 消息内容
+     * @param string $msg 消息内容
      * @return array
      */
     public function getError($msg = '')
@@ -111,7 +113,7 @@ class NotifyUrl
     /**
      * 验签方法
      * @access public
-     * @param  array $setting 配置参数
+     * @param null $setting 配置参数
      * @return bool
      */
     public function checkReturn($setting = null)
@@ -130,7 +132,7 @@ class NotifyUrl
         $this->tradeNo = isset($arr['trade_no']) ? $arr['trade_no'] : '';
         $this->timestamp = isset($arr['gmt_payment']) ? $arr['gmt_payment'] : '';
 
-        $aop = new \AopClient();
+        $aop = new AopClient();
         $aop->alipayrsaPublicKey = $setting['alipayPublicKey']['value'];
 
         if (!$aop->rsaCheckV1($arr, $aop->alipayrsaPublicKey, $arr['sign_type'])) {

@@ -5,7 +5,7 @@
  * CareyShop    OSS基类
  *
  * @author      zxm <252404501@qq.com>
- * @date        2018/1/22
+ * @date        2020/7/23
  */
 
 namespace oss;
@@ -21,7 +21,7 @@ abstract class Upload
     protected $error = '';
 
     /**
-     * @var \think\Request Request 实例
+     * @var Request Request 实例
      */
     protected $request;
 
@@ -46,11 +46,21 @@ abstract class Upload
     /**
      * 构造函数
      * @access public
+     * @param Request $request
+     */
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+        $this->initialize();
+    }
+
+    /**
+     * 初始化
+     * @access public
      * @return void
      */
-    public function __construct()
+    public function initialize()
     {
-        $this->request = Request::instance();
     }
 
     /**
@@ -66,10 +76,10 @@ abstract class Upload
     /**
      * 设置错误信息
      * @access public
-     * @param  string $error 错误信息
+     * @param string $error 错误信息
      * @return false
      */
-    public function setError($error)
+    public function setError(string $error)
     {
         $this->error = $error;
         return false;
@@ -78,10 +88,10 @@ abstract class Upload
     /**
      * 添加待删除资源
      * @access public
-     * @param  string $path 资源路径
+     * @param string $path 资源路径
      * @return void
      */
-    public function addDelFile($path)
+    public function addDelFile(string $path)
     {
         $this->delFileList[] = $path;
     }
@@ -89,7 +99,7 @@ abstract class Upload
     /**
      * 添加待删除资源Id
      * @access public
-     * @param  mixed $id 资源Id
+     * @param mixed $id 资源Id
      * @return void
      */
     public function addDelFileId($id)
@@ -110,7 +120,7 @@ abstract class Upload
     /**
      * 查询条件数据转字符
      * @access public
-     * @param  array $options 查询条件
+     * @param array $options 查询条件
      * @return string
      */
     protected function queryToString($options = [])
@@ -128,7 +138,7 @@ abstract class Upload
     /**
      * 根据文件mime判断资源类型 1=普通资源 3=视频资源
      * @access public
-     * @param  array $options 查询条件
+     * @param $mime
      * @return string
      */
     protected function getFileType($mime)
@@ -150,7 +160,7 @@ abstract class Upload
     /**
      * 获取上传Token
      * @access protected
-     * @param  string $replace 替换资源(path)
+     * @param string $replace 替换资源(path)
      * @return array
      */
     abstract protected function getToken($replace = '');
@@ -172,10 +182,11 @@ abstract class Upload
     /**
      * 获取资源缩略图实际路径
      * @access protected
-     * @param  array $urlArray 路径结构
+     * @param array $urlArray  路径结构
+     * @param array $styleList 样式集合
      * @return void
      */
-    abstract protected function getThumbUrl($urlArray);
+    abstract protected function getThumbUrl(array $urlArray, array $styleList);
 
     /**
      * 批量删除资源
@@ -187,25 +198,25 @@ abstract class Upload
     /**
      * 批量删除资源
      * @access protected
-     * @param  string $path 路径
+     * @param string $path 路径
      * @return void
      */
-    abstract protected function clearThumb($path);
+    abstract protected function clearThumb(string $path);
 
     /**
      * 响应实际下载路径
      * @access protected
-     * @param  string $url      路径
-     * @param  string $filename 文件名
+     * @param string $url      路径
+     * @param string $filename 文件名
      * @return void
      */
-    abstract protected function getDownload($url, $filename);
+    abstract protected function getDownload(string $url, string $filename);
 
     /**
      * 获取资源缩略图信息
      * @access protected
-     * @param  string $url 路径
+     * @param string $url 路径
      * @return array
      */
-    abstract protected function getThumbInfo($url);
+    abstract protected function getThumbInfo(string $url);
 }

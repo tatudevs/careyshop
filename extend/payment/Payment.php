@@ -2,10 +2,10 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    支付
+ * CareyShop    支付基类
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/7/1
+ * @date        2020/7/22
  */
 
 namespace payment;
@@ -67,10 +67,10 @@ class Payment
     /**
      * 设置同步返回URL
      * @access public
-     * @param  string $returnUrl 同步返回URL
+     * @param string $returnUrl 同步返回URL
      * @return bool
      */
-    public function setReturnUrl($returnUrl)
+    public function setReturnUrl(string $returnUrl)
     {
         if (is_string($returnUrl)) {
             $this->returnUrl = $returnUrl;
@@ -83,10 +83,10 @@ class Payment
     /**
      * 设置异步返回URL
      * @access public
-     * @param  string $notifyUrl 异步返回URL
+     * @param string $notifyUrl 异步返回URL
      * @return bool
      */
-    public function setNotifyUrl($notifyUrl)
+    public function setNotifyUrl(string $notifyUrl)
     {
         if (is_string($notifyUrl)) {
             $this->notifyUrl = $notifyUrl;
@@ -99,9 +99,9 @@ class Payment
     /**
      * 设置支付流水号
      * @access public
-     * @param  string $paymentNo 流水号
+     * @param string $paymentNo 流水号
      */
-    public function setOutTradeNo($paymentNo)
+    public function setOutTradeNo(string $paymentNo)
     {
         $this->outTradeNo = $paymentNo;
     }
@@ -109,9 +109,9 @@ class Payment
     /**
      * 设置支付订单名称
      * @access public
-     * @param  string $subject 订单名称
+     * @param string $subject 订单名称
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject)
     {
         $this->subject = $subject;
     }
@@ -119,9 +119,9 @@ class Payment
     /**
      * 设置订单支付金额
      * @access public
-     * @param  float $amount 支付金额
+     * @param float $amount 支付金额
      */
-    public function setTotalAmount($amount)
+    public function setTotalAmount(float $amount)
     {
         $this->totalAmount = $amount;
     }
@@ -129,7 +129,7 @@ class Payment
     /**
      * 设置支付描述
      * @access public
-     * @param  string $body 描述
+     * @param string $body 描述
      */
     public function setBody($body = '')
     {

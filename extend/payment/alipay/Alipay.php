@@ -5,13 +5,17 @@
  * CareyShop    支付宝
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/6/30
+ * @date        2020/7/23
  */
 
 namespace payment\alipay;
 
-use think\Request;
+use AlipayTradeAppPayRequest;
+use AlipayTradePagePayRequest;
+use AlipayTradeWapPayRequest;
+use AopClient;
 use payment\Payment;
+use think\facade\Request;
 
 require_once __DIR__ . '/lib/AopClient.php';
 require_once __DIR__ . '/lib/request/AlipayTradePagePayRequest.php';
@@ -65,10 +69,10 @@ class Alipay extends Payment
     /**
      * 设置请求来源
      * @access public
-     * @param  string $request 请求来源
+     * @param string $request 请求来源
      * @return object
      */
-    public function setQequest($request)
+    public function setQequest(string $request)
     {
         $this->request = $request;
         $this->productCode = $request == 'app' ? 'QUICK_MSECURITY_PAY' : 'FAST_INSTANT_TRADE_PAY';
@@ -79,10 +83,10 @@ class Alipay extends Payment
     /**
      * 设置支付配置
      * @access public
-     * @param  array $setting 配置信息
+     * @param array $setting 配置信息
      * @return bool
      */
-    public function setConfig($setting)
+    public function setConfig(array $setting)
     {
         foreach ($setting as $key => $value) {
             $this->$key = $value['value'];
@@ -127,10 +131,10 @@ class Alipay extends Payment
         ];
 
         if ($this->request == 'web') {
-            $request = Request::instance()->isMobile() ? new \AlipayTradeWapPayRequest() : new \AlipayTradePagePayRequest();
+            $request = Request::isMobile() ? new AlipayTradeWapPayRequest() : new AlipayTradePagePayRequest();
             $request->setReturnUrl($this->returnUrl);
         } else {
-            $request = new \AlipayTradeAppPayRequest();
+            $request = new AlipayTradeAppPayRequest();
         }
 
         $request->setNotifyUrl($this->notifyUrl);
@@ -146,14 +150,14 @@ class Alipay extends Payment
     /**
      * sdkClient
      * @access public
-     * @param  object $request 接口请求参数对象
-     * @param  bool   $ispage  是否是页面接口,电脑网站支付是页面表单接口
+     * @param object $request 接口请求参数对象
+     * @param bool   $ispage  是否是页面接口,电脑网站支付是页面表单接口
      * @return mixed
      * @throws
      */
     private function aopclientRequestExecute($request, $ispage = false)
     {
-        $aop = new \AopClient();
+        $aop = new AopClient();
         $aop->appId = $this->appId;
         $aop->rsaPrivateKey = $this->merchantPrivateKey;
         $aop->alipayrsaPublicKey = $this->alipayPublicKey;

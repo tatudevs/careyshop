@@ -5,11 +5,14 @@
  * CareyShop    支付宝原路退回
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/9/25
+ * @date        2020/7/23
  */
 
 namespace payment\alipay;
 
+use AlipayTradeFastpayRefundQueryRequest;
+use AlipayTradeRefundRequest;
+use AopClient;
 use payment\Payment;
 
 require_once __DIR__ . '/lib/AopClient.php';
@@ -63,10 +66,10 @@ class Refund extends Payment
     /**
      * 设置支付配置
      * @access public
-     * @param  array $setting 配置信息
+     * @param array $setting 配置信息
      * @return bool
      */
-    public function setConfig($setting)
+    public function setConfig(array $setting)
     {
         foreach ($setting as $key => $value) {
             $this->$key = $value['value'];
@@ -98,9 +101,9 @@ class Refund extends Payment
     /**
      * 设置退款流水号
      * @access public
-     * @param  string $refundNo 退款流水号
+     * @param string $refundNo 退款流水号
      */
-    public function setRefundNo($refundNo)
+    public function setRefundNo(string $refundNo)
     {
         $this->refundNo = $refundNo;
     }
@@ -108,7 +111,7 @@ class Refund extends Payment
     /**
      * 设置退款金额
      * @access public
-     * @param  string $amount 退款金额
+     * @param mixed $amount 退款金额
      */
     public function setRefundAmount($amount)
     {
@@ -140,11 +143,11 @@ class Refund extends Payment
             'out_request_no' => $this->refundNo,
         ];
 
-        $request = new \AlipayTradeRefundRequest();
+        $request = new AlipayTradeRefundRequest();
         $request->setBizContent(json_encode($bizContent, JSON_UNESCAPED_UNICODE));
 
         // 请求客户端
-        $aop = new \AopClient();
+        $aop = new AopClient();
         $aop->appId = $this->appId;
         $aop->rsaPrivateKey = $this->merchantPrivateKey;
         $aop->alipayrsaPublicKey = $this->alipayPublicKey;
@@ -175,11 +178,11 @@ class Refund extends Payment
             'out_request_no' => $this->refundNo,
         ];
 
-        $request = new \AlipayTradeFastpayRefundQueryRequest();
+        $request = new AlipayTradeFastpayRefundQueryRequest();
         $request->setBizContent(json_encode($bizContent, JSON_UNESCAPED_UNICODE));
 
         // 请求客户端
-        $aop = new \AopClient();
+        $aop = new AopClient();
         $aop->appId = $this->appId;
         $aop->rsaPrivateKey = $this->merchantPrivateKey;
         $aop->alipayrsaPublicKey = $this->alipayPublicKey;

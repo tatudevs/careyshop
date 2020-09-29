@@ -5,15 +5,12 @@
  * CareyShop    货到付款同步返回
  *
  * @author      zxm <252404501@qq.com>
- * @date        2017/9/3
+ * @date        2020/7/22
  */
 
 namespace payment\cod;
 
-use think\Config;
-use think\Controller;
-
-class ReturnUrl extends Controller
+class ReturnUrl
 {
     /**
      * 流水号
@@ -71,8 +68,8 @@ class ReturnUrl extends Controller
     {
         $data['callback_return_type'] = 'view';
         $data['is_callback'] = sprintf(
-            '<head><meta http-equiv="refresh" content="0; url=%s?info=%s&payment_no=%s"></head>',
-            Config::get('success.value', 'payment'),
+            '<head><meta http-equiv="refresh" content="0; url=%s?info=%s&payment_no=%s"><title></title></head>',
+            config('careyshop.payment.success'),
             $msg,
             $this->paymentNo
         );
@@ -90,8 +87,8 @@ class ReturnUrl extends Controller
     {
         $data['callback_return_type'] = 'view';
         $data['is_callback'] = sprintf(
-            '<head><meta http-equiv="refresh" content="0; url=%s?info=%s&payment_no=%s"></head>',
-            Config::get('error.value', 'payment'),
+            '<head><meta http-equiv="refresh" content="0; url=%s?info=%s&payment_no=%s"><title></title></head>',
+            config('careyshop.payment.error'),
             $msg,
             $this->paymentNo
         );
@@ -106,7 +103,7 @@ class ReturnUrl extends Controller
      */
     public function checkReturn()
     {
-        $this->paymentNo = $this->request->param('out_trade_no');
+        $this->paymentNo = input('param.out_trade_no');
         return true;
     }
 }

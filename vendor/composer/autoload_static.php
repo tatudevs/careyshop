@@ -4,25 +4,39 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2bc4f313dba415539e266f7ac2c87dcd
+class ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548
 {
     public static $files = array (
-        '841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
-        '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        'dedcc85cd6292ba67f8bcf9a7983c616' => __DIR__ . '/..' . '/dnyz520/careyshop-captcha/src/helper.php',
+        '841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
+        '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         't' => 
         array (
-            'think\\helper\\' => 13,
-            'think\\composer\\' => 15,
-            'think\\captcha\\' => 14,
+            'think\\view\\driver\\' => 18,
+            'think\\app\\' => 10,
             'think\\' => 6,
+        ),
+        'c' => 
+        array (
+            'careyshop\\' => 10,
         ),
         'a' => 
         array (
             'app\\' => 4,
+        ),
+        'S' => 
+        array (
+            'Symfony\\Polyfill\\Php80\\' => 23,
+            'Symfony\\Polyfill\\Php72\\' => 23,
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Component\\VarDumper\\' => 28,
         ),
         'Q' => 
         array (
@@ -30,11 +44,20 @@ class ComposerStaticInit2bc4f313dba415539e266f7ac2c87dcd
         ),
         'P' => 
         array (
+            'Psr\\SimpleCache\\' => 16,
+            'Psr\\Log\\' => 8,
+            'Psr\\Container\\' => 14,
+            'Psr\\Cache\\' => 10,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
         'O' => 
         array (
             'OSS\\' => 4,
+        ),
+        'L' => 
+        array (
+            'League\\Flysystem\\Cached\\' => 24,
+            'League\\Flysystem\\' => 17,
         ),
         'C' => 
         array (
@@ -43,30 +66,69 @@ class ComposerStaticInit2bc4f313dba415539e266f7ac2c87dcd
     );
 
     public static $prefixDirsPsr4 = array (
-        'think\\helper\\' => 
+        'think\\view\\driver\\' => 
         array (
-            0 => __DIR__ . '/..' . '/topthink/think-helper/src',
+            0 => __DIR__ . '/..' . '/topthink/think-view/src',
         ),
-        'think\\composer\\' => 
+        'think\\app\\' => 
         array (
-            0 => __DIR__ . '/..' . '/topthink/think-installer/src',
-        ),
-        'think\\captcha\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/topthink/think-captcha/src',
+            0 => __DIR__ . '/..' . '/topthink/think-multi-app/src',
         ),
         'think\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/thinkphp/library/think',
-            1 => __DIR__ . '/..' . '/topthink/think-image/src',
+            0 => __DIR__ . '/..' . '/topthink/framework/src/think',
+            1 => __DIR__ . '/..' . '/topthink/think-helper/src',
+            2 => __DIR__ . '/..' . '/topthink/think-orm/src',
+            3 => __DIR__ . '/..' . '/topthink/think-template/src',
+        ),
+        'careyshop\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dnyz520/careyshop-captcha/src',
+            1 => __DIR__ . '/..' . '/dnyz520/careyshop-exception/src',
+            2 => __DIR__ . '/..' . '/dnyz520/careyshop-image/src',
+            3 => __DIR__ . '/..' . '/dnyz520/careyshop-ip2region/src',
+            4 => __DIR__ . '/..' . '/dnyz520/careyshop-jump/src',
+            5 => __DIR__ . '/..' . '/dnyz520/careyshop-time/src',
         ),
         'app\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/application',
+            0 => __DIR__ . '/../..' . '/app',
+        ),
+        'Symfony\\Polyfill\\Php80\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
+        ),
+        'Symfony\\Polyfill\\Php72\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php72',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Component\\VarDumper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/var-dumper',
         ),
         'Qiniu\\' => 
         array (
             0 => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu',
+        ),
+        'Psr\\SimpleCache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Psr\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
         'PHPMailer\\PHPMailer\\' => 
         array (
@@ -76,17 +138,37 @@ class ComposerStaticInit2bc4f313dba415539e266f7ac2c87dcd
         array (
             0 => __DIR__ . '/..' . '/aliyuncs/oss-sdk-php/src/OSS',
         ),
+        'League\\Flysystem\\Cached\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/flysystem-cached-adapter/src',
+        ),
+        'League\\Flysystem\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/flysystem/src',
+        ),
         'CodeItNow\\' => 
         array (
-            0 => __DIR__ . '/..' . '/codeitnowin/barcode/CodeItNow',
+            0 => __DIR__ . '/..' . '/dnyz520/careyshop-barcode/CodeItNow',
         ),
+    );
+
+    public static $fallbackDirsPsr0 = array (
+        0 => __DIR__ . '/../..' . '/extend',
+    );
+
+    public static $classMap = array (
+        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+        'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2bc4f313dba415539e266f7ac2c87dcd::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2bc4f313dba415539e266f7ac2c87dcd::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInita61d3c03f6bfca22d7ea1e26e36ce548::$classMap;
 
         }, null, ClassLoader::class);
     }

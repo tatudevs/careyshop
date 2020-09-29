@@ -49,6 +49,8 @@ class Geohash
 
     /**
      * Decode a geohash and return an array with decimal lat,long in it
+     * @param $hash
+     * @return array
      */
     public function decode($hash)
     {
@@ -128,6 +130,9 @@ class Geohash
 
     /**
      * Encode a hash from given lat and long
+     * @param $lat
+     * @param $long
+     * @return string
      */
     public function encode($lat, $long)
     {
@@ -194,6 +199,10 @@ class Geohash
 
     /**
      * What's the maximum error for $bits bits covering a range $min to $max
+     * @param $bits
+     * @param $min
+     * @param $max
+     * @return float|int
      */
     private function calcError($bits, $min, $max)
     {
@@ -229,6 +238,11 @@ class Geohash
      * removing the tail recursion is left an exercise for the reader
      *
      * Author: Bruce Chen (weibo: @一个开发者)
+     * @param $number
+     * @param $min
+     * @param $max
+     * @param $bitcount
+     * @return string
      */
     private function binEncode($number, $min, $max, $bitcount)
     {
@@ -251,6 +265,10 @@ class Geohash
     /**
      * decodes binary encoding of number as detailed in http://en.wikipedia.org/wiki/Geohash#Example
      * removing the tail recursion is left an exercise for the reader
+     * @param $binary
+     * @param $min
+     * @param $max
+     * @return float|int
      */
     private function binDecode($binary, $min, $max)
     {

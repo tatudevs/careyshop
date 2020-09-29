@@ -10,7 +10,7 @@
         "framework"
     ],
     "homepage": "https://careyshop.cn/",
-    "license": "proprietary",
+    "license": "AGPL-3.0",
     "authors": [
         {
             "name": "dnyz520",
@@ -23,30 +23,46 @@
         "source": "https://demo.careyshop.cn/admin"
     },
     "require": {
-        "php": ">=5.6.0",
-        "topthink/think-image": "1.*",
-        "topthink/think-helper": "1.*",
-        "topthink/think-captcha": "1.*",
+        "php": ">=7.1.0",
+        "topthink/framework": "^6.0.0",
+        "topthink/think-orm": "^2.0",
+        "topthink/think-multi-app": "^1.0",
+        "topthink/think-view": "^1.0",
         "aliyuncs/oss-sdk-php": "^2.3",
         "phpmailer/phpmailer": "^6.1",
         "qiniu/php-sdk": "^7.2",
-        "codeitnowin/barcode": "^3.0"
+        "dnyz520/careyshop-ip2region": "^1.0",
+        "dnyz520/careyshop-image": "^1.0",
+        "dnyz520/careyshop-barcode": "^1.0",
+        "dnyz520/careyshop-captcha": "^1.0",
+        "dnyz520/careyshop-jump": "^1.0",
+        "dnyz520/careyshop-time": "^1.0",
+        "dnyz520/careyshop-exception": "^1.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.2"
     },
     "autoload": {
         "psr-4": {
-            "app\\": "application"
+            "app\\": "app"
+        },
+        "psr-0": {
+            "": "extend/"
         }
-    },
-    "extra": {
-        "think-path": "thinkphp"
     },
     "config": {
         "preferred-install": "dist"
     },
+    "scripts": {
+        "post-autoload-dump": [
+            "@php think service:discover",
+            "@php think vendor:publish"
+        ]
+    },
     "repositories": {
         "packagist": {
             "type": "composer",
-            "url": "https://packagist.phpcomposer.com"
+            "url": "https://mirrors.aliyun.com/composer/"
         }
     }
 }
