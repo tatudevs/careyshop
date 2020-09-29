@@ -10,6 +10,7 @@
 <div id="container">
     <h1>An Error Occurred</h1>
     <p>Sorry, the page you are looking for is currently unavailable.</p>
+    <p style="display:none">基于 CareyShop 商城框架系统搭建</p>
 </div>
 </body>
 </html>

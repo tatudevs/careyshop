@@ -20,7 +20,6 @@ if (!function_exists('file_put_contents')) {
 
 class Image
 {
-
     /* 缩略图相关常量定义 */
     const THUMB_SCALING   = 1; //常量，标识缩略图等比例缩放类型
     const THUMB_FILLED    = 2; //常量，标识缩略图缩放后填充类型

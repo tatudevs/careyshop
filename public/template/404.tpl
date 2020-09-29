@@ -10,6 +10,7 @@
 <div id="container">
     <h1>404 Page Not Found</h1>
     <p>The page you requested was not found.</p>
+    <p style="display:none">基于 CareyShop 商城框架系统搭建</p>
 </div>
 </body>
 </html>

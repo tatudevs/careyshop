@@ -16,5 +16,12 @@
         "psr-4": {
             "careyshop\\": "src"
         }
+    },
+    "extra": {
+        "think": {
+            "services": [
+                "careyshop\\Ip2RegionService"
+            ]
+        }
     }
 }

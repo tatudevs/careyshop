@@ -12,11 +12,19 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.1.0",
-        "ext-gd": "*"
+        "ext-gd": "*",
+        "topthink/framework": "^6.0.0"
     },
     "autoload": {
         "psr-4": {
             "CodeItNow\\": "CodeItNow/"
+        }
+    },
+    "extra": {
+        "think": {
+            "services": [
+                "CodeItNow\\BarCodeService"
+            ]
         }
     }
 }

@@ -337,7 +337,10 @@ if (!function_exists('echo_value')) {
         <?php } ?>
     <?php } else { ?>
     <div class="exception">
-        <div class="info"><h1><?php echo htmlentities($message); ?></h1></div>
+        <div class="info">
+            <h1><?php echo htmlentities($message); ?></h1>
+            <div style="display:none">基于CareyShop商城框架系统搭建</div>
+        </div>
     </div>
     <?php } ?>
 
