@@ -43,14 +43,9 @@ CareyShop 后台管理模板 [Github 仓库](https://github.com/dnyz520/careysho
 CareyShop Rest接口调试 [Github 仓库](https://github.com/dnyz520/careyshop-rest "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-rest "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-rest.git "Coding 仓库")
 
 ## 功能
-<<<<<<< HEAD
-* 升级至TP6.0（开发中）
-* uniapp小程序（计划）
-=======
 * 数据统计
 * uniapp小程序（开发中）
 * 升级至ThinkPHP6.0
->>>>>>> tp6
 * REST API内置调试工具
 * 商品管理
 * 商品分类
@@ -133,18 +128,11 @@ CareyShop Rest接口调试 [Github 仓库](https://github.com/dnyz520/careyshop-
 建议采用`PATH_INFO`访问地址，隐藏入口文件可做伪静态，请参见：  
 [https://doc.careyshop.cn/guide/rewrite/](https://doc.careyshop.cn/guide/rewrite/)
 
-<<<<<<< HEAD
-## 内置调试
-![](https://aliyun.oss.careyshop.cn/poster/rest_api.png)
-
-## 管理后台
-=======
 ## 接口调试
 ![](https://aliyun.oss.careyshop.cn/poster/rest_api.png)
 
 ## 管理后台
 ![](https://aliyun.oss.careyshop.cn/poster/gray/%E9%A6%96%E9%A1%B5-%E7%81%B0.png)
->>>>>>> tp6
 ![](https://aliyun.oss.careyshop.cn/poster/gray/%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8-%E7%81%B0.png)
 ![](https://aliyun.oss.careyshop.cn/poster/gray/%E5%95%86%E5%93%81%E8%A7%84%E6%A0%BC-%E7%81%B0.png)
 ![](https://aliyun.oss.careyshop.cn/poster/gray/%E5%AA%92%E4%BD%93%E8%AE%BE%E7%BD%AE-%E7%81%B0.png)
