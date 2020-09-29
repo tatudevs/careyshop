@@ -45,7 +45,7 @@ CareyShop Rest接口调试 [Github 仓库](https://github.com/dnyz520/careyshop-
 ## 功能
 * 数据统计
 * uniapp小程序（开发中）
-* 升级至ThinkPHP6.0
+* 重构至ThinkPHP6.0
 * REST API内置调试工具
 * 商品管理
 * 商品分类
