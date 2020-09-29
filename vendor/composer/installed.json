@@ -50,17 +50,17 @@
     },
     {
         "name": "dnyz520/careyshop-barcode",
-        "version": "v1.0.3",
-        "version_normalized": "1.0.3.0",
+        "version": "v1.0.4",
+        "version_normalized": "1.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-barcode.git",
-            "reference": "b2b96596809f9a369384c54fa130014570fd70e1"
+            "reference": "c5043a1cd1f6a808f448f69c1f66e99a47ccf925"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-barcode/zipball/b2b96596809f9a369384c54fa130014570fd70e1",
-            "reference": "b2b96596809f9a369384c54fa130014570fd70e1",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-barcode/zipball/c5043a1cd1f6a808f448f69c1f66e99a47ccf925",
+            "reference": "c5043a1cd1f6a808f448f69c1f66e99a47ccf925",
             "shasum": "",
             "mirrors": [
                 {
@@ -74,7 +74,7 @@
             "php": ">=7.1.0",
             "topthink/framework": "^6.0.0"
         },
-        "time": "2020-09-29T03:31:00+00:00",
+        "time": "2020-09-29T08:10:26+00:00",
         "type": "library",
         "extra": {
             "think": {
@@ -103,17 +103,17 @@
     },
     {
         "name": "dnyz520/careyshop-captcha",
-        "version": "v1.0.10",
-        "version_normalized": "1.0.10.0",
+        "version": "v1.1.0",
+        "version_normalized": "1.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-captcha.git",
-            "reference": "8a4e66812f7896ba78195e97012d052f6bb873ae"
+            "reference": "460d69f62aa6dcccff98c92c1770b3d74321fd50"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/8a4e66812f7896ba78195e97012d052f6bb873ae",
-            "reference": "8a4e66812f7896ba78195e97012d052f6bb873ae",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/460d69f62aa6dcccff98c92c1770b3d74321fd50",
+            "reference": "460d69f62aa6dcccff98c92c1770b3d74321fd50",
             "shasum": "",
             "mirrors": [
                 {
@@ -126,7 +126,7 @@
             "php": ">=7.1.0",
             "topthink/framework": "^6.0.0"
         },
-        "time": "2020-09-29T03:02:35+00:00",
+        "time": "2020-09-29T08:10:48+00:00",
         "type": "library",
         "extra": {
             "think": {
@@ -161,17 +161,17 @@
     },
     {
         "name": "dnyz520/careyshop-exception",
-        "version": "v1.0.1",
-        "version_normalized": "1.0.1.0",
+        "version": "v1.0.2",
+        "version_normalized": "1.0.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-exception.git",
-            "reference": "00a52975f4588c32eaa17dbe3384d055e54ff5c1"
+            "reference": "7525147a16e77f775a17d09b0da4805fa3e37245"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-exception/zipball/00a52975f4588c32eaa17dbe3384d055e54ff5c1",
-            "reference": "00a52975f4588c32eaa17dbe3384d055e54ff5c1",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-exception/zipball/7525147a16e77f775a17d09b0da4805fa3e37245",
+            "reference": "7525147a16e77f775a17d09b0da4805fa3e37245",
             "shasum": "",
             "mirrors": [
                 {
@@ -184,7 +184,7 @@
             "php": ">=7.1.0",
             "topthink/framework": "^6.0"
         },
-        "time": "2020-09-29T07:47:18+00:00",
+        "time": "2020-09-29T08:10:59+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -206,17 +206,17 @@
     },
     {
         "name": "dnyz520/careyshop-image",
-        "version": "v1.0.2",
-        "version_normalized": "1.0.2.0",
+        "version": "v1.0.3",
+        "version_normalized": "1.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-image.git",
-            "reference": "1ec24bb2ea453b2f02d16b16e2d9ae26c3ad3d60"
+            "reference": "ba53292c8d2608aa266cab2fc9c14a1ee7cf0cb2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-image/zipball/1ec24bb2ea453b2f02d16b16e2d9ae26c3ad3d60",
-            "reference": "1ec24bb2ea453b2f02d16b16e2d9ae26c3ad3d60",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-image/zipball/ba53292c8d2608aa266cab2fc9c14a1ee7cf0cb2",
+            "reference": "ba53292c8d2608aa266cab2fc9c14a1ee7cf0cb2",
             "shasum": "",
             "mirrors": [
                 {
@@ -232,7 +232,7 @@
         "require-dev": {
             "topthink/framework": "^6.0"
         },
-        "time": "2020-09-29T03:24:05+00:00",
+        "time": "2020-09-29T08:11:11+00:00",
         "type": "library",
         "extra": {
             "think": {
@@ -261,17 +261,17 @@
     },
     {
         "name": "dnyz520/careyshop-ip2region",
-        "version": "v1.0.4",
-        "version_normalized": "1.0.4.0",
+        "version": "v1.0.5",
+        "version_normalized": "1.0.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-ip2region.git",
-            "reference": "2aa378ac083d12e05d54753cf6cc3a927516cfe9"
+            "reference": "2eaa79893ca53d0ddd1bb9c918799529f72451cb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/2aa378ac083d12e05d54753cf6cc3a927516cfe9",
-            "reference": "2aa378ac083d12e05d54753cf6cc3a927516cfe9",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/2eaa79893ca53d0ddd1bb9c918799529f72451cb",
+            "reference": "2eaa79893ca53d0ddd1bb9c918799529f72451cb",
             "shasum": "",
             "mirrors": [
                 {
@@ -284,7 +284,7 @@
             "php": ">=7.1.0",
             "topthink/framework": "^6.0.0"
         },
-        "time": "2020-09-29T03:02:52+00:00",
+        "time": "2020-09-29T08:11:25+00:00",
         "type": "library",
         "extra": {
             "think": {
@@ -313,17 +313,17 @@
     },
     {
         "name": "dnyz520/careyshop-jump",
-        "version": "v1.0.3",
-        "version_normalized": "1.0.3.0",
+        "version": "v1.0.4",
+        "version_normalized": "1.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-jump.git",
-            "reference": "e6ef18ef71e1e9ba68db80d745192cd45e5a3be5"
+            "reference": "b8785759f8237ef19a50227c5fdcbfe09b9448a5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-jump/zipball/e6ef18ef71e1e9ba68db80d745192cd45e5a3be5",
-            "reference": "e6ef18ef71e1e9ba68db80d745192cd45e5a3be5",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-jump/zipball/b8785759f8237ef19a50227c5fdcbfe09b9448a5",
+            "reference": "b8785759f8237ef19a50227c5fdcbfe09b9448a5",
             "shasum": "",
             "mirrors": [
                 {
@@ -337,7 +337,7 @@
             "topthink/framework": "^6.0",
             "topthink/think-view": "^1.0"
         },
-        "time": "2020-09-29T05:53:09+00:00",
+        "time": "2020-09-29T08:11:41+00:00",
         "type": "library",
         "extra": {
             "think": {
@@ -366,17 +366,17 @@
     },
     {
         "name": "dnyz520/careyshop-time",
-        "version": "v1.0.4",
-        "version_normalized": "1.0.4.0",
+        "version": "v1.0.5",
+        "version_normalized": "1.0.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-time.git",
-            "reference": "da39b7d57e34ef7439745601b73518e9be86e27e"
+            "reference": "517a1b9aec52d338759c192a020f6c34060ec34c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-time/zipball/da39b7d57e34ef7439745601b73518e9be86e27e",
-            "reference": "da39b7d57e34ef7439745601b73518e9be86e27e",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-time/zipball/517a1b9aec52d338759c192a020f6c34060ec34c",
+            "reference": "517a1b9aec52d338759c192a020f6c34060ec34c",
             "shasum": "",
             "mirrors": [
                 {
@@ -389,7 +389,7 @@
             "php": ">=7.1.0",
             "topthink/framework": "^6.0.0"
         },
-        "time": "2020-09-29T05:57:45+00:00",
+        "time": "2020-09-29T08:12:48+00:00",
         "type": "library",
         "extra": {
             "think": {
