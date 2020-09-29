@@ -10,7 +10,7 @@
 
 namespace app\api\controller;
 
-use app\api\exception\ApiOutput;
+use careyshop\ApiOutput;
 use app\common\service\Auth;
 use Exception;
 use think\App;

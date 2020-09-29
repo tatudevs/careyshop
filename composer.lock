@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9d1884a93ed1779a9b8c40b24b5bf55",
+    "content-hash": "2de3b47cc769557b342035e65dfdf3af",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
-            "version": "v2.4.0",
+            "version": "v2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aliyun/aliyun-oss-php-sdk.git",
-                "reference": "bd9c2bba3d167de821cbb33b5c03fe6e41e8e363"
+                "reference": "492866331b7bafaac09506cf42f351b7e9e63766"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aliyun/aliyun-oss-php-sdk/zipball/bd9c2bba3d167de821cbb33b5c03fe6e41e8e363",
-                "reference": "bd9c2bba3d167de821cbb33b5c03fe6e41e8e363",
+                "url": "https://api.github.com/repos/aliyun/aliyun-oss-php-sdk/zipball/492866331b7bafaac09506cf42f351b7e9e63766",
+                "reference": "492866331b7bafaac09506cf42f351b7e9e63766",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -51,7 +51,7 @@
             ],
             "description": "Aliyun OSS SDK for PHP",
             "homepage": "http://www.aliyun.com/product/oss/",
-            "time": "2020-08-31T08:39:59+00:00"
+            "time": "2020-09-29T06:23:57+00:00"
         },
         {
             "name": "dnyz520/careyshop-barcode",
@@ -159,6 +159,49 @@
             ],
             "description": "The CareyShop Captcha Package",
             "time": "2020-09-29T03:02:35+00:00"
+        },
+        {
+            "name": "dnyz520/careyshop-exception",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dnyz520/careyshop-exception.git",
+                "reference": "00a52975f4588c32eaa17dbe3384d055e54ff5c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-exception/zipball/00a52975f4588c32eaa17dbe3384d055e54ff5c1",
+                "reference": "00a52975f4588c32eaa17dbe3384d055e54ff5c1",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "topthink/framework": "^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "careyshop\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "careyshop",
+                    "email": "dnyz520@126.com"
+                }
+            ],
+            "description": "The CareyShop Exception Package",
+            "time": "2020-09-29T07:47:18+00:00"
         },
         {
             "name": "dnyz520/careyshop-image",

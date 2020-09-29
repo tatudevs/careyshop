@@ -9,7 +9,7 @@ return array(
     'think\\view\\driver\\' => array($vendorDir . '/topthink/think-view/src'),
     'think\\app\\' => array($vendorDir . '/topthink/think-multi-app/src'),
     'think\\' => array($vendorDir . '/topthink/framework/src/think', $vendorDir . '/topthink/think-helper/src', $vendorDir . '/topthink/think-orm/src', $vendorDir . '/topthink/think-template/src'),
-    'careyshop\\' => array($vendorDir . '/dnyz520/careyshop-captcha/src', $vendorDir . '/dnyz520/careyshop-image/src', $vendorDir . '/dnyz520/careyshop-ip2region/src', $vendorDir . '/dnyz520/careyshop-jump/src', $vendorDir . '/dnyz520/careyshop-time/src'),
+    'careyshop\\' => array($vendorDir . '/dnyz520/careyshop-captcha/src', $vendorDir . '/dnyz520/careyshop-exception/src', $vendorDir . '/dnyz520/careyshop-image/src', $vendorDir . '/dnyz520/careyshop-ip2region/src', $vendorDir . '/dnyz520/careyshop-jump/src', $vendorDir . '/dnyz520/careyshop-time/src'),
     'app\\' => array($baseDir . '/app'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
     'Symfony\\Polyfill\\Php72\\' => array($vendorDir . '/symfony/polyfill-php72'),

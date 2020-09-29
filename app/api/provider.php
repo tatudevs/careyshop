@@ -9,5 +9,5 @@
  */
 
 return [
-    'think\exception\Handle' => \app\api\exception\ApiException::class,
+    'think\exception\Handle' => \careyshop\ApiException::class,
 ];
