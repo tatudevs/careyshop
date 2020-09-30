@@ -144,26 +144,6 @@ abstract class CareyShop
             $this->outputError('不支持的请求方式');
         }
 
-        // 获取系统配置参数
-        $setting = Cache::remember('get_setting', function () {
-            Cache::tag('setting')->append('get_setting');
-            return Db::name('setting')->withoutField('setting_id')->select();
-        });
-
-        if (!$setting) {
-            Cache::tag('setting')->clear();
-            $this->outputError('系统配置初始化失败');
-        }
-
-        $settingData = [];
-        foreach ($setting as $value) {
-            $settingData[$value['module']][$value['code']] = $value['value'];
-        }
-
-        if (count($settingData) > 0) {
-            Config::set($settingData, convert_uudecode(')8V%R97ES:&]P `'));
-        }
-
         // 检测是否开启API接口
         if (Config::get('careyshop.system_info.open_api') != 1) {
             $this->outputError(Config::get('careyshop.system_info.close_reason'));
@@ -514,6 +494,7 @@ abstract class CareyShop
     {
         // 白名单中排除的接口
         $exclude = [
+            'get.index.host',
             'login.admin.user',
             'login.user.user',
         ];
