@@ -39,8 +39,14 @@ class Stats extends CareyShop
     {
         // 外部数据验证
         try {
+            $validate = [
+                'type|查询方式'       => 'require|in:index,shop,goods,order,client',
+                'begin_time|起始日期' => 'requireWith:end_time|date',
+                'end_time|截止日期'   => 'requireWith:begin_time|date',
+            ];
+
             $data = $this->getParams();
-            $this->validate($data, 'Stats');
+            $this->validate($data, $validate);
         } catch (ValidateException $e) {
             return $this->setError($e->getMessage());
         }
