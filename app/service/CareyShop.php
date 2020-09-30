@@ -5,16 +5,16 @@
  * CareyShop    应用服务类
  *
  * @author      zxm <252404501@qq.com>
- * @date        2020/7/20
+ * @date        2020/9/30
  */
 
 declare (strict_types=1);
 
-namespace app;
+namespace app\service;
 
 use think\Service;
 
-class AppService extends Service
+class CareyShop extends Service
 {
     public function register()
     {
