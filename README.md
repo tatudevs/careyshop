@@ -116,10 +116,10 @@ CareyShop Rest接口调试 [Github 仓库](https://github.com/dnyz520/careyshop-
 * 接口批量调用
 
 ## 安装
-将项目下的`public`目录设为`web访问`目录，第一次访问时会进入`安装向导`，通过向导完成安装。
+必须将项目下的`public`目录设为`web访问`目录，第一次访问首页时会进入`安装向导`，务必请通过向导完成安装。
 
 ## 快速启动
-切换到项目根目录下，输入命令行`php think run -H 127.0.0.1 -p 8080`，便可使用 PHP 自带的`webserver`服务快速访问，按键`Ctrl + C`退出服务。
+切换到项目根目录，在命令行输入`php think run -H 127.0.0.1 -p 8080`，PHP 自带的`webserver`服务就已启动，按键`Ctrl + C`退出服务。
 
 > 建议使用`IP`启动，避免使用`localhost`，并且此方法只适合调试环境。
 
