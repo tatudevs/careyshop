@@ -34,7 +34,7 @@ class Index extends CareyShop
         }
 
         $shell = [
-            'clear'      => '--clear --dir',
+            'clear'      => 'clear --cache --dir',
             'schema_api' => 'optimize:schema common',
         ];
 

@@ -363,7 +363,7 @@ class Index
         Session::clear();
 
         if (!ini_get('safe_mode') && function_exists('shell_exec')) {
-            shell_exec(sprintf('php "%s" %s', root_path() . 'think', '--clear --dir'));
+            shell_exec(sprintf('php "%s"', root_path() . 'think clear --cache --dir'));
         }
 
         View::assign('system_data', $data);
