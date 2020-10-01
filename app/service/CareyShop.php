@@ -30,19 +30,22 @@ class CareyShop extends Service
     /**
      * 服务启动
      * @access public
-     * @throws
      */
     public function boot()
     {
-        // 获取系统配置参数
-        $setting = Cache::remember('get_setting', function () {
-            Cache::tag('setting')->append('get_setting');
-            return Db::name('setting')->withoutField('setting_id')->select();
-        });
+        try {
+            // 获取系统配置参数
+            $setting = Cache::remember('get_setting', function () {
+                Cache::tag('setting')->append('get_setting');
+                return Db::name('setting')->withoutField('setting_id')->select();
+            });
 
-        if (!$setting) {
-            Cache::tag('setting')->clear();
-            abort(500, '系统配置初始化失败');
+            if (!$setting) {
+                Cache::tag('setting')->clear();
+                abort(500, '系统配置初始化失败');
+            }
+        } catch (\Throwable $e) {
+            return;
         }
 
         $settingData = [];
