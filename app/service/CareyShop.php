@@ -15,6 +15,7 @@ namespace app\service;
 use think\facade\Cache;
 use think\facade\Config;
 use think\facade\Db;
+use think\facade\Log;
 use think\Service;
 
 class CareyShop extends Service
@@ -45,6 +46,7 @@ class CareyShop extends Service
                 abort(500, '系统配置初始化失败');
             }
         } catch (\Throwable $e) {
+            Log::error($e->getMessage());
             return;
         }
 

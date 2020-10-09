@@ -1398,7 +1398,7 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v4.4.14",
+            "version": "v4.4.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
@@ -1488,6 +1488,5 @@
     "platform": {
         "php": ">=7.1.0"
     },
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }
