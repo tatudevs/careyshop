@@ -58,5 +58,10 @@ class CareyShop extends Service
         if (count($settingData) > 0) {
             Config::set($settingData, convert_uudecode(')8V%R97ES:&]P `'));
         }
+
+        $appFunction = $this->app->getAppPath() . 'function.php';
+        if (is_file($appFunction)) {
+            include_once $appFunction;
+        }
     }
 }
