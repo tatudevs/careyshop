@@ -18,9 +18,9 @@ if (version_compare(PHP_VERSION, '7.1', '<')) {
 
 // 检测是否完成安装
 $appName = '';
-$installPath = __DIR__ . '/../app/install';
+$installPath = __DIR__ . '/../public/static/install';
 
-if (file_exists($installPath) && !is_file($installPath . '/data/install.lock')) {
+if (file_exists($installPath) && !is_file($installPath . '/install.lock')) {
     $appName = 'install';
 }
 

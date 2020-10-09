@@ -33,22 +33,16 @@ function get_url($vars = '', $idx = null)
 function check_env()
 {
     $items = [
-        'os'       => ['操作系统', '不限制', '类Unix', PHP_OS, 'check'],
-        'php_low'  => ['PHP最低版', '7.1', '7.1+', PHP_VERSION, 'check'],
-        'php_high' => ['PHP最高版', '7.3', '7.4-', PHP_VERSION, 'check'],
-        'upload'   => ['附件上传', '不限制', '2M+', '未知', 'check'],
-        'gd'       => ['GD库', '2.0', '2.0+', '未知', 'check'],
-        'disk'     => ['磁盘空间', '100M', '不限制', '未知', 'check'],
+        'os'     => ['操作系统', '不限制', '类Unix', PHP_OS, 'check'],
+        'php'    => ['PHP版本', '7.1', '7.1+', PHP_VERSION, 'check'],
+        'upload' => ['附件上传', '不限制', '2M+', '未知', 'check'],
+        'gd'     => ['GD库', '2.0', '2.0+', '未知', 'check'],
+        'disk'   => ['磁盘空间', '100M', '不限制', '未知', 'check'],
     ];
 
     // PHP环境检测
-    if ($items['php_low'][3] < $items['php_low'][1]) {
-        $items['php_low'][4] = 'error';
-        session('error', true);
-    }
-
-    if ($items['php_high'][3] > $items['php_high'][1]) {
-        $items['php_high'][4] = 'error';
+    if ($items['php'][3] < $items['php'][1]) {
+        $items['php'][4] = 'error';
         session('error', true);
     }
 
@@ -87,8 +81,8 @@ function check_env()
 function check_dirfile()
 {
     $items = [
-        ['dir', '可写', 'check', '../app'],
         ['dir', '可写', 'check', '../runtime'],
+        ['file', '可写', 'check', '../.env'],
         ['dir', '可写', 'check', './static'],
         ['dir', '可写', 'check', './uploads'],
     ];

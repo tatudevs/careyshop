@@ -18,6 +18,8 @@ use think\facade\Session;
 use think\facade\Validate;
 use think\facade\View;
 
+const DS = DIRECTORY_SEPARATOR;
+
 class Index
 {
     // 引入Jump
@@ -30,10 +32,8 @@ class Index
     public function index()
     {
         // 获取运行目录
-        $appPath = app_path();
-
-        if (is_file($appPath . 'data' . DIRECTORY_SEPARATOR . 'install.lock')) {
-            $this->error('已安装，如需重新安装，请删除 install 模块 data 目录下的 install.lock 文件');
+        if (is_file(public_path() . 'static' . DS . 'install' . DS . 'install.lock')) {
+            $this->error('已安装，如需重新安装，请删除 public\static\install 目录下的 install.lock 文件');
         }
 
         if (is_file(root_path() . '.env')) {
@@ -110,7 +110,7 @@ class Index
                 'password|数据库密码'       => 'require',
                 'hostport|数据库端口'       => 'require|number',
                 'prefix|数据表前缀'         => 'require',
-                'admin_user|管理员账号'     => 'require|length:4,20',
+                'admin_user|管理员账号'     => 'require|alphaDash|length:4,20',
                 'admin_password|管理员密码' => 'require|min:6|confirm',
                 'base_api|API接口路径'     => 'require',
                 'is_cover|覆盖同名数据库'     => 'require|in:0,1',
@@ -159,7 +159,7 @@ class Index
                 $mysqli->close();
 
                 // 创建配置文件
-                $dataPath = app_path() . 'data' . DIRECTORY_SEPARATOR;
+                $dataPath = app_path() . 'data' . DS;
                 $envFile = file_get_contents($dataPath . 'env.tpl');
                 $envFile = macro_str_replace($envFile, $data);
 
@@ -205,7 +205,7 @@ class Index
         $data = Session::get('installData');
         $type = $this->request->post('type');
         $result = ['status' => 1, 'type' => $type];
-        $dataPath = app_path() . 'data' . DIRECTORY_SEPARATOR;
+        $dataPath = app_path() . 'data' . DS;
 
         if (!$type) {
             $result['type'] = 'function';
@@ -313,8 +313,8 @@ class Index
             $fileAdmin = file_get_contents($dataPath . 'production.tpl');
             $fileAdmin = macro_str_replace($fileAdmin, $appData);
 
-            $pathPro = public_path() . 'static' . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR . 'config';
-            if (!file_put_contents($pathPro . DIRECTORY_SEPARATOR . 'production.js', $fileAdmin)) {
+            $pathPro = public_path() . 'static' . DS . 'admin' . DS . 'static' . DS . 'config';
+            if (!file_put_contents($pathPro . DS . 'production.js', $fileAdmin)) {
                 $this->error('后台配置文件写入失败');
             }
 
@@ -349,8 +349,13 @@ class Index
         }
 
         // 安装锁定文件
-        $lockPath = app_path() . 'data' . DIRECTORY_SEPARATOR . 'install.lock';
-        file_put_contents($lockPath, 'lock');
+        $system = str_replace(" ", '', base64_decode('Q2FyZXkgU2hvcCDllYbln44='));
+        $lockPath = public_path() . 'static' . DS . 'install' . DS . 'install.lock';
+
+        $contents = '<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"></head><body>';
+        $contents .= '本项目基于' . $system . '框架系统安装';
+        $contents .= '</body></html>';
+        file_put_contents($lockPath, $contents);
 
         // 清理缓存资源(Cache::clear()其实可以不写,clear命令同样清理缓存)
         // 但防止系统不支持"shell_exec"还是需要单独清理
