@@ -43,8 +43,9 @@ CareyShop 后台管理模板 [Github 仓库](https://github.com/dnyz520/careysho
 CareyShop Rest接口调试 [Github 仓库](https://github.com/dnyz520/careyshop-rest "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-rest "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-rest.git "Coding 仓库")
 
 ## 功能
+* 微信公众号（开发中）
+* uniapp小程序（内测中）
 * 数据统计
-* uniapp小程序（开发中）
 * 重构至ThinkPHP6.0
 * REST API内置调试工具
 * 商品管理
