@@ -19,11 +19,11 @@ class Index extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // API访问测试
             'get.index.host'      => ['getIndexHost', false],
             // 清空所有缓存

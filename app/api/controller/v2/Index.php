@@ -20,21 +20,21 @@ class Index extends \app\api\controller\v1\Index
      * 如果只是简单的修改或只是新增额外自定义接口,请参考 https://doc.careyshop.cn/guide/version/
      *
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        // 从父类中获取了方法路由,此时就可以进行新增或修改
-        $parent = parent::initMethod();
+        // 如果需要父类的方法路由,则需要执行
+        parent::initMethod();
 
         // 父方法路由键名不存在"get.system.v2"方法,表示新增一个接口
-        $parent['get.system.v2'] = ['getMethodV2', false];
+        self::$route['get.system.v2'] = ['getMethodV2', false];
 
         // 父方法路由键名存在"get.system.version"方法,表示修改一个接口
-        $parent['get.system.version'] = ['getVersion', false];
+        self::$route['get.system.version'] = ['getVersion', false];
 
         // 删除从父方法路由继承过来的"set.system.optimize"方法
-        unset($parent['set.system.optimize']);
+        unset(self::$route['set.system.optimize']);
 
         /**
          * 至此"Index"控制器下的最终方法结果:
@@ -43,10 +43,7 @@ class Index extends \app\api\controller\v1\Index
          * "get.system.version" v1、v2都可请求,但返回内容不同
          * "get.system.v2" v1不可请求,v2可请求
          * 至于方法路由中的键值含义请参考 https://doc.careyshop.cn/guide/controller/
-         * 最后,只需要将"$parent"变量返回即可
          */
-
-        return $parent;
     }
 
     /**
