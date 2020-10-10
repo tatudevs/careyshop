@@ -494,7 +494,6 @@ abstract class CareyShop
     {
         // 白名单中排除的接口
         $exclude = [
-            'get.index.host',
             'login.admin.user',
             'login.user.user',
         ];
