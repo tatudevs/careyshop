@@ -38,18 +38,6 @@ abstract class CareyShop
     protected $app;
 
     /**
-     * 是否批量验证
-     * @var bool
-     */
-    protected $batchValidate = false;
-
-    /**
-     * 控制器中间件
-     * @var array
-     */
-    protected $middleware = [];
-
-    /**
      * 控制器错误信息
      * @var string
      */
@@ -209,8 +197,11 @@ abstract class CareyShop
             $this->outputError($sign);
         }
 
-        // 控制器初始化
+        // 自定义初始化
         static::init();
+
+        // 获取方法路由器
+        static::initMethod();
     }
 
     /**
@@ -241,11 +232,7 @@ abstract class CareyShop
         }
 
         $v->message($message);
-
-        // 是否批量验证
-        if ($batch || $this->batchValidate) {
-            $v->batch(true);
-        }
+        !$batch ?: $v->batch(true); // 是否批量验证
 
         return $v->failException(true)->check($data);
     }
@@ -262,11 +249,10 @@ abstract class CareyShop
     /*
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [];
     }
 
     /**
@@ -298,11 +284,7 @@ abstract class CareyShop
      */
     public function index()
     {
-        // 获取控制器方法路由
-        if (!isset(self::$route)) {
-            self::$route = static::initMethod();
-        }
-
+        // 尝试自动查找对应函数
         if (!array_key_exists($this->method, self::$route)) {
             $this->autoFindMethod();
         }
