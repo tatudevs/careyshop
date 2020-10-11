@@ -38,10 +38,10 @@ class Index extends CareyShop
     /**
      * 测试远程访问API接口是否通过
      * 请不要删除或修改,否则无法申请CareyShop官方云服务
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function getIndexHost()
+    public function getIndexHost()
     {
         $data['system'] = Config::get('extra.product');
         $data['verification'] = $this->getParams();
