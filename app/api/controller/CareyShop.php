@@ -95,7 +95,7 @@ abstract class CareyShop
      * 方法路由器
      * @var array
      */
-    protected static $route;
+    protected static $route = [];
 
     /**
      * 对应模型
@@ -197,11 +197,11 @@ abstract class CareyShop
             $this->outputError($sign);
         }
 
-        // 自定义初始化
-        static::init();
-
         // 获取方法路由器
         static::initMethod();
+
+        // 自定义初始化
+        static::init();
     }
 
     /**
@@ -237,21 +237,21 @@ abstract class CareyShop
         return $v->failException(true)->check($data);
     }
 
-    /**
-     * 自定义初始化
-     * @access protected
-     * @return void
-     */
-    protected static function init()
-    {
-    }
-
     /*
      * 方法路由器
      * @access protected
      * @return void
      */
     protected static function initMethod()
+    {
+    }
+
+    /**
+     * 自定义初始化
+     * @access protected
+     * @return void
+     */
+    protected static function init()
     {
     }
 
