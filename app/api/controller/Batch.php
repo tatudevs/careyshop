@@ -72,18 +72,26 @@ class Batch extends CareyShop
                     }
                 }
 
-                $route = $oldData['class']::initMethod();
-                if (!array_key_exists($method, $route)) {
+                $route = [];
+                $oldData['class']::initMethod();
+
+                if (!array_key_exists($method, $oldData['class']::$route)) {
                     throw new Exception('method路由方法不存在');
                 }
 
-                $method = $route[$method];
+                // 获取实际调用方法
+                $method = $oldData['class']::$route[$method];
+
+                // 检测是否指定指向类
                 if (!isset($method[1])) {
                     $method[1] = 'app\\common\\model\\' . $controller;
                 }
 
+                // 实例化指向类
                 if (class_exists($method[1])) {
                     static::$model = new $method[1];
+                } else if (method_exists($oldData['class'], $method[0])) {
+                    static::$model = new $oldData['class']($this->app);
                 } else {
                     throw new Exception('method不支持批量调用');
                 }
