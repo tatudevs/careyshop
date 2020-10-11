@@ -17,11 +17,11 @@ class UserMoney extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取指定账号资金信息
             'get.user.money.info' => ['getUserMoneyInfo'],
         ];

@@ -17,11 +17,11 @@ class StorageStyle extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 验证资源样式编码是否唯一
             'unique.storage.style.code' => ['uniqueStorageStyleCode'],
             // 添加一个资源样式

@@ -17,11 +17,11 @@ class CouponGive extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 向指定用户发放优惠劵
             'give.coupon.user'       => ['giveCouponUser'],
             // 生成线下优惠劵

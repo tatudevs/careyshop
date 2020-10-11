@@ -17,11 +17,11 @@ class History extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一条我的足迹
             'add.history.item'   => ['addHistoryItem'],
             // 批量删除我的足迹

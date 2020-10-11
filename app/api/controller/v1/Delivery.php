@@ -17,11 +17,11 @@ class Delivery extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个配送方式
             'add.delivery.item'    => ['addDeliveryItem'],
             // 编辑一个配送方式

@@ -17,11 +17,11 @@ class GoodsReply extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 对商品评价添加一个回复(管理组不参与评价回复)
             'add.goods.reply.item' => ['addReplyItem'],
             // 批量删除商品评价的回复

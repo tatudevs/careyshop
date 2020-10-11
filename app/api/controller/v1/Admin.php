@@ -18,11 +18,11 @@ class Admin extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个账号
             'add.admin.item'       => ['addAdminItem'],
             // 编辑一个账号

@@ -17,11 +17,11 @@ class Navigation extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个导航
             'add.navigation.item'   => ['addNavigationItem'],
             // 编辑一个导航

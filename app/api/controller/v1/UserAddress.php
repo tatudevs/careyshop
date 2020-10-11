@@ -17,11 +17,11 @@ class UserAddress extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取指定账号的收货地址列表
             'get.user.address.list'    => ['getAddressList'],
             // 获取指定账号的一个收货地址

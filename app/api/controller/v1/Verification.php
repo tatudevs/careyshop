@@ -17,11 +17,11 @@ class Verification extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 使用验证码
             'use.verification.item'   => ['useVerificationItem'],
             // 发送短信验证码

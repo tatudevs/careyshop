@@ -17,11 +17,11 @@ class Cart extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 验证是否允许添加或编辑购物车
             'check.cart.goods'   => ['checkCartGoods'],
             // 添加或编辑购物车商品

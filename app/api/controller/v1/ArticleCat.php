@@ -18,11 +18,11 @@ class ArticleCat extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个文章分类
             'add.article.cat.item'  => ['addArticleCatItem'],
             // 编辑一个文章分类
@@ -46,13 +46,13 @@ class ArticleCat extends CareyShop
 
     /**
      * 获取文章分类列表
-     * @access protected
+     * @access public
      * @param int  $articleCatId 文章分类Id
      * @param bool $isLayer      是否返回本级分类
      * @param null $level        分类深度
      * @return array|bool
      */
-    protected function getArticleCatList($articleCatId = 0, $isLayer = false, $level = null)
+    public function getArticleCatList($articleCatId = 0, $isLayer = false, $level = null)
     {
         try {
             $catData = $this->getParams();

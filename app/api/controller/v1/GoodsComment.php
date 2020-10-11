@@ -17,11 +17,11 @@ class GoodsComment extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一条新的商品评价
             'add.goods.comment.item'   => ['addCommentItem'],
             // 追加一条商品评价

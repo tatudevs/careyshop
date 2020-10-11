@@ -20,11 +20,11 @@ class Stats extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取某一项数据统计
             'get.stats.data' => ['getStatsData', false],
         ];
@@ -32,10 +32,10 @@ class Stats extends CareyShop
 
     /**
      * 获取某一项数据统计
-     * @access protected
+     * @access public
      * @return array|false
      */
-    protected function getStatsData()
+    public function getStatsData()
     {
         // 外部数据验证
         try {

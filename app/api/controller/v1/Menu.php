@@ -17,11 +17,11 @@ class Menu extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个菜单
             'add.menu.item'      => ['addMenuItem'],
             // 获取一个菜单

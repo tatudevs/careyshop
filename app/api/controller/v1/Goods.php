@@ -19,11 +19,11 @@ class Goods extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 检测商品货号是否唯一
             'unique.goods.code'          => ['uniqueGoodsCode'],
             // 添加一个商品

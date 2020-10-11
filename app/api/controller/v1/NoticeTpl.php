@@ -17,11 +17,11 @@ class NoticeTpl extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取一个通知系统模板
             'get.notice.tpl.item'   => ['getNoticeTplItem'],
             // 获取通知系统模板列表

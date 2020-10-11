@@ -17,11 +17,11 @@ class UserLevel extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取一个账号等级
             'get.user.level.item' => ['getLevelItem'],
             // 获取账号等级列表

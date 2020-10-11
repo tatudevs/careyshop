@@ -17,11 +17,11 @@ class GoodsAttribute extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个商品属性主体
             'add.goods.attribute.body.item' => ['addAttributeBodyItem'],
             // 编辑一个商品属性主体

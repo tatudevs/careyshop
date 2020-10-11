@@ -18,11 +18,11 @@ class App extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个应用
             'add.app.item'            => ['addAppItem'],
             // 编辑一个应用
@@ -52,10 +52,10 @@ class App extends CareyShop
 
     /**
      * 查询应用验证码
-     * @access protected
+     * @access public
      * @return array|false
      */
-    protected function getAppCaptcha()
+    public function getAppCaptcha()
     {
         $appKey = $this->request->param('appkey');
         return \app\common\model\App::getAppCaptcha($appKey);

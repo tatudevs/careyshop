@@ -18,11 +18,11 @@ class Barcode extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取条形码调用地址
             'get.barcode.callurl' => ['getBarcodeCallurl', BarcodeService::class],
             // 获取一个条形码

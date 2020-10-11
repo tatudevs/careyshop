@@ -17,11 +17,11 @@ class DeliveryArea extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个配送区域
             'add.delivery.area.item' => ['addAreaItem'],
             // 编辑一个配送区域

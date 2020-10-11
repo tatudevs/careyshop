@@ -17,11 +17,11 @@ class GoodsConsult extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个新的商品咨询
             'add.goods.consult.item'   => ['addConsultItem'],
             // 批量删除商品咨询

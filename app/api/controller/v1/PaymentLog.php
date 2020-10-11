@@ -17,11 +17,11 @@ class PaymentLog extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 关闭一笔充值记录
             'close.payment.log.item' => ['closePaymentLogItem'],
             // 获取一笔充值记录

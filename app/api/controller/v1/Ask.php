@@ -17,11 +17,11 @@ class Ask extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个提问
             'add.ask.item'      => ['addAskItem'],
             // 删除一条记录

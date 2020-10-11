@@ -17,11 +17,11 @@ class ActionLog extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取一条操作日志
             'get.action.log.item' => ['getActionLogItem'],
             // 获取操作日志列表

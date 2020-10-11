@@ -18,11 +18,11 @@ class DeliveryDist extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一条配送轨迹
             'add.delivery.dist.item'     => ['addDeliveryDistItem'],
             // 接收推送过来的配送轨迹

@@ -17,11 +17,11 @@ class AppInstall extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个应用安装包
             'add.app.install.item'      => ['addAppInstallItem'],
             // 编辑一个应用安装包

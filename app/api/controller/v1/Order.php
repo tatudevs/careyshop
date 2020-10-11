@@ -19,11 +19,11 @@ class Order extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取订单确认或提交订单
             'confirm.order.list'      => ['confirmOrderList'],
             // 调整订单应付金额

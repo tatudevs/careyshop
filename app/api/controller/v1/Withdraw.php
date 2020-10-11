@@ -18,11 +18,11 @@ class Withdraw extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取一个提现请求
             'get.withdraw.item'      => ['getWithdrawItem'],
             // 获取提现请求列表

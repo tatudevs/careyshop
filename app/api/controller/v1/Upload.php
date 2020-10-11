@@ -18,11 +18,11 @@ class Upload extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取上传模块列表
             'get.upload.module'   => ['getUploadModule', UploadService::class],
             // 获取上传地址

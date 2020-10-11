@@ -17,11 +17,11 @@ class AuthRule extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一条规则
             'add.auth.rule.item'   => ['addAuthRuleItem'],
             // 获取一条规则

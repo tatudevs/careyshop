@@ -17,11 +17,11 @@ class Coupon extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一张优惠劵
             'add.coupon.item'    => ['addCouponItem'],
             // 编辑一张优惠劵

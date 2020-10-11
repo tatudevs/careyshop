@@ -18,11 +18,11 @@ class User extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 注册一个新账号
             'add.user.item'       => ['addUserItem'],
             // 编辑一个账号

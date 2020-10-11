@@ -17,11 +17,11 @@ class Ads extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个广告
             'add.ads.item'    => ['addAdsItem'],
             // 编辑一个广告

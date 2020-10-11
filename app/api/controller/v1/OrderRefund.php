@@ -17,11 +17,11 @@ class OrderRefund extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 查询一笔退款信息
             'query.refund.item' => ['queryRefundItem'],
             // 获取退款记录列表

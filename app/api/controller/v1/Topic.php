@@ -17,11 +17,11 @@ class Topic extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个专题
             'add.topic.item'   => ['addTopicItem'],
             // 编辑一个专题

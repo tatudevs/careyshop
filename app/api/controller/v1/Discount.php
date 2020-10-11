@@ -18,11 +18,11 @@ class Discount extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个商品折扣
             'add.discount.item'       => ['addDiscountItem'],
             // 编辑一个商品折扣

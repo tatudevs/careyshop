@@ -18,11 +18,11 @@ class IpLocation extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 查询一条IPv4信息(支持数字地址查询)
             'get.ip.location' => ['getIpLocation', false],
         ];
@@ -30,10 +30,10 @@ class IpLocation extends CareyShop
 
     /**
      * 查询一条IPv4信息
-     * @access protected
+     * @access public
      * @return array|bool
      */
-    protected function getIpLocation()
+    public function getIpLocation()
     {
         $result = [];
         $data = $this->getParams();

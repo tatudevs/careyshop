@@ -17,11 +17,11 @@ class Article extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一篇文章
             'add.article.item'   => ['addArticleItem'],
             // 编辑一篇文章

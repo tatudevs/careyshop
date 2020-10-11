@@ -17,11 +17,11 @@ class Setting extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取某个模块的设置
             'get.setting.list'       => ['getSettingList'],
             // 设置配送轨迹

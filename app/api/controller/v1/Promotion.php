@@ -17,11 +17,11 @@ class Promotion extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个订单促销
             'add.promotion.item'   => ['addPromotionItem'],
             // 编辑一个订单促销

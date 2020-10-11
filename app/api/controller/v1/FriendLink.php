@@ -17,11 +17,11 @@ class FriendLink extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个友情链接
             'add.friendlink.item'   => ['addFriendLinkItem'],
             // 编辑一个友情链接

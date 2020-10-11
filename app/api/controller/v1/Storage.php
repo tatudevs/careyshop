@@ -18,11 +18,11 @@ class Storage extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个资源目录
             'add.storage.directory.item'    => ['addStorageDirectoryItem'],
             // 编辑一个资源目录

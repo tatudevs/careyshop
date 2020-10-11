@@ -17,11 +17,11 @@ class CardUse extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 批量设置购物卡是否有效
             'set.card.use.invalid' => ['setCardUseInvalid'],
             // 绑定购物卡

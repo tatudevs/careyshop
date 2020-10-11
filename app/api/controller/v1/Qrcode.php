@@ -18,11 +18,11 @@ class Qrcode extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 动态生成一个二维码
             'get.qrcode.item'    => ['getQrcodeItem'],
             // 添加一个二维码

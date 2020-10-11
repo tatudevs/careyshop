@@ -17,11 +17,11 @@ class Card extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一条购物卡
             'add.card.item'   => ['addCardItem'],
             // 编辑一条购物卡

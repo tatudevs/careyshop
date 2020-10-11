@@ -17,11 +17,11 @@ class Transaction extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取一笔交易结算
             'get.transaction.item' => ['getTransactionItem'],
             // 获取交易结算列表

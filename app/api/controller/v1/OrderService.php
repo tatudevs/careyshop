@@ -17,11 +17,11 @@ class OrderService extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取订单商品可申请的售后服务
             'get.order.service.goods'    => ['getOrderServiceGoods'],
             // 客服对售后服务单添加备注(顾客不可见)

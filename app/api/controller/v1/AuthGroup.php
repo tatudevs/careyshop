@@ -17,11 +17,11 @@ class AuthGroup extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个用户组
             'add.auth.group.item'   => ['addAuthGroupItem'],
             // 编辑一个用户组

@@ -18,11 +18,11 @@ class Payment extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 编辑一个支付配置
             'set.payment.item'    => ['setPaymentItem'],
             // 获取一个支付配置

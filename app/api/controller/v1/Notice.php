@@ -18,11 +18,11 @@ class Notice extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 获取一个通知系统
             'get.notice.item'   => ['getNoticeItem'],
             // 批量设置通知系统是否启用

@@ -18,11 +18,11 @@ class GoodsCategory extends CareyShop
     /**
      * 方法路由器
      * @access protected
-     * @return array
+     * @return void
      */
     protected static function initMethod()
     {
-        return [
+        self::$route = [
             // 添加一个商品分类
             'add.goods.category.item'   => ['addCategoryItem'],
             // 编辑一个商品分类
@@ -50,10 +50,10 @@ class GoodsCategory extends CareyShop
 
     /**
      * 获取所有子级分类
-     * @access protected
+     * @access public
      * @return array|bool
      */
-    protected function getCategorySon()
+    public function getCategorySon()
     {
         try {
             $catData = $this->getParams();
@@ -67,14 +67,14 @@ class GoodsCategory extends CareyShop
 
     /**
      * 获取商品分类列表
-     * @access protected
+     * @access public
      * @param int  $catId        分类Id
      * @param bool $isGoodsTotal 是否获取关联商品数
      * @param bool $isLayer      是否返回本级分类
      * @param null $level        分类深度
      * @return array|bool
      */
-    protected function getCategoryList($catId = 0, $isGoodsTotal = false, $isLayer = false, $level = null)
+    public function getCategoryList($catId = 0, $isGoodsTotal = false, $isLayer = false, $level = null)
     {
         try {
             $catData = $this->getParams();
