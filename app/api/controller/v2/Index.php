@@ -43,13 +43,13 @@ class Index extends \app\api\controller\v1\Index
          */
         parent::initMethod();
 
-        // 父方法路由键名不存在"get.system.v2"方法,表示新增一个接口
+        // 父方法路由器键名不存在"get.system.v2"方法,表示新增一个接口
         self::$route['get.system.v2'] = ['getMethodV2', false];
 
-        // 父方法路由键名存在"get.system.version"方法,表示修改一个接口
+        // 父方法路由器键名存在"get.system.version"方法,表示修改一个接口
         self::$route['get.system.version'] = ['getVersion', false];
 
-        // 删除从父方法路由继承过来的"set.system.optimize"方法
+        // 删除从父方法路由器继承过来的"set.system.optimize"方法
         unset(self::$route['set.system.optimize']);
 
         /**
@@ -58,7 +58,7 @@ class Index extends \app\api\controller\v1\Index
          * "set.system.optimize" v1可请求,v2不可请求
          * "get.system.version" v1、v2都可请求,但返回内容不同
          * "get.system.v2" v1不可请求,v2可请求
-         * 至于方法路由中的键值含义请参考 https://doc.careyshop.cn/guide/controller/
+         * 至于方法路由器中的键值含义请参考 https://doc.careyshop.cn/guide/controller/
          */
 
         /**
@@ -67,7 +67,7 @@ class Index extends \app\api\controller\v1\Index
          * "set.system.optimize" v1可请求,v2不可请求
          * "get.system.version" v1、v2都可请求,但返回内容不同
          * "get.system.v2" v1不可请求,v2可请求
-         * 至于方法路由中的键值含义请参考 https://doc.careyshop.cn/guide/controller/
+         * 至于方法路由器中的键值含义请参考 https://doc.careyshop.cn/guide/controller/
          */
     }
 
@@ -81,13 +81,13 @@ class Index extends \app\api\controller\v1\Index
      */
     protected static function init()
     {
-        // 父方法路由键名不存在"get.system.v2"方法,表示新增一个接口
+        // 父方法路由器键名不存在"get.system.v2"方法,表示新增一个接口
         // self::$route['get.system.v2'] = ['getMethodV2', false];
 
-        // 父方法路由键名存在"get.system.version"方法,表示修改一个接口
+        // 父方法路由器键名存在"get.system.version"方法,表示修改一个接口
         // self::$route['get.system.version'] = ['getVersion', false];
 
-        // 删除从父方法路由继承过来的"set.system.optimize"方法
+        // 删除从父方法路由器继承过来的"set.system.optimize"方法
         // unset(self::$route['set.system.optimize']);
 
         /**
@@ -96,7 +96,7 @@ class Index extends \app\api\controller\v1\Index
          * "set.system.optimize" v1可请求,v2不可请求
          * "get.system.version" v1、v2都可请求,但返回内容不同
          * "get.system.v2" v1不可请求,v2可请求
-         * 至于方法路由中的键值含义请参考 https://doc.careyshop.cn/guide/controller/
+         * 至于方法路由器中的键值含义请参考 https://doc.careyshop.cn/guide/controller/
          */
     }
 
