@@ -37,7 +37,8 @@
         "dnyz520/careyshop-captcha": "^1.0",
         "dnyz520/careyshop-jump": "^1.0",
         "dnyz520/careyshop-time": "^1.0",
-        "dnyz520/careyshop-exception": "^1.0"
+        "dnyz520/careyshop-exception": "^1.0",
+        "overtrue/wechat": "~4.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2"
