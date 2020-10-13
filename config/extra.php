@@ -10,7 +10,7 @@
 
 return [
     // 产品信息
-    'product'      => [
+    'product'        => [
         'product_name'    => 'CareyShop商城框架系统',
         'product_version' => '1.3.1',
         'build_version'   => '20201012',
@@ -21,15 +21,15 @@ return [
         'company_website' => 'http://www.careyshop.cn',
     ],
 
-    // 模块
-    'module_group' => [
+    // 应用模块
+    'module_group'   => [
         'api'   => 'API',
         'admin' => '后台',
         'home'  => '前台',
     ],
 
-    // 客户组
-    'client_group' => [
+    // 用户组
+    'client_group'   => [
         'visitor' => [
             'value' => -1,
             'name'  => '游客组',
@@ -42,5 +42,9 @@ return [
             'value' => 1,
             'name'  => '管理组',
         ],
+    ],
+
+    // 公众号模块
+    'official_group' => [
     ],
 ];
