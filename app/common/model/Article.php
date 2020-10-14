@@ -63,7 +63,7 @@ class Article extends CareyShop
     /**
      * 关联查询NULL处理
      * @param mixed $value
-     * @return \stdClass
+     * @return mixed|\stdClass
      */
     public function getGetArticleCatAttr($value)
     {

@@ -430,7 +430,7 @@ class Admin extends CareyShop
      * 获取指定账号的基础数据
      * @access public
      * @param array $data 外部数据
-     * @return array|bool
+     * @return array|false
      */
     public function getAdminSelect(array $data)
     {

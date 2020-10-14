@@ -45,7 +45,7 @@ class AdsPosition extends CareyShop
      * @access public
      * @param  $value
      * @param  $data
-     * @return mixed
+     * @return false|string
      */
     public function setContentAttr($value, $data)
     {

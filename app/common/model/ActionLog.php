@@ -5,7 +5,7 @@
  * CareyShop    操作日志模型
  *
  * @author      zxm <252404501@qq.com>
- * @date        2020/7/25
+ * @date        2020/10/14
  */
 
 namespace app\common\model;

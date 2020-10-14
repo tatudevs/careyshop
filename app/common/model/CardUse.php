@@ -71,7 +71,7 @@ class CardUse extends CareyShop
     /**
      * 关联查询NULL处理
      * @param mixed $value
-     * @return \stdClass
+     * @return mixed|\stdClass
      */
     public function getGetUserAttr($value)
     {
@@ -349,7 +349,7 @@ class CardUse extends CareyShop
      * 隐藏购物卡卡密
      * @access private
      * @param array $data 购物卡数据
-     * @return array|mixed
+     * @return array
      */
     private function hidePassword(array $data)
     {

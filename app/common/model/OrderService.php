@@ -134,7 +134,7 @@ class OrderService extends CareyShop
     /**
      * 关联查询NULL处理
      * @param mixed $value
-     * @return \stdClass
+     * @return mixed|\stdClass
      */
     public function getGetOrderRefundAttr($value)
     {
@@ -144,7 +144,7 @@ class OrderService extends CareyShop
     /**
      * 关联查询NULL处理
      * @param mixed $value
-     * @return \stdClass
+     * @return mixed|\stdClass
      */
     public function getGetUserAttr($value)
     {
@@ -154,7 +154,7 @@ class OrderService extends CareyShop
     /**
      * 关联查询NULL处理
      * @param mixed $value
-     * @return \stdClass
+     * @return mixed|\stdClass
      */
     public function getGetAdminAttr($value)
     {

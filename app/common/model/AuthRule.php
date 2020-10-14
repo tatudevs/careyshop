@@ -248,7 +248,7 @@ class AuthRule extends CareyShop
      * @access public
      * @param string $module  对应模块
      * @param int    $groupId 用户组编号
-     * @return array|false
+     * @return array
      * @throws
      */
     public static function getMenuAuthRule(string $module, int $groupId)

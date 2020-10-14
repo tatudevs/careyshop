@@ -202,7 +202,7 @@ class AppInstall extends CareyShop
     /**
      * 根据请求获取一个应用安装包
      * @access public
-     * @return array|false
+     * @return array|mixed
      */
     public function requestAppInstallItem()
     {

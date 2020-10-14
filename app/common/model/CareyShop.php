@@ -75,7 +75,7 @@ abstract class CareyShop extends Model
      * 设置模型错误信息
      * @access public
      * @param string $value 错误信息
-     * @return bool
+     * @return false
      */
     public function setError(string $value)
     {
@@ -86,30 +86,26 @@ abstract class CareyShop extends Model
     /**
      * 翻页搜索器
      * @access public
-     * @param object $query
-     * @param mixed  $value
-     * @param mixed  $data
+     * @param mixed ...$args 参数
      */
-    public function searchPageAttr($query, $value, $data)
+    public function searchPageAttr(...$args)
     {
-        $pageNo = isset($data['page_no']) ? $data['page_no'] : 1;
-        $pageSize = isset($data['page_size']) ? $data['page_size'] : Config::get('app.list_rows');
+        $pageNo = isset($args[2]['page_no']) ? $args[2]['page_no'] : 1;
+        $pageSize = isset($args[2]['page_size']) ? $args[2]['page_size'] : Config::get('app.list_rows');
 
-        $query->page($pageNo, $pageSize);
+        $args[0]->page($pageNo, $pageSize);
     }
 
     /**
      * 排序搜索器
      * @access public
-     * @param object $query
-     * @param mixed  $value
-     * @param mixed  $data
+     * @param mixed ...$args 参数
      */
-    public function searchOrderAttr($query, $value, $data)
+    public function searchOrderAttr(...$args)
     {
         $order = [];
-        if (isset($data['order_field']) || isset($data['order_type'])) {
-            $order[$data['order_field']] = $data['order_type'];
+        if (isset($args[2]['order_field']) || isset($args[2]['order_type'])) {
+            $order[$args[2]['order_field']] = $args[2]['order_type'];
         } else {
             $order = $this->defaultOrder;
         }
@@ -117,13 +113,13 @@ abstract class CareyShop extends Model
         if (!empty($this->fixedOrder)) {
             // 固定排序必须在前,否则将导致自定义排序无法覆盖
             $order = array_merge($this->fixedOrder, $order);
-            if (!empty($data['order_field']) && $this->isReverse) {
+            if (!empty($args[2]['order_field']) && $this->isReverse) {
                 $order = array_reverse($order);
             }
         }
 
         if (!empty($order)) {
-            $query->order($order);
+            $args[0]->order($order);
         }
     }
 

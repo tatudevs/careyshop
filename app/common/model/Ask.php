@@ -86,7 +86,7 @@ class Ask extends CareyShop
     /**
      * 关联查询NULL处理
      * @param mixed $value
-     * @return \stdClass
+     * @return mixed|\stdClass
      */
     public function getGetUserAttr($value)
     {
@@ -266,7 +266,7 @@ class Ask extends CareyShop
      * 获取一个问答明细
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return false|mixed|null
      * @throws
      */
     public function getAskItem(array $data)
