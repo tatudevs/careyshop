@@ -15,7 +15,7 @@ class Withdraw extends CareyShop
     /**
      * 获取提现手续费
      * @access public
-     * @return array
+     * @return float[]
      */
     public function getWithdrawFee()
     {

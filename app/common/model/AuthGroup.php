@@ -97,7 +97,7 @@ class AuthGroup extends CareyShop
      * 获取一个用户组
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAuthGroupItem(array $data)

@@ -42,7 +42,7 @@ class Goods extends CareyShop
 
     /**
      * 是否需要自动写入时间戳
-     * @var bool
+     * @var bool|string
      */
     protected $autoWriteTimestamp = true;
 
@@ -360,7 +360,7 @@ class Goods extends CareyShop
      * 获取一个商品
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getGoodsItem(array $data)
@@ -1328,7 +1328,7 @@ class Goods extends CareyShop
      * 复制一个商品
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function copyGoodsItem(array $data)

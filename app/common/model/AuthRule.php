@@ -78,7 +78,7 @@ class AuthRule extends CareyShop
      * 获取一条规则
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAuthRuleItem(array $data)

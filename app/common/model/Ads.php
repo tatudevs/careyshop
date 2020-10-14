@@ -234,7 +234,7 @@ class Ads extends CareyShop
      * 获取一个广告
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAdsItem(array $data)
@@ -292,7 +292,7 @@ class Ads extends CareyShop
      * 根据编码获取广告
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAdsCode(array $data)

@@ -119,7 +119,7 @@ class GoodsAttribute extends CareyShop
      * 获取一个商品属性主体
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAttributeBodyItem(array $data)
@@ -231,7 +231,7 @@ class GoodsAttribute extends CareyShop
      * 获取一个商品属性
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAttributeItem(array $data)

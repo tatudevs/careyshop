@@ -20,7 +20,7 @@ class Topic extends CareyShop
 
     /**
      * 是否需要自动写入时间戳
-     * @var bool
+     * @var bool|string
      */
     protected $autoWriteTimestamp = true;
 

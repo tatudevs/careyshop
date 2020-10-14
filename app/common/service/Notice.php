@@ -15,7 +15,7 @@ class Notice extends CareyShop
     /**
      * 获取通知系统列表
      * @access public
-     * @return array|false
+     * @return mixed
      */
     public static function getNoticeList()
     {

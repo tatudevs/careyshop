@@ -23,7 +23,7 @@ class Admin extends CareyShop
 
     /**
      * 是否需要自动写入时间戳
-     * @var bool
+     * @var bool|string
      */
     protected $autoWriteTimestamp = true;
 
@@ -137,7 +137,7 @@ class Admin extends CareyShop
     /**
      * 关联查询NULL处理
      * @param mixed $value
-     * @return \stdClass
+     * @return mixed|\stdClass
      */
     public function getGetAuthGroupAttr($value)
     {
@@ -149,7 +149,7 @@ class Admin extends CareyShop
      * @access private
      * @param null $adminID admin_id
      * @param null $data    外部数据
-     * @return bool|false
+     * @return bool
      * @throws
      */
     private function checkAdminAuth($adminID = null, $data = null)
@@ -182,7 +182,7 @@ class Admin extends CareyShop
      * 添加一个账号
      * @access public
      * @param array $data 外部数据
-     * @return array|bool
+     * @return array|false
      */
     public function addAdminItem(array $data)
     {
@@ -316,7 +316,7 @@ class Admin extends CareyShop
      * 重置一个账号密码
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function resetAdminItem(array $data)
     {
@@ -376,7 +376,7 @@ class Admin extends CareyShop
      * 获取一个账号
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAdminItem(array $data)

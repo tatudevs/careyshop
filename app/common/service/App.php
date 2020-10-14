@@ -18,7 +18,7 @@ class App extends CareyShop
     /**
      * 获取应用验证码调用地址
      * @access public
-     * @return mixed
+     * @return array
      */
     public function getCaptchaCallurl()
     {
@@ -31,7 +31,7 @@ class App extends CareyShop
     /**
      * 获取应用验证码
      * @access public
-     * @return mixed
+     * @return array
      */
     public function imageAppCaptcha()
     {
@@ -62,7 +62,7 @@ class App extends CareyShop
      * 验证应用验证码
      * @access public
      * @param string $code 验证码
-     * @return bool
+     * @return string|true
      */
     public static function checkCaptcha(string $code)
     {

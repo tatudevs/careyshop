@@ -36,7 +36,7 @@ class DeliveryDist extends CareyShop
 
     /**
      * 是否需要自动写入时间戳
-     * @var bool
+     * @var bool|string
      */
     protected $autoWriteTimestamp = true;
 
@@ -106,7 +106,7 @@ class DeliveryDist extends CareyShop
      * 添加一条配送轨迹
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function addDeliveryDistItem(array $data)
@@ -200,7 +200,7 @@ class DeliveryDist extends CareyShop
      * 接收推送过来的配送轨迹
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function putDeliveryDistData(array $data)
     {
@@ -254,7 +254,7 @@ class DeliveryDist extends CareyShop
      * @access private
      * @param string $deliveryCode 快递公司编码
      * @param string $logisticCode 快递单号
-     * @return false|array
+     * @return array|false
      */
     private function getOrderTracesByJson(string $deliveryCode, string $logisticCode)
     {
@@ -303,7 +303,7 @@ class DeliveryDist extends CareyShop
      * 根据流水号获取配送轨迹
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getDeliveryDistCode(array $data)
@@ -362,7 +362,7 @@ class DeliveryDist extends CareyShop
      * 获取配送轨迹列表
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getDeliveryDistList(array $data)

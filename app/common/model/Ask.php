@@ -38,7 +38,7 @@ class Ask extends CareyShop
 
     /**
      * 是否需要自动写入时间戳
-     * @var bool
+     * @var bool|string
      */
     protected $autoWriteTimestamp = true;
 
@@ -177,7 +177,7 @@ class Ask extends CareyShop
      * @access private
      * @param array    $data 提交数据
      * @param bool|int $isQa true:咨询 false:回复
-     * @return false|array
+     * @return array|false
      * @throws
      */
     private function addAskOrAnswer(array $data, $isQa)
@@ -266,7 +266,7 @@ class Ask extends CareyShop
      * 获取一个问答明细
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAskItem(array $data)

@@ -218,7 +218,7 @@ class AdsPosition extends CareyShop
      * 获取一个广告位置
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getPositionItem(array $data)
@@ -302,7 +302,7 @@ class AdsPosition extends CareyShop
      * 根据广告位置编码获取广告
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getPositionCode(array $data)

@@ -23,7 +23,7 @@ class AppInstall extends CareyShop
 
     /**
      * 是否需要自动写入时间戳
-     * @var bool
+     * @var bool|string
      */
     protected $autoWriteTimestamp = true;
 
@@ -103,7 +103,7 @@ class AppInstall extends CareyShop
      * 获取一个应用安装包
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAppInstallItem(array $data)
@@ -171,7 +171,7 @@ class AppInstall extends CareyShop
      * 根据条件查询是否有更新
      * @access public
      * @param array $data 外部数据
-     * @return array|bool
+     * @return array|bool|false[]
      * @throws
      */
     public function queryAppInstallUpdated(array $data)

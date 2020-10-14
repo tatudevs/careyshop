@@ -19,7 +19,7 @@ class OrderRefund extends CareyShop
      * @access private
      * @param string $file  支付目录
      * @param string $model 退款模块
-     * @return object|false
+     * @return false|mixed
      */
     private function createRefundModel(string $file, string $model)
     {
@@ -46,7 +46,7 @@ class OrderRefund extends CareyShop
      * @param array  &$setting  支付配置
      * @param float   $amount   退款金额
      * @param string  $refundNo 退款流水号
-     * @return object|false
+     * @return false|mixed
      */
     public function createRefundRequest(array &$data, array &$setting, float $amount, $refundNo = '')
     {

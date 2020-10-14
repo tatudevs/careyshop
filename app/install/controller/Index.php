@@ -27,7 +27,7 @@ class Index
 
     /**
      * 安装首页
-     * @return mixed
+     * @return string
      */
     public function index()
     {
@@ -52,7 +52,7 @@ class Index
 
     /**
      * 步骤二，检查环境
-     * @return mixed
+     * @return string
      */
     public function step2()
     {
@@ -79,7 +79,7 @@ class Index
 
     /**
      * 步骤三，设置数据
-     * @return mixed
+     * @return string
      */
     public function step3()
     {
@@ -96,7 +96,7 @@ class Index
 
     /**
      * 步骤四，创建配置
-     * @return mixed
+     * @return string
      */
     public function step4()
     {
@@ -336,7 +336,7 @@ class Index
 
     /**
      * 完成安装
-     * @return mixed
+     * @return string
      */
     public function complete()
     {

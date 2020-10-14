@@ -20,7 +20,7 @@ class Cart extends CareyShop
 
     /**
      * 是否需要自动写入时间戳
-     * @var bool
+     * @var bool|string
      */
     protected $autoWriteTimestamp = true;
 
@@ -106,7 +106,7 @@ class Cart extends CareyShop
      * @access public
      * @param array $data     外部数据
      * @param bool  $isBuyNow 是否立即购买
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function setCartItem(array $data, $isBuyNow = false)
@@ -170,7 +170,7 @@ class Cart extends CareyShop
      * 验证是否允许添加或编辑购物车
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function checkCartGoods(array $data)
@@ -311,7 +311,7 @@ class Cart extends CareyShop
      * 获取购物车列表
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getCartList(array $data)
@@ -343,7 +343,7 @@ class Cart extends CareyShop
      * 获取购物车商品数量
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false|int[]
      */
     public static function getCartCount(array $data)
     {
@@ -419,7 +419,7 @@ class Cart extends CareyShop
      * 请求商品立即购买
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function createCartBuynow(array $data)
     {

@@ -110,7 +110,7 @@ class App extends CareyShop
      * 编辑一个应用
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function setAppItem(array $data)
     {
@@ -141,7 +141,7 @@ class App extends CareyShop
      * 获取一个应用
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAppItem(array $data)

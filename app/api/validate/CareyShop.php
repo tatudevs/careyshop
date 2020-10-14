@@ -32,7 +32,7 @@ class CareyShop extends Validate
 
     /**
      * 批量调用验证场景
-     * @return CareyShop
+     * @return $this
      */
     public function sceneBatch()
     {
@@ -46,7 +46,7 @@ class CareyShop extends Validate
      * 验证时间戳是否在允许范围内
      * @access protected
      * @param string $value 验证数据
-     * @return string|true
+     * @return bool|string
      */
     protected function checkTimestamp(string $value)
     {

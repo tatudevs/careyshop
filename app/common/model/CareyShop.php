@@ -64,7 +64,7 @@ abstract class CareyShop extends Model
     /**
      * 返回模型的错误信息
      * @access public
-     * @return string|array
+     * @return string
      */
     public function getError()
     {

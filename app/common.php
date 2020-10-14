@@ -62,7 +62,7 @@ if (!function_exists('get_client_id')) {
 if (!function_exists('get_client_name')) {
     /**
      * 返回当前账号登录名
-     * @return int
+     * @return string
      */
     function get_client_name()
     {
@@ -84,7 +84,7 @@ if (!function_exists('get_client_group')) {
 if (!function_exists('get_client_nickname')) {
     /**
      * 返回当前账号昵称
-     * @return mixed
+     * @return string
      */
     function get_client_nickname()
     {
@@ -100,7 +100,7 @@ if (!function_exists('get_client_nickname')) {
 if (!function_exists('get_client_token')) {
     /**
      * 返回当前账号token
-     * @return string
+     * @return null|string
      */
     function get_client_token()
     {
@@ -245,7 +245,7 @@ if (!function_exists('auto_hid_substr')) {
      * 智能字符串模糊化
      * @param string $str 被模糊的字符串
      * @param int    $len 模糊的长度
-     * @return string
+     * @return null|string
      */
     function auto_hid_substr(string $str, $len = 3)
     {
@@ -272,7 +272,7 @@ if (!function_exists('string_to_byte')) {
      * 字符计量大小转换为字节大小
      * @param string $var 值
      * @param int    $dec 小数位数
-     * @return int
+     * @return float
      */
     function string_to_byte(string $var, $dec = 2)
     {
@@ -292,7 +292,7 @@ if (!function_exists('xml_to_array')) {
     /**
      * XML转为array
      * @param mixed $xml 值
-     * @return array
+     * @return false|mixed
      */
     function xml_to_array($xml)
     {

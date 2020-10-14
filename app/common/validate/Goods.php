@@ -254,7 +254,7 @@ class Goods extends CareyShop
      * @param mixed $value 验证数据
      * @param mixed $rule  验证规则(purchase_sum)
      * @param array $data  全部数据
-     * @return mixed
+     * @return bool|string
      */
     public function checkLeast($value, $rule, array $data)
     {
@@ -271,7 +271,7 @@ class Goods extends CareyShop
      * @param mixed $value 验证数据
      * @param mixed $rule  验证规则(integral_type)
      * @param array $data  全部数据
-     * @return mixed
+     * @return array|bool|string
      */
     public function checkIntegral($value, $rule, array $data)
     {

@@ -20,7 +20,7 @@ class Card extends CareyShop
 
     /**
      * 是否需要自动写入时间戳
-     * @var bool
+     * @var bool|string
      */
     protected $autoWriteTimestamp = true;
 
@@ -120,7 +120,7 @@ class Card extends CareyShop
      * 编辑一条购物卡
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function setCardItem(array $data)
     {
@@ -151,7 +151,7 @@ class Card extends CareyShop
      * 获取一条购物卡
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false|null
      * @throws
      */
     public function getCardItem(array $data)

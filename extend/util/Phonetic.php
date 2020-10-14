@@ -77,7 +77,7 @@ class Phonetic
     /**
      * 中文转换到拼音(每次处理一个字符)
      * @param number $iWORD 待处理字符双字节
-     * @return string 拼音
+     * @return int|string
      */
     private static function zh2py($iWORD)
     {

@@ -147,7 +147,7 @@ class ArticleCat extends CareyShop
      * 获取一个文章分类
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getArticleCatItem(array $data)

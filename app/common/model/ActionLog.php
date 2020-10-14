@@ -149,7 +149,7 @@ class ActionLog extends CareyShop
      * 获取器设置请求参数
      * @access public
      * @param $value
-     * @return mixed
+     * @return array|mixed
      */
     public function getParamsAttr($value)
     {
@@ -168,7 +168,7 @@ class ActionLog extends CareyShop
      * 获取器设置处理结果
      * @access public
      * @param $value
-     * @return mixed
+     * @return array|mixed
      */
     public function getResultAttr($value)
     {
@@ -203,7 +203,7 @@ class ActionLog extends CareyShop
      * 获取一条操作日志
      * @access public
      * @param array $data 外部数据
-     * @return mixed
+     * @return array|false|null
      * @throws
      */
     public function getActionLogItem(array $data)
@@ -220,7 +220,7 @@ class ActionLog extends CareyShop
      * 获取操作日志列表
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getActionLogList(array $data)

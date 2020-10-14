@@ -51,7 +51,7 @@ class GoodsCategory extends CareyShop
     /**
      * 获取所有子级分类
      * @access public
-     * @return array|bool
+     * @return array|false
      */
     public function getCategorySon()
     {
@@ -72,7 +72,7 @@ class GoodsCategory extends CareyShop
      * @param bool $isGoodsTotal 是否获取关联商品数
      * @param bool $isLayer      是否返回本级分类
      * @param null $level        分类深度
-     * @return array|bool
+     * @return array|false
      */
     public function getCategoryList($catId = 0, $isGoodsTotal = false, $isLayer = false, $level = null)
     {

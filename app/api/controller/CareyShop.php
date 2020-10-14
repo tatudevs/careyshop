@@ -366,7 +366,7 @@ abstract class CareyShop
     /**
      * 只验证Token是否合法,否则一律按游客处理
      * @access private
-     * @return string|true
+     * @return bool|string
      * @throws throwable
      */
     private function checkToken()
@@ -432,7 +432,7 @@ abstract class CareyShop
     /**
      * 验证Auth
      * @access private
-     * @return string|true
+     * @return bool|string
      * @throws throwable
      */
     private function checkAuth()
@@ -498,7 +498,7 @@ abstract class CareyShop
     /*
      * 验证Sign是否合法
      * @access private
-     * @return string|true
+     * @return bool|string
      */
     private function checkSign()
     {
@@ -532,7 +532,7 @@ abstract class CareyShop
      * @access protected
      * @param array $data 业务结果
      * @param int   $code HTTP状态码
-     * @return array
+     * @return mixed
      */
     protected function outputResult($data = [], $code = 200)
     {
@@ -555,7 +555,7 @@ abstract class CareyShop
      * 获取公共参数
      * @access protected
      * @param null $key
-     * @return mixed
+     * @return array|mixed|null
      */
     protected function getParams($key = null)
     {
@@ -566,7 +566,7 @@ abstract class CareyShop
      * 删除指定的公共参数
      * @access protected
      * @param string|array $key 键值
-     * @return mixed
+     * @return $this
      */
     protected function unParams($key)
     {

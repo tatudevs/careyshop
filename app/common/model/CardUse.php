@@ -251,7 +251,7 @@ class CardUse extends CareyShop
      * 获取可合并的购物卡列表
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function getCardUseMerge(array $data)
     {
@@ -349,7 +349,7 @@ class CardUse extends CareyShop
      * 隐藏购物卡卡密
      * @access private
      * @param array $data 购物卡数据
-     * @return mixed
+     * @return array|mixed
      */
     private function hidePassword(array $data)
     {
@@ -392,7 +392,7 @@ class CardUse extends CareyShop
      * 获取已绑定的购物卡
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getCardUseList(array $data)
@@ -468,7 +468,7 @@ class CardUse extends CareyShop
      * 根据商品Id列出可使用的购物卡
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getCardUseSelect(array $data)
@@ -558,7 +558,7 @@ class CardUse extends CareyShop
      * 验证购物卡是否可使用
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return bool
      * @throws
      */
     public function getCardUseCheck(array $data)

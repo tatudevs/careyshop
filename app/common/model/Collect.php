@@ -20,7 +20,7 @@ class Collect extends CareyShop
 
     /**
      * 是否需要自动写入时间戳
-     * @var bool
+     * @var bool|string
      */
     protected $autoWriteTimestamp = true;
 
@@ -154,7 +154,7 @@ class Collect extends CareyShop
      * 获取商品收藏列表
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getCollectList(array $data)
@@ -208,7 +208,7 @@ class Collect extends CareyShop
      * 检测指定商品是否被收藏
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false|int[]
      */
     public function isCollectGoods(array $data)
     {

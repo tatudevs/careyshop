@@ -18,7 +18,7 @@ class GoodsCategory extends CareyShop
 {
     /**
      * 分类树
-     * @var int
+     * @var array
      */
     private static $tree = [];
 
@@ -182,7 +182,7 @@ class GoodsCategory extends CareyShop
      * 获取一个商品分类
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getCategoryItem(array $data)
@@ -330,7 +330,7 @@ class GoodsCategory extends CareyShop
      * @param bool $isGoodsTotal 是否获取关联商品数
      * @param bool $isLayer      是否返回本级分类
      * @param null $level        分类深度
-     * @return false|array
+     * @return array
      * @throws
      */
     public static function getCategoryList($catId = 0, $isGoodsTotal = false, $isLayer = false, $level = null)

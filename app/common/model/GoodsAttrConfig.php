@@ -58,7 +58,7 @@ class GoodsAttrConfig extends CareyShop
      * 获取指定商品的属性配置数据
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|array[]|false
      * @throws
      */
     public function getAttrConfigItem(array $data)

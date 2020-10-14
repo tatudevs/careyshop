@@ -16,7 +16,7 @@ class Cart extends CareyShop
      * 获取购物车或订单商品封面
      * @access private
      * @param array $goods 商品数据
-     * @return mixed
+     * @return mixed|string
      */
     private function getGoodsImage(array $goods)
     {
@@ -53,7 +53,7 @@ class Cart extends CareyShop
      * @param array $goodsData  商品数据(附带商品规格)
      * @param bool  $isCheckout 结算调用(创建订单)
      * @param bool  $isConcise  是否返回简洁数据
-     * @return false|array
+     * @return array|false
      */
     public function checkCartGoodsList(array $goodsData, bool $isCheckout, $isConcise = false)
     {

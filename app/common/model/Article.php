@@ -22,7 +22,7 @@ class Article extends CareyShop
 
     /**
      * 是否需要自动写入时间戳
-     * @var bool
+     * @var bool|string
      */
     protected $autoWriteTimestamp = true;
 
@@ -134,7 +134,7 @@ class Article extends CareyShop
      * 获取一篇文章
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getArticleItem(array $data)

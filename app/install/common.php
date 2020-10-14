@@ -28,7 +28,7 @@ function get_url($vars = '', $idx = null)
 
 /**
  * 系统环境检测
- * @return array 系统环境数据
+ * @return array
  */
 function check_env()
 {
@@ -76,7 +76,7 @@ function check_env()
 
 /**
  * 目录，文件读写检测
- * @return array 检测数据
+ * @return string[][]
  */
 function check_dirfile()
 {
@@ -123,7 +123,7 @@ function check_dirfile()
 
 /**
  * 函数检测
- * @return array 检测数据
+ * @return string[][]
  */
 function check_func()
 {
@@ -160,7 +160,7 @@ function check_func()
  * 替换语句中的宏
  * @param string $sql  源SQL语句
  * @param array  $data 配置数据
- * @return mixed
+ * @return string|string[]
  */
 function macro_str_replace(string $sql, array $data)
 {

@@ -75,7 +75,7 @@ class DiscountGoods extends CareyShop
      * 根据商品编号获取折扣信息
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getDiscountGoodsInfo(array $data)
@@ -106,7 +106,7 @@ class DiscountGoods extends CareyShop
      * 根据编号获取折扣商品明细
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getDiscountGoodsList(array $data)

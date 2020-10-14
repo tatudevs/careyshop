@@ -53,7 +53,7 @@ class App extends CareyShop
     /**
      * 查询应用验证码
      * @access public
-     * @return array|false
+     * @return array
      */
     public function getAppCaptcha()
     {
