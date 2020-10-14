@@ -52,4 +52,73 @@ class OfficialAccounts extends CareyShop
 
         return $code;
     }
+
+    /**
+     * 添加一个公众号
+     * @access public
+     * @param array $data 外部数据
+     * @return array|false
+     */
+    public function addOfficialItem(array $data)
+    {
+        if (!$this->validateData($data)) {
+            return false;
+        }
+
+        // 初始化部分数据
+        $data['code'] = $this->getOfficialCode();
+        unset($data['official_accounts_id']);
+
+        if ($this->save($data)) {
+            return $this->toArray();
+        }
+
+        return false;
+    }
+
+    /**
+     * 编辑一个公众号
+     * @access public
+     * @param array $data 外部数据
+     * @return array|bool
+     */
+    public function setOfficialItem(array $data)
+    {
+        if (!$this->validateData($data, 'set', true)) {
+            return false;
+        }
+
+        if (!empty($data['name'])) {
+            $map[] = ['official_accounts_id', '<>', $data['official_accounts_id']];
+            $map[] = ['name', '=', $data['name']];
+
+            if (self::checkUnique($map)) {
+                return $this->setError('公众号名称已存在');
+            }
+        }
+
+        // 允许修改字段与条件
+        $field = ['name', 'remark', 'setting', 'status'];
+        $map = [['official_accounts_id', '=', $data['official_accounts_id']]];
+
+        $result = self::update($data, $map, $field);
+        return $result->toArray();
+    }
+
+    /**
+     * 获取一个公众号
+     * @access public
+     * @param array $data
+     * @return array|false|null
+     * @throws
+     */
+    public function getOfficialItem(array $data)
+    {
+        if (!$this->validateData($data, 'item')) {
+            return false;
+        }
+
+        $result = $this->find($data['official_accounts_id']);
+        return is_null($result) ? null : $result->toArray();
+    }
 }

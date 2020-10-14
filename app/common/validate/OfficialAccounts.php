@@ -30,6 +30,12 @@ class OfficialAccounts extends CareyShop
      * @var array
      */
     protected $field = [
+        'official_accounts_id' => '公众号编号',
+        'name'                 => '公众号名称',
+        'model'                => '所属模块',
+        'remark'               => '公众号备注',
+        'setting'              => '公众号配置',
+        'status'               => '公众号状态',
     ];
 
     /**
@@ -37,5 +43,15 @@ class OfficialAccounts extends CareyShop
      * @var array
      */
     protected $scene = [
+        'set'  => [
+            'official_accounts_id' => 'require|integer|gt:0',
+            'name'                 => 'require|max:30',
+            'remark',
+            'setting',
+            'status',
+        ],
+        'item' => [
+            'official_accounts_id' => 'require|integer|gt:0',
+        ],
     ];
 }
