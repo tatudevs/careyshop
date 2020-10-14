@@ -23,7 +23,7 @@ class Menu extends CareyShop
         'alias'     => 'max:16',
         'icon'      => 'max:64',
         'remark'    => 'max:255',
-        'module'    => 'require|checkModule',
+        'module'    => 'require|checkModule:module',
         'type'      => 'require|in:0,1',
         'url'       => 'max:255',
         'params'    => 'max:255',

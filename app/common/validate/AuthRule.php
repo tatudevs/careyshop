@@ -18,7 +18,7 @@ class AuthRule extends CareyShop
      */
     protected $rule = [
         'rule_id'     => 'integer|gt:0',
-        'module'      => 'require|checkModule',
+        'module'      => 'require|checkModule:module',
         'group_id'    => 'require|integer|gt:0',
         'name'        => 'require|max:32',
         'menu_auth'   => 'arrayHasOnlyInts',
@@ -67,7 +67,7 @@ class AuthRule extends CareyShop
             'rule_id' => 'require|arrayHasOnlyInts',
         ],
         'list'   => [
-            'module'   => 'checkModule',
+            'module'   => 'checkModule:module',
             'group_id' => 'integer|gt:0',
             'status',
             'order_type',

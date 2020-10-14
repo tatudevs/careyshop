@@ -20,7 +20,7 @@ class AuthGroup extends CareyShop
         'group_id'    => 'integer|gt:0',
         'name'        => 'require|max:32',
         'description' => 'max:255',
-        'module'      => 'require|checkModule',
+        'module'      => 'require|checkModule:module',
         'sort'        => 'integer|between:0,255',
         'status'      => 'in:0,1',
         'exclude_id'  => 'arrayHasOnlyInts',
@@ -64,7 +64,7 @@ class AuthGroup extends CareyShop
             'group_id' => 'require|integer|gt:0',
         ],
         'list'   => [
-            'module' => 'checkModule',
+            'module' => 'checkModule:module',
             'status',
             'exclude_id',
             'order_type',

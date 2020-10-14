@@ -17,6 +17,12 @@ class OfficialAccounts extends CareyShop
      * @var array
      */
     protected $rule = [
+        'official_accounts_id' => 'integer|gt:0',
+        'name'                 => 'require|max:30|unique:official_accounts,name,0,official_accounts_id',
+        'model'                => 'require|max:50|checkModule:official',
+        'remark'               => 'max:255',
+        'setting'              => 'require|array',
+        'status'               => 'in:0,1',
     ];
 
     /**

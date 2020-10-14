@@ -20,7 +20,7 @@ class Help extends CareyShop
         'help_id'    => 'integer|gt:0',
         'router'     => 'require|max:100',
         'ver'        => 'require|max:16|regex:^\d+(\.\d+){0,3}$',
-        'module'     => 'require|checkModule',
+        'module'     => 'require|checkModule:module',
         'content'    => 'require',
         'url'        => 'max:255|url',
         'exclude_id' => 'integer|gt:0',
@@ -65,7 +65,7 @@ class Help extends CareyShop
         'list'   => [
             'router'  => 'max:100',
             'ver'     => 'max:16|regex:^\d+(\.\d+){0,3}$',
-            'module'  => 'checkModule',
+            'module'  => 'checkModule:module',
             'content' => 'max:100',
             'url',
         ],

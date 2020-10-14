@@ -186,7 +186,20 @@ class CareyShop extends Validate
      */
     public function checkModule(...$args)
     {
-        $moduleList = config('extra.module_group');
+        switch ($args[1]) {
+            case 'module':
+                $moduleList = config('extra.module_group');
+                break;
+
+            case 'official':
+                $moduleList = config('extra.official_group');
+                break;
+        }
+
+        if (is_null($moduleList)) {
+            return $args[4] . '验证规则 checkModule 设置错误';
+        }
+
         if (!isset($moduleList[$args[0]])) {
             return sprintf('%s必须在 %s 范围内', $args[4], implode(',', array_keys($moduleList)));
         }
