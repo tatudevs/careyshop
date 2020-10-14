@@ -46,5 +46,6 @@ return [
 
     // 公众号模块
     'official_group' => [
+        'wechat' => '微信',
     ],
 ];

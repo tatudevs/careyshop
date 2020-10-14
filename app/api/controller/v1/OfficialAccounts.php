@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\service\OfficialAccounts as OfficialService;
 
 class OfficialAccounts extends CareyShop
 {
@@ -22,6 +23,20 @@ class OfficialAccounts extends CareyShop
     protected static function initMethod()
     {
         self::$route = [
+            // 获取各类公众号平台
+            'get.official.platform' => ['getOfficialPlatform', OfficialService::class],
+            // 添加一个公众号
+            'add.official.item'     => ['addOfficialItem'],
+            // 编辑一个公众号
+            'set.official.item'     => ['setOfficialItem'],
+            // 获取一个公众号
+            'get.official.item'     => ['getOfficialItem'],
+            // 获取公众号列表
+            'get.official.list'     => ['getOfficialList'],
+            // 批量删除公众号
+            'del.official.list'     => ['delOfficialList'],
+            // 批量设置公众号状态
+            'set.official.status'   => ['setOfficialStatus'],
         ];
     }
 }

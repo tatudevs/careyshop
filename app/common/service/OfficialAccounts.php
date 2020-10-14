@@ -12,4 +12,13 @@ namespace app\common\service;
 
 class OfficialAccounts extends CareyShop
 {
+    /**
+     * 获取各类公众号平台
+     * @access public
+     * @return mixed
+     */
+    public function getOfficialPlatform()
+    {
+        return config('extra.official_group');
+    }
 }
