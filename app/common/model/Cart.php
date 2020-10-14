@@ -343,7 +343,7 @@ class Cart extends CareyShop
      * 获取购物车商品数量
      * @access public
      * @param array $data 外部数据
-     * @return array|false|int[]
+     * @return int[]
      */
     public static function getCartCount(array $data)
     {
