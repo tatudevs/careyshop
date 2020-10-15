@@ -67,6 +67,7 @@ class OfficialAccounts extends CareyShop
 
         // 初始化部分数据
         $data['code'] = $this->getOfficialCode();
+        !empty($data['setting']) ?: $data['setting'] = [];
         unset($data['official_accounts_id']);
 
         if ($this->save($data)) {
@@ -97,6 +98,10 @@ class OfficialAccounts extends CareyShop
             }
         }
 
+        if (isset($data['setting']) && '' == $data['setting']) {
+            $data['setting'] = [];
+        }
+
         // 允许修改字段与条件
         $field = ['name', 'remark', 'setting', 'status'];
         $map = [['official_accounts_id', '=', $data['official_accounts_id']]];
@@ -108,7 +113,7 @@ class OfficialAccounts extends CareyShop
     /**
      * 获取一个公众号
      * @access public
-     * @param array $data
+     * @param array $data 外部数据
      * @return array|false|null
      * @throws
      */
@@ -120,5 +125,73 @@ class OfficialAccounts extends CareyShop
 
         $result = $this->find($data['official_accounts_id']);
         return is_null($result) ? null : $result->toArray();
+    }
+
+    /**
+     * 获取公众号列表
+     * @access public
+     * @param array $data 外部数据
+     * @return array|false
+     * @throws
+     */
+    public function getOfficialList(array $data)
+    {
+        if (!$this->validateData($data, 'list')) {
+            return false;
+        }
+
+        // 搜索条件
+        $map = [];
+        empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
+        empty($data['model']) ?: $map[] = ['model', '=', $data['model']];
+        is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
+
+        $result['total_result'] = $this->where($map)->count();
+        if ($result['total_result'] <= 0) {
+            return $result;
+        }
+
+        // 实际查询
+        $result['items'] = $this->setDefaultOrder(['official_accounts_id' => 'desc'])
+            ->where($map)
+            ->withSearch(['page', 'order'], $data)
+            ->select()
+            ->toArray();
+
+        return $result;
+    }
+
+    /**
+     * 批量删除公众号
+     * @access public
+     * @param array $data 外部数据
+     * @return bool
+     */
+    public function delOfficialList(array $data)
+    {
+        if (!$this->validateData($data, 'del')) {
+            return false;
+        }
+
+        self::destroy($data['official_accounts_id']);
+        return true;
+    }
+
+    /**
+     * 批量设置公众号状态
+     * @access public
+     * @param array $data 外部数据
+     * @return bool
+     */
+    public function setOfficialStatus(array $data)
+    {
+        if (!$this->validateData($data, 'status')) {
+            return false;
+        }
+
+        $map[] = ['official_accounts_id', 'in', $data['official_accounts_id']];
+        self::update(['status' => $data['status']], $map);
+
+        return true;
     }
 }

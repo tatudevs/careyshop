@@ -21,8 +21,12 @@ class OfficialAccounts extends CareyShop
         'name'                 => 'require|max:30|unique:official_accounts,name,0,official_accounts_id',
         'model'                => 'require|max:50|checkModule:official',
         'remark'               => 'max:255',
-        'setting'              => 'require|array',
+        'setting'              => 'array',
         'status'               => 'in:0,1',
+        'page_no'              => 'integer|gt:0',
+        'page_size'            => 'integer|gt:0',
+        'order_type'           => 'requireWith:order_field|in:asc,desc',
+        'order_field'          => 'requireWith:order_type|in:official_accounts_id,name,model,status',
     ];
 
     /**
@@ -36,6 +40,10 @@ class OfficialAccounts extends CareyShop
         'remark'               => '公众号备注',
         'setting'              => '公众号配置',
         'status'               => '公众号状态',
+        'page_no'              => '页码',
+        'page_size'            => '每页数量',
+        'order_type'           => '排序方式',
+        'order_field'          => '排序字段',
     ];
 
     /**
@@ -43,15 +51,31 @@ class OfficialAccounts extends CareyShop
      * @var array
      */
     protected $scene = [
-        'set'  => [
+        'set'    => [
             'official_accounts_id' => 'require|integer|gt:0',
             'name'                 => 'require|max:30',
             'remark',
             'setting',
             'status',
         ],
-        'item' => [
+        'item'   => [
             'official_accounts_id' => 'require|integer|gt:0',
+        ],
+        'list'   => [
+            'name'  => 'max:30',
+            'model' => 'max:50|checkModule:official',
+            'status',
+            'page_no',
+            'page_size',
+            'order_type',
+            'order_field',
+        ],
+        'del'    => [
+            'official_accounts_id' => 'require|arrayHasOnlyInts',
+        ],
+        'status' => [
+            'official_accounts_id' => 'require|arrayHasOnlyInts',
+            'status'               => 'require|in:0,1',
         ],
     ];
 }
