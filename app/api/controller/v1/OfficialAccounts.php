@@ -23,8 +23,10 @@ class OfficialAccounts extends CareyShop
     protected static function initMethod()
     {
         self::$route = [
-            // 获取各类公众号平台
+            // 获取框架已支持的公众号平台
             'get.official.platform' => ['getOfficialPlatform', OfficialService::class],
+            // 根据公众号所属模块获取默认配置结构
+            'get.official.setting'  => ['getOfficialStting'],
             // 添加一个公众号
             'add.official.item'     => ['addOfficialItem'],
             // 编辑一个公众号

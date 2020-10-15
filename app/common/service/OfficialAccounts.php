@@ -13,7 +13,7 @@ namespace app\common\service;
 class OfficialAccounts extends CareyShop
 {
     /**
-     * 获取各类公众号平台
+     * 获取框架已支持的公众号平台
      * @access public
      * @return mixed
      */

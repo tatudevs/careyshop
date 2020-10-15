@@ -19,11 +19,12 @@ class OfficialAccounts extends CareyShop
     protected $rule = [
         'official_accounts_id' => 'integer|gt:0',
         'name'                 => 'require|max:30|unique:official_accounts,name,0,official_accounts_id',
-        'code'                 => 'max:8',
+        'code'                 => 'integer|max:8',
         'model'                => 'require|max:50|checkModule:official',
         'remark'               => 'max:255',
         'setting'              => 'array',
         'status'               => 'in:0,1',
+        'url'                  => 'url',
         'page_no'              => 'integer|gt:0',
         'page_size'            => 'integer|gt:0',
         'order_type'           => 'requireWith:order_field|in:asc,desc',
@@ -42,6 +43,7 @@ class OfficialAccounts extends CareyShop
         'remark'               => '公众号备注',
         'setting'              => '公众号配置',
         'status'               => '公众号状态',
+        'url'                  => 'URL',
         'page_no'              => '页码',
         'page_size'            => '每页数量',
         'order_type'           => '排序方式',
@@ -53,17 +55,22 @@ class OfficialAccounts extends CareyShop
      * @var array
      */
     protected $scene = [
-        'set'    => [
+        'setting' => [
+            'model',
+            'code',
+            'url',
+        ],
+        'set'     => [
             'official_accounts_id' => 'require|integer|gt:0',
             'name'                 => 'require|max:30',
             'remark',
             'setting',
             'status',
         ],
-        'item'   => [
+        'item'    => [
             'official_accounts_id' => 'require|integer|gt:0',
         ],
-        'list'   => [
+        'list'    => [
             'name'  => 'max:30',
             'model' => 'max:50|checkModule:official',
             'code',
@@ -73,10 +80,10 @@ class OfficialAccounts extends CareyShop
             'order_type',
             'order_field',
         ],
-        'del'    => [
+        'del'     => [
             'official_accounts_id' => 'require|arrayHasOnlyInts',
         ],
-        'status' => [
+        'status'  => [
             'official_accounts_id' => 'require|arrayHasOnlyInts',
             'status'               => 'require|in:0,1',
         ],

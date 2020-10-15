@@ -10,6 +10,8 @@
 
 namespace app\common\model;
 
+use think\facade\Route;
+
 class OfficialAccounts extends CareyShop
 {
     /**
@@ -51,6 +53,68 @@ class OfficialAccounts extends CareyShop
         } while (self::checkUnique(['code' => $code]));
 
         return $code;
+    }
+
+    /**
+     * 根据公众号所属模块获取默认配置结构
+     * @access public
+     * @param array $data       外部数据
+     * @param false $isInternal 内部调用则不进行规则检测
+     * @return array|false
+     */
+    public function getOfficialStting(array $data, $isInternal = false)
+    {
+        if (!$isInternal && !$this->validateData($data, 'setting')) {
+            return false;
+        }
+
+        // 默认配置结构
+        $stting = [
+            'wechat' => [
+                'app_id'           => [
+                    'name'        => '开发者ID',
+                    'value'       => '',
+                    'description' => '开发者ID来自于您申请的公众号AppID',
+                ],
+                'app_secret'       => [
+                    'name'        => '开发者密码',
+                    'value'       => '',
+                    'description' => '开发者密码来自于您申请的公众号AppSecret',
+                ],
+                'url'              => [
+                    'name'        => '服务器地址',
+                    'value'       => '',
+                    'description' => '仅支持80(http)和443(https)端口，不填写则由服务端生成',
+                ],
+                'token'            => [
+                    'name'        => '令牌',
+                    'value'       => 'CareyShop',
+                    'description' => '必须为英文或数字，长度为3-32字符，如不填写则默认为CareyShop',
+                ],
+                'encoding_aes_key' => [
+                    'name'        => '消息加解密密钥',
+                    'value'       => '',
+                    'description' => '由43位字符组成，可随机修改，字符范围为A-Z，a-z，0-9，安全模式下必须填写',
+                ],
+            ],
+        ];
+
+        // 选择需要返回的结构
+        $result = isset($stting[$data['model']]) ? $stting[$data['model']] : [];
+
+        // 生成服务器地址
+        if (!empty($data['code']) && empty($data['url'])) {
+            $vars = [
+                'method' => 'put.official.wechat.data',
+                'code'   => $data['code'],
+            ];
+
+            $result['url']['value'] = Route::buildUrl('api/v1/official_wechat', $vars)
+                ->domain(true)
+                ->build();
+        }
+
+        return $result;
     }
 
     /**
