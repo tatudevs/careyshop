@@ -62,6 +62,7 @@ class ActionLog extends CareyShop
     protected $safety = [
         'password',
         'password_confirm',
+        'app_id',
         'appkey',
         'app_key',
         'app_secret',
@@ -78,6 +79,7 @@ class ActionLog extends CareyShop
         'mobile',
         'email',
         'account',
+        'encoding_aes_key',
     ];
 
     /**
