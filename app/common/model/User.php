@@ -202,7 +202,7 @@ class User extends CareyShop
      * 注册一个新账号
      * @access public
      * @param array $data 外部数据
-     * @return array|bool
+     * @return bool
      */
     public function addUserItem(array $data)
     {
@@ -387,7 +387,7 @@ class User extends CareyShop
      * 获取一个账号
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getUserItem(array $data)
@@ -406,7 +406,7 @@ class User extends CareyShop
      * 获取一个账号的简易信息
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getUserInfo(array $data)
@@ -461,7 +461,7 @@ class User extends CareyShop
      * 获取指定账号的基础数据
      * @access public
      * @param array $data 外部数据
-     * @return array|bool
+     * @return array|false
      */
     public function getUserSelect(array $data)
     {

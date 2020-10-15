@@ -208,7 +208,7 @@ class Collect extends CareyShop
      * 检测指定商品是否被收藏
      * @access public
      * @param array $data 外部数据
-     * @return array|false|int[]
+     * @return false|int[]
      */
     public function isCollectGoods(array $data)
     {

@@ -200,7 +200,7 @@ class DeliveryDist extends CareyShop
      * 接收推送过来的配送轨迹
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return mixed
      */
     public function putDeliveryDistData(array $data)
     {
@@ -288,7 +288,7 @@ class DeliveryDist extends CareyShop
      * 根据快递单号即时查询配送轨迹
      * @access public
      * @param array $data 外部数据
-     * @return array|bool
+     * @return array|false
      */
     public function getDeliveryDistTrace(array $data)
     {

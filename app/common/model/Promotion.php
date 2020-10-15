@@ -169,7 +169,7 @@ class Promotion extends CareyShop
      * 获取一个订单促销
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getPromotionItem(array $data)
@@ -225,7 +225,7 @@ class Promotion extends CareyShop
      * 获取订单促销列表
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getPromotionList(array $data)
@@ -260,7 +260,7 @@ class Promotion extends CareyShop
     /**
      * 获取正在进行的促销列表
      * @access public
-     * @return false|array
+     * @return array
      * @throws
      */
     public function getPromotionActive()

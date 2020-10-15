@@ -80,7 +80,7 @@ class OfficialAccounts extends CareyShop
      * 编辑一个公众号
      * @access public
      * @param array $data 外部数据
-     * @return array|bool
+     * @return array|false
      */
     public function setOfficialItem(array $data)
     {

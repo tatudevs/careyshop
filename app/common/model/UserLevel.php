@@ -40,7 +40,7 @@ class UserLevel extends CareyShop
      * 获取一个账号等级
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getLevelItem(array $data)

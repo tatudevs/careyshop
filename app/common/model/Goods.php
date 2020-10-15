@@ -23,24 +23,6 @@ class Goods extends CareyShop
     protected $pk = 'goods_id';
 
     /**
-     * 商品属性模型对象
-     * @var GoodsAttr
-     */
-    private static $goodsAttr = null;
-
-    /**
-     * 商品规格模型对象
-     * @var SpecGoods
-     */
-    private static $specGoods = null;
-
-    /**
-     * 商品规格图片模型对象
-     * @var SpecImage
-     */
-    private static $specImage = null;
-
-    /**
      * 是否需要自动写入时间戳
      * @var bool|string
      */
@@ -88,6 +70,24 @@ class Goods extends CareyShop
         'status'            => 'integer',
         'is_delete'         => 'integer',
     ];
+
+    /**
+     * 商品属性模型对象
+     * @var GoodsAttr
+     */
+    private static $goodsAttr;
+
+    /**
+     * 商品规格模型对象
+     * @var SpecGoods
+     */
+    private static $specGoods;
+
+    /**
+     * 商品规格图片模型对象
+     * @var SpecImage
+     */
+    private static $specImage;
 
     /**
      * hasMany cs_goods_attr
@@ -400,7 +400,7 @@ class Goods extends CareyShop
      * 获取指定编号商品的基础数据
      * @access public
      * @param array $data 外部数据
-     * @return array|bool
+     * @return array|false
      */
     public function getGoodsSelect(array $data)
     {
@@ -1369,7 +1369,7 @@ class Goods extends CareyShop
      * 获取指定商品的规格菜单数据
      * @access public
      * @param array $data 外部数据
-     * @return array|bool
+     * @return array|false
      */
     public function getGoodsSpecMenu(array $data)
     {

@@ -187,7 +187,7 @@ class Order extends CareyShop
      * @access private
      * @param int   $goodsId 商品编号
      * @param float $price   商品价格
-     * @return float
+     * @return float|int|mixed
      */
     private function calculateDiscountGoods(int $goodsId, float $price)
     {
@@ -225,7 +225,7 @@ class Order extends CareyShop
      * 获取订单确认或提交订单
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function confirmOrderList(array $data)
@@ -961,7 +961,7 @@ class Order extends CareyShop
      * 创建订单
      * @access private
      * @param int $clientId 账号编号
-     * @return mixed
+     * @return array|false
      */
     private function createOrder(int $clientId)
     {
@@ -1015,7 +1015,7 @@ class Order extends CareyShop
      * 检测订单是否可设置为已支付状态
      * @access public
      * @param array $data 外部数据
-     * @return object|false
+     * @return false|object
      * @throws
      */
     public function isPaymentStatus(array $data)
@@ -1048,7 +1048,7 @@ class Order extends CareyShop
      * 调整订单应付金额
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function changePriceOrderItem(array $data)
@@ -1243,7 +1243,7 @@ class Order extends CareyShop
      * 取消一个订单
      * @access public
      * @param array $data 外部数据
-     * @return mixed
+     * @return false|int[]
      * @throws
      */
     public function cancelOrderItem(array $data)
@@ -1382,7 +1382,7 @@ class Order extends CareyShop
      * 添加或编辑卖家备注
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function remarkOrderItem(array $data)
     {
@@ -1402,7 +1402,7 @@ class Order extends CareyShop
      * 编辑一个订单
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function setOrderItem(array $data)
@@ -1450,7 +1450,7 @@ class Order extends CareyShop
      * 获取一个订单
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false|null
      * @throws
      */
     public function getOrderItem(array $data)
@@ -1627,7 +1627,7 @@ class Order extends CareyShop
      * 订单设为发货状态
      * @access public
      * @param array $data 外部数据
-     * @return mixed
+     * @return array|false
      * @throws
      */
     public function deliveryOrderItem(array $data)
@@ -1849,7 +1849,7 @@ class Order extends CareyShop
      * 订单批量确认收货
      * @access public
      * @param array $data 外部数据
-     * @return mixed
+     * @return array|false
      * @throws
      */
     public function completeOrderList(array $data)
@@ -2016,7 +2016,7 @@ class Order extends CareyShop
      * 获取订单列表
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getOrderList(array $data)
@@ -2144,7 +2144,7 @@ class Order extends CareyShop
      * 获取订单各个状态合计数
      * @param array $data 外部数据
      * @access public
-     * @return array
+     * @return int[]
      * @throws
      */
     public function getOrderStatusTotal(array $data)
@@ -2267,7 +2267,7 @@ class Order extends CareyShop
      * 获取可评价或可追评的订单商品列表
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getOrderGoodsComment(array $data)

@@ -104,7 +104,7 @@ class Menu extends CareyShop
      * 获取一个菜单
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getMenuItem(array $data)
@@ -181,7 +181,7 @@ class Menu extends CareyShop
      * @param bool   $isLayer 是否返回本级菜单
      * @param null   $level   菜单深度
      * @param null   $filter  过滤'is_navi'与'status'
-     * @return array|mixed
+     * @return array
      */
     public static function getMenuListData(string $module, $menuId = 0, $isLayer = false, $level = null, $filter = null)
     {
@@ -296,7 +296,7 @@ class Menu extends CareyShop
      * 删除一个菜单(影响下级子菜单)
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function delMenuItem(array $data)
@@ -523,7 +523,7 @@ class Menu extends CareyShop
      * 获取菜单列表
      * @access public
      * @param array $data 外部数据
-     * @return mixed
+     * @return array|false
      */
     public function getMenuList(array $data)
     {

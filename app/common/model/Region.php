@@ -70,7 +70,7 @@ class Region extends CareyShop
     /**
      * 获取区域缓存列表
      * @access public
-     * @return array|false
+     * @return array
      */
     public static function getRegionCacheList()
     {
@@ -147,7 +147,7 @@ class Region extends CareyShop
      * 获取指定区域
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getRegionItem(array $data)

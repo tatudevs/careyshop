@@ -96,7 +96,7 @@ class Support extends CareyShop
      * 获取一名客服
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getSupportItem(array $data)

@@ -87,7 +87,7 @@ class NoticeTpl extends CareyShop
      * @access public
      * @param int  $type 通知类型
      * @param null $code 通知编码
-     * @return array|false
+     * @return array
      * @throws
      */
     public function getNoticeTplData(int $type, $code = null)
@@ -105,7 +105,7 @@ class NoticeTpl extends CareyShop
      * 获取一个通知系统模板
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getNoticeTplItem(array $data)
@@ -314,7 +314,7 @@ class NoticeTpl extends CareyShop
      * @access private
      * @param string $code 通知编码
      * @param array  $data 内部提交数据
-     * @return mixed
+     * @return false|mixed|string|string[]
      */
     private function templateToSendContent(string $code, array $data)
     {

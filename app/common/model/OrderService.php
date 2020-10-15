@@ -308,7 +308,7 @@ class OrderService extends CareyShop
      * @param array $data         外部数据
      * @param null  $orderGoodsDb 订单商品模型对象
      * @param bool  $isRefundFee  是否返回退款结构
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getOrderServiceGoods(array $data, &$orderGoodsDb = null, $isRefundFee = false)
@@ -417,7 +417,7 @@ class OrderService extends CareyShop
      * 获取一个售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return false|mixed|null
      * @throws
      */
     public function getOrderServiceItem(array $data)
@@ -486,7 +486,7 @@ class OrderService extends CareyShop
      * 获取售后服务单列表
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getOrderServiceList(array $data)
@@ -593,7 +593,7 @@ class OrderService extends CareyShop
      * @access private
      * @param object  $orderGoodsDb 订单商品模型对象
      * @param bool   &$isDelivery   是否退回运费
-     * @return array
+     * @return int[]
      */
     private function getMaxRefundFee($orderGoodsDb, bool &$isDelivery)
     {
@@ -652,7 +652,7 @@ class OrderService extends CareyShop
      * @access private
      * @param array  $data 外部数据
      * @param string $type 售后类型 maintain或exchange
-     * @return false|array
+     * @return array|false
      */
     private function addMaintainOfExchange(array &$data, string $type)
     {
@@ -728,7 +728,7 @@ class OrderService extends CareyShop
      * 添加一个维修售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function addOrderServiceMaintain(array $data)
     {
@@ -739,7 +739,7 @@ class OrderService extends CareyShop
      * 添加一个换货售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function addOrderServiceExchange(array $data)
     {
@@ -751,7 +751,7 @@ class OrderService extends CareyShop
      * @access private
      * @param array  $data 外部数据
      * @param string $type 售后类型 refund或refund_refunds
-     * @return false|array
+     * @return array|false
      */
     private function addServiceRefund(array &$data, string $type)
     {
@@ -837,7 +837,7 @@ class OrderService extends CareyShop
      * 添加一个仅退款售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function addOrderServiceRefund(array $data)
     {
@@ -848,7 +848,7 @@ class OrderService extends CareyShop
      * 添加一个退款退货售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function addOrderServiceRefunds(array $data)
     {
@@ -889,7 +889,7 @@ class OrderService extends CareyShop
      * 同意(接收)一个售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return bool|array
+     * @return array|false
      * @throws
      */
     public function setOrderServiceAgree(array $data)
@@ -942,7 +942,7 @@ class OrderService extends CareyShop
      * 拒绝一个售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return bool|array
+     * @return false|mixed
      * @throws
      */
     public function setOrderServiceRefused(array $data)
@@ -1182,7 +1182,7 @@ class OrderService extends CareyShop
      * 设置一个售后服务单状态为"售后中"
      * @access public
      * @param array $data 外部数据
-     * @return bool|array
+     * @return array|false
      * @throws
      */
     public function setOrderServiceAfter(array $data)
@@ -1229,7 +1229,7 @@ class OrderService extends CareyShop
      * 撤销一个售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return bool|array
+     * @return false|mixed
      * @throws
      */
     public function setOrderServiceCancel(array $data)
@@ -1706,7 +1706,7 @@ class OrderService extends CareyShop
      * 完成一个售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return bool|array
+     * @return array|false
      * @throws
      */
     public function setOrderServiceComplete(array $data)

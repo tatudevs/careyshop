@@ -108,7 +108,7 @@ class Transaction extends CareyShop
      * 获取一笔交易结算
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getTransactionItem(array $data)

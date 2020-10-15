@@ -127,7 +127,7 @@ class Withdraw extends CareyShop
      * 获取一个提现请求
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return false|mixed|null
      * @throws
      */
     public function getWithdrawItem(array $data)

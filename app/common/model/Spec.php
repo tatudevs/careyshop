@@ -153,7 +153,7 @@ class Spec extends CareyShop
      * 获取一条商品规格
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getSpecItem(array $data)
@@ -277,7 +277,7 @@ class Spec extends CareyShop
     /**
      * 获取所有商品规格及规格项
      * @access public
-     * @return bool|array
+     * @return array
      * @throws
      */
     public function getSpecAll()
@@ -356,7 +356,7 @@ class Spec extends CareyShop
      * 批量设置商品规格检索
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return bool
      */
     public function setSpecKey(array $data)
     {

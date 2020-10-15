@@ -111,7 +111,7 @@ class GoodsType extends CareyShop
      * 获取一个商品模型
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getTypeItem(array $data)

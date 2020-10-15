@@ -118,7 +118,7 @@ class StorageStyle extends CareyShop
      * 获取一个资源样式
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getStorageStyleItem(array $data)
@@ -135,7 +135,7 @@ class StorageStyle extends CareyShop
      * 根据编码获取资源样式
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getStorageStyleCode(array $data)

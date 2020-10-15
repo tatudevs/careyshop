@@ -92,7 +92,7 @@ class UserAddress extends CareyShop
      * 获取指定账号的一个收货地址
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAddressItem(array $data)
@@ -112,7 +112,7 @@ class UserAddress extends CareyShop
      * 获取指定账号的默认收货地址信息
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getAddressDefault(array $data)

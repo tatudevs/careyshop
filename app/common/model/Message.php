@@ -213,7 +213,7 @@ class Message extends CareyShop
      * 获取一条消息(后台)
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getMessageItem(array $data)
@@ -234,7 +234,7 @@ class Message extends CareyShop
      * 用户获取一条消息
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getMessageUserItem(array $data)
@@ -327,7 +327,7 @@ class Message extends CareyShop
      * 用户获取未读消息数
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      */
     public function getMessageUserUnread(array $data)
     {

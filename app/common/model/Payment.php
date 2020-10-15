@@ -159,7 +159,7 @@ class Payment extends CareyShop
      * 获取一个支付配置
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getPaymentItem(array $data)
@@ -176,7 +176,7 @@ class Payment extends CareyShop
      * 根据Code获取支付配置详情(不对外开放)
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getPaymentInfo(array $data)
@@ -456,7 +456,7 @@ class Payment extends CareyShop
      * 订单付款在线支付
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|bool
      * @throws
      */
     public function orderPaymentPay(array $data)
@@ -530,7 +530,7 @@ class Payment extends CareyShop
      * 接收支付返回内容
      * @access public
      * @param array $data 外部数据
-     * @return bool|string
+     * @return false|string
      * @throws
      */
     public function putPaymentData(array $data)

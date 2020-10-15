@@ -141,7 +141,7 @@ class WithdrawUser extends CareyShop
      * 获取指定账号的一个提现账号
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getWithdrawUserItem(array $data)

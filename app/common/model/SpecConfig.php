@@ -68,7 +68,7 @@ class SpecConfig extends CareyShop
      * 获取指定商品的规格配置数据
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array[]|false
      * @throws
      */
     public function getSpecConfigItem(array $data)

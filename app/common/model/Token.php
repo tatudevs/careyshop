@@ -62,7 +62,7 @@ class Token extends CareyShop
      * @param int    $type     顾客或管理组
      * @param string $username 账号
      * @param string $platform 来源平台
-     * @return false|array
+     * @return array
      */
     public static function setToken(int $id, int $group, int $type, string $username, string $platform)
     {
@@ -101,7 +101,7 @@ class Token extends CareyShop
      * @param int    $type     顾客或管理组
      * @param string $refresh  刷新令牌
      * @param string $oldToken 原授权令牌
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function refreshUser(int $type, string $refresh, string $oldToken)

@@ -151,7 +151,7 @@ class Storage extends CareyShop
      * 获取一个资源或资源目录
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getStorageItem(array $data)
@@ -350,7 +350,7 @@ class Storage extends CareyShop
      * 批量移动资源到指定目录
      * @access public
      * @param array $data 外部数据
-     * @return mixed
+     * @return array|false
      * @throws
      */
     public function moveStorageList(array $data)
@@ -536,7 +536,7 @@ class Storage extends CareyShop
     /**
      * 获取默认目录的资源编号
      * @access public
-     * @return integer
+     * @return int
      */
     public static function getDefaultStorageId()
     {

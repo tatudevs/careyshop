@@ -226,7 +226,7 @@ class GoodsConsult extends CareyShop
      * 获取一个商品咨询问答明细
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return false|mixed
      * @throws
      */
     public function getConsultItem(array $data)

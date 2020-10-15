@@ -150,7 +150,7 @@ class PaymentLog extends CareyShop
      * 获取一笔充值记录
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getPaymentLogItem(array $data)
@@ -224,7 +224,7 @@ class PaymentLog extends CareyShop
      * 获取一笔订单成功付款的具体金额
      * @access public
      * @param string $paymentNo 交易流水号
-     * @return float|int
+     * @return int|float
      */
     public static function getPaymentLogValue(string $paymentNo)
     {

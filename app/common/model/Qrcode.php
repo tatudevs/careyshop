@@ -161,7 +161,7 @@ class Qrcode extends CareyShop
      * 获取一个二维码
      * @access public
      * @param array $data 外部数据
-     * @return array|false
+     * @return array|false|null
      * @throws
      */
     public function getQrcodeConfig(array $data)

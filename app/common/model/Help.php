@@ -62,7 +62,7 @@ class Help extends CareyShop
      * 添加一条帮助文档
      * @access public
      * @param array $data 外部数据
-     * @return bool|array
+     * @return array|false
      */
     public function addHelpItem(array $data)
     {
@@ -89,7 +89,7 @@ class Help extends CareyShop
      * 编辑一条帮助文档
      * @access public
      * @param array $data 外部数据
-     * @return bool|array
+     * @return array|false
      */
     public function setHelpItem(array $data)
     {
@@ -112,7 +112,7 @@ class Help extends CareyShop
      * 获取一条帮助文档
      * @access public
      * @param array $data 外部数据
-     * @return bool|array
+     * @return array|false|null
      * @throws
      */
     public function getHelpItem(array $data)
@@ -129,7 +129,7 @@ class Help extends CareyShop
      * 根据路由获取帮助文档
      * @access public
      * @param array $data 外部数据
-     * @return bool|array
+     * @return array|false|null
      * @throws
      */
     public function getHelpRouter(array $data)
@@ -150,7 +150,7 @@ class Help extends CareyShop
      * 获取帮助文档列表
      * @access public
      * @param array $data 外部数据
-     * @return bool|array
+     * @return array|false
      * @throws
      */
     public function getHelpList(array $data)

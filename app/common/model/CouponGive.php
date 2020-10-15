@@ -129,7 +129,7 @@ class CouponGive extends CareyShop
      * @param int   $couponId 优惠劵编号
      * @param array $userId   发放用户(等同于发放数)
      * @param int   $type     优惠劵类型
-     * @return false|object
+     * @return false|int|object
      * @throws
      */
     private function addCouponGive(int $couponId, array $userId, int $type)
@@ -211,7 +211,7 @@ class CouponGive extends CareyShop
      * 向指定用户发放优惠劵
      * @access public
      * @param array $data 外部数据
-     * @return false|mixed|object
+     * @return false|int|object
      */
     public function giveCouponUser(array $data)
     {
