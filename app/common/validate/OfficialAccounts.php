@@ -19,6 +19,7 @@ class OfficialAccounts extends CareyShop
     protected $rule = [
         'official_accounts_id' => 'integer|gt:0',
         'name'                 => 'require|max:30|unique:official_accounts,name,0,official_accounts_id',
+        'code'                 => 'max:8',
         'model'                => 'require|max:50|checkModule:official',
         'remark'               => 'max:255',
         'setting'              => 'array',
@@ -36,6 +37,7 @@ class OfficialAccounts extends CareyShop
     protected $field = [
         'official_accounts_id' => '公众号编号',
         'name'                 => '公众号名称',
+        'code'                 => '公众号识别码',
         'model'                => '所属模块',
         'remark'               => '公众号备注',
         'setting'              => '公众号配置',
@@ -64,6 +66,7 @@ class OfficialAccounts extends CareyShop
         'list'   => [
             'name'  => 'max:30',
             'model' => 'max:50|checkModule:official',
+            'code',
             'status',
             'page_no',
             'page_size',

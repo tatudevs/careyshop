@@ -143,6 +143,7 @@ class OfficialAccounts extends CareyShop
         // 搜索条件
         $map = [];
         empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
+        empty($data['code']) ?: $map[] = ['code', '=', $data['code']];
         empty($data['model']) ?: $map[] = ['model', '=', $data['model']];
         is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
