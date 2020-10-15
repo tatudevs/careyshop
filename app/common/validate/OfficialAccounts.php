@@ -24,7 +24,6 @@ class OfficialAccounts extends CareyShop
         'remark'               => 'max:255',
         'setting'              => 'array',
         'status'               => 'in:0,1',
-        'url'                  => 'url',
         'page_no'              => 'integer|gt:0',
         'page_size'            => 'integer|gt:0',
         'order_type'           => 'requireWith:order_field|in:asc,desc',
@@ -43,7 +42,6 @@ class OfficialAccounts extends CareyShop
         'remark'               => '公众号备注',
         'setting'              => '公众号配置',
         'status'               => '公众号状态',
-        'url'                  => 'URL',
         'page_no'              => '页码',
         'page_size'            => '每页数量',
         'order_type'           => '排序方式',
@@ -58,7 +56,6 @@ class OfficialAccounts extends CareyShop
         'setting' => [
             'model',
             'code',
-            'url',
         ],
         'set'     => [
             'official_accounts_id' => 'require|integer|gt:0',

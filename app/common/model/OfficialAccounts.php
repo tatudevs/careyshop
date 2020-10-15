@@ -62,14 +62,14 @@ class OfficialAccounts extends CareyShop
      * @param false $isInternal 内部调用则不进行规则检测
      * @return array|false
      */
-    public function getOfficialStting(array $data, $isInternal = false)
+    public function getOfficialSetting(array $data, $isInternal = false)
     {
         if (!$isInternal && !$this->validateData($data, 'setting')) {
             return false;
         }
 
         // 默认配置结构
-        $stting = [
+        $setting = [
             'wechat' => [
                 'app_id'           => [
                     'name'        => '开发者ID',
@@ -100,21 +100,25 @@ class OfficialAccounts extends CareyShop
         ];
 
         // 选择需要返回的结构
-        $result = isset($stting[$data['model']]) ? $stting[$data['model']] : [];
+        $result = isset($setting[$data['model']]) ? $setting[$data['model']] : [];
 
         // 生成服务器地址
-        if (!empty($data['code']) && empty($data['url'])) {
-            $vars = [
-                'method' => 'put.official.wechat.data',
-                'code'   => $data['code'],
-            ];
-
-            $result['url']['value'] = Route::buildUrl('api/v1/official_wechat', $vars)
-                ->domain(true)
-                ->build();
-        }
+//        if (!empty($data['code']) && empty($data['setting']['url']['value'])) {
+//            $vars = [
+//                'method' => 'put.official.wechat.data',
+//                'code'   => $data['code'],
+//            ];
+//
+//            $result['url']['value'] = Route::buildUrl('api/v1/official_wechat', $vars)
+//                ->domain(true)
+//                ->build();
+//        }
 
         return $result;
+    }
+
+    private function refactorSetting(array &$source, string $model)
+    {
     }
 
     /**
@@ -131,7 +135,7 @@ class OfficialAccounts extends CareyShop
 
         // 初始化部分数据
         $data['code'] = $this->getOfficialCode();
-        !empty($data['setting']) ?: $data['setting'] = [];
+        $this->refactorSetting($data['setting'], $data['model']);
         unset($data['official_accounts_id']);
 
         if ($this->save($data)) {
@@ -162,16 +166,16 @@ class OfficialAccounts extends CareyShop
             }
         }
 
-        if (isset($data['setting']) && '' == $data['setting']) {
-            $data['setting'] = [];
-        }
-
-        // 允许修改字段与条件
-        $field = ['name', 'remark', 'setting', 'status'];
-        $map = [['official_accounts_id', '=', $data['official_accounts_id']]];
-
-        $result = self::update($data, $map, $field);
-        return $result->toArray();
+//        if (isset($data['setting']) && '' == $data['setting']) {
+//            $data['setting'] = [];
+//        }
+//
+//        // 允许修改字段与条件
+//        $field = ['name', 'remark', 'setting', 'status'];
+//        $map = [['official_accounts_id', '=', $data['official_accounts_id']]];
+//
+//        $result = self::update($data, $map, $field);
+//        return $result->toArray();
     }
 
     /**
