@@ -75,7 +75,7 @@ class CareyShop extends Validate
     /**
      * 日期是否在合理范围内
      * @access public
-     * @param mixed ...$args 参数
+     * @param mixed ...$args [验证数据,验证规则,全部数据,字段名,字段描述]
      * @return bool|string
      */
     public function betweenTime(...$args)
@@ -90,7 +90,7 @@ class CareyShop extends Validate
     /**
      * 某个字段的值是否小于某个字段(日期)
      * @access public
-     * @param mixed ...$args 参数
+     * @param mixed ...$args [验证数据,验证规则,全部数据,字段名,字段描述]
      * @return bool|string
      */
     public function beforeTime(...$args)
@@ -109,7 +109,7 @@ class CareyShop extends Validate
     /**
      * 某个字段的值是否大于某个字段(日期)
      * @access public
-     * @param mixed ...$args 参数
+     * @param mixed ...$args [验证数据,验证规则,全部数据,字段名,字段描述]
      * @return bool|string
      */
     public function afterTime(...$args)
@@ -128,7 +128,7 @@ class CareyShop extends Validate
     /**
      * 检测数组内所有键值是否都为int
      * @access public
-     * @param mixed ...$args 参数
+     * @param mixed ...$args [验证数据,验证规则,全部数据,字段名,字段描述]
      * @return bool|string
      */
     public function arrayHasOnlyInts(...$args)
@@ -159,7 +159,7 @@ class CareyShop extends Validate
     /**
      * 检测数组内所有键值是否都为string
      * @access public
-     * @param mixed ...$args 参数
+     * @param mixed ...$args [验证数据,验证规则,全部数据,字段名,字段描述]
      * @return bool|string
      */
     public function arrayHasOnlyStrings(...$args)
@@ -181,7 +181,7 @@ class CareyShop extends Validate
     /**
      * 验证模块是否在指定范围内
      * @access public
-     * @param mixed ...$args 参数
+     * @param mixed ...$args [验证数据,验证规则,全部数据,字段名,字段描述]
      * @return bool|string
      */
     public function checkModule(...$args)
@@ -194,6 +194,9 @@ class CareyShop extends Validate
             case 'official':
                 $moduleList = config('extra.official_group');
                 break;
+
+            default:
+                $moduleList = null;
         }
 
         if (is_null($moduleList)) {
