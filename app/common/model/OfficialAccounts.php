@@ -76,13 +76,13 @@ class OfficialAccounts extends CareyShop
                     'name'        => '开发者ID',
                     'value'       => '',
                     'description' => '开发者ID来自于您申请的公众号AppID',
-                    'validate'    => 'require',
+                    'validate'    => 'max:32',
                 ],
                 'app_secret'       => [
                     'name'        => '开发者密码',
                     'value'       => '',
                     'description' => '开发者密码来自于您申请的公众号AppSecret',
-                    'validate'    => 'require',
+                    'validate'    => 'max:32',
                 ],
                 'url'              => [
                     'name'        => '服务器地址',
@@ -105,8 +105,19 @@ class OfficialAccounts extends CareyShop
             ],
         ];
 
+        // 外部请求时不带入检测规则
+        $filter = function ($value) use ($isInternal) {
+            if (!$isInternal) {
+                foreach ($value as &$item) {
+                    unset($item['validate']);
+                }
+            }
+
+            return $value;
+        };
+
         return isset($setting[$data['model']])
-            ? $setting[$data['model']]
+            ? $filter($setting[$data['model']])
             : $this->setError('所属模块 ' . $data['model'] . ' 不存在默认配置结构');
     }
 
@@ -208,12 +219,14 @@ class OfficialAccounts extends CareyShop
             return $this->setError('数据不存在');
         }
 
-        // 对请求参数进行补齐
-        $data['code'] = $result->getAttr('code');
-        $data['model'] = $result->getAttr('model');
+        if (!empty($data['setting'])) {
+            // 对请求参数进行补齐
+            $data['code'] = $result->getAttr('code');
+            $data['model'] = $result->getAttr('model');
 
-        if (false === ($data['setting'] = $this->refactorSetting($data))) {
-            return false;
+            if (false === ($data['setting'] = $this->refactorSetting($data))) {
+                return false;
+            }
         }
 
         if ($result->save($data)) {
