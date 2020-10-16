@@ -22,7 +22,7 @@ class OfficialAccounts extends CareyShop
         'code'                 => 'integer|max:8',
         'model'                => 'require|max:50|checkModule:official',
         'remark'               => 'max:255',
-        'setting'              => 'array',
+        'setting'              => 'require|array',
         'status'               => 'in:0,1',
         'page_no'              => 'integer|gt:0',
         'page_size'            => 'integer|gt:0',
@@ -59,9 +59,9 @@ class OfficialAccounts extends CareyShop
         ],
         'set'     => [
             'official_accounts_id' => 'require|integer|gt:0',
-            'name'                 => 'require|max:30',
-            'remark',
+            'name'                 => 'max:30',
             'setting',
+            'remark',
             'status',
         ],
         'item'    => [

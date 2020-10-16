@@ -10,6 +10,7 @@
 
 namespace app\common\model;
 
+use think\facade\Cache;
 use think\facade\Route;
 
 class OfficialAccounts extends CareyShop
@@ -60,7 +61,7 @@ class OfficialAccounts extends CareyShop
      * @access public
      * @param array $data       外部数据
      * @param false $isInternal 内部调用则不进行规则检测
-     * @return array|false
+     * @return false|string[][]
      */
     public function getOfficialSetting(array $data, $isInternal = false)
     {
@@ -75,50 +76,80 @@ class OfficialAccounts extends CareyShop
                     'name'        => '开发者ID',
                     'value'       => '',
                     'description' => '开发者ID来自于您申请的公众号AppID',
+                    'validate'    => 'require',
                 ],
                 'app_secret'       => [
                     'name'        => '开发者密码',
                     'value'       => '',
                     'description' => '开发者密码来自于您申请的公众号AppSecret',
+                    'validate'    => 'require',
                 ],
                 'url'              => [
                     'name'        => '服务器地址',
                     'value'       => '',
                     'description' => '仅支持80(http)和443(https)端口，不填写则由服务端生成',
+                    'validate'    => 'url',
                 ],
                 'token'            => [
                     'name'        => '令牌',
                     'value'       => 'CareyShop',
                     'description' => '必须为英文或数字，长度为3-32字符，如不填写则默认为CareyShop',
+                    'validate'    => 'alphaNum|length:3,32',
                 ],
                 'encoding_aes_key' => [
                     'name'        => '消息加解密密钥',
                     'value'       => '',
-                    'description' => '由43位字符组成，可随机修改，字符范围为A-Z，a-z，0-9，安全模式下必须填写',
+                    'description' => '由43位范围为A-Z，a-z，0-9字符随机组成，安全模式下必须填写',
+                    'validate'    => 'alphaNum|length:43',
                 ],
             ],
         ];
 
-        // 选择需要返回的结构
-        $result = isset($setting[$data['model']]) ? $setting[$data['model']] : [];
-
-        // 生成服务器地址
-//        if (!empty($data['code']) && empty($data['setting']['url']['value'])) {
-//            $vars = [
-//                'method' => 'put.official.wechat.data',
-//                'code'   => $data['code'],
-//            ];
-//
-//            $result['url']['value'] = Route::buildUrl('api/v1/official_wechat', $vars)
-//                ->domain(true)
-//                ->build();
-//        }
-
-        return $result;
+        return isset($setting[$data['model']])
+            ? $setting[$data['model']]
+            : $this->setError('所属模块 ' . $data['model'] . ' 不存在默认配置结构');
     }
 
-    private function refactorSetting(array &$source, string $model)
+    /**
+     * 重构公众号配置结构
+     * @access private
+     * @param array $source 来源数据
+     * @return false|string[][]
+     */
+    private function refactorSetting(array $source)
     {
+        $data = $validate = [];
+        $setting = $this->getOfficialSetting($source, true);
+
+        if (!$setting) return false;
+
+        foreach ($setting as $key => &$item) {
+            if (isset($source['setting'][$key]['value'])) {
+                $item['value'] = $source['setting'][$key]['value'];
+            }
+
+            $data[$key] = $item['value'];
+            $validate[$key . '|' . $item['name']] = $item['validate'];
+            unset($item['validate']);
+        }
+
+        if (!$this->validateData($data, null, false, $validate)) {
+            return false;
+        }
+
+        // 生成服务器地址
+        if (!empty($source['code']) && empty($setting['url']['value'])) {
+            $vars = [
+                'method' => 'put.official.wechat.data',
+                'code'   => $source['code'],
+            ];
+
+            $setting['url']['value'] = Route::buildUrl('api/v1/official_wechat', $vars)
+                ->domain(true)
+                ->build();
+        }
+
+        return $setting;
     }
 
     /**
@@ -135,8 +166,11 @@ class OfficialAccounts extends CareyShop
 
         // 初始化部分数据
         $data['code'] = $this->getOfficialCode();
-        $this->refactorSetting($data['setting'], $data['model']);
         unset($data['official_accounts_id']);
+
+        if (false === ($data['setting'] = $this->refactorSetting($data))) {
+            return false;
+        }
 
         if ($this->save($data)) {
             return $this->toArray();
@@ -150,6 +184,7 @@ class OfficialAccounts extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
+     * @throws
      */
     public function setOfficialItem(array $data)
     {
@@ -166,16 +201,27 @@ class OfficialAccounts extends CareyShop
             }
         }
 
-//        if (isset($data['setting']) && '' == $data['setting']) {
-//            $data['setting'] = [];
-//        }
-//
-//        // 允许修改字段与条件
-//        $field = ['name', 'remark', 'setting', 'status'];
-//        $map = [['official_accounts_id', '=', $data['official_accounts_id']]];
-//
-//        $result = self::update($data, $map, $field);
-//        return $result->toArray();
+        $map = [['official_accounts_id', '=', $data['official_accounts_id']]];
+        $result = $this->where($map)->find();
+
+        if (is_null($result)) {
+            return $this->setError('数据不存在');
+        }
+
+        // 对请求参数进行补齐
+        $data['code'] = $result->getAttr('code');
+        $data['model'] = $result->getAttr('model');
+
+        if (false === ($data['setting'] = $this->refactorSetting($data))) {
+            return false;
+        }
+
+        if ($result->save($data)) {
+            Cache::tag('OfficialAccounts')->clear();
+            return $result->toArray();
+        }
+
+        return false;
     }
 
     /**
@@ -243,6 +289,8 @@ class OfficialAccounts extends CareyShop
         }
 
         self::destroy($data['official_accounts_id']);
+        Cache::tag('OfficialAccounts')->clear();
+
         return true;
     }
 
@@ -260,6 +308,7 @@ class OfficialAccounts extends CareyShop
 
         $map[] = ['official_accounts_id', 'in', $data['official_accounts_id']];
         self::update(['status' => $data['status']], $map);
+        Cache::tag('OfficialAccounts')->clear();
 
         return true;
     }
