@@ -146,14 +146,14 @@ abstract class CareyShop extends Model
      * @param array|object $data     验证数据
      * @param string|null  $scene    场景名
      * @param bool         $clean    是否清理规则键值不存在的$data
-     * @param string       $validate 验证器规则或类
+     * @param string|array $validate 验证器规则或类
      * @return bool
      */
     public function validateData(array &$data, $scene = null, $clean = false, $validate = '')
     {
         try {
             // 确定规则来源
-            if (empty($validate)) {
+            if (empty($validate) && is_string($validate)) {
                 $class = '\\app\\common\\validate\\' . $this->getName();
                 if ($scene) {
                     $v = new $class();
