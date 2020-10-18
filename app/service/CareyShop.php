@@ -35,7 +35,6 @@ class CareyShop extends Service
     public function boot()
     {
         try {
-            // 获取系统配置参数
             $setting = Cache::remember('get_setting', function () {
                 Cache::tag('setting')->append('get_setting');
                 return Db::name('setting')->withoutField('setting_id')->select();
