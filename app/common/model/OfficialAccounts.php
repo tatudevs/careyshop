@@ -102,6 +102,12 @@ class OfficialAccounts extends CareyShop
                     'description' => '由43位范围为A-Z，a-z，0-9字符随机组成，安全模式下必须填写',
                     'validate'    => 'alphaNum|length:43',
                 ],
+                'domain'           => [
+                    'name'        => '安全域名',
+                    'value'       => request()->host(),
+                    'description' => '微信后台需要填写安全域名时，请使用此域名',
+                    'validate'    => 'require',
+                ],
             ],
         ];
 
