@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    微信公众号缓存类
+ * CareyShop    WeChat 缓存类
  *
  * @author      zxm <252404501@qq.com>
  * @date        2020/10/19

@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\wechat\service\OfficialAccount;
 
 class OfficialWechat extends CareyShop
 {
@@ -23,7 +24,7 @@ class OfficialWechat extends CareyShop
     {
         self::$route = [
             // 接收微信推送信息
-//            'put.official.wechat.data' => ['putOfficialWechatData', OfficialService::class],
+            'put.official.wechat.data' => ['putOfficialWechatData', OfficialAccount::class],
         ];
     }
 }
