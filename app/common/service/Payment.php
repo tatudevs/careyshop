@@ -34,7 +34,7 @@ class Payment extends CareyShop
 
         // 生成链接
         $vars = ['method' => 'put.payment.data', 'to_payment' => $data['to_payment'], 'type' => 'notify'];
-        $notifyUrl = Route::buildUrl('api/v1/payment', $vars)->domain(true)->build();
+        $notifyUrl = Route::buildUrl("api/{$this->version}/payment", $vars)->domain(true)->build();
 
         return $isString ? $notifyUrl : ['notify_url' => $notifyUrl, 'to_payment' => $data['to_payment']];
     }
@@ -57,7 +57,7 @@ class Payment extends CareyShop
 
         // 生成链接
         $vars = ['method' => 'put.payment.data', 'to_payment' => $data['to_payment'], 'type' => 'return'];
-        $notifyUrl = Route::buildUrl('api/v1/payment', $vars)->domain(true)->build();
+        $notifyUrl = Route::buildUrl("api/{$this->version}/payment", $vars)->domain(true)->build();
 
         return $isString ? $notifyUrl : ['return_url' => $notifyUrl, 'to_payment' => $data['to_payment']];
     }

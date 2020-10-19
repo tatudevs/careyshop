@@ -15,6 +15,12 @@ use think\Request;
 abstract class Upload
 {
     /**
+     * 控制器版本号
+     * @var string
+     */
+    protected $version = 'v1';
+
+    /**
      * 错误信息
      * @var string
      */
@@ -148,6 +154,27 @@ abstract class Upload
         }
 
         return 1;
+    }
+
+    /**
+     * 设置版本号
+     * @access protected
+     * @param string $version 版本号
+     * @return void
+     */
+    public function setVersion(string $version)
+    {
+        $this->version = $version;
+    }
+
+    /**
+     * 获取版本号
+     * @access protected
+     * @return string
+     */
+    protected function getVersion()
+    {
+        return $this->version;
     }
 
     /**

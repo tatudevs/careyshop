@@ -43,7 +43,7 @@ class Upload extends UploadBase
     private function getCallbackUrl()
     {
         $vars = ['method' => 'put.upload.data', 'module' => self::MODULE];
-        return Route::buildUrl('api/v1/upload', $vars)->domain(true)->build();
+        return Route::buildUrl("api/{$this->getVersion()}/upload", $vars)->domain(true)->build();
     }
 
     /**

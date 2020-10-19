@@ -110,6 +110,12 @@ abstract class CareyShop
     protected static $auth;
 
     /**
+     * 控制器版本号
+     * @var string
+     */
+    public $version = 'v1';
+
+    /**
      * 是否调试模式
      * @var bool
      */
@@ -315,8 +321,10 @@ abstract class CareyShop
 
         try {
             if (method_exists($this, $callback[0])) {
+                $this->version = $this->request->param('version', 'v1');
                 $result = call_user_func_array([$this, $callback[0]], []);
             } else if (method_exists(static::$model, $callback[0])) {
+                static::$model->version = $this->request->param('version', 'v1');
                 $result = call_user_func([static::$model, $callback[0]], $this->getParams());
             } else {
                 $this->outputError('method成员方法不存在');

@@ -22,7 +22,7 @@ class Qrcode extends CareyShop
     public function getQrcodeCallurl()
     {
         $vars = ['method' => 'get.qrcode.item'];
-        $data['call_url'] = Route::buildUrl('api/v1/qrcode', $vars)->domain(true)->build();
+        $data['call_url'] = Route::buildUrl("api/{$this->version}/qrcode", $vars)->domain(true)->build();
 
         return $data;
     }

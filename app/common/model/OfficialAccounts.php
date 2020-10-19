@@ -155,7 +155,7 @@ class OfficialAccounts extends CareyShop
                 'code'   => $source['code'],
             ];
 
-            $setting['url']['value'] = Route::buildUrl('api/v1/official_wechat', $vars)
+            $setting['url']['value'] = Route::buildUrl("api/{$this->version}/official_wechat", $vars)
                 ->domain(true)
                 ->build();
         }

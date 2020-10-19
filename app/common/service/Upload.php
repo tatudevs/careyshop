@@ -73,7 +73,10 @@ class Upload extends CareyShop
 
         $ossObject = '\\oss\\' . $file . '\\' . $model;
         if (class_exists($ossObject)) {
-            return invoke($ossObject);
+            $object = invoke($ossObject);
+            $object->setVersion($this->version);
+
+            return $object;
         }
 
         return $this->setError($ossObject . '模块不存在');

@@ -100,6 +100,7 @@ class Batch extends CareyShop
                     throw new Exception('method成员方法不存在');
                 }
 
+                static::$model->version = $version;
                 unset($value['version'], $value['controller'], $value['method']);
                 $callback = call_user_func([static::$model, $method[0]], $value);
             } catch (Exception $e) {

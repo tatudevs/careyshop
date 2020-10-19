@@ -110,7 +110,7 @@ class Index extends \app\api\controller\v1\Index
      */
     public function getMethodV2()
     {
-        return '基于CareyShop商城框架系统,新增v2接口数据返回';
+        return "基于CareyShop商城框架系统,新增{$this->version}接口数据返回";
     }
 
     /**
@@ -127,7 +127,7 @@ class Index extends \app\api\controller\v1\Index
     {
         $indexService = new IndexService();
         $data = $indexService->getVersion();
-        $data['v2'] = '基于CareyShop商城框架系统,修改为v2接口后数据返回';
+        $data[$this->version] = "基于CareyShop商城框架系统,修改为{$this->version}接口后数据返回";
 
         return $data;
     }
