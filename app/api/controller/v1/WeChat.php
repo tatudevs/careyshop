@@ -12,6 +12,7 @@ namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
 use app\common\wechat\service\Server;
+use app\common\wechat\service\User;
 
 class WeChat extends CareyShop
 {
@@ -24,7 +25,10 @@ class WeChat extends CareyShop
     {
         self::$route = [
             // 接收微信推送信息
-            'put.wechat.data' => ['putWeChatData', Server::class],
+            'put.wechat.data'                => ['putWeChatData', Server::class],
+
+            // 获取公众号用户列表
+            'get.official_account.user.list' => ['getOfficialAccountUserList', User::class],
         ];
     }
 }
