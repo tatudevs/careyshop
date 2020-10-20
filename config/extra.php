@@ -10,7 +10,7 @@
 
 return [
     // 产品信息
-    'product'        => [
+    'product'      => [
         'product_name'    => 'CareyShop商城框架系统',
         'product_version' => '1.3.1',
         'build_version'   => '20201012',
@@ -22,14 +22,14 @@ return [
     ],
 
     // 应用模块
-    'module_group'   => [
+    'module_group' => [
         'api'   => 'API',
         'admin' => '后台',
         'home'  => '前台',
     ],
 
     // 用户组
-    'client_group'   => [
+    'client_group' => [
         'visitor' => [
             'value' => -1,
             'name'  => '游客组',
@@ -44,9 +44,15 @@ return [
         ],
     ],
 
-    // 公众号模块
-    'official_group' => [
-        'wechat' => '微信',
-        // 更多公众号平台(目前只添加微信,但架构理论上支持所有平台)
+    // 微服务
+    'mini_service' => [
+        'wechat' => [
+            'name'  => '微信',
+            'model' => [
+                'official_account' => '公众号',
+            ],
+        ],
+
+        // 您可以扩展更多
     ],
 ];

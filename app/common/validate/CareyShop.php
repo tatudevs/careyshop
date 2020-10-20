@@ -191,10 +191,6 @@ class CareyShop extends Validate
                 $moduleList = config('extra.module_group');
                 break;
 
-            case 'official':
-                $moduleList = config('extra.official_group');
-                break;
-
             default:
                 $moduleList = null;
         }

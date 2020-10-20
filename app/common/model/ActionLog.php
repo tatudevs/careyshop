@@ -79,7 +79,7 @@ class ActionLog extends CareyShop
         'mobile',
         'email',
         'account',
-        'encoding_aes_key',
+        'aes_key',
     ];
 
     /**
