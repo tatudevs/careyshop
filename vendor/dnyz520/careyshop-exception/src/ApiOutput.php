@@ -64,7 +64,9 @@ class ApiOutput
     public static function outView($result, $code)
     {
         header(self::$headerKey . ': ' . self::$header[self::$headerKey]);
-        return view('common@/CareyShop', ['data' => $result], $code);
+        $template = __DIR__ . '/template/CareyShop.tpl';
+
+        return view($template, ['data' => $result], $code);
     }
 
     /**
