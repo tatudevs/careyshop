@@ -62,7 +62,7 @@ class WeChatApp
      * 实例化
      * @var null
      */
-    public $app = null;
+    protected $app = null;
 
     /**
      * 对应模块
@@ -115,5 +115,15 @@ class WeChatApp
         // 实例化对应模块
         $this->app = new $this->models[$setting['model']]($this->setting);
         $this->app->rebind('cache', app(CacheBridge::class));
+    }
+
+    /**
+     * 获取 WeChat 实列
+     * @access public
+     * @return mixed|null
+     */
+    public function getApp()
+    {
+        return $this->app;
     }
 }

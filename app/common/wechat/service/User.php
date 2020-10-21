@@ -12,8 +12,7 @@ namespace app\common\wechat\service;
 
 class User extends CareyShop
 {
-    public function getOfficialAccountUserList(array $data)
+    public function getOfficialAccountUserList()
     {
-        return 'getOfficialAccountUserList OK';
     }
 }
