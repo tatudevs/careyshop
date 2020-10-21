@@ -57,27 +57,14 @@ class CareyShop
      */
     public function initWeChat(array $params)
     {
-        $this->params = new Params($params);
-        if ($this->validateData()) {
+        if (isset($params['code'])) {
+            $this->params = new Params($params);
             $wechat = new WeChat($this->params['code']);
             $this->app = $wechat->getApp();
         }
 
         return $this;
     }
-
-//    /**
-//     * 请求参数验证
-//     * @access public
-//     * @return bool
-//     * @throws
-//     */
-//    public function validateData()
-//    {
-//        return validate([
-//            'code|微服务识别码' => 'require|integer|max:8',
-//        ])->check((array)$this->params);
-//    }
 
     /**
      * 设置错误信息

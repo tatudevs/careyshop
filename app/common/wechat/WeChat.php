@@ -87,6 +87,10 @@ class WeChat
     public function __construct(string $code)
     {
         // 从数据库获取配置
+        if (empty($code)) {
+            throw new \Exception('code is does not exist');
+        }
+
         $setting = Cache::remember($code, function () use ($code) {
             $map = [
                 ['code', '=', $code],
