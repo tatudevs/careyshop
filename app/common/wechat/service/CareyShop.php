@@ -10,6 +10,9 @@
 
 namespace app\common\wechat\service;
 
+use app\common\wechat\Params;
+use app\common\wechat\WeChat;
+
 class CareyShop
 {
     /**
@@ -23,6 +26,58 @@ class CareyShop
      * @var string
      */
     public $error = '';
+
+    /**
+     * WeChat 实列
+     * @var mixed|null
+     */
+    public $app = null;
+
+    /**
+     * 请求参数容器
+     * @var mixed
+     */
+    public $params;
+
+    /**
+     * CareyShop constructor.
+     * @access public
+     * @param array $params
+     */
+    public function __construct(array $params = [])
+    {
+        $this->initWeChat($params);
+    }
+
+    /**
+     * 实际创建 WeChat 实列
+     * @access public
+     * @param array $params 请求参数
+     * @return $this
+     */
+    public function initWeChat(array $params)
+    {
+        $this->params = new Params($params);
+        if ($this->validateData()) {
+            $wechat = new WeChat($this->params['code']);
+            $this->app = $wechat->getApp();
+        }
+
+        return $this;
+    }
+
+//    /**
+//     * 请求参数验证
+//     * @access public
+//     * @return bool
+//     * @throws
+//     */
+//    public function validateData()
+//    {
+//        return validate([
+//            'code|微服务识别码' => 'require|integer|max:8',
+//        ])->check((array)$this->params);
+//    }
 
     /**
      * 设置错误信息
@@ -44,26 +99,5 @@ class CareyShop
     public function getError()
     {
         return $this->error;
-    }
-
-    /**
-     * 数据验证
-     * @access public
-     * @param array $data 待验证数据
-     * @return bool
-     */
-    public function validateData(array $data)
-    {
-        // 验证规则
-        $rule = [
-            'code|微服务识别码' => 'require|integer|max:8',
-        ];
-
-        $v = validate($rule, [], false, false);
-        if (!$v->check($data)) {
-            return $this->setError($v->getError());
-        }
-
-        return true;
     }
 }
