@@ -86,37 +86,37 @@ class MiniService extends CareyShop
             case 'wechat':
                 $setting = [
                     'official_account' => [
-                        'app_id'     => [
+                        'app_id'  => [
                             'name'        => '开发者ID',
                             'value'       => '',
                             'description' => '开发者ID来自于您申请的公众号AppID',
                             'validate'    => 'max:32',
                         ],
-                        'app_secret' => [
+                        'secret'  => [
                             'name'        => '开发者密码',
                             'value'       => '',
                             'description' => '开发者密码来自于您申请的公众号AppSecret',
                             'validate'    => 'max:32',
                         ],
-                        'url'        => [
+                        'url'     => [
                             'name'        => '服务器地址',
                             'value'       => '',
                             'description' => '仅支持80(http)和443(https)端口，不填写(推荐)则会自动生成',
                             'validate'    => 'url',
                         ],
-                        'token'      => [
+                        'token'   => [
                             'name'        => '令牌',
                             'value'       => 'CareyShop',
                             'description' => '必须为英文或数字，长度为3-32字符，如不填写则默认为CareyShop',
                             'validate'    => 'alphaNum|length:3,32',
                         ],
-                        'aes_key'    => [
+                        'aes_key' => [
                             'name'        => '消息加解密密钥',
                             'value'       => '',
                             'description' => '由43位范围为A-Z，a-z，0-9字符随机组成，安全模式下必须填写',
                             'validate'    => 'alphaNum|length:43',
                         ],
-                        'domain'     => [
+                        'domain'  => [
                             'name'        => '安全域名',
                             'value'       => request()->host(),
                             'description' => '微信后台需要填写安全域名时，可使用此域名',

@@ -66,6 +66,7 @@ class ActionLog extends CareyShop
         'appkey',
         'app_key',
         'app_secret',
+        'secret',
         'give_code',
         'exchange_code',
         'setting',

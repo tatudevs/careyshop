@@ -45,4 +45,25 @@ class CareyShop
     {
         return $this->error;
     }
+
+    /**
+     * 数据验证
+     * @access public
+     * @param array $data 待验证数据
+     * @return bool
+     */
+    public function validateData(array $data)
+    {
+        // 验证规则
+        $rule = [
+            'code|微服务识别码' => 'require|integer|max:8',
+        ];
+
+        $v = validate($rule, [], false, false);
+        if (!$v->check($data)) {
+            return $this->setError($v->getError());
+        }
+
+        return true;
+    }
 }

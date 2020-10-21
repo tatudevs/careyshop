@@ -10,10 +10,17 @@
 
 namespace app\common\wechat\service;
 
+use app\common\wechat\WeChatApp;
+
 class Server extends CareyShop
 {
     public function putWeChatData(array $data)
     {
-        return 'putWeChatData OK';
+        if (!$this->validateData($data)) {
+            return false;
+        }
+
+        $wechat = new WeChatApp($data['code']);
+        return $wechat->app->user->list();
     }
 }
