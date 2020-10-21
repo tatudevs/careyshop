@@ -25,7 +25,7 @@ class Params implements ArrayAccess
      * @access public
      * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
         $this->data = $data;
     }
@@ -67,5 +67,17 @@ class Params implements ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
+    }
+
+    /**
+     * 替换数据源
+     * @access public
+     * @param array $data
+     * @return $this
+     */
+    public function replace(array $data)
+    {
+        $this->data = $data;
+        return $this;
     }
 }
