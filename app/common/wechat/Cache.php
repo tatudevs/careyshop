@@ -11,13 +11,21 @@
 namespace app\common\wechat;
 
 use Psr\SimpleCache\CacheInterface;
-use think\Cache;
 
-class CacheBridge implements CacheInterface
+class Cache implements CacheInterface
 {
+    /**
+     * 缓存对象
+     * @var \think\Cache|null
+     */
     protected $cache = null;
 
-    public function __construct(Cache $cache)
+    /**
+     * Cache constructor.
+     * @access public
+     * @param \think\Cache $cache
+     */
+    public function __construct(\think\Cache $cache)
     {
         $this->cache = $cache;
     }

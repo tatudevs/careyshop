@@ -20,7 +20,7 @@ use EasyWeChat\OpenWork\Application as OpenWork;
 use EasyWeChat\MicroMerchant\Application as MicroMerchant;
 use think\facade\Cache;
 
-class WeChatApp
+class WeChat
 {
     /**
      * 默认配置
@@ -114,7 +114,7 @@ class WeChatApp
 
         // 实例化对应模块
         $this->app = new $this->models[$setting['model']]($this->setting);
-        $this->app->rebind('cache', app(CacheBridge::class));
+        $this->app->rebind('cache', app(\app\common\wechat\Cache::class));
     }
 
     /**
