@@ -12,7 +12,11 @@ namespace app\common\wechat\service;
 
 class User extends CareyShop
 {
-    public function getOfficialAccountUserList()
+    public function getUserSync()
+    {
+    }
+
+    public function getUserList()
     {
     }
 }

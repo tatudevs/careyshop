@@ -50,8 +50,10 @@ class WeChat extends CareyShop
     private static function getUserMethod()
     {
         return [
+            // 同步公众号用户
+            'get.official_account.user.sync' => ['getUserSync', User::class],
             // 获取公众号用户列表
-            'get.official_account.user.list' => ['getOfficialAccountUserList', User::class],
+            'get.official_account.user.list' => ['getUserList', User::class],
         ];
     }
 }
