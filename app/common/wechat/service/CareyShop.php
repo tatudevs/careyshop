@@ -31,10 +31,10 @@ class CareyShop
      * WeChat 实列
      * @var mixed|null
      */
-    public $app = null;
+    public $wechat = null;
 
     /**
-     * 请求参数容器
+     * 外部请求参数容器
      * @var mixed|null
      */
     public $params = null;
@@ -60,8 +60,7 @@ class CareyShop
     {
         if (isset($params['code'])) {
             $this->params = new Params($params);
-            $wechat = new WeChat($this->params['code']);
-            $this->app = $wechat->getApp();
+            $this->wechat = (new WeChat($params['code']))->getApp();
         }
 
         return $this;
