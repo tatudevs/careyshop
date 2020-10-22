@@ -20,6 +20,10 @@ class Server extends CareyShop
     public function putWeChatData()
     {
         $this->wechat->server->push(function ($message) {
+            if (!isset($message['MsgType'])) {
+                return null;
+            }
+
             switch ($message['MsgType']) {
                 case 'event':
                     //return '收到事件消息';
