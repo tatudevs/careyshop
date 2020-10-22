@@ -193,11 +193,23 @@ abstract class CareyShop extends Model
         return true;
     }
 
+    /**
+     * 尝试获取验证器类
+     * @access private
+     * @return string
+     * @throws
+     */
     private function getValidateClass()
     {
-        // app\\common\\validate\\ . $this->getName();
-        print_r(__NAMESPACE__);
-        exit();
+        $pos = mb_strrpos(__NAMESPACE__, '\\');
+        $dir = '\\validate\\' . $this->getName();
+
+        $class = Str::substr(__NAMESPACE__, 0, $pos) . $dir;
+        if (!class_exists($class)) {
+            throw new ValidateException("验证器 {$class} 不存在");
+        }
+
+        return $class;
     }
 
     /**

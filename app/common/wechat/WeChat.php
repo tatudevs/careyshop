@@ -115,7 +115,7 @@ class WeChat
 
         // 实例化对应模块
         if (!array_key_exists($setting['model'], $this->models)) {
-            throw new \Exception("model {$setting['model']} is does not exist");
+            throw new \Exception("WeChat模型 {$setting['model']} 不存在");
         }
 
         $this->app = new $this->models[$setting['model']]($this->setting);

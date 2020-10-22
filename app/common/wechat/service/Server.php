@@ -16,10 +16,11 @@ class Server extends CareyShop
      * 接收并响应微信推送
      * @access public
      * @return void
+     * @throws
      */
     public function putWeChatData()
     {
-        $this->wechat->server->push(function ($message) {
+        $this->getApp('server')->push(function ($message) {
             if (!isset($message['MsgType'])) {
                 return null;
             }
@@ -63,7 +64,7 @@ class Server extends CareyShop
             }
         });
 
-        $this->wechat->server->serve()->send();
+        $this->getApp('server')->serve()->send();
         exit();
     }
 }
