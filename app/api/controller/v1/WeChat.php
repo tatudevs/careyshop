@@ -23,10 +23,33 @@ class WeChat extends CareyShop
      */
     protected static function initMethod()
     {
-        self::$route = [
-            // 接收微信推送信息
-            'put.wechat.data'                => ['putWeChatData', Server::class],
+        $server = self::getServerMethod();
+        $user = self::getUserMethod();
 
+        self::$route = array_merge($server, $user);
+    }
+
+    /**
+     * 服务端方法
+     * @access private
+     * @return string[][]
+     */
+    private static function getServerMethod()
+    {
+        return [
+            // 接收并响应微信推送
+            'put.wechat.data' => ['putWeChatData', Server::class],
+        ];
+    }
+
+    /**
+     * 用户管理方法
+     * @access private
+     * @return string[][]
+     */
+    private static function getUserMethod()
+    {
+        return [
             // 获取公众号用户列表
             'get.official_account.user.list' => ['getOfficialAccountUserList', User::class],
         ];
