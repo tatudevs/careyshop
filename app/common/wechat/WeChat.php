@@ -114,6 +114,10 @@ class WeChat
         }
 
         // 实例化对应模块
+        if (!array_key_exists($setting['model'], $this->models)) {
+            throw new \Exception("model {$setting['model']} is does not exist");
+        }
+
         $this->app = new $this->models[$setting['model']]($this->setting);
         $this->app->rebind('cache', app(\app\common\wechat\Cache::class));
     }
