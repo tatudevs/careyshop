@@ -14,6 +14,5 @@ class Server extends CareyShop
 {
     public function putWeChatData()
     {
-        print_r($this->app);exit();
     }
 }

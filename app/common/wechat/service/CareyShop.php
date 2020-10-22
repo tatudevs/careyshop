@@ -35,9 +35,9 @@ class CareyShop
 
     /**
      * 请求参数容器
-     * @var mixed
+     * @var mixed|null
      */
-    public $params;
+    public $params = null;
 
     /**
      * CareyShop constructor.
@@ -54,6 +54,7 @@ class CareyShop
      * @access public
      * @param array $params 请求参数
      * @return $this
+     * @throws
      */
     public function initWeChat(array $params)
     {

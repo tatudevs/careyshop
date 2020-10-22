@@ -315,6 +315,9 @@ abstract class CareyShop
 
         if (class_exists($callback[1])) {
             isset(static::$model) ?: static::$model = new $callback[1];
+            if (method_exists(static::$model, 'initWeChat')) {
+                static::$model->initWeChat($this->getParams());
+            }
         } else if (false !== $callback[1]) {
             $this->outputError('模型类或方法不存在');
         }
