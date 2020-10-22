@@ -161,17 +161,17 @@
     },
     {
         "name": "dnyz520/careyshop-exception",
-        "version": "v1.0.3",
-        "version_normalized": "1.0.3.0",
+        "version": "v1.0.4",
+        "version_normalized": "1.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-exception.git",
-            "reference": "37797cda3ccb72b79f75d2fb3647172f86c7eec1"
+            "reference": "2a91f955eb27427b15e274cf580b1778f55a2b03"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-exception/zipball/37797cda3ccb72b79f75d2fb3647172f86c7eec1",
-            "reference": "37797cda3ccb72b79f75d2fb3647172f86c7eec1",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-exception/zipball/2a91f955eb27427b15e274cf580b1778f55a2b03",
+            "reference": "2a91f955eb27427b15e274cf580b1778f55a2b03",
             "shasum": "",
             "mirrors": [
                 {
@@ -184,7 +184,7 @@
             "php": ">=7.1.0",
             "topthink/framework": "^6.0"
         },
-        "time": "2020-10-19T08:54:13+00:00",
+        "time": "2020-10-22T05:50:12+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

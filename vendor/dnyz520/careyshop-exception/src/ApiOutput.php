@@ -16,7 +16,7 @@ class ApiOutput
      * 输出格式
      * @var string
      */
-    public static $format = 'json';
+    public static $format = '';
 
     /**
      * 默认响应头
@@ -135,8 +135,10 @@ class ApiOutput
                 return self::outXml($result, $code);
 
             case 'json':
-            default:
                 return self::outJson($result, $code);
+
+            default:
+                return $result;
         }
     }
 }
