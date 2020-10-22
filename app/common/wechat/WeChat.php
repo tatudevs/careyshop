@@ -87,10 +87,6 @@ class WeChat
     public function __construct(string $code)
     {
         // 从数据库获取配置
-        if (empty($code)) {
-            throw new \Exception('code is does not exist');
-        }
-
         $setting = Cache::remember($code, function () use ($code) {
             $map = [
                 ['code', '=', $code],
@@ -98,6 +94,7 @@ class WeChat
                 ['status', '=', 1],
             ];
 
+            // 数据不存在时会抛出异常
             $result = MiniService::where($map)->findOrFail();
             Cache::tag('MiniService')->append($code);
 
