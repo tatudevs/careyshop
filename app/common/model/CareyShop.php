@@ -160,7 +160,7 @@ abstract class CareyShop extends Model
         try {
             // 确定规则来源
             if (empty($validate) && is_string($validate)) {
-                $class = '\\app\\common\\validate\\' . $this->getName();
+                $class = $this->getValidateClass();
                 if ($scene) {
                     $v = new $class();
                     $v->extractScene($data, $scene, $clean, $this->getPk());
@@ -191,6 +191,13 @@ abstract class CareyShop extends Model
         }
 
         return true;
+    }
+
+    private function getValidateClass()
+    {
+        // app\\common\\validate\\ . $this->getName();
+        print_r(__NAMESPACE__);
+        exit();
     }
 
     /**
