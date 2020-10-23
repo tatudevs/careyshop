@@ -12,9 +12,16 @@ namespace app\common\wechat\service;
 
 use app\common\wechat\Params;
 use app\common\wechat\WeChat;
+use think\facade\Config;
 
 class CareyShop
 {
+    /**
+     * 用户缓存名
+     * @var string
+     */
+    const WECHAT_USER = 'WeChatUser';
+
     /**
      * 控制器版本号
      * @var string
@@ -102,5 +109,27 @@ class CareyShop
     public function getError()
     {
         return $this->error;
+    }
+
+    /**
+     * 从请求参数中获取翻页数据
+     * @access protected
+     * @param int $maxSize
+     * @return int[]
+     */
+    protected function getPageData(int $maxSize = 0)
+    {
+        $pageNo = $this->params['page_no'];
+        $pageSize = $this->params['page_size'];
+
+        $pageNo = empty($pageNo) ? 0 : --$pageNo;
+        !empty($pageSize) ?: $pageSize = Config::get('app.list_rows');
+
+        // 限制最大每页数量
+        if ($maxSize > 0 && $pageSize > $maxSize) {
+            $pageSize = $maxSize;
+        }
+
+        return [$pageNo, $pageSize];
     }
 }

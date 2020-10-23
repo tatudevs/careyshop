@@ -51,9 +51,13 @@ class WeChat extends CareyShop
     {
         return [
             // 同步公众号用户
-            'get.official_account.user.sync' => ['getUserSync', User::class],
+            'get.official_account.user.sync'      => ['getUserSync', User::class],
+            // 获取公众号订阅渠道来源
+            'get.official_account.user.subscribe' => ['getSubscribeScene', User::class],
+            // 获取一个公众号用户
+            'get.official_account.user.item'      => ['getUserItem', User::class],
             // 获取公众号用户列表
-            'get.official_account.user.list' => ['getUserList', User::class],
+            'get.official_account.user.list'      => ['getUserList', User::class],
         ];
     }
 }
