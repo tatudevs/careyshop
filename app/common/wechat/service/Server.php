@@ -10,6 +10,8 @@
 
 namespace app\common\wechat\service;
 
+use think\facade\Cache;
+
 class Server extends CareyShop
 {
     /**
@@ -79,9 +81,35 @@ class Server extends CareyShop
      * 处理事件消息
      * @access private
      * @return void
+     * @throws
      */
     private function handleEvent()
     {
+        $this->getApp('server')->push(function ($res) {
+            // 订阅
+            if ($res['Event'] == 'subscribe') {
+                $userList = Cache::get('WeChatUser');
+                is_null($userList)
+                    ? $userList = [$res['FromUserName']]
+                    : array_unshift($userList, $res['FromUserName']);
+
+                Cache::set('WeChatUser', $userList);
+                return;
+            }
+
+            // 取消订阅
+            if ($res['Event'] == 'unsubscribe') {
+                $userList = Cache::get('WeChatUser');
+                $key = array_search($res['FromUserName'], $userList);
+
+                if (false !== $key) {
+                    unset($userList[$key]);
+                    Cache::set('WeChatUser', $userList);
+                }
+
+                return;
+            }
+        });
     }
 
     /**

@@ -39,9 +39,7 @@ class User extends CareyShop
             }
         }
 
-        $openIdList = array_flip(array_reverse($openIdList));
-        Cache::set('WeChatUser', $openIdList);
-
+        Cache::set('WeChatUser', array_reverse($openIdList));
         return true;
     }
 
