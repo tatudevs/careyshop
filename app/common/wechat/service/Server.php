@@ -20,51 +20,139 @@ class Server extends CareyShop
      */
     public function putWeChatData()
     {
-        $this->getApp('server')->push(function ($message) {
-            if (!isset($message['MsgType'])) {
-                return null;
-            }
-
+        // 获取消息
+        $message = $this->getApp('server')->getMessage();
+        if (isset($message['MsgType'])) {
             switch ($message['MsgType']) {
+                // 事件消息
                 case 'event':
-                    //return '收到事件消息';
+                    $this->handleEvent();
                     break;
 
+                // 文字消息
                 case 'text':
-                    //return '收到文字消息';
+                    $this->handleText();
                     break;
 
+                // 图片消息
                 case 'image':
-                    //return '收到图片消息';
+                    $this->handleImage();
                     break;
 
+                // 语音消息
                 case 'voice':
-                    //return '收到语音消息';
+                    $this->handleVoice();
                     break;
 
+                // 视频消息
                 case 'video':
-                    //return '收到视频消息';
+                    $this->handleVideo();
                     break;
 
+                // 坐标消息
                 case 'location':
-                    //return '收到坐标消息';
+                    $this->handleLocation();
                     break;
 
+                // 链接消息
                 case 'link':
-                    //return '收到链接消息';
+                    $this->handleLink();
                     break;
 
+                // 文件消息
                 case 'file':
-                    //return '收到文件消息';
+                    $this->handleFile();
                     break;
 
+                // 其它消息
                 default:
-                    //return '收到其它消息';
-                    break;
+                    $this->handleOther();
             }
-        });
+        }
 
+        // 响应实际输出
         $this->getApp('server')->serve()->send();
         exit();
+    }
+
+    /**
+     * 处理事件消息
+     * @access private
+     * @return void
+     */
+    private function handleEvent()
+    {
+    }
+
+    /**
+     * 处理文字消息
+     * @access private
+     * @return void
+     */
+    private function handleText()
+    {
+    }
+
+    /**
+     * 处理图片消息
+     * @access private
+     * @return void
+     */
+    private function handleImage()
+    {
+    }
+
+    /**
+     * 处理语音消息
+     * @access private
+     * @return void
+     */
+    private function handleVoice()
+    {
+    }
+
+    /**
+     * 处理视频消息
+     * @access private
+     * @return void
+     */
+    private function handleVideo()
+    {
+    }
+
+    /**
+     * 处理坐标消息
+     * @access private
+     * @return void
+     */
+    private function handleLocation()
+    {
+    }
+
+    /**
+     * 处理链接消息
+     * @access private
+     * @return void
+     */
+    private function handleLink()
+    {
+    }
+
+    /**
+     * 处理文件消息
+     * @access private
+     * @return void
+     */
+    private function handleFile()
+    {
+    }
+
+    /**
+     * 处理其它消息
+     * @access private
+     * @return void
+     */
+    private function handleOther()
+    {
     }
 }

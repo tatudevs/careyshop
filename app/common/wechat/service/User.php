@@ -10,10 +10,39 @@
 
 namespace app\common\wechat\service;
 
+use think\facade\Cache;
+
 class User extends CareyShop
 {
+    /**
+     * 同步公众号用户
+     * @access public
+     * @return bool
+     * @throws
+     */
     public function getUserSync()
     {
+        $openIdList = [];
+        $nextOpenId = null;
+
+        while (true) {
+            $result = $this->getApp('user')->list($nextOpenId);
+            if (isset($result['errcode']) && $result['errcode'] != 0) {
+                return $this->setError($result['errmsg']);
+            }
+
+            $nextOpenId = $result['next_openid'];
+            $openIdList = array_merge($openIdList, $result['data']['openid']);
+
+            if ($result['count'] < 10000) {
+                break;
+            }
+        }
+
+        $openIdList = array_flip(array_reverse($openIdList));
+        Cache::set('WeChatUser', $openIdList);
+
+        return true;
     }
 
     public function getUserList()
