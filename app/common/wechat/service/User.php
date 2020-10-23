@@ -39,7 +39,9 @@ class User extends CareyShop
             }
         }
 
-        Cache::set('WeChatUser', array_reverse($openIdList));
+        $cacheKey = 'WeChatUser' . $this->params['code'];
+        Cache::set($cacheKey, array_reverse($openIdList));
+
         return true;
     }
 
