@@ -32,7 +32,9 @@ class User extends CareyShop
             }
 
             $nextOpenId = $result['next_openid'];
-            $openIdList = array_merge($openIdList, $result['data']['openid']);
+            if ($result['count'] > 0) {
+                $openIdList = array_merge($openIdList, $result['data']['openid']);
+            }
 
             if ($result['count'] < 10000) {
                 break;
@@ -73,7 +75,7 @@ class User extends CareyShop
      */
     public function getUserItem()
     {
-        $result = $this->getApp('user')->get($this->params['open_id']);
+        $result = $this->getApp('user')->get($this->params['openid']);
         if (isset($result['errcode']) && $result['errcode'] != 0) {
             return $this->setError($result['errmsg']);
         }
@@ -82,16 +84,17 @@ class User extends CareyShop
     }
 
     /**
-     * 获取公众号用户列表
+     * 获取微信用户详情列表
      * @access public
+     * @param string $name 缓存名
      * @return array|false
      * @throws
      */
-    public function getUserList()
+    private function getWeChatUserList(string $name)
     {
         // 数据准备
         [$pageNo, $pageSize] = $this->getPageData(100);
-        $cacheData = Cache::get(self::WECHAT_USER . $this->params['code'], []);
+        $cacheData = Cache::get($name . $this->params['code'], []);
 
         // 计算合计
         $data['total_result'] = count($cacheData);
@@ -108,5 +111,149 @@ class User extends CareyShop
 
         $data['items'] = $result['user_info_list'];
         return $data;
+    }
+
+    /**
+     * 获取公众号用户列表
+     * @access public
+     * @return array|false
+     */
+    public function getUserList()
+    {
+        return $this->getWeChatUserList(self::WECHAT_USER);
+    }
+
+    /**
+     * 设置公众号用户的备注
+     * @access public
+     * @return bool
+     * @throws
+     */
+    public function setUserRemark()
+    {
+        // 数据准备
+        $openId = $this->params['openid'];
+        $remark = $this->params['remark'];
+
+        // 发送请求
+        $result = $this->getApp('user')->remark($openId, $remark);
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return true;
+    }
+
+    /**
+     * 同步公众号黑名单
+     * @access public
+     * @return bool
+     * @throws
+     */
+    public function getBlackSync()
+    {
+        $openIdList = [];
+        $beginOpenId = null;
+
+        while (true) {
+            $result = $this->getApp('user')->blacklist($beginOpenId);
+            if (isset($result['errcode']) && $result['errcode'] != 0) {
+                return $this->setError($result['errmsg']);
+            }
+
+            if (isset($result['next_openid'])) {
+                $beginOpenId = $result['next_openid'];
+            }
+
+            if ($result['count'] > 0) {
+                $openIdList = array_merge($openIdList, $result['data']['openid']);
+            }
+
+            if ($result['count'] < 10000) {
+                break;
+            }
+        }
+
+        $cacheKey = self::WECHAT_BLACK . $this->params['code'];
+        Cache::set($cacheKey, array_reverse($openIdList));
+
+        return true;
+    }
+
+    /**
+     * 获取公众号黑名单列表
+     * @access public
+     * @return array|false
+     */
+    public function getBlackList()
+    {
+        return $this->getWeChatUserList(self::WECHAT_BLACK);
+    }
+
+    /**
+     * 拉黑公众号用户
+     * @access public
+     * @return bool
+     * @throws
+     */
+    public function getBlackBlock()
+    {
+        $result = $this->getApp('user')->block($this->params['openid_list']);
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        $this->setBlackCache('add');
+        return true;
+    }
+
+    /**
+     * 取消公众号拉黑用户
+     * @access public
+     * @return bool
+     * @throws
+     */
+    public function getBlackUnblock()
+    {
+        $result = $this->getApp('user')->unblock($this->params['openid_list']);
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        $this->setBlackCache('del');
+        return true;
+    }
+
+    /**
+     * 设置公众号黑名单缓存
+     * @access private
+     * @param string $type 添加或删除(add del)
+     * @return void
+     */
+    private function setBlackCache(string $type)
+    {
+        if (is_string($this->params['openid_list'])) {
+            $this->params['openid_list'] = [$this->params['openid_list']];
+        }
+
+        $cacheKey = self::WECHAT_BLACK . $this->params['code'];
+        $cacheData = Cache::get($cacheKey, []);
+
+        if ('add' === $type) {
+            foreach ($this->params['openid_list'] as $vlaue) {
+                if (!in_array($vlaue, $cacheData)) {
+                    array_unshift($cacheData, $vlaue);
+                }
+            }
+        } else if ('del' === $type) {
+            foreach ($this->params['openid_list'] as $vlaue) {
+                $pos = array_search($vlaue, $cacheData);
+                if (false !== $pos) {
+                    unset($cacheData[$pos]);
+                }
+            }
+        }
+
+        Cache::set($cacheKey, $cacheData);
     }
 }

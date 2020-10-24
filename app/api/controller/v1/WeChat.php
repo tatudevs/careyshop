@@ -58,6 +58,16 @@ class WeChat extends CareyShop
             'get.official_account.user.item'      => ['getUserItem', User::class],
             // 获取公众号用户列表
             'get.official_account.user.list'      => ['getUserList', User::class],
+            // 设置公众号用户的备注
+            'set.official_account.user.remark'    => ['setUserRemark', User::class],
+            // 同步公众号黑名单
+            'get.official_account.black.sync'     => ['getBlackSync', User::class],
+            // 获取公众号黑名单列表
+            'get.official_account.black.list'     => ['getBlackList', User::class],
+            // 拉黑公众号用户
+            'get.official_account.black.block'    => ['getBlackBlock', User::class],
+            // 取消公众号拉黑用户
+            'get.official_account.black.unblock'  => ['getBlackUnblock', User::class],
         ];
     }
 }

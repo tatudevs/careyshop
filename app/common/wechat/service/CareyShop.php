@@ -17,10 +17,16 @@ use think\facade\Config;
 class CareyShop
 {
     /**
-     * 用户缓存名
+     * 公众号用户缓存标识
      * @var string
      */
     const WECHAT_USER = 'WeChatUser';
+
+    /**
+     * 公众号黑名单缓存标识
+     * @var string
+     */
+    const WECHAT_BLACK = 'WeChatBlack';
 
     /**
      * 控制器版本号
