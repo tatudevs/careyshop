@@ -13,6 +13,7 @@ namespace app\api\controller\v1;
 use app\api\controller\CareyShop;
 use app\common\wechat\service\Server;
 use app\common\wechat\service\User;
+use app\common\wechat\service\UserTag;
 
 class WeChat extends CareyShop
 {
@@ -23,33 +24,32 @@ class WeChat extends CareyShop
      */
     protected static function initMethod()
     {
-        $server = self::getServerMethod();
-        $user = self::getUserMethod();
-
-        self::$route = array_merge($server, $user);
+        self::getServerMethod();
+        self::getUserMethod();
+        self::getUserTagMethod();
     }
 
     /**
-     * 服务端方法
+     * 服务端
      * @access private
-     * @return string[][]
+     * @return void
      */
     private static function getServerMethod()
     {
-        return [
+        self::$route = array_merge(self::$route, [
             // 接收并响应微信推送
             'put.wechat.data' => ['putWeChatData', Server::class],
-        ];
+        ]);
     }
 
     /**
-     * 用户管理方法
+     * 用户管理
      * @access private
-     * @return string[][]
+     * @return void
      */
     private static function getUserMethod()
     {
-        return [
+        self::$route = array_merge(self::$route, [
             // 同步公众号用户
             'get.official_account.user.sync'      => ['getUserSync', User::class],
             // 获取公众号订阅渠道来源
@@ -68,6 +68,31 @@ class WeChat extends CareyShop
             'get.official_account.black.block'    => ['getBlackBlock', User::class],
             // 取消公众号拉黑用户
             'get.official_account.black.unblock'  => ['getBlackUnblock', User::class],
-        ];
+        ]);
+    }
+
+    /**
+     * 用户标签
+     * @access private
+     * @return void
+     */
+    private static function getUserTagMethod()
+    {
+        self::$route = array_merge(self::$route, [
+            // 添加一个公众号标签
+            'add.official_account.tag.item' => ['', UserTag::class],
+            // 编辑一个公众号标签
+            'set.official_account.tag.item' => ['', UserTag::class],
+            // 删除一个公众号标签
+            'del.official_account.tag.item' => ['', UserTag::class],
+            // 获取公众号标签列表
+            'get.official_account.tag.list' => ['', UserTag::class],
+            // 获取指定公众号用户下的所有标签
+            'get.official_account.tag.user' => ['', UserTag::class],
+            // 批量为公众号用户添加标签
+            'set.official_account.tag.user' => ['', UserTag::class],
+            // 批量为公众号用户删除标签
+            'del.official_account.tag.user' => ['', UserTag::class],
+        ]);
     }
 }
