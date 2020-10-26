@@ -13,6 +13,7 @@ namespace app\api\controller\v1;
 use app\api\controller\CareyShop;
 use app\common\wechat\service\DataCube;
 use app\common\wechat\service\Server;
+use app\common\wechat\service\Service;
 use app\common\wechat\service\User;
 use app\common\wechat\service\UserTag;
 
@@ -29,6 +30,7 @@ class WeChat extends CareyShop
         self::getUserMethod();
         self::getUserTagMethod();
         self::getDataCubeMethod();
+        self::getServiceMethod();
     }
 
     /**
@@ -106,6 +108,29 @@ class WeChat extends CareyShop
         self::$route = array_merge(self::$route, [
             // 获取公众号数据统计分析
             'del.official_account.datacube' => ['getDataCube', DataCube::class],
+        ]);
+    }
+
+    /**
+     * 客服管理
+     * @access private
+     * @return void
+     */
+    private static function getServiceMethod()
+    {
+        self::$route = array_merge(self::$route, [
+            // 添加一名客服
+            'add.official_account.service.item'   => ['addServiceItem', Service::class],
+            // 编辑一名客服
+            'set.official_account.service.item'   => ['setServiceItem', Service::class],
+            // 删除一名客户
+            'del.official_account.service.item'   => ['delServiceItem', Service::class],
+            // 编辑客服头像
+            'set.official_account.service.avatar' => ['setServiceAvatar', Service::class],
+            // 获取全部客服列表
+            'get.official_account.service.list'   => ['getServiceList', Service::class],
+            // 获取在线客服列表
+            'get.official_account.service.online' => ['getServiceOnline', Service::class],
         ]);
     }
 }
