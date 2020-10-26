@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\wechat\service\DataCube;
 use app\common\wechat\service\Server;
 use app\common\wechat\service\User;
 use app\common\wechat\service\UserTag;
@@ -52,23 +53,21 @@ class WeChat extends CareyShop
     {
         self::$route = array_merge(self::$route, [
             // 同步公众号用户
-            'get.official_account.user.sync'      => ['getUserSync', User::class],
-            // 获取公众号订阅渠道来源
-            'get.official_account.user.subscribe' => ['getSubscribeScene', User::class],
+            'get.official_account.user.sync'     => ['getUserSync', User::class],
             // 获取一个公众号用户
-            'get.official_account.user.item'      => ['getUserItem', User::class],
+            'get.official_account.user.item'     => ['getUserItem', User::class],
             // 获取公众号用户列表
-            'get.official_account.user.list'      => ['getUserList', User::class],
+            'get.official_account.user.list'     => ['getUserList', User::class],
             // 设置公众号用户的备注
-            'set.official_account.user.remark'    => ['setUserRemark', User::class],
+            'set.official_account.user.remark'   => ['setUserRemark', User::class],
             // 同步公众号黑名单
-            'get.official_account.black.sync'     => ['getBlackSync', User::class],
+            'get.official_account.black.sync'    => ['getBlackSync', User::class],
             // 获取公众号黑名单列表
-            'get.official_account.black.list'     => ['getBlackList', User::class],
+            'get.official_account.black.list'    => ['getBlackList', User::class],
             // 拉黑公众号用户
-            'get.official_account.black.block'    => ['getBlackBlock', User::class],
+            'get.official_account.black.block'   => ['getBlackBlock', User::class],
             // 取消公众号拉黑用户
-            'get.official_account.black.unblock'  => ['getBlackUnblock', User::class],
+            'get.official_account.black.unblock' => ['getBlackUnblock', User::class],
         ]);
     }
 
@@ -105,6 +104,8 @@ class WeChat extends CareyShop
     private static function getDataCubeMethod()
     {
         self::$route = array_merge(self::$route, [
+            // 获取公众号数据统计分析
+            'del.official_account.datacube' => ['getDataCube', DataCube::class],
         ]);
     }
 }
