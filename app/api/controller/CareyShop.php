@@ -382,10 +382,10 @@ abstract class CareyShop
      */
     private function checkToken()
     {
-        // 初始账号数据
+        // 初始账号数据(调试环境下默认为超级管理员)
         $GLOBALS['client'] = [
-            'type'        => config('extra.client_group.' . ($this->apiDebug ? 'user' : 'visitor') . '.value'),
-            'group_id'    => $this->apiDebug ? AUTH_CLIENT : AUTH_GUEST,
+            'type'        => config('extra.client_group.' . ($this->apiDebug ? 'admin' : 'visitor') . '.value'),
+            'group_id'    => $this->apiDebug ? AUTH_SUPER_ADMINISTRATOR : AUTH_GUEST,
             'client_id'   => $this->apiDebug ? 1 : 0,
             'client_name' => $this->apiDebug ? 'CareyShop' : '游客',
             'token'       => $this->token,

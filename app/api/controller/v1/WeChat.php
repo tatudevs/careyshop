@@ -80,19 +80,19 @@ class WeChat extends CareyShop
     {
         self::$route = array_merge(self::$route, [
             // 添加一个公众号标签
-            'add.official_account.tag.item' => ['', UserTag::class],
+            'add.official_account.tag.item' => ['addTagItem', UserTag::class],
             // 编辑一个公众号标签
-            'set.official_account.tag.item' => ['', UserTag::class],
+            'set.official_account.tag.item' => ['setTagItem', UserTag::class],
             // 删除一个公众号标签
-            'del.official_account.tag.item' => ['', UserTag::class],
+            'del.official_account.tag.item' => ['delTagItem', UserTag::class],
             // 获取公众号标签列表
-            'get.official_account.tag.list' => ['', UserTag::class],
+            'get.official_account.tag.list' => ['getTagList', UserTag::class],
             // 获取指定公众号用户下的所有标签
-            'get.official_account.tag.user' => ['', UserTag::class],
+            'get.official_account.tag.user' => ['getTagOfUser', UserTag::class],
             // 批量为公众号用户添加标签
-            'set.official_account.tag.user' => ['', UserTag::class],
+            'set.official_account.tag.user' => ['setTagToUser', UserTag::class],
             // 批量为公众号用户删除标签
-            'del.official_account.tag.user' => ['', UserTag::class],
+            'del.official_account.tag.user' => ['delTagToUser', UserTag::class],
         ]);
     }
 }
