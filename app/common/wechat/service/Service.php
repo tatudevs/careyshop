@@ -116,4 +116,45 @@ class Service extends CareyShop
 
         return $result['kf_online_list'];
     }
+
+    /**
+     * 邀请微信用户绑定客服帐号
+     * @access public
+     * @return bool
+     * @throws
+     */
+    public function setServiceInvite()
+    {
+        $account = $this->params['kf_account'];
+        $invite = $this->params['invite_wx'];
+
+        $result = $this->getApp('customer_service')->invite($account, $invite);
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return true;
+    }
+
+    /**
+     * 获取客服与客户聊天记录
+     * @access public
+     * @return array|false
+     * @throws
+     */
+    public function getServiceMessage()
+    {
+        $starttime = $this->params['starttime'];
+        $endtime = $this->params['endtime'];
+
+        $msgId = $this->params['msgid'] ?? 1;
+        $number = $this->params['number'] ?? 100;
+
+        $result = $this->getApp('customer_service')->messages($starttime, $endtime, $msgId, $number);
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return $result;
+    }
 }

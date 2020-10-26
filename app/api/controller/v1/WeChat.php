@@ -120,17 +120,21 @@ class WeChat extends CareyShop
     {
         self::$route = array_merge(self::$route, [
             // 添加一名客服
-            'add.official_account.service.item'   => ['addServiceItem', Service::class],
+            'add.official_account.service.item'    => ['addServiceItem', Service::class],
             // 编辑一名客服
-            'set.official_account.service.item'   => ['setServiceItem', Service::class],
+            'set.official_account.service.item'    => ['setServiceItem', Service::class],
             // 删除一名客户
-            'del.official_account.service.item'   => ['delServiceItem', Service::class],
+            'del.official_account.service.item'    => ['delServiceItem', Service::class],
             // 编辑客服头像
-            'set.official_account.service.avatar' => ['setServiceAvatar', Service::class],
+            'set.official_account.service.avatar'  => ['setServiceAvatar', Service::class],
             // 获取全部客服列表
-            'get.official_account.service.list'   => ['getServiceList', Service::class],
+            'get.official_account.service.list'    => ['getServiceList', Service::class],
             // 获取在线客服列表
-            'get.official_account.service.online' => ['getServiceOnline', Service::class],
+            'get.official_account.service.online'  => ['getServiceOnline', Service::class],
+            // 邀请微信用户绑定客服帐号
+            'set.official_account.service.invite'  => ['setServiceInvite', Service::class],
+            // 获取客服与客户聊天记录
+            'get.official_account.service.message' => ['getServiceMessage', Service::class],
         ]);
     }
 }
