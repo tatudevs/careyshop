@@ -27,6 +27,7 @@ class WeChat extends CareyShop
         self::getServerMethod();
         self::getUserMethod();
         self::getUserTagMethod();
+        self::getDataCubeMethod();
     }
 
     /**
@@ -93,6 +94,17 @@ class WeChat extends CareyShop
             'set.official_account.tag.user' => ['setTagToUser', UserTag::class],
             // 批量为公众号用户删除标签
             'del.official_account.tag.user' => ['delTagToUser', UserTag::class],
+        ]);
+    }
+
+    /**
+     * 数据统计
+     * @access private
+     * @return void
+     */
+    private static function getDataCubeMethod()
+    {
+        self::$route = array_merge(self::$route, [
         ]);
     }
 }
