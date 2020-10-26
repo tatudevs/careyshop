@@ -127,7 +127,7 @@ class History extends CareyShop
         }
 
         $map[] = ['history_id', 'in', $data['history_id']];
-        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
 
         $this->where($map)->delete();
         return true;
@@ -147,12 +147,17 @@ class History extends CareyShop
     /**
      * 获取我的足迹数量
      * @access public
-     * @return array
+     * @param array $data 外部数据
+     * @return array|false
      */
-    public function getHistoryCount()
+    public function getHistoryCount(array $data)
     {
+        if (!$this->validateData($data, 'count')) {
+            return false;
+        }
+
         // 搜索条件
-        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
         $totalResult = $this->with('get_goods')->where($map)->count();
 
         return ['total_result' => $totalResult];
@@ -172,7 +177,7 @@ class History extends CareyShop
         }
 
         // 搜索条件
-        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
         $result['total_result'] = $this->where($map)->count();
 
         if ($result['total_result'] <= 0) {

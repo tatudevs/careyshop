@@ -19,6 +19,7 @@ class History extends CareyShop
     protected $rule = [
         'history_id'  => 'integer|gt:0',
         'goods_id'    => 'require|integer|gt:0',
+        'client_id'   => 'integer|gt:0',
         'page_no'     => 'integer|gt:0',
         'page_size'   => 'integer|gt:0',
         'order_type'  => 'requireWith:order_field|in:asc,desc',
@@ -32,6 +33,7 @@ class History extends CareyShop
     protected $field = [
         'history_id'  => '我的足迹编号',
         'goods_id'    => '商品编号',
+        'client_id'   => '账号编号',
         'page_no'     => '页码',
         'page_size'   => '每页数量',
         'order_type'  => '排序方式',
@@ -43,10 +45,15 @@ class History extends CareyShop
      * @var array
      */
     protected $scene = [
-        'del'  => [
+        'del'   => [
+            'client_id',
             'history_id' => 'require|arrayHasOnlyInts',
         ],
-        'list' => [
+        'count' => [
+            'client_id',
+        ],
+        'list'  => [
+            'client_id',
             'page_no',
             'page_size',
             'order_type',
