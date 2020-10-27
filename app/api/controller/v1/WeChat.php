@@ -31,6 +31,7 @@ class WeChat extends CareyShop
         self::getUserTagMethod();
         self::getDataCubeMethod();
         self::getServiceMethod();
+        self::getSessionMethod();
     }
 
     /**
@@ -135,6 +136,31 @@ class WeChat extends CareyShop
             'set.official_account.service.invite'  => ['setServiceInvite', Service::class],
             // 获取客服与客户聊天记录
             'get.official_account.service.message' => ['getServiceMessage', Service::class],
+            // 主动发送消息给公众号用户
+            'send.official_account.service.user'   => ['sendMessageToUser', Service::class],
+            // 使用指定客服发送消息给公众号用户
+            'send.official_account.service.from'   => ['sendMessageFromUser', Service::class],
+        ]);
+    }
+
+    /**
+     * 客服会话
+     * @access private
+     * @return void
+     */
+    private static function getSessionMethod()
+    {
+        self::$route = array_merge(self::$route, [
+            // 创建一个客服会话
+            'add.official_account.session.item'    => ['addSessionItem', Service::class],
+            // 关闭一个客服会话
+            'close.official_account.session.item'  => ['closeSessionItem', Service::class],
+            // 获取公众号用户会话状态
+            'get.official_account.session.user'    => ['getSessionUser', Service::class],
+            // 根据客服账号获取会话列表
+            'get.official_account.session.list'    => ['getSessionList', Service::class],
+            // 获取未接入会话列表
+            'get.official_account.session.waiting' => ['getSessionWaiting', Service::class],
         ]);
     }
 }

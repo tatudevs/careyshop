@@ -72,6 +72,8 @@ class Server extends CareyShop
             }
         }
 
+        // todo 消息转发给客服未实现
+
         // 响应实际输出
         $this->getApp('server')->serve()->send();
         exit();
