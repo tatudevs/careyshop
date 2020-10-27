@@ -43,7 +43,9 @@ class WeChat extends CareyShop
     {
         self::$route = array_merge(self::$route, [
             // 接收并响应微信推送
-            'put.wechat.data' => ['putWeChatData', Server::class],
+            'put.wechat.data'  => ['putWeChatData', Server::class],
+            // 长链接转短链接
+            'set.wechat.short' => ['setWeChatShort', Server::class],
         ]);
     }
 

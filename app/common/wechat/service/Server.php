@@ -185,4 +185,20 @@ class Server extends CareyShop
     private function handleOther()
     {
     }
+
+    /**
+     * 长链接转短链接
+     * @access public
+     * @return array|false
+     * @throws
+     */
+    public function setWeChatShort()
+    {
+        $result = $this->getApp('url')->shorten($this->params['url']);
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return $result['short_url'];
+    }
 }
