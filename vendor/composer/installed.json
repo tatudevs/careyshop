@@ -830,17 +830,17 @@
     },
     {
         "name": "monolog/monolog",
-        "version": "1.25.5",
-        "version_normalized": "1.25.5.0",
+        "version": "2.1.1",
+        "version_normalized": "2.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Seldaek/monolog.git",
-            "reference": "1817faadd1846cd08be9a49e905dc68823bc38c0"
+            "reference": "f9eee5cec93dfb313a38b6b288741e84e53f02d5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1817faadd1846cd08be9a49e905dc68823bc38c0",
-            "reference": "1817faadd1846cd08be9a49e905dc68823bc38c0",
+            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/f9eee5cec93dfb313a38b6b288741e84e53f02d5",
+            "reference": "f9eee5cec93dfb313a38b6b288741e84e53f02d5",
             "shasum": "",
             "mirrors": [
                 {
@@ -850,8 +850,8 @@
             ]
         },
         "require": {
-            "php": ">=5.3.0",
-            "psr/log": "~1.0"
+            "php": ">=7.2",
+            "psr/log": "^1.0.1"
         },
         "provide": {
             "psr/log-implementation": "1.0.0"
@@ -859,33 +859,37 @@
         "require-dev": {
             "aws/aws-sdk-php": "^2.4.9 || ^3.0",
             "doctrine/couchdb": "~1.0@dev",
-            "graylog2/gelf-php": "~1.0",
+            "elasticsearch/elasticsearch": "^6.0",
+            "graylog2/gelf-php": "^1.4.2",
             "php-amqplib/php-amqplib": "~2.4",
             "php-console/php-console": "^3.1.3",
             "php-parallel-lint/php-parallel-lint": "^1.0",
-            "phpunit/phpunit": "~4.5",
+            "phpspec/prophecy": "^1.6.1",
+            "phpunit/phpunit": "^8.5",
+            "predis/predis": "^1.1",
+            "rollbar/rollbar": "^1.3",
             "ruflin/elastica": ">=0.90 <3.0",
-            "sentry/sentry": "^0.13",
             "swiftmailer/swiftmailer": "^5.3|^6.0"
         },
         "suggest": {
             "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
             "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+            "elasticsearch/elasticsearch": "Allow sending log messages to an Elasticsearch server via official client",
             "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-            "ext-mongo": "Allow sending log messages to a MongoDB server",
+            "ext-mbstring": "Allow to work properly with unicode symbols",
+            "ext-mongodb": "Allow sending log messages to a MongoDB server (via driver)",
             "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
-            "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
+            "mongodb/mongodb": "Allow sending log messages to a MongoDB server (via library)",
             "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
             "php-console/php-console": "Allow sending log messages to Google Chrome",
             "rollbar/rollbar": "Allow sending log messages to Rollbar",
-            "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-            "sentry/sentry": "Allow sending log messages to a Sentry server"
+            "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
         },
-        "time": "2020-07-23T08:35:51+00:00",
+        "time": "2020-07-23T08:41:23+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.0.x-dev"
+                "dev-master": "2.x-dev"
             }
         },
         "installation-source": "dist",
@@ -911,6 +915,16 @@
             "log",
             "logging",
             "psr-3"
+        ],
+        "funding": [
+            {
+                "url": "https://github.com/Seldaek",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/monolog/monolog",
+                "type": "tidelift"
+            }
         ]
     },
     {
@@ -983,17 +997,17 @@
     },
     {
         "name": "overtrue/wechat",
-        "version": "4.2.11",
-        "version_normalized": "4.2.11.0",
+        "version": "4.3.1",
+        "version_normalized": "4.3.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/overtrue/wechat.git",
-            "reference": "853e0772e6aa53a71edf1b5d251c7ff1e6b2a2bf"
+            "reference": "d7fa23e54337251f5ebfb6c6aab2b2a72da78bd3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/overtrue/wechat/zipball/853e0772e6aa53a71edf1b5d251c7ff1e6b2a2bf",
-            "reference": "853e0772e6aa53a71edf1b5d251c7ff1e6b2a2bf",
+            "url": "https://api.github.com/repos/overtrue/wechat/zipball/d7fa23e54337251f5ebfb6c6aab2b2a72da78bd3",
+            "reference": "d7fa23e54337251f5ebfb6c6aab2b2a72da78bd3",
             "shasum": "",
             "mirrors": [
                 {
@@ -1007,25 +1021,25 @@
             "ext-fileinfo": "*",
             "ext-openssl": "*",
             "ext-simplexml": "*",
-            "guzzlehttp/guzzle": "^6.2",
+            "guzzlehttp/guzzle": "^6.2 || ^7.0",
             "monolog/monolog": "^1.22 || ^2.0",
             "overtrue/socialite": "~2.0",
-            "php": ">=7.1",
+            "php": ">=7.2",
             "pimple/pimple": "^3.0",
             "psr/simple-cache": "^1.0",
-            "symfony/cache": "^3.3 || ^4.3",
-            "symfony/event-dispatcher": "^4.3",
-            "symfony/http-foundation": "^2.7 || ^3.0 || ^4.0",
-            "symfony/psr-http-message-bridge": "^0.3 || ^1.0"
+            "symfony/cache": "^3.3 || ^4.3 || ^5.0",
+            "symfony/event-dispatcher": "^4.3 || ^5.0",
+            "symfony/http-foundation": "^2.7 || ^3.0 || ^4.0 || ^5.0",
+            "symfony/psr-http-message-bridge": "^0.3 || ^1.0 || ^2.0"
         },
         "require-dev": {
             "friendsofphp/php-cs-fixer": "^2.15",
             "mikey179/vfsstream": "^1.6",
             "mockery/mockery": "^1.2.3",
-            "phpstan/phpstan": "^0.11.12",
+            "phpstan/phpstan": "^0.12.0",
             "phpunit/phpunit": "^7.5"
         },
-        "time": "2019-11-27T16:38:00+00:00",
+        "time": "2020-09-28T09:20:16+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1049,10 +1063,25 @@
         ],
         "description": "微信SDK",
         "keywords": [
+            "easywechat",
             "sdk",
             "wechat",
             "weixin",
             "weixin-sdk"
+        ],
+        "funding": [
+            {
+                "url": "https://www.easywechat.com/img/pay/wechat.jpg",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/overtrue",
+                "type": "github"
+            },
+            {
+                "url": "https://www.patreon.com/overtrue",
+                "type": "patreon"
+            }
         ]
     },
     {
@@ -1656,6 +1685,20 @@
         "keywords": [
             "caching",
             "psr6"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
@@ -1726,6 +1769,20 @@
             "interfaces",
             "interoperability",
             "standards"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
@@ -1805,7 +1862,21 @@
             }
         ],
         "description": "Symfony EventDispatcher Component",
-        "homepage": "https://symfony.com"
+        "homepage": "https://symfony.com",
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
+        ]
     },
     {
         "name": "symfony/event-dispatcher-contracts",
@@ -1875,6 +1946,20 @@
             "interfaces",
             "interoperability",
             "standards"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
@@ -1938,7 +2023,21 @@
             }
         ],
         "description": "Symfony HttpFoundation Component",
-        "homepage": "https://symfony.com"
+        "homepage": "https://symfony.com",
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
+        ]
     },
     {
         "name": "symfony/mime",
@@ -2008,6 +2107,20 @@
         "keywords": [
             "mime",
             "mime-type"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
@@ -2447,17 +2560,17 @@
     },
     {
         "name": "symfony/psr-http-message-bridge",
-        "version": "v1.3.0",
-        "version_normalized": "1.3.0.0",
+        "version": "v2.0.2",
+        "version_normalized": "2.0.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/psr-http-message-bridge.git",
-            "reference": "9d3e80d54d9ae747ad573cad796e8e247df7b796"
+            "reference": "51a21cb3ba3927d4b4bf8f25cc55763351af5f2e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/psr-http-message-bridge/zipball/9d3e80d54d9ae747ad573cad796e8e247df7b796",
-            "reference": "9d3e80d54d9ae747ad573cad796e8e247df7b796",
+            "url": "https://api.github.com/repos/symfony/psr-http-message-bridge/zipball/51a21cb3ba3927d4b4bf8f25cc55763351af5f2e",
+            "reference": "51a21cb3ba3927d4b4bf8f25cc55763351af5f2e",
             "shasum": "",
             "mirrors": [
                 {
@@ -2467,23 +2580,22 @@
             ]
         },
         "require": {
-            "php": "^7.1",
+            "php": ">=7.1",
             "psr/http-message": "^1.0",
             "symfony/http-foundation": "^4.4 || ^5.0"
         },
         "require-dev": {
             "nyholm/psr7": "^1.1",
-            "symfony/phpunit-bridge": "^4.4 || ^5.0",
-            "zendframework/zend-diactoros": "^1.4.1 || ^2.0"
+            "symfony/phpunit-bridge": "^4.4 || ^5.0"
         },
         "suggest": {
             "nyholm/psr7": "For a super lightweight PSR-7/17 implementation"
         },
-        "time": "2019-11-25T19:33:50+00:00",
+        "time": "2020-09-29T08:17:46+00:00",
         "type": "symfony-bridge",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.3-dev"
+                "dev-master": "2.0-dev"
             }
         },
         "installation-source": "dist",
@@ -2516,6 +2628,20 @@
             "http-message",
             "psr-17",
             "psr-7"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
@@ -2586,6 +2712,20 @@
             "interfaces",
             "interoperability",
             "standards"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
@@ -2739,6 +2879,20 @@
             "hydrate",
             "instantiate",
             "serialize"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {

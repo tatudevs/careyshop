@@ -352,7 +352,7 @@ class Index
         $system = str_replace(" ", '', base64_decode('Q2FyZXkgU2hvcCDllYbln44='));
         $lockPath = public_path() . 'static' . DS . 'install' . DS . 'install.lock';
 
-        $contents = '<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"></head><body>';
+        $contents = '<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><title>CareyShop 安装完成</title></head><body>';
         $contents .= '本项目基于' . $system . '框架系统安装';
         $contents .= '</body></html>';
         file_put_contents($lockPath, $contents);
