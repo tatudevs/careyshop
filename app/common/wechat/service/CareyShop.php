@@ -29,6 +29,12 @@ class CareyShop
     const WECHAT_BLACK = 'WeChatBlack';
 
     /**
+     * 公众号菜单缓存标识
+     * $var string
+     */
+    const WECHAT_MENU = 'WeChatMenu';
+
+    /**
      * 控制器版本号
      * @var string
      */

@@ -12,6 +12,7 @@ namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
 use app\common\wechat\service\DataCube;
+use app\common\wechat\service\Menu;
 use app\common\wechat\service\Server;
 use app\common\wechat\service\Service;
 use app\common\wechat\service\User;
@@ -32,6 +33,7 @@ class WeChat extends CareyShop
         self::getDataCubeMethod();
         self::getServiceMethod();
         self::getSessionMethod();
+        self::getMenuMethod();
     }
 
     /**
@@ -163,6 +165,23 @@ class WeChat extends CareyShop
             'get.official_account.session.list'    => ['getSessionList', Service::class],
             // 获取未接入会话列表
             'get.official_account.session.waiting' => ['getSessionWaiting', Service::class],
+        ]);
+    }
+
+    /**
+     * 自定义菜单
+     * @access private
+     * @return void
+     */
+    private static function getMenuMethod()
+    {
+        self::$route = array_merge(self::$route, [
+            // 编辑自定义菜单(配置数据为空时表示全部删除)
+            'set.official_account.menu.data' => ['setMenuData', Menu::class],
+            // 获取自定义菜单
+            'get.official_account.menu.data' => ['getMenuData', Menu::class],
+            // 删除全部自定义菜单
+            'del.official_account.menu.all'  => ['delMenuAll', Menu::class],
         ]);
     }
 }
