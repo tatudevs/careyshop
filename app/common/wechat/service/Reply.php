@@ -73,14 +73,19 @@ class Reply extends CareyShop
 //                'status'   => 1,        // 0=禁用 1=启用
 //            ],
 //        ];
+        $type = $this->params['type'];
         $setting = $this->params['setting'] ?? [];
-        if (is_array($setting)) {
-            $cacheKey = self::WECHAT_REPLY . $this->params['code'];
-            Cache::set($cacheKey, $setting);
 
-            return true;
+        if (!is_array($setting)) {
+            return false;
         }
 
-        return false;
+        $cacheKey = self::WECHAT_REPLY . $this->params['code'];
+        $cacheData = Cache::get($cacheKey, []);
+
+        empty($type) ? $cacheData[$type] = $setting : $cacheData = $setting;
+        Cache::set($cacheKey, $cacheData);
+
+        return true;
     }
 }
