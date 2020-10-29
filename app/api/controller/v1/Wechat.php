@@ -36,6 +36,7 @@ class Wechat extends CareyShop
         self::getSessionMethod();
         self::getMenuMethod();
         self::getAutoReplyMethod();
+        self::getTemplateMethod();
     }
 
     /**
@@ -199,6 +200,17 @@ class Wechat extends CareyShop
             'get.official_account.reply.data' => ['getReplyData', Reply::class],
             // 设置自动回复配置
             'set.official_account.reply.data' => ['setReplyData', Reply::class],
+        ]);
+    }
+
+    /**
+     * 模板消息
+     * @access private
+     * @return void
+     */
+    private static function getTemplateMethod()
+    {
+        self::$route = array_merge(self::$route, [
         ]);
     }
 }
