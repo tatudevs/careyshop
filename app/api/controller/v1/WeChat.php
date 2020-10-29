@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\wechat\service\AutoReply;
 use app\common\wechat\service\DataCube;
 use app\common\wechat\service\Menu;
 use app\common\wechat\service\Server;
@@ -34,6 +35,7 @@ class WeChat extends CareyShop
         self::getServiceMethod();
         self::getSessionMethod();
         self::getMenuMethod();
+        self::getAutoReplyMethod();
     }
 
     /**
@@ -182,6 +184,18 @@ class WeChat extends CareyShop
             'get.official_account.menu.data' => ['getMenuData', Menu::class],
             // 删除全部自定义菜单
             'del.official_account.menu.all'  => ['delMenuAll', Menu::class],
+        ]);
+    }
+
+    /**
+     * 自动回复
+     * @access private
+     * @return void
+     */
+    private static function getAutoReplyMethod()
+    {
+        self::$route = array_merge(self::$route, [
+            'get.official_account.reply.data' => ['getReplyData', AutoReply::class],
         ]);
     }
 }
