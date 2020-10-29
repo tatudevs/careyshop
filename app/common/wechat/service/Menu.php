@@ -14,6 +14,12 @@ use think\facade\Cache;
 
 class Menu extends CareyShop
 {
+    /**
+     * 编辑自定义菜单(配置数据为空时表示全部删除)
+     * @access public
+     * @return bool
+     * @throws
+     */
     public function setMenuData()
     {
         $button = $this->params['button'];
@@ -26,19 +32,33 @@ class Menu extends CareyShop
             return $this->setError($result['errmsg']);
         }
 
+        $cacheName = self::WECHAT_MENU . $this->params['code'];
+        Cache::delete($cacheName);
+
         return true;
     }
 
+    /**
+     * 获取自定义菜单
+     * @access public
+     * @return array|false
+     * @throws
+     */
     public function getMenuData()
     {
         $cacheName = self::WECHAT_MENU . $this->params['code'];
-        Cache::remember($cacheName, function () {
+        $result = Cache::remember($cacheName, function () {
+            $result = $this->getApp('menu')->list();
+            if (isset($result['errcode']) && $result['errcode'] == 46003) {
+                return []; // 菜单尚未创建
+            }
+
+            return $result;
         });
 
-//        $result = $this->getApp('menu')->list();
-//        if (isset($result['errcode']) && $result['errcode'] == 46003) {
-//            return []; // 菜单尚未创建
-//        }
+        if (empty($result)) {
+            return [];
+        }
 
         $result = $this->getApp('menu')->current();
         if (isset($result['errcode']) && $result['errcode'] != 0) {
@@ -48,9 +68,18 @@ class Menu extends CareyShop
         return $result;
     }
 
+    /**
+     * 删除全部自定义菜单
+     * @access public
+     * @return bool
+     * @throws
+     */
     public function delMenuAll()
     {
         $result = $this->getApp('menu')->delete();
+        $cacheName = self::WECHAT_MENU . $this->params['code'];
+        Cache::delete($cacheName);
+
         if (isset($result['errcode']) && $result['errcode'] != 0) {
             return $this->setError($result['errmsg']);
         }
