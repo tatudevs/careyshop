@@ -15,6 +15,18 @@ use think\facade\Cache;
 class User extends CareyShop
 {
     /**
+     * 公众号用户缓存标识
+     * @var string
+     */
+    const WECHAT_USER = 'WechatUser';
+
+    /**
+     * 公众号黑名单缓存标识
+     * @var string
+     */
+    const WECHAT_BLACK = 'WechatBlack';
+
+    /**
      * 同步公众号用户
      * @access public
      * @return bool

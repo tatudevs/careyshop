@@ -90,7 +90,7 @@ class Server extends CareyShop
         $this->getApp('server')->push(function ($res) {
             // 订阅
             if ($res['Event'] == 'subscribe') {
-                $cacheKey = self::WECHAT_USER . $this->params['code'];
+                $cacheKey = User::WECHAT_USER . $this->params['code'];
                 $userList = Cache::get($cacheKey, []);
 
                 array_unshift($userList, $res['FromUserName']);
@@ -100,7 +100,7 @@ class Server extends CareyShop
 
             // 取消订阅
             if ($res['Event'] == 'unsubscribe') {
-                $cacheKey = self::WECHAT_USER . $this->params['code'];
+                $cacheKey = User::WECHAT_USER . $this->params['code'];
                 $userList = Cache::get($cacheKey, []);
                 $key = array_search($res['FromUserName'], $userList);
 

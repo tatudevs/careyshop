@@ -17,24 +17,6 @@ use think\facade\Config;
 class CareyShop
 {
     /**
-     * 公众号用户缓存标识
-     * @var string
-     */
-    const WECHAT_USER = 'WechatUser';
-
-    /**
-     * 公众号黑名单缓存标识
-     * @var string
-     */
-    const WECHAT_BLACK = 'WechatBlack';
-
-    /**
-     * 公众号菜单缓存标识
-     * $var string
-     */
-    const WECHAT_MENU = 'WechatMenu';
-
-    /**
      * 控制器版本号
      * @var string
      */

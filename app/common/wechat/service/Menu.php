@@ -15,6 +15,12 @@ use think\facade\Cache;
 class Menu extends CareyShop
 {
     /**
+     * 公众号菜单缓存标识
+     * $var string
+     */
+    const WECHAT_MENU = 'WechatMenu';
+
+    /**
      * 编辑自定义菜单(配置数据为空时表示全部删除)
      * @access public
      * @return bool
@@ -28,12 +34,12 @@ class Menu extends CareyShop
         }
 
         $result = $this->getApp('menu')->create($button);
+        $cacheName = self::WECHAT_MENU . $this->params['code'];
+        Cache::set($cacheName, true);
+
         if (isset($result['errcode']) && $result['errcode'] != 0) {
             return $this->setError($result['errmsg']);
         }
-
-        $cacheName = self::WECHAT_MENU . $this->params['code'];
-        Cache::delete($cacheName);
 
         return true;
     }
@@ -47,16 +53,9 @@ class Menu extends CareyShop
     public function getMenuData()
     {
         $cacheName = self::WECHAT_MENU . $this->params['code'];
-        $result = Cache::remember($cacheName, function () {
-            $result = $this->getApp('menu')->list();
-            if (isset($result['errcode']) && $result['errcode'] == 46003) {
-                return []; // 菜单尚未创建
-            }
+        $result = Cache::get($cacheName);
 
-            return $result;
-        });
-
-        if (empty($result)) {
+        if (false === $result) {
             return [];
         }
 
@@ -78,7 +77,7 @@ class Menu extends CareyShop
     {
         $result = $this->getApp('menu')->delete();
         $cacheName = self::WECHAT_MENU . $this->params['code'];
-        Cache::delete($cacheName);
+        Cache::set($cacheName, false);
 
         if (isset($result['errcode']) && $result['errcode'] != 0) {
             return $this->setError($result['errmsg']);
