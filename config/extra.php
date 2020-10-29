@@ -44,8 +44,8 @@ return [
         ],
     ],
 
-    // 微服务
-    'mini_service' => [
+    // 渠道平台
+    'place'        => [
         'wechat' => [
             'name'  => '微信',
             'model' => [

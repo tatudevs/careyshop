@@ -10,7 +10,7 @@
 
 namespace app\common\wechat;
 
-use app\common\model\MiniService;
+use app\common\model\Place;
 use EasyWeChat\MiniProgram\Application as MiniProgram;
 use EasyWeChat\OfficialAccount\Application as OfficialAccount;
 use EasyWeChat\OpenPlatform\Application as OpenPlatform;
@@ -95,7 +95,7 @@ class WeChat
             ];
 
             // 数据不存在时会抛出异常
-            $result = MiniService::where($map)->findOrFail();
+            $result = Place::where($map)->findOrFail();
             Cache::tag('MiniService')->append($code);
 
             return $result->toArray();

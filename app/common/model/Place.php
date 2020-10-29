@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    微服务模型
+ * CareyShop    渠道平台模型
  *
  * @author      zxm <252404501@qq.com>
  * @date        2020/10/13
@@ -13,20 +13,20 @@ namespace app\common\model;
 use think\facade\Cache;
 use think\facade\Route;
 
-class MiniService extends CareyShop
+class Place extends CareyShop
 {
     /**
      * 主键
      * @var string
      */
-    protected $pk = 'mini_service_id';
+    protected $pk = 'place_id';
 
     /**
      * 只读属性
      * @var array
      */
     protected $readonly = [
-        'mini_service_id',
+        'place_id',
         'code',
         'platform',
         'model',
@@ -37,15 +37,16 @@ class MiniService extends CareyShop
      * @var array
      */
     protected $type = [
-        'mini_service_id' => 'integer',
-        'code'            => 'integer',
-        'setting'         => 'array',
-        'expand'          => 'array',
-        'status'          => 'integer',
+        'place_id' => 'integer',
+        'code'     => 'integer',
+        'setting'  => 'array',
+        'expand'   => 'array',
+        'status'   => 'integer',
     ];
 
+    // todo 修改至此处
     /**
-     * 生成唯一微服务code
+     * 生成唯一渠道code
      * @access private
      * @return string
      */
