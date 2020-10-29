@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    WeChat 控制器
+ * CareyShop    Wechat 控制器
  *
  * @author      zxm <252404501@qq.com>
  * @date        2020/10/20
@@ -19,7 +19,7 @@ use app\common\wechat\service\Service;
 use app\common\wechat\service\User;
 use app\common\wechat\service\UserTag;
 
-class WeChat extends CareyShop
+class Wechat extends CareyShop
 {
     /**
      * 方法路由器
@@ -47,9 +47,9 @@ class WeChat extends CareyShop
     {
         self::$route = array_merge(self::$route, [
             // 接收并响应微信推送
-            'put.wechat.data'  => ['putWeChatData', Server::class],
+            'put.wechat.data'  => ['putWechatData', Server::class],
             // 长链接转短链接
-            'set.wechat.short' => ['setWeChatShort', Server::class],
+            'set.wechat.short' => ['setWechatShort', Server::class],
         ]);
     }
 

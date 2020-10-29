@@ -103,8 +103,8 @@ class Batch extends CareyShop
                 static::$model->version = $version;
                 unset($value['version'], $value['controller'], $value['method']);
 
-                if (method_exists(static::$model, 'initWeChat')) {
-                    static::$model->initWeChat($value);
+                if (method_exists(static::$model, 'initWechat')) {
+                    static::$model->initWechat($value);
                 }
 
                 // 调用实际执行函数

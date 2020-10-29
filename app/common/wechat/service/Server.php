@@ -20,7 +20,7 @@ class Server extends CareyShop
      * @return void
      * @throws
      */
-    public function putWeChatData()
+    public function putWechatData()
     {
         // 获取消息
         $message = $this->getApp('server')->getMessage();
@@ -193,7 +193,7 @@ class Server extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setWeChatShort()
+    public function setWechatShort()
     {
         $result = $this->getApp('url')->shorten($this->params['url']);
         if (isset($result['errcode']) && $result['errcode'] != 0) {

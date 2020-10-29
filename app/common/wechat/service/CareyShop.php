@@ -20,19 +20,19 @@ class CareyShop
      * 公众号用户缓存标识
      * @var string
      */
-    const WECHAT_USER = 'WeChatUser';
+    const WECHAT_USER = 'WechatUser';
 
     /**
      * 公众号黑名单缓存标识
      * @var string
      */
-    const WECHAT_BLACK = 'WeChatBlack';
+    const WECHAT_BLACK = 'WechatBlack';
 
     /**
      * 公众号菜单缓存标识
      * $var string
      */
-    const WECHAT_MENU = 'WeChatMenu';
+    const WECHAT_MENU = 'WechatMenu';
 
     /**
      * 控制器版本号
@@ -65,7 +65,7 @@ class CareyShop
      */
     public function __construct(array $params = [])
     {
-        $this->initWeChat($params);
+        $this->initWechat($params);
     }
 
     /**
@@ -75,7 +75,7 @@ class CareyShop
      * @return $this
      * @throws
      */
-    public function initWeChat(array $params)
+    public function initWechat(array $params)
     {
         if (isset($params['code'])) {
             $this->params = new Params($params);
@@ -95,7 +95,7 @@ class CareyShop
     public function getApp(string $plate)
     {
         if (!$this->wechat) {
-            throw new \Exception('WeChat未实例化');
+            throw new \Exception('Wechat未实例化');
         }
 
         return $this->wechat->$plate;

@@ -70,7 +70,7 @@ class User extends CareyShop
      * @return array|false
      * @throws
      */
-    private function getWeChatUserList(string $name)
+    private function getWechatUserList(string $name)
     {
         // 数据准备
         [$pageNo, $pageSize] = $this->getPageData(100);
@@ -100,7 +100,7 @@ class User extends CareyShop
      */
     public function getUserList()
     {
-        return $this->getWeChatUserList(self::WECHAT_USER);
+        return $this->getWechatUserList(self::WECHAT_USER);
     }
 
     /**
@@ -167,7 +167,7 @@ class User extends CareyShop
      */
     public function getBlackList()
     {
-        return $this->getWeChatUserList(self::WECHAT_BLACK);
+        return $this->getWechatUserList(self::WECHAT_BLACK);
     }
 
     /**
