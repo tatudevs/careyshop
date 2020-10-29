@@ -11,7 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\wechat\service\AutoReply;
+use app\common\wechat\service\Reply;
 use app\common\wechat\service\DataCube;
 use app\common\wechat\service\Menu;
 use app\common\wechat\service\Server;
@@ -195,7 +195,10 @@ class Wechat extends CareyShop
     private static function getAutoReplyMethod()
     {
         self::$route = array_merge(self::$route, [
-            'get.official_account.reply.data' => ['getReplyData', AutoReply::class],
+            // 获取自动回复配置
+            'get.official_account.reply.data' => ['getReplyData', Reply::class],
+            // 设置自动回复配置
+            'set.official_account.reply.data' => ['setReplyData', Reply::class],
         ]);
     }
 }
