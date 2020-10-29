@@ -16,6 +16,7 @@ use app\common\wechat\service\DataCube;
 use app\common\wechat\service\Menu;
 use app\common\wechat\service\Server;
 use app\common\wechat\service\Service;
+use app\common\wechat\service\Template;
 use app\common\wechat\service\User;
 use app\common\wechat\service\UserTag;
 
@@ -211,6 +212,18 @@ class Wechat extends CareyShop
     private static function getTemplateMethod()
     {
         self::$route = array_merge(self::$route, [
+            // 获取行业信息列表
+            'get.official_account.template.id'       => ['getIndustryId', Template::class],
+            // 获取已设置的行业信息
+            'get.official_account.template.industry' => ['getIndustry', Template::class],
+            // 编辑行业信息
+            'set.official_account.template.industry' => ['setIndustry', Template::class],
+            // 使用公众号模板库中添加模板至列表
+            'add.official_account.template.item'     => ['addTemplateItem', Template::class],
+            // 获取所有模板列表
+            'get.official_account.template.list'     => ['getTemplateList', Template::class],
+            // 删除指定模板
+            'del.official_account.template.item'     => ['delTemplateItem', Template::class],
         ]);
     }
 }
