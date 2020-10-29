@@ -68,7 +68,7 @@ class Server extends CareyShop
 
                 // 其它消息
                 default:
-                    $this->handleOther();
+                    $this->handleOther($message['MsgType']);
             }
         }
 
@@ -180,9 +180,10 @@ class Server extends CareyShop
     /**
      * 处理其它消息
      * @access private
+     * @param string $type 消息类型
      * @return void
      */
-    private function handleOther()
+    private function handleOther(string $type)
     {
     }
 
