@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\common\wechat\service\Material;
 use app\common\wechat\service\Reply;
 use app\common\wechat\service\DataCube;
 use app\common\wechat\service\Menu;
@@ -38,6 +39,7 @@ class Wechat extends CareyShop
         self::getMenuMethod();
         self::getAutoReplyMethod();
         self::getTemplateMethod();
+        self::getMaterialMethod();
     }
 
     /**
@@ -224,6 +226,18 @@ class Wechat extends CareyShop
             'get.official_account.template.list'     => ['getTemplateList', Template::class],
             // 删除一个指定模板
             'del.official_account.template.item'     => ['delTemplateItem', Template::class],
+        ]);
+    }
+
+    /**
+     * 素材管理
+     * @access private
+     * @return void
+     */
+    private static function getMaterialMethod()
+    {
+        self::$route = array_merge(self::$route, [
+            'get.official_account.material.list' => ['test', Material::class],
         ]);
     }
 }

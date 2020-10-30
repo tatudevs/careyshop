@@ -13,6 +13,8 @@ namespace app\common\wechat\service;
 use app\common\wechat\Params;
 use app\common\wechat\WeChat;
 use think\facade\Config;
+use think\facade\Filesystem;
+use think\facade\Validate;
 
 class CareyShop
 {
@@ -125,5 +127,46 @@ class CareyShop
         }
 
         return [$pageNo, $pageSize];
+    }
+
+    protected function getUploadFile()
+    {
+        // 获取上传句柄
+        $files = request()->file($type);
+        if (empty($files)) {
+            return $this->setError('请选择需要上传的素材');
+        } else {
+            is_array($files) ?: $files = [$files];
+        }
+
+        // 验证规则
+        $validate = [
+            'image' => ['image' => 'filesize:10240|fileExt:bmp,png,jpeg,jpg,gif'],
+            'voice' => ['voice' => 'filesize:2048|fileExt:mp3,wma,wav,amr'],
+            'video' => ['video' => 'filesize:10240|fileExt:mp4'],
+            'thumb' => ['thumb' => 'filesize:64|fileExt:jpg'],
+        ];
+
+        // 上传文件验证
+//        foreach ($files as $file) {
+//            if (!Validate::check([$type => $file], $validate[$type])) {
+//                print_r(Validate::getError());exit();
+////                return $this->setError();
+//            }
+//        }
+
+//        $paths = [];
+//        $driver = Filesystem::disk('public');
+//
+//        foreach ($files as $file) {
+//            $saveName = $driver->putFile('wechat', $file);
+//            if (false === $saveName) {
+//                return $this->setError('上传素材失败');
+//            }
+//
+//            $paths[] = $driver->path($saveName);
+//        }
+//
+//        return $paths;
     }
 }
