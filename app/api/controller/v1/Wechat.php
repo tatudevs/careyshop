@@ -218,11 +218,11 @@ class Wechat extends CareyShop
             'get.official_account.template.industry' => ['getIndustry', Template::class],
             // 编辑行业信息
             'set.official_account.template.industry' => ['setIndustry', Template::class],
-            // 使用公众号模板库中添加模板至列表
+            // 使用公众号的模板库添加至模板列表
             'add.official_account.template.item'     => ['addTemplateItem', Template::class],
-            // 获取所有模板列表
+            // 获取已添加的所有模板列表
             'get.official_account.template.list'     => ['getTemplateList', Template::class],
-            // 删除指定模板
+            // 删除一个指定模板
             'del.official_account.template.item'     => ['delTemplateItem', Template::class],
         ]);
     }
