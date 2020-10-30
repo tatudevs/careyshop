@@ -81,7 +81,7 @@ class WeChat
     /**
      * 构造函数
      * @access public
-     * @param string $code 微服务编码
+     * @param string $code 渠道平台编码
      * @throws
      */
     public function __construct(string $code)
@@ -96,7 +96,7 @@ class WeChat
 
             // 数据不存在时会抛出异常
             $result = Place::where($map)->findOrFail();
-            Cache::tag('MiniService')->append($code);
+            Cache::tag('Place')->append($code);
 
             return $result->toArray();
         });

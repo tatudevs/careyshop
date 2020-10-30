@@ -44,13 +44,12 @@ class Place extends CareyShop
         'status'   => 'integer',
     ];
 
-    // todo 修改至此处
     /**
-     * 生成唯一渠道code
+     * 生成唯一渠道Code
      * @access private
      * @return string
      */
-    private function getOfficialCode()
+    private function getPlaceCode()
     {
         do {
             $code = rand_number(8);
@@ -60,13 +59,13 @@ class Place extends CareyShop
     }
 
     /**
-     * 获取框架已支持的微服务
+     * 获取框架已支持的渠道平台
      * @access public
      * @return mixed
      */
-    public function getMiniServiceExist()
+    public function getPlaceExist()
     {
-        return config('extra.mini_service', []);
+        return config('extra.place', []);
     }
 
     /**
@@ -76,7 +75,7 @@ class Place extends CareyShop
      * @param false $isInternal 内部调用则不进行规则检测
      * @return array|false
      */
-    public function getMiniServiceSetting(array $data, $isInternal = false)
+    public function getPlaceSetting(array $data, $isInternal = false)
     {
         if (!$isInternal && !$this->validateData($data, 'setting')) {
             return false;
@@ -158,7 +157,7 @@ class Place extends CareyShop
     private function refactorSetting(array $source)
     {
         $data = $validate = [];
-        if (!($setting = $this->getMiniServiceSetting($source, true))) {
+        if (!($setting = $this->getPlaceSetting($source, true))) {
             return false;
         }
 
@@ -203,20 +202,20 @@ class Place extends CareyShop
     }
 
     /**
-     * 添加一个微服务
+     * 添加一个渠道平台
      * @access public
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addMiniServiceItem(array $data)
+    public function addPlaceItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
         }
 
         // 初始化部分数据
-        $data['code'] = $this->getOfficialCode();
-        unset($data['mini_service_id']);
+        $data['code'] = $this->getPlaceCode();
+        unset($data['place_id']);
 
         if (!($data['setting'] = $this->refactorSetting($data))) {
             return false;
@@ -230,28 +229,28 @@ class Place extends CareyShop
     }
 
     /**
-     * 编辑一个微服务
+     * 编辑一个渠道平台
      * @access public
      * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function setMiniServiceItem(array $data)
+    public function setPlaceItem(array $data)
     {
         if (!$this->validateData($data, 'set', true)) {
             return false;
         }
 
         if (!empty($data['name'])) {
-            $map[] = ['mini_service_id', '<>', $data['mini_service_id']];
+            $map[] = ['place_id', '<>', $data['place_id']];
             $map[] = ['name', '=', $data['name']];
 
             if (self::checkUnique($map)) {
-                return $this->setError('微服务名称已存在');
+                return $this->setError('渠道平台名称已存在');
             }
         }
 
-        $result = $this->where('mini_service_id', '=', $data['mini_service_id'])->find();
+        $result = $this->where('place_id', '=', $data['place_id'])->find();
         if (is_null($result)) {
             return $this->setError('数据不存在');
         }
@@ -268,7 +267,7 @@ class Place extends CareyShop
         }
 
         if ($result->save($data)) {
-            Cache::tag('MiniService')->clear();
+            Cache::tag('Place')->clear();
             return $result->toArray();
         }
 
@@ -276,30 +275,30 @@ class Place extends CareyShop
     }
 
     /**
-     * 获取一个微服务
+     * 获取一个渠道平台
      * @access public
      * @param array $data 外部数据
      * @return array|false|null
      * @throws
      */
-    public function getMiniServiceItem(array $data)
+    public function getPlaceItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = $this->find($data['mini_service_id']);
+        $result = $this->find($data['place_id']);
         return is_null($result) ? null : $result->toArray();
     }
 
     /**
-     * 获取微服务列表
+     * 获取渠道平台列表
      * @access public
      * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    public function getMiniServiceList(array $data)
+    public function getPlaceList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -318,7 +317,7 @@ class Place extends CareyShop
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['mini_service_id' => 'desc'])
+        $result['items'] = $this->setDefaultOrder(['place_id' => 'desc'])
             ->where($map)
             ->withSearch(['page', 'order'], $data)
             ->select()
@@ -328,38 +327,38 @@ class Place extends CareyShop
     }
 
     /**
-     * 批量删除微服务
+     * 批量删除渠道平台
      * @access public
      * @param array $data 外部数据
      * @return bool
      */
-    public function delMiniServiceList(array $data)
+    public function delPlaceList(array $data)
     {
         if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        self::destroy($data['mini_service_id']);
-        Cache::tag('MiniService')->clear();
+        self::destroy($data['place_id']);
+        Cache::tag('Place')->clear();
 
         return true;
     }
 
     /**
-     * 批量设置微服务状态
+     * 批量设置渠道平台状态
      * @access public
      * @param array $data 外部数据
      * @return bool
      */
-    public function setMiniServiceStatus(array $data)
+    public function setPlaceStatus(array $data)
     {
         if (!$this->validateData($data, 'status')) {
             return false;
         }
 
-        $map[] = ['mini_service_id', 'in', $data['mini_service_id']];
+        $map[] = ['place_id', 'in', $data['place_id']];
         self::update(['status' => $data['status']], $map);
-        Cache::tag('MiniService')->clear();
+        Cache::tag('Place')->clear();
 
         return true;
     }
