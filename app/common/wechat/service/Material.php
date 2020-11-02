@@ -10,6 +10,8 @@
 
 namespace app\common\wechat\service;
 
+use EasyWeChat\Kernel\Messages\Article;
+
 const DS = DIRECTORY_SEPARATOR;
 
 class Material extends CareyShop
@@ -129,12 +131,21 @@ class Material extends CareyShop
 
     public function addMaterialArticle()
     {
-//        $article = [];
-//        $news = $this->params['article'] ?? [];
-//
-//        foreach ($news as $value) {
-//            $article[] = [
-//            ];
-//        }
+        $article = null;
+        $news = $this->params['article'] ?? [];
+
+        if (count($news) == count($news, 1)) {
+            $article = new Article([
+                'title' => isset($article['title']) ? $article['title'] : '',
+            ]);
+        } else {
+            foreach ($news as $item) {
+                $article[] = new Article([
+                ]);
+            }
+        }
+
+        print_r($article);exit();
+        exit();
     }
 }
