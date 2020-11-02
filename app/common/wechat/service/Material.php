@@ -15,7 +15,7 @@ const DS = DIRECTORY_SEPARATOR;
 class Material extends CareyShop
 {
     /**
-     * 上传模块
+     * 上传素材
      * @access private
      * @param string $module 上传模块
      * @return array|false
@@ -60,7 +60,7 @@ class Material extends CareyShop
     }
 
     /**
-     * 下载文件
+     * 获取素材
      * @access private
      * @param string $module 下载模块
      * @return array|false
