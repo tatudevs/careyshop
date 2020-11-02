@@ -14,6 +14,6 @@ class Material extends CareyShop
 {
     public function test()
     {
-        return $this->getUploadFile();
+        return $this->getUploadFile($this->params['type']);
     }
 }

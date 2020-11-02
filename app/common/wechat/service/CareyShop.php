@@ -160,10 +160,9 @@ class CareyShop
         ];
 
         // 上传文件验证
-        try {
-            validate($validate[$type])->check([$type => $file]);
-        } catch (\Exception $e) {
-            return $this->setError($e->getMessage());
+        $validate = validate($validate[$type], [], false, false);
+        if (!$validate->check([$type => $file])) {
+            return $this->setError($validate->getError());
         }
 
         // 完成素材存储
