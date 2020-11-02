@@ -14,7 +14,6 @@ use app\common\wechat\Params;
 use app\common\wechat\WeChat;
 use think\facade\Config;
 use think\facade\Filesystem;
-use think\facade\Validate;
 
 class CareyShop
 {
@@ -129,44 +128,52 @@ class CareyShop
         return [$pageNo, $pageSize];
     }
 
-    protected function getUploadFile()
+    /**
+     * 获取上传文件
+     * @access protected
+     * @param string $type 上传字段名
+     * @return false|string
+     */
+    protected function getUploadFile(string $type)
     {
+        $upType = ['image', 'voice', 'video', 'thumb'];
+        if (!in_array($type, $upType)) {
+            return $this->setError(sprintf('参数type只能在 %s 范围内', implode(',', $upType)));
+        }
+
         // 获取上传句柄
-        $files = request()->file($type);
-        if (empty($files)) {
+        $file = request()->file($type);
+        if (empty($file)) {
             return $this->setError('请选择需要上传的素材');
         } else {
-            is_array($files) ?: $files = [$files];
+            if (is_array($file)) {
+                return $this->setError('不允许多素材上传');
+            }
         }
 
         // 验证规则
         $validate = [
-            'image' => ['image' => 'filesize:10240|fileExt:bmp,png,jpeg,jpg,gif'],
-            'voice' => ['voice' => 'filesize:2048|fileExt:mp3,wma,wav,amr'],
-            'video' => ['video' => 'filesize:10240|fileExt:mp4'],
-            'thumb' => ['thumb' => 'filesize:64|fileExt:jpg'],
+            'image' => ['image' => 'fileSize:10485760|fileExt:bmp,png,jpeg,jpg,gif'],
+            'voice' => ['voice' => 'fileSize:2097152|fileExt:mp3,wma,wav,amr'],
+            'video' => ['video' => 'fileSize:10485760|fileExt:mp4'],
+            'thumb' => ['thumb' => 'fileSize:65536|fileExt:jpg'],
         ];
 
         // 上传文件验证
-//        foreach ($files as $file) {
-//            if (!Validate::check([$type => $file], $validate[$type])) {
-//                print_r(Validate::getError());exit();
-////                return $this->setError();
-//            }
-//        }
+        try {
+            validate($validate[$type])->check([$type => $file]);
+        } catch (\Exception $e) {
+            return $this->setError($e->getMessage());
+        }
 
-//        $paths = [];
-//        $driver = Filesystem::disk('public');
-//
-//        foreach ($files as $file) {
-//            $saveName = $driver->putFile('wechat', $file);
-//            if (false === $saveName) {
-//                return $this->setError('上传素材失败');
-//            }
-//
-//            $paths[] = $driver->path($saveName);
-//        }
-//
-//        return $paths;
+        // 完成素材存储
+        $driver = Filesystem::disk('public');
+        $saveName = $driver->putFile('wechat', $file);
+
+        if (false === $saveName) {
+            return $this->setError('上传素材失败');
+        }
+
+        return $driver->path($saveName);
     }
 }
