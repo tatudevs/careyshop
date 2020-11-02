@@ -15,19 +15,20 @@ const DS = DIRECTORY_SEPARATOR;
 class Material extends CareyShop
 {
     /**
-     * 上传临时素材
-     * @access public
+     * 上传模块
+     * @access private
+     * @param string $module 上传模块
      * @return array|false
      * @throws
      */
-    public function addMediaItem()
+    private function uploadFile(string $module)
     {
         $type = $this->params['type'];
         if (false === ($path = $this->getUploadFile($type))) {
             return false;
         }
 
-        $wechat = $this->getApp('media');
+        $wechat = $this->getApp($module);
         switch ($type) {
             case 'image':
                 $result = $wechat->uploadImage($path);
@@ -59,15 +60,16 @@ class Material extends CareyShop
     }
 
     /**
-     * 获取临时素材
-     * @access public
+     * 下载文件
+     * @access private
+     * @param string $module 下载模块
      * @return array|false
      * @throws
      */
-    public function getMediaItem()
+    private function downloadFile(string $module)
     {
         $mediaId = $this->params['media_id'];
-        $result = $this->getApp('media')->get($mediaId);
+        $result = $this->getApp($module)->get($mediaId);
 
         if ($result instanceof \EasyWeChat\Kernel\Http\StreamResponse) {
             $dir = 'uploads' . DS . 'wechat' . DS . date('Ymd') . DS;
@@ -83,5 +85,45 @@ class Material extends CareyShop
         }
 
         return $result;
+    }
+
+    /**
+     * 上传临时素材
+     * @access public
+     * @return array|false
+     */
+    public function addMediaItem()
+    {
+        return $this->uploadFile('media');
+    }
+
+    /**
+     * 获取临时素材
+     * @access public
+     * @return array|false
+     */
+    public function getMediaItem()
+    {
+        return $this->downloadFile('media');
+    }
+
+    /**
+     * 上传永久素材
+     * @access public
+     * @return array|false
+     */
+    public function addMaterialItem()
+    {
+        return $this->uploadFile('material');
+    }
+
+    /**
+     * 获取永久素材
+     * @access public
+     * @return array|false
+     */
+    public function getMaterialItem()
+    {
+        return $this->downloadFile('material');
     }
 }
