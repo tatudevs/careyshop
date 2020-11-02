@@ -134,7 +134,7 @@ class Upload extends UploadBase
 
         // 获取上传资源数据
         $filesData = [];
-        $files = $this->request->file();
+        $files = $this->request->file('file');
 
         // 验证资源
         if (empty($files)) {
@@ -146,17 +146,20 @@ class Upload extends UploadBase
             return $this->setError(sprintf('请选择需要上传的附件(单附件大小不能超过 %s)', $uploadMaxSize));
         }
 
+        // 单资源转为多维状态并进行资源验证
+        is_array($files) ?: $files = [$files];
+
         if ($this->request->has('x:replace', 'param', true) && count($files) > 1) {
             return $this->setError('替换资源只能上传单个文件');
         }
 
-        try {
-            $ext = Config::get('careyshop.upload.image_ext') . ',' . Config::get('careyshop.upload.file_ext');
-            $rule = sprintf('filesize:%s|fileExt:%s', self::$maxSize, $ext);
+        $ext = Config::get('careyshop.upload.image_ext') . ',' . Config::get('careyshop.upload.file_ext');
+        $validate = validate(['file' => sprintf('fileSize:%s|fileExt:%s', self::$maxSize, $ext)], [], false, false);
 
-            validate(['image' => $rule])->check($files);
-        } catch (\Exception $e) {
-            return $this->setError($e->getMessage());
+        foreach ($files as $key => $file) {
+            if (!$validate->check(['file' => $file])) {
+                return $this->setError($file->getOriginalName() . '：' . $validate->getError());
+            }
         }
 
         // 实际保存资源
