@@ -1602,17 +1602,17 @@
     },
     {
         "name": "symfony/cache",
-        "version": "v4.4.15",
-        "version_normalized": "4.4.15.0",
+        "version": "v4.4.16",
+        "version_normalized": "4.4.16.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/cache.git",
-            "reference": "969a76c2dbce7e4306684f5376718147d1ec4ae7"
+            "reference": "7ab1528cac0328566895ad303e2a5111aef2b440"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/cache/zipball/969a76c2dbce7e4306684f5376718147d1ec4ae7",
-            "reference": "969a76c2dbce7e4306684f5376718147d1ec4ae7",
+            "url": "https://api.github.com/repos/symfony/cache/zipball/7ab1528cac0328566895ad303e2a5111aef2b440",
+            "reference": "7ab1528cac0328566895ad303e2a5111aef2b440",
             "shasum": "",
             "mirrors": [
                 {
@@ -1648,15 +1648,11 @@
             "psr/simple-cache": "^1.0",
             "symfony/config": "^4.2|^5.0",
             "symfony/dependency-injection": "^3.4|^4.1|^5.0",
+            "symfony/filesystem": "^4.4|^5.0",
             "symfony/var-dumper": "^4.4|^5.0"
         },
-        "time": "2020-09-27T12:40:39+00:00",
+        "time": "2020-10-25T19:32:35+00:00",
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "4.4-dev"
-            }
-        },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
@@ -1787,17 +1783,17 @@
     },
     {
         "name": "symfony/event-dispatcher",
-        "version": "v4.4.15",
-        "version_normalized": "4.4.15.0",
+        "version": "v4.4.16",
+        "version_normalized": "4.4.16.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/event-dispatcher.git",
-            "reference": "e17bb5e0663dc725f7cdcafc932132735b4725cd"
+            "reference": "4204f13d2d0b7ad09454f221bb2195fccdf1fe98"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/e17bb5e0663dc725f7cdcafc932132735b4725cd",
-            "reference": "e17bb5e0663dc725f7cdcafc932132735b4725cd",
+            "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/4204f13d2d0b7ad09454f221bb2195fccdf1fe98",
+            "reference": "4204f13d2d0b7ad09454f221bb2195fccdf1fe98",
             "shasum": "",
             "mirrors": [
                 {
@@ -1831,13 +1827,8 @@
             "symfony/dependency-injection": "",
             "symfony/http-kernel": ""
         },
-        "time": "2020-09-18T14:07:46+00:00",
+        "time": "2020-10-24T11:50:19+00:00",
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "4.4-dev"
-            }
-        },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
@@ -1964,17 +1955,17 @@
     },
     {
         "name": "symfony/http-foundation",
-        "version": "v4.4.15",
-        "version_normalized": "4.4.15.0",
+        "version": "v4.4.16",
+        "version_normalized": "4.4.16.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/http-foundation.git",
-            "reference": "10683b407c3b6087c64619ebc97a87e36ea62c92"
+            "reference": "827a00811ef699e809a201ceafac0b2b246bf38a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/10683b407c3b6087c64619ebc97a87e36ea62c92",
-            "reference": "10683b407c3b6087c64619ebc97a87e36ea62c92",
+            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/827a00811ef699e809a201ceafac0b2b246bf38a",
+            "reference": "827a00811ef699e809a201ceafac0b2b246bf38a",
             "shasum": "",
             "mirrors": [
                 {
@@ -1992,13 +1983,8 @@
             "predis/predis": "~1.0",
             "symfony/expression-language": "^3.4|^4.0|^5.0"
         },
-        "time": "2020-09-27T14:14:06+00:00",
+        "time": "2020-10-24T11:50:19+00:00",
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "4.4-dev"
-            }
-        },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
@@ -2041,17 +2027,17 @@
     },
     {
         "name": "symfony/mime",
-        "version": "v4.4.15",
-        "version_normalized": "4.4.15.0",
+        "version": "v4.4.16",
+        "version_normalized": "4.4.16.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/mime.git",
-            "reference": "42df2507eb8e6cd9795f51c99dd52bab543a918f"
+            "reference": "360f9963b6d4db6c3454d58548fb2b085f97d3e2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/mime/zipball/42df2507eb8e6cd9795f51c99dd52bab543a918f",
-            "reference": "42df2507eb8e6cd9795f51c99dd52bab543a918f",
+            "url": "https://api.github.com/repos/symfony/mime/zipball/360f9963b6d4db6c3454d58548fb2b085f97d3e2",
+            "reference": "360f9963b6d4db6c3454d58548fb2b085f97d3e2",
             "shasum": "",
             "mirrors": [
                 {
@@ -2072,13 +2058,8 @@
             "egulias/email-validator": "^2.1.10",
             "symfony/dependency-injection": "^3.4|^4.1|^5.0"
         },
-        "time": "2020-09-02T16:08:58+00:00",
+        "time": "2020-10-24T11:50:19+00:00",
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "4.4-dev"
-            }
-        },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
@@ -2730,17 +2711,17 @@
     },
     {
         "name": "symfony/var-dumper",
-        "version": "v4.4.15",
-        "version_normalized": "4.4.15.0",
+        "version": "v4.4.16",
+        "version_normalized": "4.4.16.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/var-dumper.git",
-            "reference": "0dc22bdf9d1197467bb04d505355180b6f20bcca"
+            "reference": "3718e18b68d955348ad860e505991802c09f5f73"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/0dc22bdf9d1197467bb04d505355180b6f20bcca",
-            "reference": "0dc22bdf9d1197467bb04d505355180b6f20bcca",
+            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/3718e18b68d955348ad860e505991802c09f5f73",
+            "reference": "3718e18b68d955348ad860e505991802c09f5f73",
             "shasum": "",
             "mirrors": [
                 {
@@ -2770,16 +2751,11 @@
             "ext-intl": "To show region name in time zone dump",
             "symfony/console": "To use the ServerDumpCommand and/or the bin/var-dump-server script"
         },
-        "time": "2020-09-18T08:35:10+00:00",
+        "time": "2020-10-26T20:47:51+00:00",
         "bin": [
             "Resources/bin/var-dump-server"
         ],
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "4.4-dev"
-            }
-        },
         "installation-source": "dist",
         "autoload": {
             "files": [
@@ -2811,21 +2787,35 @@
         "keywords": [
             "debug",
             "dump"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
         "name": "symfony/var-exporter",
-        "version": "v4.4.15",
-        "version_normalized": "4.4.15.0",
+        "version": "v4.4.16",
+        "version_normalized": "4.4.16.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/var-exporter.git",
-            "reference": "bb6c505d1492bf55534184c0a38826bda529e5e2"
+            "reference": "a07f9c350ebe30dadd30505d2b05d7c9bbcef2b1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/var-exporter/zipball/bb6c505d1492bf55534184c0a38826bda529e5e2",
-            "reference": "bb6c505d1492bf55534184c0a38826bda529e5e2",
+            "url": "https://api.github.com/repos/symfony/var-exporter/zipball/a07f9c350ebe30dadd30505d2b05d7c9bbcef2b1",
+            "reference": "a07f9c350ebe30dadd30505d2b05d7c9bbcef2b1",
             "shasum": "",
             "mirrors": [
                 {
@@ -2840,13 +2830,8 @@
         "require-dev": {
             "symfony/var-dumper": "^4.4.9|^5.0.9"
         },
-        "time": "2020-09-07T21:10:21+00:00",
+        "time": "2020-10-24T11:50:19+00:00",
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "4.4-dev"
-            }
-        },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
