@@ -75,7 +75,11 @@ class Service extends CareyShop
     public function setServiceAvatar()
     {
         $account = $this->params['kf_account'];
-        $avatarPath = $this->params['avatar_path'];
+        $avatarPath = $this->getUploadFile('image');
+
+        if (false === $avatarPath) {
+            return false;
+        }
 
         $result = $this->getApp('customer_service')->setAvatar($account, $avatarPath);
         if (isset($result['errcode']) && $result['errcode'] != 0) {
