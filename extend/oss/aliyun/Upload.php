@@ -133,7 +133,7 @@ class Upload extends UploadBase
 
         $timestamp = new \DateTime();
         $expires = time() + Config::get('careyshop.upload.token_expires');
-        $dir = 'uploads/files/' . date('Ymd/', time());
+        $dir = 'uploads/files/' . date('Ymd/');
 
         if (!empty($this->replace)) {
             $pathInfo = pathinfo($this->replace);

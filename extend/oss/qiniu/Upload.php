@@ -103,7 +103,7 @@ class Upload extends UploadBase
 
         // 资源文件前缀
         $key = '';
-        $dir = 'uploads/files/' . date('Ymd/', time());
+        $dir = 'uploads/files/' . date('Ymd/');
 
         if (!empty($this->replace)) {
             $pathInfo = pathinfo($this->replace);
