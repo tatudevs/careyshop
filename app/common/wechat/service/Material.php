@@ -126,4 +126,15 @@ class Material extends CareyShop
     {
         return $this->downloadFile('material');
     }
+
+    public function addMaterialArticle()
+    {
+//        $article = [];
+//        $news = $this->params['article'] ?? [];
+//
+//        foreach ($news as $value) {
+//            $article[] = [
+//            ];
+//        }
+    }
 }

@@ -238,13 +238,15 @@ class Wechat extends CareyShop
     {
         self::$route = array_merge(self::$route, [
             // 上传临时素材(有效期3天)
-            'add.official_account.media.item'    => ['addMediaItem', Material::class],
+            'add.official_account.media.item'       => ['addMediaItem', Material::class],
             // 获取临时素材
-            'get.official_account.media.item'    => ['getMediaItem', Material::class],
+            'get.official_account.media.item'       => ['getMediaItem', Material::class],
             // 上传永久素材
-            'add.official_account.material.item' => ['addMaterialItem', Material::class],
+            'add.official_account.material.item'    => ['addMaterialItem', Material::class],
             // 获取永久素材
-            'get.official_account.material.item' => ['getMaterialItem', Material::class],
+            'get.official_account.material.item'    => ['getMaterialItem', Material::class],
+            // 上传永久图文素材
+            'add.official_account.material.article' => ['addMaterialArticle', Material::class],
         ]);
     }
 }
