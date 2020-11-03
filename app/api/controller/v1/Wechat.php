@@ -15,6 +15,7 @@ use app\common\wechat\service\Material;
 use app\common\wechat\service\Reply;
 use app\common\wechat\service\DataCube;
 use app\common\wechat\service\Menu;
+use app\common\wechat\service\Message;
 use app\common\wechat\service\Server;
 use app\common\wechat\service\Service;
 use app\common\wechat\service\Template;
@@ -40,6 +41,7 @@ class Wechat extends CareyShop
         self::getAutoReplyMethod();
         self::getTemplateMethod();
         self::getMaterialMethod();
+        self::getMessageMethod();
     }
 
     /**
@@ -259,6 +261,27 @@ class Wechat extends CareyShop
             'del.official_account.material.item'  => ['delMaterialItem', Material::class],
             // 发送图文素材的预览
             'send.official_account.material.view' => ['sendMaterialView', Material::class],
+        ]);
+    }
+
+    /**
+     * 消息群发
+     * @access private
+     * @return void
+     */
+    private static function getMessageMethod()
+    {
+        self::$route = array_merge(self::$route, [
+            // 群发文本消息
+            'send.official_account.message.text' => ['sendMessageText', Message::class],
+            // 群发图文消息
+            'send.official_account.message.news' => ['sendMessageNews', Message::class],
+            // 群发图片消息
+            // 群发语音消息
+            // 群发视频消息
+            // 发送预览消息给指定的微信用户或粉丝
+            // 删除某条群发消息
+            // 获取群发消息状态列表
         ]);
     }
 }
