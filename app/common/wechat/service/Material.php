@@ -129,23 +129,59 @@ class Material extends CareyShop
         return $this->downloadFile('material');
     }
 
+    /**
+     * 获取图文对象
+     * @access private
+     * @param array $article 图文数据
+     * @return Article
+     */
+    private function getArticle(array $article)
+    {
+        $result = [];
+        $maps = [
+            'title'                 => '',
+            'thumb_media_id'        => '',
+            'author'                => '',
+            'digest'                => '',
+            'show_cover'            => '',
+            'show_cover_pic'        => 0,
+            'content'               => '',
+            'content_source_url'    => '',
+            'need_open_comment'     => 0,
+            'only_fans_can_comment' => 0,
+        ];
+
+        foreach ($maps as $key => $value) {
+            $result[$key] = isset($article[$key]) ? $article[$key] : $value;
+        }
+
+        return new Article($result);
+    }
+
+    /**
+     * 上传永久图文素材
+     * @access public
+     * @return array|false
+     * @throws
+     */
     public function addMaterialArticle()
     {
         $article = null;
         $news = $this->params['article'] ?? [];
 
         if (count($news) == count($news, 1)) {
-            $article = new Article([
-                'title' => isset($article['title']) ? $article['title'] : '',
-            ]);
+            $article = $this->getArticle($news);
         } else {
             foreach ($news as $item) {
-                $article[] = new Article([
-                ]);
+                $article[] = $this->getArticle($item);
             }
         }
 
-        print_r($article);exit();
-        exit();
+        $result = $this->getApp('material')->uploadArticle($article);
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return $result;
     }
 }
