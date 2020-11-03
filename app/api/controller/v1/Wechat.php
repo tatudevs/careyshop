@@ -238,25 +238,27 @@ class Wechat extends CareyShop
     {
         self::$route = array_merge(self::$route, [
             // 上传临时素材(有效期3天)
-            'add.official_account.media.item'       => ['addMediaItem', Material::class],
+            'add.official_account.media.item'     => ['addMediaItem', Material::class],
             // 获取临时素材
-            'get.official_account.media.item'       => ['getMediaItem', Material::class],
+            'get.official_account.media.item'     => ['getMediaItem', Material::class],
             // 上传永久素材
-            'add.official_account.material.item'    => ['addMaterialItem', Material::class],
+            'add.official_account.material.item'  => ['addMaterialItem', Material::class],
             // 获取永久素材
-            'get.official_account.material.item'    => ['getMaterialItem', Material::class],
+            'get.official_account.material.item'  => ['getMaterialItem', Material::class],
             // 获取永久素材列表
-            'get.official_account.material.list'    => ['getMaterialList', Material::class],
+            'get.official_account.material.list'  => ['getMaterialList', Material::class],
             // 上传永久图文素材
-            'add.official_account.material.article' => ['addMaterialArticle', Material::class],
+            'add.official_account.material.news'  => ['addMaterialNews', Material::class],
             // 编辑永久图文素材
-            'set.official_account.material.article' => ['setMaterialArticle', Material::class],
+            'set.official_account.material.news'  => ['setMaterialNews', Material::class],
             // 上传永久图文消息图片
-            'add.official_account.material.image'   => ['addMaterialImage', Material::class],
+            'add.official_account.material.image' => ['addMaterialImage', Material::class],
             // 获取永久素材的总数
-            'get.official_account.material.count'   => ['getMaterialCount', Material::class],
+            'get.official_account.material.count' => ['getMaterialCount', Material::class],
             // 删除一个永久素材
-            'del.official_account.material.item'    => ['delMaterialItem', Material::class],
+            'del.official_account.material.item'  => ['delMaterialItem', Material::class],
+            // 发送图文素材的预览
+            'send.official_account.material.view' => ['sendMaterialView', Material::class],
         ]);
     }
 }

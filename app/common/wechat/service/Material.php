@@ -50,7 +50,7 @@ class Material extends CareyShop
                 $result = $wechat->uploadThumb($path);
                 break;
 
-            case 'article':
+            case 'news':
                 $result = $wechat->uploadArticleImage($path);
                 break;
 
@@ -168,10 +168,10 @@ class Material extends CareyShop
      * @return array|false
      * @throws
      */
-    public function addMaterialArticle()
+    public function addMaterialNews()
     {
         $article = null;
-        $news = $this->params['article'] ?? [];
+        $news = $this->params['news'] ?? [];
 
         if (count($news) == count($news, 1)) {
             $article = $this->getArticle($news);
@@ -189,7 +189,7 @@ class Material extends CareyShop
         return $result;
     }
 
-    public function setMaterialArticle()
+    public function setMaterialNews()
     {
     }
 
@@ -253,6 +253,36 @@ class Material extends CareyShop
     public function delMaterialItem()
     {
         $result = $this->getApp('material')->delete($this->params['media_id']);
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return true;
+    }
+
+    /**
+     * 发送图文素材的预览
+     * @access public
+     * @return bool
+     * @throws
+     */
+    public function sendMaterialView()
+    {
+        $openId = $this->params['open_id'];
+        $wxname = $this->params['wxname'];
+        $mediaId = $this->params['media_id'];
+
+        $result = null;
+        $wechat = $this->getApp('broadcasting');
+
+        if ($wxname) {
+            $result = $wechat->previewNewsByName($mediaId, $wxname);
+        } else if ($openId) {
+            $result = $wechat->previewNews($mediaId, $openId);
+        } else {
+            return $this->setError('参数"wxname"或"open_id"其中之一必填');
+        }
+
         if (isset($result['errcode']) && $result['errcode'] != 0) {
             return $this->setError($result['errmsg']);
         }

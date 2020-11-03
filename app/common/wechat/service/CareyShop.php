@@ -136,7 +136,7 @@ class CareyShop
      */
     protected function getUploadFile(string $type)
     {
-        $upType = ['image', 'voice', 'video', 'thumb', 'article'];
+        $upType = ['image', 'voice', 'video', 'thumb', 'news'];
         if (!in_array($type, $upType)) {
             return $this->setError(sprintf('参数type只能在 %s 范围内', implode(',', $upType)));
         }
@@ -153,11 +153,11 @@ class CareyShop
 
         // 验证规则
         $validate = [
-            'image'   => ['image' => 'fileSize:10485760|fileExt:bmp,png,jpeg,jpg,gif'],
-            'voice'   => ['voice' => 'fileSize:2097152|fileExt:mp3,wma,wav,amr'],
-            'video'   => ['video' => 'fileSize:10485760|fileExt:mp4'],
-            'thumb'   => ['thumb' => 'fileSize:65536|fileExt:jpg'],
-            'article' => ['article' => 'fileSize:1048576|fileExt:png,jpg'],
+            'image' => ['image' => 'fileSize:10485760|fileExt:bmp,png,jpeg,jpg,gif'],
+            'voice' => ['voice' => 'fileSize:2097152|fileExt:mp3,wma,wav,amr'],
+            'video' => ['video' => 'fileSize:10485760|fileExt:mp4'],
+            'thumb' => ['thumb' => 'fileSize:65536|fileExt:jpg'],
+            'news'  => ['news' => 'fileSize:1048576|fileExt:png,jpg'],
         ];
 
         // 上传文件验证
