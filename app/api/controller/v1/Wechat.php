@@ -253,6 +253,10 @@ class Wechat extends CareyShop
             'set.official_account.material.article' => ['setMaterialArticle', Material::class],
             // 上传永久图文消息图片
             'add.official_account.material.image'   => ['addMaterialImage', Material::class],
+            // 获取永久素材的总数
+            'get.official_account.material.count'   => ['getMaterialCount', Material::class],
+            // 删除一个永久素材
+            'del.official_account.material.item'    => ['delMaterialItem', Material::class],
         ]);
     }
 }

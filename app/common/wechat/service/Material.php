@@ -227,4 +227,36 @@ class Material extends CareyShop
 
         return $result;
     }
+
+    /**
+     * 获取永久素材的总数
+     * @access public
+     * @return array|false
+     * @throws
+     */
+    public function getMaterialCount()
+    {
+        $result = $this->getApp('material')->stats();
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 删除一个永久素材
+     * @access public
+     * @return bool
+     * @throws
+     */
+    public function delMaterialItem()
+    {
+        $result = $this->getApp('material')->delete($this->params['media_id']);
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return true;
+    }
 }
