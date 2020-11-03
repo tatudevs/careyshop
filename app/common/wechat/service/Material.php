@@ -189,8 +189,24 @@ class Material extends CareyShop
         return $result;
     }
 
+    /**
+     * 编辑永久图文素材
+     * @access public
+     * @return bool
+     * @throws
+     */
     public function setMaterialNews()
     {
+        $index = $this->params['index'] ?? 0;
+        $mediaId = $this->params['media_id'];
+        $article = $this->getArticle($this->params['news'] ?? []);
+
+        $result = $this->getApp('material')->updateArticle($mediaId, $article, $index);
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return true;
     }
 
     /**
