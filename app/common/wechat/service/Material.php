@@ -50,6 +50,10 @@ class Material extends CareyShop
                 $result = $wechat->uploadThumb($path);
                 break;
 
+            case 'article':
+                $result = $wechat->uploadArticleImage($path);
+                break;
+
             default:
                 $result = false;
         }
@@ -183,5 +187,19 @@ class Material extends CareyShop
         }
 
         return $result;
+    }
+
+    public function setMaterialArticle()
+    {
+    }
+
+    /**
+     * 上传永久图文消息图片
+     * @access public
+     * @return array|false
+     */
+    public function addMaterialImage()
+    {
+        return $this->uploadFile('material');
     }
 }
