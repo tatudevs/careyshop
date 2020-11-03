@@ -202,4 +202,29 @@ class Material extends CareyShop
     {
         return $this->uploadFile('material');
     }
+
+    /**
+     * 获取永久素材列表
+     * @access public
+     * @return array|false
+     * @throws
+     */
+    public function getMaterialList()
+    {
+        // 数据准备
+        $type = $this->params['type'];
+        $typeMap = ['image', 'voice', 'video', 'news'];
+        [$pageNo, $pageSize] = $this->getPageData(20);
+
+        if (!in_array($type, $typeMap)) {
+            return $this->setError(sprintf('参数type只能在 %s 范围内', implode(',', $typeMap)));
+        }
+
+        $result = $this->getApp('material')->list($type, $pageNo * $pageSize, $pageSize);
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return $result;
+    }
 }
