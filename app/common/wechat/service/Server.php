@@ -93,7 +93,9 @@ class Server extends CareyShop
 
                 array_unshift($userList, $res['FromUserName']);
                 Cache::set($cacheKey, $userList);
-                return;
+
+                // 订阅回复
+                return $this->getSubscribeReply();
             }
 
             // 取消订阅
@@ -106,9 +108,9 @@ class Server extends CareyShop
                     unset($userList[$key]);
                     Cache::set($cacheKey, $userList);
                 }
-
-                return;
             }
+
+            return null;
         });
     }
 
@@ -199,5 +201,41 @@ class Server extends CareyShop
         }
 
         return $result['short_url'];
+    }
+
+    /**
+     * 获取微信服务器IP(或IP段)
+     * @access public
+     * @return array|false
+     * @throws
+     */
+    public function getWechatIP()
+    {
+        $result = $this->getApp('base')->getValidIps();
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return $result['ip_list'];
+    }
+
+    /**
+     * 清理接口调用次数(每月10次)
+     * @access public
+     * @return bool
+     * @throws
+     */
+    public function clearWechatQuota()
+    {
+        $result = $this->getApp('base')->clearQuota();
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return true;
+    }
+
+    public function getSubscribeReply()
+    {
     }
 }

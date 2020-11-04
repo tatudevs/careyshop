@@ -48,29 +48,26 @@ class Reply extends CareyShop
 //        $data = [
 //            // 关注回复
 //            'subscribe' => [
-//                'type'     => 'text',   // 文本=text 图片=img 语音=voice 视频=video 图文=news
-//                'value'    => [],       // 文本回复内容(>1=随机)
-//                'media_id' => [],       // 除text外,其余类型都需要(>1=随机)
-//                'status'   => 1,        // 0=禁用 1=启用
+//                'type'     => 'text',       // 文本=text 图片=image 语音=voice 视频=video 图文=news
+//                'media_id' => [],           // 素材编号(>1 随机)
+//                'status'   => 1,            // 0=禁用 1=启用
 //            ],
 //            // 关键词回复
 //            'keyword'   => [
 //                [
 //                    'keyword'  => [],       // 关键词
 //                    'mode'     => 0,        // 0=模糊匹配 1=完全匹配
-//                    'type'     => 'text',   // 文本=text 图片=img 语音=voice 视频=video 图文=news
-//                    'value'    => [],       // 文本回复内容(>1=随机)
-//                    'media_id' => [],       // 除text外,其余类型都需要(>1=随机)
+//                    'type'     => 'text',   // 文本=text 图片=image 语音=voice 视频=video 图文=news
+//                    'media_id' => [],       // 素材编号(>1 随机)
 //                    'status'   => 1,        // 0=禁用 1=启用
 //                ],
 //                // ...更多的关键词
 //            ],
 //            // 默认回复
 //            'default'   => [
-//                'type'     => 'text',   // 文本=text 图片=img 语音=voice 视频=video 图文=news
-//                'value'    => [],       // 文本回复内容(>1=随机)
-//                'media_id' => [],       // 除text外,其余类型都需要(>1=随机)
-//                'status'   => 1,        // 0=禁用 1=启用
+//                'type'     => 'text',       // 文本=text 图片=image 语音=voice 视频=video 图文=news
+//                'media_id' => [],           // 素材编号(>1 随机)
+//                'status'   => 1,            // 0=禁用 1=启用
 //            ],
 //        ];
         $type = $this->params['type'];

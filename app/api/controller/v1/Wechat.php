@@ -53,9 +53,13 @@ class Wechat extends CareyShop
     {
         self::$route = array_merge(self::$route, [
             // 接收并响应微信推送
-            'put.wechat.data'  => ['putWechatData', Server::class],
+            'put.wechat.data'    => ['putWechatData', Server::class],
             // 长链接转短链接
-            'set.wechat.short' => ['setWechatShort', Server::class],
+            'set.wechat.short'   => ['setWechatShort', Server::class],
+            // 获取微信服务器IP(或IP段)
+            'get.wechat.ip'      => ['getWechatIP', Server::class],
+            // 清理接口调用次数(每月10次)
+            'clear.wechat.quota' => ['clearWechatQuota', Server::class],
         ]);
     }
 

@@ -80,4 +80,14 @@ class Params implements ArrayAccess
         $this->data = $data;
         return $this;
     }
+
+    /**
+     * 获取原始数据
+     * @access public
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
 }
