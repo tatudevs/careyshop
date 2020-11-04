@@ -97,7 +97,7 @@ class Server extends CareyShop
                 Cache::store('place')->set($cacheKey, $userList);
 
                 // 订阅回复
-                return $this->getSubscribeReply();
+                return $this->getSubscribeReply($this->params['code']);
             }
 
             // 取消订阅
@@ -237,20 +237,14 @@ class Server extends CareyShop
         return true;
     }
 
-    private function getReplyContent(string $key, array $source)
+    private function getReplyContent(array $source)
     {
     }
 
-    /**
-     * 获取关注后需要回复的内容
-     * @access private
-     * @return Media|Text|void
-     * @throws
-     */
-    private function getSubscribeReply()
+    private function getSubscribeReply(string $code)
     {
-        $cacheKey = Reply::WECHAT_REPLY . $this->params['code'];
-        $data = Cache::store('place')->get($cacheKey, []);
+        $cacheKey = Reply::WECHAT_REPLY . $code;
+        $cacheData = Cache::store('place')->get($cacheKey, []);
 
         // 检测字段是否存在,状态是否可用
         if (!array_key_exists('subscribe', $data) || !$data['subscribe']['status']) {
