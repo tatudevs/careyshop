@@ -24,6 +24,7 @@ class Reply extends CareyShop
      * 获取自动回复配置
      * @access public
      * @return array
+     * @throws
      */
     public function getReplyData()
     {
@@ -41,6 +42,7 @@ class Reply extends CareyShop
      * 设置自动回复配置
      * @access public
      * @return bool
+     * @throws
      */
     public function setReplyData()
     {
@@ -80,7 +82,7 @@ class Reply extends CareyShop
         $cacheKey = self::WECHAT_REPLY . $this->params['code'];
         $cacheData = Cache::store('place')->get($cacheKey, []);
 
-        empty($type) ? $cacheData[$type] = $setting : $cacheData = $setting;
+        !empty($type) ? $cacheData[$type] = $setting : $cacheData = $setting;
         Cache::store('place')->set($cacheKey, $cacheData);
 
         return true;

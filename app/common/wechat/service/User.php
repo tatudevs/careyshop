@@ -221,6 +221,7 @@ class User extends CareyShop
      * @access private
      * @param string $type 添加或删除(add del)
      * @return void
+     * @throws
      */
     private function setBlackCache(string $type)
     {

@@ -10,6 +10,8 @@
 
 namespace app\common\wechat\service;
 
+use EasyWeChat\Kernel\Messages\Media;
+use EasyWeChat\Kernel\Messages\Text;
 use think\facade\Cache;
 
 class Server extends CareyShop
@@ -235,7 +237,52 @@ class Server extends CareyShop
         return true;
     }
 
-    public function getSubscribeReply()
+    /**
+     * 获取关注后需要回复的内容
+     * @access private
+     * @return Media|Text|void
+     * @throws
+     */
+    private function getSubscribeReply()
     {
+        $cacheKey = Reply::WECHAT_REPLY . $this->params['code'];
+        $data = Cache::store('place')->get($cacheKey, []);
+
+        // 检测字段是否存在,状态是否可用
+        if (!array_key_exists('subscribe', $data) || !$data['subscribe']['status']) {
+            return;
+        }
+
+        // 检测可回复素材
+        if (empty($data['subscribe']['media_id'])) {
+            return;
+        }
+
+        // 获取回复素材(数组大于1时随机取)
+        $index = array_rand($data['subscribe']['media_id'], 1);
+        $mediaId = $data['subscribe']['media_id'][$index];
+
+        switch ($data['subscribe']['type']) {
+            case 'image':
+                $result = new Media($mediaId, 'image');
+                break;
+
+            case 'voice':
+                $result = new Media($mediaId, 'voice');
+                break;
+
+            case 'video':
+                $result = new Media($mediaId, 'mpvideo');
+                break;
+
+            case 'news':
+                $result = new Media($mediaId, 'mpnews');
+                break;
+
+            default:
+                $result = new Text($mediaId);
+        }
+
+        return $result;
     }
 }
