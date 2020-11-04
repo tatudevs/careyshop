@@ -237,6 +237,10 @@ class Server extends CareyShop
         return true;
     }
 
+    private function getReplyContent(string $key, array $source)
+    {
+    }
+
     /**
      * 获取关注后需要回复的内容
      * @access private
