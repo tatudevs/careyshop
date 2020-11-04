@@ -35,7 +35,7 @@ class Menu extends CareyShop
 
         $result = $this->getApp('menu')->create($button);
         $cacheKey = self::WECHAT_MENU . $this->params['code'];
-        Cache::set($cacheKey, true);
+        Cache::store('place')->set($cacheKey, true);
 
         if (isset($result['errcode']) && $result['errcode'] != 0) {
             return $this->setError($result['errmsg']);
@@ -53,7 +53,7 @@ class Menu extends CareyShop
     public function getMenuData()
     {
         $cacheKey = self::WECHAT_MENU . $this->params['code'];
-        $result = Cache::get($cacheKey);
+        $result = Cache::store('place')->get($cacheKey);
 
         if (false === $result) {
             return [];
@@ -77,7 +77,7 @@ class Menu extends CareyShop
     {
         $result = $this->getApp('menu')->delete();
         $cacheKey = self::WECHAT_MENU . $this->params['code'];
-        Cache::set($cacheKey, false);
+        Cache::store('place')->set($cacheKey, false);
 
         if (isset($result['errcode']) && $result['errcode'] != 0) {
             return $this->setError($result['errmsg']);

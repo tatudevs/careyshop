@@ -28,7 +28,7 @@ class Reply extends CareyShop
     public function getReplyData()
     {
         $cacheKey = self::WECHAT_REPLY . $this->params['code'];
-        $result = Cache::get($cacheKey, []);
+        $result = Cache::store('place')->get($cacheKey, []);
 
         if (array_key_exists($this->params['type'], $result)) {
             return $result[$this->params['type']];
@@ -78,10 +78,10 @@ class Reply extends CareyShop
         }
 
         $cacheKey = self::WECHAT_REPLY . $this->params['code'];
-        $cacheData = Cache::get($cacheKey, []);
+        $cacheData = Cache::store('place')->get($cacheKey, []);
 
         empty($type) ? $cacheData[$type] = $setting : $cacheData = $setting;
-        Cache::set($cacheKey, $cacheData);
+        Cache::store('place')->set($cacheKey, $cacheData);
 
         return true;
     }

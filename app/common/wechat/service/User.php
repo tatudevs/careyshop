@@ -54,7 +54,7 @@ class User extends CareyShop
         }
 
         $cacheKey = self::WECHAT_USER . $this->params['code'];
-        Cache::set($cacheKey, array_reverse($openIdList));
+        Cache::store('place')->set($cacheKey, array_reverse($openIdList));
 
         return true;
     }
@@ -86,7 +86,7 @@ class User extends CareyShop
     {
         // 数据准备
         [$pageNo, $pageSize] = $this->getPageData(100);
-        $cacheData = Cache::get($name . $this->params['code'], []);
+        $cacheData = Cache::store('place')->get($name . $this->params['code'], []);
 
         // 计算合计
         $data['total_result'] = count($cacheData);
@@ -167,7 +167,7 @@ class User extends CareyShop
         }
 
         $cacheKey = self::WECHAT_BLACK . $this->params['code'];
-        Cache::set($cacheKey, array_reverse($openIdList));
+        Cache::store('place')->set($cacheKey, array_reverse($openIdList));
 
         return true;
     }
@@ -229,7 +229,7 @@ class User extends CareyShop
         }
 
         $cacheKey = self::WECHAT_BLACK . $this->params['code'];
-        $cacheData = Cache::get($cacheKey, []);
+        $cacheData = Cache::store('place')->get($cacheKey, []);
 
         if ('add' === $type) {
             foreach ($this->params['openid_list'] as $vlaue) {
@@ -246,6 +246,6 @@ class User extends CareyShop
             }
         }
 
-        Cache::set($cacheKey, $cacheData);
+        Cache::store('place')->set($cacheKey, $cacheData);
     }
 }
