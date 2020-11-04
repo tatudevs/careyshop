@@ -272,16 +272,14 @@ class Wechat extends CareyShop
     private static function getMessageMethod()
     {
         self::$route = array_merge(self::$route, [
-            // 群发文本消息
-            'send.official_account.message.text' => ['sendMessageText', Message::class],
-            // 群发图文消息
-            'send.official_account.message.news' => ['sendMessageNews', Message::class],
-            // 群发图片消息
-            // 群发语音消息
-            // 群发视频消息
+            // 发送一条群发消息
+            'send.official_account.message.item'  => ['sendMessageItem', Message::class],
             // 发送预览消息给指定的微信用户或粉丝
-            // 删除某条群发消息
-            // 获取群发消息状态列表
+            'send.official_account.message.view'  => ['sendMessageView', Message::class],
+            // 删除一条群发消息
+            'del.official_account.message.item'   => ['delMessageItem', Message::class],
+            // 查询群发消息发送状态
+            'get.official_account.message.status' => ['getMessageStatus', Message::class],
         ]);
     }
 }
