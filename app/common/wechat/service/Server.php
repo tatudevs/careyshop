@@ -10,6 +10,7 @@
 
 namespace app\common\wechat\service;
 
+use app\common\wechat\Params;
 use EasyWeChat\Kernel\Messages\Media;
 use EasyWeChat\Kernel\Messages\Text;
 use think\facade\Cache;
@@ -237,30 +238,27 @@ class Server extends CareyShop
         return true;
     }
 
+    /**
+     * 从回复规则中获取回复内容
+     * @access private
+     * @param array $source 数据源
+     * @return Media|Text|void
+     */
     private function getReplyContent(array $source)
     {
-    }
+        // 将数据转为对象访问
+        $data = new Params($source);
 
-    private function getSubscribeReply(string $code)
-    {
-        $cacheKey = Reply::WECHAT_REPLY . $code;
-        $cacheData = Cache::store('place')->get($cacheKey, []);
-
-        // 检测字段是否存在,状态是否可用
-        if (!array_key_exists('subscribe', $data) || !$data['subscribe']['status']) {
-            return;
-        }
-
-        // 检测可回复素材
-        if (empty($data['subscribe']['media_id'])) {
+        // 检测状态是否可用,是否有可回复素材
+        if (!$data['status'] || empty($data['media_id'])) {
             return;
         }
 
         // 获取回复素材(数组大于1时随机取)
-        $index = array_rand($data['subscribe']['media_id'], 1);
-        $mediaId = $data['subscribe']['media_id'][$index];
+        $index = array_rand($data['media_id'], 1);
+        $mediaId = $data['media_id'][$index];
 
-        switch ($data['subscribe']['type']) {
+        switch ($data['type']) {
             case 'image':
                 $result = new Media($mediaId, 'image');
                 break;
@@ -277,10 +275,35 @@ class Server extends CareyShop
                 $result = new Media($mediaId, 'mpnews');
                 break;
 
-            default:
+            case 'text':
                 $result = new Text($mediaId);
+                break;
+
+            default:
+                return;
         }
 
         return $result;
+    }
+
+    /**
+     * 关注后获取回复内容
+     * @access private
+     * @param string $code 渠道编号
+     * @return Media|Text|void
+     * @throws
+     */
+    private function getSubscribeReply(string $code)
+    {
+        $cacheKey = Reply::WECHAT_REPLY . $code;
+        $cacheData = Cache::store('place')->get($cacheKey, []);
+
+        // 检测字段是否存在
+        if (!array_key_exists('subscribe', $cacheData)) {
+            return;
+        }
+
+        // 获取可回复素材
+        return $this->getReplyContent($cacheData['subscribe']);
     }
 }
