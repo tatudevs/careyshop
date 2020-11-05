@@ -242,45 +242,70 @@ class Server extends CareyShop
      * 从回复规则中获取回复内容
      * @access private
      * @param array $source 数据源
-     * @return Media|Text|void
+     * @return array|Media|Text|void
      */
     private function getReplyContent(array $source)
     {
         // 将数据转为对象访问
+        $result = [];
         $data = new Params($source);
 
-        // 检测状态是否可用,是否有可回复素材
-        if (!$data['status'] || empty($data['media_id'])) {
+        // 检测状态是否可用
+        if (!$data['status']) {
+            return;
+        }
+
+        // 获取多媒体素材
+        $getMedia = function ($type, $mediaId) {
+            switch ($type) {
+                case 'image':
+                    $result = new Media($mediaId, 'image');
+                    break;
+
+                case 'voice':
+                    $result = new Media($mediaId, 'voice');
+                    break;
+
+                case 'video':
+                    $result = new Media($mediaId, 'mpvideo');
+                    break;
+
+                case 'news':
+                    $result = new Media($mediaId, 'mpnews');
+                    break;
+
+                case 'text':
+                    $result = new Text($mediaId);
+                    break;
+
+                default:
+                    return null;
+            }
+
+            return $result;
+        };
+
+        // 检测是否有可回复素材
+        $key = isset($data['keyword']) ? 'value' : 'media_id';
+        if (empty($data[$key])) {
             return;
         }
 
         // 获取回复素材(数组大于1时随机取)
-        $index = array_rand($data['media_id'], 1);
-        $mediaId = $data['media_id'][$index];
+        $index = array_rand($data[$key], 1);
+        $mediaId = $data[$key][$index];
 
-        switch ($data['type']) {
-            case 'image':
-                $result = new Media($mediaId, 'image');
-                break;
-
-            case 'voice':
-                $result = new Media($mediaId, 'voice');
-                break;
-
-            case 'video':
-                $result = new Media($mediaId, 'mpvideo');
-                break;
-
-            case 'news':
-                $result = new Media($mediaId, 'mpnews');
-                break;
-
-            case 'text':
-                $result = new Text($mediaId);
-                break;
-
-            default:
-                return;
+        if (isset($data['keyword'])) {
+            // 处理关键词回复
+            if (0 == $data['type']) {
+                $result = $getMedia($mediaId['type'], $mediaId['media_id']);
+            } else if (1 == $data['type']) {
+                foreach ($data[$key] as $item) {
+                    $result[] = $getMedia($item['type'], $item['media_id']);
+                }
+            }
+        } else {
+            $result = $getMedia($data['type'], $mediaId);
         }
 
         return $result;
@@ -304,6 +329,11 @@ class Server extends CareyShop
         }
 
         // 获取可回复素材
-        return $this->getReplyContent($cacheData['subscribe']);
+        $result = $this->getReplyContent($cacheData['subscribe']);
+        if (!is_object($result)) {
+            return;
+        }
+
+        return $result;
     }
 }
