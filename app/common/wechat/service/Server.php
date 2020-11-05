@@ -295,10 +295,10 @@ class Server extends CareyShop
      */
     private function getSubscribeReply(string $code)
     {
+        // 获取数据并检测配置是否存在
         $cacheKey = Reply::WECHAT_REPLY . $code;
         $cacheData = Cache::store('place')->get($cacheKey, []);
 
-        // 检测字段是否存在
         if (!array_key_exists('subscribe', $cacheData)) {
             return;
         }
