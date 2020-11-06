@@ -13,6 +13,7 @@ namespace app\common\wechat\service;
 use app\common\wechat\Params;
 use EasyWeChat\Kernel\Messages\Media;
 use EasyWeChat\Kernel\Messages\Text;
+use EasyWeChat\Kernel\Messages\Transfer;
 use think\facade\Cache;
 
 class Server extends CareyShop
@@ -26,7 +27,9 @@ class Server extends CareyShop
     public function putWechatData()
     {
         // 获取消息
-        $message = $this->getApp('server')->getMessage();
+        $server = $this->getApp('server');
+        $message = $server->getMessage();
+
         if (isset($message['MsgType'])) {
             switch ($message['MsgType']) {
                 // 事件消息
@@ -75,8 +78,13 @@ class Server extends CareyShop
             }
         }
 
+        // 转发消息至客服系统
+//        $server->push(function () {
+//            return new Transfer();
+//        });
+
         // 响应实际输出
-        $this->getApp('server')->serve()->send();
+        $server->serve()->send();
         exit();
     }
 
