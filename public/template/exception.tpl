@@ -97,7 +97,7 @@ if (!function_exists('echo_value')) {
     <meta name="description" content="<?php echo base64_decode('5pys56uZ5Z+65LqOIENhcmV5U2hvcCDllYbln47moYbmnrbns7vnu5/mkK3lu7o=') ?>">
     <meta name="robots" content="noindex,nofollow" />
     <style>
-        /* Base 瑞令网络科技*/
+        /* Base 互明科技*/
         body {
             color: #333;
             font: 16px Verdana, "Helvetica Neue", helvetica, Arial, 'Microsoft YaHei', sans-serif;

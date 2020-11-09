@@ -12,12 +12,12 @@ return [
     // 产品信息
     'product'      => [
         'product_name'    => 'CareyShop商城框架系统',
-        'product_version' => '1.3.1',
+        'product_version' => '1.3.2',
         'build_version'   => '20201012',
         'product_website' => 'http://www.careyshop.cn',
         'product_update'  => 'http://www.careyshop.cn/checkUpdate',
         'develop_team'    => 'think',
-        'company_name'    => '温州瑞令网络科技有限公司',
+        'company_name'    => '宁波互明科技有限公司',
         'company_website' => 'http://www.careyshop.cn',
     ],
 
