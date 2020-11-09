@@ -106,7 +106,7 @@ class Server extends CareyShop
                 Cache::store('place')->set($cacheKey, $userList);
 
                 // 订阅回复
-                return $this->getSubscribeReply($this->params['code']);
+                return $this->getReplyContent('subscribe');
             }
 
             // 取消订阅
@@ -130,8 +130,40 @@ class Server extends CareyShop
      * @access private
      * @return void
      */
-    private function handleText()
+    public function handleText()
     {
+        $this->getApp('server')->push(function ($res) {
+            // 处理关键词回复
+            $cacheKey = Reply::WECHAT_REPLY . $this->params['code'];
+            $cacheData = Cache::store('place')->get($cacheKey, []);
+
+            if (array_key_exists('keyword', $cacheData)) {
+                foreach ($cacheData['keyword'] as $value) {
+                    if (0 == $value['mode'] && false !== mb_stristr($res['Content'], $value['keyword'])) {
+                        return $this->getReplyContent($value);
+                    }
+
+                    if (1 == $value['mode'] && $res['Content'] === $value['keyword']) {
+                        return $this->getReplyContent($value);
+                    }
+                }
+            }
+
+            // 处理默认回复
+            $cacheKey .= 'default';
+            if (!Cache::store('place')->get($cacheKey)) {
+                $defaultReply = $this->getReplyContent('default');
+                if (!empty($defaultReply)) {
+                    Cache::store('place')->set($cacheKey, true, 3600);
+                    return $defaultReply;
+                }
+            }
+
+            // 处理是否转发给客服系统
+//            $expand = $this->getApp('server')->getExpand();
+        });
+
+        print_r($this->expand);exit();
     }
 
     /**
@@ -249,97 +281,63 @@ class Server extends CareyShop
     /**
      * 从回复规则中获取回复内容
      * @access private
-     * @param array $source 数据源
-     * @return array|Media|Text|void
+     * @param array|string $source 数据源
+     * @return Media|Text|void
+     * @throws
      */
-    private function getReplyContent(array $source)
+    private function getReplyContent($source)
     {
         // 将数据转为对象访问
-        $result = [];
-        $data = new Params($source);
+        if (is_array($source)) {
+            $data = new Params($source);
+        } else {
+            $cacheKey = Reply::WECHAT_REPLY . $this->params['code'];
+            $cacheData = Cache::store('place')->get($cacheKey, []);
+
+            if (!array_key_exists($source, $cacheData)) {
+                return;
+            }
+
+            $data = new Params($cacheData[$source]);
+        }
 
         // 检测状态是否可用
         if (!$data['status']) {
             return;
         }
 
-        // 获取多媒体素材
-        $getMedia = function ($type, $mediaId) {
-            switch ($type) {
-                case 'image':
-                    $result = new Media($mediaId, 'image');
-                    break;
-
-                case 'voice':
-                    $result = new Media($mediaId, 'voice');
-                    break;
-
-                case 'video':
-                    $result = new Media($mediaId, 'mpvideo');
-                    break;
-
-                case 'news':
-                    $result = new Media($mediaId, 'mpnews');
-                    break;
-
-                case 'text':
-                    $result = new Text($mediaId);
-                    break;
-
-                default:
-                    return null;
-            }
-
-            return $result;
-        };
-
         // 检测是否有可回复素材
-        $key = isset($data['keyword']) ? 'value' : 'media_id';
-        if (empty($data[$key])) {
+        if (empty($data['media_id'])) {
             return;
         }
 
         // 获取回复素材(数组大于1时随机取)
-        $index = array_rand($data[$key], 1);
-        $mediaId = $data[$key][$index];
+        $index = array_rand($data['media_id'], 1);
+        $mediaId = $data['media_id'][$index];
 
-        if (isset($data['keyword'])) {
-            // 处理关键词回复
-            if (0 == $data['type']) {
-                $result = $getMedia($mediaId['type'], $mediaId['media_id']);
-            } else if (1 == $data['type']) {
-                foreach ($data[$key] as $item) {
-                    $result[] = $getMedia($item['type'], $item['media_id']);
-                }
-            }
-        } else {
-            $result = $getMedia($data['type'], $mediaId);
-        }
+        switch ($data['type']) {
+            case 'image':
+                $result = new Media($mediaId, 'image');
+                break;
 
-        return $result;
-    }
+            case 'voice':
+                $result = new Media($mediaId, 'voice');
+                break;
 
-    /**
-     * 关注后获取回复内容
-     * @access private
-     * @param string $code 渠道编号
-     * @return Media|Text|void
-     * @throws
-     */
-    private function getSubscribeReply(string $code)
-    {
-        // 获取数据并检测配置是否存在
-        $cacheKey = Reply::WECHAT_REPLY . $code;
-        $cacheData = Cache::store('place')->get($cacheKey, []);
+            case 'video':
+                $result = new Media($mediaId, 'mpvideo');
+                break;
 
-        if (!array_key_exists('subscribe', $cacheData)) {
-            return;
-        }
+            case 'news':
+                $result = new Media($mediaId, 'mpnews');
+                break;
 
-        // 获取可回复素材
-        $result = $this->getReplyContent($cacheData['subscribe']);
-        if (!is_object($result)) {
-            return;
+            case 'text':
+                $result = new Text($mediaId);
+                break;
+
+            default:
+                return;
         }
 
         return $result;

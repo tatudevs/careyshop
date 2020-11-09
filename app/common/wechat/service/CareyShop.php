@@ -42,6 +42,12 @@ class CareyShop
     public $params = null;
 
     /**
+     * 实列的扩展配置
+     * @var mixed|null
+     */
+    public $expand = null;
+
+    /**
      * CareyShop constructor.
      * @access public
      * @param array $params
@@ -62,7 +68,10 @@ class CareyShop
     {
         if (isset($params['code'])) {
             $this->params = new Params($params);
-            $this->wechat = (new WeChat($params['code']))->getApp();
+
+            $wechat = new WeChat($params['code']);
+            $this->wechat = $wechat->getApp();
+            $this->expand = $wechat->getExpand();
         }
 
         return $this;

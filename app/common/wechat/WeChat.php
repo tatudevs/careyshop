@@ -59,6 +59,12 @@ class WeChat
     ];
 
     /**
+     * 扩展配置
+     * @var mixed|null
+     */
+    protected $expand = null;
+
+    /**
      * 实例化
      * @var null
      */
@@ -101,6 +107,9 @@ class WeChat
             return $result->toArray();
         });
 
+        // 赋值扩展配置
+        $this->expand = new Params($setting['expand']);
+
         // 修改部分配置参数
         $channel = env('app_debug', true) ? 'dev' : 'prod';
         $path = runtime_path() . sprintf('wechat/%s.log', date('d'));
@@ -130,5 +139,15 @@ class WeChat
     public function getApp()
     {
         return $this->app;
+    }
+
+    /**
+     * 获取扩展配置
+     * @access public
+     * @return mixed|null
+     */
+    public function getExpand()
+    {
+        return $this->expand;
     }
 }
