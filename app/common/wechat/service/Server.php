@@ -126,7 +126,7 @@ class Server extends CareyShop
      * @return void
      * @throws
      */
-    public function handleText()
+    private function handleText()
     {
         $this->getApp('server')->push(function ($res) {
             // 处理关键词回复

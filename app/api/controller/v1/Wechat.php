@@ -60,7 +60,6 @@ class Wechat extends CareyShop
             'get.wechat.ip'      => ['getWechatIP', Server::class],
             // 清理接口调用次数(每月10次)
             'clear.wechat.quota' => ['clearWechatQuota', Server::class],
-            'test' => ['handleText', Server::class]
         ]);
     }
 
