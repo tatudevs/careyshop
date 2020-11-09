@@ -92,28 +92,39 @@ class Server extends CareyShop
     private function handleEvent()
     {
         $this->getApp('server')->push(function ($res) {
-            // 订阅
-            if ($res['Event'] == 'subscribe') {
-                $cacheKey = User::WECHAT_USER . $this->params['code'];
-                $userList = Cache::store('place')->get($cacheKey, []);
+            switch ($res['Event']) {
+                // 订阅
+                case 'subscribe':
+                    $cacheKey = User::WECHAT_USER . $this->params['code'];
+                    $userList = Cache::store('place')->get($cacheKey, []);
 
-                array_unshift($userList, $res['FromUserName']);
-                Cache::store('place')->set($cacheKey, $userList);
-
-                // 订阅回复
-                return $this->getReplyContent('subscribe');
-            }
-
-            // 取消订阅
-            if ($res['Event'] == 'unsubscribe') {
-                $cacheKey = User::WECHAT_USER . $this->params['code'];
-                $userList = Cache::store('place')->get($cacheKey, []);
-                $key = array_search($res['FromUserName'], $userList);
-
-                if (false !== $key) {
-                    unset($userList[$key]);
+                    array_unshift($userList, $res['FromUserName']);
                     Cache::store('place')->set($cacheKey, $userList);
-                }
+
+                    // 订阅回复
+                    return $this->getReplyContent('subscribe');
+
+                // 取消订阅
+                case 'unsubscribe':
+                    $cacheKey = User::WECHAT_USER . $this->params['code'];
+                    $userList = Cache::store('place')->get($cacheKey, []);
+                    $key = array_search($res['FromUserName'], $userList);
+
+                    if (false !== $key) {
+                        unset($userList[$key]);
+                        Cache::store('place')->set($cacheKey, $userList);
+                    }
+                    break;
+
+                case 'CLICK':
+                    // 菜单点击事件,事件处理预留
+                    break;
+
+                case 'weapp_audit_success':
+                    // 小程序审核通过,事件处理预留
+                    break;
+
+                //...更多事件,自行处理
             }
 
             return null;
