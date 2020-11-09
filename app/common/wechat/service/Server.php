@@ -78,11 +78,6 @@ class Server extends CareyShop
             }
         }
 
-        // 转发消息至客服系统
-//        $server->push(function () {
-//            return new Transfer();
-//        });
-
         // 响应实际输出
         $server->serve()->send();
         exit();
@@ -129,6 +124,7 @@ class Server extends CareyShop
      * 处理文字消息
      * @access private
      * @return void
+     * @throws
      */
     public function handleText()
     {
@@ -143,7 +139,7 @@ class Server extends CareyShop
                         return $this->getReplyContent($value);
                     }
 
-                    if (1 == $value['mode'] && $res['Content'] === $value['keyword']) {
+                    if (1 == $value['mode'] && 0 === strnatcasecmp($res['Content'], $value['keyword'])) {
                         return $this->getReplyContent($value);
                     }
                 }
@@ -159,11 +155,13 @@ class Server extends CareyShop
                 }
             }
 
-            // 处理是否转发给客服系统
-//            $expand = $this->getApp('server')->getExpand();
-        });
+            // 处理转发客服系统
+            if ($this->expand['is_transfer']) {
+                return new Transfer($this->expand['transfer_account']);
+            }
 
-        print_r($this->expand);exit();
+            return null;
+        });
     }
 
     /**

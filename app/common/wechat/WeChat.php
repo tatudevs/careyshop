@@ -108,7 +108,7 @@ class WeChat
         });
 
         // 赋值扩展配置
-        $this->expand = new Params($setting['expand']);
+        $this->expand = new Params($setting['expand']?? []);
 
         // 修改部分配置参数
         $channel = env('app_debug', true) ? 'dev' : 'prod';
