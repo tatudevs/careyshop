@@ -141,8 +141,8 @@ class Index
                 $version = mysqli_get_server_info($mysqli);
 
                 // 检测数据库版本号
-                if (version_compare($version, '5.5.3', '<')) {
-                    throw new \Exception('数据库版本过低，必须 5.5.3 及以上');
+                if (version_compare($version, '5.7', '<')) {
+                    throw new \Exception('数据库版本过低，必须 5.7 及以上');
                 }
 
                 // 检测是否已存在数据库
