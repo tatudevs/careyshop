@@ -47,7 +47,7 @@ class PaymentLog extends CareyShop
         'to_payment'     => '支付方式',
         'type'           => '支付类型',
         'status'         => '支付状态',
-        'account'        => '账号或昵称',
+        'account'        => '账号',
         'begin_time'     => '开始日期',
         'end_time'       => '结束日期',
         'page_no'        => '页码',

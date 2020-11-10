@@ -43,7 +43,7 @@ class Withdraw extends CareyShop
         'money'            => '提现金额',
         'remark'           => '提现备注',
         'status'           => '提现状态',
-        'account'          => '账号或昵称',
+        'account'          => '账号',
         'begin_time'       => '开始日期',
         'end_time'         => '结束日期',
         'page_no'          => '页码',

@@ -40,7 +40,7 @@ class Ask extends CareyShop
         'ask_type'    => '提问类型',
         'title'       => '提问主题',
         'ask'         => '提问内容',
-        'account'     => '账号或昵称',
+        'account'     => '账号',
         'status'      => '是否回答',
         'page_no'     => '页码',
         'page_size'   => '每页数量',

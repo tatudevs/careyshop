@@ -60,7 +60,7 @@ class User extends CareyShop
         'status'        => '账号状态',
         'password_old'  => '原始密码',
         'last_login'    => '登录日期',
-        'account'       => '账号、昵称、手机号',
+        'account'       => '账号或手机号',
         'platform'      => '来源终端',
         'page_no'       => '页码',
         'page_size'     => '每页数量',

@@ -50,7 +50,7 @@ class DeliveryDist extends CareyShop
         'is_trace'         => '是否获取配送轨迹',
         'state'            => '配送状态',
         'is_sub'           => '是否订阅推送',
-        'account'          => '账号或昵称',
+        'account'          => '账号',
         'timeout'          => '超时配送',
         'page_no'          => '页码',
         'page_size'        => '每页数量',

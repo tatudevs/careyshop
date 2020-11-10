@@ -52,7 +52,7 @@ class CardUse extends CareyShop
         'money'          => '金额',
         'exclude_number' => '排除卡号',
         'type'           => '筛选类型',
-        'account'        => '账号或昵称',
+        'account'        => '账号',
         'goods_id'       => '商品编号',
         'page_no'        => '页码',
         'page_size'      => '每页数量',

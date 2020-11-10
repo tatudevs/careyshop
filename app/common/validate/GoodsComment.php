@@ -58,7 +58,7 @@ class GoodsComment extends CareyShop
         'is_show'          => '是否显示',
         'is_top'           => '是否置顶',
         'status'           => '是否已读',
-        'account'          => '账号或昵称',
+        'account'          => '账号',
         'is_image'         => '是否有图',
         'is_append'        => '是否有追评',
         'goods_spec'       => '商品规格',

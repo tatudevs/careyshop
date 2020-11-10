@@ -47,7 +47,7 @@ class GoodsConsult extends CareyShop
         'is_show'          => '是否显示',
         'status'           => '是否回复',
         'is_answer'        => '是否显示完整问答列表',
-        'account'          => '账号或昵称',
+        'account'          => '账号',
         'page_no'          => '页码',
         'page_size'        => '每页数量',
         'order_type'       => '排序方式',

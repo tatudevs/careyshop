@@ -76,7 +76,7 @@ class OrderService extends CareyShop
         'refund_fee'       => '退款金额',
         'goods_status'     => '货物状态',
         'order_code'       => '流水号',
-        'account'          => '账号或昵称',
+        'account'          => '账号',
         'type'             => '售后类型',
         'status'           => '售后状态',
         'begin_time'       => '开始日期',

@@ -48,7 +48,7 @@ class CouponGive extends CareyShop
         'goods_id'       => '商品编号',
         'pay_amount'     => '支付总金额',
         'type'           => '优惠劵状态选择',
-        'account'        => '账号或昵称',
+        'account'        => '账号',
         'order_id'       => '订单编号',
         'page_no'        => '页码',
         'page_size'      => '每页数量',

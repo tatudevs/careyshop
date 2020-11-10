@@ -106,7 +106,7 @@ class Order extends CareyShop
         'use_card'             => '购物卡支付',
         'card_number'          => '购物卡卡号',
         'comment_type'         => '评价方式',
-        'account'              => '账号或昵称',
+        'account'              => '账号',
         'is_picking'           => '是否配货',
         'page_no'              => '页码',
         'page_size'            => '每页数量',

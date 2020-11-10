@@ -52,7 +52,7 @@ class Transaction extends CareyShop
         'cause'          => '操作原因',
         'module'         => '收支模型',
         'to_payment'     => '交易来源',
-        'account'        => '账号或昵称',
+        'account'        => '账号',
         'begin_time'     => '开始日期',
         'end_time'       => '结束日期',
         'card_number'    => '购物卡卡号',

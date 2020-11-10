@@ -51,7 +51,7 @@ class OrderRefund extends CareyShop
         'payment_no'      => '支付流水号',
         'begin_time'      => '开始日期',
         'end_time'        => '结束日期',
-        'account'         => '账号或昵称',
+        'account'         => '账号',
         'page_no'         => '页码',
         'page_size'       => '每页数量',
         'order_type'      => '排序方式',
