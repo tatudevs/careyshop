@@ -21,7 +21,7 @@ class Server extends CareyShop
     /**
      * 接收并响应微信推送
      * @access public
-     * @return void
+     * @return string[]
      * @throws
      */
     public function putWechatData()
@@ -80,7 +80,12 @@ class Server extends CareyShop
 
         // 响应实际输出
         $server->serve()->send();
-        exit();
+
+        // 必须返回,否则将导致后续执行(如日志)中断
+        return [
+            'callback_return_type' => 'view',
+            'is_callback'          => 'success',
+        ];
     }
 
     /**
