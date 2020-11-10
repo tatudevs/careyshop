@@ -53,8 +53,6 @@ class User extends CareyShop
             'check.user.username' => ['checkUserName', UserService::class],
             // 验证账号手机是否合法
             'check.user.mobile'   => ['checkUserMobile', UserService::class],
-            // 验证账号昵称是否合法
-            'check.user.nickname' => ['checkUserNick', UserService::class],
         ];
     }
 }

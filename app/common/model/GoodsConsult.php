@@ -285,7 +285,7 @@ class GoodsConsult extends CareyShop
         if (is_client_admin()) {
             // 允许管理组根据用户搜索商品咨询
             if (!empty($data['account'])) {
-                $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+                $map[] = ['getUser.username', '=', $data['account']];
             }
         } else {
             // 当goods_id为空,表示顾客组想要获取属于他自己的咨询列表

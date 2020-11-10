@@ -510,7 +510,7 @@ class OrderService extends CareyShop
 
         if (is_client_admin()) {
             if (!empty($data['account'])) {
-                $userId = User::where('username|nickname', '=', $data['account'])->value('user_id', 0);
+                $userId = User::where('username', '=', $data['account'])->value('user_id', 0);
                 $map[] = ['user_id', '=', $userId];
             }
 

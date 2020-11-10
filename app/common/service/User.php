@@ -59,18 +59,4 @@ class User extends CareyShop
 
         return $this->checkField(['mobile|手机号' => $rule], $data);
     }
-
-    /**
-     * 验证账号昵称是否合法
-     * @access public
-     * @param array $data 外部数据
-     * @return bool
-     */
-    public function checkUserNick(array $data)
-    {
-        $rule = 'require|max:50|unique:user,nickname';
-        $rule .= sprintf(',%d,user_id', isset($data['exclude_id']) ? $data['exclude_id'] : 0);
-
-        return $this->checkField(['nickname|昵称' => $rule], $data);
-    }
 }

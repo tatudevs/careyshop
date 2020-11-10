@@ -198,7 +198,7 @@ class PaymentLog extends CareyShop
         if (is_client_admin()) {
             $with['getUser'] = ['username', 'nickname', 'level_icon', 'head_pic'];
             is_empty_parm($data['to_payment']) ?: $map[] = ['payment_log.to_payment', '=', (string)$data['to_payment']];
-            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+            empty($data['account']) ?: $map[] = ['getUser.username', '=', $data['account']];
         } else {
             $map[] = ['payment_log.user_id', '=', get_client_id()];
         }

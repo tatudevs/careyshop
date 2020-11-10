@@ -2082,8 +2082,7 @@ class Order extends CareyShop
 
         // 通过账号或昵称查询
         if (is_client_admin() && !empty($data['account'])) {
-            $mapUser[] = ['username|nickname', '=', $data['account']];
-            $userId = User::where($mapUser)->value('user_id', 0);
+            $userId = User::where('username', '=', $data['account'])->value('user_id', 0);
             $map['user_id'] = ['=', $userId];
         }
 
@@ -2174,8 +2173,7 @@ class Order extends CareyShop
 
         // 通过账号或昵称查询
         if (is_client_admin() && !empty($data['account'])) {
-            $mapUser[] = ['username|nickname', '=', $data['account']];
-            $userId = User::where($mapUser)->value('user_id', 0);
+            $userId = User::where('username', '=', $data['account'])->value('user_id', 0);
             $map[] = ['user_id', '=', $userId];
         }
 

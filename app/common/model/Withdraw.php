@@ -183,7 +183,7 @@ class Withdraw extends CareyShop
         // 后台管理搜索
         if (is_client_admin()) {
             $with['getUser'] = ['username', 'level_icon', 'head_pic', 'nickname'];
-            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+            empty($data['account']) ?: $map[] = ['getUser.username', '=', $data['account']];
         } else {
             $map[] = ['withdraw.user_id', '=', get_client_id()];
         }

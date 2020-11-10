@@ -259,15 +259,6 @@ class User extends CareyShop
         $map = ['user_id' => is_client_admin() ? $data['client_id'] : get_client_id()];
         $field = ['group_id', 'nickname', 'head_pic', 'sex', 'birthday', 'status'];
 
-        if (!empty($data['nickname'])) {
-            $nickMap[] = ['user_id', '<>', $map['user_id']];
-            $nickMap[] = ['nickname', '=', $data['nickname']];
-
-            if (self::checkUnique($nickMap)) {
-                return $this->setError('昵称已存在');
-            }
-        }
-
         if (!is_client_admin()) {
             unset($data['password']);
             unset($data['status']);
@@ -435,7 +426,7 @@ class User extends CareyShop
         // 搜索条件
         $map = [];
         !isset($data['client_id']) ?: $map[] = ['user_id', 'in', $data['client_id']];
-        empty($data['account']) ?: $map[] = ['username|mobile|nickname', '=', $data['account']];
+        empty($data['account']) ?: $map[] = ['username|mobile', '=', $data['account']];
         is_empty_parm($data['user_level_id']) ?: $map[] = ['user_level_id', '=', $data['user_level_id']];
         is_empty_parm($data['group_id']) ?: $map[] = ['group_id', '=', $data['group_id']];
         is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];

@@ -773,7 +773,7 @@ class GoodsComment extends CareyShop
             is_empty_parm($data['status']) ?: $map[] = ['goods_comment.status', '=', $data['status']];
             empty($data['order_no']) ?: $map[] = ['goods_comment.order_no', '=', $data['order_no']];
             empty($data['content']) ?: $map[] = ['goods_comment.content', 'like', '%' . $data['content'] . '%'];
-            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+            empty($data['account']) ?: $map[] = ['getUser.username', '=', $data['account']];
         }
 
         // 查看指定商品规格评价

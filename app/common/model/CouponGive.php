@@ -332,7 +332,7 @@ class CouponGive extends CareyShop
 
         if (is_client_admin()) {
             empty($data['coupon_id']) ?: $map[] = ['coupon_give.coupon_id', '=', $data['coupon_id']];
-            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+            empty($data['account']) ?: $map[] = ['getUser.username', '=', $data['account']];
         } else {
             $map[] = ['coupon_give.user_id', '=', get_client_id()];
         }

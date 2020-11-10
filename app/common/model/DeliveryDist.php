@@ -385,7 +385,7 @@ class DeliveryDist extends CareyShop
         }
 
         if (is_client_admin() && !empty($data['account'])) {
-            $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+            $map[] = ['getUser.username', '=', $data['account']];
         }
 
         // 关联查询

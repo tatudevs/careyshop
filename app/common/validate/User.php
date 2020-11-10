@@ -23,7 +23,7 @@ class User extends CareyShop
         'mobile'        => 'require|number|length:7,15|unique:user,mobile,0,user_id',
         'code'          => 'integer|max:6',
         'email'         => 'email|max:60',
-        'nickname'      => 'max:50|unique:user,nickname,0,user_id',
+        'nickname'      => 'max:50',
         'head_pic'      => 'max:512',
         'sex'           => 'in:0,1,2',
         'birthday'      => 'date|dateFormat:Y-m-d',

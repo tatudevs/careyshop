@@ -284,7 +284,7 @@ class OrderRefund extends CareyShop
 
         if (is_client_admin()) {
             !isset($data['to_payment']) ?: $map[] = ['order_refund.to_payment', '=', $data['to_payment']];
-            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+            empty($data['account']) ?: $map[] = ['getUser.username', '=', $data['account']];
         } else {
             $map[] = ['order_refund.user_id', '=', get_client_id()];
         }

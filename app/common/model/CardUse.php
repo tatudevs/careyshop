@@ -408,7 +408,7 @@ class CardUse extends CareyShop
             empty($data['card_id']) ?: $map[] = ['card_use.card_id', '=', $data['card_id']];
             empty($data['number']) ?: $map[] = ['card_use.number', '=', $data['number']];
             empty($data['name']) ?: $map[] = ['getCard.name', 'like', '%' . $data['name'] . '%'];
-            empty($data['account']) ?: $map[] = ['getUser.username|getUser.nickname', '=', $data['account']];
+            empty($data['account']) ?: $map[] = ['getUser.username', '=', $data['account']];
 
             if (!is_empty_parm($data['is_active'])) {
                 $map[] = ['card_use.user_id', empty($data['is_active']) ? '=' : '<>', 0];
