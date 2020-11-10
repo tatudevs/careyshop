@@ -50,7 +50,7 @@ class WeChat
                 ],
                 // 生产环境
                 'prod' => [
-                    'driver' => 'daily',
+                    'driver' => 'single',
                     'path'   => '../runtime/log/wechat.log',
                     'level'  => 'info',
                 ],
@@ -112,7 +112,7 @@ class WeChat
 
         // 修改部分配置参数
         $channel = env('app_debug', true) ? 'dev' : 'prod';
-        $path = runtime_path() . sprintf('wechat/%s.log', date('d'));
+        $path = runtime_path() . 'wechat/' . date('Ym/d') . '.log';
 
         $this->setting['log']['default'] = $channel;
         $this->setting['log']['channels'][$channel]['path'] = $path;
