@@ -29,7 +29,7 @@ return [
             'serialize'  => [],
         ],
         'place' => [
-            // 驱动方式
+            // 驱动方式(需要数据持久化)
             'type'       => 'File',
             // 缓存保存目录
             'path'       => app()->getRuntimePath() . 'place' . DIRECTORY_SEPARATOR,
