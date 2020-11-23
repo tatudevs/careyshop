@@ -241,7 +241,7 @@ class Weixin extends Payment
 
         $vars = [
             'method' => 'get.qrcode.item',
-            'text'   => urlencode($result['code_url']),
+            'text'   => $result['code_url'],
         ];
 
         $url = url('api/v1/qrcode', $vars, true, true)->build();
