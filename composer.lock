@@ -106,16 +106,16 @@
         },
         {
             "name": "dnyz520/careyshop-captcha",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-captcha.git",
-                "reference": "edcd0060d3fff142c59fb6228db12353c491eca4"
+                "reference": "3aef014f7fea3b8e047687c8fee012e96081ce84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/edcd0060d3fff142c59fb6228db12353c491eca4",
-                "reference": "edcd0060d3fff142c59fb6228db12353c491eca4",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/3aef014f7fea3b8e047687c8fee012e96081ce84",
+                "reference": "3aef014f7fea3b8e047687c8fee012e96081ce84",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -158,7 +158,7 @@
                 }
             ],
             "description": "The CareyShop Captcha Package",
-            "time": "2020-11-09T07:18:54+00:00"
+            "time": "2020-11-23T08:59:12+00:00"
         },
         {
             "name": "dnyz520/careyshop-exception",
@@ -906,16 +906,16 @@
         },
         {
             "name": "overtrue/socialite",
-            "version": "2.0.21",
+            "version": "2.0.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/overtrue/socialite.git",
-                "reference": "a4a91039601f846494a8a9b06201958896d129bf"
+                "reference": "0ce3285293026a639de317a70b01eeef051e9962"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/overtrue/socialite/zipball/a4a91039601f846494a8a9b06201958896d129bf",
-                "reference": "a4a91039601f846494a8a9b06201958896d129bf",
+                "url": "https://api.github.com/repos/overtrue/socialite/zipball/0ce3285293026a639de317a70b01eeef051e9962",
+                "reference": "0ce3285293026a639de317a70b01eeef051e9962",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -968,20 +968,20 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2020-10-23T15:14:08+00:00"
+            "time": "2020-11-12T23:23:15+00:00"
         },
         {
             "name": "overtrue/wechat",
-            "version": "4.3.1",
+            "version": "4.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/overtrue/wechat.git",
-                "reference": "d7fa23e54337251f5ebfb6c6aab2b2a72da78bd3"
+                "reference": "093a3bc059cfaea00d62e041c6b36a695324aba4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/overtrue/wechat/zipball/d7fa23e54337251f5ebfb6c6aab2b2a72da78bd3",
-                "reference": "d7fa23e54337251f5ebfb6c6aab2b2a72da78bd3",
+                "url": "https://api.github.com/repos/overtrue/wechat/zipball/093a3bc059cfaea00d62e041c6b36a695324aba4",
+                "reference": "093a3bc059cfaea00d62e041c6b36a695324aba4",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1055,7 +1055,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2020-09-28T09:20:16+00:00"
+            "time": "2020-11-17T03:33:00+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
