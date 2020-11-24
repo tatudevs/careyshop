@@ -131,7 +131,10 @@ class Alipay extends Payment
         ];
 
         if ($this->request == 'web') {
-            $request = Request::isMobile() ? new AlipayTradeWapPayRequest() : new AlipayTradePagePayRequest();
+            $request = preg_match('~alipay~i', Request::header('user-agent'))
+                ? new AlipayTradeWapPayRequest()
+                : new AlipayTradePagePayRequest();
+
             $request->setReturnUrl($this->returnUrl);
         } else {
             $request = new AlipayTradeAppPayRequest();

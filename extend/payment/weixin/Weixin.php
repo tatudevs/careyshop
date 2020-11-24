@@ -153,7 +153,7 @@ class Weixin extends Payment
         $result['is_callback'] = [];
 
         if ($this->request == 'web') {
-            if (Request::isMobile() && strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {
+            if (preg_match('~micromessenger~i', Request::header('user-agent'))) {
                 $result['is_callback'] = $this->jsRequestExecute();
             } else {
                 $result['is_callback'] = $this->pcRequestExecute();
