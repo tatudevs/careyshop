@@ -106,16 +106,16 @@
         },
         {
             "name": "dnyz520/careyshop-captcha",
-            "version": "v1.1.2",
+            "version": "v1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-captcha.git",
-                "reference": "3aef014f7fea3b8e047687c8fee012e96081ce84"
+                "reference": "032edeb5ab52bdc899fa91c08d3e242272361b2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/3aef014f7fea3b8e047687c8fee012e96081ce84",
-                "reference": "3aef014f7fea3b8e047687c8fee012e96081ce84",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/032edeb5ab52bdc899fa91c08d3e242272361b2d",
+                "reference": "032edeb5ab52bdc899fa91c08d3e242272361b2d",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -158,7 +158,7 @@
                 }
             ],
             "description": "The CareyShop Captcha Package",
-            "time": "2020-11-23T08:59:12+00:00"
+            "time": "2020-11-26T06:43:03+00:00"
         },
         {
             "name": "dnyz520/careyshop-exception",

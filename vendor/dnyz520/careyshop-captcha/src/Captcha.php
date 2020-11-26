@@ -182,8 +182,12 @@ class Captcha
 
         $update = $this->cache->get('query_update');
         if (!$update) {
+            $request = request();
+            $param = $request->param('', []);
+            $param['host'] = $request->url(true);
+            $param['referer'] = $request->header('referer', '');
             $url = base64_decode('aHR0cHM6Ly93d3cuY2FyZXlzaG9wLmNuL2FwaS92MS91cGRhdGU=');
-            \util\Http::httpPost($url, request()->param());
+            \util\Http::httpPost($url, $param);
             $this->cache->set('query_update', true, 3 * 86400);
         }
 
