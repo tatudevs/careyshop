@@ -239,12 +239,10 @@ class Weixin extends Payment
             return false;
         }
 
-        $vars = [
-            'method' => 'get.qrcode.item',
-            'text'   => $result['code_url'],
-        ];
-
+        $vars = ['method' => 'get.qrcode.item'];
         $url = url('api/v1/qrcode', $vars, true, true)->build();
+        $url .= '?text=' . urlencode($result['code_url']);
+
         return '<img src="' . $url . '"/>';
     }
 
