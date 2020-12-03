@@ -2,6 +2,7 @@
 
 class EncryptResponseData
 {
-	public $realContent;
-	public $returnContent;
+    public $realContent;
+
+    public $returnContent;
 }

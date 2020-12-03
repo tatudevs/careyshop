@@ -3,25 +3,25 @@
  * ALIPAY API: alipay.trade.fastpay.refund.query request
  *
  * @author auto create
- * @since 1.0, 2017-03-23 19:11:54
+ * @since 1.0, 2020-08-13 19:08:51
  */
-
 class AlipayTradeFastpayRefundQueryRequest
 {
-	/**
+	/** 
 	 * 商户可使用该接口查询自已通过alipay.trade.refund提交的退款请求是否执行成功。
 	 **/
 	private $bizContent;
 
-	private $apiParas = [];
+	private $apiParas = array();
 	private $terminalType;
 	private $terminalInfo;
 	private $prodCode;
-	private $apiVersion = "1.0";
+	private $apiVersion="1.0";
 	private $notifyUrl;
 	private $returnUrl;
-	private $needEncrypt = false;
+    private $needEncrypt=false;
 
+	
 	public function setBizContent($bizContent)
 	{
 		$this->bizContent = $bizContent;
@@ -40,7 +40,7 @@ class AlipayTradeFastpayRefundQueryRequest
 
 	public function setNotifyUrl($notifyUrl)
 	{
-		$this->notifyUrl = $notifyUrl;
+		$this->notifyUrl=$notifyUrl;
 	}
 
 	public function getNotifyUrl()
@@ -50,7 +50,7 @@ class AlipayTradeFastpayRefundQueryRequest
 
 	public function setReturnUrl($returnUrl)
 	{
-		$this->returnUrl = $returnUrl;
+		$this->returnUrl=$returnUrl;
 	}
 
 	public function getReturnUrl()
@@ -95,7 +95,7 @@ class AlipayTradeFastpayRefundQueryRequest
 
 	public function setApiVersion($apiVersion)
 	{
-		$this->apiVersion = $apiVersion;
+		$this->apiVersion=$apiVersion;
 	}
 
 	public function getApiVersion()
@@ -103,13 +103,16 @@ class AlipayTradeFastpayRefundQueryRequest
 		return $this->apiVersion;
 	}
 
-	public function setNeedEncrypt($needEncrypt)
-	{
-		$this->needEncrypt = $needEncrypt;
-	}
+  public function setNeedEncrypt($needEncrypt)
+  {
 
-	public function getNeedEncrypt()
-	{
-		return $this->needEncrypt;
-	}
+     $this->needEncrypt=$needEncrypt;
+
+  }
+
+  public function getNeedEncrypt()
+  {
+    return $this->needEncrypt;
+  }
+
 }

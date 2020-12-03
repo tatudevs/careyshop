@@ -3,9 +3,8 @@
  * ALIPAY API: alipay.trade.app.pay request
  *
  * @author auto create
- * @since 1.0, 2017-06-19 11:12:46
+ * @since 1.0, 2020-08-11 10:54:18
  */
-
 class AlipayTradeAppPayRequest
 {
 	/** 
@@ -21,6 +20,7 @@ class AlipayTradeAppPayRequest
 	private $notifyUrl;
 	private $returnUrl;
     private $needEncrypt=false;
+
 	
 	public function setBizContent($bizContent)
 	{
@@ -103,13 +103,16 @@ class AlipayTradeAppPayRequest
 		return $this->apiVersion;
 	}
 
-	public function setNeedEncrypt($needEncrypt)
-	{
-		$this->needEncrypt = $needEncrypt;
-	}
+  public function setNeedEncrypt($needEncrypt)
+  {
 
-	public function getNeedEncrypt()
-	{
-		return $this->needEncrypt;
-	}
+     $this->needEncrypt=$needEncrypt;
+
+  }
+
+  public function getNeedEncrypt()
+  {
+    return $this->needEncrypt;
+  }
+
 }
