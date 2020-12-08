@@ -1001,12 +1001,12 @@
         "version_normalized": "4.3.2.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/overtrue/wechat.git",
+            "url": "https://github.com/w7corp/easywechat.git",
             "reference": "093a3bc059cfaea00d62e041c6b36a695324aba4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/overtrue/wechat/zipball/093a3bc059cfaea00d62e041c6b36a695324aba4",
+            "url": "https://api.github.com/repos/w7corp/easywechat/zipball/093a3bc059cfaea00d62e041c6b36a695324aba4",
             "reference": "093a3bc059cfaea00d62e041c6b36a695324aba4",
             "shasum": "",
             "mirrors": [
