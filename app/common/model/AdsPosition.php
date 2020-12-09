@@ -328,15 +328,13 @@ class AdsPosition extends CareyShop
             ['status', '=', 1],
         ];
 
-        $adsDb = new Ads();
-        $adsDb->where($map);
-
         // 随机展示的广告没必要排序
+        $adsDb = new Ads();
         if (in_array($result->getAttr('display'), [0, 1])) {
-            $adsDb->order(['sort' => 'asc', 'ads_id' => 'desc']);
+            $adsDb = $adsDb->order(['sort' => 'asc', 'ads_id' => 'desc']);
         }
 
-        $adsResult = $adsDb->field('ads_id,name,url,target,content,color,type')->select();
+        $adsResult = $adsDb->field('ads_id,name,url,target,content,color,type')->where($map)->select();
         $adsData = $adsResult->toArray(); // 从Ads数据集获取 0=多个 1=单个 2=随机多个 3=随机单个
 
         if (!empty($adsData)) {

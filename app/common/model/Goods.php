@@ -719,9 +719,8 @@ class Goods extends CareyShop
             return [];
         }
 
-        // 子查询语句
-        $subQuery = self::$specGoods->field("goods_id,concat('_', `key_name`, '_') as key_sub")->buildSql();
-
+        // 规格键名搜索条件
+        $map = [];
         foreach ($specList as $item) {
             if (is_array($item)) {
                 array_shift($item);
@@ -737,13 +736,16 @@ class Goods extends CareyShop
             }
 
             if (is_array($item)) {
-                self::$specGoods->where([['s.key_sub', 'like', $item, 'or']]);
+                $map[] = ['s.key_sub', 'like', $item, 'or'];
             } else {
-                self::$specGoods->whereOr([['s.key_sub', 'like', '%\_' . $item . '\_%']]);
+                $map[] = ['s.key_sub', 'like', '%\_' . $item . '\_%'];
             }
         }
 
-        return self::$specGoods->table($subQuery . ' s')->group('s.goods_id')->column('s.goods_id');
+        // 子查询语句
+        $subQuery = self::$specGoods->field("goods_id,concat('_', `key_name`, '_') as key_sub")->buildSql();
+
+        return self::$specGoods->table($subQuery . ' s')->whereOr($map)->group('s.goods_id')->column('s.goods_id');
     }
 
     /**
@@ -833,9 +835,10 @@ class Goods extends CareyShop
             $specGroup = [];
 
             if (!is_array(current($filterParam['spec']))) {
-                $specList = array_shift($filterParam['spec']);
+                $specShift = array_shift($filterParam['spec']);
                 $specItemList = $filterParam['spec'];
-                $specGroup[$specList] = $specItemList;
+                $specGroup[$specShift] = $specItemList;
+                $specList[] = $specShift;
             } else {
                 foreach ($filterParam['spec'] as $item) {
                     $specKey = array_shift($item);

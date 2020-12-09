@@ -364,7 +364,7 @@ class GoodsCategory extends CareyShop
             ->cache(true, null, 'GoodsCategory');
 
         if ($isGoodsTotal) {
-            $db->join([$goodsSql => 'g'], 'g.goods_category_id = c.goods_category_id', 'left');
+            $db = $db->join([$goodsSql => 'g'], 'g.goods_category_id = c.goods_category_id', 'left');
         }
 
         // 获取商品全部分类
