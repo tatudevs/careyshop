@@ -488,11 +488,10 @@ class Admin extends CareyShop
             return false;
         }
 
-        // 请求实列
-        $request = request();
-
         // 验证码识别
+        $request = request();
         $appResult = App::getAppCaptcha($request->param('appkey'), false);
+
         if (false !== $appResult['captcha']) {
             $checkResult = \app\common\service\App::checkCaptcha($request->param('login_code'));
             if (true !== $checkResult) {
