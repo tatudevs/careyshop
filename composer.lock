@@ -972,16 +972,16 @@
         },
         {
             "name": "overtrue/wechat",
-            "version": "4.3.2",
+            "version": "4.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/w7corp/easywechat.git",
-                "reference": "093a3bc059cfaea00d62e041c6b36a695324aba4"
+                "reference": "121607188e1cb1039a5ea0f49bcec011cb44dbdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/093a3bc059cfaea00d62e041c6b36a695324aba4",
-                "reference": "093a3bc059cfaea00d62e041c6b36a695324aba4",
+                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/121607188e1cb1039a5ea0f49bcec011cb44dbdd",
+                "reference": "121607188e1cb1039a5ea0f49bcec011cb44dbdd",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1041,21 +1041,7 @@
                 "weixin",
                 "weixin-sdk"
             ],
-            "funding": [
-                {
-                    "url": "https://www.easywechat.com/img/pay/wechat.jpg",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/overtrue",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/overtrue",
-                    "type": "patreon"
-                }
-            ],
-            "time": "2020-11-17T03:33:00+00:00"
+            "time": "2020-12-07T08:20:11+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
