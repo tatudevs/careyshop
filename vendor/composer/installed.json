@@ -995,17 +995,17 @@
     },
     {
         "name": "overtrue/wechat",
-        "version": "4.3.4",
-        "version_normalized": "4.3.4.0",
+        "version": "4.3.5",
+        "version_normalized": "4.3.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/w7corp/easywechat.git",
-            "reference": "3cb328208cc8d5a78c34586a0789fecaaea7855a"
+            "reference": "19d60ef304bae897ef5b68d6bf1a116940b53423"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/w7corp/easywechat/zipball/3cb328208cc8d5a78c34586a0789fecaaea7855a",
-            "reference": "3cb328208cc8d5a78c34586a0789fecaaea7855a",
+            "url": "https://api.github.com/repos/w7corp/easywechat/zipball/19d60ef304bae897ef5b68d6bf1a116940b53423",
+            "reference": "19d60ef304bae897ef5b68d6bf1a116940b53423",
             "shasum": "",
             "mirrors": [
                 {
@@ -1037,7 +1037,7 @@
             "phpstan/phpstan": "^0.12.0",
             "phpunit/phpunit": "^7.5"
         },
-        "time": "2020-12-15T08:46:48+00:00",
+        "time": "2020-12-23T06:55:46+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
