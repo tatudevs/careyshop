@@ -44,7 +44,7 @@ return [
     ],
 
     // 错误显示信息,非调试模式有效
-    'error_message'           => '系统看小差了，请稍后访问！',
+    'error_message'           => '您访问的站点服务离线，请稍后访问！',
     // 显示错误信息
     'show_error_msg'          => false,
 
