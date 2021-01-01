@@ -217,7 +217,7 @@ class Collect extends CareyShop
         }
 
         // 游客返回结果
-        if (get_client_type() <= 0) {
+        if (get_client_type() != 0) {
             return ['is_collect' => 0];
         }
 
