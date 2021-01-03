@@ -17,7 +17,7 @@ class Template extends CareyShop
      * @access public
      * @return string[][]
      */
-    public function getIndustryId()
+    public function getIndustryId(): array
     {
         return [
             'IT科技'    => [
@@ -116,7 +116,7 @@ class Template extends CareyShop
      * @return bool
      * @throws
      */
-    public function setIndustry()
+    public function setIndustry(): bool
     {
         $id1 = $this->params['industry_id1'];
         $id2 = $this->params['industry_id2'];
@@ -169,7 +169,7 @@ class Template extends CareyShop
      * @return bool
      * @throws
      */
-    public function delTemplateItem()
+    public function delTemplateItem(): bool
     {
         $templateId = $this->params['template_id'];
         $result = $this->getApp('template_message')->deletePrivateTemplate($templateId);

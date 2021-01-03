@@ -15,4 +15,8 @@ namespace think;
 require __DIR__ . '/vendor/autoload.php';
 
 // 应用初始化
-(new App())->console->run();
+try {
+    (new App())->console->run();
+} catch (\Exception $e) {
+    trace($e->getMessage(), 'error');
+}

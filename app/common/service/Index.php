@@ -55,7 +55,7 @@ class Index extends CareyShop
      * @access public
      * @return bool
      */
-    public function clearCacheAll()
+    public function clearCacheAll(): bool
     {
         Cache::clear();
         sleep(1);
@@ -68,7 +68,7 @@ class Index extends CareyShop
      * @access public
      * @return array
      */
-    public function getVersion()
+    public function getVersion(): array
     {
         return ['version' => get_version()];
     }

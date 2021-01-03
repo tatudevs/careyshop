@@ -143,7 +143,7 @@ class Payment extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delPaymentList(array $data)
+    public function delPaymentList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -251,7 +251,7 @@ class Payment extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setPaymentSort(array $data)
+    public function setPaymentSort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -271,7 +271,7 @@ class Payment extends CareyShop
      * @return bool
      * @throws \Exception
      */
-    public function setPaymentIndex(array $data)
+    public function setPaymentIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;
@@ -291,7 +291,7 @@ class Payment extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setPaymentStatus(array $data)
+    public function setPaymentStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -310,7 +310,7 @@ class Payment extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setPaymentFinance(array $data)
+    public function setPaymentFinance(array $data): bool
     {
         if (!$this->validateData($data, 'finance', false, Validate::class)) {
             return false;
@@ -593,7 +593,7 @@ class Payment extends CareyShop
      * @param int    $toPayment    支付方式
      * @return bool
      */
-    private function settleOrder($model, $paymentLogDb, int $toPayment)
+    private function settleOrder(object $model, object $paymentLogDb, int $toPayment): bool
     {
         // 共用参数提取
         $userId = $paymentLogDb->getAttr('user_id');
@@ -665,7 +665,7 @@ class Payment extends CareyShop
      * @param int    $toPayment    支付方式
      * @return bool
      */
-    private function settlePay($model, $paymentLogDb, int $toPayment)
+    private function settlePay(object $model, object $paymentLogDb, int $toPayment): bool
     {
         // 共用参数提取
         $userId = $paymentLogDb->getAttr('user_id');

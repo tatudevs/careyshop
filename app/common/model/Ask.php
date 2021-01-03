@@ -147,7 +147,7 @@ class Ask extends CareyShop
      * @return bool
      * @throws
      */
-    public function delAskItem(array $data)
+    public function delAskItem(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -266,7 +266,7 @@ class Ask extends CareyShop
      * 获取一个问答明细
      * @access public
      * @param array $data 外部数据
-     * @return false|mixed|null
+     * @return false|mixed
      * @throws
      */
     public function getAskItem(array $data)
@@ -301,7 +301,7 @@ class Ask extends CareyShop
             return $temp[0];
         }
 
-        return null;
+        return [];
     }
 
     /**

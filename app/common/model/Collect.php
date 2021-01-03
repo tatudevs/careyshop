@@ -74,7 +74,7 @@ class Collect extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function addCollectItem(array $data)
+    public function addCollectItem(array $data): bool
     {
         if (!$this->validateData($data)) {
             return false;
@@ -107,7 +107,7 @@ class Collect extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCollectList(array $data)
+    public function delCollectList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -125,7 +125,7 @@ class Collect extends CareyShop
      * @access public
      * @return bool
      */
-    public function clearCollectList()
+    public function clearCollectList(): bool
     {
         self::destroy(['user_id' => get_client_id()]);
         return true;
@@ -137,7 +137,7 @@ class Collect extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCollectTop(array $data)
+    public function setCollectTop(array $data): bool
     {
         if (!$this->validateData($data, 'top')) {
             return false;
@@ -195,7 +195,7 @@ class Collect extends CareyShop
      * @return array
      * @throws
      */
-    public function getCollectCount()
+    public function getCollectCount(): array
     {
         // 搜索条件
         $map[] = ['collect.user_id', '=', get_client_id()];

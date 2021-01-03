@@ -58,7 +58,7 @@ class DeliveryArea extends CareyShop
      * @param int   $areaId 字段delivery_area_id
      * @return bool
      */
-    private function setRegionData(array &$data, int $areaId)
+    private function setRegionData(array &$data, int $areaId): bool
     {
         if (isset($data['region']) && is_array($data['region'])) {
             $data['region'] = array_unique($data['region']);
@@ -94,7 +94,7 @@ class DeliveryArea extends CareyShop
      * @return bool true:重复 false:不重复
      * @throws
      */
-    private function checkRegionUnique(array $source, int $deliveryId, int $areaId)
+    private function checkRegionUnique(array $source, int $deliveryId, int $areaId): bool
     {
         // 获取当前已存在的配送区域
         $map[] = ['delivery_id', '=', $deliveryId];
@@ -182,7 +182,7 @@ class DeliveryArea extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAreaList(array $data)
+    public function delAreaList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;

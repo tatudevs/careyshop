@@ -103,7 +103,7 @@ class ArticleCat extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delArticleCatList(array $data)
+    public function delArticleCatList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -169,7 +169,7 @@ class ArticleCat extends CareyShop
      * @param null $isNavi  过滤是否导航
      * @return array
      */
-    public static function getArticleCatList($catId = 0, $isLayer = false, $level = null, $isNavi = null)
+    public static function getArticleCatList($catId = 0, $isLayer = false, $level = null, $isNavi = null): array
     {
         // 子查询,查询关联的文章数量
         $article = Article::field('article_cat_id,count(*) num')
@@ -216,7 +216,7 @@ class ArticleCat extends CareyShop
      * @param int    $level      分类深度
      * @return array
      */
-    private static function setArticleCatTree(int $parentId, &$list, $limitLevel = null, $isLayer = false, $level = 0)
+    private static function setArticleCatTree(int $parentId, object &$list, $limitLevel = null, $isLayer = false, $level = 0): array
     {
         static $tree = [];
         $parentId != 0 ?: $isLayer = false; // 返回全部分类不需要本级
@@ -306,7 +306,7 @@ class ArticleCat extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setArticleCatSort(array $data)
+    public function setArticleCatSort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -327,7 +327,7 @@ class ArticleCat extends CareyShop
      * @param array $data
      * @return bool
      */
-    public function setArticleCatIndex(array $data)
+    public function setArticleCatIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;
@@ -347,7 +347,7 @@ class ArticleCat extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setArticleCatNavi(array $data)
+    public function setArticleCatNavi(array $data): bool
     {
         if (!$this->validateData($data, 'nac')) {
             return false;

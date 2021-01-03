@@ -166,7 +166,7 @@ class OrderService extends CareyShop
      * @access private
      * @return string
      */
-    private function getServiceNo()
+    private function getServiceNo(): string
     {
         do {
             $serviceNo = get_order_no('SH_');
@@ -183,7 +183,7 @@ class OrderService extends CareyShop
      * @param string $desc        描述
      * @return bool
      */
-    public function addServiceLog(array $serviceData, string $comment, string $desc)
+    public function addServiceLog(array $serviceData, string $comment, string $desc): bool
     {
         $data = [
             'order_service_id' => $serviceData['order_service_id'],
@@ -218,7 +218,7 @@ class OrderService extends CareyShop
      * @return bool
      * @throws
      */
-    public function inCancelOrderService(string $orderNo, string $type)
+    public function inCancelOrderService(string $orderNo, string $type): bool
     {
         if (!in_array($type, ['delivery', 'complete'])) {
             return false;
@@ -344,7 +344,7 @@ class OrderService extends CareyShop
         }
 
         // 获取订单商品基础数据(订单、订单商品)
-        $orderGoodsDb = (new OrderGoods())->getOrderGoodsItem($data, false, true);
+        $orderGoodsDb = (new OrderGoods())->getOrderGoodsItem($data, false);
         if (!$orderGoodsDb || !is_object($orderGoodsDb)) {
             return !is_null($orderGoodsDb) ? $this->setError('数据获取异常') : $service;
         }
@@ -401,7 +401,7 @@ class OrderService extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setOrderServiceRemark(array $data)
+    public function setOrderServiceRemark(array $data): bool
     {
         if (!$this->validateData($data, 'remark')) {
             return false;
@@ -417,7 +417,7 @@ class OrderService extends CareyShop
      * 获取一个售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return false|mixed|null
+     * @return false|array
      * @throws
      */
     public function getOrderServiceItem(array $data)
@@ -479,7 +479,7 @@ class OrderService extends CareyShop
             return $temp[0];
         }
 
-        return is_null($result) ? null : false;
+        return is_null($result) ? [] : false;
     }
 
     /**
@@ -576,7 +576,7 @@ class OrderService extends CareyShop
      * @param string $orderNo 订单号
      * @return bool
      */
-    private function isServiceEgtOrderGoods(string $orderNo)
+    private function isServiceEgtOrderGoods(string $orderNo): bool
     {
         $map[] = ['order_no', '=', $orderNo];
         $map[] = ['type', 'in', '0,1'];
@@ -595,7 +595,7 @@ class OrderService extends CareyShop
      * @param bool   &$isDelivery   是否退回运费
      * @return int[]
      */
-    private function getMaxRefundFee($orderGoodsDb, bool &$isDelivery)
+    private function getMaxRefundFee(object $orderGoodsDb, bool &$isDelivery): array
     {
         $data = [
             'money_amount'    => 0, // 余额
@@ -862,7 +862,7 @@ class OrderService extends CareyShop
      * @return bool
      * @throws
      */
-    public function addOrderServiceMessage(array $data)
+    public function addOrderServiceMessage(array $data): bool
     {
         if (!$this->validateData($data, 'message')) {
             return false;
@@ -945,7 +945,7 @@ class OrderService extends CareyShop
      * @return false|mixed
      * @throws
      */
-    public function setOrderServiceRefused(array $data)
+    public function setOrderServiceRefused(array $data): bool
     {
         if (!$this->validateData($data, 'refused')) {
             return false;
@@ -1016,7 +1016,7 @@ class OrderService extends CareyShop
      * @return bool
      * @throws
      */
-    public function setOrderServiceSendback(array $data)
+    public function setOrderServiceSendback(array $data): bool
     {
         if (!$this->validateData($data, 'sendback')) {
             return false;
@@ -1079,7 +1079,7 @@ class OrderService extends CareyShop
      * @return bool
      * @throws
      */
-    private function setLogisticCode(array &$data)
+    private function setLogisticCode(array &$data): bool
     {
         $map[] = ['service_no', '=', $data['service_no']];
         $map[] = ['user_id', '=', get_client_id()];
@@ -1154,7 +1154,7 @@ class OrderService extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setOrderServiceBuyer(array $data)
+    public function setOrderServiceBuyer(array $data): bool
     {
         if (!$this->validateData($data, 'buyer')) {
             return false;
@@ -1169,7 +1169,7 @@ class OrderService extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setOrderServiceLogistic(array $data)
+    public function setOrderServiceLogistic(array $data): bool
     {
         if (!$this->validateData($data, 'logistic')) {
             return false;
@@ -1229,7 +1229,7 @@ class OrderService extends CareyShop
      * 撤销一个售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return false|mixed
+     * @return false|array
      * @throws
      */
     public function setOrderServiceCancel(array $data)
@@ -1309,7 +1309,7 @@ class OrderService extends CareyShop
      * @param string $serviceNo 售后单号
      * @return bool
      */
-    private function recoverGiveResources(array $orderData, string $serviceNo)
+    private function recoverGiveResources(array $orderData, string $serviceNo): bool
     {
         // 减少累计消费金额
         $userMoneyDb = new UserMoney();
@@ -1366,7 +1366,7 @@ class OrderService extends CareyShop
      * @param string $serviceNo 售后单号
      * @return bool
      */
-    private function refundUserMoney(string $type, float $value, int $userId, string $serviceNo)
+    private function refundUserMoney(string $type, float $value, int $userId, string $serviceNo): bool
     {
         if ($value <= 0 || !in_array($type, ['money_amount', 'integral_amount'])) {
             return true;
@@ -1411,7 +1411,7 @@ class OrderService extends CareyShop
      * @param string $serviceNo 售后单号
      * @return bool
      */
-    private function refundCardUser(float $value, $orderDb, string $serviceNo)
+    private function refundCardUser(float $value, object $orderDb, string $serviceNo): bool
     {
         if ($value <= 0) {
             return true;
@@ -1453,7 +1453,7 @@ class OrderService extends CareyShop
      * @param object $serviceDb 售后单模型
      * @return bool
      */
-    private function refundPayment(float $value, array $orderData, $serviceDb)
+    private function refundPayment(float $value, array $orderData, object $serviceDb): bool
     {
         if ($value <= 0 || $orderData['total_amount'] <= 0 || empty($orderData['payment_no'])) {
             return true;
@@ -1479,7 +1479,7 @@ class OrderService extends CareyShop
      * @param object $orderDb 订单模型
      * @return bool
      */
-    private function isCancelOrder($orderDb)
+    private function isCancelOrder(object $orderDb): bool
     {
         // 查询是否已全部退款
         $map[] = ['order_no', '=', $orderDb->getAttr('order_no')];
@@ -1512,7 +1512,7 @@ class OrderService extends CareyShop
      * @param object $serviceDb 售后单模型
      * @return bool
      */
-    private function completeContainsFeeService(array $data, $serviceDb)
+    private function completeContainsFeeService(array $data, object $serviceDb): bool
     {
         if (!is_object($serviceDb)) {
             return $this->setError('参数异常');
@@ -1637,7 +1637,7 @@ class OrderService extends CareyShop
      * @param object $serviceDb 数据模型
      * @return bool
      */
-    private function completeNotFeeService(array $data, $serviceDb)
+    private function completeNotFeeService(array $data, object $serviceDb): bool
     {
         if (!is_object($serviceDb)) {
             return $this->setError('参数异常');

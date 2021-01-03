@@ -14,7 +14,7 @@ namespace app\mobile\controller;
 
 class Index
 {
-    public function index()
+    public function index(): string
     {
         return '欢迎使用CareyShop商城框架系统 - Mobile';
     }

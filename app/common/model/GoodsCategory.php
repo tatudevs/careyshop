@@ -136,7 +136,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCategoryList(array $data)
+    public function delCategoryList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -259,7 +259,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCategoryStatus(array $data)
+    public function setCategoryStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -282,7 +282,7 @@ class GoodsCategory extends CareyShop
      * @param int     $level      分类深度
      * @return array
      */
-    private static function setCategoryTree(int $parentId, &$list, $limitLevel = null, $isLayer = false, $level = 0)
+    private static function setCategoryTree(int $parentId, object &$list, $limitLevel = null, $isLayer = false, $level = 0): array
     {
         $parentId != 0 ?: $isLayer = false; // 返回全部分类不需要本级
         foreach ($list as $key => $value) {
@@ -333,7 +333,7 @@ class GoodsCategory extends CareyShop
      * @return array
      * @throws
      */
-    public static function getCategoryList($catId = 0, $isGoodsTotal = false, $isLayer = false, $level = null)
+    public static function getCategoryList($catId = 0, $isGoodsTotal = false, $isLayer = false, $level = null): array
     {
         // 搜索条件
         $map = [];
@@ -391,7 +391,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return array
      */
-    public static function getCategorySon(array $data)
+    public static function getCategorySon(array $data): array
     {
         if (empty($data['goods_category_id'])) {
             return [];
@@ -420,7 +420,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCategorySort(array $data)
+    public function setCategorySort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -439,7 +439,7 @@ class GoodsCategory extends CareyShop
      * @param array $data
      * @return bool
      */
-    public function setCategoryIndex(array $data)
+    public function setCategoryIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;
@@ -459,7 +459,7 @@ class GoodsCategory extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCategoryNavi(array $data)
+    public function setCategoryNavi(array $data): bool
     {
         if (!$this->validateData($data, 'nac')) {
             return false;

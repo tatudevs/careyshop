@@ -99,7 +99,7 @@ class GoodsComment extends CareyShop
      * @param $data
      * @return string
      */
-    public function getIpAddressRegionAttr($value, $data)
+    public function getIpAddressRegionAttr($value, $data): string
     {
         if (empty($data['ip_address'])) {
             return '';
@@ -420,7 +420,7 @@ class GoodsComment extends CareyShop
      * @return bool
      * @throws
      */
-    public function delCommentItem(array $data)
+    public function delCommentItem(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -469,7 +469,7 @@ class GoodsComment extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function addPraiseItem(array $data)
+    public function addPraiseItem(array $data): bool
     {
         if (!$this->validateData($data, 'praise')) {
             return false;
@@ -570,7 +570,7 @@ class GoodsComment extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCommentShow(array $data)
+    public function setCommentShow(array $data): bool
     {
         if (!$this->validateData($data, 'show')) {
             return false;
@@ -586,7 +586,7 @@ class GoodsComment extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCommentTop(array $data)
+    public function setCommentTop(array $data): bool
     {
         if (!$this->validateData($data, 'top')) {
             return false;
@@ -602,7 +602,7 @@ class GoodsComment extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCommentStatus(array $data)
+    public function setCommentStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -657,7 +657,7 @@ class GoodsComment extends CareyShop
      * 获取某个评价的明细("是否已读"不关联,关联不代表看完,所以需手动设置)
      * @access public
      * @param array $data 外部数据
-     * @return false|mixed
+     * @return false|array
      * @throws
      */
     public function getCommentItem(array $data)

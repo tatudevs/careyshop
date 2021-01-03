@@ -32,7 +32,7 @@ class User extends CareyShop
      * @return bool
      * @throws
      */
-    public function getUserSync()
+    public function getUserSync(): bool
     {
         $openIdList = [];
         $nextOpenId = null;
@@ -121,7 +121,7 @@ class User extends CareyShop
      * @return bool
      * @throws
      */
-    public function setUserRemark()
+    public function setUserRemark(): bool
     {
         // 数据准备
         $openId = $this->params['openid'];
@@ -142,7 +142,7 @@ class User extends CareyShop
      * @return bool
      * @throws
      */
-    public function getBlackSync()
+    public function getBlackSync(): bool
     {
         $openIdList = [];
         $beginOpenId = null;
@@ -188,7 +188,7 @@ class User extends CareyShop
      * @return bool
      * @throws
      */
-    public function getBlackBlock()
+    public function getBlackBlock(): bool
     {
         $result = $this->getApp('user')->block($this->params['openid_list']);
         if (isset($result['errcode']) && $result['errcode'] != 0) {
@@ -205,7 +205,7 @@ class User extends CareyShop
      * @return bool
      * @throws
      */
-    public function getBlackUnblock()
+    public function getBlackUnblock(): bool
     {
         $result = $this->getApp('user')->unblock($this->params['openid_list']);
         if (isset($result['errcode']) && $result['errcode'] != 0) {

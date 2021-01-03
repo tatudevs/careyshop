@@ -30,7 +30,7 @@ class CareyShop
      * @param string $value 错误信息
      * @return false
      */
-    public function setError(string $value)
+    public function setError(string $value): bool
     {
         $this->error = $value;
         return false;
@@ -41,7 +41,7 @@ class CareyShop
      * @access public
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return $this->error;
     }

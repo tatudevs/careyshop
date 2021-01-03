@@ -47,7 +47,7 @@ class Verification extends CareyShop
      * @return bool
      * @throws
      */
-    private function sendNotice(string $code, string $number)
+    private function sendNotice(string $code, string $number): bool
     {
         $result = $this
             ->where('number', '=', $number)
@@ -89,7 +89,7 @@ class Verification extends CareyShop
      * @return bool
      * @throws
      */
-    public function useVerificationItem(array $data)
+    public function useVerificationItem(array $data): bool
     {
         if (!$this->validateData($data, 'use')) {
             return false;
@@ -138,7 +138,7 @@ class Verification extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function sendVerificationSms(array $data)
+    public function sendVerificationSms(array $data): bool
     {
         if (!$this->validateData($data, 'sms')) {
             return false;
@@ -153,7 +153,7 @@ class Verification extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function sendVerificationEmail(array $data)
+    public function sendVerificationEmail(array $data): bool
     {
         if (!$this->validateData($data, 'email')) {
             return false;
@@ -170,7 +170,7 @@ class Verification extends CareyShop
      * @return bool
      * @throws
      */
-    public function verVerification(string $number, string $code)
+    public function verVerification(string $number, string $code): bool
     {
         $map[] = ['number', '=', $number];
         $map[] = ['code', '=', $code];
@@ -197,7 +197,7 @@ class Verification extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function verVerificationSms(array $data)
+    public function verVerificationSms(array $data): bool
     {
         if (!$this->validateData($data, 'ver_sms')) {
             return false;
@@ -212,7 +212,7 @@ class Verification extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function verVerificationEmail(array $data)
+    public function verVerificationEmail(array $data): bool
     {
         if (!$this->validateData($data, 'ver_email')) {
             return false;

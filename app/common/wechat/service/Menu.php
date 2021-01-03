@@ -26,7 +26,7 @@ class Menu extends CareyShop
      * @return bool
      * @throws
      */
-    public function setMenuData()
+    public function setMenuData(): bool
     {
         $button = $this->params['button'];
         if (empty($button)) {
@@ -73,7 +73,7 @@ class Menu extends CareyShop
      * @return bool
      * @throws
      */
-    public function delMenuAll()
+    public function delMenuAll(): bool
     {
         $result = $this->getApp('menu')->delete();
         $cacheKey = self::WECHAT_MENU . $this->params['code'];

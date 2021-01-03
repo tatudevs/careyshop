@@ -251,7 +251,7 @@ class Cart extends CareyShop
      * @return bool
      * @throws
      */
-    public function addCartList(array $data)
+    public function addCartList(array $data): bool
     {
         if (!$this->validateData($data, 'add')) {
             return false;
@@ -345,7 +345,7 @@ class Cart extends CareyShop
      * @param array $data 外部数据
      * @return int[]
      */
-    public static function getCartCount(array $data)
+    public static function getCartCount(array $data): array
     {
         $map[] = ['cart.user_id', '<>', 0];
         $map[] = ['cart.user_id', '=', get_client_id()];
@@ -364,7 +364,7 @@ class Cart extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCartSelect(array $data)
+    public function setCartSelect(array $data): bool
     {
         if (!$this->validateData($data, 'select')) {
             return false;
@@ -385,7 +385,7 @@ class Cart extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCartList(array $data)
+    public function delCartList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -405,7 +405,7 @@ class Cart extends CareyShop
      * @access public
      * @return bool
      */
-    public function clearCartList()
+    public function clearCartList(): bool
     {
         $map[] = ['user_id', '<>', 0];
         $map[] = ['user_id', '=', get_client_id()];

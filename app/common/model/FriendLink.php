@@ -82,7 +82,7 @@ class FriendLink extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delFriendLinkList(array $data)
+    public function delFriendLinkList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -144,7 +144,7 @@ class FriendLink extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setFriendLinkStatus(array $data)
+    public function setFriendLinkStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -162,7 +162,7 @@ class FriendLink extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setFriendLinkSort(array $data)
+    public function setFriendLinkSort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -180,7 +180,7 @@ class FriendLink extends CareyShop
      * @param array $data
      * @return bool
      */
-    public function setFriendLinkIndex(array $data)
+    public function setFriendLinkIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;

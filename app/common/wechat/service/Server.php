@@ -24,7 +24,7 @@ class Server extends CareyShop
      * @return string[]
      * @throws
      */
-    public function putWechatData()
+    public function putWechatData(): array
     {
         // 获取消息
         $server = $this->getApp('server');
@@ -282,7 +282,7 @@ class Server extends CareyShop
      * @return bool
      * @throws
      */
-    public function clearWechatQuota()
+    public function clearWechatQuota(): bool
     {
         $result = $this->getApp('base')->clearQuota();
         if (isset($result['errcode']) && $result['errcode'] != 0) {

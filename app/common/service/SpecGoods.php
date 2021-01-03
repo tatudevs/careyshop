@@ -24,7 +24,7 @@ class SpecGoods extends CareyShop
      * @return array
      * @throws
      */
-    public static function specItemToMenu(array $data, $goodsId = null)
+    public static function specItemToMenu(array $data, $goodsId = null): array
     {
         if (!is_array($data) || empty($data)) {
             return [];

@@ -18,7 +18,7 @@ class Service extends CareyShop
      * @return bool
      * @throws
      */
-    public function addServiceItem()
+    public function addServiceItem(): bool
     {
         $account = $this->params['kf_account'];
         $nickname = $this->params['nickname'];
@@ -37,7 +37,7 @@ class Service extends CareyShop
      * @return bool
      * @throws
      */
-    public function setServiceItem()
+    public function setServiceItem(): bool
     {
         $account = $this->params['kf_account'];
         $nickname = $this->params['nickname'];
@@ -56,7 +56,7 @@ class Service extends CareyShop
      * @return bool
      * @throws
      */
-    public function delServiceItem()
+    public function delServiceItem(): bool
     {
         $result = $this->getApp('customer_service')->delete($this->params['kf_account']);
         if (isset($result['errcode']) && $result['errcode'] != 0) {
@@ -72,7 +72,7 @@ class Service extends CareyShop
      * @return bool
      * @throws
      */
-    public function setServiceAvatar()
+    public function setServiceAvatar(): bool
     {
         $account = $this->params['kf_account'];
         $avatarPath = $this->getUploadFile('image');
@@ -127,7 +127,7 @@ class Service extends CareyShop
      * @return bool
      * @throws
      */
-    public function setServiceInvite()
+    public function setServiceInvite(): bool
     {
         $account = $this->params['kf_account'];
         $invite = $this->params['invite_wx'];
@@ -168,7 +168,7 @@ class Service extends CareyShop
      * @return bool
      * @throws
      */
-    public function sendMessageToUser()
+    public function sendMessageToUser(): bool
     {
         $message = $this->params['message'];
         $openId = $this->params['openid'];
@@ -191,7 +191,7 @@ class Service extends CareyShop
      * @return bool
      * @throws
      */
-    public function sendMessageFromUser()
+    public function sendMessageFromUser(): bool
     {
         $message = $this->params['message'];
         $account = $this->params['kf_account'];
@@ -216,7 +216,7 @@ class Service extends CareyShop
      * @return bool
      * @throws
      */
-    public function addSessionItem()
+    public function addSessionItem(): bool
     {
         $account = $this->params['kf_account'];
         $openId = $this->params['openid'];
@@ -235,7 +235,7 @@ class Service extends CareyShop
      * @return bool
      * @throws
      */
-    public function closeSessionItem()
+    public function closeSessionItem(): bool
     {
         $account = $this->params['kf_account'];
         $openId = $this->params['openid'];

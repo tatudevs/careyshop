@@ -87,7 +87,7 @@ class Topic extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delTopicList(array $data)
+    public function delTopicList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -166,7 +166,7 @@ class Topic extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setTopicStatus(array $data)
+    public function setTopicStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;

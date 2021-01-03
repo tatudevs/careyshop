@@ -21,7 +21,7 @@ class DeliveryDist extends CareyShop
      * @param string $data 请求内容
      * @return string
      */
-    public static function getCallbackSign(string $data)
+    public static function getCallbackSign(string $data): string
     {
         return urlencode(base64_encode(md5($data . config('careyshop.delivery_dist.api_key', ''))));
     }
@@ -31,7 +31,7 @@ class DeliveryDist extends CareyShop
      * @access public
      * @return array
      */
-    public function getDistCallback()
+    public function getDistCallback(): array
     {
         $vars = ['method' => 'put.delivery.dist.data'];
         $callbackUrl = Route::buildUrl("api/{$this->version}/delivery_dist", $vars)->domain(true)->build();
@@ -45,7 +45,7 @@ class DeliveryDist extends CareyShop
      * @param array $data 数据
      * @return array
      */
-    public static function snake(array $data)
+    public static function snake(array $data): array
     {
         if (empty($data)) {
             return [];

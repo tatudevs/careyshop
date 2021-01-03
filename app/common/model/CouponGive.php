@@ -91,7 +91,7 @@ class CouponGive extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function useCouponItem(array $data)
+    public function useCouponItem(array $data): bool
     {
         if (!$this->validateData($data, 'use')) {
             return false;
@@ -259,7 +259,7 @@ class CouponGive extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function giveCouponLive(array $data)
+    public function giveCouponLive(array $data): bool
     {
         if (!$this->validateData($data, 'live')) {
             return false;
@@ -279,7 +279,7 @@ class CouponGive extends CareyShop
      * @return bool
      * @throws
      */
-    public function giveCouponCode(array $data)
+    public function giveCouponCode(array $data): bool
     {
         if (!$this->validateData($data, 'code')) {
             return false;
@@ -407,7 +407,7 @@ class CouponGive extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCouponGiveList(array $data)
+    public function delCouponGiveList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -434,7 +434,7 @@ class CouponGive extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function recCouponGiveList(array $data)
+    public function recCouponGiveList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;

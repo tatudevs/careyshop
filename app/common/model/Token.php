@@ -64,7 +64,7 @@ class Token extends CareyShop
      * @param string $platform 来源平台
      * @return array
      */
-    public static function setToken(int $id, int $group, int $type, string $username, string $platform)
+    public static function setToken(int $id, int $group, int $type, string $username, string $platform): array
     {
         $code = rand_string();
         $token = user_md5(sprintf('%d%d%s', $id, $type, $code));

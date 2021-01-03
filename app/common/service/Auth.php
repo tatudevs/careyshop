@@ -69,7 +69,7 @@ class Auth extends CareyShop
      * @param string $url Url(模块/控制器/操作名)
      * @return bool
      */
-    public function check(string $url)
+    public function check(string $url): bool
     {
         /**
          * 不能直接返回,否则后台的权限勾选失去了意义
@@ -106,7 +106,7 @@ class Auth extends CareyShop
      * @param string $url Url(模块/控制器/操作名)
      * @return bool
      */
-    public function checkWhite(string $url)
+    public function checkWhite(string $url): bool
     {
         if (empty($this->whiteList)) {
             return false;
@@ -134,7 +134,7 @@ class Auth extends CareyShop
      * @param string $error   错误信息
      * @return void
      */
-    public function saveLog(string $url, $request, $result, string $class, $error = '')
+    public function saveLog(string $url, object $request, $result, string $class, $error = '')
     {
         // 转为小写
         $url = mb_strtolower($url, 'utf-8');

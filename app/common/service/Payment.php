@@ -21,7 +21,7 @@ class Payment extends CareyShop
      * @access public
      * @param array $data     外部数据
      * @param bool  $isString 是否直接返回URL地址
-     * @return array|mixed
+     * @return string|array|bool
      */
     public function getPaymentNotify(array $data, $isString = false)
     {
@@ -44,7 +44,7 @@ class Payment extends CareyShop
      * @access public
      * @param array $data     外部数据
      * @param bool  $isString 是否直接返回URL地址
-     * @return array|mixed
+     * @return string|array|bool
      */
     public function getPaymentReturn(array $data, $isString = false)
     {
@@ -67,7 +67,7 @@ class Payment extends CareyShop
      * @access public
      * @param string $file  支付目录
      * @param string $model 支付模块
-     * @return false|mixed
+     * @return mixed
      */
     public function createPaymentModel(string $file, string $model)
     {

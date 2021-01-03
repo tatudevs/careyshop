@@ -85,7 +85,7 @@ class OrderGoods extends CareyShop
      * @param int $goodsId 商品编号
      * @return int
      */
-    public static function getBoughtGoods(int $goodsId)
+    public static function getBoughtGoods(int $goodsId): int
     {
         // 搜索条件
         $map[] = ['g.user_id', '=', get_client_id()];
@@ -107,7 +107,7 @@ class OrderGoods extends CareyShop
      * @return bool
      * @throws
      */
-    public function isComment(string $orderNo, int $orderGoodsId)
+    public function isComment(string $orderNo, int $orderGoodsId): bool
     {
         // 搜索条件
         $map[] = ['order_goods_id', '=', $orderGoodsId];

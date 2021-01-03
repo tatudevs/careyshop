@@ -35,7 +35,7 @@ class UserTag extends CareyShop
      * @return bool
      * @throws
      */
-    public function setTagItem()
+    public function setTagItem(): bool
     {
         $tagId = $this->params['tag_id'];
         $name = $this->params['name'];
@@ -54,7 +54,7 @@ class UserTag extends CareyShop
      * @return bool
      * @throws
      */
-    public function delTagItem()
+    public function delTagItem(): bool
     {
         $result = $this->getApp('user_tag')->delete($this->params['tag_id']);
         if (isset($result['errcode']) && $result['errcode'] != 0) {
@@ -102,7 +102,7 @@ class UserTag extends CareyShop
      * @return bool
      * @throws
      */
-    public function setTagToUser()
+    public function setTagToUser(): bool
     {
         $openIdList = $this->params['openid_list'];
         $tagId = $this->params['tag_id'];
@@ -121,7 +121,7 @@ class UserTag extends CareyShop
      * @return bool
      * @throws
      */
-    public function delTagToUser()
+    public function delTagToUser(): bool
     {
         $openIdList = $this->params['openid_list'];
         $tagId = $this->params['tag_id'];

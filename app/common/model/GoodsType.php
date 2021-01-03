@@ -91,7 +91,7 @@ class GoodsType extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueTypeName(array $data)
+    public function uniqueTypeName(array $data): bool
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -181,7 +181,7 @@ class GoodsType extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delTypeList(array $data)
+    public function delTypeList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;

@@ -20,7 +20,7 @@ class App extends CareyShop
      * @access public
      * @return array
      */
-    public function getCaptchaCallurl()
+    public function getCaptchaCallurl(): array
     {
         $vars = ['method' => 'image.app.captcha'];
         $data['call_url'] = Route::buildUrl("api/{$this->version}/app", $vars)->domain(true)->build();
@@ -33,7 +33,7 @@ class App extends CareyShop
      * @access public
      * @return array
      */
-    public function imageAppCaptcha()
+    public function imageAppCaptcha(): array
     {
         $keyID = input('param.session_id', '');
         $generate = input('param.generate');
@@ -62,7 +62,7 @@ class App extends CareyShop
      * 验证应用验证码
      * @access public
      * @param string|null $code 验证码
-     * @return string|true
+     * @return mixed
      */
     public static function checkCaptcha(?string $code)
     {

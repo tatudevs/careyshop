@@ -34,7 +34,7 @@ class Params implements ArrayAccess
      * @param mixed $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->data[$offset]);
     }
@@ -43,7 +43,7 @@ class Params implements ArrayAccess
      * @param mixed $offset
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): ?string
     {
         return isset($this->data[$offset]) ? $this->data[$offset] : '';
     }
@@ -75,7 +75,7 @@ class Params implements ArrayAccess
      * @param array $data
      * @return $this
      */
-    public function replace(array $data)
+    public function replace(array $data): Params
     {
         $this->data = $data;
         return $this;
@@ -86,7 +86,7 @@ class Params implements ArrayAccess
      * @access public
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }

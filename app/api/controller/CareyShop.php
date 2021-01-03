@@ -38,12 +38,6 @@ abstract class CareyShop
     protected $app;
 
     /**
-     * 控制器错误信息
-     * @var string
-     */
-    public $error;
-
-    /**
      * AppKey
      * @var string
      */
@@ -110,6 +104,12 @@ abstract class CareyShop
     protected static $auth;
 
     /**
+     * 控制器错误信息
+     * @var string
+     */
+    public $error = '';
+
+    /**
      * 控制器版本号
      * @var string
      */
@@ -172,10 +172,7 @@ abstract class CareyShop
         ApiOutput::$format = $this->format;
 
         // 验证Params
-        $validate = $this->validate($this->params, 'CareyShop');
-        if (true !== $validate) {
-            $this->outputError($validate);
-        }
+        $this->validate($this->params, strrev(base64_decode('cG9oU3llcmFD')));
 
         // 验证Token
         $token = $this->checkToken();
@@ -220,7 +217,7 @@ abstract class CareyShop
      * @return bool
      * @throws ValidateException
      */
-    protected function validate(array $data, $validate, array $message = [], bool $batch = false)
+    protected function validate(array $data, $validate, array $message = [], bool $batch = false): bool
     {
         if (is_array($validate)) {
             $v = new Validate();
@@ -286,7 +283,7 @@ abstract class CareyShop
     /**
      * 核心基础首页
      * @access public
-     * @return array
+     * @return mixed
      */
     public function index()
     {
@@ -358,7 +355,7 @@ abstract class CareyShop
      * @param  string $value 错误信息
      * @return false
      */
-    public function setError($value)
+    public function setError($value): bool
     {
         $this->error = $value;
         return false;
@@ -369,7 +366,7 @@ abstract class CareyShop
      * @access public
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return $this->error;
     }
@@ -568,7 +565,7 @@ abstract class CareyShop
      * @param null $key
      * @return array|mixed|null
      */
-    protected function getParams($key = null)
+    protected function getParams($key = null): ?array
     {
         return is_null($key) ? $this->params : $this->params[$key];
     }
@@ -579,7 +576,7 @@ abstract class CareyShop
      * @param string|array $key 键值
      * @return $this
      */
-    protected function unParams($key)
+    protected function unParams($key): CareyShop
     {
         if (isset($key)) {
             if (is_string($key)) {
@@ -600,7 +597,7 @@ abstract class CareyShop
      * @param string $key 键值
      * @return bool
      */
-    protected function hasParams(string $key)
+    protected function hasParams(string $key): bool
     {
         return isset($this->params[$key]);
     }
@@ -610,7 +607,7 @@ abstract class CareyShop
      * @access private
      * @return string
      */
-    private function getAuthUrl()
+    private function getAuthUrl(): string
     {
         $module = app('http')->getName();
         $version = $this->request->param('version');

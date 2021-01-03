@@ -16,7 +16,7 @@ use think\facade\View;
 
 class Index
 {
-    public function index()
+    public function index(): string
     {
         return View::fetch();
     }

@@ -27,7 +27,7 @@ class Cod extends Payment
      * @param string $request 请求
      * @return object
      */
-    public function setQequest(string $request)
+    public function setQequest(string $request): object
     {
         $this->request = $request;
         return $this;
@@ -38,7 +38,7 @@ class Cod extends Payment
      * @access public
      * @return bool
      */
-    public function setConfig()
+    public function setConfig(): bool
     {
         return true;
     }

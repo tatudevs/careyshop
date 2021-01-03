@@ -46,7 +46,7 @@ class StorageStyle extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueStorageStyleCode(array $data)
+    public function uniqueStorageStyleCode(array $data): bool
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -197,7 +197,7 @@ class StorageStyle extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delStorageStyleList(array $data)
+    public function delStorageStyleList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -215,7 +215,7 @@ class StorageStyle extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setStorageStyleStatus(array $data)
+    public function setStorageStyleStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;

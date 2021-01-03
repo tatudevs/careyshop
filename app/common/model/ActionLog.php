@@ -118,7 +118,7 @@ class ActionLog extends CareyShop
      * @return string
      * @throws \Exception
      */
-    public function getIpRegionAttr($value, $data)
+    public function getIpRegionAttr($value, $data): string
     {
         if (empty($data['ip'])) {
             return '';
@@ -142,7 +142,7 @@ class ActionLog extends CareyShop
      * @return string
      * @throws
      */
-    public function getActionAttr($value, $data)
+    public function getActionAttr($value, $data): string
     {
         $this->setMenuMap($data['path'], $value);
         return $value;
@@ -152,7 +152,7 @@ class ActionLog extends CareyShop
      * 获取器设置请求参数
      * @access public
      * @param $value
-     * @return array|mixed
+     * @return mixed
      */
     public function getParamsAttr($value)
     {
@@ -170,20 +170,20 @@ class ActionLog extends CareyShop
     /**
      * 获取器设置处理结果
      * @access public
-     * @param $value
-     * @return array|mixed
+     * @param $result
+     * @return mixed
      */
-    public function getResultAttr($value)
+    public function getResultAttr($result)
     {
-        if (is_string($value)) {
-            $value = json_decode($value, true);
+        if (is_string($result)) {
+            $result = json_decode($result, true);
         }
 
-        if (is_array($value)) {
-            $this->privacyField($value);
+        if (is_array($result)) {
+            $this->privacyField($result);
         }
 
-        return $value;
+        return $result;
     }
 
     /**

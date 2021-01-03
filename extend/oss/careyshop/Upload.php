@@ -85,7 +85,7 @@ class Upload extends UploadBase
      * @access public
      * @return array
      */
-    public function getUploadUrl()
+    public function getUploadUrl(): array
     {
         $vars = ['method' => 'add.upload.list'];
         $uploadUrl = Route::buildUrl("api/{$this->getVersion()}/upload", $vars)->domain(true)->build();
@@ -107,7 +107,7 @@ class Upload extends UploadBase
      * @param string $replace 替换资源(path)
      * @return array
      */
-    public function getToken($replace = '')
+    public function getToken($replace = ''): array
     {
         empty($replace) ?: $this->replace = $replace;
         $tokenExpires = Config::get('careyshop.upload.token_expires');
@@ -122,7 +122,7 @@ class Upload extends UploadBase
     /**
      * 上传资源
      * @access public
-     * @return array|false
+     * @return array|bool
      */
     public function uploadFiles()
     {
@@ -195,7 +195,7 @@ class Upload extends UploadBase
      * @access public
      * @return false
      */
-    public function putUploadData()
+    public function putUploadData(): bool
     {
         return $this->setError(self::NAME . '模块异常访问!');
     }
@@ -374,7 +374,7 @@ class Upload extends UploadBase
      * @param string $type     新的路径方式
      * @return string
      */
-    private function getNewUrl(string $fileName, string $suffix, array $fileInfo, $urlArray = null, $type = 'url')
+    private function getNewUrl(string $fileName, string $suffix, array $fileInfo, $urlArray = null, $type = 'url'): string
     {
         if ($type === 'url') {
             $url = $urlArray['scheme'] . '://';
@@ -433,7 +433,7 @@ class Upload extends UploadBase
      * @param array $styleList 样式集合
      * @return string
      */
-    public function getThumbUrl(array $urlArray, array $styleList)
+    public function getThumbUrl(array $urlArray, array $styleList): string
     {
         // 获取自定义后缀,不合法则使用原后缀
         $fileInfo = pathinfo($urlArray['path']);
@@ -531,7 +531,7 @@ class Upload extends UploadBase
      * @access public
      * @return bool
      */
-    public function delFileList()
+    public function delFileList(): bool
     {
         foreach ($this->delFileList as $value) {
             $path = public_path() . $value;
@@ -568,7 +568,7 @@ class Upload extends UploadBase
      * @param string $path 路径
      * @return bool
      */
-    private function checkImg(string $path)
+    private function checkImg(string $path): bool
     {
         $info = @getimagesize($path);
         if (false === $info || (IMAGETYPE_GIF === $info[2] && empty($info['bits']))) {
@@ -639,7 +639,7 @@ class Upload extends UploadBase
      * @param string $url 路径
      * @return array
      */
-    public function getThumbInfo(string $url)
+    public function getThumbInfo(string $url): array
     {
         $info = [
             'size'   => 0,

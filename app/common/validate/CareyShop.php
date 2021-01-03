@@ -20,7 +20,7 @@ class CareyShop extends Validate
      * @param string $field 参数
      * @return string
      */
-    public function getField(string $field)
+    public function getField(string $field): string
     {
         return isset($this->field[$field]) ? $this->field[$field] : $field;
     }
@@ -30,7 +30,7 @@ class CareyShop extends Validate
      * @access public
      * @return array
      */
-    public function getRuleKey()
+    public function getRuleKey(): array
     {
         return array_keys($this->rule);
     }

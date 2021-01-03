@@ -200,9 +200,9 @@ class DeliveryDist extends CareyShop
      * 接收推送过来的配送轨迹
      * @access public
      * @param array $data 外部数据
-     * @return mixed
+     * @return array
      */
-    public function putDeliveryDistData(array $data)
+    public function putDeliveryDistData(array $data): array
     {
         $result['callback_return_type'] = 'json';
         $result['is_callback'] = [

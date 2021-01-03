@@ -82,7 +82,7 @@ class History extends CareyShop
      * @return bool
      * @throws
      */
-    public function addHistoryItem(array $data)
+    public function addHistoryItem(array $data): bool
     {
         if (get_client_id() == 0) {
             return true;
@@ -120,7 +120,7 @@ class History extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delHistoryList(array $data)
+    public function delHistoryList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -138,7 +138,7 @@ class History extends CareyShop
      * @access public
      * @return bool
      */
-    public function clearHistoryList()
+    public function clearHistoryList(): bool
     {
         self::destroy(['user_id' => get_client_id()]);
         return true;

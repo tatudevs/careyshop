@@ -165,7 +165,7 @@ class Ads extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAdsList(array $data)
+    public function delAdsList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -181,7 +181,7 @@ class Ads extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAdsSort(array $data)
+    public function setAdsSort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -199,7 +199,7 @@ class Ads extends CareyShop
      * @param array $data
      * @return bool
      */
-    public function setAdsIndex(array $data)
+    public function setAdsIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;
@@ -218,7 +218,7 @@ class Ads extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAdsStatus(array $data)
+    public function setAdsStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -319,7 +319,7 @@ class Ads extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueAdsCode(array $data)
+    public function uniqueAdsCode(array $data): bool
     {
         if (!$this->validateData($data, 'unique')) {
             return false;

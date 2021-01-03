@@ -138,7 +138,7 @@ class UserLevel extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delLevelList(array $data)
+    public function delLevelList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;

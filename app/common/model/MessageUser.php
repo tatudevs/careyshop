@@ -63,7 +63,7 @@ class MessageUser extends CareyShop
      * @return bool
      * @throws
      */
-    public function updateMessageUserItem(int $messageId)
+    public function updateMessageUserItem(int $messageId): bool
     {
         $clientType = is_client_admin() ? 'admin_id' : 'user_id';
         $map[] = ['message_id', '=', $messageId];
@@ -92,7 +92,7 @@ class MessageUser extends CareyShop
      * @param bool   $isAll     是否操作所有
      * @return bool
      */
-    private function updateMessageUserList(array $messageId, string $field, $isAll = false)
+    private function updateMessageUserList(array $messageId, string $field, $isAll = false): bool
     {
         // 获取已存在的消息
         $clientType = is_client_admin() ? 'admin_id' : 'user_id';
@@ -139,7 +139,7 @@ class MessageUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setMessageUserRead(array $data)
+    public function setMessageUserRead(array $data): bool
     {
         if (!$this->validateData($data, 'user', false, Validate::class)) {
             return false;
@@ -165,7 +165,7 @@ class MessageUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setMessageUserAllRead(array $data)
+    public function setMessageUserAllRead(array $data): bool
     {
         if (!$this->validateData($data, 'unread', false, Validate::class)) {
             return false;
@@ -190,7 +190,7 @@ class MessageUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delMessageUserList(array $data)
+    public function delMessageUserList(array $data): bool
     {
         if (!$this->validateData($data, 'user', false, Validate::class)) {
             return false;
@@ -216,7 +216,7 @@ class MessageUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delMessageUserAll(array $data)
+    public function delMessageUserAll(array $data): bool
     {
         if (!$this->validateData($data, 'unread', false, Validate::class)) {
             return false;

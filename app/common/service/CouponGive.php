@@ -23,7 +23,7 @@ class CouponGive extends CareyShop
      * @param float $payAmount     订单支付金额
      * @return bool
      */
-    public function checkCoupon(array $coupon, array $goodsCategory, float $payAmount)
+    public function checkCoupon(array $coupon, array $goodsCategory, float $payAmount): bool
     {
         if (bccomp($coupon['get_coupon']['quota'], $payAmount, 2) === 1) {
             return $this->setError('订单金额不足' . $coupon['get_coupon']['quota']);

@@ -80,7 +80,7 @@ class Refund extends Payment
      * @param array $setting 配置信息
      * @return bool
      */
-    public function setConfig(array $setting)
+    public function setConfig(array $setting): bool
     {
         foreach ($setting as $key => $value) {
             $this->$key = $value['value'];
@@ -146,7 +146,7 @@ class Refund extends Payment
      * @access public
      * @return string
      */
-    public function getTradeNo()
+    public function getTradeNo(): string
     {
         return $this->tradeNo;
     }
@@ -154,10 +154,10 @@ class Refund extends Payment
     /**
      * 返回退款请求结果
      * @access public
-     * @return array|false
+     * @return bool
      * @throws
      */
-    public function refundRequest()
+    public function refundRequest(): bool
     {
         $input = new WxPayRefund();
         $input->SetOut_trade_no($this->outTradeNo);

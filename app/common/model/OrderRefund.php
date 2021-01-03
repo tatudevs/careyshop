@@ -81,7 +81,7 @@ class OrderRefund extends CareyShop
      * @access public
      * @return string
      */
-    public function getRefundNo()
+    public function getRefundNo(): string
     {
         do {
             $refundNo = get_order_no('TK_');
@@ -96,7 +96,7 @@ class OrderRefund extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function addOrderRefundItem(array $data)
+    public function addOrderRefundItem(array $data): bool
     {
         if (!$this->validateData($data)) {
             return false;
@@ -122,7 +122,7 @@ class OrderRefund extends CareyShop
      * @param null  $refundNo  退款单号
      * @return bool
      */
-    public function refundOrderPayment(array $orderData, $amount = 0.0, &$refundNo = null)
+    public function refundOrderPayment(array $orderData, $amount = 0.0, &$refundNo = null): bool
     {
         if (!$this->validateData($orderData, 'refund')) {
             return false;
@@ -174,7 +174,7 @@ class OrderRefund extends CareyShop
      * @return bool
      * @throws
      */
-    public function retryRefundItem(array $data)
+    public function retryRefundItem(array $data): bool
     {
         if (!$this->validateData($data, 'retry')) {
             return false;

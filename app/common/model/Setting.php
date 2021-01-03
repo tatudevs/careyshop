@@ -97,7 +97,7 @@ class Setting extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setDeliveryDistList(array $data)
+    public function setDeliveryDistList(array $data): bool
     {
         if (!$this->validateData($data, 'rule')) {
             return false;
@@ -138,7 +138,7 @@ class Setting extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setPaymentList(array $data)
+    public function setPaymentList(array $data): bool
     {
         if (!$this->validateData($data, 'rule')) {
             return false;
@@ -175,7 +175,7 @@ class Setting extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setDeliveryList(array $data)
+    public function setDeliveryList(array $data): bool
     {
         if (!$this->validateData($data, 'rule')) {
             return false;
@@ -232,7 +232,7 @@ class Setting extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setShoppingList(array $data)
+    public function setShoppingList(array $data): bool
     {
         if (!$this->validateData($data, 'rule')) {
             return false;
@@ -286,7 +286,7 @@ class Setting extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setServiceList(array $data)
+    public function setServiceList(array $data): bool
     {
         if (!$this->validateData($data, 'rule')) {
             return false;
@@ -330,7 +330,7 @@ class Setting extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setSystemList(array $data)
+    public function setSystemList(array $data): bool
     {
         if (!$this->validateData($data, 'rule')) {
             return false;
@@ -404,7 +404,7 @@ class Setting extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    private function checkPostMaxSize(array $data)
+    private function checkPostMaxSize(array $data): bool
     {
         if (!array_key_exists('default', $data) && !array_key_exists('file_size', $data)) {
             return true;
@@ -438,7 +438,7 @@ class Setting extends CareyShop
      * @return bool
      * @throws \Exception
      */
-    private function checkUrl(string $key, string $value)
+    private function checkUrl(string $key, string $value): bool
     {
         $url = [
             'oss'           => '资源获取短地址',
@@ -464,7 +464,7 @@ class Setting extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setUploadList(array $data)
+    public function setUploadList(array $data): bool
     {
         if (!$this->validateData($data, 'rule')) {
             return false;

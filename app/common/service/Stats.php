@@ -24,7 +24,7 @@ class Stats extends CareyShop
      * @return array
      * @throws
      */
-    public static function getStatsIndex()
+    public static function getStatsIndex(): array
     {
         // 缓存时间
         $expire = Config::get('careyshop.system_info.stats_time', 30);
@@ -197,7 +197,7 @@ class Stats extends CareyShop
      * @return array
      * @throws
      */
-    public static function getStatsShop()
+    public static function getStatsShop(): array
     {
         // 缓存时间
         $expire = Config::get('careyshop.system_info.stats_time', 30);
@@ -400,7 +400,7 @@ class Stats extends CareyShop
      * @return array
      * @throws
      */
-    public static function getStatsGoods(int $begin, int $end)
+    public static function getStatsGoods(int $begin, int $end): array
     {
         // 缓存时间
         $expire = Config::get('careyshop.system_info.stats_time', 30);
@@ -498,7 +498,7 @@ class Stats extends CareyShop
      * @return array
      * @throws
      */
-    public static function getStatsOrder(int $begin, int $end)
+    public static function getStatsOrder(int $begin, int $end): array
     {
         // 缓存时间
         $expire = Config::get('careyshop.system_info.stats_time', 30);
@@ -607,7 +607,7 @@ class Stats extends CareyShop
      * @return array
      * @throws
      */
-    public static function getStatsClient(int $begin, int $end)
+    public static function getStatsClient(int $begin, int $end): array
     {
         // 缓存时间
         $expire = Config::get('careyshop.system_info.stats_time', 30);

@@ -20,7 +20,7 @@ class Batch extends CareyShop
      * @access public
      * @return array
      */
-    public function index()
+    public function index(): array
     {
         // 删除多余数据,避免影响其他模块
         unset($this->params['appkey']);

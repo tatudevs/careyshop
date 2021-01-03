@@ -148,7 +148,7 @@ class AdsPosition extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delPositionList(array $data)
+    public function delPositionList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -180,7 +180,7 @@ class AdsPosition extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniquePositionCode(array $data)
+    public function uniquePositionCode(array $data): bool
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -202,7 +202,7 @@ class AdsPosition extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setPositionStatus(array $data)
+    public function setPositionStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;

@@ -64,7 +64,7 @@ class CareyShop
      * @return $this
      * @throws
      */
-    public function initWechat(array $params)
+    public function initWechat(array $params): CareyShop
     {
         if (isset($params['code'])) {
             $this->params = new Params($params);
@@ -99,7 +99,7 @@ class CareyShop
      * @param string $value 错误信息
      * @return false
      */
-    public function setError(string $value)
+    public function setError(string $value): bool
     {
         $this->error = $value;
         return false;
@@ -110,7 +110,7 @@ class CareyShop
      * @access public
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return $this->error;
     }
@@ -121,7 +121,7 @@ class CareyShop
      * @param int $maxSize
      * @return int[]
      */
-    protected function getPageData(int $maxSize = 0)
+    protected function getPageData(int $maxSize = 0): array
     {
         $pageNo = $this->params['page_no'];
         $pageSize = $this->params['page_size'];

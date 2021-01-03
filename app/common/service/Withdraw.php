@@ -17,7 +17,7 @@ class Withdraw extends CareyShop
      * @access public
      * @return float[]
      */
-    public function getWithdrawFee()
+    public function getWithdrawFee(): array
     {
         return ['withdraw_fee' => (float)config('careyshop.system_shopping.withdraw_fee')];
     }

@@ -55,7 +55,7 @@ class App extends CareyShop
      * @access public
      * @return array
      */
-    public function getAppCaptcha()
+    public function getAppCaptcha(): array
     {
         $appKey = $this->request->param('appkey');
         return \app\common\model\App::getAppCaptcha($appKey);

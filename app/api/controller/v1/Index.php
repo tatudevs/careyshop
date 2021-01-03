@@ -41,7 +41,7 @@ class Index extends CareyShop
      * @access public
      * @return array
      */
-    public function getIndexHost()
+    public function getIndexHost(): array
     {
         $data['system'] = Config::get('extra.product');
         $data['verification'] = $this->getParams();

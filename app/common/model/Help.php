@@ -40,7 +40,7 @@ class Help extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueHelpItem(array $data)
+    public function uniqueHelpItem(array $data): bool
     {
         if (!$this->validateData($data, 'unique')) {
             return false;

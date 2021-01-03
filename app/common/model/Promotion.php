@@ -56,7 +56,7 @@ class Promotion extends CareyShop
      * @return bool
      * @throws
      */
-    private function isRepeatPromotion(string $beginTime, string $endTime, $excludeId = 0)
+    private function isRepeatPromotion(string $beginTime, string $endTime, $excludeId = 0): bool
     {
         $map = [];
         $excludeId == 0 ?: $map[] = ['promotion_id', '<>', $excludeId];
@@ -188,7 +188,7 @@ class Promotion extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setPromotionStatus(array $data)
+    public function setPromotionStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -206,7 +206,7 @@ class Promotion extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delPromotionList(array $data)
+    public function delPromotionList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -263,7 +263,7 @@ class Promotion extends CareyShop
      * @return array
      * @throws
      */
-    public function getPromotionActive()
+    public function getPromotionActive(): array
     {
         // 同一个时段内只允许存在一个促销,所以返回get就可以了
         $map[] = ['begin_time', '<=', time()];

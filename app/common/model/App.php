@@ -63,7 +63,7 @@ class App extends CareyShop
      * @access public
      * @param object $query 模型
      */
-    public function scopeDelete($query)
+    public function scopeDelete(object $query)
     {
         $query->where('is_delete', '=', 0);
     }
@@ -73,10 +73,10 @@ class App extends CareyShop
      * @access private
      * @return string
      */
-    private function getAppKey()
+    private function getAppKey(): string
     {
         do {
-            $appKey = rand_number(8);
+            $appKey = rand_number();
         } while (self::checkUnique(['app_key' => $appKey]));
 
         return $appKey;
@@ -181,7 +181,7 @@ class App extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAppList(array $data)
+    public function delAppList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -203,7 +203,7 @@ class App extends CareyShop
      * @return bool
      * @throws \Exception
      */
-    public function uniqueAppName(array $data)
+    public function uniqueAppName(array $data): bool
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -244,7 +244,7 @@ class App extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAppCaptcha(array $data)
+    public function setAppCaptcha(array $data): bool
     {
         if (!$this->validateData($data, 'captcha')) {
             return false;
@@ -263,7 +263,7 @@ class App extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAppStatus(array $data)
+    public function setAppStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -284,7 +284,7 @@ class App extends CareyShop
      * @return array
      * @throws
      */
-    public static function getAppCaptcha(string $key, $is_key = true)
+    public static function getAppCaptcha(string $key, $is_key = true): array
     {
         $result = [
             'captcha'    => true,

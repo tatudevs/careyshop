@@ -74,7 +74,7 @@ abstract class Upload
      * @access public
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return $this->error;
     }
@@ -85,7 +85,7 @@ abstract class Upload
      * @param string $error 错误信息
      * @return false
      */
-    public function setError(string $error)
+    public function setError(string $error): bool
     {
         $this->error = $error;
         return false;
@@ -118,7 +118,7 @@ abstract class Upload
      * @access public
      * @return array
      */
-    public function getDelFileIdList()
+    public function getDelFileIdList(): array
     {
         return $this->delFileIdList;
     }
@@ -129,7 +129,7 @@ abstract class Upload
      * @param array $options 查询条件
      * @return string
      */
-    protected function queryToString($options = [])
+    protected function queryToString($options = []): string
     {
         $temp = [];
         foreach ($options as $key => $value) {
@@ -172,7 +172,7 @@ abstract class Upload
      * @access protected
      * @return string
      */
-    protected function getVersion()
+    protected function getVersion(): string
     {
         return $this->version;
     }
@@ -180,7 +180,7 @@ abstract class Upload
     /**
      * 获取上传地址
      * @access protected
-     * @return array
+     * @return array|bool
      */
     abstract protected function getUploadUrl();
 
@@ -188,21 +188,21 @@ abstract class Upload
      * 获取上传Token
      * @access protected
      * @param string $replace 替换资源(path)
-     * @return array
+     * @return array|bool
      */
     abstract protected function getToken($replace = '');
 
     /**
      * 接收第三方推送数据
      * @access protected
-     * @return array
+     * @return array|bool
      */
     abstract protected function putUploadData();
 
     /**
      * 上传资源
      * @access protected
-     * @return array
+     * @return array|bool
      */
     abstract protected function uploadFiles();
 
@@ -220,7 +220,7 @@ abstract class Upload
      * @access protected
      * @return bool
      */
-    abstract protected function delFileList();
+    abstract protected function delFileList(): bool;
 
     /**
      * 批量删除资源
@@ -245,5 +245,5 @@ abstract class Upload
      * @param string $url 路径
      * @return array
      */
-    abstract protected function getThumbInfo(string $url);
+    abstract protected function getThumbInfo(string $url): array;
 }

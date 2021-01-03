@@ -34,7 +34,7 @@ class CareyShop extends Validate
      * 批量调用验证场景
      * @return $this
      */
-    public function sceneBatch()
+    public function sceneBatch(): CareyShop
     {
         return $this->only(['version', 'controller', 'method'])
             ->append('version', 'require')

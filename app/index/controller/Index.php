@@ -17,7 +17,7 @@ use think\facade\View;
 
 class Index
 {
-    public function index()
+    public function index(): string
     {
         $map = ['code' => 'open_api_rest', 'module' => 'system_info'];
         $showRest = Db::name('setting')->where($map)->value('value');

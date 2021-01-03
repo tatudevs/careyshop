@@ -117,7 +117,7 @@ class GoodsReply extends CareyShop
      * @return bool
      * @throws
      */
-    public function delReplyList(array $data)
+    public function delReplyList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;

@@ -136,7 +136,7 @@ class Goods extends CareyShop
      * @access public
      * @param object $query 模型
      */
-    public function scopeGlobal($query)
+    public function scopeGlobal(object $query)
     {
         $query->where([
             ['status', '=', 1],
@@ -150,10 +150,10 @@ class Goods extends CareyShop
      * @access private
      * @return string
      */
-    private function setGoodsCode()
+    private function setGoodsCode(): string
     {
         do {
-            $goodsCode = 'CS' . rand_number(8);
+            $goodsCode = 'CS' . rand_number();
         } while (self::checkUnique(['goods_code' => $goodsCode]));
 
         return $goodsCode;
@@ -165,7 +165,7 @@ class Goods extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueGoodsCode(array $data)
+    public function uniqueGoodsCode(array $data): bool
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -189,7 +189,7 @@ class Goods extends CareyShop
      * @param array  $data    外部数据
      * @return bool
      */
-    private function addGoodSubjoin(int $goodsId, array &$result, array $data)
+    private function addGoodSubjoin(int $goodsId, array &$result, array $data): bool
     {
         // 检测规格是否存在自定义,存在则更新,并且返回会附带规格图集合
         \app\common\service\SpecGoods::validateSpecMenu($data);
@@ -383,7 +383,7 @@ class Goods extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delGoodsList(array $data)
+    public function delGoodsList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -430,7 +430,7 @@ class Goods extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setIntegralGoodsList(array $data)
+    public function setIntegralGoodsList(array $data): bool
     {
         if (!$this->validateData($data, 'integral')) {
             return false;
@@ -448,7 +448,7 @@ class Goods extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setRecommendGoodsList(array $data)
+    public function setRecommendGoodsList(array $data): bool
     {
         if (!$this->validateData($data, 'recommend')) {
             return false;
@@ -466,7 +466,7 @@ class Goods extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setNewGoodsList(array $data)
+    public function setNewGoodsList(array $data): bool
     {
         if (!$this->validateData($data, 'new')) {
             return false;
@@ -484,7 +484,7 @@ class Goods extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setHotGoodsList(array $data)
+    public function setHotGoodsList(array $data): bool
     {
         if (!$this->validateData($data, 'hot')) {
             return false;
@@ -502,7 +502,7 @@ class Goods extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setShelvesGoodsList(array $data)
+    public function setShelvesGoodsList(array $data): bool
     {
         if (!$this->validateData($data, 'shelves')) {
             return false;
@@ -683,7 +683,7 @@ class Goods extends CareyShop
      * @param array $data 外部数据
      * @return array
      */
-    private function getGoodsIdByBrandPrice(array $data)
+    private function getGoodsIdByBrandPrice(array $data): array
     {
         if (empty($data['shop_price']) && empty($data['brand_id'])) {
             return [];
@@ -710,7 +710,7 @@ class Goods extends CareyShop
      * @param array $specList 规格列表
      * @return array
      */
-    private function getGoodsIdBySpec(array $specList)
+    private function getGoodsIdBySpec(array $specList): array
     {
         // 数组首位对应的是"cs_spec"中的"spec_id",非同一类值
         is_array(current($specList)) ?: array_shift($specList);
@@ -754,7 +754,7 @@ class Goods extends CareyShop
      * @param array $attrList 属性列表
      * @return array
      */
-    private function getGoodsIdByAttr(array $attrList)
+    private function getGoodsIdByAttr(array $attrList): array
     {
         if (empty($attrList)) {
             return [];
@@ -798,7 +798,7 @@ class Goods extends CareyShop
      * @param array $filterParam 筛选的参数
      * @return array
      */
-    private function getFilterMenu(array $filterParam)
+    private function getFilterMenu(array $filterParam): array
     {
         // 菜单列表
         $menuList = [];
@@ -906,7 +906,7 @@ class Goods extends CareyShop
      * @param int   $page        价格分段
      * @return array
      */
-    private function getFilterPrice(array $goodsIdList, $page = 5)
+    private function getFilterPrice(array $goodsIdList, $page = 5): array
     {
         if (empty($goodsIdList)) {
             return [];
@@ -956,7 +956,7 @@ class Goods extends CareyShop
      * @return array
      * @throws
      */
-    private function getFilterBrand(array $goodsIdList)
+    private function getFilterBrand(array $goodsIdList): array
     {
         if (empty($goodsIdList)) {
             return [];
@@ -990,7 +990,7 @@ class Goods extends CareyShop
      * @param string $key         筛选参数的键名
      * @return array
      */
-    private function getSpecOrAttrItem(array $filterParam, string $key)
+    private function getSpecOrAttrItem(array $filterParam, string $key): array
     {
         if (!isset($filterParam[$key])) {
             return [];
@@ -1018,7 +1018,7 @@ class Goods extends CareyShop
      * @return array
      * @throws
      */
-    private function getFilterSpec(array $goodsIdList, array $filterParam)
+    private function getFilterSpec(array $goodsIdList, array $filterParam): array
     {
         if (empty($goodsIdList)) {
             return [];
@@ -1083,7 +1083,7 @@ class Goods extends CareyShop
      * @return array
      * @throws
      */
-    private function getFilterAttr(array $goodsIdList, array $filterParam)
+    private function getFilterAttr(array $goodsIdList, array $filterParam): array
     {
         if (empty($goodsIdList)) {
             return [];
@@ -1139,7 +1139,7 @@ class Goods extends CareyShop
      * @param array $data        外部数据
      * @return array
      */
-    private function getFilterCate(array $goodsIdList, array $data)
+    private function getFilterCate(array $goodsIdList, array $data): array
     {
         if (empty($data['keywords'])) {
             return [];
@@ -1179,7 +1179,7 @@ class Goods extends CareyShop
      * @param array  $goodsCateList 购物车商品列表
      * @return bool
      */
-    private function isCategoryList(array $data, array &$goodsCateList)
+    private function isCategoryList(array $data, array &$goodsCateList): bool
     {
         $categoryId = isset($data['goods_category_id']) ? $data['goods_category_id'] : 0;
         $cateList = GoodsCategory::getCategoryList($categoryId, false, true);
@@ -1292,7 +1292,7 @@ class Goods extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setGoodsSort(array $data)
+    public function setGoodsSort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -1310,7 +1310,7 @@ class Goods extends CareyShop
      * @param array $data 外部数据
      * @return array
      */
-    public function getGoodsKeywordsSuggest(array $data)
+    public function getGoodsKeywordsSuggest(array $data): array
     {
         if (!$this->validateData($data, 'suggest')) {
             return [];

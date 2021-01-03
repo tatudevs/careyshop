@@ -139,7 +139,7 @@ class Material extends CareyShop
      * @param array $article 图文数据
      * @return Article
      */
-    private function getArticle(array $article)
+    private function getArticle(array $article): Article
     {
         $result = [];
         $maps = [
@@ -195,7 +195,7 @@ class Material extends CareyShop
      * @return bool
      * @throws
      */
-    public function setMaterialNews()
+    public function setMaterialNews(): bool
     {
         $index = $this->params['index'] ?? 0;
         $mediaId = $this->params['media_id'];
@@ -266,7 +266,7 @@ class Material extends CareyShop
      * @return bool
      * @throws
      */
-    public function delMaterialItem()
+    public function delMaterialItem(): bool
     {
         $result = $this->getApp('material')->delete($this->params['media_id']);
         if (isset($result['errcode']) && $result['errcode'] != 0) {
@@ -282,7 +282,7 @@ class Material extends CareyShop
      * @return bool
      * @throws
      */
-    public function sendMaterialView()
+    public function sendMaterialView(): bool
     {
         $openId = $this->params['open_id'];
         $wxname = $this->params['wxname'];

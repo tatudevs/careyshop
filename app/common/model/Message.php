@@ -95,7 +95,7 @@ class Message extends CareyShop
      * @param int   $clientType 消息成员组 0=顾客组 1=管理组
      * @return bool
      */
-    public function inAddMessageItem(array $data, array $clientId, int $clientType)
+    public function inAddMessageItem(array $data, array $clientId, int $clientType): bool
     {
         if (!$this->validateData($data)) {
             return false;
@@ -174,7 +174,7 @@ class Message extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delMessageList(array $data)
+    public function delMessageList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -194,7 +194,7 @@ class Message extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setMessageStatus(array $data)
+    public function setMessageStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;

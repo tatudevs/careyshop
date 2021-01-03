@@ -60,7 +60,7 @@ class Coupon extends CareyShop
      * @param mixed $type 参数
      * @return string
      */
-    private function getGiveCode($type)
+    private function getGiveCode($type): string
     {
         $value = '';
         if (2 == $type) {
@@ -226,7 +226,7 @@ class Coupon extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCouponList(array $data)
+    public function delCouponList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -245,7 +245,7 @@ class Coupon extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCouponStatus(array $data)
+    public function setCouponStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -264,7 +264,7 @@ class Coupon extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCouponInvalid(array $data)
+    public function setCouponInvalid(array $data): bool
     {
         if (!$this->validateData($data, 'invalid')) {
             return false;
@@ -283,7 +283,7 @@ class Coupon extends CareyShop
      * @return array
      * @throws
      */
-    public function getCouponActive()
+    public function getCouponActive(): array
     {
         // 搜索条件
         $map[] = ['type', '=', 2];

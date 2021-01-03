@@ -59,7 +59,7 @@ class Payment
      * @access public
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return $this->error;
     }
@@ -70,7 +70,7 @@ class Payment
      * @param string $returnUrl 同步返回URL
      * @return bool
      */
-    public function setReturnUrl(string $returnUrl)
+    public function setReturnUrl(string $returnUrl): bool
     {
         if (is_string($returnUrl)) {
             $this->returnUrl = $returnUrl;
@@ -86,7 +86,7 @@ class Payment
      * @param string $notifyUrl 异步返回URL
      * @return bool
      */
-    public function setNotifyUrl(string $notifyUrl)
+    public function setNotifyUrl(string $notifyUrl): bool
     {
         if (is_string($notifyUrl)) {
             $this->notifyUrl = $notifyUrl;

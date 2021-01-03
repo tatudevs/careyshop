@@ -53,7 +53,7 @@ abstract class CareyShop extends Model
      * @param array $map 查询条件
      * @return bool false:不存在
      */
-    public static function checkUnique(array $map)
+    public static function checkUnique(array $map): bool
     {
         if (empty($map)) {
             return true;
@@ -72,7 +72,7 @@ abstract class CareyShop extends Model
      * @access public
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return $this->error;
     }
@@ -83,7 +83,7 @@ abstract class CareyShop extends Model
      * @param string $value 错误信息
      * @return false
      */
-    public function setError(string $value)
+    public function setError(string $value): bool
     {
         $this->error = $value;
         return false;
@@ -137,7 +137,7 @@ abstract class CareyShop extends Model
      * @param bool  $reverse 是否调整顺序
      * @return $this
      */
-    public function setDefaultOrder(array $order, $fixed = [], $reverse = false)
+    public function setDefaultOrder(array $order, $fixed = [], $reverse = false): CareyShop
     {
         $this->defaultOrder = $order;
         $this->fixedOrder = $fixed;
@@ -155,7 +155,7 @@ abstract class CareyShop extends Model
      * @param string|array $validate 验证器规则或类
      * @return bool
      */
-    public function validateData(array &$data, $scene = null, $clean = false, $validate = '')
+    public function validateData(array &$data, $scene = null, $clean = false, $validate = ''): bool
     {
         try {
             // 确定规则来源
@@ -199,7 +199,7 @@ abstract class CareyShop extends Model
      * @return string
      * @throws
      */
-    private function getValidateClass()
+    private function getValidateClass(): string
     {
         $pos = mb_strrpos(__NAMESPACE__, '\\');
         $dir = '\\validate\\' . $this->getName();

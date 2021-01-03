@@ -70,7 +70,7 @@ class Admin extends CareyShop
      * @access public
      * @param object $query 模型
      */
-    public function scopeDelete($query)
+    public function scopeDelete(object $query)
     {
         $query->where('is_delete', '=', 0);
     }
@@ -81,7 +81,7 @@ class Admin extends CareyShop
      * @param string $value 值
      * @return string
      */
-    public function setPasswordAttr(string $value)
+    public function setPasswordAttr(string $value): string
     {
         return user_md5($value);
     }
@@ -94,7 +94,7 @@ class Admin extends CareyShop
      * @return string
      * @throws \Exception
      */
-    public function getLastIpRegionAttr($value, $data)
+    public function getLastIpRegionAttr($value, $data): string
     {
         if (empty($data['last_ip'])) {
             return '';
@@ -152,7 +152,7 @@ class Admin extends CareyShop
      * @return bool
      * @throws
      */
-    private function checkAdminAuth($adminID = null, $data = null)
+    private function checkAdminAuth($adminID = null, $data = null): bool
     {
         if (get_client_group() === AUTH_SUPER_ADMINISTRATOR) {
             return true;
@@ -249,7 +249,7 @@ class Admin extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAdminStatus(array $data)
+    public function setAdminStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -284,7 +284,7 @@ class Admin extends CareyShop
      * @return bool
      * @throws
      */
-    public function setAdminPassword(array $data)
+    public function setAdminPassword(array $data): bool
     {
         if (!$this->validateData($data, 'change')) {
             return false;
@@ -344,7 +344,7 @@ class Admin extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAdminList(array $data)
+    public function delAdminList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -459,7 +459,7 @@ class Admin extends CareyShop
      * @access public
      * @return bool
      */
-    public function logoutAdmin()
+    public function logoutAdmin(): bool
     {
         $map[] = ['client_id', '=', get_client_id()];
         $map[] = ['client_type', '=', 1];

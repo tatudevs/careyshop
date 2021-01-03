@@ -174,7 +174,7 @@ class Card extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCardStatus(array $data)
+    public function setCardStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -193,7 +193,7 @@ class Card extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCardList(array $data)
+    public function delCardList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;

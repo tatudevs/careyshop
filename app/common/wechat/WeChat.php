@@ -146,7 +146,7 @@ class WeChat
      * @access public
      * @return mixed|null
      */
-    public function getExpand()
+    public function getExpand(): ?Params
     {
         return $this->expand;
     }

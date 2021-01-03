@@ -40,7 +40,7 @@ class Upload extends UploadBase
      * @access private
      * @return string
      */
-    private function getCallbackUrl()
+    private function getCallbackUrl(): string
     {
         $vars = ['method' => 'put.upload.data', 'module' => self::MODULE];
         return Route::buildUrl("api/{$this->getVersion()}/upload", $vars)->domain(true)->build();
@@ -230,7 +230,7 @@ class Upload extends UploadBase
      * @access public
      * @return false
      */
-    public function uploadFiles()
+    public function uploadFiles(): bool
     {
         // 直传的意思是客户端直接传附件给OSS,而不再需要应用服务端代为上传,少了转发,速度更快.
         return $this->setError('"' . self::NAME . '"只支持直传附件,详见七牛云开发文档');
@@ -244,7 +244,7 @@ class Upload extends UploadBase
      * @param string $resize 缩放方式
      * @return string
      */
-    private function getSizeParam(int $width, int $height, string $resize)
+    private function getSizeParam(int $width, int $height, string $resize): string
     {
         $options = 'thumbnail/';
         if ('proportion' === $resize) {
@@ -267,10 +267,10 @@ class Upload extends UploadBase
      * @param int $height 高度
      * @return string
      */
-    private function getExtentParam(int $width, int $height)
+    private function getExtentParam(int $width, int $height): string
     {
         $options = '';
-        if ($width != 0 && $height != 0) {
+        if ($width != 0 || $height != 0) {
             $options = 'extent/';
             $options .= $width != 0 ? (int)$width : '';
             $options .= 'x';
@@ -288,7 +288,7 @@ class Upload extends UploadBase
      * @param int $height 高度
      * @return string
      */
-    private function getCropParam(int $width, int $height)
+    private function getCropParam(int $width, int $height): string
     {
         if (!$width && !$height) {
             return '';
@@ -310,7 +310,7 @@ class Upload extends UploadBase
      * @param array $styleList 样式集合
      * @return string
      */
-    public function getThumbUrl(array $urlArray, array $styleList)
+    public function getThumbUrl(array $urlArray, array $styleList): string
     {
         // 初始化数据并拼接不带查询条件的URL
         $fileInfo = pathinfo($urlArray['path']);
@@ -420,7 +420,7 @@ class Upload extends UploadBase
      * @access public
      * @return bool
      */
-    public function delFileList()
+    public function delFileList(): bool
     {
         if (count($this->delFileList) > 1000) {
             return $this->setError(self::NAME . '批量删除资源不可超过1000个');
@@ -475,7 +475,7 @@ class Upload extends UploadBase
      * @param string $url 路径
      * @return array
      */
-    public function getThumbInfo(string $url)
+    public function getThumbInfo(string $url): array
     {
         $info = [
             'size'   => 0,

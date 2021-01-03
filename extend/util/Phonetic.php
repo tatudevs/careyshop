@@ -49,7 +49,7 @@ class Phonetic
      * @param string $sSpace     分隔符号
      * @return string
      */
-    public static function encode(string $utf8Data, $sRetFormat = 'head', $sSpace = '')
+    public static function encode(string $utf8Data, $sRetFormat = 'head', $sSpace = ''): string
     {
         $aBuf = [];
         $sGBK = iconv('utf-8', 'gbk', $utf8Data);

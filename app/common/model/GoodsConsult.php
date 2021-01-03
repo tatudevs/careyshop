@@ -141,7 +141,7 @@ class GoodsConsult extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delConsultList(array $data)
+    public function delConsultList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -161,7 +161,7 @@ class GoodsConsult extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setConsultShow(array $data)
+    public function setConsultShow(array $data): bool
     {
         if (!$this->validateData($data, 'show')) {
             return false;
@@ -229,7 +229,7 @@ class GoodsConsult extends CareyShop
      * @return false|mixed
      * @throws
      */
-    public function getConsultItem(array $data)
+    public function getConsultItem(array $data): bool
     {
         if (!$this->validateData($data, 'item')) {
             return false;

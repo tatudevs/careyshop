@@ -52,7 +52,7 @@ class Geohash
      * @param $hash
      * @return array
      */
-    public function decode($hash)
+    public function decode($hash): array
     {
         // decode hash into binary string
         $binary = '';
@@ -93,7 +93,7 @@ class Geohash
         return [$lat, $long];
     }
 
-    private function calculateAdjacent($srcHash, $dir)
+    private function calculateAdjacent($srcHash, $dir): string
     {
         if (!isset($srcHash[mb_strlen($srcHash) - 1])) {
             return '';
@@ -111,7 +111,7 @@ class Geohash
         return $base . $this->coding[mb_strpos($this->neighbors[$dir][$type], $lastChr, null, 'utf-8')];
     }
 
-    public function neighbors($srcHash)
+    public function neighbors($srcHash): array
     {
         //$geohashPrefix = mb_substr($srcHash, 0, strlen($srcHash) - 1, 'utf-8');
 
@@ -134,7 +134,7 @@ class Geohash
      * @param $long
      * @return string
      */
-    public function encode($lat, $long)
+    public function encode($lat, $long): string
     {
         // how many bits does latitude need?
         $plat = $this->precision($lat);
@@ -244,7 +244,7 @@ class Geohash
      * @param $bitcount
      * @return string
      */
-    private function binEncode($number, $min, $max, $bitcount)
+    private function binEncode($number, $min, $max, $bitcount): string
     {
         if ($bitcount == 0) {
             return '';

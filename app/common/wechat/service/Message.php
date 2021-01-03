@@ -69,7 +69,7 @@ class Message extends CareyShop
      * @return bool
      * @throws
      */
-    public function sendMessageView()
+    public function sendMessageView(): bool
     {
         $result = null;
         $type = $this->params['type'];
@@ -146,7 +146,7 @@ class Message extends CareyShop
      * @return bool
      * @throws
      */
-    public function delMessageItem()
+    public function delMessageItem(): bool
     {
         $result = $this->getApp('broadcasting')->delete($this->params['msg_id']);
         if (isset($result['errcode']) && $result['errcode'] != 0) {

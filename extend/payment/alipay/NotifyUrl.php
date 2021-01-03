@@ -45,7 +45,7 @@ class NotifyUrl
      * @access public
      * @return string
      */
-    public function getPaymentNo()
+    public function getPaymentNo(): string
     {
         return $this->paymentNo;
     }
@@ -65,7 +65,7 @@ class NotifyUrl
      * @access public
      * @return string
      */
-    public function getTradeNo()
+    public function getTradeNo(): string
     {
         return $this->tradeNo;
     }
@@ -75,7 +75,7 @@ class NotifyUrl
      * @access public
      * @return string
      */
-    public function getTimestamp()
+    public function getTimestamp(): string
     {
         return $this->timestamp;
     }
@@ -86,7 +86,7 @@ class NotifyUrl
      * @param string $msg 消息内容
      * @return array
      */
-    public function getSuccess($msg = '')
+    public function getSuccess($msg = ''): array
     {
         unset($msg);
         $data['callback_return_type'] = 'view';
@@ -101,7 +101,7 @@ class NotifyUrl
      * @param string $msg 消息内容
      * @return array
      */
-    public function getError($msg = '')
+    public function getError($msg = ''): array
     {
         unset($msg);
         $data['callback_return_type'] = 'view';
@@ -116,7 +116,7 @@ class NotifyUrl
      * @param null $setting 配置参数
      * @return bool
      */
-    public function checkReturn($setting = null)
+    public function checkReturn($setting = null): bool
     {
         if (empty($setting) || !isset($_POST['trade_status'])) {
             return false;

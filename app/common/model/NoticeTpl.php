@@ -90,7 +90,7 @@ class NoticeTpl extends CareyShop
      * @return array
      * @throws
      */
-    public function getNoticeTplData(int $type, $code = null)
+    public function getNoticeTplData(int $type, $code = null): array
     {
         $map[] = ['type', '=', $type];
         !isset($code) ?: $map[] = ['code', '=', $code];
@@ -197,7 +197,7 @@ class NoticeTpl extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setNoticeTplStatus(array $data)
+    public function setNoticeTplStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -220,7 +220,7 @@ class NoticeTpl extends CareyShop
      * @param array  $data   发送数据(如订单号则需要从外部传入,而验证码就不需要)
      * @return bool
      */
-    public function sendNotice(string $mobile, string $email, int $type, $code = null, $data = [])
+    public function sendNotice(string $mobile, string $email, int $type, $code = null, $data = []): bool
     {
         if (empty($mobile) && empty($email)) {
             return $this->setError('手机号或邮箱地址不能为空');
@@ -382,7 +382,7 @@ class NoticeTpl extends CareyShop
         $replaceItem = [];
         $template = 'sms' == $code ? $this->smsSetting['template'] : $this->emailSetting['template'];
 
-        if (false === preg_match_all('/\{([^\}]+)\}/', $template, $replaceItem)) {
+        if (false === preg_match_all('/{([^}]+)}/', $template, $replaceItem)) {
             return false;
         }
 
@@ -421,7 +421,7 @@ class NoticeTpl extends CareyShop
      * @param array  $data   发送数据
      * @return bool
      */
-    private function snedNoticeSms(string $mobile, array $data)
+    private function snedNoticeSms(string $mobile, array $data): bool
     {
         // 加载区域结点配置
         AliyunConfig::load();
@@ -491,7 +491,7 @@ class NoticeTpl extends CareyShop
      * @return bool
      * @throws
      */
-    private function snedNoticeEmail(string $email, string $subject, array $data, $attachment = null)
+    private function snedNoticeEmail(string $email, string $subject, array $data, $attachment = null): bool
     {
         // 实例化PHPMailer对象
         $mail = new PHPMailer();

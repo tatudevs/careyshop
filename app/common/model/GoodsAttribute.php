@@ -56,7 +56,7 @@ class GoodsAttribute extends CareyShop
      * @access public
      * @param object $query 模型
      */
-    public function scopeDelete($query)
+    public function scopeDelete(object $query)
     {
         $query->where('is_delete', '=', 0);
     }
@@ -359,7 +359,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAttributeKey(array $data)
+    public function setAttributeKey(array $data): bool
     {
         if (!$this->validateData($data, 'key')) {
             return false;
@@ -378,7 +378,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAttributeImportant(array $data)
+    public function setAttributeImportant(array $data): bool
     {
         if (!$this->validateData($data, 'important')) {
             return false;
@@ -397,7 +397,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAttributeSort(array $data)
+    public function setAttributeSort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -415,7 +415,7 @@ class GoodsAttribute extends CareyShop
      * @param array $data
      * @return bool
      */
-    public function setAttributeIndex(array $data)
+    public function setAttributeIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;
@@ -435,7 +435,7 @@ class GoodsAttribute extends CareyShop
      * @return bool
      * @throws
      */
-    public function delAttributeList(array $data)
+    public function delAttributeList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;

@@ -81,7 +81,7 @@ class PaymentLog extends CareyShop
      * @access private
      * @return string
      */
-    private function getPaymentNo()
+    private function getPaymentNo(): string
     {
         do {
             $paymentNo = get_order_no('ZF_');
@@ -122,7 +122,7 @@ class PaymentLog extends CareyShop
      * @return bool
      * @throws
      */
-    public function closePaymentLogItem(array $data)
+    public function closePaymentLogItem(array $data): bool
     {
         if (!$this->validateData($data, 'close')) {
             return false;

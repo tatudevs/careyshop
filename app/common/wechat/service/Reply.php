@@ -26,7 +26,7 @@ class Reply extends CareyShop
      * @return array
      * @throws
      */
-    public function getReplyData()
+    public function getReplyData(): array
     {
         $cacheKey = self::WECHAT_REPLY . $this->params['code'];
         $result = Cache::store('place')->get($cacheKey, []);
@@ -44,7 +44,7 @@ class Reply extends CareyShop
      * @return bool
      * @throws
      */
-    public function setReplyData()
+    public function setReplyData(): bool
     {
         // 数据结构
 //        $data = [

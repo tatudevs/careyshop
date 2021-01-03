@@ -50,7 +50,7 @@ class GoodsAttr extends CareyShop
      * @param array $data    外部数据
      * @return bool
      */
-    public function addGoodsAttr(int $goodsId, array $data)
+    public function addGoodsAttr(int $goodsId, array $data): bool
     {
         // 处理部分数据,并进行验证
         foreach ($data as $key => $value) {

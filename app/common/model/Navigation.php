@@ -88,7 +88,7 @@ class Navigation extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delNavigationList(array $data)
+    public function delNavigationList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -123,7 +123,7 @@ class Navigation extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setNavigationTarget(array $data)
+    public function setNavigationTarget(array $data): bool
     {
         if (!$this->validateData($data, 'target')) {
             return false;
@@ -142,7 +142,7 @@ class Navigation extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setNavigationStatus(array $data)
+    public function setNavigationStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -193,7 +193,7 @@ class Navigation extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setNavigationSort(array $data)
+    public function setNavigationSort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -212,7 +212,7 @@ class Navigation extends CareyShop
      * @param array $data
      * @return bool
      */
-    public function setNavigationIndex(array $data)
+    public function setNavigationIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;

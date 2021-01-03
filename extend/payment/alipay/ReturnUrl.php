@@ -45,7 +45,7 @@ class ReturnUrl
      * @access public
      * @return string
      */
-    public function getPaymentNo()
+    public function getPaymentNo(): string
     {
         return $this->paymentNo;
     }
@@ -65,7 +65,7 @@ class ReturnUrl
      * @access public
      * @return string
      */
-    public function getTradeNo()
+    public function getTradeNo(): string
     {
         return $this->tradeNo;
     }
@@ -75,7 +75,7 @@ class ReturnUrl
      * @access public
      * @return string
      */
-    public function getTimestamp()
+    public function getTimestamp(): string
     {
         return $this->timestamp;
     }
@@ -86,7 +86,7 @@ class ReturnUrl
      * @param string $msg 消息内容
      * @return array
      */
-    public function getSuccess($msg = '支付结算完成')
+    public function getSuccess($msg = '支付结算完成'): array
     {
         $data['callback_return_type'] = 'view';
         $data['is_callback'] = sprintf(
@@ -105,7 +105,7 @@ class ReturnUrl
      * @param string $msg 消息内容
      * @return array
      */
-    public function getError($msg = '支付结算失败')
+    public function getError($msg = '支付结算失败'): array
     {
         $data['callback_return_type'] = 'view';
         $data['is_callback'] = sprintf(
@@ -124,7 +124,7 @@ class ReturnUrl
      * @param null $setting 配置参数
      * @return bool
      */
-    public function checkReturn($setting = null)
+    public function checkReturn($setting = null): bool
     {
         if (empty($setting)) {
             return false;

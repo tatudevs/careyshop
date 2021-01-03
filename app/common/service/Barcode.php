@@ -21,7 +21,7 @@ class Barcode extends CareyShop
      * @access public
      * @return array
      */
-    public function getBarcodeCallurl()
+    public function getBarcodeCallurl(): array
     {
         $vars = ['method' => 'get.barcode.item'];
         $data['call_url'] = Route::buildUrl("api/{$this->version}/barcode", $vars)->domain(true)->build();

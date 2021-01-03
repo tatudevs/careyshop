@@ -148,7 +148,7 @@ class DeliveryItem extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delCompanyList(array $data)
+    public function delCompanyList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -198,7 +198,7 @@ class DeliveryItem extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueCompanyCode(array $data)
+    public function uniqueCompanyCode(array $data): bool
     {
         if (!$this->validateData($data, 'unique')) {
             return false;

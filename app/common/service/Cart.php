@@ -16,9 +16,9 @@ class Cart extends CareyShop
      * 获取购物车或订单商品封面
      * @access private
      * @param array $goods 商品数据
-     * @return mixed|string
+     * @return string
      */
-    private function getGoodsImage(array $goods)
+    private function getGoodsImage(array $goods): string
     {
         $default = '';
         if (isset($goods['goods']['attachment'][0])) {

@@ -19,7 +19,7 @@ if (!function_exists('get_version')) {
      * 获取版本号
      * @return string
      */
-    function get_version()
+    function get_version(): string
     {
         return config('extra.product.product_version', '');
     }
@@ -30,7 +30,7 @@ if (!function_exists('get_client_type')) {
      * 返回当前账号类型
      * @return int -1:游客 0:顾客 1:管理组
      */
-    function get_client_type()
+    function get_client_type(): int
     {
         $visitor = config('extra.client_group.visitor.value');
         return isset($GLOBALS['client']['type']) ? $GLOBALS['client']['type'] : $visitor;
@@ -42,7 +42,7 @@ if (!function_exists('is_client_admin')) {
      * 当前账号是否属于管理组
      * @return bool
      */
-    function is_client_admin()
+    function is_client_admin(): bool
     {
         return get_client_type() === config('extra.client_group.admin.value');
     }
@@ -53,7 +53,7 @@ if (!function_exists('get_client_id')) {
      * 返回当前账号编号
      * @return int
      */
-    function get_client_id()
+    function get_client_id(): int
     {
         return isset($GLOBALS['client']['client_id']) ? $GLOBALS['client']['client_id'] : 0;
     }
@@ -64,7 +64,7 @@ if (!function_exists('get_client_name')) {
      * 返回当前账号登录名
      * @return string
      */
-    function get_client_name()
+    function get_client_name(): string
     {
         return isset($GLOBALS['client']['client_name']) ? $GLOBALS['client']['client_name'] : '游客';
     }
@@ -75,7 +75,7 @@ if (!function_exists('get_client_group')) {
      * 返回当前账号用户组编号
      * @return int
      */
-    function get_client_group()
+    function get_client_group(): int
     {
         return isset($GLOBALS['client']['group_id']) ? $GLOBALS['client']['group_id'] : AUTH_GUEST;
     }
@@ -86,7 +86,7 @@ if (!function_exists('get_client_nickname')) {
      * 返回当前账号昵称
      * @return string
      */
-    function get_client_nickname()
+    function get_client_nickname(): string
     {
         if (get_client_group() == AUTH_GUEST) {
             return '游客';
@@ -115,7 +115,7 @@ if (!function_exists('user_md5')) {
      * @param string $key      盐
      * @return string
      */
-    function user_md5(string $password, $key = 'Carey_Shop#')
+    function user_md5(string $password, $key = 'Carey_Shop#'): string
     {
         return isset($password) ? md5(sha1($password) . $key) : '';
     }
@@ -127,7 +127,7 @@ if (!function_exists('get_order_no')) {
      * @param string $prefix 头部
      * @return string
      */
-    function get_order_no($prefix = 'CS_')
+    function get_order_no($prefix = 'CS_'): string
     {
         $year_code = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
@@ -148,7 +148,7 @@ if (!function_exists('rand_number')) {
      * @param int $len 数值长度,默认8位
      * @return string
      */
-    function rand_number($len = 8)
+    function rand_number($len = 8): string
     {
         $chars = str_repeat('123456789', 3);
         if ($len > 10) {
@@ -167,7 +167,7 @@ if (!function_exists('rand_string')) {
      * @param bool $lower 是否小写,否则大写
      * @return string
      */
-    function rand_string($len = 32, $lower = true)
+    function rand_string($len = 32, $lower = true): string
     {
         $string = mb_substr(md5(uniqid(rand(), true)), 0, $len, 'utf-8');
         return $lower ? $string : mb_strtoupper($string, 'utf-8');
@@ -180,7 +180,7 @@ if (!function_exists('guid_v4')) {
      * @param bool $trim
      * @return string
      */
-    function guid_v4($trim = true)
+    function guid_v4($trim = true): string
     {
         // Windows
         if (function_exists('com_create_guid')) {
@@ -217,7 +217,7 @@ if (!function_exists('get_randstr')) {
      * @param int $len 数值长度,默认6位
      * @return string
      */
-    function get_randstr($len = 6)
+    function get_randstr($len = 6): string
     {
         $chars = [
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
@@ -245,12 +245,12 @@ if (!function_exists('auto_hid_substr')) {
      * 智能字符串模糊化
      * @param string $str 被模糊的字符串
      * @param int    $len 模糊的长度
-     * @return null|string
+     * @return string
      */
-    function auto_hid_substr(string $str, $len = 3)
+    function auto_hid_substr(string $str, $len = 3): string
     {
         if (empty($str)) {
-            return null;
+            return '';
         }
 
         $sub_str = mb_substr($str, 0, 1, 'utf-8');
@@ -274,7 +274,7 @@ if (!function_exists('string_to_byte')) {
      * @param int    $dec 小数位数
      * @return float
      */
-    function string_to_byte(string $var, $dec = 2)
+    function string_to_byte(string $var, $dec = 2): float
     {
         preg_match('/(^[0-9.]+)(\w+)/', $var, $info);
         $size = $info[1];
@@ -292,13 +292,13 @@ if (!function_exists('xml_to_array')) {
     /**
      * XML转为array
      * @param mixed $xml 值
-     * @return false|mixed
+     * @return mixed|bool
      */
-    function xml_to_array($xml)
+    function xml_to_array($xml): ?bool
     {
         // 禁止引用外部xml实体
         $value = false;
-        libxml_disable_entity_loader(true);
+        libxml_disable_entity_loader();
 
         if (is_string($xml)) {
             $value = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
@@ -337,7 +337,7 @@ if (!function_exists('is_empty_parm')) {
      * @param mixed $parm
      * @return bool
      */
-    function is_empty_parm(&$parm)
+    function is_empty_parm(&$parm): bool
     {
         return !(isset($parm) && '' !== $parm);
     }
@@ -349,7 +349,7 @@ if (!function_exists('get_ip2region_str')) {
      * @param string $ip IP地址
      * @return string
      */
-    function get_ip2region_str(string $ip)
+    function get_ip2region_str(string $ip): string
     {
         $ipStr = '';
         [$country, , $region, $city, $isp] = explode('|', $ip);
@@ -368,7 +368,7 @@ if (!function_exists('is_windows')) {
      * 判断是否为Windows系统
      * @return bool
      */
-    function is_windows()
+    function is_windows(): bool
     {
         return strpos(PHP_OS, 'WIN') !== false;
     }

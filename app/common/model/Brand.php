@@ -114,7 +114,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delBrandList(array $data)
+    public function delBrandList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -132,7 +132,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setBrandStatus(array $data)
+    public function setBrandStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -151,7 +151,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueBrandName(array $data)
+    public function uniqueBrandName(array $data): bool
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -280,7 +280,7 @@ class Brand extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setBrandSort(array $data)
+    public function setBrandSort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -299,7 +299,7 @@ class Brand extends CareyShop
      * @param array $data
      * @return bool
      */
-    public function setBrandIndex(array $data)
+    public function setBrandIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;

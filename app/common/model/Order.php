@@ -173,7 +173,7 @@ class Order extends CareyShop
      * @access private
      * @return string
      */
-    private function getOrderNo()
+    private function getOrderNo(): string
     {
         do {
             $orderNo = get_order_no('PO_');
@@ -312,7 +312,7 @@ class Order extends CareyShop
      * @param int $clientId 账号编号
      * @return bool
      */
-    private function calculatePrice(int $clientId)
+    private function calculatePrice(int $clientId): bool
     {
         // 部分数据需要初始化
         $goodsNum = 0;
@@ -638,7 +638,7 @@ class Order extends CareyShop
      * @param null $data 不为空则为外部数据,否则使用内部数据
      * @return string
      */
-    private function getCompleteAddress($data = null)
+    private function getCompleteAddress($data = null): string
     {
         if (!is_null($data)) {
             $this->dataParams = $data;
@@ -670,7 +670,7 @@ class Order extends CareyShop
      * @param int $clientId 账号编号
      * @return bool
      */
-    private function addOrderData(int $clientId)
+    private function addOrderData(int $clientId): bool
     {
         // 订单数据入库准备
         $orderData = [
@@ -727,7 +727,7 @@ class Order extends CareyShop
      * @param array $invoiceData 订单完整数据
      * @return bool
      */
-    private function setInvoiceData(array &$invoiceData)
+    private function setInvoiceData(array &$invoiceData): bool
     {
         $invoiceType = isset($this->dataParams['invoice_type']) ? $this->dataParams['invoice_type'] : 0;
         if (2 == $invoiceType && empty($this->dataParams['invoice_title'])) {
@@ -758,7 +758,7 @@ class Order extends CareyShop
      * @access private
      * @return bool
      */
-    private function addOrderGoodsData()
+    private function addOrderGoodsData(): bool
     {
         $goodsData = [];
         $orderId = $this->getAttr('order_id');
@@ -796,7 +796,7 @@ class Order extends CareyShop
      * @param string $desc      描述
      * @return bool
      */
-    public function addOrderLog(array $orderData, string $comment, string $desc)
+    public function addOrderLog(array $orderData, string $comment, string $desc): bool
     {
         $data = [
             'order_id'        => $orderData['order_id'],
@@ -821,7 +821,7 @@ class Order extends CareyShop
      * @access private
      * @return bool
      */
-    private function setGoodsStoreQty()
+    private function setGoodsStoreQty(): bool
     {
         foreach ($this->cartData['goods_list'] as $value) {
             // 规格非空则需要减规格库存
@@ -847,7 +847,7 @@ class Order extends CareyShop
      * @param int $clientId 账号编号
      * @return bool
      */
-    private function setUserData(int $clientId)
+    private function setUserData(int $clientId): bool
     {
         $txDb = new Transaction();
         $moneyDb = new UserMoney();
@@ -944,7 +944,7 @@ class Order extends CareyShop
      * @param int $clientId 账号编号
      * @return bool
      */
-    private function delCartGoodsList(int $clientId)
+    private function delCartGoodsList(int $clientId): bool
     {
         $cartId = array_column($this->cartData['goods_list'], 'cart_id');
         $map[] = ['user_id', '=', $clientId];
@@ -1127,7 +1127,7 @@ class Order extends CareyShop
      * @return bool
      * @throws
      */
-    private function returnGoodsStoreQty()
+    private function returnGoodsStoreQty(): bool
     {
         // 搜索条件
         $map[] = ['order_no', '=', $this->orderData['order_no']];
@@ -1157,7 +1157,7 @@ class Order extends CareyShop
      * @access private
      * @return bool
      */
-    private function returnUserData()
+    private function returnUserData(): bool
     {
         $txDb = new Transaction();
         $moneyDb = new UserMoney();
@@ -1315,7 +1315,7 @@ class Order extends CareyShop
      * @access public
      * @return bool
      */
-    public function timeoutOrderCancel()
+    public function timeoutOrderCancel(): bool
     {
         // 设置脚本超时时间
         $seconds = 5 * 60;
@@ -1510,7 +1510,7 @@ class Order extends CareyShop
      * @return bool
      * @throws
      */
-    public function recycleOrderItem(array $data)
+    public function recycleOrderItem(array $data): bool
     {
         if (!$this->validateData($data, 'recycle')) {
             return false;
@@ -1755,7 +1755,7 @@ class Order extends CareyShop
      * @access private
      * @return bool
      */
-    private function completeUserData()
+    private function completeUserData(): bool
     {
         // 调整账号累计消费金额
         $moneyDb = new UserMoney();
@@ -1795,7 +1795,7 @@ class Order extends CareyShop
      * @param object $orderDb 订单模型
      * @return bool
      */
-    public function completeGiveCoupon($orderDb)
+    public function completeGiveCoupon(object $orderDb): bool
     {
         $data = [];
         $couponGiveDb = new CouponGive();
@@ -1820,7 +1820,7 @@ class Order extends CareyShop
      * @param int $orderId 订单编号
      * @return bool
      */
-    private function completeOrderGoods(int $orderId)
+    private function completeOrderGoods(int $orderId): bool
     {
         $map[] = ['order_id', '=', $orderId];
         $map[] = ['status', '=', 1];
@@ -1835,7 +1835,7 @@ class Order extends CareyShop
      * @param string $type 撤销类型
      * @return bool
      */
-    private function cancelOrderService(string $type)
+    private function cancelOrderService(string $type): bool
     {
         $orderServiceDb = new OrderService();
         if (!$orderServiceDb->inCancelOrderService($this->orderData['order_no'], $type)) {
@@ -1938,7 +1938,7 @@ class Order extends CareyShop
      * @access public
      * @return bool
      */
-    public function timeoutOrderComplete()
+    public function timeoutOrderComplete(): bool
     {
         // 设置脚本超时时间
         $seconds = 10 * 60;
@@ -2146,7 +2146,7 @@ class Order extends CareyShop
      * @return int[]
      * @throws
      */
-    public function getOrderStatusTotal(array $data)
+    public function getOrderStatusTotal(array $data): array
     {
         // 准备基础数据
         $result = [
@@ -2220,7 +2220,7 @@ class Order extends CareyShop
      * @return bool
      * @throws
      */
-    public function buyagainOrderGoods(array $data)
+    public function buyagainOrderGoods(array $data): bool
     {
         if (!$this->validateData($data, 'buy_again')) {
             return false;

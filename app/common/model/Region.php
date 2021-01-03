@@ -62,7 +62,7 @@ class Region extends CareyShop
      * @access public
      * @param object $query 模型
      */
-    public function scopeDelete($query)
+    public function scopeDelete(object $query)
     {
         $query->where('is_delete', '=', 0);
     }
@@ -72,7 +72,7 @@ class Region extends CareyShop
      * @access public
      * @return array
      */
-    public static function getRegionCacheList()
+    public static function getRegionCacheList(): array
     {
         return self::withoutGlobalScope()
             ->cache('DeliveryArea')
@@ -128,7 +128,7 @@ class Region extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delRegionList(array $data)
+    public function delRegionList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -252,7 +252,7 @@ class Region extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setRegionSort(array $data)
+    public function setRegionSort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -273,7 +273,7 @@ class Region extends CareyShop
      * @param array $data
      * @return bool
      */
-    public function setRegionIndex(array $data)
+    public function setRegionIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;
@@ -293,7 +293,7 @@ class Region extends CareyShop
      * @param array $data 外部数据
      * @return string
      */
-    public function getRegionName(array $data)
+    public function getRegionName(array $data): string
     {
         if (!$this->validateData($data, 'name')) {
             return '';

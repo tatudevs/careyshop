@@ -50,7 +50,7 @@ class AppInstall extends CareyShop
      * @param string $value 值
      * @return string
      */
-    public function setUserAgentAttr(string $value)
+    public function setUserAgentAttr(string $value): string
     {
         return mb_strtolower($value, 'utf-8');
     }
@@ -122,7 +122,7 @@ class AppInstall extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAppInstallList(array $data)
+    public function delAppInstallList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -204,7 +204,7 @@ class AppInstall extends CareyShop
      * @access public
      * @return array|mixed
      */
-    public function requestAppInstallItem()
+    public function requestAppInstallItem(): array
     {
         // 获取所有安装包列表
         $result = $this->cache(true, null, 'AppInstall')

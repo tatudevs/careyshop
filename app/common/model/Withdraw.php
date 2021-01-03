@@ -83,7 +83,7 @@ class Withdraw extends CareyShop
      * @access private
      * @return string
      */
-    private function getWithdrawNo()
+    private function getWithdrawNo(): string
     {
         do {
             $withdrawNo = get_order_no('TX_');
@@ -102,7 +102,7 @@ class Withdraw extends CareyShop
      * @param string $remark     备注
      * @return bool
      */
-    private function addTransaction(int $type, float $amount, int $userId, string $withdrawNo, string $remark)
+    private function addTransaction(int $type, float $amount, int $userId, string $withdrawNo, string $remark): bool
     {
         $transactionData = [
             'user_id'    => $userId,
@@ -127,7 +127,7 @@ class Withdraw extends CareyShop
      * 获取一个提现请求
      * @access public
      * @param array $data 外部数据
-     * @return false|mixed|null
+     * @return false|array
      * @throws
      */
     public function getWithdrawItem(array $data)
@@ -152,7 +152,7 @@ class Withdraw extends CareyShop
             return $temp[0];
         }
 
-        return null;
+        return [];
     }
 
     /**
@@ -271,7 +271,7 @@ class Withdraw extends CareyShop
      * @return bool
      * @throws
      */
-    public function cancelWithdrawItem(array $data)
+    public function cancelWithdrawItem(array $data): bool
     {
         if (!$this->validateData($data, 'cancel')) {
             return false;
@@ -326,7 +326,7 @@ class Withdraw extends CareyShop
      * @return bool
      * @throws
      */
-    public function processWithdrawItem(array $data)
+    public function processWithdrawItem(array $data): bool
     {
         if (!$this->validateData($data, 'process')) {
             return false;
@@ -356,7 +356,7 @@ class Withdraw extends CareyShop
      * @return bool
      * @throws
      */
-    public function completeWithdrawItem(array $data)
+    public function completeWithdrawItem(array $data): bool
     {
         if (!$this->validateData($data, 'complete')) {
             return false;
@@ -399,7 +399,7 @@ class Withdraw extends CareyShop
      * @return bool
      * @throws
      */
-    public function refuseWithdrawItem(array $data)
+    public function refuseWithdrawItem(array $data): bool
     {
         if (!$this->validateData($data, 'refuse')) {
             return false;

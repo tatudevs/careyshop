@@ -280,7 +280,7 @@ class Spec extends CareyShop
      * @return array
      * @throws
      */
-    public function getSpecAll()
+    public function getSpecAll(): array
     {
         // 搜索条件
         $map[] = ['spec.goods_type_id', '<>', 0];
@@ -326,7 +326,7 @@ class Spec extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delSpecList(array $data)
+    public function delSpecList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -358,7 +358,7 @@ class Spec extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setSpecKey(array $data)
+    public function setSpecKey(array $data): bool
     {
         if (!$this->validateData($data, 'key')) {
             return false;
@@ -376,7 +376,7 @@ class Spec extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setSpecSort(array $data)
+    public function setSpecSort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -394,7 +394,7 @@ class Spec extends CareyShop
      * @param array $data
      * @return bool
      */
-    public function setSpecIndex(array $data)
+    public function setSpecIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;

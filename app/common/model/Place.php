@@ -49,10 +49,10 @@ class Place extends CareyShop
      * @access private
      * @return string
      */
-    private function getPlaceCode()
+    private function getPlaceCode(): string
     {
         do {
-            $code = rand_number(8);
+            $code = rand_number();
         } while (self::checkUnique(['code' => $code]));
 
         return $code;
@@ -332,7 +332,7 @@ class Place extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delPlaceList(array $data)
+    public function delPlaceList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -350,7 +350,7 @@ class Place extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setPlaceStatus(array $data)
+    public function setPlaceStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;

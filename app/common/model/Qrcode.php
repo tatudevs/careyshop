@@ -180,7 +180,7 @@ class Qrcode extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delQrcodeList(array $data)
+    public function delQrcodeList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;

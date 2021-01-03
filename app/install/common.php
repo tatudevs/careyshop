@@ -14,7 +14,7 @@
  * @param mixed  $idx  下步序号
  * @return string
  */
-function get_url($vars = '', $idx = null)
+function get_url($vars = '', $idx = null): string
 {
     $url = request()->baseFile();
     if (!empty($vars) && $vars != '/') {
@@ -30,7 +30,7 @@ function get_url($vars = '', $idx = null)
  * 系统环境检测
  * @return array
  */
-function check_env()
+function check_env(): array
 {
     $items = [
         'os'     => ['操作系统', '不限制', '类Unix', PHP_OS, 'check'],
@@ -78,7 +78,7 @@ function check_env()
  * 目录，文件读写检测
  * @return string[][]
  */
-function check_dirfile()
+function check_dirfile(): array
 {
     $items = [
         ['dir', '可写', 'check', '../runtime'],
@@ -125,7 +125,7 @@ function check_dirfile()
  * 函数检测
  * @return string[][]
  */
-function check_func()
+function check_func(): array
 {
     $items = [
         ['pdo', '支持', 'check', '类'],
@@ -178,7 +178,7 @@ function macro_str_replace(string $sql, array $data)
  * @param string $sql SQL语句
  * @return string
  */
-function get_sql_message(string $sql)
+function get_sql_message(string $sql): string
 {
     if (preg_match('/CREATE TABLE? `([^ ]*)`/is', $sql, $matches)) {
         return !empty($matches[1]) ? "创建数据库表 {$matches[1]} 完成" : '';

@@ -57,10 +57,10 @@ class Weixin extends Payment
     /**
      * 设置请求来源
      * @access public
-     * @param string $request 请求来源
+     * @param mixed $request 请求来源
      * @return object
      */
-    public function setQequest($request)
+    public function setQequest($request): object
     {
         $this->request = $request;
         return $this;
@@ -72,7 +72,7 @@ class Weixin extends Payment
      * @param array $setting 配置信息
      * @return bool
      */
-    public function setConfig($setting)
+    public function setConfig(array $setting): bool
     {
         foreach ($setting as $key => $value) {
             $this->$key = $value['value'];
@@ -107,7 +107,7 @@ class Weixin extends Payment
      * @param array $data 参数信息
      * @return string
      */
-    private function toUrlParams($data)
+    private function toUrlParams(array $data): string
     {
         $buff = '';
         foreach ($data as $k => $v) {
@@ -126,7 +126,7 @@ class Weixin extends Payment
      * @param array $data 参数信息
      * @return string
      */
-    private function makeSign($data)
+    private function makeSign(array $data): string
     {
         // 签名步骤一：按字典序排序参数
         ksort($data);
@@ -252,7 +252,7 @@ class Weixin extends Payment
      * @return string
      * @throws
      */
-    private function jsRequestExecute()
+    private function jsRequestExecute(): string
     {
         $tools = new JsApiPay();
         $openId = $tools->GetOpenid();

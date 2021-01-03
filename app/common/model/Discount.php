@@ -58,7 +58,7 @@ class Discount extends CareyShop
      * @return bool
      * @throws
      */
-    private function isRepeatGoods(string $beginTime, string $endTime, array $goodsList, $excludeId = 0)
+    private function isRepeatGoods(string $beginTime, string $endTime, array $goodsList, $excludeId = 0): bool
     {
         $map = [];
         $excludeId == 0 ?: $map[] = ['discount_id', '<>', $excludeId];
@@ -195,7 +195,7 @@ class Discount extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delDiscountList(array $data)
+    public function delDiscountList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -216,7 +216,7 @@ class Discount extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setDiscountStatus(array $data)
+    public function setDiscountStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;

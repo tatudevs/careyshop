@@ -29,7 +29,7 @@ class Index
      * 安装首页
      * @return string
      */
-    public function index()
+    public function index(): string
     {
         // 获取运行目录
         if (is_file(public_path() . 'static' . DS . 'install' . DS . 'install.lock')) {
@@ -54,7 +54,7 @@ class Index
      * 步骤二，检查环境
      * @return string
      */
-    public function step2()
+    public function step2(): string
     {
         Session::set('step', 2);
         Session::set('error', false);
@@ -81,7 +81,7 @@ class Index
      * 步骤三，设置数据
      * @return string
      */
-    public function step3()
+    public function step3(): string
     {
         if (Session::get('step') != 2) {
             $this->redirect(get_url());
@@ -98,7 +98,7 @@ class Index
      * 步骤四，创建配置
      * @return string
      */
-    public function step4()
+    public function step4(): string
     {
         // POST 用于验证
         if ($this->request->isPost()) {
@@ -297,7 +297,7 @@ class Index
             $appData = [
                 'app_id'     => 1,
                 'app_name'   => 'Admin(后台管理)',
-                'app_key'    => rand_number(8),
+                'app_key'    => rand_number(),
                 'app_secret' => rand_string(),
                 'captcha'    => 1,
             ];
@@ -338,7 +338,7 @@ class Index
      * 完成安装
      * @return string
      */
-    public function complete()
+    public function complete(): string
     {
         if (Session::get('step') != 4) {
             $this->error('请按步骤安装系统', get_url());

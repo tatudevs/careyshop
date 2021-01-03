@@ -136,7 +136,7 @@ class Delivery extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delDeliveryList(array $data)
+    public function delDeliveryList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -203,7 +203,7 @@ class Delivery extends CareyShop
      * @access public
      * @return array
      */
-    public function getDeliverySelect()
+    public function getDeliverySelect(): array
     {
         $map[] = ['d.status', '=', 1];
         $map[] = ['i.is_delete', '=', 0];
@@ -337,7 +337,7 @@ class Delivery extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setDeliveryStatus(array $data)
+    public function setDeliveryStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -355,7 +355,7 @@ class Delivery extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function uniqueDeliveryItem(array $data)
+    public function uniqueDeliveryItem(array $data): bool
     {
         if (!$this->validateData($data, 'unique')) {
             return false;
@@ -377,7 +377,7 @@ class Delivery extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setDeliverySort(array $data)
+    public function setDeliverySort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -395,7 +395,7 @@ class Delivery extends CareyShop
      * @param array $data
      * @return bool
      */
-    public function setDeliveryIndex(array $data)
+    public function setDeliveryIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;

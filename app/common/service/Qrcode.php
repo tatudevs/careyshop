@@ -19,7 +19,7 @@ class Qrcode extends CareyShop
      * @access public
      * @return array
      */
-    public function getQrcodeCallurl()
+    public function getQrcodeCallurl(): array
     {
         $vars = ['method' => 'get.qrcode.item'];
         $data['call_url'] = Route::buildUrl("api/{$this->version}/qrcode", $vars)->domain(true)->build();
@@ -33,7 +33,7 @@ class Qrcode extends CareyShop
      * @param string $path 路径
      * @return string
      */
-    public static function getQrcodeLogoPath(string $path)
+    public static function getQrcodeLogoPath(string $path): string
     {
         // 如果是网络文件直接返回
         if (filter_var($path, FILTER_VALIDATE_URL)) {

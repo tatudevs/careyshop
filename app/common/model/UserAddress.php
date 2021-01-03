@@ -66,7 +66,7 @@ class UserAddress extends CareyShop
      * @access public
      * @param object $query 模型
      */
-    public function scopeDelete($query)
+    public function scopeDelete(object $query)
     {
         $query->where('is_delete', '=', 0);
     }
@@ -224,7 +224,7 @@ class UserAddress extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delAddressList(array $data)
+    public function delAddressList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -256,7 +256,7 @@ class UserAddress extends CareyShop
      * @return bool
      * @throws
      */
-    public function setAddressDefault(array $data)
+    public function setAddressDefault(array $data): bool
     {
         if (!$this->validateData($data, 'default')) {
             return false;
@@ -282,7 +282,7 @@ class UserAddress extends CareyShop
      * @return bool
      * @throws
      */
-    public function isAddressMaximum(array $data)
+    public function isAddressMaximum(array $data): bool
     {
         if (!$this->validateData($data, 'maximum')) {
             return false;

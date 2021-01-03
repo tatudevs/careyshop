@@ -23,7 +23,7 @@ class Upload extends CareyShop
      * @access public
      * @return array[]
      */
-    public function getUploadModule()
+    public function getUploadModule(): array
     {
         $moduleList = [
             [
@@ -59,7 +59,7 @@ class Upload extends CareyShop
      * @access public
      * @param string $file  目录
      * @param string $model 模块
-     * @return false|mixed
+     * @return mixed
      */
     public function createOssObject(string $file, $model = 'Upload')
     {
@@ -85,7 +85,7 @@ class Upload extends CareyShop
     /**
      * 获取上传地址
      * @access public
-     * @return false|mixed
+     * @return bool|array
      */
     public function getUploadUrl()
     {
@@ -110,7 +110,7 @@ class Upload extends CareyShop
     /**
      * 获取上传Token
      * @access public
-     * @return false|mixed
+     * @return bool|array
      */
     public function getUploadToken()
     {
@@ -185,7 +185,7 @@ class Upload extends CareyShop
     /**
      * 当参数为空时获取默认上传模块名,否则验证指定模块名并返回
      * @access public
-     * @return false|mixed
+     * @return mixed
      */
     private function getModuleName()
     {
@@ -205,7 +205,7 @@ class Upload extends CareyShop
     /**
      * 资源上传请求(第三方OSS只能单文件直传方式上传)
      * @access public
-     * @return false|mixed
+     * @return bool|array
      */
     public function addUploadList()
     {
@@ -225,7 +225,7 @@ class Upload extends CareyShop
     /**
      * 接收第三方推送数据
      * @access public
-     * @return false|mixed
+     * @return bool|array
      */
     public function putUploadData()
     {
@@ -348,7 +348,7 @@ class Upload extends CareyShop
     /**
      * 获取资源缩略图信息
      * @access public
-     * @return false|mixed
+     * @return bool|array
      */
     public function getThumbInfo()
     {

@@ -118,7 +118,7 @@ class Article extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delArticleList(array $data)
+    public function delArticleList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -220,7 +220,7 @@ class Article extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setArticleTop(array $data)
+    public function setArticleTop(array $data): bool
     {
         if (!$this->validateData($data, 'top')) {
             return false;
@@ -238,7 +238,7 @@ class Article extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setArticleStatus(array $data)
+    public function setArticleStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;

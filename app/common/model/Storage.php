@@ -131,7 +131,7 @@ class Storage extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setStorageDirectoryDefault(array $data)
+    public function setStorageDirectoryDefault(array $data): bool
     {
         if (!$this->validateData($data, 'default')) {
             return false;
@@ -304,7 +304,7 @@ class Storage extends CareyShop
      * @return bool
      * @throws
      */
-    public function setStorageCover(array $data)
+    public function setStorageCover(array $data): bool
     {
         if (!$this->validateData($data, 'cover')) {
             return false;
@@ -333,7 +333,7 @@ class Storage extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function clearStorageCover(array $data)
+    public function clearStorageCover(array $data): bool
     {
         if (!$this->validateData($data, 'clear_cover')) {
             return false;
@@ -416,7 +416,7 @@ class Storage extends CareyShop
      * @return bool
      * @throws
      */
-    public function delStorageList(array $data)
+    public function delStorageList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -504,7 +504,7 @@ class Storage extends CareyShop
      * @return bool
      * @throws
      */
-    public function clearStorageThumb(array $data)
+    public function clearStorageThumb(array $data): bool
     {
         if (!$this->validateData($data, 'thumb')) {
             return false;
@@ -538,7 +538,7 @@ class Storage extends CareyShop
      * @access public
      * @return int
      */
-    public static function getDefaultStorageId()
+    public static function getDefaultStorageId(): int
     {
         $map[] = ['type', '=', 2];
         $map[] = ['is_default', '=', 1];

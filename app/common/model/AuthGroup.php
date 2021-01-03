@@ -117,7 +117,7 @@ class AuthGroup extends CareyShop
      * @return bool
      * @throws
      */
-    public function delAuthGroupItem(array $data)
+    public function delAuthGroupItem(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -181,7 +181,7 @@ class AuthGroup extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAuthGroupStatus(array $data)
+    public function setAuthGroupStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -201,7 +201,7 @@ class AuthGroup extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setAuthGroupSort(array $data)
+    public function setAuthGroupSort(array $data): bool
     {
         if (!$this->validateData($data, 'sort')) {
             return false;
@@ -221,7 +221,7 @@ class AuthGroup extends CareyShop
      * @param array $data
      * @return bool
      */
-    public function setAuthGroupIndex(array $data)
+    public function setAuthGroupIndex(array $data): bool
     {
         if (!$this->validateData($data, 'index')) {
             return false;

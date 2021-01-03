@@ -77,7 +77,7 @@ class User extends CareyShop
      * @access public
      * @param object $query 模型
      */
-    public function scopeDelete($query)
+    public function scopeDelete(object $query)
     {
         $query->where('is_delete', '=', 0);
     }
@@ -88,7 +88,7 @@ class User extends CareyShop
      * @param mixed $value 值
      * @return string
      */
-    public function setPasswordAttr($value)
+    public function setPasswordAttr($value): string
     {
         return user_md5($value);
     }
@@ -101,7 +101,7 @@ class User extends CareyShop
      * @return string
      * @throws \Exception
      */
-    public function getLastIpRegionAttr($value, $data)
+    public function getLastIpRegionAttr($value, $data): string
     {
         if (empty($data['last_ip'])) {
             return '';
@@ -204,7 +204,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function addUserItem(array $data)
+    public function addUserItem(array $data): bool
     {
         if (!$this->validateData($data)) {
             return false;
@@ -281,7 +281,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setUserStatus(array $data)
+    public function setUserStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -311,7 +311,7 @@ class User extends CareyShop
      * @return bool
      * @throws
      */
-    public function setUserPassword(array $data)
+    public function setUserPassword(array $data): bool
     {
         if (!$this->validateData($data, 'change')) {
             return false;
@@ -351,7 +351,7 @@ class User extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delUserList(array $data)
+    public function delUserList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -482,7 +482,7 @@ class User extends CareyShop
      * @return bool
      * @throws
      */
-    public function logoutUser()
+    public function logoutUser(): bool
     {
         $map[] = ['client_id', '=', get_client_id()];
         $map[] = ['client_type', '=', 0];
@@ -589,7 +589,7 @@ class User extends CareyShop
      * @return bool
      * @throws
      */
-    public function findUserPassword(array $data)
+    public function findUserPassword(array $data): bool
     {
         if (!$this->validateData($data, 'find')) {
             return false;

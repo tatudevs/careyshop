@@ -21,7 +21,7 @@ class Admin extends CareyShop
      * @param array $data  待验证数据
      * @return bool
      */
-    private function checkField(array $rules, array $data)
+    private function checkField(array $rules, array $data): bool
     {
         try {
             validate($rules)->check($data);
@@ -38,7 +38,7 @@ class Admin extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function checkAdminName(array $data)
+    public function checkAdminName(array $data): bool
     {
         $rule = 'require|alphaDash|length:4,20|unique:admin,username';
         $rule .= sprintf(',%d,admin_id', isset($data['exclude_id']) ? $data['exclude_id'] : 0);
@@ -52,7 +52,7 @@ class Admin extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function checkAdminNick(array $data)
+    public function checkAdminNick(array $data): bool
     {
         $rule = 'require|max:50|unique:admin,nickname';
         $rule .= sprintf(',%d,admin_id', isset($data['exclude_id']) ? $data['exclude_id'] : 0);

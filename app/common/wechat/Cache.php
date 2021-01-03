@@ -35,34 +35,37 @@ class Cache implements CacheInterface
         return $this->cache->get($key, $default);
     }
 
-    public function set($key, $value, $ttl = null)
+    public function set($key, $value, $ttl = null): bool
     {
         return $this->cache->set($key, $value, $ttl);
     }
 
-    public function delete($key)
+    public function delete($key): bool
     {
         return $this->cache->delete($key);
     }
 
-    public function clear()
+    public function clear(): bool
     {
         return $this->cache->clear();
     }
 
-    public function getMultiple($keys, $default = null)
+    public function getMultiple($keys, $default = null): iterable
     {
+        return [];
     }
 
-    public function setMultiple($values, $ttl = null)
+    public function setMultiple($values, $ttl = null): bool
     {
+        return false;
     }
 
-    public function deleteMultiple($keys)
+    public function deleteMultiple($keys): bool
     {
+        return false;
     }
 
-    public function has($key)
+    public function has($key): bool
     {
         return $this->cache->has($key);
     }

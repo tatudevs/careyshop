@@ -15,7 +15,7 @@ if (!function_exists('careyshop_function')) {
      * 二次开发公共函数调用测试(演示)
      * @return string
      */
-    function careyshop_function()
+    function careyshop_function(): string
     {
         return 'careyshop function success';
     }

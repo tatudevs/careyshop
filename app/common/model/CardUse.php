@@ -85,7 +85,7 @@ class CardUse extends CareyShop
      * @return bool
      * @throws
      */
-    public function bindCardUseItem(array $data)
+    public function bindCardUseItem(array $data): bool
     {
         if (!$this->validateData($data, 'bind')) {
             return false;
@@ -152,7 +152,7 @@ class CardUse extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setCardUseInvalid(array $data)
+    public function setCardUseInvalid(array $data): bool
     {
         if (!$this->validateData($data, 'invalid')) {
             return false;
@@ -174,7 +174,7 @@ class CardUse extends CareyShop
      * @return bool
      * @throws
      */
-    public function incCardUseMoney($number = '', $value = 0.0, $clientId = 0)
+    public function incCardUseMoney($number = '', $value = 0.0, $clientId = 0): bool
     {
         if (empty($number)) {
             return $this->setError('卡号不能为空');
@@ -213,7 +213,7 @@ class CardUse extends CareyShop
      * @return bool
      * @throws
      */
-    public function decCardUseMoney($number = '', $value = 0.0, $clientId = 0)
+    public function decCardUseMoney($number = '', $value = 0.0, $clientId = 0): bool
     {
         if (empty($number)) {
             return $this->setError('卡号不能为空');
@@ -294,7 +294,7 @@ class CardUse extends CareyShop
      * @return bool
      * @throws
      */
-    public function setCardUseMerge(array $data)
+    public function setCardUseMerge(array $data): bool
     {
         if (!$this->validateData($data, 'merge')) {
             return false;
@@ -351,7 +351,7 @@ class CardUse extends CareyShop
      * @param array $data 购物卡数据
      * @return array
      */
-    private function hidePassword(array $data)
+    private function hidePassword(array $data): array
     {
         $cardAuth = json_decode(Config::get('careyshop.system_info.card_auth', []), true);
         if (!is_client_admin() || in_array(get_client_id(), $cardAuth)) {
@@ -520,7 +520,7 @@ class CardUse extends CareyShop
      * @param float $decMoney      准备减少的可用金额
      * @return bool
      */
-    private function checkCard(array $card, array $goodsCategory, $decMoney = 0.0)
+    private function checkCard(array $card, array $goodsCategory, $decMoney = 0.0): bool
     {
         if ($decMoney > 0 && bccomp($decMoney, $card['money'], 2) === 1) {
             return $this->setError('卡号 ' . $card['number'] . ' 可用余额不足');
@@ -561,7 +561,7 @@ class CardUse extends CareyShop
      * @return bool
      * @throws
      */
-    public function getCardUseCheck(array $data)
+    public function getCardUseCheck(array $data): bool
     {
         if (!$this->validateData($data, 'check')) {
             return false;

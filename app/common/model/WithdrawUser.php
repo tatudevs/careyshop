@@ -65,7 +65,7 @@ class WithdrawUser extends CareyShop
      * @access public
      * @param object $query 模型
      */
-    public function scopeDelete($query)
+    public function scopeDelete(object $query)
     {
         $query->where('is_delete', '=', 0);
     }
@@ -124,7 +124,7 @@ class WithdrawUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delWithdrawUserList(array $data)
+    public function delWithdrawUserList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
@@ -182,7 +182,7 @@ class WithdrawUser extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function isWithdrawUserMaximum(array $data)
+    public function isWithdrawUserMaximum(array $data): bool
     {
         if (!$this->validateData($data, 'maximum')) {
             return false;
