@@ -23,7 +23,7 @@ class CareyShop extends Validate
         'token'      => 'max:100',
         'sign'       => 'min:32',
         'timestamp'  => 'checkTimestamp',
-        'format'     => 'in:json,jsonp,xml',
+        'format'     => 'in:json,jsonp,xml,html',
         'version'    => 'max:10',
         'controller' => 'max:20',
         'method'     => 'max:100',
