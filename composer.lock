@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db4c66da3c83adc60d7406d6438fb25a",
+    "content-hash": "936975da9766cf58e1f138c0977b6248",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -162,16 +162,16 @@
         },
         {
             "name": "dnyz520/careyshop-exception",
-            "version": "v1.0.7",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-exception.git",
-                "reference": "0d87b61ab30fa180cfcfbaa6f6ec8b8b6a6fbcaf"
+                "reference": "ba5e96a6733c4e299e0bf883fd9384991af026bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-exception/zipball/0d87b61ab30fa180cfcfbaa6f6ec8b8b6a6fbcaf",
-                "reference": "0d87b61ab30fa180cfcfbaa6f6ec8b8b6a6fbcaf",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-exception/zipball/ba5e96a6733c4e299e0bf883fd9384991af026bc",
+                "reference": "ba5e96a6733c4e299e0bf883fd9384991af026bc",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -201,7 +201,7 @@
                 }
             ],
             "description": "The CareyShop Exception Package",
-            "time": "2021-01-04T07:55:35+00:00"
+            "time": "2021-01-06T03:17:45+00:00"
         },
         {
             "name": "dnyz520/careyshop-image",
@@ -3108,7 +3108,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.1.0"
+        "php": ">=7.2.0"
     },
     "platform-dev": [],
     "plugin-api-version": "1.1.0"
