@@ -11,7 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\service\Upload as UploadService;
+use app\careyshop\service\Upload as UploadService;
 
 class Storage extends CareyShop
 {

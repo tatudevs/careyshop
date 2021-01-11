@@ -55,16 +55,16 @@
         },
         {
             "name": "dnyz520/careyshop-barcode",
-            "version": "v1.0.6",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-barcode.git",
-                "reference": "b94c5a3affcb7702f1341f234d8c572769aa00a4"
+                "reference": "fad300b80049e81f8dcbf91b167028b69af68eb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-barcode/zipball/b94c5a3affcb7702f1341f234d8c572769aa00a4",
-                "reference": "b94c5a3affcb7702f1341f234d8c572769aa00a4",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-barcode/zipball/fad300b80049e81f8dcbf91b167028b69af68eb7",
+                "reference": "fad300b80049e81f8dcbf91b167028b69af68eb7",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -102,20 +102,20 @@
                 }
             ],
             "description": "The CareyShop Barcode Package",
-            "time": "2021-01-04T07:54:51+00:00"
+            "time": "2021-01-11T03:17:31+00:00"
         },
         {
             "name": "dnyz520/careyshop-captcha",
-            "version": "v1.1.4",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-captcha.git",
-                "reference": "c0432f41bff04930d6a678484c04e71f376a93c3"
+                "reference": "cdac7c2f82cfaa8b6093ddfe7ff8faae25ff6637"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/c0432f41bff04930d6a678484c04e71f376a93c3",
-                "reference": "c0432f41bff04930d6a678484c04e71f376a93c3",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-captcha/zipball/cdac7c2f82cfaa8b6093ddfe7ff8faae25ff6637",
+                "reference": "cdac7c2f82cfaa8b6093ddfe7ff8faae25ff6637",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -158,7 +158,7 @@
                 }
             ],
             "description": "The CareyShop Captcha Package",
-            "time": "2021-01-04T07:55:11+00:00"
+            "time": "2021-01-11T06:10:38+00:00"
         },
         {
             "name": "dnyz520/careyshop-exception",
@@ -205,16 +205,16 @@
         },
         {
             "name": "dnyz520/careyshop-image",
-            "version": "v1.0.6",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-image.git",
-                "reference": "df0603d5041cb175c0b33c243e574873dd5b39cc"
+                "reference": "f06ca7b6e19a47f8d323377ab75e4c3824b7c7cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-image/zipball/df0603d5041cb175c0b33c243e574873dd5b39cc",
-                "reference": "df0603d5041cb175c0b33c243e574873dd5b39cc",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-image/zipball/f06ca7b6e19a47f8d323377ab75e4c3824b7c7cd",
+                "reference": "f06ca7b6e19a47f8d323377ab75e4c3824b7c7cd",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -254,20 +254,20 @@
                 }
             ],
             "description": "The CareyShop Image Package",
-            "time": "2021-01-04T08:20:03+00:00"
+            "time": "2021-01-11T06:10:56+00:00"
         },
         {
             "name": "dnyz520/careyshop-ip2region",
-            "version": "v1.0.7",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-ip2region.git",
-                "reference": "59a8949d92791e934b189cce193e63179606e4a1"
+                "reference": "4e48ff7f66d211829364eb4eeb573acb4a8e00f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/59a8949d92791e934b189cce193e63179606e4a1",
-                "reference": "59a8949d92791e934b189cce193e63179606e4a1",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/4e48ff7f66d211829364eb4eeb573acb4a8e00f1",
+                "reference": "4e48ff7f66d211829364eb4eeb573acb4a8e00f1",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -304,20 +304,20 @@
                 }
             ],
             "description": "The CareyShop Ip2Region Package",
-            "time": "2021-01-04T07:56:01+00:00"
+            "time": "2021-01-11T03:18:28+00:00"
         },
         {
             "name": "dnyz520/careyshop-jump",
-            "version": "v1.0.7",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-jump.git",
-                "reference": "ae0521ed2b152967095d2ada6a5fa486be848058"
+                "reference": "602493936954fcefd36e03e558fe44c2883fa0bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-jump/zipball/ae0521ed2b152967095d2ada6a5fa486be848058",
-                "reference": "ae0521ed2b152967095d2ada6a5fa486be848058",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-jump/zipball/602493936954fcefd36e03e558fe44c2883fa0bc",
+                "reference": "602493936954fcefd36e03e558fe44c2883fa0bc",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -355,20 +355,20 @@
                 }
             ],
             "description": "适用于thinkphp6.0的跳转扩展",
-            "time": "2021-01-04T08:20:20+00:00"
+            "time": "2021-01-11T06:11:13+00:00"
         },
         {
             "name": "dnyz520/careyshop-time",
-            "version": "v1.0.8",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-time.git",
-                "reference": "207f3954bfbba39693f342e77f428a1a144abc8a"
+                "reference": "9d003e51ec82ae5bd291976ef254a39bf27d9e55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-time/zipball/207f3954bfbba39693f342e77f428a1a144abc8a",
-                "reference": "207f3954bfbba39693f342e77f428a1a144abc8a",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-time/zipball/9d003e51ec82ae5bd291976ef254a39bf27d9e55",
+                "reference": "9d003e51ec82ae5bd291976ef254a39bf27d9e55",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -405,7 +405,7 @@
                 }
             ],
             "description": "The CareyShop Time Package",
-            "time": "2021-01-04T08:20:37+00:00"
+            "time": "2021-01-11T03:19:01+00:00"
         },
         {
             "name": "easywechat-composer/easywechat-composer",
@@ -2044,16 +2044,16 @@
         },
         {
             "name": "symfony/polyfill-intl-idn",
-            "version": "v1.20.0",
+            "version": "v1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-idn.git",
-                "reference": "3b75acd829741c768bc8b1f84eb33265e7cc5117"
+                "reference": "0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/3b75acd829741c768bc8b1f84eb33265e7cc5117",
-                "reference": "3b75acd829741c768bc8b1f84eb33265e7cc5117",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44",
+                "reference": "0eb8293dbbcd6ef6bf81404c9ce7d95bcdf34f44",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2073,7 +2073,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.20-dev"
+                    "dev-main": "1.22-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -2130,20 +2130,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-23T14:02:19+00:00"
+            "time": "2021-01-07T16:49:33+00:00"
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
-            "version": "v1.20.0",
+            "version": "v1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
-                "reference": "727d1096295d807c309fb01a851577302394c897"
+                "reference": "6e971c891537eb617a00bb07a43d182a6915faba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/727d1096295d807c309fb01a851577302394c897",
-                "reference": "727d1096295d807c309fb01a851577302394c897",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/6e971c891537eb617a00bb07a43d182a6915faba",
+                "reference": "6e971c891537eb617a00bb07a43d182a6915faba",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2161,7 +2161,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.20-dev"
+                    "dev-main": "1.22-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -2217,20 +2217,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-23T14:02:19+00:00"
+            "time": "2021-01-07T17:09:11+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.20.0",
+            "version": "v1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "39d483bdf39be819deabf04ec872eb0b2410b531"
+                "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/39d483bdf39be819deabf04ec872eb0b2410b531",
-                "reference": "39d483bdf39be819deabf04ec872eb0b2410b531",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
+                "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2248,7 +2248,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.20-dev"
+                    "dev-main": "1.22-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -2300,20 +2300,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-23T14:02:19+00:00"
+            "time": "2021-01-07T16:49:33+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
-            "version": "v1.20.0",
+            "version": "v1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php72.git",
-                "reference": "cede45fcdfabdd6043b3592e83678e42ec69e930"
+                "reference": "cc6e6f9b39fe8075b3dabfbaf5b5f645ae1340c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/cede45fcdfabdd6043b3592e83678e42ec69e930",
-                "reference": "cede45fcdfabdd6043b3592e83678e42ec69e930",
+                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/cc6e6f9b39fe8075b3dabfbaf5b5f645ae1340c9",
+                "reference": "cc6e6f9b39fe8075b3dabfbaf5b5f645ae1340c9",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2328,7 +2328,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.20-dev"
+                    "dev-main": "1.22-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -2379,20 +2379,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-23T14:02:19+00:00"
+            "time": "2021-01-07T16:49:33+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.20.0",
+            "version": "v1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "e70aa8b064c5b72d3df2abd5ab1e90464ad009de"
+                "reference": "dc3063ba22c2a1fd2f45ed856374d79114998f91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/e70aa8b064c5b72d3df2abd5ab1e90464ad009de",
-                "reference": "e70aa8b064c5b72d3df2abd5ab1e90464ad009de",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/dc3063ba22c2a1fd2f45ed856374d79114998f91",
+                "reference": "dc3063ba22c2a1fd2f45ed856374d79114998f91",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2407,7 +2407,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.20-dev"
+                    "dev-main": "1.22-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -2465,7 +2465,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-23T14:02:19+00:00"
+            "time": "2021-01-07T16:49:33+00:00"
         },
         {
             "name": "symfony/psr-http-message-bridge",
@@ -2710,16 +2710,16 @@
         },
         {
             "name": "topthink/framework",
-            "version": "v6.0.5",
+            "version": "v6.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "85625d984f5c96699dc27d384869f206c3aec1cc"
+                "reference": "dd265d9e962da2c033a45190b839d5538770a760"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/framework/zipball/85625d984f5c96699dc27d384869f206c3aec1cc",
-                "reference": "85625d984f5c96699dc27d384869f206c3aec1cc",
+                "url": "https://api.github.com/repos/top-think/framework/zipball/dd265d9e962da2c033a45190b839d5538770a760",
+                "reference": "dd265d9e962da2c033a45190b839d5538770a760",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2773,7 +2773,7 @@
                 "orm",
                 "thinkphp"
             ],
-            "time": "2020-10-26T07:18:00+00:00"
+            "time": "2021-01-10T15:35:54+00:00"
         },
         {
             "name": "topthink/think-helper",
@@ -2872,16 +2872,16 @@
         },
         {
             "name": "topthink/think-orm",
-            "version": "v2.0.34",
+            "version": "v2.0.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/think-orm.git",
-                "reference": "57f9b98895b0ff4ae7b7b75e51456fd8cb8fb629"
+                "reference": "f0bba0b15610d4015655ff6f07ea3d639212076f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-orm/zipball/57f9b98895b0ff4ae7b7b75e51456fd8cb8fb629",
-                "reference": "57f9b98895b0ff4ae7b7b75e51456fd8cb8fb629",
+                "url": "https://api.github.com/repos/top-think/think-orm/zipball/f0bba0b15610d4015655ff6f07ea3d639212076f",
+                "reference": "f0bba0b15610d4015655ff6f07ea3d639212076f",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2919,7 +2919,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2020-09-28T08:24:57+00:00"
+            "time": "2021-01-06T12:55:12+00:00"
         },
         {
             "name": "topthink/think-template",

@@ -11,16 +11,16 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\wechat\service\Material;
-use app\common\wechat\service\Reply;
-use app\common\wechat\service\DataCube;
-use app\common\wechat\service\Menu;
-use app\common\wechat\service\Message;
-use app\common\wechat\service\Server;
-use app\common\wechat\service\Service;
-use app\common\wechat\service\Template;
-use app\common\wechat\service\User;
-use app\common\wechat\service\UserTag;
+use app\careyshop\wechat\service\Material;
+use app\careyshop\wechat\service\Reply;
+use app\careyshop\wechat\service\DataCube;
+use app\careyshop\wechat\service\Menu;
+use app\careyshop\wechat\service\Message;
+use app\careyshop\wechat\service\Server;
+use app\careyshop\wechat\service\Service;
+use app\careyshop\wechat\service\Template;
+use app\careyshop\wechat\service\User;
+use app\careyshop\wechat\service\UserTag;
 
 class Wechat extends CareyShop
 {

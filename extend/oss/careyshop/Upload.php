@@ -12,7 +12,7 @@ namespace oss\careyshop;
 
 const DS = DIRECTORY_SEPARATOR;
 
-use app\common\model\Storage;
+use app\careyshop\model\Storage;
 use careyshop\Image;
 use oss\Upload as UploadBase;
 use think\facade\Config;

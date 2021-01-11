@@ -11,7 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\service\User as UserService;
+use app\careyshop\service\User as UserService;
 
 class User extends CareyShop
 {

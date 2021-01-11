@@ -11,7 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\service\Notice as NoticeService;
+use app\careyshop\service\Notice as NoticeService;
 
 class Notice extends CareyShop
 {

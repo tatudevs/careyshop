@@ -11,8 +11,8 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\model\GoodsAttrConfig;
-use app\common\model\SpecConfig;
+use app\careyshop\model\GoodsAttrConfig;
+use app\careyshop\model\SpecConfig;
 
 class Goods extends CareyShop
 {

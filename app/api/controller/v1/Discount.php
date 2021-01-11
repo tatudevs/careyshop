@@ -11,7 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\model\DiscountGoods;
+use app\careyshop\model\DiscountGoods;
 
 class Discount extends CareyShop
 {

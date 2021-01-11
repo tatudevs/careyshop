@@ -11,7 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\service\App as AppService;
+use app\careyshop\service\App as AppService;
 
 class App extends CareyShop
 {
@@ -58,6 +58,6 @@ class App extends CareyShop
     public function getAppCaptcha(): array
     {
         $appKey = $this->request->param('appkey');
-        return \app\common\model\App::getAppCaptcha($appKey);
+        return \app\careyshop\model\App::getAppCaptcha($appKey);
     }
 }

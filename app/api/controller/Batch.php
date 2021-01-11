@@ -84,7 +84,7 @@ class Batch extends CareyShop
 
                 // 检测是否指定指向类
                 if (!isset($method[1])) {
-                    $method[1] = 'app\\common\\model\\' . $controller;
+                    $method[1] = 'app\\careyshop\\model\\' . $controller;
                 }
 
                 // 实例化指向类

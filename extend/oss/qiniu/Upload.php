@@ -10,7 +10,7 @@
 
 namespace oss\qiniu;
 
-use app\common\model\Storage;
+use app\careyshop\model\Storage;
 use oss\Upload as UploadBase;
 use Qiniu\Auth;
 use Qiniu\Region;

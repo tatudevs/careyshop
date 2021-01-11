@@ -11,7 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\service\Index as IndexService;
+use app\careyshop\service\Index as IndexService;
 use think\facade\Config;
 
 class Index extends CareyShop

@@ -11,7 +11,7 @@
 namespace app\api\controller;
 
 use careyshop\ApiOutput;
-use app\common\service\Auth;
+use app\careyshop\service\Auth;
 use Exception;
 use think\App;
 use think\exception\ValidateException;
@@ -307,7 +307,7 @@ abstract class CareyShop
         if (!isset($callback[1])) {
             $className = ucwords(str_replace(['-', '_'], ' ', $this->request->param('controller')));
             $className = str_replace(' ', '', $className);
-            $callback[1] = 'app\\common\\model\\' . $className;
+            $callback[1] = 'app\\careyshop\\model\\' . $className;
         }
 
         if (class_exists($callback[1])) {

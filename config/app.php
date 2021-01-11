@@ -15,8 +15,6 @@ return [
     'app_namespace'           => '',
     // 是否启用路由
     'with_route'              => true,
-    // 是否启用事件
-    'with_event'              => true,
     // 开启应用快速访问
     'app_express'             => true,
     // 默认应用
@@ -29,7 +27,7 @@ return [
     // 域名绑定（自动多应用模式有效）
     'domain_bind'             => [],
     // 禁止URL访问的应用列表（自动多应用模式有效）
-    'deny_app_list'           => ['common', 'service', 'install'],
+    'deny_app_list'           => ['careyshop', 'service', 'install'],
 
     // 异常页面的模板文件
     'exception_tmpl'          => app()->getRootPath() . 'public/template/exception.tpl',

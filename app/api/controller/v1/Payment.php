@@ -11,7 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\service\Payment as PaymentService;
+use app\careyshop\service\Payment as PaymentService;
 
 class Payment extends CareyShop
 {

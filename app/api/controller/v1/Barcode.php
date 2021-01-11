@@ -11,7 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\service\Barcode as BarcodeService;
+use app\careyshop\service\Barcode as BarcodeService;
 
 class Barcode extends CareyShop
 {

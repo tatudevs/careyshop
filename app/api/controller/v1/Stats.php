@@ -11,7 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\service\Stats as StatsService;
+use app\careyshop\service\Stats as StatsService;
 use careyshop\Time;
 use think\exception\ValidateException;
 

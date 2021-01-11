@@ -11,7 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\model\MessageUser;
+use app\careyshop\model\MessageUser;
 
 class Message extends CareyShop
 {

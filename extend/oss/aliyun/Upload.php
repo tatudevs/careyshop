@@ -10,7 +10,7 @@
 
 namespace oss\aliyun;
 
-use app\common\model\Storage;
+use app\careyshop\model\Storage;
 use oss\Upload as UploadBase;
 use OSS\OssClient;
 use OSS\Core\OssException;

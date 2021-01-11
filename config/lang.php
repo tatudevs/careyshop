@@ -18,7 +18,9 @@ return [
     // 是否使用Cookie记录
     'use_cookie'      => true,
     // 多语言cookie变量
-    'cookie_var'      => 'think_lang',
+    'cookie_var'      => 'careyshop_lang',
+    // 多语言header变量
+    'header_var'      => 'careyshop-lang',
     // 扩展语言包
     'extend_list'     => [],
     // Accept-Language转义为对应语言包名称

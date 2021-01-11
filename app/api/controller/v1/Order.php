@@ -11,8 +11,8 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\common\model\OrderGoods;
-use app\common\model\OrderLog;
+use app\careyshop\model\OrderGoods;
+use app\careyshop\model\OrderLog;
 
 class Order extends CareyShop
 {
