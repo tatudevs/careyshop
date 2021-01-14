@@ -17,6 +17,7 @@ use think\facade\Db;
 use think\facade\Session;
 use think\facade\Validate;
 use think\facade\View;
+use util\Aes;
 
 const DS = DIRECTORY_SEPARATOR;
 
@@ -202,7 +203,8 @@ class Index
         }
 
         // 数据准备
-        $data = Session::get('installData');
+        $data = Session::get('installData', []);
+        $data['project'] = Aes::decrypt('A1Na3UQXIeMOrkhhAE7JOg==', 'template', false);
         $type = $this->request->post('type');
         $result = ['status' => 1, 'type' => $type];
         $dataPath = app_path() . 'data' . DS;
@@ -215,7 +217,7 @@ class Index
         // 安装数据库函数
         if ('function' == $type) {
             try {
-                $sql = file_get_contents($dataPath . 'function_sql.tpl');
+                $sql = Aes::decrypt(file_get_contents($dataPath . 'function_sql.tpl'));
                 $sql = macro_str_replace($sql, $data);
 
                 $mysqli = mysqli_connect($data['hostname'], $data['username'], $data['password'], $data['database'], (int)$data['hostport']);
@@ -237,7 +239,7 @@ class Index
         // 安装数据库表
         if ('database' == $type) {
             $database = Cache::remember('database', function () use ($data, $dataPath) {
-                $sql = file_get_contents($dataPath . sprintf('careyshop%s.tpl', $data['is_demo'] == 1 ? '_demo' : ''));
+                $sql = Aes::decrypt(file_get_contents($dataPath . sprintf('careyshop%s.tpl', $data['is_demo'] == 1 ? '_demo' : '')));
                 $sql = macro_str_replace($sql, $data);
                 $sql = str_replace("\r", "\n", $sql);
                 $sql = explode(";\n", $sql);
