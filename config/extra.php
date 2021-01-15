@@ -12,7 +12,7 @@ return [
     // 产品信息
     'product'      => [
         'product_name'    => 'CareyShop商城框架系统',
-        'product_version' => '1.3.3',
+        'product_version' => '1.3.2',
         'build_version'   => '20210111',
         'product_website' => 'http://www.careyshop.cn',
         'product_update'  => 'http://www.careyshop.cn/checkUpdate',
