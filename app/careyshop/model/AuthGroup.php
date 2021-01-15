@@ -85,9 +85,11 @@ class AuthGroup extends CareyShop
             return false;
         }
 
+        // 允许修改字段与条件
+        $field = ['name', 'description', 'sort', 'status'];
         $map[] = ['group_id', '=', $data['group_id']];
 
-        $result = self::update($data, $map);
+        $result = self::update($data, $map, $field);
         Cache::tag('CommonAuth')->clear();
 
         return $result->toArray();
