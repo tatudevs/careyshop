@@ -26,6 +26,7 @@ class AuthGroup extends CareyShop
      */
     protected $readonly = [
         'group_id',
+        'module',
         'system',
     ];
 
@@ -85,11 +86,10 @@ class AuthGroup extends CareyShop
             return false;
         }
 
-        // 允许修改字段与条件
-        $field = ['name', 'description', 'sort', 'status'];
+        // 修改条件
         $map[] = ['group_id', '=', $data['group_id']];
 
-        $result = self::update($data, $map, $field);
+        $result = self::update($data, $map);
         Cache::tag('CommonAuth')->clear();
 
         return $result->toArray();

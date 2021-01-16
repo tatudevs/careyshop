@@ -53,7 +53,6 @@ class AuthGroup extends CareyShop
             'group_id' => 'require|integer|gt:0',
             'name',
             'description',
-            'module',
             'sort',
             'status',
         ],

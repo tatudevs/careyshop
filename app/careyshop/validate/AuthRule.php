@@ -53,7 +53,6 @@ class AuthRule extends CareyShop
     protected $scene = [
         'set'    => [
             'rule_id' => 'require|integer|gt:0',
-            'module',
             'name',
             'menu_auth',
             'log_auth',

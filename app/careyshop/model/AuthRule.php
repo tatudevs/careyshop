@@ -27,6 +27,7 @@ class AuthRule extends CareyShop
     protected $readonly = [
         'rule_id',
         'group_id',
+        'module',
     ];
 
     /**
