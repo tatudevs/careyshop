@@ -53,7 +53,7 @@ class Order extends CareyShop
         'goods_name'           => 'max:200',
         'keywords'             => 'max:200',
         'use_card'             => 'requireWith:card_number|float|egt:0|regex:^\d+(\.\d{1,2})?$',
-        'card_number'          => 'requireWith:use_card|length:16',
+        'card_number'          => 'requireWith:use_card|length:11',
         'comment_type'         => 'in:comment,addition',
         'account'              => 'max:80',
         'is_picking'           => 'in:0,1',
