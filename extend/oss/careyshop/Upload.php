@@ -150,13 +150,13 @@ class Upload extends UploadBase
             return $this->setError('替换资源只能上传单个文件');
         }
 
-        try {
-            $ext = Config::get('careyshop.upload.image_ext') . ',' . Config::get('careyshop.upload.file_ext');
-            $rule = sprintf('filesize:%s|fileExt:%s', self::$maxSize, $ext);
+        $ext = Config::get('careyshop.upload.image_ext') . ',' . Config::get('careyshop.upload.file_ext');
+        $validate = validate(['file' => sprintf('fileSize:%s|fileExt:%s', self::$maxSize, $ext)], [], false, false);
 
-            validate(['image' => $rule])->check($files);
-        } catch (\Exception $e) {
-            return $this->setError($e->getMessage());
+        foreach ($files as $key => $file) {
+            if (!$validate->check(['file' => $file])) {
+                return $this->setError($file->getOriginalName() . '：' . $validate->getError());
+            }
         }
 
         // 实际保存资源
