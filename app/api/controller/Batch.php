@@ -18,9 +18,9 @@ class Batch extends CareyShop
     /**
      * API批量调用首页
      * @access public
-     * @return array
+     * @return mixed
      */
-    public function index(): array
+    public function index()
     {
         // 删除多余数据,避免影响其他模块
         unset($this->params['appkey']);
@@ -58,10 +58,7 @@ class Batch extends CareyShop
 
             try {
                 // 验证数据
-                $validate = $this->validate($value, 'CareyShop.batch');
-                if (true !== $validate) {
-                    throw new Exception($validate);
-                }
+                $this->validate($value, 'CareyShop.batch');
 
                 // 权限验证,先验证是否属于白名单,再验证是否有权限
                 if (!$this->apiDebug) {
