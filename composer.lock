@@ -258,16 +258,16 @@
         },
         {
             "name": "dnyz520/careyshop-ip2region",
-            "version": "v1.0.8",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-ip2region.git",
-                "reference": "4e48ff7f66d211829364eb4eeb573acb4a8e00f1"
+                "reference": "7bd668745b2e11b18954652035e34de91e1ca51d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/4e48ff7f66d211829364eb4eeb573acb4a8e00f1",
-                "reference": "4e48ff7f66d211829364eb4eeb573acb4a8e00f1",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-ip2region/zipball/7bd668745b2e11b18954652035e34de91e1ca51d",
+                "reference": "7bd668745b2e11b18954652035e34de91e1ca51d",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -304,7 +304,7 @@
                 }
             ],
             "description": "The CareyShop Ip2Region Package",
-            "time": "2021-01-11T03:18:28+00:00"
+            "time": "2021-01-19T01:57:07+00:00"
         },
         {
             "name": "dnyz520/careyshop-jump",
@@ -970,16 +970,16 @@
         },
         {
             "name": "overtrue/wechat",
-            "version": "4.3.5",
+            "version": "4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/w7corp/easywechat.git",
-                "reference": "19d60ef304bae897ef5b68d6bf1a116940b53423"
+                "reference": "20bdd3fe8056ee9297692caf53bd131be8079ee6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/19d60ef304bae897ef5b68d6bf1a116940b53423",
-                "reference": "19d60ef304bae897ef5b68d6bf1a116940b53423",
+                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/20bdd3fe8056ee9297692caf53bd131be8079ee6",
+                "reference": "20bdd3fe8056ee9297692caf53bd131be8079ee6",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1039,7 +1039,21 @@
                 "weixin",
                 "weixin-sdk"
             ],
-            "time": "2020-12-23T06:55:46+00:00"
+            "funding": [
+                {
+                    "url": "https://www.easywechat.com/img/pay/wechat.jpg",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/overtrue",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/overtrue",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-12-30T06:39:40+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -2872,16 +2886,16 @@
         },
         {
             "name": "topthink/think-orm",
-            "version": "v2.0.35",
+            "version": "v2.0.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/think-orm.git",
-                "reference": "f0bba0b15610d4015655ff6f07ea3d639212076f"
+                "reference": "f48dc09050f25029d41a66bfc9c3c403e4f82024"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-orm/zipball/f0bba0b15610d4015655ff6f07ea3d639212076f",
-                "reference": "f0bba0b15610d4015655ff6f07ea3d639212076f",
+                "url": "https://api.github.com/repos/top-think/think-orm/zipball/f48dc09050f25029d41a66bfc9c3c403e4f82024",
+                "reference": "f48dc09050f25029d41a66bfc9c3c403e4f82024",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2919,7 +2933,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2021-01-06T12:55:12+00:00"
+            "time": "2021-01-12T09:08:52+00:00"
         },
         {
             "name": "topthink/think-template",
