@@ -35,6 +35,7 @@ class Storage extends CareyShop
     protected $readonly = [
         'storage_id',
         'hash',
+        'create_time',
     ];
 
     /**

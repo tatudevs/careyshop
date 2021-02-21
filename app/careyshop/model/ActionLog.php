@@ -39,6 +39,7 @@ class ActionLog extends CareyShop
      */
     protected $readonly = [
         'action_log_id',
+        'create_time',
     ];
 
     /**

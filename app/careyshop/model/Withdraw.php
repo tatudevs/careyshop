@@ -41,6 +41,7 @@ class Withdraw extends CareyShop
     protected $readonly = [
         'withdraw_id',
         'withdraw_no',
+        'create_time',
     ];
 
     /**
@@ -70,10 +71,10 @@ class Withdraw extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetUserAttr($value)
+    public function getGetUserAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }
@@ -127,7 +128,7 @@ class Withdraw extends CareyShop
      * 获取一个提现请求
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getWithdrawItem(array $data)

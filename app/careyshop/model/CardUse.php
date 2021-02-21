@@ -70,10 +70,10 @@ class CardUse extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetUserAttr($value)
+    public function getGetUserAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }

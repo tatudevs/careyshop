@@ -43,6 +43,15 @@ class GoodsConsult extends CareyShop
     ];
 
     /**
+     * 只读属性
+     * @var array
+     */
+    protected $readonly = [
+        'goods_consult_id',
+        'create_time',
+    ];
+
+    /**
      * 字段类型或者格式转换
      * @var array
      */
@@ -94,20 +103,20 @@ class GoodsConsult extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetUserAttr($value)
+    public function getGetUserAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetGoodsAttr($value)
+    public function getGetGoodsAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }
@@ -226,10 +235,10 @@ class GoodsConsult extends CareyShop
      * 获取一个商品咨询问答明细
      * @access public
      * @param array $data 外部数据
-     * @return false|mixed
+     * @return array|false
      * @throws
      */
-    public function getConsultItem(array $data): bool
+    public function getConsultItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;

@@ -41,6 +41,7 @@ class MessageUser extends CareyShop
         'message_id',
         'user_id',
         'admin_id',
+        'create_time',
     ];
 
     /**

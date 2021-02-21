@@ -39,6 +39,7 @@ class OrderService extends CareyShop
         'type',
         'goods_status',
         'refund_fee',
+        'create_time',
     ];
 
     /**
@@ -133,30 +134,30 @@ class OrderService extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetOrderRefundAttr($value)
+    public function getGetOrderRefundAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetUserAttr($value)
+    public function getGetUserAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetAdminAttr($value)
+    public function getGetAdminAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }
@@ -417,7 +418,7 @@ class OrderService extends CareyShop
      * 获取一个售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getOrderServiceItem(array $data)
@@ -1229,7 +1230,7 @@ class OrderService extends CareyShop
      * 撤销一个售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function setOrderServiceCancel(array $data)

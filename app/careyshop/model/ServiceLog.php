@@ -37,6 +37,7 @@ class ServiceLog extends CareyShop
     protected $readonly = [
         'service_log_id',
         'order_service_id',
+        'create_time',
     ];
 
     /**

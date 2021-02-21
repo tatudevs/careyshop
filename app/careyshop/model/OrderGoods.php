@@ -151,7 +151,7 @@ class OrderGoods extends CareyShop
      * @param array $data          外部数据
      * @param bool  $returnArray   是否以数组的形式返回
      * @param bool  $hasOrderGoods 是否关联订单数据
-     * @return false|array|object
+     * @return array|object|false
      * @throws
      */
     public function getOrderGoodsItem(array $data, $returnArray = true, $hasOrderGoods = true)

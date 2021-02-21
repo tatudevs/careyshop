@@ -45,6 +45,7 @@ class User extends CareyShop
         'username',
         'mobile',
         'email',
+        'create_time',
     ];
 
     /**
@@ -180,20 +181,20 @@ class User extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetUserLevelAttr($value)
+    public function getGetUserLevelAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetAuthGroupAttr($value)
+    public function getGetAuthGroupAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }

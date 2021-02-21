@@ -43,6 +43,15 @@ class Transaction extends CareyShop
     protected $updateTime = false;
 
     /**
+     * 只读属性
+     * @var array
+     */
+    protected $readonly = [
+        'transaction_id',
+        'create_time',
+    ];
+
+    /**
      * 字段类型或者格式转换
      * @var array
      */
@@ -69,10 +78,10 @@ class Transaction extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetUserAttr($value)
+    public function getGetUserAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }

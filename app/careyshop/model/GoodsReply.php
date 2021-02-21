@@ -38,6 +38,7 @@ class GoodsReply extends CareyShop
         'goods_reply_id',
         'goods_comment_id',
         'user_id',
+        'create_time',
     ];
 
     /**

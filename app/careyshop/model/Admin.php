@@ -43,6 +43,7 @@ class Admin extends CareyShop
     protected $readonly = [
         'admin_id',
         'username',
+        'create_time',
     ];
 
     /**
@@ -136,10 +137,10 @@ class Admin extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetAuthGroupAttr($value)
+    public function getGetAuthGroupAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }

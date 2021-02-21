@@ -45,6 +45,7 @@ class Collect extends CareyShop
     protected $readonly = [
         'collect_id',
         'user_id',
+        'create_time',
     ];
 
     /**

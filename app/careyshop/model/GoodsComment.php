@@ -69,6 +69,15 @@ class GoodsComment extends CareyShop
     ];
 
     /**
+     * 只读属性
+     * @var array
+     */
+    protected $readonly = [
+        'goods_comment_id',
+        'create_time',
+    ];
+
+    /**
      * 字段类型或者格式转换
      * @var array
      */
@@ -175,30 +184,30 @@ class GoodsComment extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetAdditionAttr($value)
+    public function getGetAdditionAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetOrderGoodsAttr($value)
+    public function getGetOrderGoodsAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetUserAttr($value)
+    public function getGetUserAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }
@@ -657,7 +666,7 @@ class GoodsComment extends CareyShop
      * 获取某个评价的明细("是否已读"不关联,关联不代表看完,所以需手动设置)
      * @access public
      * @param array $data 外部数据
-     * @return false|array
+     * @return array|false
      * @throws
      */
     public function getCommentItem(array $data)

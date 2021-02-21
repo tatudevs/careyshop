@@ -39,6 +39,7 @@ class Message extends CareyShop
     protected $readonly = [
         'message_id',
         'member',
+        'create_time',
     ];
 
     /**

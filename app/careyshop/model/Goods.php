@@ -36,6 +36,7 @@ class Goods extends CareyShop
         'goods_id',
         'comment_sum',
         'sales_sum',
+        'create_time',
     ];
 
     /**

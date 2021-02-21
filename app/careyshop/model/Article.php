@@ -32,6 +32,7 @@ class Article extends CareyShop
      */
     protected $readonly = [
         'article_id',
+        'create_time',
     ];
 
     /**
@@ -62,10 +63,10 @@ class Article extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param mixed $value
-     * @return mixed|\stdClass
+     * @param Object $value
+     * @return mixed
      */
-    public function getGetArticleCatAttr($value)
+    public function getGetArticleCatAttr($value = null)
     {
         return is_null($value) ? new \stdClass : $value;
     }

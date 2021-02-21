@@ -31,6 +31,15 @@ class Verification extends CareyShop
     protected $updateTime = false;
 
     /**
+     * 只读属性
+     * @var array
+     */
+    protected $readonly = [
+        'verification_id',
+        'create_time',
+    ];
+
+    /**
      * 字段类型或者格式转换
      * @var array
      */

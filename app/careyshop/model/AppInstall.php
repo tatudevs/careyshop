@@ -33,6 +33,7 @@ class AppInstall extends CareyShop
      */
     protected $readonly = [
         'app_install_id',
+        'create_time',
     ];
 
     /**

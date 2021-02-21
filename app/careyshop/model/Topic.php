@@ -30,6 +30,7 @@ class Topic extends CareyShop
      */
     protected $readonly = [
         'topic_id',
+        'create_time',
     ];
 
     /**

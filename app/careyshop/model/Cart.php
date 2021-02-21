@@ -47,6 +47,7 @@ class Cart extends CareyShop
         'cart_id',
         'user_id',
         'goods_id',
+        'create_time',
     ];
 
     /**
