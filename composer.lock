@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "65b42101a15ac5558dfa637538d6674a",
+    "content-hash": "6727cc2edabc563f662d48444e7b2fc6",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -359,16 +359,16 @@
         },
         {
             "name": "dnyz520/careyshop-report",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dnyz520/careyshop-report.git",
-                "reference": "e2f5e1bb3227bc802e9a3edbe4682f16bda39d3b"
+                "reference": "66fcccc64a7372d494908d694da3c513f20b1793"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dnyz520/careyshop-report/zipball/e2f5e1bb3227bc802e9a3edbe4682f16bda39d3b",
-                "reference": "e2f5e1bb3227bc802e9a3edbe4682f16bda39d3b",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-report/zipball/66fcccc64a7372d494908d694da3c513f20b1793",
+                "reference": "66fcccc64a7372d494908d694da3c513f20b1793",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -405,7 +405,7 @@
                 }
             ],
             "description": "The CareyShop ReportAdmin Package",
-            "time": "2021-03-02T06:12:30+00:00"
+            "time": "2021-03-02T14:55:53+00:00"
         },
         {
             "name": "dnyz520/careyshop-time",
