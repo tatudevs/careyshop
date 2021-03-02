@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "936975da9766cf58e1f138c0977b6248",
+    "content-hash": "65b42101a15ac5558dfa637538d6674a",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -356,6 +356,56 @@
             ],
             "description": "适用于thinkphp6.0的跳转扩展",
             "time": "2021-01-11T06:11:13+00:00"
+        },
+        {
+            "name": "dnyz520/careyshop-report",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dnyz520/careyshop-report.git",
+                "reference": "e2f5e1bb3227bc802e9a3edbe4682f16bda39d3b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dnyz520/careyshop-report/zipball/e2f5e1bb3227bc802e9a3edbe4682f16bda39d3b",
+                "reference": "e2f5e1bb3227bc802e9a3edbe4682f16bda39d3b",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "topthink/framework": "^6.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "think": {
+                    "services": [
+                        "careyshop\\Report"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "careyshop\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "careyshop",
+                    "email": "dnyz520@126.com"
+                }
+            ],
+            "description": "The CareyShop ReportAdmin Package",
+            "time": "2021-03-02T06:12:30+00:00"
         },
         {
             "name": "dnyz520/careyshop-time",
