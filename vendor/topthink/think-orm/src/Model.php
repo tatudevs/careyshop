@@ -456,6 +456,9 @@ abstract class Model implements JsonSerializable, ArrayAccess, Arrayable, Jsonab
         if ($this->exists) {
             $this->data   = $this->db()->find($this->getKey())->getData();
             $this->origin = $this->data;
+            $this->get    = [];
+            $this->set    = [];
+            $this->readDataType();
 
             if ($relation) {
                 $this->relation = [];
@@ -964,7 +967,10 @@ abstract class Model implements JsonSerializable, ArrayAccess, Arrayable, Jsonab
      */
     public function __unset(string $name): void
     {
-        unset($this->data[$name], $this->relation[$name]);
+        unset($this->data[$name],
+            $this->get[$name],
+            $this->set[$name],
+            $this->relation[$name]);
     }
 
     // ArrayAccess
