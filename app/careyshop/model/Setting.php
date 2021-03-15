@@ -115,6 +115,7 @@ class Setting extends CareyShop
                         break;
 
                     case 'is_sub':
+                    case 'is_subscriber':
                         $this->setSettingItem($key, $value, 'delivery_dist', 'status');
                         break;
 

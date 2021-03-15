@@ -12,6 +12,7 @@ namespace app\careyshop\model;
 
 use app\careyshop\service\DeliveryDist as Dist;
 use think\facade\Config;
+use think\helper\Str;
 use util\Http;
 
 class DeliveryDist extends CareyShop
@@ -162,22 +163,36 @@ class DeliveryDist extends CareyShop
             return $distResult->toArray();
         }
 
+        $contact = '';
+        if ('SF' === $data['delivery_code']) {
+            if (empty($data['customer_name'])) {
+                return $this->setError('该快递公司需要填写收件人\寄件人的联系方式');
+            } else {
+                $contact = Str::substr($data['customer_name'], -4);
+            }
+
+            if (Str::length($contact) !== 4) {
+                return $this->setError('联系方式长度过短');
+            }
+        }
+
         // 如开启订阅配送轨迹则向第三方订阅
         if (1 == $data['is_sub']) {
             // 请求正文内容
             $requestData = [
-                'ShipperCode'  => $deliveryResult->getAttr('code'),
+                'ShipperCode'  => $data['delivery_code'],
                 'LogisticCode' => $data['logistic_code'],
                 'OrderCode'    => $data['order_code'],
+                'CustomerName' => $contact,
                 'Remark'       => 'CareyShop',
             ];
-            $requestData = json_encode($requestData, JSON_UNESCAPED_UNICODE);
 
             // 请求系统参数
+            $requestData = json_encode($requestData, JSON_UNESCAPED_UNICODE);
             $postData = [
                 'RequestData' => urlencode($requestData),
                 'EBusinessID' => Config::get('careyshop.delivery_dist.api_id'),
-                'RequestType' => '1008',
+                'RequestType' => Config::get('careyshop.delivery_dist.is_subscriber') ? '8008' : '1008',
                 'DataSign'    => Dist::getCallbackSign($requestData),
                 'DataType'    => '2',
             ];
@@ -255,19 +270,24 @@ class DeliveryDist extends CareyShop
      * @access private
      * @param string $deliveryCode 快递公司编码
      * @param string $logisticCode 快递单号
+     * @param mixed  $customerName 客户名称
      * @return array|false
      */
-    private function getOrderTracesByJson(string $deliveryCode, string $logisticCode)
+    private function getOrderTracesByJson(string $deliveryCode, string $logisticCode, $customerName)
     {
         // 请求正文内容
-        $requestData = ['ShipperCode' => $deliveryCode, 'LogisticCode' => $logisticCode];
-        $requestData = json_encode($requestData, JSON_UNESCAPED_UNICODE);
+        $requestData = [
+            'ShipperCode'  => $deliveryCode,
+            'LogisticCode' => $logisticCode,
+            'CustomerName' => $deliveryCode === 'SF' ? Str::substr($customerName, -4) : '',
+        ];
 
         // 请求系统参数
+        $requestData = json_encode($requestData, JSON_UNESCAPED_UNICODE);
         $postData = [
             'RequestData' => urlencode($requestData),
             'EBusinessID' => Config::get('careyshop.delivery_dist.api_id'),
-            'RequestType' => '1002',
+            'RequestType' => Config::get('careyshop.delivery_dist.is_subscriber') ? '8002' : '1002',
             'DataSign'    => Dist::getCallbackSign($requestData),
             'DataType'    => '2',
         ];
@@ -297,7 +317,11 @@ class DeliveryDist extends CareyShop
             return false;
         }
 
-        return $this->getOrderTracesByJson($data['delivery_code'], $data['logistic_code']);
+        return $this->getOrderTracesByJson(
+            $data['delivery_code'],
+            $data['logistic_code'],
+            $data['customer_name']
+        );
     }
 
     /**
@@ -328,31 +352,32 @@ class DeliveryDist extends CareyShop
             return [];
         }
 
-        $update = [];
         foreach ($result as $key => $value) {
             // 忽略已订阅或已签收的配送轨迹
             if (1 === $value['is_sub'] || 3 === $value['state']) {
                 continue;
             }
 
-            $track = $this->getOrderTracesByJson($value['getDeliveryItem']['code'], $value['logistic_code']);
+            $track = $this->getOrderTracesByJson(
+                $value['getDeliveryItem']['code'],
+                $value['logistic_code'],
+                $value['customer_name']
+            );
+
             if (false !== $track) {
                 $result[$key]['state'] = (int)$track['state'];
                 $result[$key]['trace'] = $track['trace'];
 
                 // 如已签收则更新数据
                 if (3 == $track['state']) {
-                    $update[] = [
-                        'delivery_dist_id' => $value['delivery_dist_id'],
-                        'state'            => $track['state'],
-                        'trace'            => $track['trace'],
+                    $update = [
+                        'state' => $track['state'],
+                        'trace' => $track['trace'],
                     ];
+
+                    self::update($update, ['delivery_dist_id' => $value['delivery_dist_id']]);
                 }
             }
-        }
-
-        if (!empty($update)) {
-            $this->saveAll($update);
         }
 
         self::keyToSnake(['getDeliveryItem', 'getUser'], $result);

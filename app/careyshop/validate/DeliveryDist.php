@@ -24,6 +24,7 @@ class DeliveryDist extends CareyShop
         'delivery_code'    => 'max:30',
         'logistic_code'    => 'require|max:50',
         'exclude_code'     => 'arrayHasOnlyStrings',
+        'customer_name'    => 'max:30',
         'is_trace'         => 'in:0,1',
         'state'            => 'in:0,1,2,3,4,201',
         'is_sub'           => 'in:0,1',
@@ -47,6 +48,7 @@ class DeliveryDist extends CareyShop
         'delivery_code'    => '快递公司编码',
         'logistic_code'    => '快递单号',
         'exclude_code'     => '排除快递单号',
+        'customer_name'    => '寄件人或收件人联系方式',
         'is_trace'         => '是否获取配送轨迹',
         'state'            => '配送状态',
         'is_sub'           => '是否订阅推送',
@@ -83,6 +85,7 @@ class DeliveryDist extends CareyShop
         ],
         'trace' => [
             'delivery_code' => 'require|max:30',
+            'customer_name' => 'requireIf:delivery_code,SF',
             'logistic_code',
         ],
     ];

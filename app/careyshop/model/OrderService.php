@@ -1116,6 +1116,7 @@ class OrderService extends CareyShop
                 'order_code'       => $result->getAttr('service_no'),
                 'delivery_item_id' => $data['delivery_item_id'],
                 'logistic_code'    => $data['logistic_code'],
+                'customer_name'    => Config::get('careyshop.service.mobile'),
             ];
 
             $distDb = new DeliveryDist();
@@ -1668,6 +1669,7 @@ class OrderService extends CareyShop
                     'order_code'       => $serviceDb->getAttr('service_no'),
                     'delivery_item_id' => $data['delivery_item_id'],
                     'logistic_code'    => $data['logistic_code'],
+                    'customer_name'    => Config::get('careyshop.service.mobile'),
                 ];
 
                 $distDb = new DeliveryDist();

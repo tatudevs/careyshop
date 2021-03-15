@@ -1714,6 +1714,7 @@ class Order extends CareyShop
                     'client_id'     => $this->orderData['user_id'],
                     'order_code'    => $this->orderData['order_no'],
                     'logistic_code' => $data['logistic_code'],
+                    'customer_name' => $this->orderData['mobile'],
                 ];
 
                 if (!is_empty_parm($data['delivery_id'])) {
