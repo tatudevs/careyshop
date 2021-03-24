@@ -20,7 +20,7 @@
     "support": {
         "email": "dnyz520@126.com",
         "issues": "https://github.com/dnyz520/careyshop/issues",
-        "source": "https://demo.careyshop.cn/admin"
+        "source": "https://www.careyshop.cn"
     },
     "require": {
         "php": ">=7.2.0",

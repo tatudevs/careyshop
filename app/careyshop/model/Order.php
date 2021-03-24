@@ -354,17 +354,20 @@ class Order extends CareyShop
 
             // 是否包邮区分,并且累计各个计量数值
             if (!$isWeight && 0 == $value['goods']['measure_type']) {
-                $weightTotal += $value['goods']['measure'];
+                // 按重量
+                $weightTotal += $value['goods']['measure'] * $value['goods_num'];
                 !$value['goods']['is_postage'] ?: $isWeight = true | $weightTotal = 0;
             }
 
             if (!$isItem && 1 == $value['goods']['measure_type']) {
+                // 按计件
                 $itemTotal += $value['goods_num'];
                 !$value['goods']['is_postage'] ?: $isItem = true | $itemTotal = 0;
             }
 
             if (!$isVolume && 2 == $value['goods']['measure_type']) {
-                $volumeTotal += $value['goods']['measure'];
+                // 按体积
+                $volumeTotal += $value['goods']['measure'] * $value['goods_num'];
                 !$value['goods']['is_postage'] ?: $isVolume = true | $volumeTotal = 0;
             }
 
