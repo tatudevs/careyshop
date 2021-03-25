@@ -266,7 +266,7 @@ class OrderService extends CareyShop
 
                 // 修改订单商品售后状态
                 $goodsDb = $value->getAttr('get_order_goods');
-                if ($goodsDb && $goodsDb->getAttr('is_service') === 1) {
+                if ($goodsDb instanceof OrderGoods && $goodsDb->getAttr('is_service') === 1) {
                     if (false === $goodsDb->save(['is_service' => 0])) {
                         throw new \Exception($goodsDb->getError());
                     }
@@ -274,7 +274,7 @@ class OrderService extends CareyShop
 
                 // 修改退款申请状态
                 $refundDb = $value->getAttr('get_order_refund');
-                if ($refundDb && $refundDb->getAttr('status') === 0) {
+                if ($refundDb instanceof OrderRefund && $refundDb->getAttr('status') === 0) {
                     $refundData = ['status' => 3, 'out_trade_msg' => $comment . '，本次退款申请撤销。'];
                     if (false === $refundDb->save($refundData)) {
                         throw new \Exception($refundDb->getError());
@@ -622,7 +622,7 @@ class OrderService extends CareyShop
         $totalAmount = array_sum($data);
         $deliveryFee = $orderDb->getAttr('delivery_fee');
 
-        if ($deliveryFee > 0) {
+        if ($deliveryFee > 0 && $totalAmount > 0) {
             $isDelivery = $this->isServiceEgtOrderGoods($orderDb->getAttr('order_no'));
             foreach ($data as $key => $value) {
                 $data[$key] -= ($deliveryFee / $totalAmount) * $value;
