@@ -724,7 +724,7 @@ class GoodsComment extends CareyShop
         }
 
         // 处理客户信息是否匿名
-        if ($result->getAttr('is_anon') !== 0 && !is_client_admin()) {
+        if ($result['getUser'] instanceof User && $result->getAttr('is_anon') !== 0 && !is_client_admin()) {
             $result['getUser']->setAttr('username', auto_hid_substr($result['getUser']->getAttr('username')));
             $result['getUser']->setAttr('nickname', auto_hid_substr($result['getUser']->getAttr('nickname')));
         }
@@ -844,7 +844,7 @@ class GoodsComment extends CareyShop
         // 账号资料匿名处理
         if (!is_client_admin()) {
             foreach ($temp as $value) {
-                if ($value->getAttr('is_anon') !== 0) {
+                if ($value['getUser'] instanceof User && $value->getAttr('is_anon') !== 0) {
                     $value['getUser']->setAttr('username', auto_hid_substr($value['getUser']->getAttr('username')));
                     $value['getUser']->setAttr('nickname', auto_hid_substr($value['getUser']->getAttr('nickname')));
                 }

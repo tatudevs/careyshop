@@ -907,7 +907,7 @@ class OrderService extends CareyShop
         $adminId = $result->getAttr('admin_id');
         if ($adminId > 0 && $adminId != get_client_id()) {
             $nickname = $result->getAttr('get_admin');
-            return $this->setError((is_null($nickname) ? '其他人员' : $nickname['nickname']) . '已在处理此售后单');
+            return $this->setError(($nickname instanceof Admin ? $nickname['nickname'] : '其他人员') . '已在处理此售后单');
         }
 
         if ($result->getAttr('status') !== 0) {
@@ -1284,9 +1284,9 @@ class OrderService extends CareyShop
             // 更新订单退款单状态
             if (!empty($result->getAttr('refund_no'))) {
                 $refundDb = $result->getAttr('getOrderRefund');
-                $refundData = ['status' => 3, 'out_trade_msg' => '由于' . $comment . '，本次退款申请撤销。'];
 
-                if ($refundDb->getAttr('status') === 0) {
+                if ($refundDb instanceof OrderRefund && $refundDb->getAttr('status') === 0) {
+                    $refundData = ['status' => 3, 'out_trade_msg' => '由于' . $comment . '，本次退款申请撤销。'];
                     if (false === $refundDb->save($refundData)) {
                         throw new \Exception($refundDb->getError());
                     }

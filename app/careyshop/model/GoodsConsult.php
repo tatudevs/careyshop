@@ -340,9 +340,9 @@ class GoodsConsult extends CareyShop
             ->select();
 
         // 账号资料匿名处理
-        if (!is_client_admin()) {
+        if (is_client_admin()) {
             foreach ($temp as $value) {
-                if ($value['is_anon'] !== 0 && !empty($value['getUser'])) {
+                if ($value['getUser'] instanceof User && $value['is_anon'] !== 0) {
                     $value['getUser']->setAttr('username', auto_hid_substr($value['getUser']->getAttr('username')));
                     $value['getUser']->setAttr('nickname', auto_hid_substr($value['getUser']->getAttr('nickname')));
                 }
