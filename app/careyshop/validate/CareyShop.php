@@ -191,6 +191,10 @@ class CareyShop extends Validate
                 $moduleList = config('extra.module_group');
                 break;
 
+            case 'oauth':
+                $moduleList = config('extra.oauth2');
+                break;
+
             default:
                 $moduleList = null;
         }

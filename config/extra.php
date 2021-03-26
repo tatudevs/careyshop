@@ -55,4 +55,21 @@ return [
 
         // 您可以扩展更多
     ],
+
+    // OAuth 2.0平台
+    'oauth2'       => [
+        'wechat'   => '微信',
+        'qq'       => 'QQ',
+        'weibo'    => '微博',
+        'taobao'   => '淘宝',
+        'douyin'   => '抖音',
+        'baidu'    => '百度',
+        'feishu'   => '飞书',
+        'douban'   => '豆瓣',
+        'github'   => 'Github',
+        'google'   => 'Google',
+        'facebook' => 'Facebook',
+        'outlook'  => 'Outlook',
+        'linkedin' => 'Linkedin',
+    ],
 ];
