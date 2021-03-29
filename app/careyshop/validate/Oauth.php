@@ -51,7 +51,7 @@ class Oauth extends CareyShop
      * @var array
      */
     protected $scene = [
-        'set'  => [
+        'set'    => [
             'oauth_id' => 'require|integer|gt:0',
             'name',
             'model',
@@ -63,20 +63,24 @@ class Oauth extends CareyShop
             'icon',
             'status',
         ],
-        'del'  => [
+        'del'    => [
             'oauth_id' => 'require|arrayHasOnlyInts',
         ],
-        'item' => [
+        'item'   => [
             'oauth_id' => 'require|integer|gt:0',
         ],
-        'list' => [
+        'list'   => [
             'name'     => 'max:16',
             'model'    => 'max:16|checkModule:oauth',
             'terminal' => 'max:16',
             'status'   => 'in:0,1',
         ],
-        'type' => [
+        'type'   => [
             'terminal',
+        ],
+        'status' => [
+            'oauth_id' => 'require|arrayHasOnlyInts',
+            'status'   => 'require|in:0,1',
         ],
     ];
 }

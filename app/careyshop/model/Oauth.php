@@ -10,6 +10,9 @@
 
 namespace app\careyshop\model;
 
+use think\facade\Cache;
+use think\facade\Route;
+
 class Oauth extends CareyShop
 {
     /**
@@ -36,6 +39,19 @@ class Oauth extends CareyShop
     ];
 
     /**
+     * 获取器设置重定向地址
+     * @access public
+     * @param $value
+     * @param $data
+     * @return string
+     */
+    public function getRedirectAttr($value, $data): string
+    {
+        $vars = ['method' => 'login.oauth.user', 'model' => $data['model']];
+        return Route::buildUrl("api/{$this->version}/oauth", $vars)->domain(true)->build();
+    }
+
+    /**
      * 添加一条授权机制
      * @access public
      * @param array $data 外部数据
@@ -51,6 +67,7 @@ class Oauth extends CareyShop
         unset($data['oauth_id']);
 
         if ($this->save($data)) {
+            Cache::tag('oauth')->clear();
             return $this->toArray();
         }
 
@@ -71,6 +88,7 @@ class Oauth extends CareyShop
 
         $map[] = ['oauth_id', '=', $data['oauth_id']];
         $result = self::update($data, $map);
+        Cache::tag('oauth')->clear();
 
         return $result->toArray();
     }
@@ -88,6 +106,8 @@ class Oauth extends CareyShop
         }
 
         self::destroy($data['oauth_id']);
+        Cache::tag('oauth')->clear();
+
         return true;
     }
 
@@ -148,9 +168,30 @@ class Oauth extends CareyShop
         $map[] = ['terminal', '=', $data['terminal']];
         $map[] = ['status', '=', 1];
 
-        // 返回字段
-        $field = 'name,model,logo,icon';
+        return $this->cache(true, null, 'oauth')
+            ->field('name,model,logo,icon')
+            ->where($map)
+            ->select()
+            ->append(['redirect'])
+            ->toArray();
+    }
 
-        return $this->field($field)->where($map)->select()->toArray();
+    /**
+     * 批量设置授权机制状态
+     * @access public
+     * @param array $data 外部数据
+     * @return bool
+     */
+    public function setOAuthStatus(array $data): bool
+    {
+        if (!$this->validateData($data, 'status')) {
+            return false;
+        }
+
+        $map[] = ['app_id', 'in', $data['app_id']];
+        self::update(['status' => $data['status']], $map);
+        Cache::tag('oauth')->clear();
+
+        return true;
     }
 }
