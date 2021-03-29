@@ -12,7 +12,7 @@ namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
 
-class Oauth extends CareyShop
+class PlaceOauth extends CareyShop
 {
     /**
      * 方法路由器
@@ -23,23 +23,23 @@ class Oauth extends CareyShop
     {
         self::$route = [
             // 添加一条授权机制
-            'add.oauth.item'   => ['addOAuthItem'],
+            'add.place.oauth.item'   => ['addPlaceOAuthItem'],
             // 编辑一条授权机制
-            'set.oauth.item'   => ['setOAuthItem'],
+            'set.place.oauth.item'   => ['setPlaceOAuthItem'],
             // 批量删除授权机制
-            'del.oauth.list'   => ['delOAuthList'],
+            'del.place.oauth.list'   => ['delPlaceOAuthList'],
             // 获取一条授权机制
-            'get.oauth.item'   => ['getOAuthItem'],
+            'get.place.oauth.item'   => ['getPlaceOAuthItem'],
             // 获取授权机制列表
-            'get.oauth.list'   => ['getOAuthList'],
+            'get.place.oauth.list'   => ['getPlaceOAuthList'],
             // 获取可使用的授权机制列表
-            'get.oauth.type'   => ['getOAuthType'],
+            'get.place.oauth.type'   => ['getPlaceOAuthType'],
             // 批量设置授权机制状态
-            'set.oauth.status' => ['setOAuthStatus'],
+            'set.place.oauth.status' => ['setPlaceOAuthStatus'],
             // OAuth2.0授权准备
-            'authorize'        => ['authorizeOAuth'],
+            'authorize'              => ['authorizeOAuth'],
             // OAuth2.0回调验证
-            'callback'         => ['callbackOAuth'],
+            'callback'               => ['callbackOAuth'],
         ];
     }
 }

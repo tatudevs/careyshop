@@ -13,20 +13,20 @@ namespace app\careyshop\model;
 use think\facade\Cache;
 use think\facade\Route;
 
-class Oauth extends CareyShop
+class PlaceOauth extends CareyShop
 {
     /**
      * 主键
      * @var string
      */
-    protected $pk = 'oauth_id';
+    protected $pk = 'place_oauth_id';
 
     /**
      * 只读属性
      * @var array
      */
     protected $readonly = [
-        'oauth_id',
+        'place_oauth_id',
     ];
 
     /**
@@ -34,8 +34,8 @@ class Oauth extends CareyShop
      * @var array
      */
     protected $type = [
-        'oauth_id' => 'integer',
-        'status'   => 'integer',
+        'place_oauth_id' => 'integer',
+        'status'         => 'integer',
     ];
 
     /**
@@ -44,14 +44,23 @@ class Oauth extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function addOAuthItem(array $data)
+    public function addPlaceOAuthItem(array $data)
     {
         if (!$this->validateData($data)) {
             return false;
         }
 
         // 避免无关字段
-        unset($data['oauth_id']);
+        unset($data['place_oauth_id']);
+        !is_empty_parm($data['channel']) ?: $data['channel'] = '';
+
+        // 检测是否存在相同配置
+        $map[] = ['model', '=', $data['model']];
+        $map[] = ['channel', '=', $data['channel']];
+
+        if (self::checkUnique($map)) {
+            return $this->setError('相同模块下已存在重复的渠道');
+        }
 
         if ($this->save($data)) {
             Cache::tag('oauth')->clear();
@@ -67,13 +76,25 @@ class Oauth extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function setOAuthItem(array $data)
+    public function setPlaceOAuthItem(array $data)
     {
-        if (!$this->validateData($data, 'set', true)) {
+        if (!$this->validateData($data, 'set')) {
             return false;
         }
 
-        $map[] = ['oauth_id', '=', $data['oauth_id']];
+        // 检测是否存在相同配置
+        $map[] = ['place_oauth_id', '<>', $data['place_oauth_id']];
+        $map[] = ['model', '=', $data['model']];
+
+        !is_empty_parm($data['channel']) ?: $data['channel'] = '';
+        $map[] = ['channel', '=', $data['channel']];
+
+        if (self::checkUnique($map)) {
+            return $this->setError('相同模块下已存在重复的渠道');
+        }
+
+        // 实际更新数据
+        $map = [['place_oauth_id', '=', $data['place_oauth_id']]];
         $result = self::update($data, $map);
         Cache::tag('oauth')->clear();
 
@@ -86,13 +107,13 @@ class Oauth extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function delOAuthList(array $data): bool
+    public function delPlaceOAuthList(array $data): bool
     {
         if (!$this->validateData($data, 'del')) {
             return false;
         }
 
-        self::destroy($data['oauth_id']);
+        self::destroy($data['place_oauth_id']);
         Cache::tag('oauth')->clear();
 
         return true;
@@ -105,13 +126,13 @@ class Oauth extends CareyShop
      * @return array|false|null
      * @throws
      */
-    public function getOAuthItem(array $data)
+    public function getPlaceOAuthItem(array $data)
     {
         if (!$this->validateData($data, 'item')) {
             return false;
         }
 
-        $result = $this->find($data['oauth_id']);
+        $result = $this->find($data['place_oauth_id']);
         return is_null($result) ? null : $result->toArray();
     }
 
@@ -122,7 +143,7 @@ class Oauth extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getOAuthList(array $data)
+    public function getPlaceOAuthList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
@@ -132,7 +153,7 @@ class Oauth extends CareyShop
         $map = [];
         empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
         empty($data['model']) ?: $map[] = ['model', '=', $data['model']];
-        empty($data['terminal']) ?: $map[] = ['terminal', '=', $data['terminal']];
+        empty($data['channel']) ?: $map[] = ['channel', '=', $data['channel']];
         is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
         return $this->where($map)->select()->toArray();
@@ -145,29 +166,29 @@ class Oauth extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getOAuthType(array $data)
+    public function getPlaceOAuthType(array $data)
     {
         if (!$this->validateData($data, 'type')) {
             return false;
         }
 
         // 搜索条件
-        $map[] = ['terminal', '=', $data['terminal']];
+        $map[] = ['channel', '=', is_empty_parm($data['channel']) ? '' : $data['channel']];
         $map[] = ['status', '=', 1];
 
         // 动态获取授权地址
         $attr = function ($value, $data) {
             $vars = [
-                'method'   => 'authorize',
-                'terminal' => $data['terminal'],
-                'model'    => $data['model'],
+                'method'  => 'authorize',
+                'channel' => $data['channel'],
+                'model'   => $data['model'],
             ];
 
-            return Route::buildUrl("api/{$this->version}/oauth", $vars)->domain(true)->build();
+            return Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
         };
 
         return $this->cache(true, null, 'oauth')
-            ->field('name,model,terminal,logo,icon')
+            ->field('name,model,channel,logo,icon')
             ->withAttr('authorize', $attr)
             ->where($map)
             ->select()
@@ -181,7 +202,7 @@ class Oauth extends CareyShop
      * @param array $data 外部数据
      * @return bool
      */
-    public function setOAuthStatus(array $data): bool
+    public function setPlaceOAuthStatus(array $data): bool
     {
         if (!$this->validateData($data, 'status')) {
             return false;
@@ -195,6 +216,10 @@ class Oauth extends CareyShop
     }
 
     public function authorizeOAuth(array $data)
+    {
+    }
+
+    public function callbackOAuth(array $data)
     {
     }
 }
