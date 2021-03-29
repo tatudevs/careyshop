@@ -10,6 +10,7 @@
 
 namespace app\careyshop\model;
 
+use Overtrue\Socialite\SocialiteManager;
 use think\facade\Cache;
 use think\facade\Route;
 
@@ -182,6 +183,7 @@ class PlaceOauth extends CareyShop
                 'method'  => 'authorize',
                 'channel' => $data['channel'],
                 'model'   => $data['model'],
+                'value'   => $value,
             ];
 
             return Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
@@ -215,8 +217,68 @@ class PlaceOauth extends CareyShop
         return true;
     }
 
+    /**
+     * 获取某个模块下的配置参数
+     * @access private
+     * @param string $model   所属模块
+     * @param string $channel 对应渠道(自定义)
+     * @return array|bool
+     * @throws
+     */
+    private function getOAuthConfig(string $model, string $channel)
+    {
+        // 搜索条件
+        $map[] = ['model', '=', $model];
+        $map[] = ['channel', '=', $channel];
+        $map[] = ['status', '=', 1];
+
+        $result = $this->where($map)->field('client_id,client_secret,expand')->find();
+        if (is_null($result)) {
+            return $this->setError('OAuth模型不存在或已停用');
+        }
+
+        // 提取配置并尝试合并扩展配置
+        $expand = @json_decode($result->getAttr('expand'), true);
+        $config = $result->hidden(['expand'])->toArray();
+
+        if (is_array($expand)) {
+            $config = array_merge($expand, $config);
+        }
+
+        // 配置回调地址
+        $vars = ['method' => 'callback', 'channel' => $channel, 'model' => $model];
+        $config['redirect'] = Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
+
+        return [$model => $config];
+    }
+
+    /**
+     * OAuth2.0授权准备
+     * @access public
+     * @param array $data 外部数据
+     * @return false|string[]
+     */
     public function authorizeOAuth(array $data)
     {
+        if (!$this->validateData($data, 'authorize')) {
+            return false;
+        }
+
+        !is_empty_parm($data['channel']) ?: $data['channel'] = '';
+        $config = $this->getOAuthConfig($data['model'], $data['channel']);
+
+        if (!$config) {
+            return false;
+        }
+
+        $socialite = new SocialiteManager($config);
+        $response = $socialite->driver($data['model'])->redirect();
+        $response->send();
+
+        return [
+            'callback_return_type' => 'view',
+            'is_callback'          => 'success',
+        ];
     }
 
     public function callbackOAuth(array $data)

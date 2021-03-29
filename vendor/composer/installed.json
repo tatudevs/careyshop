@@ -656,17 +656,17 @@
     },
     {
         "name": "guzzlehttp/psr7",
-        "version": "1.7.0",
-        "version_normalized": "1.7.0.0",
+        "version": "1.8.1",
+        "version_normalized": "1.8.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/guzzle/psr7.git",
-            "reference": "53330f47520498c0ae1f61f7e2c90f55690c06a3"
+            "reference": "35ea11d335fd638b5882ff1725228b3d35496ab1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/guzzle/psr7/zipball/53330f47520498c0ae1f61f7e2c90f55690c06a3",
-            "reference": "53330f47520498c0ae1f61f7e2c90f55690c06a3",
+            "url": "https://api.github.com/repos/guzzle/psr7/zipball/35ea11d335fd638b5882ff1725228b3d35496ab1",
+            "reference": "35ea11d335fd638b5882ff1725228b3d35496ab1",
             "shasum": "",
             "mirrors": [
                 {
@@ -690,7 +690,7 @@
         "suggest": {
             "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
         },
-        "time": "2020-09-30T07:37:11+00:00",
+        "time": "2021-03-21T16:25:00+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1656,17 +1656,17 @@
     },
     {
         "name": "symfony/cache",
-        "version": "v4.4.20",
-        "version_normalized": "4.4.20.0",
+        "version": "v4.4.21",
+        "version_normalized": "4.4.21.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/cache.git",
-            "reference": "8fa248b0105d962ac279ae973dee2a32ae009dee"
+            "reference": "b7ff54be3f3eb1ce09643692f0c309b1b27bc992"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/cache/zipball/8fa248b0105d962ac279ae973dee2a32ae009dee",
-            "reference": "8fa248b0105d962ac279ae973dee2a32ae009dee",
+            "url": "https://api.github.com/repos/symfony/cache/zipball/b7ff54be3f3eb1ce09643692f0c309b1b27bc992",
+            "reference": "b7ff54be3f3eb1ce09643692f0c309b1b27bc992",
             "shasum": "",
             "mirrors": [
                 {
@@ -1706,7 +1706,7 @@
             "symfony/http-kernel": "^4.4",
             "symfony/var-dumper": "^4.4|^5.0"
         },
-        "time": "2021-02-25T23:52:11+00:00",
+        "time": "2021-03-14T19:28:18+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2083,17 +2083,17 @@
     },
     {
         "name": "symfony/mime",
-        "version": "v4.4.20",
-        "version_normalized": "4.4.20.0",
+        "version": "v4.4.21",
+        "version_normalized": "4.4.21.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/mime.git",
-            "reference": "6db092f97cd6eee8d4b2026e3a8fa3f576b396d4"
+            "reference": "50d7a1d569edad1f1321c59123c4c322c8daff7c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/mime/zipball/6db092f97cd6eee8d4b2026e3a8fa3f576b396d4",
-            "reference": "6db092f97cd6eee8d4b2026e3a8fa3f576b396d4",
+            "url": "https://api.github.com/repos/symfony/mime/zipball/50d7a1d569edad1f1321c59123c4c322c8daff7c",
+            "reference": "50d7a1d569edad1f1321c59123c4c322c8daff7c",
             "shasum": "",
             "mirrors": [
                 {
@@ -2108,13 +2108,14 @@
             "symfony/polyfill-mbstring": "^1.0"
         },
         "conflict": {
+            "egulias/email-validator": "~3.0.0",
             "symfony/mailer": "<4.4"
         },
         "require-dev": {
-            "egulias/email-validator": "^2.1.10",
+            "egulias/email-validator": "^2.1.10|^3.1",
             "symfony/dependency-injection": "^3.4|^4.1|^5.0"
         },
-        "time": "2021-02-14T12:29:41+00:00",
+        "time": "2021-03-12T08:47:38+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2773,17 +2774,17 @@
     },
     {
         "name": "symfony/var-dumper",
-        "version": "v4.4.20",
-        "version_normalized": "4.4.20.0",
+        "version": "v4.4.21",
+        "version_normalized": "4.4.21.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/var-dumper.git",
-            "reference": "a1eab2f69906dc83c5ddba4632180260d0ab4f7f"
+            "reference": "0da0e174f728996f5d5072d6a9f0a42259dbc806"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/a1eab2f69906dc83c5ddba4632180260d0ab4f7f",
-            "reference": "a1eab2f69906dc83c5ddba4632180260d0ab4f7f",
+            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/0da0e174f728996f5d5072d6a9f0a42259dbc806",
+            "reference": "0da0e174f728996f5d5072d6a9f0a42259dbc806",
             "shasum": "",
             "mirrors": [
                 {
@@ -2813,7 +2814,7 @@
             "ext-intl": "To show region name in time zone dump",
             "symfony/console": "To use the ServerDumpCommand and/or the bin/var-dump-server script"
         },
-        "time": "2021-01-27T09:09:26+00:00",
+        "time": "2021-03-27T19:49:03+00:00",
         "bin": [
             "Resources/bin/var-dump-server"
         ],
