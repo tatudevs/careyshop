@@ -36,8 +36,10 @@ class Oauth extends CareyShop
             'get.oauth.type'   => ['getOAuthType'],
             // 批量设置授权机制状态
             'set.oauth.status' => ['setOAuthStatus'],
-            // OAuth2.0登录
-            'login.oauth.user' => ['loginOAuthUser'],
+            // OAuth2.0授权准备
+            'authorize'        => ['authorizeOAuth'],
+            // OAuth2.0回调验证
+            'callback'         => ['callbackOAuth'],
         ];
     }
 }

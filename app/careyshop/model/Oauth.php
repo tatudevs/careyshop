@@ -39,19 +39,6 @@ class Oauth extends CareyShop
     ];
 
     /**
-     * 获取器设置重定向地址
-     * @access public
-     * @param $value
-     * @param $data
-     * @return string
-     */
-    public function getRedirectAttr($value, $data): string
-    {
-        $vars = ['method' => 'login.oauth.user', 'model' => $data['model']];
-        return Route::buildUrl("api/{$this->version}/oauth", $vars)->domain(true)->build();
-    }
-
-    /**
      * 添加一条授权机制
      * @access public
      * @param array $data 外部数据
@@ -168,11 +155,23 @@ class Oauth extends CareyShop
         $map[] = ['terminal', '=', $data['terminal']];
         $map[] = ['status', '=', 1];
 
+        // 动态获取授权地址
+        $attr = function ($value, $data) {
+            $vars = [
+                'method'   => 'authorize',
+                'terminal' => $data['terminal'],
+                'model'    => $data['model'],
+            ];
+
+            return Route::buildUrl("api/{$this->version}/oauth", $vars)->domain(true)->build();
+        };
+
         return $this->cache(true, null, 'oauth')
-            ->field('name,model,logo,icon')
+            ->field('name,model,terminal,logo,icon')
+            ->withAttr('authorize', $attr)
             ->where($map)
             ->select()
-            ->append(['redirect'])
+            ->append(['authorize'])
             ->toArray();
     }
 
@@ -193,5 +192,9 @@ class Oauth extends CareyShop
         Cache::tag('oauth')->clear();
 
         return true;
+    }
+
+    public function authorizeOAuth(array $data)
+    {
     }
 }
