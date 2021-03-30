@@ -14,13 +14,13 @@ class GoodsAttribute extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'goods_attribute_id';
 
     /**
      * 隐藏属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $hidden = [
         'is_delete',
@@ -28,17 +28,15 @@ class GoodsAttribute extends CareyShop
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'goods_attribute_id',
-        //'parent_id',
-        //'goods_type_id',
     ];
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'goods_attribute_id' => 'integer',

@@ -60,13 +60,13 @@ class Notice extends CareyShop
 
     /**
      * 当前模型名称
-     * @var string
+     * @var mixed|string
      */
     protected $name = 'setting';
 
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'setting_id';
 

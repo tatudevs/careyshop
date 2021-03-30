@@ -18,13 +18,13 @@ class PlaceOauth extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'place_oauth_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'place_oauth_id',
@@ -32,7 +32,7 @@ class PlaceOauth extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'place_oauth_id' => 'integer',
@@ -271,9 +271,9 @@ class PlaceOauth extends CareyShop
             return false;
         }
 
-        $socialite = new SocialiteManager($config);
-        $response = $socialite->driver($data['model'])->redirect();
-        $response->send();
+//        $socialite = new SocialiteManager($config);
+//        $response = $socialite->create($data['model'])->redirect();
+//        $response->send();
 
         return [
             'callback_return_type' => 'view',

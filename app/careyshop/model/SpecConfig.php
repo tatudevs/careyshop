@@ -14,13 +14,13 @@ class SpecConfig extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'spec_config_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'spec_config_id',
@@ -28,7 +28,7 @@ class SpecConfig extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'spec_config_id' => 'integer',

@@ -17,7 +17,7 @@ class Cod extends Payment
 {
     /**
      * 请求来源
-     * @var array|bool
+     * @var mixed
      */
     private $request;
 

@@ -14,13 +14,13 @@ class Discount extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'discount_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'discount_id',
@@ -28,7 +28,7 @@ class Discount extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'discount_id' => 'integer',

@@ -14,7 +14,7 @@ class Promotion extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'promotion_id'    => 'integer|gt:0',
@@ -31,7 +31,7 @@ class Promotion extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'promotion_id'    => '促销编号',
@@ -48,7 +48,7 @@ class Promotion extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'set'    => [

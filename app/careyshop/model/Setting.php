@@ -17,13 +17,13 @@ class Setting extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'setting_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'setting_id',
@@ -34,7 +34,7 @@ class Setting extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'setting_id' => 'integer',

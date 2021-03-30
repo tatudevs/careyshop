@@ -17,7 +17,7 @@ class ActionLog extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'action_log_id';
 
@@ -35,7 +35,7 @@ class ActionLog extends CareyShop
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'action_log_id',
@@ -44,7 +44,7 @@ class ActionLog extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'action_log_id' => 'integer',
@@ -58,9 +58,9 @@ class ActionLog extends CareyShop
 
     /**
      * 敏感词过滤字段
-     * @var array
+     * @var string[]
      */
-    protected $safety = [
+    protected array $safety = [
         'password',
         'password_confirm',
         'app_id',

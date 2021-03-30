@@ -14,13 +14,13 @@ class Token extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'token_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'token_id',
@@ -32,7 +32,7 @@ class Token extends CareyShop
 
     /**
      * 隐藏属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $hidden = [
         'token_id',
@@ -43,7 +43,7 @@ class Token extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'token_id'        => 'integer',

@@ -23,6 +23,11 @@ class Client extends BaseClient
     /**
      * Get the checkin data.
      *
+     * @param int   $startTime
+     * @param int   $endTime
+     * @param array $userList
+     * @param int   $type
+     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -43,6 +48,9 @@ class Client extends BaseClient
     /**
      * Get the checkin rules.
      *
+     * @param int   $datetime
+     * @param array $userList
+     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -61,6 +69,8 @@ class Client extends BaseClient
     /**
      * Get approval template details.
      *
+     * @param string $templateId
+     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -78,6 +88,8 @@ class Client extends BaseClient
     /**
      * Submit an application for approval.
      *
+     * @param array $data
+     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -90,6 +102,12 @@ class Client extends BaseClient
 
     /**
      * Get Approval number.
+     *
+     * @param int   $startTime
+     * @param int   $endTime
+     * @param int   $nextCursor
+     * @param int   $size
+     * @param array $filters
      *
      * @return mixed
      *
@@ -112,6 +130,8 @@ class Client extends BaseClient
     /**
      * Get approval detail.
      *
+     * @param int $number
+     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -129,6 +149,8 @@ class Client extends BaseClient
     /**
      * Get Approval Data.
      *
+     * @param int $startTime
+     * @param int $endTime
      * @param int $nextNumber
      *
      * @return mixed
@@ -145,5 +167,31 @@ class Client extends BaseClient
         ];
 
         return $this->httpPostJson('cgi-bin/corp/getapprovaldata', $params);
+    }
+
+
+    /**
+     * 获取公费电话拨打记录.
+     *
+     * @param int $startTime
+     * @param int $endTime
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function dialRecords(int $startTime, int $endTime, int $offset = 0, $limit = 100)
+    {
+        $params = [
+            'start_time' => $startTime,
+            'end_time' => $endTime,
+            'offset' => $offset,
+            'limit' => $limit
+        ];
+
+        return $this->httpPostJson('cgi-bin/dial/get_dial_record', $params);
     }
 }

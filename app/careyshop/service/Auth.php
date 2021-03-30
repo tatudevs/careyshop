@@ -18,19 +18,19 @@ class Auth extends CareyShop
 {
     /**
      * 菜单权限
-     * @var array
+     * @var array|mixed
      */
     private $menuAuth = [];
 
     /**
      * 白名单列表
-     * @var array
+     * @var array|mixed
      */
     private $whiteList = [];
 
     /**
      * 日志权限
-     * @var array
+     * @var array|mixed
      */
     private $logAuth = [];
 
@@ -38,7 +38,7 @@ class Auth extends CareyShop
      * 菜单数据
      * @var array
      */
-    private $menuList = [];
+    private array $menuList = [];
 
     /**
      * 构造函数

@@ -14,13 +14,13 @@ class SpecItem extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'spec_item_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'spec_item_id',
@@ -29,7 +29,7 @@ class SpecItem extends CareyShop
 
     /**
      * 隐藏属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $hidden = [
         'spec_id',
@@ -37,7 +37,7 @@ class SpecItem extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'spec_item_id' => 'integer',

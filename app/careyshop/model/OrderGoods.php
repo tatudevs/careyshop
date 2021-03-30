@@ -16,13 +16,13 @@ class OrderGoods extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'order_goods_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'order_goods_id',
@@ -34,7 +34,7 @@ class OrderGoods extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'order_goods_id' => 'integer',

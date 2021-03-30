@@ -24,55 +24,55 @@ class Refund extends Payment
      * 绑定支付的APPID
      * @var string
      */
-    private $appid;
+    private string $appid;
 
     /**
      * 商户号
      * @var string
      */
-    private $mchid;
+    private string $mchid;
 
     /**
      * 商户支付密钥
      * @var string
      */
-    private $key;
+    private string $key;
 
     /**
      * 公众帐号Secert
      * @var string
      */
-    private $appsecret = '';
+    private string $appsecret = '';
 
     /**
      * 退款流水号
      * @var string
      */
-    private $refundNo;
+    private string $refundNo;
 
     /**
      * 退款金额
      * @var float
      */
-    private $refundAmount;
+    private float $refundAmount;
 
     /**
      * 交易号
      * @var string
      */
-    protected $tradeNo;
+    protected string $tradeNo;
 
     /**
      * apiclient_cert
      * @var string
      */
-    private $sslcert = '';
+    private string $sslcert = '';
 
     /**
      * apiclient_key
      * @var string
      */
-    private $sslkey = '';
+    private string $sslkey = '';
 
     /**
      * 设置支付配置

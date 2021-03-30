@@ -14,7 +14,7 @@ class DiscountGoods extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'discount_id' => 'integer|gt:0',
@@ -25,7 +25,7 @@ class DiscountGoods extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'discount_id' => '折扣编号',
@@ -36,7 +36,7 @@ class DiscountGoods extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'info' => [

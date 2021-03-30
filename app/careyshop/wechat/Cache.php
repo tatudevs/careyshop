@@ -18,7 +18,7 @@ class Cache implements CacheInterface
      * 缓存对象
      * @var \think\Cache|null
      */
-    protected $cache = null;
+    protected ?\think\Cache $cache = null;
 
     /**
      * Cache constructor.

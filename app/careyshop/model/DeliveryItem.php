@@ -24,13 +24,13 @@ class DeliveryItem extends CareyShop
 
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'delivery_item_id';
 
     /**
      * 隐藏属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $hidden = [
         'is_delete',
@@ -38,7 +38,7 @@ class DeliveryItem extends CareyShop
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'delivery_item_id',
@@ -46,7 +46,7 @@ class DeliveryItem extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'delivery_item_id' => 'integer',

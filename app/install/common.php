@@ -34,7 +34,7 @@ function check_env(): array
 {
     $items = [
         'os'     => ['操作系统', '不限制', '类Unix', PHP_OS, 'check'],
-        'php'    => ['PHP版本', '7.2', '7.2+', PHP_VERSION, 'check'],
+        'php'    => ['PHP版本', '7.4', '7.4+', PHP_VERSION, 'check'],
         'upload' => ['附件上传', '不限制', '2M+', '未知', 'check'],
         'gd'     => ['GD库', '2.0', '2.0+', '未知', 'check'],
         'disk'   => ['磁盘空间', '100M', '不限制', '未知', 'check'],

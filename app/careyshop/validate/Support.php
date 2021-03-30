@@ -14,7 +14,7 @@ class Support extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'support_id'  => 'integer|gt:0',
@@ -29,7 +29,7 @@ class Support extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'support_id'  => '客服编号',
@@ -44,7 +44,7 @@ class Support extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'set'    => [

@@ -14,7 +14,7 @@ class Ask extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'answer'      => 'max:200',
@@ -32,7 +32,7 @@ class Ask extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'answer'      => '回答内容',
@@ -50,7 +50,7 @@ class Ask extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'del'      => [

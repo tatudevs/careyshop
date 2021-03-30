@@ -18,7 +18,7 @@ class Order extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'order_id';
 
@@ -26,25 +26,25 @@ class Order extends CareyShop
      * 商品折扣数据
      * @var array
      */
-    private $discountData = [];
+    private array $discountData = [];
 
     /**
      * 创建订单数据
      * @var array
      */
-    private $orderData = [];
+    private array $orderData = [];
 
     /**
      * 购物车数据
      * @var array
      */
-    private $cartData = [];
+    private array $cartData = [];
 
     /**
      * 外部提交数据
      * @var array
      */
-    private $dataParams = [];
+    private array $dataParams = [];
 
     /**
      * 是否需要自动写入时间戳
@@ -54,7 +54,7 @@ class Order extends CareyShop
 
     /**
      * 隐藏属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $hidden = [
         'parent_id',
@@ -63,7 +63,7 @@ class Order extends CareyShop
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'order_id',
@@ -76,7 +76,7 @@ class Order extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'order_id'        => 'integer',

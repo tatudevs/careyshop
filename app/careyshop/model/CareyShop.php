@@ -21,31 +21,31 @@ abstract class CareyShop extends Model
      * 控制器版本号
      * @var string
      */
-    public $version = 'v1';
+    public string $version = 'v1';
 
     /**
      * 错误信息
      * @var string
      */
-    protected $error = '';
+    protected string $error = '';
 
     /**
      * 默认排序
      * @var array
      */
-    protected $defaultOrder = [];
+    protected array $defaultOrder = [];
 
     /**
      * 固定排序
      * @var array
      */
-    protected $fixedOrder = [];
+    protected array $fixedOrder = [];
 
     /**
      * 是否调整顺序
      * @var bool
      */
-    protected $isReverse = false;
+    protected bool $isReverse = false;
 
     /**
      * 检测是否存在相同值

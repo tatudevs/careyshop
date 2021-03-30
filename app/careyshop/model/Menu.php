@@ -16,7 +16,7 @@ class Menu extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'menu_id';
 
@@ -24,11 +24,11 @@ class Menu extends CareyShop
      * 菜单权限
      * @var array
      */
-    private static $menuAuth = [];
+    private static array $menuAuth = [];
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'menu_id',
@@ -37,7 +37,7 @@ class Menu extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'menu_id'   => 'integer',

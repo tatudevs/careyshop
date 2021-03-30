@@ -14,13 +14,13 @@ class GoodsType extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'goods_type_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'goods_type_id',
@@ -28,7 +28,7 @@ class GoodsType extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'goods_type_id' => 'integer',

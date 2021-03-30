@@ -16,43 +16,43 @@ class Payment
      * 错误信息
      * @var string
      */
-    protected $error = '';
+    protected string $error = '';
 
     /**
      * 同步返回URL
      * @var string
      */
-    protected $returnUrl;
+    protected string $returnUrl;
 
     /**
      * 异步返回URL
      * @var string
      */
-    protected $notifyUrl;
+    protected string $notifyUrl;
 
     /**
      * 支付流水号
      * @var string
      */
-    protected $outTradeNo;
+    protected string $outTradeNo;
 
     /**
      * 订单名称
      * @var string
      */
-    protected $subject;
+    protected string $subject;
 
     /**
      * 支付金额
      * @var float
      */
-    protected $totalAmount;
+    protected float $totalAmount;
 
     /**
      * 支付描述
      * @var string
      */
-    protected $body = '';
+    protected string $body = '';
 
     /**
      * 返回错误信息

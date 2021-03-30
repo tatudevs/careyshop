@@ -19,7 +19,7 @@ class DeliveryDist extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'delivery_dist_id';
 
@@ -43,7 +43,7 @@ class DeliveryDist extends CareyShop
 
     /**
      * 隐藏属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $hidden = [
         'delivery_item_id',
@@ -52,7 +52,7 @@ class DeliveryDist extends CareyShop
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'delivery_dist_id',
@@ -61,7 +61,7 @@ class DeliveryDist extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'delivery_dist_id' => 'integer',

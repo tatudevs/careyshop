@@ -14,7 +14,7 @@ class GoodsAttrConfig extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'goods_attr_config_id' => 'integer|gt:0',
@@ -23,7 +23,7 @@ class GoodsAttrConfig extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'goods_attr_config_id' => '商品属性配置编号',

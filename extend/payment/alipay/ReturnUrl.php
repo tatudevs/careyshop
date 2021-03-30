@@ -20,25 +20,25 @@ class ReturnUrl
      * 流水号
      * @var string
      */
-    protected $paymentNo;
+    protected string $paymentNo;
 
     /**
      * 总金额
      * @var float
      */
-    protected $totalAmount;
+    protected float $totalAmount;
 
     /**
      * 交易号
      * @var string
      */
-    protected $tradeNo;
+    protected string $tradeNo;
 
     /**
      * 交易时间
      * @var string
      */
-    protected $timestamp;
+    protected string $timestamp;
 
     /**
      * 返回流水号

@@ -12,7 +12,7 @@ return [
     // 产品信息
     'product'      => [
         'product_name'    => 'CareyShop商城框架系统',
-        'product_version' => '1.3.2',
+        'product_version' => '1.3.3',
         'build_version'   => '20210111',
         'product_website' => 'http://www.careyshop.cn',
         'product_update'  => 'http://www.careyshop.cn/checkUpdate',
@@ -59,13 +59,18 @@ return [
     // OAuth 2.0平台
     'oauth2'       => [
         'wechat'   => '微信',
+        'wework'   => '企业微信',
         'qq'       => 'QQ',
         'weibo'    => '微博',
         'taobao'   => '淘宝',
+        'alipay'   => '支付宝',
+        'qcloud'   => '腾讯云',
+        'dingtalk' => '钉钉',
         'douyin'   => '抖音',
         'baidu'    => '百度',
         'feishu'   => '飞书',
         'douban'   => '豆瓣',
+        'tapd'     => 'TAPD',
         'github'   => 'Github',
         'google'   => 'Google',
         'facebook' => 'Facebook',

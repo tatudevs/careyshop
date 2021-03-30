@@ -31,6 +31,8 @@ class Client extends BaseClient
     }
 
     /**
+     * @param array $params
+     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -42,6 +44,8 @@ class Client extends BaseClient
     }
 
     /**
+     * @param array $params
+     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -53,6 +57,8 @@ class Client extends BaseClient
     }
 
     /**
+     * @param array $params
+     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -64,6 +70,8 @@ class Client extends BaseClient
     }
 
     /**
+     * @param array $params
+     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -75,6 +83,9 @@ class Client extends BaseClient
     }
 
     /**
+     * @param string $deliveryId
+     * @param string $bizId
+     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -100,6 +111,8 @@ class Client extends BaseClient
     }
 
     /**
+     * @param string $openid
+     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -114,6 +127,8 @@ class Client extends BaseClient
     }
 
     /**
+     * @param string $openid
+     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException

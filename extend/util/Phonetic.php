@@ -16,7 +16,7 @@ class Phonetic
      * 拼音字符转换图
      * @var array
      */
-    private static $maps = [
+    private static array $maps = [
         'a'   => -20319, 'ai' => -20317, 'an' => -20304, 'ang' => -20295, 'ao' => -20292,
         'ba'  => -20283, 'bai' => -20265, 'ban' => -20257, 'bang' => -20242, 'bao' => -20230, 'bei' => -20051, 'ben' => -20036, 'beng' => -20032, 'bi' => -20026, 'bian' => -20002, 'biao' => -19990, 'bie' => -19986, 'bin' => -19982, 'bing' => -19976, 'bo' => -19805, 'bu' => -19784,
         'ca'  => -19775, 'cai' => -19774, 'can' => -19763, 'cang' => -19756, 'cao' => -19751, 'ce' => -19746, 'ceng' => -19741, 'cha' => -19739, 'chai' => -19728, 'chan' => -19725, 'chang' => -19715, 'chao' => -19540, 'che' => -19531, 'chen' => -19525, 'cheng' => -19515, 'chi' => -19500, 'chong' => -19484, 'chou' => -19479, 'chu' => -19467, 'chuai' => -19289, 'chuan' => -19288, 'chuang' => -19281, 'chui' => -19275, 'chun' => -19270, 'chuo' => -19263, 'ci' => -19261, 'cong' => -19249, 'cou' => -19243, 'cu' => -19242, 'cuan' => -19238, 'cui' => -19235, 'cun' => -19227, 'cuo' => -19224,
@@ -55,9 +55,9 @@ class Phonetic
         $sGBK = iconv('utf-8', 'gbk', $utf8Data);
 
         for ($i = 0, $iLoop = mb_strlen($sGBK, 'utf-8'); $i < $iLoop; $i++) {
-            $iChr = ord($sGBK{$i});
+            $iChr = ord($sGBK[$i]);
             if ($iChr > 160) {
-                $iChr = ($iChr << 8) + ord($sGBK{++$i}) - 65536;
+                $iChr = ($iChr << 8) + ord($sGBK[++$i]) - 65536;
             }
 
             if ('head' === $sRetFormat) {

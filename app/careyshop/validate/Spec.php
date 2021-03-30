@@ -14,7 +14,7 @@ class Spec extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'spec_id'       => 'integer|gt:0',
@@ -33,7 +33,7 @@ class Spec extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'spec_id'       => '商品规格编号',
@@ -52,7 +52,7 @@ class Spec extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'set'   => [

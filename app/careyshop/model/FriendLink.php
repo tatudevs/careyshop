@@ -14,13 +14,13 @@ class FriendLink extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'friend_link_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'friend_link_id',
@@ -28,7 +28,7 @@ class FriendLink extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'friend_link_id' => 'integer',

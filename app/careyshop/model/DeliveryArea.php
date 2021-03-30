@@ -14,13 +14,13 @@ class DeliveryArea extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'delivery_area_id';
 
     /**
      * 隐藏属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $hidden = [
         'delivery_id',
@@ -28,7 +28,7 @@ class DeliveryArea extends CareyShop
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'delivery_area_id',
@@ -37,7 +37,7 @@ class DeliveryArea extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'delivery_area_id'    => 'integer',

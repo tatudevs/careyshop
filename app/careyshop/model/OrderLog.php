@@ -14,7 +14,7 @@ class OrderLog extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'order_log_id';
 
@@ -26,13 +26,13 @@ class OrderLog extends CareyShop
 
     /**
      * 更新日期字段
-     * @var bool|string
+     * @var false|string
      */
     protected $updateTime = false;
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'order_log_id',
@@ -42,7 +42,7 @@ class OrderLog extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'order_log_id'    => 'integer',

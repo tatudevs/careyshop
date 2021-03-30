@@ -14,7 +14,7 @@ class ServiceLog extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'order_service_id' => 'require|integer|gt:0',
@@ -25,7 +25,7 @@ class ServiceLog extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'order_service_id' => '售后服务编号',

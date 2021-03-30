@@ -46,6 +46,8 @@ class Client extends BaseClient
     /**
      * Send miniprogram normal redpack.
      *
+     * @param array $params
+     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -63,6 +65,8 @@ class Client extends BaseClient
 
     /**
      * Send normal redpack.
+     *
+     * @param array $params
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
@@ -83,6 +87,8 @@ class Client extends BaseClient
 
     /**
      * Send group redpack.
+     *
+     * @param array $params
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *

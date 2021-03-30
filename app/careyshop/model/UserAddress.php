@@ -20,13 +20,13 @@ class UserAddress extends CareyShop
 
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'user_address_id';
 
     /**
      * 隐藏属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $hidden = [
         'user_id',
@@ -35,7 +35,7 @@ class UserAddress extends CareyShop
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'user_address_id',
@@ -44,7 +44,7 @@ class UserAddress extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'user_address_id' => 'integer',
@@ -55,7 +55,7 @@ class UserAddress extends CareyShop
 
     /**
      * 定义全局的查询范围
-     * @var string[]
+     * @var mixed|string[]
      */
     protected $globalScope = [
         'delete',

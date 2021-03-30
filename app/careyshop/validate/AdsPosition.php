@@ -14,7 +14,7 @@ class AdsPosition extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'ads_position_id' => 'integer|gt:0',
@@ -39,7 +39,7 @@ class AdsPosition extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]|mixed
      */
     protected $field = [
         'ads_position_id' => '广告位置编号',
@@ -64,7 +64,7 @@ class AdsPosition extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'set'    => [

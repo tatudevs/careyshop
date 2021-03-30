@@ -29,17 +29,17 @@ abstract class CareyShop
      * Request实例
      * @var Request
      */
-    protected $request;
+    protected Request $request;
 
     /**
      * 应用实例
      * @var App
      */
-    protected $app;
+    protected App $app;
 
     /**
      * AppKey
-     * @var string
+     * @var mixed|string
      */
     public $appkey;
 
@@ -47,41 +47,41 @@ abstract class CareyShop
      * AppSecret
      * @var string
      */
-    public $appSecret;
+    public string $appSecret = '';
 
     /**
      * Token
-     * @var string
+     * @var mixed|string
      */
     public $token;
 
     /**
      * Sign
-     * @var string
+     * @var mixed|string
      */
     public $sign;
 
     /**
      * 时间戳
-     * @var int
+     * @var int|mixed
      */
     public $timestamp;
 
     /**
      * 返回格式
-     * @var string
+     * @var mixed|string
      */
     public $format;
 
     /**
      * 业务方法
-     * @var string
+     * @var mixed|string
      */
     public $method;
 
     /**
      * 业务参数
-     * @var array
+     * @var array|mixed
      */
     public $params = [];
 
@@ -89,31 +89,31 @@ abstract class CareyShop
      * 方法路由器
      * @var array
      */
-    protected static $route = [];
+    protected static array $route = [];
 
     /**
      * 对应模型
-     * @var object
+     * @var object|null
      */
-    protected static $model;
+    protected static ?object $model = null;
 
     /**
      * 权限验证实例
-     * @var object
+     * @var object|null
      */
-    protected static $auth;
+    protected static ?object $auth = null;
 
     /**
      * 控制器错误信息
      * @var string
      */
-    public $error = '';
+    public string $error = '';
 
     /**
      * 控制器版本号
      * @var string
      */
-    public $version = 'v1';
+    public string $version = 'v1';
 
     /**
      * 是否调试模式

@@ -14,7 +14,7 @@ class OrderRefund extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'order_refund_id' => 'integer|gt:0',
@@ -37,7 +37,7 @@ class OrderRefund extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'order_refund_id' => '退款日志编号',
@@ -60,7 +60,7 @@ class OrderRefund extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'refund' => [

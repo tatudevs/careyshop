@@ -25,43 +25,43 @@ class Refund extends Payment
      * 应用ID
      * @var string
      */
-    private $appId;
+    private string $appId;
 
     /**
      * 商户私钥
      * @var string
      */
-    private $merchantPrivateKey;
+    private string $merchantPrivateKey;
 
     /**
      * 签名方式
      * @var string
      */
-    private $signType;
+    private string $signType;
 
     /**
      * 支付宝公钥
      * @var string
      */
-    private $alipayPublicKey;
+    private string $alipayPublicKey;
 
     /**
      * 退款流水号
      * @var string
      */
-    private $refundNo;
+    private string $refundNo;
 
     /**
      * 退款金额
      * @var float
      */
-    private $refundAmount;
+    private float $refundAmount;
 
     /**
      * 交易号
      * @var string
      */
-    protected $tradeNo;
+    protected string $tradeNo;
 
     /**
      * 设置支付配置

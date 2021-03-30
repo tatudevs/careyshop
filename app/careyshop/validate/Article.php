@@ -14,7 +14,7 @@ class Article extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'article_id'     => 'integer|gt:0',
@@ -38,7 +38,7 @@ class Article extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'article_id'     => '文章编号',
@@ -62,7 +62,7 @@ class Article extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'set'    => [

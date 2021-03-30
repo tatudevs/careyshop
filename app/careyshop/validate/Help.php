@@ -14,7 +14,7 @@ class Help extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'help_id'    => 'integer|gt:0',
@@ -28,7 +28,7 @@ class Help extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'help_id'    => '帮助文档编号',
@@ -42,7 +42,7 @@ class Help extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'set'    => [

@@ -17,13 +17,13 @@ class Region extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'region_id';
 
     /**
      * 隐藏属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $hidden = [
         'is_delete',
@@ -31,7 +31,7 @@ class Region extends CareyShop
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'region_id',
@@ -40,7 +40,7 @@ class Region extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'region_id' => 'integer',
@@ -51,7 +51,7 @@ class Region extends CareyShop
 
     /**
      * 定义全局的查询范围
-     * @var string[]
+     * @var mixed|string[]
      */
     protected $globalScope = [
         'delete',

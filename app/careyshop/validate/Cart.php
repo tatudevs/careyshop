@@ -14,7 +14,7 @@ class Cart extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'cart_id'     => 'integer|gt:0',
@@ -30,7 +30,7 @@ class Cart extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'cart_id'     => '购物车编号',
@@ -46,7 +46,7 @@ class Cart extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'list'   => [

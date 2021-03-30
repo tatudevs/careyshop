@@ -20,17 +20,17 @@ class GoodsCategory extends CareyShop
      * 分类树
      * @var array
      */
-    private static $tree = [];
+    private static array $tree = [];
 
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'goods_category_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'goods_category_id',
@@ -38,7 +38,7 @@ class GoodsCategory extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'goods_category_id' => 'integer',

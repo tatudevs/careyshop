@@ -14,7 +14,7 @@ class Cart extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'cart_id';
 
@@ -26,13 +26,13 @@ class Cart extends CareyShop
 
     /**
      * 创建日期字段
-     * @var bool|string
+     * @var false|string
      */
     protected $createTime = false;
 
     /**
      * 隐藏属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $hidden = [
         'user_id',
@@ -41,7 +41,7 @@ class Cart extends CareyShop
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'cart_id',
@@ -52,7 +52,7 @@ class Cart extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'cart_id'     => 'integer',

@@ -14,7 +14,7 @@ class SpecGoods extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'goods_id'  => 'require|integer|gt:0',
@@ -28,7 +28,7 @@ class SpecGoods extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'goods_id'  => '规格列表中的商品编码',

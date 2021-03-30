@@ -14,13 +14,13 @@ class AdsPosition extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'ads_position_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'ads_position_id',
@@ -28,7 +28,7 @@ class AdsPosition extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'ads_position_id' => 'integer',

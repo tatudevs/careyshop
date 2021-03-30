@@ -16,13 +16,13 @@ class CareyShop
      * 控制器版本号
      * @var string
      */
-    public $version = 'v1';
+    public string $version = 'v1';
 
     /**
      * 错误信息
      * @var string
      */
-    public $error = '';
+    public string $error = '';
 
     /**
      * 设置错误信息

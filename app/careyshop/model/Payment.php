@@ -59,13 +59,13 @@ class Payment extends CareyShop
 
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'payment_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'payment_id',
@@ -76,7 +76,7 @@ class Payment extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'payment_id' => 'integer',

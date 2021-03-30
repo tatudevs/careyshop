@@ -18,36 +18,37 @@ abstract class Upload
      * 控制器版本号
      * @var string
      */
-    protected $version = 'v1';
+    protected string $version = 'v1';
 
     /**
      * 错误信息
      * @var string
      */
-    protected $error = '';
+    protected string $error = '';
 
     /**
-     * @var Request Request 实例
+     * Request 实例
+     * @var Request
      */
-    protected $request;
+    protected Request $request;
 
     /**
      * 待删除资源列表
      * @var array
      */
-    protected $delFileList = [];
+    protected array $delFileList = [];
 
     /**
      * 待删除资源Id列表
      * @var array
      */
-    protected $delFileIdList = [];
+    protected array $delFileIdList = [];
 
     /**
      * 资源替换
      * @var string
      */
-    protected $replace = '';
+    protected string $replace = '';
 
     /**
      * 构造函数

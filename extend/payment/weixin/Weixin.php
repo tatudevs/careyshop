@@ -28,29 +28,29 @@ class Weixin extends Payment
      * 绑定支付的APPID
      * @var string
      */
-    private $appid;
+    private string $appid;
 
     /**
      * 商户号
      * @var string
      */
-    private $mchid;
+    private string $mchid;
 
     /**
      * 商户支付密钥
      * @var string
      */
-    private $key;
+    private string $key;
 
     /**
      * 公众帐号Secert
      * @var string
      */
-    private $appsecret = '';
+    private string $appsecret = '';
 
     /**
      * 请求来源
-     * @var array|bool
+     * @var mixed
      */
     private $request;
 

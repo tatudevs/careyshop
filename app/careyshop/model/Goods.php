@@ -18,7 +18,7 @@ class Goods extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'goods_id';
 
@@ -30,7 +30,7 @@ class Goods extends CareyShop
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'goods_id',
@@ -41,7 +41,7 @@ class Goods extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'goods_id'          => 'integer',
@@ -74,21 +74,21 @@ class Goods extends CareyShop
 
     /**
      * 商品属性模型对象
-     * @var GoodsAttr
+     * @var GoodsAttr|null
      */
-    private static $goodsAttr;
+    private static ?GoodsAttr $goodsAttr = null;
 
     /**
      * 商品规格模型对象
-     * @var SpecGoods
+     * @var SpecGoods|null
      */
-    private static $specGoods;
+    private static ?SpecGoods $specGoods = null;
 
     /**
      * 商品规格图片模型对象
-     * @var SpecImage
+     * @var SpecImage|null
      */
-    private static $specImage;
+    private static ?SpecImage $specImage = null;
 
     /**
      * hasMany cs_goods_attr

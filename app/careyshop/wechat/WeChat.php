@@ -26,7 +26,7 @@ class WeChat
      * 默认配置
      * @var array
      */
-    protected $setting = [
+    protected array $setting = [
         /**
          * 指定 API 调用返回结果的类型：array(default)/collection/object/raw/自定义类名
          * 使用自定义类名时，构造函数将会接收一个 `EasyWeChat\Kernel\Http\Response` 实例
@@ -74,7 +74,7 @@ class WeChat
      * 对应模块
      * @var string[]
      */
-    private $models = [
+    private array $models = [
         'official_account' => OfficialAccount::class,
         'work'             => Work::class,
         'mini_program'     => MiniProgram::class,

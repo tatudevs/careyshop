@@ -28,41 +28,41 @@ class Alipay extends Payment
      * 应用ID
      * @var string
      */
-    private $appId;
+    private string $appId;
 
     /**
      * 商户私钥
      * @var string
      */
-    private $merchantPrivateKey;
+    private string $merchantPrivateKey;
 
     /**
      * 签名方式
      * @var string
      */
-    private $signType;
+    private string $signType;
 
     /**
      * 支付宝公钥
      * @var string
      */
-    private $alipayPublicKey;
+    private string $alipayPublicKey;
 
     /**
      * 业务编码
      * @var string
      */
-    private $productCode;
+    private string $productCode;
 
     /**
      * 页面接口方式
      * @var string
      */
-    private $httpMethod = 'post';
+    private string $httpMethod = 'post';
 
     /**
      * 请求来源
-     * @var array/bool
+     * @var mixed
      */
     private $request;
 

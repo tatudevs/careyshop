@@ -11,9 +11,9 @@
 namespace think;
 
 // PHP版本检查
-if (version_compare(PHP_VERSION, '7.2', '<')) {
+if (version_compare(PHP_VERSION, '7.4', '<')) {
     header('Content-type: text/html; charset=utf-8');
-    die('PHP版本过低，最少需要PHP7.2，请升级PHP版本！');
+    die('PHP版本过低，最少需要PHP7.4，请升级PHP版本！');
 }
 
 // 检测是否完成安装

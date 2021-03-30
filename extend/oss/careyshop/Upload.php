@@ -38,13 +38,13 @@ class Upload extends UploadBase
      * 最大上传字节数
      * @var int
      */
-    protected static $maxSize;
+    protected static int $maxSize;
 
     /**
      * 最大上传信息
      * @var string
      */
-    protected static $maxSizeInfo;
+    protected static string $maxSizeInfo;
 
     /**
      * 初始化

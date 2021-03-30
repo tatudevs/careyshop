@@ -18,7 +18,7 @@ class Params implements ArrayAccess
      * 请求数据
      * @var array
      */
-    protected $data = [];
+    protected array $data = [];
 
     /**
      * Params constructor.

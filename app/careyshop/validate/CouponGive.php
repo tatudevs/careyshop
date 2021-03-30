@@ -14,7 +14,7 @@ class CouponGive extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'coupon_give_id' => 'integer|gt:0',
@@ -35,7 +35,7 @@ class CouponGive extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'coupon_give_id' => '优惠劵发放编号',
@@ -56,7 +56,7 @@ class CouponGive extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'user'   => [

@@ -13,11 +13,11 @@ namespace util;
 class Geohash
 {
     //private $bitss = [16, 8, 4, 2, 1];
-    private $neighbors = [];
-    private $borders = [];
+    private array $neighbors = [];
+    private array $borders = [];
 
-    private $coding = '0123456789bcdefghjkmnpqrstuvwxyz';
-    private $codingMap = [];
+    private string $coding = '0123456789bcdefghjkmnpqrstuvwxyz';
+    private array $codingMap = [];
 
     public function __construct()
     {

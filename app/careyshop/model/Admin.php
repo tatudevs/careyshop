@@ -17,7 +17,7 @@ class Admin extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'admin_id';
 
@@ -29,7 +29,7 @@ class Admin extends CareyShop
 
     /**
      * 隐藏属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $hidden = [
         'password',
@@ -38,7 +38,7 @@ class Admin extends CareyShop
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'admin_id',
@@ -48,7 +48,7 @@ class Admin extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'admin_id'   => 'integer',
@@ -60,7 +60,7 @@ class Admin extends CareyShop
 
     /**
      * 定义全局的查询范围
-     * @var string[]
+     * @var mixed|string[]
      */
     protected $globalScope = [
         'delete',

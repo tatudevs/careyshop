@@ -16,13 +16,13 @@ class StorageStyle extends CareyShop
 {
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'storage_style_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'storage_style_id',
@@ -30,7 +30,7 @@ class StorageStyle extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'storage_style_id' => 'integer',

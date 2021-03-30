@@ -25,35 +25,35 @@ class NoticeTpl extends CareyShop
      * 主配置参数
      * @var array
      */
-    private $setting;
+    private array $setting;
 
     /**
      * 当前通知类型短信模板参数
      * @var array
      */
-    private $smsSetting;
+    private array $smsSetting;
 
     /**
      * 当前通知类型邮箱模板参数
      * @var array
      */
-    private $emailSetting;
+    private array $emailSetting;
 
     /**
      * 可用变量
      * @var array
      */
-    private $noticeItem;
+    private array $noticeItem;
 
     /**
      * 主键
-     * @var string
+     * @var array|string
      */
     protected $pk = 'notice_tpl_id';
 
     /**
      * 只读属性
-     * @var array
+     * @var mixed|string[]
      */
     protected $readonly = [
         'notice_tpl_id',
@@ -64,7 +64,7 @@ class NoticeTpl extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var array
+     * @var mixed|string[]
      */
     protected $type = [
         'notice_tpl_id' => 'integer',

@@ -14,7 +14,7 @@ class DeliveryArea extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'delivery_area_id'    => 'integer|gt:0',
@@ -31,7 +31,7 @@ class DeliveryArea extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'delivery_area_id'    => '配送区域编号',
@@ -48,7 +48,7 @@ class DeliveryArea extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'set'  => [

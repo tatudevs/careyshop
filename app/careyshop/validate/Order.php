@@ -14,7 +14,7 @@ class Order extends CareyShop
 {
     /**
      * 验证规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $rule = [
         'order_no'             => 'max:50',
@@ -65,7 +65,7 @@ class Order extends CareyShop
 
     /**
      * 字段描述
-     * @var array
+     * @var mixed|string[]
      */
     protected $field = [
         'order_no'             => '订单号',
@@ -116,7 +116,7 @@ class Order extends CareyShop
 
     /**
      * 场景规则
-     * @var array
+     * @var mixed|string[]
      */
     protected $scene = [
         'create'       => [

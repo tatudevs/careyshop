@@ -102,9 +102,9 @@ if (!function_exists('get_client_token')) {
      * 返回当前账号token
      * @return null|string
      */
-    function get_client_token()
+    function get_client_token(): ?string
     {
-        return isset($GLOBALS['client']['token']) ? $GLOBALS['client']['token'] : null;
+        return $GLOBALS['client']['token'] ??= null;
     }
 }
 
