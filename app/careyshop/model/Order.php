@@ -1808,7 +1808,7 @@ class Order extends CareyShop
         foreach ($this->orderData['give_coupon'] as $item) {
             $couponGiveId = $couponGiveDb->giveCouponOrder($item, $this->orderData['user_id']);
             if (false !== $couponGiveId && !empty($couponGiveId)) {
-                $data = array_merge($data, $couponGiveId);
+                $data = [...$data, ...$couponGiveId];
             }
         }
 

@@ -45,7 +45,7 @@ class User extends CareyShop
 
             $nextOpenId = $result['next_openid'];
             if ($result['count'] > 0) {
-                $openIdList = array_merge($openIdList, $result['data']['openid']);
+                $openIdList = [...$openIdList, ...$result['data']['openid']];
             }
 
             if ($result['count'] < 10000) {
@@ -158,7 +158,7 @@ class User extends CareyShop
             }
 
             if ($result['count'] > 0) {
-                $openIdList = array_merge($openIdList, $result['data']['openid']);
+                $openIdList = [...$openIdList, ...$result['data']['openid']];
             }
 
             if ($result['count'] < 10000) {

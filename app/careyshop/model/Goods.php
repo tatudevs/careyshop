@@ -767,7 +767,7 @@ class Goods extends CareyShop
         if (is_array(current($attrList))) {
             foreach ($attrList as $value) {
                 $attributeIdList[] = array_shift($value);
-                $valueList = array_merge($valueList, $value);
+                $valueList = [...$valueList, ...$value];
 
                 if (empty($value)) {
                     return [];
@@ -775,7 +775,7 @@ class Goods extends CareyShop
             }
         } else {
             $attributeIdList[] = array_shift($attrList);
-            $valueList = array_merge($valueList, $attrList);
+            $valueList = [...$valueList, ...$attrList];
         }
 
         if (empty($attributeIdList) || empty($valueList)) {
@@ -845,7 +845,7 @@ class Goods extends CareyShop
                     $specKey = array_shift($item);
                     $specGroup[$specKey] = $item;
                     $specList[] = $specKey;
-                    $specItemList = array_merge($specItemList, $item);
+                    $specItemList = [...$specItemList, ...$item];
                 }
             }
 
@@ -861,7 +861,7 @@ class Goods extends CareyShop
                         }
                     }
                     !Str::endsWith($spec['text'], '、') ?: $spec['text'] = Str::substr($spec['text'], 0, -1);
-                    $spec['value'] = array_merge([$key], $item);
+                    $spec['value'] = [$key, ...$item];
                     $spec['param'] = 'spec_list';
                     $menuList[] = $spec;
                 }
@@ -890,7 +890,7 @@ class Goods extends CareyShop
             foreach ($attrGroup as $key => $item) {
                 if (isset($attrResult[$key])) {
                     $attr['text'] = $attrResult[$key] . '：' . implode($attrGroup[$key], '、');
-                    $attr['value'] = array_merge([$key], $item);
+                    $attr['value'] = [$key, ...$item];
                     $attr['param'] = 'attr_list';
                     $menuList[] = $attr;
                 }

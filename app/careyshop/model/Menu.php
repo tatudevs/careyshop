@@ -510,7 +510,7 @@ class Menu extends CareyShop
         $parent = array_column($parent, 'menu_id');
         $children = array_column($children, 'menu_id');
 
-        $map[] = ['menu_id', 'in', array_merge($parent, $children)];
+        $map[] = ['menu_id', 'in', [...$parent, ...$children]];
         $map[] = ['status', '=', $result->getAttr('status')];
 
         self::update(['status' => $data['status']], $map);

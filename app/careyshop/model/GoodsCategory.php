@@ -407,7 +407,7 @@ class GoodsCategory extends CareyShop
             $list = self::getCategoryList($value, $isGoodsTotal, $isLayer, $level);
 
             if ($list) {
-                $result = array_merge($result, $list);
+                $result = [...$result, ...$list];
             }
         }
 

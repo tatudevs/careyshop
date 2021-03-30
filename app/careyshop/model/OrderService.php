@@ -1129,7 +1129,7 @@ class OrderService extends CareyShop
             unset($data['order_service_id']);
             $field = ['logistic_code', 'status'];
             if (in_array($result->getAttr('type'), [2, 3])) {
-                $field = array_merge($field, ['address', 'consignee', 'zipcode', 'mobile']);
+                $field = [...$field, 'address', 'consignee', 'zipcode', 'mobile'];
             }
 
             if (false === $result->allowField($field)->save($data)) {

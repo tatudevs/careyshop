@@ -104,7 +104,7 @@ class DeliveryArea extends CareyShop
         // 合并各个配送区域
         $tempData = [];
         foreach ($result as $value) {
-            $tempData = array_merge($tempData, $value->getAttr('region'));
+            $tempData = [...$tempData, ...$value->getAttr('region')];
         }
 
         // 去处重复并验证

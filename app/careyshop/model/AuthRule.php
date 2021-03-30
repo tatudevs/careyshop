@@ -271,16 +271,16 @@ class AuthRule extends CareyShop
         foreach ($result as $value) {
             // 默认将所有获取到的编号都归入数组
             if (!empty($value['menu_auth'])) {
-                $menuAuth = array_merge($menuAuth, $value['menu_auth']);
+                $menuAuth = [...$menuAuth, ...$value['menu_auth']];
 
                 // 游客组需要将权限加入白名单列表
                 if (AUTH_GUEST == $value['group_id']) {
-                    $whiteList = array_merge($whiteList, $value['menu_auth']);
+                    $whiteList = [...$whiteList, ...$value['menu_auth']];
                 }
             }
 
             if (!empty($value['log_auth'])) {
-                $logAuth = array_merge($logAuth, $value['log_auth']);
+                $logAuth = [...$logAuth, ...$value['log_auth']];
             }
         }
 
