@@ -22,7 +22,7 @@ class CareyShop extends Validate
      */
     public function getField(string $field): string
     {
-        return isset($this->field[$field]) ? $this->field[$field] : $field;
+        return $this->field[$field] ?? $field;
     }
 
     /**
