@@ -10,7 +10,7 @@
 
 /**
  * 启动命令：php think run
- * 如有特殊指定：php think run -H tp.com -p 80
+ * 如有特殊指定：php think run -H 127.0.0.1 -p 8080
  */
 if (is_file($_SERVER['DOCUMENT_ROOT'] . $_SERVER['SCRIPT_NAME'])) {
     return false;
