@@ -156,7 +156,7 @@ class Material extends CareyShop
         ];
 
         foreach ($maps as $key => $value) {
-            $result[$key] = isset($article[$key]) ? $article[$key] : $value;
+            $result[$key] = $article[$key] ?? $value;
         }
 
         return new Article($result);
