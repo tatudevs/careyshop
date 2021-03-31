@@ -45,7 +45,7 @@ class Params implements ArrayAccess
      */
     public function offsetGet($offset): ?string
     {
-        return isset($this->data[$offset]) ? $this->data[$offset] : '';
+        return $this->data[$offset] ?? '';
     }
 
     /**
