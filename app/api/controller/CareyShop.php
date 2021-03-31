@@ -71,7 +71,7 @@ abstract class CareyShop
      * 返回格式
      * @var mixed|string
      */
-    public $format;
+    public $format = 'json';
 
     /**
      * 业务方法
@@ -163,12 +163,12 @@ abstract class CareyShop
         }
 
         // 公共参数赋值
-        $this->appkey = isset($this->params['appkey']) ? $this->params['appkey'] : '';
-        $this->token = isset($this->params['token']) ? $this->params['token'] : '';
-        $this->sign = isset($this->params['sign']) ? $this->params['sign'] : '';
-        $this->timestamp = isset($this->params['timestamp']) ? $this->params['timestamp'] : 0;
-        $this->format = !empty($this->params['format']) ? $this->params['format'] : 'json';
-        $this->method = isset($this->params['method']) ? $this->params['method'] : '';
+        $this->appkey = $this->params['appkey'] ?? '';
+        $this->token = $this->params['token'] ?? '';
+        $this->sign = $this->params['sign'] ?? '';
+        $this->timestamp = $this->params['timestamp'] ?? 0;
+        $this->method = $this->params['method'] ?? '';
+        empty($this->params['format']) ?: $this->format = $this->params['format'];
         ApiOutput::$format = $this->format;
 
         // 验证Params
@@ -301,7 +301,7 @@ abstract class CareyShop
 
         // 调用自身成员函数或类成员方法
         $result = null;
-        $callback = isset(self::$route[$this->method]) ? self::$route[$this->method] : null;
+        $callback = self::$route[$this->method] ?? null;
 
         // 路由定义中如果数组[1]不存在,则表示默认对应model模型
         if (!isset($callback[1])) {
@@ -311,7 +311,7 @@ abstract class CareyShop
         }
 
         if (class_exists($callback[1])) {
-            isset(static::$model) ?: static::$model = new $callback[1];
+            static::$model ??= new $callback[1];
             if (method_exists(static::$model, 'initWechat')) {
                 static::$model->initWechat($this->getParams());
             }

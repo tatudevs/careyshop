@@ -22,8 +22,8 @@ class Index
         $isRest = Db::name('setting')->where($map)->value('value');
 
         $result = [
-            'status' => 200,
             'data'   => '欢迎使用CareyShop商城框架系统 - Api',
+            'status' => 200,
         ];
 
         return $isRest || input('?get.key') ? view() : json($result);

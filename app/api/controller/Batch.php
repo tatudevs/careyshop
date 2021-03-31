@@ -70,7 +70,7 @@ class Batch extends CareyShop
                 }
 
                 $route = [];
-                $oldData['class']::initMethod();
+                call_user_func($oldData['class'] . '::initMethod');
 
                 if (!array_key_exists($method, $oldData['class']::$route)) {
                     throw new Exception('method路由方法不存在');
