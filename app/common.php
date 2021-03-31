@@ -33,7 +33,7 @@ if (!function_exists('get_client_type')) {
     function get_client_type(): int
     {
         $visitor = config('extra.client_group.visitor.value');
-        return isset($GLOBALS['client']['type']) ? $GLOBALS['client']['type'] : $visitor;
+        return $GLOBALS['client']['type'] ?? $visitor;
     }
 }
 
@@ -55,7 +55,7 @@ if (!function_exists('get_client_id')) {
      */
     function get_client_id(): int
     {
-        return isset($GLOBALS['client']['client_id']) ? $GLOBALS['client']['client_id'] : 0;
+        return $GLOBALS['client']['client_id'] ?? 0;
     }
 }
 
@@ -66,7 +66,7 @@ if (!function_exists('get_client_name')) {
      */
     function get_client_name(): string
     {
-        return isset($GLOBALS['client']['client_name']) ? $GLOBALS['client']['client_name'] : '游客';
+        return $GLOBALS['client']['client_name'] ?? '游客';
     }
 }
 
@@ -77,7 +77,7 @@ if (!function_exists('get_client_group')) {
      */
     function get_client_group(): int
     {
-        return isset($GLOBALS['client']['group_id']) ? $GLOBALS['client']['group_id'] : AUTH_GUEST;
+        return $GLOBALS['client']['group_id'] ?? AUTH_GUEST;
     }
 }
 
@@ -92,8 +92,9 @@ if (!function_exists('get_client_nickname')) {
             return '游客';
         }
 
-        $userType = is_client_admin() ? 'admin' : 'user';
-        return \think\facade\Db::name($userType)->where('user_id', get_client_id())->value('nickname');
+        return \think\facade\Db::name(is_client_admin() ? 'admin' : 'user')
+            ->where('user_id', get_client_id())
+            ->value('nickname');
     }
 }
 
@@ -104,7 +105,7 @@ if (!function_exists('get_client_token')) {
      */
     function get_client_token(): ?string
     {
-        return $GLOBALS['client']['token'] ??= null;
+        return $GLOBALS['client']['token'] ?? null;
     }
 }
 
