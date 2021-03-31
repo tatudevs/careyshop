@@ -66,6 +66,7 @@ class CareyShop
      */
     public function initWechat(array $params): CareyShop
     {
+        // 此处必须isset检测,控制器调用时有二次进入此函数
         if (isset($params['code'])) {
             $this->params = new Params($params);
 
