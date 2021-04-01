@@ -41,7 +41,7 @@ class User extends CareyShop
     public function checkUserName(array $data): bool
     {
         $rule = 'require|alphaDash|length:4,20|unique:user,username';
-        $rule .= sprintf(',%d,user_id', isset($data['exclude_id']) ? $data['exclude_id'] : 0);
+        $rule .= sprintf(',%d,user_id', $data['exclude_id'] ?? 0);
 
         return $this->checkField(['username|账号' => $rule], $data);
     }
@@ -55,7 +55,7 @@ class User extends CareyShop
     public function checkUserMobile(array $data): bool
     {
         $rule = 'require|number|length:7,15|unique:user,mobile';
-        $rule .= sprintf(',%d,user_id', isset($data['exclude_id']) ? $data['exclude_id'] : 0);
+        $rule .= sprintf(',%d,user_id', $data['exclude_id'] ?? 0);
 
         return $this->checkField(['mobile|手机号' => $rule], $data);
     }
