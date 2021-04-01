@@ -99,7 +99,7 @@ class Ask extends CareyShop
      */
     public function getGetUserAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**

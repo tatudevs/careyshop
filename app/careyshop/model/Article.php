@@ -68,7 +68,7 @@ class Article extends CareyShop
      */
     public function getGetArticleCatAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**

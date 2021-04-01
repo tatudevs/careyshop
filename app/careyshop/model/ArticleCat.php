@@ -110,7 +110,7 @@ class ArticleCat extends CareyShop
         }
 
         $idList = $result = [];
-        isset($data['not_empty']) ?: $data['not_empty'] = 0;
+        $data['not_empty'] ??= 0;
 
         if (!empty($data['not_empty'])) {
             $idList = $data['article_cat_id'];
@@ -147,7 +147,7 @@ class ArticleCat extends CareyShop
      * 获取一个文章分类
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getArticleCatItem(array $data)
@@ -156,8 +156,7 @@ class ArticleCat extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['article_cat_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['article_cat_id'])->toArray();
     }
 
     /**
@@ -192,9 +191,7 @@ class ArticleCat extends CareyShop
             ->select();
 
         // 生成参数缓存标签
-        $treeCache = sprintf('ArticleCat:id%dis_layer%dlevel%dis_navi%d',
-            $catId, $isLayer, is_null($level) ? -1 : $level, is_null($isNavi) ? -1 : $isNavi);
-
+        $treeCache = sprintf('ArticleCat:id%dis_layer%dlevel%dis_navi%d', $catId, $isLayer, $level ?? -1, $isNavi ?? -1);
         if (Cache::has($treeCache)) {
             return Cache::get($treeCache);
         }

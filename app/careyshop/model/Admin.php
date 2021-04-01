@@ -104,11 +104,7 @@ class Admin extends CareyShop
         $ip2region = new Ip2Region();
         $result = $ip2region->btreeSearch($data['last_ip']);
 
-        if ($result) {
-            $value = get_ip2region_str($result['region']);
-        }
-
-        return $value;
+        return $result ? get_ip2region_str($result['region']) : $value;
     }
 
     /**
@@ -142,7 +138,7 @@ class Admin extends CareyShop
      */
     public function getGetAuthGroupAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**

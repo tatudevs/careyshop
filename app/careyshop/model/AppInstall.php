@@ -104,7 +104,7 @@ class AppInstall extends CareyShop
      * 获取一个应用安装包
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getAppInstallItem(array $data)
@@ -113,8 +113,7 @@ class AppInstall extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['app_install_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['app_install_id'])->toArray();
     }
 
     /**

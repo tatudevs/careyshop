@@ -128,11 +128,7 @@ class ActionLog extends CareyShop
         $ip2region = new Ip2Region();
         $result = $ip2region->btreeSearch($data['ip']);
 
-        if ($result) {
-            $value = get_ip2region_str($result['region']);
-        }
-
-        return $value;
+        return $result ? get_ip2region_str($result['region']) : $value;
     }
 
     /**

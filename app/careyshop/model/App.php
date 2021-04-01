@@ -141,7 +141,7 @@ class App extends CareyShop
      * 获取一个应用
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getAppItem(array $data)
@@ -150,8 +150,7 @@ class App extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['app_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['app_id'])->toArray();
     }
 
     /**

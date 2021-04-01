@@ -304,7 +304,7 @@ if (!function_exists('xml_to_array')) {
         if (is_string($xml)) {
             $value = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
         } else if (is_object($xml)) {
-            $value = json_decode(json_encode($xml), true);
+            $value = json_decode(json_encode($xml, JSON_UNESCAPED_UNICODE), true);
         }
 
         return $value;

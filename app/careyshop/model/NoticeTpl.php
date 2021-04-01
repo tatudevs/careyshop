@@ -396,7 +396,7 @@ class NoticeTpl extends CareyShop
                     }
                 }
 
-                $result = json_encode($smsData);
+                $result = json_encode($smsData, JSON_UNESCAPED_UNICODE);
             }
 
             if ('email' == $code) {

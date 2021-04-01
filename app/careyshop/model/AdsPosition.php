@@ -87,7 +87,7 @@ class AdsPosition extends CareyShop
 
         // 避免无关字段
         unset($data['ads_position_id']);
-        isset($data['content']) ?: $data['content'] = '';
+        $data['content'] ??= '';
 
         if ($this->save($data)) {
             return $this->toArray();
@@ -218,7 +218,7 @@ class AdsPosition extends CareyShop
      * 获取一个广告位置
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getPositionItem(array $data)
@@ -227,8 +227,7 @@ class AdsPosition extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['ads_position_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['ads_position_id'])->toArray();
     }
 
     /**

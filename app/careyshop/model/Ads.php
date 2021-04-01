@@ -98,7 +98,7 @@ class Ads extends CareyShop
 
         // 避免无关字段
         unset($data['ads_id'], $data['platform'], $data['type']);
-        isset($data['content']) ?: $data['content'] = '';
+        $data['content'] ??= '';
 
         // 获取广告位
         $result = AdsPosition::find($data['ads_position_id']);
@@ -234,7 +234,7 @@ class Ads extends CareyShop
      * 获取一个广告
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getAdsItem(array $data)
@@ -243,8 +243,7 @@ class Ads extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['ads_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['ads_id'])->toArray();
     }
 
     /**
@@ -292,7 +291,7 @@ class Ads extends CareyShop
      * 根据编码获取广告
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getAdsCode(array $data)
@@ -306,11 +305,10 @@ class Ads extends CareyShop
         $map[] = ['end_time', '>= time', time()];
         $map[] = ['status', '=', 1];
 
-        $result = $this->where($map)
+        return $this->where($map)
             ->withoutField('code,ads_position_id,begin_time,end_time,sort,status')
-            ->find();
-
-        return is_null($result) ? null : $result->toArray();
+            ->findOrEmpty()
+            ->toArray();
     }
 
     /**
