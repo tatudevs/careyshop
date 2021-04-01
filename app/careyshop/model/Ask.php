@@ -344,13 +344,14 @@ class Ask extends CareyShop
             $map[] = ['ask.user_id', '=', get_client_id()];
         }
 
-        $result['total_result'] = $this->withJoin($with, 'inner')->where($map)->count();
+        $result['total_result'] = $this->alias('ask')->withJoin($with, 'inner')->where($map)->count();
         if ($result['total_result'] <= 0) {
             return $result;
         }
 
         // 实际查询
         $result['items'] = $this->setDefaultOrder(['ask_id' => 'desc'])
+            ->alias('ask')
             ->withoutField('ask,answer')
             ->withJoin($with, 'inner')
             ->where($map)
