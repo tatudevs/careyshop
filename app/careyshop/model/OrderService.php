@@ -428,9 +428,9 @@ class OrderService extends CareyShop
         }
 
         // 搜索条件
-        $map[] = ['service_no', '=', $data['service_no']];
+        $map[] = ['order_service.service_no', '=', $data['service_no']];
         if (!is_client_admin()) {
-            $map[] = ['user_id', '=', get_client_id()];
+            $map[] = ['order_service.user_id', '=', get_client_id()];
         }
 
         // 关联查询
@@ -441,14 +441,10 @@ class OrderService extends CareyShop
             'key_value', 'qty', 'is_service', 'status',
         ];
 
-        // 过滤字段
-        $field = !is_client_admin() ? 'admin_id,remark,admin_event' : '';
-
         // 实际查询
         $result = $this
             ->with('get_service_log')
             ->withJoin($with)
-            ->withoutField($field)
             ->where($map)
             ->find();
 
@@ -470,6 +466,9 @@ class OrderService extends CareyShop
                     $result->save();
                 }
             } else {
+                // 隐藏对顾客组字段
+                array_push($hidden, 'admin_id', 'remark', 'admin_event');
+
                 $result->setAttr('user_event', 0);
                 $result->save();
             }
@@ -1242,7 +1241,7 @@ class OrderService extends CareyShop
 
         // 搜索条件
         $map[] = ['service_no', '=', $data['service_no']];
-        is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
+        is_client_admin() ?: $map[] = ['order_service.user_id', '=', get_client_id()];
 
         // 关联查询
         $with['getOrderRefund'] = ['order_refund_id', 'refund_no', 'status'];
