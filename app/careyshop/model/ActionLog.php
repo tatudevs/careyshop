@@ -145,8 +145,11 @@ class ActionLog extends CareyShop
      */
     public function getActionAttr($value, $data): string
     {
-        $this->setMenuMap($data['path'], $value);
-        return $value;
+        if (!empty($value) && !empty($data['path'])) {
+            $this->setMenuMap($data['path'], $value);
+        }
+
+        return $value ?? '';
     }
 
     /**
