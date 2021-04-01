@@ -1240,7 +1240,7 @@ class OrderService extends CareyShop
         }
 
         // 搜索条件
-        $map[] = ['service_no', '=', $data['service_no']];
+        $map[] = ['order_service.service_no', '=', $data['service_no']];
         is_client_admin() ?: $map[] = ['order_service.user_id', '=', get_client_id()];
 
         // 关联查询
