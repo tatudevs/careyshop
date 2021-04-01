@@ -20,7 +20,7 @@ class PlaceOauth extends CareyShop
         'place_oauth_id' => 'integer|gt:0',
         'name'           => 'require|max:16',
         'model'          => 'require|max:16|checkModule:oauth',
-        'channel'        => 'max:16',
+        'code'           => 'max:16',
         'client_id'      => 'require|max:32',
         'client_secret'  => 'require|max:128',
         'expand'         => 'min:0',
@@ -37,7 +37,7 @@ class PlaceOauth extends CareyShop
         'place_oauth_id' => '授权机制编号',
         'name'           => '授权名称',
         'model'          => '所属模块',
-        'channel'        => '对应渠道',
+        'code'           => '对应渠道',
         'client_id'      => 'ClientId',
         'client_secret'  => 'ClientSecret',
         'expand'         => '扩展配置',
@@ -55,7 +55,7 @@ class PlaceOauth extends CareyShop
             'place_oauth_id' => 'require|integer|gt:0',
             'name',
             'model',
-            'channel',
+            'code',
             'client_id',
             'client_secret',
             'expand',
@@ -72,11 +72,11 @@ class PlaceOauth extends CareyShop
         'list'      => [
             'name'   => 'max:16',
             'model'  => 'max:16|checkModule:oauth',
-            'channel',
+            'code',
             'status' => 'in:0,1',
         ],
         'type'      => [
-            'channel',
+            'code',
         ],
         'status'    => [
             'place_oauth_id' => 'require|arrayHasOnlyInts',
@@ -84,7 +84,7 @@ class PlaceOauth extends CareyShop
         ],
         'authorize' => [
             'model',
-            'channel',
+            'code',
         ],
     ];
 }

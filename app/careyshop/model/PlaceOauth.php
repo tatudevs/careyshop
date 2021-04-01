@@ -53,11 +53,11 @@ class PlaceOauth extends CareyShop
 
         // 避免无关字段
         unset($data['place_oauth_id']);
-        !is_empty_parm($data['channel']) ?: $data['channel'] = '';
+        !is_empty_parm($data['code']) ?: $data['code'] = '';
 
         // 检测是否存在相同配置
         $map[] = ['model', '=', $data['model']];
-        $map[] = ['channel', '=', $data['channel']];
+        $map[] = ['code', '=', $data['code']];
 
         if (self::checkUnique($map)) {
             return $this->setError('相同模块下已存在重复的渠道');
@@ -87,8 +87,8 @@ class PlaceOauth extends CareyShop
         $map[] = ['place_oauth_id', '<>', $data['place_oauth_id']];
         $map[] = ['model', '=', $data['model']];
 
-        !is_empty_parm($data['channel']) ?: $data['channel'] = '';
-        $map[] = ['channel', '=', $data['channel']];
+        !is_empty_parm($data['code']) ?: $data['code'] = '';
+        $map[] = ['code', '=', $data['code']];
 
         if (self::checkUnique($map)) {
             return $this->setError('相同模块下已存在重复的渠道');
@@ -154,7 +154,7 @@ class PlaceOauth extends CareyShop
         $map = [];
         empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
         empty($data['model']) ?: $map[] = ['model', '=', $data['model']];
-        empty($data['channel']) ?: $map[] = ['channel', '=', $data['channel']];
+        empty($data['code']) ?: $map[] = ['code', '=', $data['code']];
         is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
         return $this->where($map)->select()->toArray();
@@ -174,23 +174,23 @@ class PlaceOauth extends CareyShop
         }
 
         // 搜索条件
-        $map[] = ['channel', '=', is_empty_parm($data['channel']) ? '' : $data['channel']];
+        $map[] = ['code', '=', is_empty_parm($data['code']) ? '' : $data['code']];
         $map[] = ['status', '=', 1];
 
         // 动态获取授权地址
         $attr = function ($value, $data) {
             $vars = [
-                'method'  => 'authorize',
-                'channel' => $data['channel'],
-                'model'   => $data['model'],
-                'value'   => $value,
+                'method' => 'authorize',
+                'code'   => $data['code'],
+                'model'  => $data['model'],
+                'value'  => $value,
             ];
 
             return Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
         };
 
         return $this->cache(true, null, 'oauth')
-            ->field('name,model,channel,logo,icon')
+            ->field('name,model,code,logo,icon')
             ->withAttr('authorize', $attr)
             ->where($map)
             ->select()
@@ -220,16 +220,16 @@ class PlaceOauth extends CareyShop
     /**
      * 获取某个模块下的配置参数
      * @access private
-     * @param string $model   所属模块
-     * @param string $channel 对应渠道(自定义)
+     * @param string $model 所属模块
+     * @param string $code  对应渠道(自定义)
      * @return array|bool
      * @throws
      */
-    private function getOAuthConfig(string $model, string $channel)
+    private function getOAuthConfig(string $model, string $code)
     {
         // 搜索条件
         $map[] = ['model', '=', $model];
-        $map[] = ['channel', '=', $channel];
+        $map[] = ['code', '=', $code];
         $map[] = ['status', '=', 1];
 
         $result = $this->where($map)->field('client_id,client_secret,expand')->find();
@@ -246,7 +246,7 @@ class PlaceOauth extends CareyShop
         }
 
         // 配置回调地址
-        $vars = ['method' => 'callback', 'channel' => $channel, 'model' => $model];
+        $vars = ['method' => 'callback', '$code' => $code, 'model' => $model];
         $config['redirect'] = Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
 
         return [$model => $config];
@@ -264,8 +264,8 @@ class PlaceOauth extends CareyShop
             return false;
         }
 
-        !is_empty_parm($data['channel']) ?: $data['channel'] = '';
-        $config = $this->getOAuthConfig($data['model'], $data['channel']);
+        !is_empty_parm($data['code']) ?: $data['code'] = '';
+        $config = $this->getOAuthConfig($data['model'], $data['code']);
 
         if (!$config) {
             return false;
