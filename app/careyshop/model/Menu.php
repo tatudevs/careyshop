@@ -104,7 +104,7 @@ class Menu extends CareyShop
      * 获取一个菜单
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getMenuItem(array $data)
@@ -113,8 +113,7 @@ class Menu extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['menu_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['menu_id'])->toArray();
     }
 
     /**
@@ -137,8 +136,8 @@ class Menu extends CareyShop
 
         // 检测编辑后是否存在重复URL
         empty($data['url']) ?: $data['url'] = $this->strToSnake($data['url']);
-        isset($data['type']) ?: $data['type'] = $result->getAttr('type');
-        isset($data['url']) ?: $data['url'] = $result->getAttr('url');
+        $data['type'] ??= $result->getAttr('type');
+        $data['url'] ??= $result->getAttr('url');
 
         if (!empty($data['url']) && 0 == $data['type']) {
             $map[] = ['menu_id', '<>', $data['menu_id']];
@@ -212,7 +211,7 @@ class Menu extends CareyShop
             ->order('m.parent_id,m.sort,m.menu_id')
             ->select();
 
-        $treeCache .= sprintf('id%dlevel%dis_layer%d', $menuId, is_null($level) ? -1 : $level, $isLayer);
+        $treeCache .= sprintf('id%dlevel%dis_layer%d', $menuId, $level ?? -1, $isLayer);
         empty(self::$menuAuth) ?: $treeCache .= 'auth' . implode(',', self::$menuAuth);
 
         if (Cache::has($treeCache)) {
@@ -334,7 +333,7 @@ class Menu extends CareyShop
         $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         $filter['is_navi'] = 1;
         $filter['status'] = 1;
-        $data['menu_id'] = isset($data['menu_id']) ?: 0;
+        $data['menu_id'] ??= 0;
 
         return self::getParentList(app('http')->getName(), $data['menu_id'], $isLayer, $filter);
     }
@@ -354,7 +353,7 @@ class Menu extends CareyShop
         $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         $filter['is_navi'] = 1;
         $filter['status'] = 1;
-        $filter['url'] = isset($data['url']) ? $data['url'] : null;
+        $filter['url'] = $data['url'] ?? null;
 
         return self::getParentList(app('http')->getName(), 0, $isLayer, $filter);
     }
@@ -531,9 +530,9 @@ class Menu extends CareyShop
             return false;
         }
 
-        $menuId = isset($data['menu_id']) ? $data['menu_id'] : 0;
+        $menuId = $data['menu_id'] ?? 0;
         $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
-        $level = isset($data['level']) ? $data['level'] : null;
+        $level = $data['level'] ?? null;
 
         $filter = null;
         is_empty_parm($data['is_navi']) ?: $filter['is_navi'] = $data['is_navi'];
@@ -562,7 +561,7 @@ class Menu extends CareyShop
 
         // 当规则表中存在菜单权限时进行赋值,让获取的函数进行过滤
         self::$menuAuth = $ruleResult['menu_auth'];
-        $menuId = isset($data['menu_id']) ? $data['menu_id'] : 0;
+        $menuId = $data['menu_id'] ?? 0;
         $result = self::getMenuListData($data['module'], $menuId, true);
         self::$menuAuth = [];
 

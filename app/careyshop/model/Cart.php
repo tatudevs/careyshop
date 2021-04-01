@@ -374,9 +374,8 @@ class Cart extends CareyShop
         $map[] = ['cart_id', 'in', $data['cart_id']];
         $map[] = ['user_id', '<>', 0];
         $map[] = ['user_id', '=', get_client_id()];
-        !empty($data['is_selected']) ?: $data['is_selected'] = 0;
 
-        self::update(['is_selected' => $data['is_selected']], $map);
+        self::update(['is_selected' => (int)$data['is_selected'] ?? 0], $map);
         return true;
     }
 

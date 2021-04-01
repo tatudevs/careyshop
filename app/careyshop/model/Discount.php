@@ -176,7 +176,7 @@ class Discount extends CareyShop
      * 获取一个商品折扣
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getDiscountItem(array $data)
@@ -185,8 +185,7 @@ class Discount extends CareyShop
             return false;
         }
 
-        $result = $this->with('discount_goods')->find($data['discount_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->with('discount_goods')->findOrEmpty($data['discount_id'])->toArray();
     }
 
     /**

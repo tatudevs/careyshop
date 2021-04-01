@@ -96,7 +96,7 @@ class FriendLink extends CareyShop
      * 获取一个友情链接
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getFriendLinkItem(array $data)
@@ -105,8 +105,7 @@ class FriendLink extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['friend_link_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['friend_link_id'])->toArray();
     }
 
     /**

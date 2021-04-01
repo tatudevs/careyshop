@@ -151,7 +151,7 @@ class Card extends CareyShop
      * 获取一条购物卡
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getCardItem(array $data)
@@ -164,8 +164,7 @@ class Card extends CareyShop
         $map[] = ['card_id', '=', $data['card_id']];
         $map[] = ['is_delete', '=', 0];
 
-        $result = $this->where($map)->withoutField('is_delete')->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->where($map)->withoutField('is_delete')->findOrEmpty()->toArray();
     }
 
     /**

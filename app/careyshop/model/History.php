@@ -72,7 +72,7 @@ class History extends CareyShop
      */
     public function getGetGoodsAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**

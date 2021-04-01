@@ -89,7 +89,7 @@ class Brand extends CareyShop
         if (!empty($data['name'])) {
             $map[] = ['brand_id', '<>', $data['brand_id']];
             $map[] = ['name', '=', $data['name']];
-            $map[] = ['goods_category_id', '=', !empty($data['goods_category_id']) ? $data['goods_category_id'] : 0];
+            $map[] = ['goods_category_id', '=', (int)$data['goods_category_id'] ?? 0];
 
             if (self::checkUnique($map)) {
                 return $this->setError('品牌名称已存在');
@@ -158,7 +158,7 @@ class Brand extends CareyShop
         }
 
         $map[] = ['name', '=', $data['name']];
-        $map[] = ['goods_category_id', '=', !empty($data['goods_category_id']) ? $data['goods_category_id'] : 0];
+        $map[] = ['goods_category_id', '=', (int)$data['goods_category_id'] ?? 0];
         !isset($data['exclude_id']) ?: $map[] = ['ads_id', '<>', $data['exclude_id']];
 
         if (self::checkUnique($map)) {
@@ -172,7 +172,7 @@ class Brand extends CareyShop
      * 获取一个品牌
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getBrandItem(array $data)
@@ -184,8 +184,7 @@ class Brand extends CareyShop
         $map[] = ['brand_id', '=', $data['brand_id']];
         is_client_admin() ?: $map[] = ['status', '=', 1];
 
-        $result = $this->where($map)->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->where($map)->findOrEmpty()->toArray();
     }
 
     /**

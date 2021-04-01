@@ -101,7 +101,7 @@ class DeliveryDist extends CareyShop
      */
     public function getGetUserAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**
@@ -320,7 +320,7 @@ class DeliveryDist extends CareyShop
         return $this->getOrderTracesByJson(
             $data['delivery_code'],
             $data['logistic_code'],
-            $data['customer_name']
+            $data['customer_name'],
         );
     }
 

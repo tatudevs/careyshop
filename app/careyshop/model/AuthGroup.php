@@ -99,7 +99,7 @@ class AuthGroup extends CareyShop
      * 获取一个用户组
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getAuthGroupItem(array $data)
@@ -108,8 +108,7 @@ class AuthGroup extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['group_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['group_id'])->toArray();
     }
 
     /**

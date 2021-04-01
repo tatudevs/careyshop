@@ -112,7 +112,7 @@ class Help extends CareyShop
      * 获取一条帮助文档
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getHelpItem(array $data)
@@ -121,15 +121,14 @@ class Help extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['help_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['help_id'])->toArray();
     }
 
     /**
      * 根据路由获取帮助文档
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getHelpRouter(array $data)
@@ -142,8 +141,7 @@ class Help extends CareyShop
         $map[] = ['ver', '=', $data['ver']];
         $map[] = ['module', '=', $data['module']];
 
-        $result = $this->field('content,url')->where($map)->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->field('content,url')->where($map)->findOrEmpty()->toArray();
     }
 
     /**

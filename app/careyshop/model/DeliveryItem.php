@@ -120,7 +120,7 @@ class DeliveryItem extends CareyShop
             $map = [
                 ['delivery_item_id', '<>', $data['delivery_item_id']],
                 ['code', '=', !empty($data['code']) ? $data['code'] : $result->getAttr('code')],
-                ['type', '=', isset($data['type']) ? $data['type'] : $result->getAttr('type')],
+                ['type', '=', $data['type'] ?? $result->getAttr('type')],
                 ['is_delete', '=', 0],
             ];
 
@@ -176,7 +176,7 @@ class DeliveryItem extends CareyShop
      * 获取一个快递公司
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getCompanyItem(array $data)
@@ -188,8 +188,7 @@ class DeliveryItem extends CareyShop
         $map[] = ['delivery_item_id', '=', $data['delivery_item_id']];
         $map[] = ['is_delete', '=', 0];
 
-        $result = $this->where($map)->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->where($map)->findOrEmpty()->toArray();
     }
 
     /**

@@ -196,7 +196,7 @@ class DeliveryArea extends CareyShop
      * 获取一个配送区域
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getAreaItem(array $data)
@@ -205,8 +205,7 @@ class DeliveryArea extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['delivery_area_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['delivery_area_id'])->toArray();
     }
 
     /**

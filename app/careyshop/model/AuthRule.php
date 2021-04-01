@@ -79,7 +79,7 @@ class AuthRule extends CareyShop
      * 获取一条规则
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getAuthRuleItem(array $data)
@@ -88,8 +88,7 @@ class AuthRule extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['rule_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['rule_id'])->toArray();
     }
 
     /**

@@ -96,8 +96,8 @@ abstract class CareyShop extends Model
      */
     public function searchPageAttr(...$args)
     {
-        $pageNo = isset($args[2]['page_no']) ? $args[2]['page_no'] : 1;
-        $pageSize = isset($args[2]['page_size']) ? $args[2]['page_size'] : Config::get('app.list_rows');
+        $pageNo = $args[2]['page_no'] ?? 1;
+        $pageSize = $args[2]['page_size'] ?? Config::get('app.list_rows');
 
         $args[0]->page($pageNo, $pageSize);
     }

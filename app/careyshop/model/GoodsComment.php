@@ -189,7 +189,7 @@ class GoodsComment extends CareyShop
      */
     public function getGetAdditionAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**
@@ -199,7 +199,7 @@ class GoodsComment extends CareyShop
      */
     public function getGetOrderGoodsAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**
@@ -209,7 +209,7 @@ class GoodsComment extends CareyShop
      */
     public function getGetUserAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**

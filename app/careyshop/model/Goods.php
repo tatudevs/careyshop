@@ -127,9 +127,9 @@ class Goods extends CareyShop
      */
     protected static function init()
     {
-        !is_null(self::$goodsAttr) ?: self::$goodsAttr = new GoodsAttr();
-        !is_null(self::$specGoods) ?: self::$specGoods = new SpecGoods();
-        !is_null(self::$specImage) ?: self::$specImage = new SpecImage();
+        self::$goodsAttr ??= new GoodsAttr();
+        self::$specGoods ??= new SpecGoods();
+        self::$specImage ??= new SpecImage();
     }
 
     /**
@@ -139,11 +139,7 @@ class Goods extends CareyShop
      */
     public function scopeGlobal(object $query)
     {
-        $query->where([
-            ['status', '=', 1],
-            ['is_delete', '=', 0],
-            ['store_qty', '>', 0],
-        ]);
+        $query->where([['status', '=', 1], ['is_delete', '=', 0], ['store_qty', '>', 0]]);
     }
 
     /**
@@ -1182,7 +1178,7 @@ class Goods extends CareyShop
      */
     private function isCategoryList(array $data, array &$goodsCateList): bool
     {
-        $categoryId = isset($data['goods_category_id']) ? $data['goods_category_id'] : 0;
+        $categoryId = $data['goods_category_id'] ?? 0;
         $cateList = GoodsCategory::getCategoryList($categoryId, false, true);
 
         if (empty($cateList)) {

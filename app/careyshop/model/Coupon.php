@@ -137,7 +137,7 @@ class Coupon extends CareyShop
      * 获取一张优惠劵
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getCouponItem(array $data)
@@ -149,8 +149,7 @@ class Coupon extends CareyShop
         $map[] = ['coupon_id', '=', $data['coupon_id']];
         $map[] = ['is_delete', '=', 0];
 
-        $result = $this->withoutField('is_delete')->where($map)->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->withoutField('is_delete')->where($map)->findOrEmpty()->toArray();
     }
 
     /**

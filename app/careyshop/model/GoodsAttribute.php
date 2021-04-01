@@ -117,7 +117,7 @@ class GoodsAttribute extends CareyShop
      * 获取一个商品属性主体
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getAttributeBodyItem(array $data)
@@ -130,9 +130,7 @@ class GoodsAttribute extends CareyShop
         $map[] = ['parent_id', '=', 0];
 
         $field = 'goods_attribute_id,attr_name,description,icon,goods_type_id,sort';
-        $result = $this->scope('delete')->field($field)->where($map)->find();
-
-        return is_null($result) ? null : $result->toArray();
+        return $this->scope('delete')->field($field)->where($map)->findOrEmpty()->toArray();
     }
 
     /**
@@ -229,7 +227,7 @@ class GoodsAttribute extends CareyShop
      * 获取一个商品属性
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getAttributeItem(array $data)
@@ -241,8 +239,7 @@ class GoodsAttribute extends CareyShop
         $map[] = ['goods_attribute_id', '=', $data['goods_attribute_id']];
         $map[] = ['parent_id', '<>', 0];
 
-        $result = $this->scope('delete')->where($map)->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->scope('delete')->where($map)->findOrEmpty()->toArray();
     }
 
     /**
@@ -325,7 +322,7 @@ class GoodsAttribute extends CareyShop
 
         // 关联查询
         $with = ['get_attribute' => function ($query) use ($order, $map) {
-            $withMap['is_delete'] = isset($map['is_delete']) ? $map['is_delete'] : [];
+            $withMap['is_delete'] = $map['is_delete'] ?? [];
             $query->where($withMap)->order($order);
         }];
 

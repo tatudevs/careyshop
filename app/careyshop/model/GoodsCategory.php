@@ -143,7 +143,7 @@ class GoodsCategory extends CareyShop
         }
 
         $idList = $result = [];
-        isset($data['not_empty']) ?: $data['not_empty'] = 0;
+        $data['not_empty'] ??= 0;
 
         if (1 == $data['not_empty']) {
             $idList = $data['goods_category_id'];
@@ -182,7 +182,7 @@ class GoodsCategory extends CareyShop
      * 获取一个商品分类
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
+     * @return array|false
      * @throws
      */
     public function getCategoryItem(array $data)
@@ -191,8 +191,7 @@ class GoodsCategory extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['goods_category_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['goods_category_id'])->toArray();
     }
 
     /**
@@ -372,7 +371,7 @@ class GoodsCategory extends CareyShop
 
         // 缓存名称
         $treeCache = sprintf('GoodsCat:admin%dtotal%d', is_client_admin(), $isGoodsTotal);
-        $treeCache .= sprintf('id%dis_layer%dlevel%d', $catId, $isLayer, is_null($level) ? -1 : $level);
+        $treeCache .= sprintf('id%dis_layer%dlevel%d', $catId, $isLayer, $level ?? -1);
 
         if (Cache::has($treeCache)) {
             return Cache::get($treeCache);
@@ -397,7 +396,7 @@ class GoodsCategory extends CareyShop
             return [];
         }
 
-        $level = isset($data['level']) ? $data['level'] : null;
+        $level = $data['level'] ?? null;
         $isGoodsTotal = !is_empty_parm($data['goods_total']) ? $data['goods_total'] : false;
         $isLayer = !is_empty_parm($data['is_layer']) ? $data['is_layer'] : true;
 
