@@ -36,15 +36,15 @@ class Upload extends UploadBase
 
     /**
      * 最大上传字节数
-     * @var int
+     * @var int|null
      */
-    protected static int $maxSize = 0;
+    protected static ?int $maxSize = null;
 
     /**
      * 最大上传信息
      * @var string
      */
-    protected static string $maxSizeInfo;
+    protected static string $maxSizeInfo = '';
 
     /**
      * 初始化
@@ -63,7 +63,7 @@ class Upload extends UploadBase
      */
     private function setFileMaxSize()
     {
-        if (self::$maxSize <= 0) {
+        if (is_null(self::$maxSize)) {
             $serverSize = ini_get('upload_max_filesize');
             $userMaxSize = Config::get('careyshop.upload.file_size');
 
