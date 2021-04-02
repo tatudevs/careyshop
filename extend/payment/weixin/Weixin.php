@@ -214,7 +214,6 @@ class Weixin extends Payment
      * pc查询结果
      * @access private
      * @return mixed
-     * @throws
      */
     private function pcRequestExecute()
     {

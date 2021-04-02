@@ -42,7 +42,7 @@ class CareyShop extends Validate
      * @param string $name  场景名
      * @param bool   $clean 当需要清理$data时场景过滤启用
      * @param string $pk    模型主键
-     * @throws \Exception
+     * @throws
      */
     public function extractScene(array $data, string $name, bool $clean, string $pk)
     {

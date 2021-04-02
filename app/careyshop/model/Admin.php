@@ -93,7 +93,7 @@ class Admin extends CareyShop
      * @param $value
      * @param $data
      * @return string
-     * @throws \Exception
+     * @throws
      */
     public function getLastIpRegionAttr($value, $data): string
     {

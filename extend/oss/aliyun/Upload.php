@@ -58,7 +58,7 @@ class Upload extends UploadBase
      * 获取上传地址
      * @access public
      * @return array|false
-     * @throws \throwable
+     * @throws
      */
     public function getUploadUrl()
     {
@@ -111,7 +111,7 @@ class Upload extends UploadBase
      * @access public
      * @param string $replace 替换资源(path)
      * @return array
-     * @throws \throwable
+     * @throws
      */
     public function getToken($replace = ''): array
     {
@@ -123,7 +123,6 @@ class Upload extends UploadBase
      * 获取表单上传所需Token
      * @access private
      * @return array|false
-     * @throws \throwable
      */
     private function getWebToken()
     {

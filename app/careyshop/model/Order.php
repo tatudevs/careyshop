@@ -2145,7 +2145,6 @@ class Order extends CareyShop
      * @param array $data 外部数据
      * @access public
      * @return int[]
-     * @throws
      */
     public function getOrderStatusTotal(array $data): array
     {

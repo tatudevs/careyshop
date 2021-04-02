@@ -159,7 +159,6 @@ class UserMoney extends CareyShop
      * @param float $value    数值
      * @param int   $clientId 账号编号
      * @return bool
-     * @throws
      */
     public function decLockBalance($value = 0.0, $clientId = 0): bool
     {
@@ -188,7 +187,6 @@ class UserMoney extends CareyShop
      * @param int $value    数值
      * @param int $clientId 账号编号
      * @return bool
-     * @throws
      */
     public function decLockPoints($value = 0, $clientId = 0): bool
     {
@@ -217,7 +215,6 @@ class UserMoney extends CareyShop
      * @param float $value    数值
      * @param int   $clientId 账号编号
      * @return bool
-     * @throws
      */
     public function setBalance($value = 0.0, $clientId = 0): bool
     {
@@ -251,7 +248,6 @@ class UserMoney extends CareyShop
      * @param int $value    数值
      * @param int $clientId 账号编号
      * @return bool
-     * @throws
      */
     public function setPoints($value = 0, $clientId = 0): bool
     {

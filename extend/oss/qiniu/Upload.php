@@ -50,7 +50,7 @@ class Upload extends UploadBase
      * 获取上传地址
      * @access public
      * @return array|false
-     * @throws \throwable
+     * @throws
      */
     public function getUploadUrl()
     {
@@ -86,7 +86,6 @@ class Upload extends UploadBase
      * @access public
      * @param string $replace 替换资源(path)
      * @return array|false
-     * @throws \throwable
      */
     public function getToken($replace = '')
     {
@@ -144,7 +143,6 @@ class Upload extends UploadBase
      * 接收第三方推送数据
      * @access public
      * @return array|false
-     * @throws
      */
     public function putUploadData()
     {

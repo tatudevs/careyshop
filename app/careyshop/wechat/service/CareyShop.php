@@ -62,7 +62,7 @@ class CareyShop
      * @access public
      * @param array $params 请求参数
      * @return $this
-     * @throws \Throwable
+     * @throws
      */
     public function initWechat(array $params): CareyShop
     {
@@ -83,7 +83,7 @@ class CareyShop
      * @access public
      * @param string $plate 板块名称
      * @return mixed
-     * @throws \Exception
+     * @throws
      */
     public function getApp(string $plate)
     {

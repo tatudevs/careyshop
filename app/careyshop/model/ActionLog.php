@@ -89,7 +89,7 @@ class ActionLog extends CareyShop
      * @access private
      * @param string      $key   来源值
      * @param string|null $value 修改值
-     * @throws \Throwable
+     * @throws
      */
     private function setMenuMap(string $key, ?string &$value)
     {
@@ -117,7 +117,7 @@ class ActionLog extends CareyShop
      * @param $value
      * @param $data
      * @return string
-     * @throws \Exception
+     * @throws
      */
     public function getIpRegionAttr($value, $data): string
     {
@@ -137,7 +137,6 @@ class ActionLog extends CareyShop
      * @param $value
      * @param $data
      * @return string
-     * @throws \Throwable
      */
     public function getActionAttr($value, $data): string
     {

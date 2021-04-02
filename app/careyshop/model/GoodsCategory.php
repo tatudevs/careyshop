@@ -329,7 +329,6 @@ class GoodsCategory extends CareyShop
      * @param bool $isLayer      是否返回本级分类
      * @param null $level        分类深度
      * @return array
-     * @throws
      */
     public static function getCategoryList($catId = 0, $isGoodsTotal = false, $isLayer = false, $level = null): array
     {

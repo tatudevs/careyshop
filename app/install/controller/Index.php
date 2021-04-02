@@ -194,7 +194,7 @@ class Index
 
     /**
      * 数据导入
-     * @throws \Throwable
+     * @throws
      */
     public function install()
     {

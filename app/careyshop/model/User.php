@@ -473,7 +473,6 @@ class User extends CareyShop
      * 注销账号
      * @access public
      * @return bool
-     * @throws
      */
     public function logoutUser(): bool
     {

@@ -76,7 +76,6 @@ class DiscountGoods extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function getDiscountGoodsInfo(array $data)
     {

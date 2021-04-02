@@ -197,7 +197,6 @@ abstract class CareyShop extends Model
      * 尝试获取验证器类
      * @access private
      * @return string
-     * @throws
      */
     private function getValidateClass(): string
     {
