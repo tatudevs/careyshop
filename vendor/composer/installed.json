@@ -50,17 +50,17 @@
     },
     {
         "name": "dnyz520/careyshop-barcode",
-        "version": "v1.0.7",
-        "version_normalized": "1.0.7.0",
+        "version": "v1.0.8",
+        "version_normalized": "1.0.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-barcode.git",
-            "reference": "fad300b80049e81f8dcbf91b167028b69af68eb7"
+            "reference": "fc1e846e961c62e37f66f8d9c66b9f5854b70329"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-barcode/zipball/fad300b80049e81f8dcbf91b167028b69af68eb7",
-            "reference": "fad300b80049e81f8dcbf91b167028b69af68eb7",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-barcode/zipball/fc1e846e961c62e37f66f8d9c66b9f5854b70329",
+            "reference": "fc1e846e961c62e37f66f8d9c66b9f5854b70329",
             "shasum": "",
             "mirrors": [
                 {
@@ -74,7 +74,7 @@
             "php": ">=7.1.0",
             "topthink/framework": "^6.0.0"
         },
-        "time": "2021-01-11T03:17:31+00:00",
+        "time": "2021-04-02T15:51:29+00:00",
         "type": "library",
         "extra": {
             "think": {
@@ -1100,17 +1100,17 @@
     },
     {
         "name": "overtrue/wechat",
-        "version": "5.4.4",
-        "version_normalized": "5.4.4.0",
+        "version": "5.5.0",
+        "version_normalized": "5.5.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/w7corp/easywechat.git",
-            "reference": "cd6b132ebf0d2f58afda00ca05fd5f2eb7a1b416"
+            "reference": "c5c0adcc9063d78f453da5cc7061fbddca197831"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/w7corp/easywechat/zipball/cd6b132ebf0d2f58afda00ca05fd5f2eb7a1b416",
-            "reference": "cd6b132ebf0d2f58afda00ca05fd5f2eb7a1b416",
+            "url": "https://api.github.com/repos/w7corp/easywechat/zipball/c5c0adcc9063d78f453da5cc7061fbddca197831",
+            "reference": "c5c0adcc9063d78f453da5cc7061fbddca197831",
             "shasum": "",
             "mirrors": [
                 {
@@ -1145,7 +1145,7 @@
             "phpstan/phpstan": "^0.12.0",
             "phpunit/phpunit": "^9.3"
         },
-        "time": "2021-03-15T14:55:21+00:00",
+        "time": "2021-04-01T08:39:54+00:00",
         "type": "library",
         "extra": {
             "hooks": {
@@ -1190,17 +1190,17 @@
     },
     {
         "name": "phpmailer/phpmailer",
-        "version": "v6.3.0",
-        "version_normalized": "6.3.0.0",
+        "version": "v6.4.0",
+        "version_normalized": "6.4.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/PHPMailer/PHPMailer.git",
-            "reference": "4a08cf4cdd2c38d12ee2b9fa69e5d235f37a6dcb"
+            "reference": "050d430203105c27c30efd1dce7aa421ad882d01"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/4a08cf4cdd2c38d12ee2b9fa69e5d235f37a6dcb",
-            "reference": "4a08cf4cdd2c38d12ee2b9fa69e5d235f37a6dcb",
+            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/050d430203105c27c30efd1dce7aa421ad882d01",
+            "reference": "050d430203105c27c30efd1dce7aa421ad882d01",
             "shasum": "",
             "mirrors": [
                 {
@@ -1224,14 +1224,14 @@
             "yoast/phpunit-polyfills": "^0.2.0"
         },
         "suggest": {
-            "ext-mbstring": "Needed to send email in multibyte encoding charset",
+            "ext-mbstring": "Needed to send email in multibyte encoding charset or decode encoded addresses",
             "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
             "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
             "psr/log": "For optional PSR-3 debug logging",
             "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
             "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
         },
-        "time": "2021-02-19T15:28:08+00:00",
+        "time": "2021-03-31T20:06:42+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

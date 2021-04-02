@@ -1125,7 +1125,7 @@ class QrCode
             $flag = 1;
             while ($flag) {
                 if ($remaining_bits > $buffer_bits) {
-                    $codewords[$codewords_counter] = ((@$codewords[$codewords_counter] << $buffer_bits) | $buffer);
+                    $codewords[$codewords_counter] = (((isset($codewords[$codewords_counter]) ? $codewords[$codewords_counter] : 0) << $buffer_bits) | $buffer);
                     $remaining_bits -= $buffer_bits;
                     $flag = 0;
                 } else {
