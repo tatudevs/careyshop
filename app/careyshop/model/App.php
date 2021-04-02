@@ -142,7 +142,6 @@ class App extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function getAppItem(array $data)
     {
@@ -200,7 +199,6 @@ class App extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return bool
-     * @throws \Exception
      */
     public function uniqueAppName(array $data): bool
     {

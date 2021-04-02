@@ -67,7 +67,7 @@ class Spec extends CareyShop
      */
     public function getGetGoodsTypeAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**

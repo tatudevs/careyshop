@@ -105,8 +105,7 @@ class NoticeTpl extends CareyShop
      * 获取一个通知系统模板
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getNoticeTplItem(array $data)
     {
@@ -123,12 +122,11 @@ class NoticeTpl extends CareyShop
         };
 
         // 获取数据
-        $result = $this->cache(true, null, 'NoticeTpl')
+        return $this->cache(true, null, 'NoticeTpl')
             ->with($with)
             ->where($map)
-            ->find();
-
-        return is_null($result) ? null : $result->toArray();
+            ->findOrEmpty()
+            ->toArray();
     }
 
     /**

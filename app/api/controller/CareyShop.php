@@ -14,14 +14,12 @@ use careyshop\ApiOutput;
 use app\careyshop\service\Auth;
 use Exception;
 use think\App;
-use think\exception\ValidateException;
 use think\facade\Cache;
 use think\facade\Config;
 use think\facade\Db;
 use think\helper\Str;
 use think\Request;
 use think\Validate;
-use throwable;
 
 abstract class CareyShop
 {
@@ -124,8 +122,7 @@ abstract class CareyShop
     /**
      * 构造方法
      * @access public
-     * @param App $app 应用对象
-     * @throws
+     * @param App $app 应用实列
      */
     public function __construct(App $app)
     {
@@ -215,7 +212,6 @@ abstract class CareyShop
      * @param array        $message  提示信息
      * @param bool         $batch    是否批量验证
      * @return bool
-     * @throws ValidateException
      */
     protected function validate(array $data, $validate, array $message = [], bool $batch = false): bool
     {
@@ -375,7 +371,7 @@ abstract class CareyShop
      * 只验证Token是否合法,否则一律按游客处理
      * @access private
      * @return bool|string
-     * @throws throwable
+     * @throws
      */
     private function checkToken()
     {
@@ -441,7 +437,7 @@ abstract class CareyShop
      * 验证Auth
      * @access private
      * @return bool|string
-     * @throws throwable
+     * @throws
      */
     private function checkAuth()
     {

@@ -89,7 +89,7 @@ class ActionLog extends CareyShop
      * @access private
      * @param string      $key   来源值
      * @param string|null $value 修改值
-     * @throws \throwable
+     * @throws \Throwable
      */
     private function setMenuMap(string $key, ?string &$value)
     {
@@ -137,7 +137,7 @@ class ActionLog extends CareyShop
      * @param $value
      * @param $data
      * @return string
-     * @throws
+     * @throws \Throwable
      */
     public function getActionAttr($value, $data): string
     {

@@ -104,8 +104,7 @@ class Navigation extends CareyShop
      * 获取一个导航
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getNavigationItem(array $data)
     {
@@ -113,8 +112,7 @@ class Navigation extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['navigation_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['navigation_id'])->toArray();
     }
 
     /**

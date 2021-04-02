@@ -22,7 +22,7 @@ class Stats extends CareyShop
      * 获取后台统计数据
      * @access public
      * @return array
-     * @throws
+     * @throws \Throwable
      */
     public static function getStatsIndex(): array
     {
@@ -195,7 +195,7 @@ class Stats extends CareyShop
      * 获取店铺统计数据
      * @access public
      * @return array
-     * @throws
+     * @throws \Throwable
      */
     public static function getStatsShop(): array
     {

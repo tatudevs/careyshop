@@ -147,8 +147,7 @@ class Region extends CareyShop
      * 获取指定区域
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getRegionItem(array $data)
     {
@@ -157,10 +156,11 @@ class Region extends CareyShop
         }
 
         // 是否提取已删除区域
-        $scope = isset($data['region_all']) ? !$data['region_all'] : true;
+        $scope = (bool)$data['region_all'] ?? false;
 
-        $result = self::withoutGlobalScope($scope ? [] : ['delete'])->find($data['region_id']);
-        return is_null($result) ? null : $result->toArray();
+        return self::withoutGlobalScope($scope ? ['delete'] : [])
+            ->findOrEmpty($data['region_id'])
+            ->toArray();
     }
 
     /**
@@ -177,10 +177,10 @@ class Region extends CareyShop
         }
 
         // 是否提取已删除区域
-        $scope = isset($data['region_all']) ? !$data['region_all'] : true;
-        $map[] = ['parent_id', '=', isset($data['region_id']) ? $data['region_id'] : 0];
+        $scope = (bool)$data['region_all'] ?? false;
+        $map[] = ['parent_id', '=', $data['region_id'] ?? 0];
 
-        return self::withoutGlobalScope($scope ? [] : ['delete'])
+        return self::withoutGlobalScope($scope ? ['delete'] : [])
             ->where($map)
             ->order(['sort', 'region_id'])
             ->select()
@@ -199,9 +199,8 @@ class Region extends CareyShop
             return false;
         }
 
-        // 是否提取已删除区域
-        $isDelete = !is_empty_parm($data['region_all']) ? (bool)$data['region_all'] : false;
-        isset($data['region_id']) ?: $data['region_id'] = 0;
+        $data['region_id'] ??= 0;
+        $isDelete = (bool)$data['region_all'] ?? false; // 是否提取已删除区域
         $regionList = self::getRegionCacheList();
 
         static $result = [];
@@ -217,7 +216,6 @@ class Region extends CareyShop
      * @param array &$tree     树结构
      * @param array &$list     原始数据结构
      * @param bool   $isDelete 是否提取已删除区域
-     * @return void
      */
     private static function getRegionChildrenList(int $id, array &$tree, array &$list, bool $isDelete)
     {

@@ -74,7 +74,7 @@ class PaymentLog extends CareyShop
      */
     public function getGetUserAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**
@@ -107,7 +107,7 @@ class PaymentLog extends CareyShop
         unset($data['payment_log_id'], $data['payment_time'], $data['to_payment']);
         $data['payment_no'] = $this->getPaymentNo();
         $data['user_id'] = get_client_id();
-        isset($data['status']) ?: $data['status'] = 0;
+        $data['status'] ??= 0;
 
         if ($this->save($data)) {
             return $this->toArray();
@@ -151,8 +151,7 @@ class PaymentLog extends CareyShop
      * 获取一笔充值记录
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getPaymentLogItem(array $data)
     {
@@ -165,8 +164,7 @@ class PaymentLog extends CareyShop
         !isset($data['type']) ?: $map[] = ['type', '=', $data['type']];
         !isset($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
-        $result = $this->where($map)->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->where($map)->findOrEmpty()->toArray();
     }
 
     /**

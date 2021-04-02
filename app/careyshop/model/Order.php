@@ -166,7 +166,7 @@ class Order extends CareyShop
      */
     public function getGetUserAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**
@@ -422,7 +422,7 @@ class Order extends CareyShop
 
         // 计算实际运费及优惠额结算
         if ($weightTotal > 0 || $itemTotal > 0 || $volumeTotal > 0) {
-            $deliveryData['delivery_id'] = isset($this->dataParams['delivery_id']) ? $this->dataParams['delivery_id'] : 0;
+            $deliveryData['delivery_id'] = $this->dataParams['delivery_id'] ?? 0;
             $deliveryData['weight_total'] = $weightTotal;
             $deliveryData['item_total'] = $itemTotal;
             $deliveryData['volume_total'] = $volumeTotal;
@@ -649,7 +649,7 @@ class Order extends CareyShop
         }
 
         // 订单区域编号组合
-        $country = isset($this->dataParams['country']) ? $this->dataParams['country'] : 0;
+        $country = $this->dataParams['country'] ?? 0;
         $regionList = $this->dataParams['region_list'];
 
         // 判断完整收货地址是否需要包含国籍
@@ -693,16 +693,16 @@ class Order extends CareyShop
             'use_card'         => $this->cartData['order_price']['use_card'],
             'delivery_fee'     => $this->cartData['order_price']['delivery_fee'],
             'delivery_id'      => $this->dataParams['delivery_id'],
-            'card_number'      => isset($this->dataParams['card_number']) ? $this->dataParams['card_number'] : '',
+            'card_number'      => $this->dataParams['card_number'] ?? '',
             'consignee'        => $this->dataParams['consignee'],
-            'country'          => isset($this->dataParams['country']) ? $this->dataParams['country'] : 0,
+            'country'          => $this->dataParams['country'] ?? 0,
             'region_list'      => $this->dataParams['region_list'],
             'address'          => $this->dataParams['address'],
             'complete_address' => $this->getCompleteAddress() . $this->dataParams['address'],
-            'zipcode'          => isset($this->dataParams['zipcode']) ? $this->dataParams['zipcode'] : '',
-            'tel'              => isset($this->dataParams['tel']) ? $this->dataParams['tel'] : '',
+            'zipcode'          => $this->dataParams['zipcode'] ?? '',
+            'tel'              => $this->dataParams['tel'] ?? '',
             'mobile'           => $this->dataParams['mobile'],
-            'buyer_remark'     => isset($this->dataParams['buyer_remark']) ? $this->dataParams['buyer_remark'] : '',
+            'buyer_remark'     => $this->dataParams['buyer_remark'] ?? '',
             'create_user_id'   => is_client_admin() ? get_client_id() : 0,
             'integral_pct'     => $this->orderData['integral_pct'],
             'give_integral'    => $this->cartData['integral']['give'],
@@ -733,7 +733,7 @@ class Order extends CareyShop
      */
     private function setInvoiceData(array &$invoiceData): bool
     {
-        $invoiceType = isset($this->dataParams['invoice_type']) ? $this->dataParams['invoice_type'] : 0;
+        $invoiceType = $this->dataParams['invoice_type'] ?? 0;
         if (2 == $invoiceType && empty($this->dataParams['invoice_title'])) {
             return $this->setError('发票抬头必须填写');
         }
@@ -1467,9 +1467,6 @@ class Order extends CareyShop
         $map[] = ['order_no', '=', $data['order_no']];
         $map[] = ['is_delete', '<>', 2];
 
-        // 过滤字段
-        $field = '';
-
         if (!is_client_admin()) {
             $map[] = ['user_id', '=', get_client_id()];
             $field = 'sellers_remark';
@@ -1483,7 +1480,7 @@ class Order extends CareyShop
             };
         }
 
-        $result = $this->with($with)->withoutField($field)->where($map)->find();
+        $result = $this->with($with)->withoutField($field ?? '')->where($map)->find();
         if (!is_null($result)) {
             // 隐藏不需要输出的字段
             $hidden = [
@@ -2111,7 +2108,6 @@ class Order extends CareyShop
         }
 
         // 过滤字段
-        $field = '';
         if (!is_client_admin()) {
             $field = 'sellers_remark';
         }
@@ -2134,7 +2130,7 @@ class Order extends CareyShop
         // 实际查询
         $result['items'] = $this->setDefaultOrder(['order_id' => 'desc'])
             ->with($with)
-            ->withoutField($field)
+            ->withoutField($field ?? '')
             ->where($whereMap)
             ->withSearch($search, $data)
             ->select()

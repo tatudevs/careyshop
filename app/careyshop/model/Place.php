@@ -278,8 +278,7 @@ class Place extends CareyShop
      * 获取一个渠道平台
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getPlaceItem(array $data)
     {
@@ -287,8 +286,7 @@ class Place extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['place_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['place_id'])->toArray();
     }
 
     /**

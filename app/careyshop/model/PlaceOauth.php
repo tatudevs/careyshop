@@ -124,8 +124,7 @@ class PlaceOauth extends CareyShop
      * 获取一条授权机制
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getPlaceOAuthItem(array $data)
     {
@@ -133,8 +132,7 @@ class PlaceOauth extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['place_oauth_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['place_oauth_id'])->toArray();
     }
 
     /**

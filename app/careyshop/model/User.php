@@ -100,7 +100,7 @@ class User extends CareyShop
      * @param $value
      * @param $data
      * @return string
-     * @throws \Exception
+     * @throws
      */
     public function getLastIpRegionAttr($value, $data): string
     {
@@ -111,11 +111,7 @@ class User extends CareyShop
         $ip2region = new Ip2Region();
         $result = $ip2region->btreeSearch($data['last_ip']);
 
-        if ($result) {
-            $value = get_ip2region_str($result['region']);
-        }
-
-        return $value;
+        return $result ? get_ip2region_str($result['region']) : $value;
     }
 
     /**
@@ -186,7 +182,7 @@ class User extends CareyShop
      */
     public function getGetUserLevelAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**
@@ -196,7 +192,7 @@ class User extends CareyShop
      */
     public function getGetAuthGroupAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**
@@ -215,11 +211,10 @@ class User extends CareyShop
         $this->startTrans();
 
         try {
-            // 添加主表
-            if (!isset($data['group_id'])) {
-                $data['group_id'] = AUTH_CLIENT;
-            }
+            // 管理组可自定义组
+            $data['group_id'] ??= AUTH_CLIENT;
 
+            // 顾客组采用固定组
             is_client_admin() ?: $data['group_id'] = AUTH_CLIENT;
             $data['level_icon'] = UserLevel::where('user_level_id', '=', 1)->value('icon', '');
 
@@ -254,10 +249,7 @@ class User extends CareyShop
             return false;
         }
 
-        // 数据类型修改
-        $data['client_id'] = (int)$data['client_id'];
-
-        $map = ['user_id' => is_client_admin() ? $data['client_id'] : get_client_id()];
+        $map = ['user_id' => is_client_admin() ? (int)$data['client_id'] : get_client_id()];
         $field = ['group_id', 'nickname', 'head_pic', 'sex', 'birthday', 'status'];
 
         if (!is_client_admin()) {

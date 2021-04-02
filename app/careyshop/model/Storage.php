@@ -152,8 +152,7 @@ class Storage extends CareyShop
      * 获取一个资源或资源目录
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getStorageItem(array $data)
     {
@@ -161,8 +160,7 @@ class Storage extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['storage_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['storage_id'])->toArray();
     }
 
     /**
@@ -179,7 +177,7 @@ class Storage extends CareyShop
         }
 
         // 初始化数据
-        $data['storage_id'] = !is_empty_parm($data['storage_id']) ? $data['storage_id'] : 0;
+        $data['storage_id'] ??= 0;
 
         // 搜索条件
         $map = [];
@@ -187,9 +185,9 @@ class Storage extends CareyShop
 
         if (!empty($data['name'])) {
             $map[] = ['name', 'like', '%' . $data['name'] . '%'];
-            $map[] = ['storage_id', '<>', $data['storage_id']];
+            $map[] = ['storage_id', '<>', (int)$data['storage_id']];
         } else {
-            $map[] = ['parent_id', '=', $data['storage_id']];
+            $map[] = ['parent_id', '=', (int)$data['storage_id']];
         }
 
         // 获取总数量,为空直接返回
@@ -256,6 +254,7 @@ class Storage extends CareyShop
             ->where('type', '=', 2)
             ->column('storage_id,parent_id,name', 'storage_id');
 
+        // 是否返回本级
         $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
         if (!$isLayer && isset($list[$data['storage_id']])) {
             $data['storage_id'] = $list[$data['storage_id']]['parent_id'];

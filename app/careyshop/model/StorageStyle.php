@@ -118,8 +118,7 @@ class StorageStyle extends CareyShop
      * 获取一个资源样式
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getStorageStyleItem(array $data)
     {
@@ -127,16 +126,14 @@ class StorageStyle extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['storage_style_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($data['storage_style_id'])->toArray();
     }
 
     /**
      * 根据编码获取资源样式
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getStorageStyleCode(array $data)
     {
@@ -148,12 +145,11 @@ class StorageStyle extends CareyShop
         $map[] = ['status', '=', 1];
         !isset($data['platform']) ?: $map[] = ['platform', '=', $data['platform']];
 
-        $result = $this->cache(true, null, 'StorageStyle')
+        return $this->cache(true, null, 'StorageStyle')
             ->field('scale,resize,quality,suffix,style')
             ->where($map)
-            ->find();
-
-        return is_null($result) ? null : $result->toArray();
+            ->findOrEmpty()
+            ->toArray();
     }
 
     /**

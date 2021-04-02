@@ -139,7 +139,7 @@ class OrderService extends CareyShop
      */
     public function getGetOrderRefundAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**
@@ -149,7 +149,7 @@ class OrderService extends CareyShop
      */
     public function getGetUserAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**
@@ -159,7 +159,7 @@ class OrderService extends CareyShop
      */
     public function getGetAdminAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**

@@ -83,7 +83,7 @@ class Transaction extends CareyShop
      */
     public function getGetUserAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**
@@ -117,8 +117,7 @@ class Transaction extends CareyShop
      * 获取一笔交易结算
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getTransactionItem(array $data)
     {
@@ -129,8 +128,7 @@ class Transaction extends CareyShop
         $map[] = ['transaction_id', '=', $data['transaction_id']];
         is_client_admin() ?: $map[] = ['user_id', '=', get_client_id()];
 
-        $result = $this->where($map)->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->where($map)->findOrEmpty()->toArray();
     }
 
     /**

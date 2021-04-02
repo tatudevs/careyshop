@@ -45,7 +45,6 @@ class Setting extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function getSettingList(array $data)
     {
@@ -75,7 +74,7 @@ class Setting extends CareyShop
      * @param string $module 模块
      * @param string $scene  验证场景
      * @param bool   $toJson 是否转为json
-     * @throws \Exception
+     * @throws
      */
     private function setSettingItem(string $key, $value, string $module, string $scene, $toJson = false)
     {
@@ -437,7 +436,7 @@ class Setting extends CareyShop
      * @param string $key   键名
      * @param string $value 键值
      * @return bool
-     * @throws \Exception
+     * @throws
      */
     private function checkUrl(string $key, string $value): bool
     {

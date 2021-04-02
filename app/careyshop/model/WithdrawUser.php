@@ -108,9 +108,8 @@ class WithdrawUser extends CareyShop
 
         // 避免无关字段并初始化部分数据
         unset($data['is_delete']);
-        empty($data['client_id']) ?: $data['client_id'] = (int)$data['client_id'];
+        $userId = is_client_admin() ? (int)$data['client_id'] : get_client_id();
 
-        $userId = is_client_admin() ? $data['client_id'] : get_client_id();
         $map[] = ['user_id', '=', $userId];
         $map[] = ['withdraw_user_id', '=', $data['withdraw_user_id']];
 
@@ -141,8 +140,7 @@ class WithdrawUser extends CareyShop
      * 获取指定账号的一个提现账号
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getWithdrawUserItem(array $data)
     {
@@ -153,8 +151,7 @@ class WithdrawUser extends CareyShop
         $map[] = ['withdraw_user_id', '=', $data['withdraw_user_id']];
         $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
 
-        $result = $this->where($map)->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->where($map)->findOrEmpty()->toArray();
     }
 
     /**
@@ -191,7 +188,7 @@ class WithdrawUser extends CareyShop
         $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
         $result = $this->where($map)->count();
 
-        if ($result >= self::WITHDRAWUSER_COUNT_MAX || !is_numeric($result)) {
+        if (!is_numeric($result) || $result >= self::WITHDRAWUSER_COUNT_MAX) {
             return $this->setError('已到达' . self::WITHDRAWUSER_COUNT_MAX . '个提现账号');
         }
 

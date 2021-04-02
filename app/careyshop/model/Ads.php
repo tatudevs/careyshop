@@ -235,7 +235,6 @@ class Ads extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function getAdsItem(array $data)
     {
@@ -292,7 +291,6 @@ class Ads extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function getAdsCode(array $data)
     {

@@ -102,8 +102,7 @@ class Topic extends CareyShop
      * 获取一个专题
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getTopicItem(array $data)
     {
@@ -114,8 +113,7 @@ class Topic extends CareyShop
         $map[] = ['topic_id', '=', $data['topic_id']];
         is_client_admin() ?: $map[] = ['status', '=', 1];
 
-        $result = $this->where($map)->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->where($map)->findOrEmpty()->toArray();
     }
 
     /**

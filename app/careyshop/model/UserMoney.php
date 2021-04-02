@@ -340,7 +340,6 @@ class UserMoney extends CareyShop
      * @access public
      * @param float $totalMoney 累计消费金额
      * @param int   $clientId   账号编号
-     * @return void
      * @throws
      */
     private function setUserLevel(float $totalMoney, int $clientId)
@@ -363,8 +362,7 @@ class UserMoney extends CareyShop
      * 获取指定账号资金信息
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getUserMoneyInfo(array $data)
     {
@@ -375,9 +373,9 @@ class UserMoney extends CareyShop
         // 管理员可选择性查看,用户组必须指定
         $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
 
-        $field = 'total_money,balance,lock_balance,points,lock_points';
-        $result = $this->where($map)->field($field)->find();
-
-        return is_null($result) ? null : $result->toArray();
+        return $this->where($map)
+            ->field('total_money,balance,lock_balance,points,lock_points')
+            ->findOrEmpty()
+            ->toArray();
     }
 }

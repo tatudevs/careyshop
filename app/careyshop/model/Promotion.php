@@ -169,8 +169,7 @@ class Promotion extends CareyShop
      * 获取一个订单促销
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getPromotionItem(array $data)
     {
@@ -178,8 +177,7 @@ class Promotion extends CareyShop
             return false;
         }
 
-        $result = $this->with('promotion_item')->find($data['promotion_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->with('promotion_item')->findOrEmpty($data['promotion_id'])->toArray();
     }
 
     /**
@@ -261,7 +259,6 @@ class Promotion extends CareyShop
      * 获取正在进行的促销列表
      * @access public
      * @return array
-     * @throws
      */
     public function getPromotionActive(): array
     {
@@ -274,7 +271,10 @@ class Promotion extends CareyShop
             $query->order(['quota' => 'desc']);
         }];
 
-        $result = $this->with($with)->withoutField('status')->where($map)->find();
-        return is_null($result) ? [] : $result->toArray();
+        return $this->with($with)
+            ->withoutField('status')
+            ->where($map)
+            ->findOrEmpty()
+            ->toArray();
     }
 }

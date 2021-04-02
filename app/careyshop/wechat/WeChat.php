@@ -88,7 +88,7 @@ class WeChat
      * 构造函数
      * @access public
      * @param string $code 渠道平台编码
-     * @throws
+     * @throws \Throwable
      */
     public function __construct(string $code)
     {

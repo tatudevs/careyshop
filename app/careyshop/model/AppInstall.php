@@ -105,7 +105,6 @@ class AppInstall extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function getAppInstallItem(array $data)
     {

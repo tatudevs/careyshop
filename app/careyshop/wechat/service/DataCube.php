@@ -16,7 +16,7 @@ class DataCube extends CareyShop
      * 获取公众号数据统计分析
      * @access public
      * @return array|false
-     * @throws
+     * @throws \Exception
      */
     public function getDataCube()
     {

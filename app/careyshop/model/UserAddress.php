@@ -92,8 +92,7 @@ class UserAddress extends CareyShop
      * 获取指定账号的一个收货地址
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getAddressItem(array $data)
     {
@@ -104,16 +103,14 @@ class UserAddress extends CareyShop
         $map[] = ['user_address_id', '=', $data['user_address_id']];
         $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
 
-        $result = $this->where($map)->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->where($map)->findOrEmpty()->toArray();
     }
 
     /**
      * 获取指定账号的默认收货地址信息
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getAddressDefault(array $data)
     {
@@ -128,8 +125,7 @@ class UserAddress extends CareyShop
             return $this->setError('尚未指定默认收货地址或尚未存在');
         }
 
-        $result = $this->find($userId);
-        return is_null($result) ? null : $result->toArray();
+        return $this->findOrEmpty($userId)->toArray();
     }
 
     /**
@@ -242,7 +238,6 @@ class UserAddress extends CareyShop
      * @access public
      * @param int $clientId  账号Id
      * @param int $addressId 收货地址Id
-     * @return void
      */
     private function setUserAddressDefault(int $clientId, int $addressId)
     {
@@ -280,7 +275,6 @@ class UserAddress extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return bool
-     * @throws
      */
     public function isAddressMaximum(array $data): bool
     {
@@ -291,7 +285,7 @@ class UserAddress extends CareyShop
         $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
         $result = $this->where($map)->count();
 
-        if ($result >= self::ADDRESS_COUNT_MAX || !is_numeric($result)) {
+        if (!is_numeric($result) || $result >= self::ADDRESS_COUNT_MAX) {
             return $this->setError('已到达' . self::ADDRESS_COUNT_MAX . '个收货地址');
         }
 

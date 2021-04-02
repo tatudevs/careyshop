@@ -183,7 +183,6 @@ class GoodsCategory extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
-     * @throws
      */
     public function getCategoryItem(array $data)
     {

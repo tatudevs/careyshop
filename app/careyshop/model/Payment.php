@@ -159,8 +159,7 @@ class Payment extends CareyShop
      * 获取一个支付配置
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getPaymentItem(array $data)
     {
@@ -168,16 +167,14 @@ class Payment extends CareyShop
             return false;
         }
 
-        $result = $this->cache(true, null, 'Payment')->find($data['payment_id']);
-        return is_null($result) ? null : $result->toArray();
+        return $this->cache(true, null, 'Payment')->findOrEmpty($data['payment_id'])->toArray();
     }
 
     /**
      * 根据Code获取支付配置详情(不对外开放)
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getPaymentInfo(array $data)
     {
@@ -188,12 +185,11 @@ class Payment extends CareyShop
         $map[] = ['code', '=', $data['code']];
         $map[] = ['status', '=', $data['status']];
 
-        $result = $this->cache(true, null, 'Payment')
+        return $this->cache(true, null, 'Payment')
             ->withoutField('image,sort,status')
             ->where($map)
-            ->find();
-
-        return is_null($result) ? null : $result->toArray();
+            ->findOrEmpty()
+            ->toArray();
     }
 
     /**
@@ -267,9 +263,8 @@ class Payment extends CareyShop
     /**
      * 根据编号自动排序
      * @access public
-     * @param array $data
+     * @param array $data 外部数据
      * @return bool
-     * @throws \Exception
      */
     public function setPaymentIndex(array $data): bool
     {

@@ -74,7 +74,7 @@ class OrderRefund extends CareyShop
      */
     public function getGetUserAttr($value = null)
     {
-        return is_null($value) ? new \stdClass : $value;
+        return $value ?? new \stdClass;
     }
 
     /**
@@ -105,8 +105,8 @@ class OrderRefund extends CareyShop
 
         // 初始化部分数据
         unset($data['order_refund_id']);
-        isset($data['refund_no']) ?: $data['refund_no'] = $this->getRefundNo();
-        isset($data['status']) ?: $data['status'] = 0;
+        $data['refund_no'] ??= $this->getRefundNo();
+        $data['status'] ??= 0;
 
         if ($this->save($data)) {
             return true;

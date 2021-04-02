@@ -214,8 +214,7 @@ class Message extends CareyShop
      * 获取一条消息(后台)
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getMessageItem(array $data)
     {
@@ -227,8 +226,7 @@ class Message extends CareyShop
         $map[] = ['member', '<>', 0];
         $map[] = ['is_delete', '=', 0];
 
-        $result = $this->where($map)->find();
-        return is_null($result) ? null : $result->toArray();
+        return $this->where($map)->findOrEmpty()->toArray();
     }
 
     /**
