@@ -38,7 +38,7 @@ class Upload extends UploadBase
      * 最大上传字节数
      * @var int
      */
-    protected static int $maxSize;
+    protected static int $maxSize = 0;
 
     /**
      * 最大上传信息
@@ -63,7 +63,7 @@ class Upload extends UploadBase
      */
     private function setFileMaxSize()
     {
-        if (is_null(self::$maxSize)) {
+        if (self::$maxSize <= 0) {
             $serverSize = ini_get('upload_max_filesize');
             $userMaxSize = Config::get('careyshop.upload.file_size');
 
@@ -239,9 +239,7 @@ class Upload extends UploadBase
 
             $savename = $fileDriver->putFileAs($movePath['dirname'], $file, $movePath['basename']);
         } else {
-            $savename = $fileDriver->putFile('files', $file, function () {
-                return date('Ymd') . DS . guid_v4();
-            });
+            $savename = $fileDriver->putFile('files', $file, fn() => date('Ymd') . DS . guid_v4());
         }
 
         if (false === $savename) {

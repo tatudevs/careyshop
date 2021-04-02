@@ -168,10 +168,7 @@ class CareyShop extends Validate
             return $args[4] . '必须是数组';
         }
 
-        if ($args[0] === array_filter($args[0], function ($value) {
-                return is_string($value);
-            })
-        ) {
+        if ($args[0] === array_filter($args[0], fn($value) => is_string($value))) {
             return true;
         }
 
