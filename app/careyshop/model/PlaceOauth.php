@@ -254,7 +254,7 @@ class PlaceOauth extends CareyShop
      * OAuth2.0授权准备
      * @access public
      * @param array $data 外部数据
-     * @return false|string[]
+     * @return false|string
      */
     public function authorizeOAuth(array $data)
     {
@@ -269,14 +269,8 @@ class PlaceOauth extends CareyShop
             return false;
         }
 
-//        $socialite = new SocialiteManager($config);
-//        $response = $socialite->create($data['model'])->redirect();
-//        $response->send();
-
-        return [
-            'callback_return_type' => 'view',
-            'is_callback'          => 'success',
-        ];
+        $socialite = new SocialiteManager($config);
+        return $socialite->create($data['model'])->redirect();
     }
 
     public function callbackOAuth(array $data)
