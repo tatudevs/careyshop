@@ -158,7 +158,7 @@ class PlaceOauth extends CareyShop
     }
 
     /**
-     * 获取可使用的授权机制列表
+     * 获取可使用的授权机制
      * @access public
      * @param array $data 外部数据
      * @return array|false

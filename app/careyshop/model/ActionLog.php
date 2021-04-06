@@ -136,15 +136,12 @@ class ActionLog extends CareyShop
      * @access public
      * @param $value
      * @param $data
-     * @return string
+     * @return mixed
      */
-    public function getActionAttr($value, $data): string
+    public function getActionAttr($value, $data)
     {
-        if (!empty($value) && !empty($data['path'])) {
-            $this->setMenuMap($data['path'], $value);
-        }
-
-        return $value ?? '';
+        $this->setMenuMap($data['path'], $value);
+        return $value;
     }
 
     /**

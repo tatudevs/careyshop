@@ -11,17 +11,9 @@
 namespace app\careyshop\service;
 
 use Overtrue\Socialite\SocialiteManager;
-use think\facade\Cache;
-use util\Aes;
 
 class PlaceOauth extends CareyShop
 {
-    /**
-     * 安全码密钥(可自定义替换)
-     * @var string
-     */
-    const STATE_KEY = 'CAREYSHOP';
-
     /**
      * 对应模型
      * @var string
@@ -85,35 +77,16 @@ class PlaceOauth extends CareyShop
     }
 
     /**
-     * 获取安全码
-     * @access private
-     * @return array
-     */
-    private function getState(): array
-    {
-        $key = md5(rand_number());
-        $value = Aes::encrypt($key, self::STATE_KEY, false);
-        Cache::set($key, $value, 60 * 5);
-
-        return [$key, $value];
-    }
-
-    /**
      * 获取微信跳转地址
      * @access private
      * @return mixed
      */
     private function getWeChatRedirect()
     {
-        [$key, $value] = $this->getState();
-        $scopes = $this->config['scope'] ?? ['snsapi_userinfo'];
-
         return $this
             ->socialite
             ->create('wechat')
-            ->scopes($scopes)
-            ->with(['state_value' => $value])
-            ->withState($key)
+            ->scopes($this->config['scope'] ?? ['snsapi_userinfo'])
             ->redirect();
     }
 
@@ -124,15 +97,10 @@ class PlaceOauth extends CareyShop
      */
     private function getBaiduRedirect()
     {
-        [$key, $value] = $this->getState();
-        $display = $this->config['display'] ?? 'mobile';
-
         return $this
             ->socialite
             ->create('baidu')
-            ->with(['state_value' => $value])
-            ->withState($key)
-            ->withDisplay($display)
+            ->withDisplay($this->config['display'] ?? 'mobile')
             ->redirect();
     }
 
@@ -143,15 +111,10 @@ class PlaceOauth extends CareyShop
      */
     private function getTaobaoRedirect()
     {
-        [$key, $value] = $this->getState();
-        $view = $this->config['view'] ?? 'wap';
-
         return $this
             ->socialite
             ->create('taobao')
-            ->with(['state_value' => $value])
-            ->withState($key)
-            ->withView($view)
+            ->withView($this->config['view'] ?? 'wap')
             ->redirect();
     }
 
@@ -162,12 +125,9 @@ class PlaceOauth extends CareyShop
      */
     private function getOtherRedirect(): string
     {
-        [$key, $value] = $this->getState();
         return $this
             ->socialite
             ->create($this->model)
-            ->with(['state_value' => $value])
-            ->withState($key)
             ->redirect();
     }
 }
