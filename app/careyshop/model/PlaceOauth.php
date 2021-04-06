@@ -10,7 +10,6 @@
 
 namespace app\careyshop\model;
 
-use Overtrue\Socialite\SocialiteManager;
 use think\facade\Cache;
 use think\facade\Route;
 
@@ -230,24 +229,25 @@ class PlaceOauth extends CareyShop
         $map[] = ['code', '=', $code];
         $map[] = ['status', '=', 1];
 
-        $result = $this->where($map)->field('client_id,client_secret,expand')->find();
+        $result = $this->where($map)->field('client_id,client_secret,config,expand')->find();
         if (is_null($result)) {
             return $this->setError('OAuth模型不存在或已停用');
         }
 
         // 提取配置并尝试合并扩展配置
+        $config = @json_decode($result->getAttr('config'), true);
         $expand = @json_decode($result->getAttr('expand'), true);
-        $config = $result->hidden(['expand'])->toArray();
+        $basics = $result->hidden(['expand', 'config'])->toArray();
 
         if (is_array($expand)) {
-            $config = array_merge($expand, $config);
+            $basics = array_merge($expand, $basics);
         }
 
         // 配置回调地址
-        $vars = ['method' => 'callback', '$code' => $code, 'model' => $model];
-        $config['redirect'] = Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
+        $vars = ['method' => 'callback', 'code' => $code, 'model' => $model];
+        $basics['redirect'] = Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
 
-        return [$model => $config];
+        return [$model => $basics, 'config' => $config];
     }
 
     /**
@@ -263,14 +263,16 @@ class PlaceOauth extends CareyShop
         }
 
         !is_empty_parm($data['code']) ?: $data['code'] = '';
-        $config = $this->getOAuthConfig($data['model'], $data['code']);
+        $basics = $this->getOAuthConfig($data['model'], $data['code']);
 
-        if (!$config) {
+        if (!$basics) {
             return false;
         }
 
-        $socialite = new SocialiteManager($config);
-        return $socialite->create($data['model'])->redirect();
+        $service = new \app\careyshop\service\PlaceOauth($data['model'], $basics);
+        $result = $service->getAuthorizeRedirect();
+
+        return false === $result ? $service->getError() : $result;
     }
 
     public function callbackOAuth(array $data)
