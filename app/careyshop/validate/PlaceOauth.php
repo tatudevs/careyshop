@@ -79,6 +79,7 @@ class PlaceOauth extends CareyShop
             'status' => 'in:0,1',
         ],
         'type'      => [
+            'model' => 'max:16|checkModule:oauth',
             'code',
         ],
         'status'    => [

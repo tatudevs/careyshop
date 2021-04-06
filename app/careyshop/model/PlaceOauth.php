@@ -171,7 +171,8 @@ class PlaceOauth extends CareyShop
         }
 
         // 搜索条件
-        $map[] = ['code', '=', is_empty_parm($data['code']) ? '' : $data['code']];
+        !isset($data['model']) ?: $map[] = ['model', '=', $data['model']];
+        is_empty_parm($data['code']) ?: $map[] = ['code', '=', $data['code']];
         $map[] = ['status', '=', 1];
 
         // 动态获取授权地址
