@@ -99,7 +99,13 @@ class PlaceOauth extends CareyShop
         // 获取回调数据
         $oauthUser = $this->getCallback();
 
+        // 检测渠道用户是否已存在
+        $userMap[] = ['place_oauth_id', '=', $this->params['place_user_id']];
+        $userMap[] = ['model', '=', ];
+
+
         // todo 待续
+        return $oauthUser;
     }
 
     /**
