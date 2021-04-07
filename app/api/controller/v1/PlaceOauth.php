@@ -11,6 +11,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\careyshop\service\PlaceOauth as PlaceOauthService;
 
 class PlaceOauth extends CareyShop
 {
@@ -35,9 +36,9 @@ class PlaceOauth extends CareyShop
             // 批量设置机制状态
             'set.place.oauth.status' => ['setPlaceOAuthStatus'],
             // OAuth2.0授权准备
-            'authorize'              => ['authorizeOAuth'],
+            'authorize'              => ['authorizeOAuth', PlaceOauthService::class],
             // OAuth2.0回调验证
-            'callback'               => ['callbackOAuth'],
+            'callback'               => ['callbackOAuth', PlaceOauthService::class],
         ];
     }
 }

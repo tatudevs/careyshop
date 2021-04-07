@@ -53,7 +53,7 @@ class PlaceOauth extends CareyShop
      * @var mixed|string[]
      */
     protected $scene = [
-        'set'       => [
+        'set'    => [
             'place_oauth_id' => 'require|integer|gt:0',
             'name',
             'model',
@@ -65,22 +65,22 @@ class PlaceOauth extends CareyShop
             'icon',
             'status',
         ],
-        'del'       => [
+        'del'    => [
             'place_oauth_id' => 'require|arrayHasOnlyInts',
         ],
-        'item'      => [
+        'item'   => [
             'place_oauth_id' => 'require|integer|gt:0',
         ],
-        'list'      => [
+        'list'   => [
             'name' => 'max:16',
             'place_id',
             'status',
         ],
-        'status'    => [
+        'status' => [
             'place_oauth_id' => 'require|arrayHasOnlyInts',
             'status'         => 'require|in:0,1',
         ],
-        'authorize' => [
+        'oauth'  => [
             'place_oauth_id',
         ],
     ];

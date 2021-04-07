@@ -157,15 +157,19 @@ class PlaceOauth extends CareyShop
     }
 
     /**
-     * 获取某个模块下的配置参数
-     * @access private
-     * @param $id
+     * 获取某个模块下的配置参数(内部调用)
+     * @access protected
+     * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    private function getOAuthConfig($id)
+    protected function getOAuthConfig(array $data)
     {
-        $map[] = ['place_oauth_id', '=', $id];
+        if (!$this->validateData($data, 'oauth')) {
+            return false;
+        }
+
+        $map[] = ['place_oauth_id', '=', $data['place_oauth_id']];
         $result = $this->where($map)->field('model,client_id,client_secret,config,expand')->find();
 
         if (is_null($result)) {
@@ -182,7 +186,7 @@ class PlaceOauth extends CareyShop
         }
 
         // 配置回调地址
-        $vars = ['method' => 'callback', 'place_oauth_id' => $id];
+        $vars = ['method' => 'callback', 'place_oauth_id' => $data['place_oauth_id']];
         $basics['redirect'] = Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
 
         return [
@@ -190,32 +194,5 @@ class PlaceOauth extends CareyShop
             'config' => $config,
             'model'  => $result->getAttr('model'),
         ];
-    }
-
-    /**
-     * OAuth2.0授权准备
-     * @access public
-     * @param array $data 外部数据
-     * @return false|string
-     */
-    public function authorizeOAuth(array $data)
-    {
-        if (!$this->validateData($data, 'authorize')) {
-            return false;
-        }
-
-        $config = $this->getOAuthConfig($data['place_oauth_id']);
-        if (!$config) {
-            return false;
-        }
-
-        $service = new \app\careyshop\service\PlaceOauth($config);
-        $result = $service->getAuthorizeRedirect();
-
-        return false === $result ? $service->getError() : $result;
-    }
-
-    public function callbackOAuth(array $data)
-    {
     }
 }
