@@ -158,12 +158,12 @@ class PlaceOauth extends CareyShop
 
     /**
      * 获取某个模块下的配置参数(内部调用)
-     * @access protected
+     * @access public
      * @param array $data 外部数据
      * @return array|false
      * @throws
      */
-    protected function getOAuthConfig(array $data)
+    public function getOAuthConfig(array $data)
     {
         if (!$this->validateData($data, 'oauth')) {
             return false;

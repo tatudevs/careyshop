@@ -11,6 +11,7 @@
 namespace app\careyshop\service;
 
 use Overtrue\Socialite\SocialiteManager;
+use app\careyshop\model\PlaceOauth as PlaceOauthModel;
 
 class PlaceOauth extends CareyShop
 {
@@ -38,12 +39,37 @@ class PlaceOauth extends CareyShop
      */
     protected ?object $socialite = null;
 
-    private function initializeData()
+    /**
+     * 各项配置初始化
+     * @access public
+     * @param array $config 配置参数
+     */
+    private function initializeData(array $config)
     {
+        $this->model = $config['model'];
+        $this->basics = $config['basics'];
+        $this->config = $config['config'];
+
+        $this->socialite = new SocialiteManager([$this->model => $this->basics]);
     }
 
+    /**
+     * OAuth2.0授权准备
+     * @access public
+     * @param array $data
+     * @return false|string
+     */
     public function authorizeOAuth(array $data)
     {
+        $oauthDB = new PlaceOauthModel();
+        $config = $oauthDB->getOAuthConfig($data);
+
+        if (false === $config) {
+            return $oauthDB->setError($oauthDB->getError());
+        }
+
+        $this->initializeData($config);
+        return $this->getAuthorizeRedirect();
     }
 
     public function callbackOAuth(array $data)
