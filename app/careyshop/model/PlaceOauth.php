@@ -27,6 +27,7 @@ class PlaceOauth extends CareyShop
      */
     protected $readonly = [
         'place_oauth_id',
+        'place_id',
     ];
 
     /**
@@ -35,6 +36,7 @@ class PlaceOauth extends CareyShop
      */
     protected $type = [
         'place_oauth_id' => 'integer',
+        'place_id'       => 'integer',
         'status'         => 'integer',
     ];
 
@@ -52,15 +54,6 @@ class PlaceOauth extends CareyShop
 
         // 避免无关字段
         unset($data['place_oauth_id']);
-        !is_empty_parm($data['code']) ?: $data['code'] = '';
-
-        // 检测是否存在相同配置
-        $map[] = ['model', '=', $data['model']];
-        $map[] = ['code', '=', $data['code']];
-
-        if (self::checkUnique($map)) {
-            return $this->setError('相同模块下已存在重复的渠道');
-        }
 
         if ($this->save($data)) {
             Cache::tag('oauth')->clear();
@@ -82,19 +75,7 @@ class PlaceOauth extends CareyShop
             return false;
         }
 
-        // 检测是否存在相同配置
-        $map[] = ['place_oauth_id', '<>', $data['place_oauth_id']];
-        $map[] = ['model', '=', $data['model']];
-
-        !is_empty_parm($data['code']) ?: $data['code'] = '';
-        $map[] = ['code', '=', $data['code']];
-
-        if (self::checkUnique($map)) {
-            return $this->setError('相同模块下已存在重复的渠道');
-        }
-
-        // 实际更新数据
-        $map = [['place_oauth_id', '=', $data['place_oauth_id']]];
+        $map[] = ['place_oauth_id', '=', $data['place_oauth_id']];
         $result = self::update($data, $map);
         Cache::tag('oauth')->clear();
 
@@ -150,54 +131,14 @@ class PlaceOauth extends CareyShop
         // 搜索条件
         $map = [];
         empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
-        empty($data['model']) ?: $map[] = ['model', '=', $data['model']];
-        empty($data['code']) ?: $map[] = ['code', '=', $data['code']];
+        $map[] = ['place_id', '=', $data['place_id']];
         is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
         return $this->where($map)->select()->toArray();
     }
 
     /**
-     * 获取可使用的授权机制
-     * @access public
-     * @param array $data 外部数据
-     * @return array|false
-     * @throws
-     */
-    public function getPlaceOAuthType(array $data)
-    {
-        if (!$this->validateData($data, 'type')) {
-            return false;
-        }
-
-        // 搜索条件
-        !isset($data['model']) ?: $map[] = ['model', '=', $data['model']];
-        is_empty_parm($data['code']) ?: $map[] = ['code', '=', $data['code']];
-        $map[] = ['status', '=', 1];
-
-        // 动态获取授权地址
-        $attr = function ($value, $data) {
-            $vars = [
-                'method' => 'authorize',
-                'code'   => $data['code'],
-                'model'  => $data['model'],
-                'value'  => $value,
-            ];
-
-            return Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
-        };
-
-        return $this->cache(true, null, 'oauth')
-            ->field('name,model,code,logo,icon')
-            ->withAttr('authorize', $attr)
-            ->where($map)
-            ->select()
-            ->append(['authorize'])
-            ->toArray();
-    }
-
-    /**
-     * 批量设置授权机制状态
+     * 批量设置机制状态
      * @access public
      * @param array $data 外部数据
      * @return bool
@@ -208,7 +149,7 @@ class PlaceOauth extends CareyShop
             return false;
         }
 
-        $map[] = ['app_id', 'in', $data['app_id']];
+        $map[] = ['place_oauth_id', 'in', $data['place_oauth_id']];
         self::update(['status' => $data['status']], $map);
         Cache::tag('oauth')->clear();
 
@@ -218,19 +159,15 @@ class PlaceOauth extends CareyShop
     /**
      * 获取某个模块下的配置参数
      * @access private
-     * @param string $model 所属模块
-     * @param string $code  对应渠道(自定义)
-     * @return array|bool
+     * @param $id
+     * @return array|false
      * @throws
      */
-    private function getOAuthConfig(string $model, string $code)
+    private function getOAuthConfig($id)
     {
-        // 搜索条件
-        $map[] = ['model', '=', $model];
-        $map[] = ['code', '=', $code];
-        $map[] = ['status', '=', 1];
+        $map[] = ['place_oauth_id', '=', $id];
+        $result = $this->where($map)->field('model,client_id,client_secret,config,expand')->find();
 
-        $result = $this->where($map)->field('client_id,client_secret,config,expand')->find();
         if (is_null($result)) {
             return $this->setError('OAuth模型不存在或已停用');
         }
@@ -238,17 +175,21 @@ class PlaceOauth extends CareyShop
         // 提取配置并尝试合并扩展配置
         $config = @json_decode($result->getAttr('config'), true);
         $expand = @json_decode($result->getAttr('expand'), true);
-        $basics = $result->hidden(['expand', 'config'])->toArray();
+        $basics = $result->hidden(['model', 'expand', 'config'])->toArray();
 
         if (is_array($expand)) {
             $basics = array_merge($expand, $basics);
         }
 
         // 配置回调地址
-        $vars = ['method' => 'callback', 'code' => $code, 'model' => $model];
+        $vars = ['method' => 'callback', 'place_oauth_id' => $id];
         $basics['redirect'] = Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
 
-        return [$model => $basics, 'config' => $config];
+        return [
+            'basics' => $basics,
+            'config' => $config,
+            'model'  => $result->getAttr('model'),
+        ];
     }
 
     /**
@@ -263,14 +204,12 @@ class PlaceOauth extends CareyShop
             return false;
         }
 
-        !is_empty_parm($data['code']) ?: $data['code'] = '';
-        $basics = $this->getOAuthConfig($data['model'], $data['code']);
-
-        if (!$basics) {
+        $config = $this->getOAuthConfig($data['place_oauth_id']);
+        if (!$config) {
             return false;
         }
 
-        $service = new \app\careyshop\service\PlaceOauth($data['model'], $basics);
+        $service = new \app\careyshop\service\PlaceOauth($config);
         $result = $service->getAuthorizeRedirect();
 
         return false === $result ? $service->getError() : $result;

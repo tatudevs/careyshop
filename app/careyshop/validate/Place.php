@@ -90,5 +90,8 @@ class Place extends CareyShop
             'place_id' => 'require|arrayHasOnlyInts',
             'status'   => 'require|in:0,1',
         ],
+        'oauth'   => [
+            'code' => 'require|integer|max:8',
+        ],
     ];
 }

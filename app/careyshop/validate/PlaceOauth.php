@@ -20,7 +20,7 @@ class PlaceOauth extends CareyShop
         'place_oauth_id' => 'integer|gt:0',
         'name'           => 'require|max:16',
         'model'          => 'require|max:16|checkModule:oauth',
-        'code'           => 'max:16',
+        'place_id'       => 'require|integer|gt:0',
         'client_id'      => 'require|max:32',
         'client_secret'  => 'require|max:128',
         'config'         => 'min:0',
@@ -38,7 +38,7 @@ class PlaceOauth extends CareyShop
         'place_oauth_id' => '授权机制编号',
         'name'           => '授权名称',
         'model'          => '所属模块',
-        'code'           => '对应渠道',
+        'place_id'       => '对应渠道',
         'client_id'      => 'ClientId',
         'client_secret'  => 'ClientSecret',
         'config'         => '扩展配置',
@@ -57,7 +57,6 @@ class PlaceOauth extends CareyShop
             'place_oauth_id' => 'require|integer|gt:0',
             'name',
             'model',
-            'code',
             'client_id',
             'client_secret',
             'config',
@@ -73,22 +72,16 @@ class PlaceOauth extends CareyShop
             'place_oauth_id' => 'require|integer|gt:0',
         ],
         'list'      => [
-            'name'   => 'max:16',
-            'model'  => 'max:16|checkModule:oauth',
-            'code',
-            'status' => 'in:0,1',
-        ],
-        'type'      => [
-            'model' => 'max:16|checkModule:oauth',
-            'code',
+            'name' => 'max:16',
+            'place_id',
+            'status',
         ],
         'status'    => [
             'place_oauth_id' => 'require|arrayHasOnlyInts',
             'status'         => 'require|in:0,1',
         ],
         'authorize' => [
-            'model',
-            'code',
+            'place_oauth_id',
         ],
     ];
 }

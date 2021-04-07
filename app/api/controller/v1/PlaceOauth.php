@@ -32,9 +32,7 @@ class PlaceOauth extends CareyShop
             'get.place.oauth.item'   => ['getPlaceOAuthItem'],
             // 获取授权机制列表
             'get.place.oauth.list'   => ['getPlaceOAuthList'],
-            // 获取可使用的授权机制
-            'get.place.oauth.type'   => ['getPlaceOAuthType'],
-            // 批量设置授权机制状态
+            // 批量设置机制状态
             'set.place.oauth.status' => ['setPlaceOAuthStatus'],
             // OAuth2.0授权准备
             'authorize'              => ['authorizeOAuth'],

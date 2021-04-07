@@ -41,17 +41,15 @@ class PlaceOauth extends CareyShop
     /**
      * PlaceOauth constructor.
      * @access public
-     * @param string $model
-     * @param array  $basics
+     * @param array $config 配置参数
      */
-    public function __construct(string $model, array $basics)
+    public function __construct(array $config)
     {
-        $this->model = $model;
-        $this->config = $basics['config'] ?? [];
-        unset($basics['config']);
-        $this->basics = $basics[$model];
+        $this->model = $config['model'];
+        $this->basics = $config['basics'];
+        $this->config = $config['config'];
 
-        $this->socialite = new SocialiteManager([$model => $this->basics]);
+        $this->socialite = new SocialiteManager([$this->model => $this->basics]);
     }
 
     /**

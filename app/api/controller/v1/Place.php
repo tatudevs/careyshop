@@ -38,6 +38,8 @@ class Place extends CareyShop
             'del.place.list'    => ['delPlaceList'],
             // 批量设置渠道平台状态
             'set.place.status'  => ['setPlaceStatus'],
+            // 获取渠道的授权机制
+            'get.place.oauth'   => ['getPlaceOAuth'],
         ];
     }
 }

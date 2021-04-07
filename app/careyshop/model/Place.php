@@ -360,4 +360,48 @@ class Place extends CareyShop
 
         return true;
     }
+
+    /**
+     * 获取渠道的授权机制
+     * @access public
+     * @param array $data 外部数据
+     * @return array|false
+     * @throws
+     */
+    public function getPlaceOAuth(array $data)
+    {
+        if (!$this->validateData($data, 'oauth')) {
+            return false;
+        }
+
+        $placeID = $this->where('code', '=', $data['code'])->value('place_id');
+        if (!$placeID) {
+            return $this->setError('当前渠道不存在');
+        }
+
+        // 搜索条件
+        $map[] = ['place_id', '=', $placeID];
+        $map[] = ['status', '=', 1];
+
+        // 动态获取授权地址
+        $attr = function ($value, $data) {
+            $vars = [
+                'method'         => 'authorize',
+                'place_oauth_id' => $data['place_oauth_id'],
+                'value'          => $value,
+            ];
+
+            return Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
+        };
+
+        $oauthDB = new PlaceOauth();
+        return $oauthDB->cache(true, null, 'oauth')
+            ->field('name,model,place_oauth_id,logo,icon')
+            ->withAttr('authorize', $attr)
+            ->where($map)
+            ->select()
+            ->append(['authorize'])
+            ->hidden(['place_oauth_id'])
+            ->toArray();
+    }
 }
