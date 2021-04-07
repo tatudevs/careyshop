@@ -40,26 +40,18 @@ class PlaceOauth extends CareyShop
     protected ?object $socialite = null;
 
     /**
-     * 各项配置初始化
-     * @access public
-     * @param array $config 配置参数
+     * 外部请求参数
+     * @var array
      */
-    private function initializeData(array $config)
-    {
-        $this->model = $config['model'];
-        $this->basics = $config['basics'];
-        $this->config = $config['config'];
-
-        $this->socialite = new SocialiteManager([$this->model => $this->basics]);
-    }
+    protected array $params = [];
 
     /**
-     * OAuth2.0授权准备
+     * 各项配置初始化
      * @access public
-     * @param array $data
-     * @return false|string
+     * @param array $data 外部数据
+     * @return bool
      */
-    public function authorizeOAuth(array $data)
+    private function initializeData(array $data): bool
     {
         $oauthDB = new PlaceOauthModel();
         $config = $oauthDB->getOAuthConfig($data);
@@ -68,20 +60,54 @@ class PlaceOauth extends CareyShop
             return $oauthDB->setError($oauthDB->getError());
         }
 
-        $this->initializeData($config);
-        return $this->getAuthorizeRedirect();
+        $this->params = $data;
+        $this->model = $config['model'];
+        $this->basics = $config['basics'];
+        $this->config = $config['config'];
+
+        $this->socialite = new SocialiteManager([$this->model => $this->basics]);
+        return true;
     }
 
+    /**
+     * OAuth2.0授权准备
+     * @access public
+     * @param array $data 外部数据
+     * @return false|string
+     */
+    public function authorizeOAuth(array $data)
+    {
+        if ($this->initializeData($data)) {
+            return $this->getAuthorize();
+        }
+
+        return false;
+    }
+
+    /**
+     * OAuth2.0回调验证
+     * @access public
+     * @param array $data 外部数据
+     * @return array|false
+     */
     public function callbackOAuth(array $data)
     {
+        if (!$this->initializeData($data)) {
+            return false;
+        }
+
+        // 获取回调数据
+        $oauthUser = $this->getCallback();
+
+        // todo 待续
     }
 
     /**
      * 获取各个平台的跳转地址
-     * @access public
+     * @access private
      * @return string
      */
-    public function getAuthorizeRedirect(): string
+    private function getAuthorize(): string
     {
         switch ($this->model) {
             case 'wechat':
@@ -151,5 +177,45 @@ class PlaceOauth extends CareyShop
             ->socialite
             ->create($this->model)
             ->redirect();
+    }
+
+    /**
+     * 验证各个平台的回调数据
+     * @access private
+     * @return mixed
+     */
+    private function getCallback()
+    {
+        switch ($this->model) {
+            case 'douyin':
+                return $this->getDouYinCallback();
+
+            default:
+                return $this->getOtherCallback();
+        }
+    }
+
+    /**
+     * 验证抖音回调数据
+     * @access private
+     * @return mixed
+     */
+    private function getDouYinCallback()
+    {
+        // 预留,如有需求自行实现
+        return $this->getOtherCallback();
+    }
+
+    /**
+     * 验证其他平台回调数据
+     * @access private
+     * @return mixed
+     */
+    private function getOtherCallback()
+    {
+        return $this
+            ->socialite
+            ->create($this->model)
+            ->userFromCode($this->params['code']);
     }
 }
