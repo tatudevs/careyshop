@@ -85,7 +85,7 @@ class Upload extends CareyShop
     /**
      * 获取上传地址
      * @access public
-     * @return bool|array
+     * @return array|false
      */
     public function getUploadUrl()
     {
@@ -110,7 +110,7 @@ class Upload extends CareyShop
     /**
      * 获取上传Token
      * @access public
-     * @return bool|array
+     * @return array|false
      */
     public function getUploadToken()
     {
@@ -205,7 +205,7 @@ class Upload extends CareyShop
     /**
      * 资源上传请求(第三方OSS只能单文件直传方式上传)
      * @access public
-     * @return bool|array
+     * @return array|false
      */
     public function addUploadList()
     {
@@ -225,7 +225,7 @@ class Upload extends CareyShop
     /**
      * 接收第三方推送数据
      * @access public
-     * @return bool|array
+     * @return array|false
      */
     public function putUploadData()
     {
@@ -348,7 +348,7 @@ class Upload extends CareyShop
     /**
      * 获取资源缩略图信息
      * @access public
-     * @return bool|array
+     * @return array|false
      */
     public function getThumbInfo()
     {

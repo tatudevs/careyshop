@@ -942,10 +942,10 @@ class OrderService extends CareyShop
      * 拒绝一个售后服务单
      * @access public
      * @param array $data 外部数据
-     * @return false|mixed
+     * @return mixed
      * @throws
      */
-    public function setOrderServiceRefused(array $data): bool
+    public function setOrderServiceRefused(array $data)
     {
         if (!$this->validateData($data, 'refused')) {
             return false;

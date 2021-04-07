@@ -204,7 +204,7 @@ class Upload extends UploadBase
      * 保存资源并写入库
      * @access private
      * @param File $file 上传文件对象
-     * @return array|string
+     * @return array|false|string
      * @throws
      */
     private function saveFile(File $file)

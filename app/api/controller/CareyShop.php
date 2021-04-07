@@ -351,7 +351,7 @@ abstract class CareyShop
      * @param  string $value 错误信息
      * @return false
      */
-    public function setError($value): bool
+    public function setError($value)
     {
         $this->error = $value;
         return false;

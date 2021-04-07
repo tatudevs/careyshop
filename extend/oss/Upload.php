@@ -86,7 +86,7 @@ abstract class Upload
      * @param string $error 错误信息
      * @return false
      */
-    public function setError(string $error): bool
+    public function setError(string $error)
     {
         $this->error = $error;
         return false;
