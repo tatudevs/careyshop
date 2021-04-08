@@ -195,7 +195,8 @@ class Withdraw extends CareyShop
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['withdraw.withdraw_id' => 'desc'])
+        $result['items'] = $this->setAliasOrder('withdraw')
+            ->setDefaultOrder(['withdraw_id' => 'desc'])
             ->alias('withdraw')
             ->withJoin($with)
             ->where($map)

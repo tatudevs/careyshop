@@ -208,7 +208,8 @@ class PaymentLog extends CareyShop
             return $result;
         }
 
-        $result['items'] = $this->setDefaultOrder(['payment_log.payment_log_id' => 'desc'])
+        $result['items'] = $this->setAliasOrder('payment_log')
+            ->setDefaultOrder(['payment_log_id' => 'desc'])
             ->alias('payment_log')
             ->withJoin($with)
             ->where($map)

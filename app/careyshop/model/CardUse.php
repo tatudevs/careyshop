@@ -448,7 +448,8 @@ class CardUse extends CareyShop
             return $result;
         }
 
-        $temp = $this->setDefaultOrder(['card_use.card_use_id' => 'desc'])
+        $temp = $this->setAliasOrder('card_use')
+            ->setDefaultOrder(['card_use_id' => 'desc'])
             ->withJoin($with)
             ->where($map)
             ->where(function ($query) use ($mapOr) {

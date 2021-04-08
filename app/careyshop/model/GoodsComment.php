@@ -835,7 +835,8 @@ class GoodsComment extends CareyShop
         $order = ['goods_comment.goods_comment_id' => 'desc'];
 
         // 实际查询
-        $temp = $this->setDefaultOrder($order, ['goods_comment.goods_comment_id' => 'desc'])
+        $temp = $this->setAliasOrder('goods_comment')
+            ->setDefaultOrder($order, $order)
             ->withoutField($field)
             ->withJoin($withJoin)
             ->with($with)

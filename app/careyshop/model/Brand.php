@@ -228,7 +228,8 @@ class Brand extends CareyShop
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['brand_id' => 'desc'], ['sort' => 'asc'], true)
+        $result['items'] = $this->setAliasOrder('b')
+            ->setDefaultOrder(['brand_id' => 'desc'], ['sort' => 'asc'], true)
             ->cache(true, null, 'Brand')
             ->alias('b')
             ->field('b.*,ifnull(c.name, \'\') category_name,ifnull(c.alias, \'\') category_alias')
@@ -261,7 +262,8 @@ class Brand extends CareyShop
         $field = 'b.goods_category_id,b.brand_id,b.name,b.phonetic,b.logo,';
         $field .= 'ifnull(c.name, \'\') category_name,ifnull(c.alias, \'\') category_alias';
 
-        return $this->setDefaultOrder(['brand_id' => 'asc'])
+        return $this->setAliasOrder('b')
+            ->setDefaultOrder(['brand_id' => 'asc'])
             ->cache(true, null, 'Brand')
             ->alias('b')
             ->field($field)

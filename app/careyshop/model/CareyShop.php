@@ -48,6 +48,12 @@ abstract class CareyShop extends Model
     protected bool $isReverse = false;
 
     /**
+     * 排序别名
+     * @var string
+     */
+    protected string $aliasOrder = '';
+
+    /**
      * 检测是否存在相同值
      * @access public
      * @param array $map 查询条件
@@ -106,7 +112,6 @@ abstract class CareyShop extends Model
      */
     public function searchOrderAttr(...$args)
     {
-        $order = [];
         if (isset($args[2]['order_field']) || isset($args[2]['order_type'])) {
             $order[$args[2]['order_field']] = $args[2]['order_type'];
         } else {
@@ -122,7 +127,14 @@ abstract class CareyShop extends Model
         }
 
         if (!empty($order)) {
-            $args[0]->order($order);
+            if (!empty($this->aliasOrder)) {
+                foreach ($order as $key => $value) {
+                    $alias = false === strpos($key, '.') ? ($this->aliasOrder . '.' . $key) : $key;
+                    $aliasOrder[$alias] = $value;
+                }
+            }
+
+            $args[0]->order($aliasOrder ?? $order);
         }
     }
 
@@ -139,6 +151,19 @@ abstract class CareyShop extends Model
         $this->defaultOrder = $order;
         $this->fixedOrder = $fixed;
         $this->isReverse = $reverse;
+
+        return $this;
+    }
+
+    /**
+     * 设置排序别名
+     * @access public
+     * @param string $alias 别名
+     * @return $this
+     */
+    public function setAliasOrder(string $alias): CareyShop
+    {
+        $this->aliasOrder = $alias;
 
         return $this;
     }

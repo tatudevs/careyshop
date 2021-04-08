@@ -175,7 +175,8 @@ class Transaction extends CareyShop
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['transaction.transaction_id' => 'desc'])
+        $result['items'] = $this->setAliasOrder('transaction')
+            ->setDefaultOrder(['transaction_id' => 'desc'])
             ->alias('transaction')
             ->withJoin($with)
             ->where($map)

@@ -213,7 +213,8 @@ class Spec extends CareyShop
         };
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['spec.spec_id' => 'asc'], ['spec.sort' => 'asc'], true)
+        $result['items'] = $this->setAliasOrder('spec')
+            ->setDefaultOrder(['spec_id' => 'asc'], ['sort' => 'asc'], true)
             ->withJoin('getGoodsType')
             ->with($with)
             ->where($map)
@@ -291,7 +292,8 @@ class Spec extends CareyShop
         };
 
         $resultData = [];
-        $result = $this->setDefaultOrder(['spec.spec_id' => 'asc'], ['spec.sort' => 'asc'])
+        $result = $this->setAliasOrder('spec')
+            ->setDefaultOrder(['spec_id' => 'asc'], ['sort' => 'asc'])
             ->withJoin('getGoodsType')
             ->with($with)
             ->where($map)

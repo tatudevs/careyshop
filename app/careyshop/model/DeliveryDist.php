@@ -424,7 +424,8 @@ class DeliveryDist extends CareyShop
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['delivery_dist.delivery_dist_id' => 'desc'])
+        $result['items'] = $this->setAliasOrder('delivery_dist')
+            ->setDefaultOrder(['delivery_dist_id' => 'desc'])
             ->withoutField(empty($data['is_trace']) ? 'trace' : null) // 默认不返回"trace"字段
             ->withJoin($with)
             ->where($map)
