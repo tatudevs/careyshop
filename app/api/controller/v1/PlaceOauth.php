@@ -39,6 +39,8 @@ class PlaceOauth extends CareyShop
             'authorize'              => ['authorizeOAuth', PlaceOauthService::class],
             // OAuth2.0回调验证
             'callback'               => ['callbackOAuth', PlaceOauthService::class],
+            // 验证授权是否完成
+            'checkoauth'             => ['checkOAuth', PlaceOauthService::class],
         ];
     }
 }

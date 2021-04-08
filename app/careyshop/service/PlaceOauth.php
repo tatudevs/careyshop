@@ -12,6 +12,7 @@ namespace app\careyshop\service;
 
 use Overtrue\Socialite\SocialiteManager;
 use app\careyshop\model\PlaceOauth as PlaceOauthModel;
+use think\facade\Cache;
 
 class PlaceOauth extends CareyShop
 {
@@ -70,6 +71,23 @@ class PlaceOauth extends CareyShop
     }
 
     /**
+     * 验证授权是否完成
+     * @access public
+     * @param array $data 外部数据
+     * @return array|mixed
+     */
+    public function checkOAuth(array $data)
+    {
+        // 没有标识则直接返回
+        if (empty($data['guid']) || !Cache::has($data['guid'])) {
+            return [];
+        }
+
+        $result = Cache::pull($data['guid']);
+        return false !== $result ? $result : [];
+    }
+
+    /**
      * OAuth2.0授权准备
      * @access public
      * @param array $data 外部数据
@@ -102,7 +120,6 @@ class PlaceOauth extends CareyShop
         // 检测渠道用户是否已存在
         $userMap[] = ['place_oauth_id', '=', $this->params['place_user_id']];
         $userMap[] = ['model', '=', ];
-
 
         // todo 待续
         return $oauthUser;

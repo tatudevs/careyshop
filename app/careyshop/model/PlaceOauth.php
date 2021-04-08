@@ -186,8 +186,15 @@ class PlaceOauth extends CareyShop
         }
 
         // 配置回调地址
-        $vars = ['method' => 'callback', 'place_oauth_id' => $data['place_oauth_id']];
-        $basics['redirect'] = Route::buildUrl("api/$this->version/place_oauth", $vars)->domain(true)->build();
+        $vars = [
+            'method'         => 'callback',
+            'place_oauth_id' => $data['place_oauth_id'],
+            'guid'           => $data['guid'] ?? guid_v4(),
+        ];
+
+        $basics['redirect'] = Route::buildUrl("api/$this->version/place_oauth", $vars)
+            ->domain(true)
+            ->build();
 
         return [
             'basics' => $basics,
