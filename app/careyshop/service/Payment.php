@@ -34,7 +34,7 @@ class Payment extends CareyShop
 
         // 生成链接
         $vars = ['method' => 'put.payment.data', 'to_payment' => $data['to_payment'], 'type' => 'notify'];
-        $notifyUrl = Route::buildUrl("api/{$this->version}/payment", $vars)->domain(true)->build();
+        $notifyUrl = Route::buildUrl("api/$this->version/payment", $vars)->domain(true)->build();
 
         return $isString ? $notifyUrl : ['notify_url' => $notifyUrl, 'to_payment' => $data['to_payment']];
     }
@@ -57,7 +57,7 @@ class Payment extends CareyShop
 
         // 生成链接
         $vars = ['method' => 'put.payment.data', 'to_payment' => $data['to_payment'], 'type' => 'return'];
-        $notifyUrl = Route::buildUrl("api/{$this->version}/payment", $vars)->domain(true)->build();
+        $notifyUrl = Route::buildUrl("api/$this->version/payment", $vars)->domain(true)->build();
 
         return $isString ? $notifyUrl : ['return_url' => $notifyUrl, 'to_payment' => $data['to_payment']];
     }
@@ -67,7 +67,7 @@ class Payment extends CareyShop
      * @access public
      * @param string $file  支付目录
      * @param string $model 支付模块
-     * @return mixed
+     * @return false|object
      */
     public function createPaymentModel(string $file, string $model)
     {
@@ -95,7 +95,7 @@ class Payment extends CareyShop
      * @param string  $request 请求来源
      * @param string  $subject 订单名称
      * @param string  $body    订单描述
-     * @return array|false
+     * @return false|mixed
      */
     public function createPaymentPay(array &$data, array &$setting, string $request, string $subject, $body = '')
     {

@@ -23,7 +23,7 @@ class App extends CareyShop
     public function getCaptchaCallurl(): array
     {
         $vars = ['method' => 'image.app.captcha'];
-        $data['call_url'] = Route::buildUrl("api/{$this->version}/app", $vars)->domain(true)->build();
+        $data['call_url'] = Route::buildUrl("api/$this->version/app", $vars)->domain(true)->build();
 
         return $data;
     }

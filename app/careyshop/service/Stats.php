@@ -476,7 +476,7 @@ class Stats extends CareyShop
             ->column(null, 'day');
 
         while ($begin <= $end) {
-            $key = date('Y-m-d', ctype_digit($begin) ? (int)$begin : strtotime($begin));
+            $key = date('Y-m-d', ctype_digit($begin) ? $begin : strtotime($begin));
             $begin += 86400;
 
             $item = array_key_exists($key, $goods)
@@ -582,7 +582,7 @@ class Stats extends CareyShop
             ->column('count', 'day');
 
         while ($begin <= $end) {
-            $key = date('Y-m-d', ctype_digit($begin) ? (int)$begin : strtotime($begin));
+            $key = date('Y-m-d', ctype_digit($begin) ? $begin : strtotime($begin));
             $begin += 86400;
 
             $orderCount = array_key_exists($key, $order) ? $order[$key] : 0;
@@ -685,7 +685,7 @@ class Stats extends CareyShop
             ->column(null, 'day');
 
         while ($begin <= $end) {
-            $key = date('Y-m-d', ctype_digit($begin) ? (int)$begin : strtotime($begin));
+            $key = date('Y-m-d', ctype_digit($begin) ? $begin : strtotime($begin));
             $begin += 86400;
 
             $result['chart']['login'][] = array_key_exists($key, $login)

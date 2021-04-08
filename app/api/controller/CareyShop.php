@@ -338,7 +338,7 @@ abstract class CareyShop
 
         // 输出结果
         if (false === $result && !isset($result['callback_return_type'])) {
-            !empty($this->error) || !is_object(static::$model) ?: $this->setError(static::$model->getError());
+            !empty($this->error) || !is_object(static::$model) || $this->setError(static::$model->getError());
             $this->outputError($this->getError());
         }
 

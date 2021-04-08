@@ -70,9 +70,9 @@ class GoodsConsult extends CareyShop
     /**
      * hasMany cs_goods_consult
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getAnswer()
+    public function getAnswer(): object
     {
         return $this->hasMany(GoodsConsult::class, 'parent_id');
     }
@@ -80,9 +80,9 @@ class GoodsConsult extends CareyShop
     /**
      * hasOne cs_user
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getUser()
+    public function getUser(): object
     {
         return $this
             ->hasOne(User::class, 'user_id', 'user_id')
@@ -92,9 +92,9 @@ class GoodsConsult extends CareyShop
     /**
      * hasOne cs_goods
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getGoods()
+    public function getGoods(): object
     {
         return $this
             ->hasOne(Goods::class, 'goods_id', 'goods_id')
@@ -103,8 +103,8 @@ class GoodsConsult extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetUserAttr($value = null)
     {
@@ -113,8 +113,8 @@ class GoodsConsult extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetGoodsAttr($value = null)
     {

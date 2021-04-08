@@ -14,11 +14,11 @@ return [
         'product_name'    => 'CareyShop商城框架系统',
         'product_version' => '1.3.3',
         'build_version'   => '20210111',
-        'product_website' => 'http://www.careyshop.cn',
-        'product_update'  => 'http://www.careyshop.cn/checkUpdate',
+        'product_website' => 'https://www.careyshop.cn',
+        'product_update'  => 'https://www.careyshop.cn/checkUpdate',
         'develop_team'    => 'think',
         'company_name'    => '宁波互明科技有限公司',
-        'company_website' => 'http://www.careyshop.cn',
+        'company_website' => 'https://www.careyshop.cn',
     ],
 
     // 应用模块

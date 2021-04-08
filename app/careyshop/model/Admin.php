@@ -110,9 +110,9 @@ class Admin extends CareyShop
     /**
      * hasOne db_token
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function hasToken()
+    public function hasToken(): object
     {
         return $this->hasOne(Token::class, 'admin_id', 'client_id');
     }
@@ -120,9 +120,9 @@ class Admin extends CareyShop
     /**
      * hasOne cs_auth_group
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getAuthGroup()
+    public function getAuthGroup(): object
     {
         return $this
             ->hasOne(AuthGroup::class, 'group_id', 'group_id')
@@ -133,8 +133,8 @@ class Admin extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetAuthGroupAttr($value = null)
     {

@@ -75,9 +75,9 @@ class NoticeTpl extends CareyShop
     /**
      * hasMany cs_notice_item
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getNoticeItem()
+    public function getNoticeItem(): object
     {
         return $this->hasMany(NoticeItem::class, 'type', 'type');
     }
@@ -262,7 +262,6 @@ class NoticeTpl extends CareyShop
             if ('email' == $value['code'] && !$isEmailClose) {
                 $this->emailSetting = $value;
                 $this->emailSetting['template'] = htmlspecialchars_decode($value['template']);
-                continue;
             }
         }
 
@@ -304,7 +303,7 @@ class NoticeTpl extends CareyShop
             }
         }
 
-        return empty($error) ? true : $this->setError($error);
+        return empty($error) || $this->setError($error);
     }
 
     /**
@@ -482,14 +481,13 @@ class NoticeTpl extends CareyShop
     /**
      * 发送邮件
      * @access private
-     * @param string $email      邮箱号码
-     * @param string $subject    邮件主题
-     * @param array  $data       发送数据
-     * @param null   $attachment 附件列表
+     * @param string $email   邮箱号码
+     * @param string $subject 邮件主题
+     * @param array  $data    发送数据
      * @return bool
      * @throws
      */
-    private function snedNoticeEmail(string $email, string $subject, array $data, $attachment = null): bool
+    private function snedNoticeEmail(string $email, string $subject, array $data): bool
     {
         // 实例化PHPMailer对象
         $mail = new PHPMailer();
@@ -546,8 +544,8 @@ class NoticeTpl extends CareyShop
         }
 
         // 添加附件
-        if (is_array($attachment)) {
-            foreach ($attachment as $file) {
+        if (is_array($data['attachment'])) {
+            foreach ($data['attachment'] as $file) {
                 is_file($file) && $mail->addAttachment($file);
             }
         }

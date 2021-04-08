@@ -83,9 +83,9 @@ class Ask extends CareyShop
     /**
      * hasOne cs_user
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getUser()
+    public function getUser(): object
     {
         return $this
             ->hasOne(User::class, 'user_id', 'user_id')
@@ -94,8 +94,8 @@ class Ask extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetUserAttr($value = null)
     {
@@ -105,9 +105,9 @@ class Ask extends CareyShop
     /**
      * hasMany cs_ask
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getItems()
+    public function getItems(): object
     {
         return $this->hasMany(Ask::class, 'parent_id');
     }

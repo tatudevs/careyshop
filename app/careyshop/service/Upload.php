@@ -59,7 +59,7 @@ class Upload extends CareyShop
      * @access public
      * @param string $file  目录
      * @param string $model 模块
-     * @return mixed
+     * @return false|object
      */
     public function createOssObject(string $file, $model = 'Upload')
     {
@@ -278,7 +278,7 @@ class Upload extends CareyShop
 
         $pattern = '/^((http|https)?:\/\/)/i';
         if (!preg_match($pattern, $url)) {
-            $url = ($request->isSsl() ? 'https://' : 'http://') . $url;
+            $url = ($request->isSsl() ? 'https' : 'http') . '://' . $url;
         }
 
         // 从URL分析获取对应模型

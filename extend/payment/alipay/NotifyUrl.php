@@ -53,9 +53,9 @@ class NotifyUrl
     /**
      * 返回总金额
      * @access public
-     * @return string
+     * @return float
      */
-    public function getTotalAmount()
+    public function getTotalAmount(): float
     {
         return $this->totalAmount;
     }
@@ -127,10 +127,10 @@ class NotifyUrl
             return false;
         }
 
-        $this->paymentNo = isset($arr['out_trade_no']) ? $arr['out_trade_no'] : 0;
-        $this->totalAmount = isset($arr['total_amount']) ? $arr['total_amount'] : 0;
-        $this->tradeNo = isset($arr['trade_no']) ? $arr['trade_no'] : '';
-        $this->timestamp = isset($arr['gmt_payment']) ? $arr['gmt_payment'] : '';
+        $this->paymentNo = $arr['out_trade_no'] ?? 0;
+        $this->totalAmount = $arr['total_amount'] ?? 0;
+        $this->tradeNo = $arr['trade_no'] ?? '';
+        $this->timestamp = $arr['gmt_payment'] ?? '';
 
         $aop = new AopClient();
         $aop->alipayrsaPublicKey = $setting['alipayPublicKey']['value'];

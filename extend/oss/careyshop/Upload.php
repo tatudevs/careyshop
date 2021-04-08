@@ -156,7 +156,7 @@ class Upload extends UploadBase
         $ext = Config::get('careyshop.upload.image_ext') . ',' . Config::get('careyshop.upload.file_ext');
         $validate = validate(['file' => sprintf('fileSize:%s|fileExt:%s', self::$maxSize, $ext)], [], false, false);
 
-        foreach ($files as $key => $file) {
+        foreach ($files as $file) {
             if (!$validate->check(['file' => $file])) {
                 return $this->setError($file->getOriginalName() . '：' . $validate->getError());
             }
@@ -471,8 +471,8 @@ class Upload extends UploadBase
         }
 
         // 检测尺寸是否正确
-        [$sWidth, $sHeight] = @array_pad(isset($styleList['size']) ? $styleList['size'] : [], 2, 0);
-        [$cWidth, $cHeight] = @array_pad(isset($styleList['crop']) ? $styleList['crop'] : [], 2, 0);
+        [$sWidth, $sHeight] = @array_pad($styleList['size'] ?? [], 2, 0);
+        [$cWidth, $cHeight] = @array_pad($styleList['crop'] ?? [], 2, 0);
 
         try {
             // 创建图片实例(并且是图片才创建缩略图文件夹)
@@ -484,7 +484,7 @@ class Upload extends UploadBase
 
             if ($sWidth || $sHeight) {
                 // 处理缩放样式
-                $resize = isset($styleList['resize']) ? $styleList['resize'] : 'scaling';
+                $resize = $styleList['resize'] ?? 'scaling';
                 $type = 'pad' === $resize ? Image::THUMB_PAD : Image::THUMB_SCALING;
 
                 // 处理缩放尺寸、裁剪尺寸

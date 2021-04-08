@@ -117,9 +117,9 @@ class Order extends CareyShop
     /**
      * 关联订单商品
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getOrderGoods()
+    public function getOrderGoods(): object
     {
         return $this->hasMany(OrderGoods::class);
     }
@@ -127,9 +127,9 @@ class Order extends CareyShop
     /**
      * 关联配送方式
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getDelivery()
+    public function getDelivery(): object
     {
         return $this
             ->hasOne(Delivery::class, 'delivery_id', 'delivery_id')
@@ -139,9 +139,9 @@ class Order extends CareyShop
     /**
      * 关联操作日志
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getOrderLog()
+    public function getOrderLog(): object
     {
         return $this->hasMany(OrderLog::class);
     }
@@ -149,9 +149,9 @@ class Order extends CareyShop
     /**
      * hasOne cs_user
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getUser()
+    public function getUser(): object
     {
         return $this
             ->hasOne(User::class, 'user_id', 'user_id')
@@ -161,8 +161,8 @@ class Order extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetUserAttr($value = null)
     {
@@ -2042,7 +2042,7 @@ class Order extends CareyShop
         empty($data['keywords']) ?: $mapGoods[] = ['order_no|goods_name', 'like', '%' . $data['keywords'] . '%'];
 
         // 不同的订单状态生成搜索条件
-        switch (isset($data['status']) ? $data['status'] : 0) {
+        switch ($data['status'] ?? 0) {
             case 1: // 未付款/待付款
                 $map['trade_status'] = ['=', 0];
                 $map['payment_status'] = ['=', 0];

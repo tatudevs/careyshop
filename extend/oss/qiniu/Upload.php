@@ -66,7 +66,7 @@ class Upload extends UploadBase
             return $this->setError($zone[1]->message());
         }
 
-        $random = array_rand($zone->cdnUpHosts, 1);
+        $random = array_rand($zone->cdnUpHosts);
         $uploadUrl = Route::buildUrl('/')->suffix(false)->domain($zone->cdnUpHosts[$random])->build();
 
         $param = [
@@ -248,9 +248,9 @@ class Upload extends UploadBase
         if ('proportion' === $resize) {
             $options .= sprintf('!%dp', $width);
         } else {
-            $options .= $width != 0 ? (int)$width : '';
+            $options .= $width != 0 ? $width : '';
             $options .= 'x';
-            $options .= $height != 0 ? (int)$height : '';
+            $options .= $height != 0 ? $height : '';
             $options .= 'pad' !== $resize ? '>' : '';
         }
 
@@ -270,9 +270,9 @@ class Upload extends UploadBase
         $options = '';
         if ($width != 0 || $height != 0) {
             $options = 'extent/';
-            $options .= $width != 0 ? (int)$width : '';
+            $options .= $width != 0 ? $width : '';
             $options .= 'x';
-            $options .= $height != 0 ? (int)$height : '';
+            $options .= $height != 0 ? $height : '';
             $options .= '/background/d2hpdGU=/';
         }
 
@@ -293,9 +293,9 @@ class Upload extends UploadBase
         }
 
         $options = 'gravity/Center/crop/';
-        $options .= $width != 0 ? (int)$width : '';
+        $options .= $width != 0 ? $width : '';
         $options .= 'x';
-        $options .= $height != 0 ? (int)$height : '';
+        $options .= $height != 0 ? $height : '';
         $options .= '/';
 
         return $options;
@@ -350,8 +350,8 @@ class Upload extends UploadBase
         }
 
         // 检测尺寸是否正确
-        [$sWidth, $sHeight] = @array_pad(isset($styleList['size']) ? $styleList['size'] : [], 2, 0);
-        [$cWidth, $cHeight] = @array_pad(isset($styleList['crop']) ? $styleList['crop'] : [], 2, 0);
+        [$sWidth, $sHeight] = @array_pad($styleList['size'] ?? [], 2, 0);
+        [$cWidth, $cHeight] = @array_pad($styleList['crop'] ?? [], 2, 0);
 
         if ($sWidth || $sHeight) {
             // 画布最后的尺寸初始化
@@ -363,7 +363,7 @@ class Upload extends UploadBase
                 switch ($key) {
                     case 'size':
                         $last = 'size';
-                        $resize = isset($styleList['resize']) ? $styleList['resize'] : '';
+                        $resize = $styleList['resize'] ?? '';
 
                         if ('pad' === $resize) {
                             empty($sWidth) && $sWidth = $sHeight;

@@ -69,7 +69,7 @@ class Batch extends CareyShop
                     }
                 }
 
-                $route = [];
+                $route = null;
                 call_user_func($oldData['class'] . '::initMethod');
 
                 if (!array_key_exists($method, $oldData['class']::$route)) {
@@ -113,7 +113,7 @@ class Batch extends CareyShop
 
             // 确定调用结果
             if (false === $callback) {
-                !empty($this->error) ?: $this->setError(static::$model->getError());
+                !empty($this->error) || $this->setError(static::$model->getError());
             }
 
             $result[$key] = [

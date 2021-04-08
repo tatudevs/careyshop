@@ -41,9 +41,9 @@ class Discount extends CareyShop
     /**
      * hasMany cs_discount_goods
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function discountGoods()
+    public function discountGoods(): object
     {
         return $this->hasMany(DiscountGoods::class, 'discount_id');
     }

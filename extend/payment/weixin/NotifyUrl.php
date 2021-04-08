@@ -63,9 +63,9 @@ class NotifyUrl extends WxPayNotify
     /**
      * 返回总金额
      * @access public
-     * @return string
+     * @return float
      */
-    public function getTotalAmount()
+    public function getTotalAmount(): float
     {
         return $this->totalAmount;
     }
@@ -139,14 +139,6 @@ class NotifyUrl extends WxPayNotify
             && $result['result_code'] == 'SUCCESS'
         ) {
             return true;
-        }
-
-        if ($result['trade_state'] != 'SUCCESS') {
-            return false;
-        }
-
-        if ($result['appid'] != WxPayConfig::$appid) {
-            return false;
         }
 
         return false;

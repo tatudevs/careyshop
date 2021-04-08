@@ -435,10 +435,9 @@ class Setting extends CareyShop
      * @access private
      * @param string $key   键名
      * @param string $value 键值
-     * @return bool
      * @throws
      */
-    private function checkUrl(string $key, string $value): bool
+    private function checkUrlPrefix(string $key, string $value)
     {
         $url = [
             'oss'           => '资源获取短地址',
@@ -448,14 +447,12 @@ class Setting extends CareyShop
         ];
 
         if (!array_key_exists($key, $url)) {
-            return true;
+            return;
         }
 
         if (preg_match('/^((https|http)?:\/\/)[^\s]+/', $value)) {
             throw new \Exception($url[$key] . '不需要添加地址前缀');
         }
-
-        return true;
     }
 
     /**
@@ -493,7 +490,7 @@ class Setting extends CareyShop
                     case 'careyshop_url':
                     case 'qiniu_url':
                     case 'aliyun_url':
-                        $this->checkUrl($key, $value);
+                        $this->checkUrlPrefix($key, $value);
                         $this->setSettingItem($key, $value, 'upload', 'string');
                         break;
 

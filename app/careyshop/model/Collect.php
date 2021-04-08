@@ -62,9 +62,9 @@ class Collect extends CareyShop
     /**
      * hasOne cs_goods
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getGoods()
+    public function getGoods(): object
     {
         return $this->hasOne(Goods::class, 'goods_id', 'goods_id');
     }

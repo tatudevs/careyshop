@@ -66,9 +66,9 @@ class Cart extends CareyShop
     /**
      * hasOne cs_goods
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function goods()
+    public function goods(): object
     {
         $field = [
             'goods_id', 'name', 'goods_code', 'goods_sku', 'bar_code', 'store_qty',
@@ -85,9 +85,9 @@ class Cart extends CareyShop
     /**
      * hasMany cs_spec_goods
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function goodsSpecItem()
+    public function goodsSpecItem(): object
     {
         return $this->hasMany(SpecGoods::class, 'goods_id', 'goods_id');
     }
@@ -95,9 +95,9 @@ class Cart extends CareyShop
     /**
      * hasMany cs_spec_image
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function goodsSpecImage()
+    public function goodsSpecImage(): object
     {
         return $this->hasMany(SpecImage::class, 'goods_id', 'goods_id');
     }
@@ -302,7 +302,7 @@ class Cart extends CareyShop
             }
         }
 
-        empty($delCartList) ?: $this->where('cart_id', 'in', $delCartList)->delete();
+        empty($delCartList) || $this->where('cart_id', 'in', $delCartList)->delete();
         $this->insertAll($cartData);
 
         return true;

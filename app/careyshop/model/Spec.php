@@ -41,9 +41,9 @@ class Spec extends CareyShop
     /**
      * hasMany cs_spec_item
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function specItem()
+    public function specItem(): object
     {
         return $this->hasMany(SpecItem::class, 'spec_id');
     }
@@ -51,9 +51,9 @@ class Spec extends CareyShop
     /**
      * hasOne cs_goods_type
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getGoodsType()
+    public function getGoodsType(): object
     {
         return $this
             ->hasOne(GoodsType::class, 'goods_type_id', 'goods_type_id')
@@ -62,8 +62,8 @@ class Spec extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetGoodsTypeAttr($value = null)
     {

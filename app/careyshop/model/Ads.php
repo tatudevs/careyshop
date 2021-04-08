@@ -76,9 +76,9 @@ class Ads extends CareyShop
     /**
      * hasOne cs_ads_position
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getAdsPosition()
+    public function getAdsPosition(): object
     {
         return $this->hasOne(AdsPosition::class, 'ads_position_id', 'ads_position_id');
     }

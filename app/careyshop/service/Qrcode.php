@@ -22,7 +22,7 @@ class Qrcode extends CareyShop
     public function getQrcodeCallurl(): array
     {
         $vars = ['method' => 'get.qrcode.item'];
-        $data['call_url'] = Route::buildUrl("api/{$this->version}/qrcode", $vars)->domain(true)->build();
+        $data['call_url'] = Route::buildUrl("api/$this->version/qrcode", $vars)->domain(true)->build();
 
         return $data;
     }
@@ -50,7 +50,6 @@ class Qrcode extends CareyShop
             return $path;
         }
 
-        $path = $public . 'static' . $DS . 'api' . $DS . 'images' . $DS . 'qrcode_logo.png';
-        return $path;
+        return $public . 'static' . $DS . 'api' . $DS . 'images' . $DS . 'qrcode_logo.png';
     }
 }

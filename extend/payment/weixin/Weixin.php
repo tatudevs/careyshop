@@ -28,19 +28,19 @@ class Weixin extends Payment
      * 绑定支付的APPID
      * @var string
      */
-    private string $appid;
+    protected string $appid;
 
     /**
      * 商户号
      * @var string
      */
-    private string $mchid;
+    protected string $mchid;
 
     /**
      * 商户支付密钥
      * @var string
      */
-    private string $key;
+    protected string $key;
 
     /**
      * 公众帐号Secert
@@ -116,8 +116,7 @@ class Weixin extends Payment
             }
         }
 
-        $buff = trim($buff, '&');
-        return $buff;
+        return trim($buff, '&');
     }
 
     /**
@@ -145,7 +144,7 @@ class Weixin extends Payment
     /**
      * 返回支付模块请求结果
      * @access public
-     * @return mixed
+     * @return array|false|string
      */
     public function payRequest()
     {
@@ -213,7 +212,7 @@ class Weixin extends Payment
     /**
      * pc查询结果
      * @access private
-     * @return mixed
+     * @return false|string
      */
     private function pcRequestExecute()
     {

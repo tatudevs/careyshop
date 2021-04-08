@@ -17,17 +17,16 @@ class OrderRefund extends CareyShop
     /**
      * 创建退款模块
      * @access private
-     * @param string $file  支付目录
-     * @param string $model 退款模块
-     * @return mixed
+     * @param string $file 支付目录
+     * @return false|object
      */
-    private function createRefundModel(string $file, string $model)
+    private function createRefundModel(string $file)
     {
         // 转换模块的名称
         $file = Str::lower($file);
-        $model = Str::studly($model);
+        $model = Str::studly('refund');
 
-        if (empty($file) || empty($model)) {
+        if (empty($file)) {
             return $this->setError('原路退款目录或模块不存在');
         }
 
@@ -55,7 +54,7 @@ class OrderRefund extends CareyShop
         }
 
         // 创建原路退款总控件
-        $refund = $this->createRefundModel($setting['model'], 'refund');
+        $refund = $this->createRefundModel($setting['model']);
         if (false === $refund) {
             return false;
         }
@@ -97,7 +96,7 @@ class OrderRefund extends CareyShop
         }
 
         // 创建原路退款总控件
-        $refund = $this->createRefundModel($setting['model'], 'refund');
+        $refund = $this->createRefundModel($setting['model']);
         if (false === $refund) {
             return false;
         }

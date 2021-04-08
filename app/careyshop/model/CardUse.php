@@ -49,9 +49,9 @@ class CardUse extends CareyShop
     /**
      * belongsTo cs_card
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getCard()
+    public function getCard(): object
     {
         return $this->belongsTo(Card::class, 'card_id');
     }
@@ -59,9 +59,9 @@ class CardUse extends CareyShop
     /**
      * hasOne cs_user
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getUser()
+    public function getUser(): object
     {
         return $this
             ->hasOne(User::class, 'user_id', 'user_id')
@@ -70,8 +70,8 @@ class CardUse extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetUserAttr($value = null)
     {

@@ -67,9 +67,9 @@ class Transaction extends CareyShop
     /**
      * hasOne cs_user
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getUser()
+    public function getUser(): object
     {
         return $this
             ->hasOne(User::class, 'user_id', 'user_id')
@@ -78,8 +78,8 @@ class Transaction extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetUserAttr($value = null)
     {

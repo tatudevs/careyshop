@@ -326,7 +326,7 @@ class Server extends CareyShop
         }
 
         // 获取回复素材(数组大于1时随机取)
-        $index = array_rand($data['media_id'], 1);
+        $index = array_rand($data['media_id']);
         $mediaId = $data['media_id'][$index];
 
         switch ($data['type']) {

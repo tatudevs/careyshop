@@ -287,8 +287,6 @@ class Material extends CareyShop
         $openId = $this->params['open_id'];
         $wxname = $this->params['wxname'];
         $mediaId = $this->params['media_id'];
-
-        $result = null;
         $wechat = $this->getApp('broadcasting');
 
         if ($wxname) {

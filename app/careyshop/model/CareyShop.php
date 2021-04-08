@@ -227,7 +227,7 @@ abstract class CareyShop extends Model
 
         $class = Str::substr(__NAMESPACE__, 0, $pos) . $dir;
         if (!class_exists($class)) {
-            throw new ValidateException("验证器 {$class} 不存在");
+            throw new ValidateException("验证器 $class 不存在");
         }
 
         return $class;

@@ -18,8 +18,8 @@ function get_url($vars = '', $idx = null): string
 {
     $url = request()->baseFile();
     if (!empty($vars) && $vars != '/') {
-        $url .= "?s=/index/{$vars}";
-        !is_null($idx) && $url .= "/idx/{$idx}";
+        $url .= "?s=/index/$vars";
+        !is_null($idx) && $url .= "/idx/$idx";
         $url .= '.html';
     }
 
@@ -91,15 +91,9 @@ function check_dirfile(): array
         $item = public_path() . $val[3];
         if ('dir' == $val[0]) {
             if (!is_writable($item)) {
-                if (is_dir($item)) {
-                    $val[1] = '可读';
-                    $val[2] = 'error';
-                    session('error', true);
-                } else {
-                    $val[1] = '不存在';
-                    $val[2] = 'error';
-                    session('error', true);
-                }
+                $val[1] = is_dir($item) ? '可读' : '不存在';
+                $val[2] = 'error';
+                session('error', true);
             }
         } else {
             if (file_exists($item)) {
@@ -166,7 +160,7 @@ function macro_str_replace(string $sql, array $data)
 {
     if (is_array($data)) {
         foreach ($data as $key => $value) {
-            $sql = str_replace("{{$key}}", $value, $sql);
+            $sql = str_replace("{$key}", $value, $sql);
         }
     }
 
@@ -181,18 +175,18 @@ function macro_str_replace(string $sql, array $data)
 function get_sql_message(string $sql): string
 {
     if (preg_match('/CREATE TABLE? `([^ ]*)`/is', $sql, $matches)) {
-        return !empty($matches[1]) ? "创建数据库表 {$matches[1]} 完成" : '';
+        return !empty($matches[1]) ? "创建数据库表 $matches[1] 完成" : '';
     }
 
     if (preg_match('/INSERT INTO? `([^ ]*)`/is', $sql, $matches)) {
-        return !empty($matches[1]) ? "插入数据库行 {$matches[1]} 完成" : '';
+        return !empty($matches[1]) ? "插入数据库行 $matches[1] 完成" : '';
     }
 
     if (preg_match('/ALTER TABLE? `([^ ]*)`/is', $sql, $matches)) {
         if (mb_strpos($sql, 'MODIFY')) {
-            return !empty($matches[1]) ? "调整数据库索引 {$matches[1]} 完成" : '';
+            return !empty($matches[1]) ? "调整数据库索引 $matches[1] 完成" : '';
         } else {
-            return !empty($matches[1]) ? "创建数据库索引 {$matches[1]} 完成" : '';
+            return !empty($matches[1]) ? "创建数据库索引 $matches[1] 完成" : '';
         }
     }
 

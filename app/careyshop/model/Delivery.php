@@ -52,9 +52,9 @@ class Delivery extends CareyShop
     /**
      * hasMany cs_delivery_area
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getDeliveryArea()
+    public function getDeliveryArea(): object
     {
         $field = [
             'region', 'first_weight_price', 'second_weight_price', 'first_item_price',
@@ -69,9 +69,9 @@ class Delivery extends CareyShop
     /**
      * hasOne cs_delivery_item
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getDeliveryItem()
+    public function getDeliveryItem(): object
     {
         return $this->hasOne(DeliveryItem::class, 'delivery_item_id', 'delivery_item_id');
     }

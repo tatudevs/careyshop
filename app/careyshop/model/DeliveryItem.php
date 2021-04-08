@@ -20,7 +20,7 @@ class DeliveryItem extends CareyShop
      * 快递鸟查询URL
      * @var string
      */
-    const KDNIAO_URL = 'http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx';
+    const KDNIAO_URL = 'https://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx';
 
     /**
      * 主键

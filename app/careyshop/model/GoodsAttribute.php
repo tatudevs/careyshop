@@ -62,9 +62,9 @@ class GoodsAttribute extends CareyShop
     /**
      * hasMany cs_goods_attribute
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getAttribute()
+    public function getAttribute(): object
     {
         return $this->hasMany(GoodsAttribute::class, 'parent_id');
     }

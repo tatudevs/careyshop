@@ -61,9 +61,9 @@ class Card extends CareyShop
     /**
      * hasMany cs_card_use
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getCardUse()
+    public function getCardUse(): object
     {
         return $this->hasMany(CardUse::class, 'card_id');
     }

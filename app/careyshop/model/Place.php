@@ -186,7 +186,7 @@ class Place extends CareyShop
                                 'code'   => $source['code'],
                             ];
 
-                            $setting['url']['value'] = Route::buildUrl("api/{$this->version}/wechat", $vars)
+                            $setting['url']['value'] = Route::buildUrl("api/$this->version/wechat", $vars)
                                 ->domain(true)
                                 ->build();
                         }
@@ -391,7 +391,7 @@ class Place extends CareyShop
                 'value'          => $value,
             ];
 
-            return Route::buildUrl("api/{$this->version}/place_oauth", $vars)->domain(true)->build();
+            return Route::buildUrl("api/$this->version/place_oauth", $vars)->domain(true)->build();
         };
 
         $oauthDB = new PlaceOauth();

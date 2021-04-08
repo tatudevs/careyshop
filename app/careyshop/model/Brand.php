@@ -205,7 +205,7 @@ class Brand extends CareyShop
                 $catIdList[] = 0;
             } else {
                 $goodsCat = GoodsCategory::getCategoryList($data['goods_category_id'], false, true);
-                $catIdList = array_column((array)$goodsCat, 'goods_category_id');
+                $catIdList = array_column($goodsCat, 'goods_category_id');
             }
         }
 

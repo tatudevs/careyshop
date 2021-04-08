@@ -59,9 +59,9 @@ class Message extends CareyShop
     /**
      * hasOne cs_message_user
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getMessageUser()
+    public function getMessageUser(): object
     {
         return $this->hasOne(MessageUser::class, 'message_id');
     }

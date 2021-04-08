@@ -117,9 +117,9 @@ class User extends CareyShop
     /**
      * hasOne db_token
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function hasToken()
+    public function hasToken(): object
     {
         return $this->hasOne(Token::class, 'user_id', 'client_id');
     }
@@ -127,9 +127,9 @@ class User extends CareyShop
     /**
      * hasOne cs_user_money
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function hasUserMoney()
+    public function hasUserMoney(): object
     {
         return $this->hasOne(UserMoney::class);
     }
@@ -137,9 +137,9 @@ class User extends CareyShop
     /**
      * hasOne cs_user_money
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getUserMoney()
+    public function getUserMoney(): object
     {
         return $this
             ->hasOne(UserMoney::class)
@@ -150,9 +150,9 @@ class User extends CareyShop
     /**
      * hasOne cs_user_level
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getUserLevel()
+    public function getUserLevel(): object
     {
         return $this
             ->hasOne(UserLevel::class, 'user_level_id', 'user_level_id')
@@ -164,9 +164,9 @@ class User extends CareyShop
     /**
      * hasOne cs_auth_group
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getAuthGroup()
+    public function getAuthGroup(): object
     {
         return $this
             ->hasOne(AuthGroup::class, 'group_id', 'group_id')
@@ -177,8 +177,8 @@ class User extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetUserLevelAttr($value = null)
     {
@@ -187,8 +187,8 @@ class User extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetAuthGroupAttr($value = null)
     {

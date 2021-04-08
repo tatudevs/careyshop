@@ -85,8 +85,8 @@ class GoodsCategory extends CareyShop
 
         !isset($catData['goods_category_id']) ?: $catId = $catData['goods_category_id'];
         !isset($catData['level']) ?: $level = $catData['level'];
-        empty($catData['goods_total']) ?: $isGoodsTotal = true;
-        empty($catData['is_layer']) ?: $isLayer = true;
+        empty($catData['goods_total']) || ($isGoodsTotal = true);
+        empty($catData['is_layer']) || ($isLayer = true);
 
         return self::$model->getCategoryList($catId, $isGoodsTotal, $isLayer, $level);
     }

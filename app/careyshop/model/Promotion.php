@@ -40,9 +40,9 @@ class Promotion extends CareyShop
     /**
      * hasMany cs_promotion_item
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function promotionItem()
+    public function promotionItem(): object
     {
         return $this->hasMany(PromotionItem::class, 'promotion_id');
     }

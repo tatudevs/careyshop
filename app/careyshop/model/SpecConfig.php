@@ -39,9 +39,9 @@ class SpecConfig extends CareyShop
     /**
      * hasMany cs_spec_goods
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function specCombo()
+    public function specCombo(): object
     {
         return $this->hasMany(SpecGoods::class, 'goods_id', 'goods_id');
     }

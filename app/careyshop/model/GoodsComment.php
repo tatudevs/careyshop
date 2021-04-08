@@ -131,9 +131,9 @@ class GoodsComment extends CareyShop
     /**
      * hasOne cs_goods_comment
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getAddition()
+    public function getAddition(): object
     {
         return $this->hasOne(GoodsComment::class, 'parent_id');
     }
@@ -141,9 +141,9 @@ class GoodsComment extends CareyShop
     /**
      * hasMany cs_goods_comment
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getMainReply()
+    public function getMainReply(): object
     {
         return $this->hasMany(GoodsComment::class, 'parent_id');
     }
@@ -151,9 +151,9 @@ class GoodsComment extends CareyShop
     /**
      * hasMany cs_goods_comment
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getAdditionReply()
+    public function getAdditionReply(): object
     {
         return $this->hasMany(GoodsComment::class, 'parent_id');
     }
@@ -161,9 +161,9 @@ class GoodsComment extends CareyShop
     /**
      * hasOne cs_order_goods
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getOrderGoods()
+    public function getOrderGoods(): object
     {
         return $this
             ->hasOne(OrderGoods::class, 'order_goods_id', 'order_goods_id')
@@ -173,9 +173,9 @@ class GoodsComment extends CareyShop
     /**
      * hasOne cs_user
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getUser()
+    public function getUser(): object
     {
         return $this
             ->hasOne(User::class, 'user_id', 'user_id')
@@ -184,8 +184,8 @@ class GoodsComment extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetAdditionAttr($value = null)
     {
@@ -194,8 +194,8 @@ class GoodsComment extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetOrderGoodsAttr($value = null)
     {
@@ -204,8 +204,8 @@ class GoodsComment extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetUserAttr($value = null)
     {

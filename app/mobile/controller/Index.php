@@ -8,7 +8,7 @@
  * @date        2020/7/20
  */
 
-declare (strict_types = 1);
+declare (strict_types=1);
 
 namespace app\mobile\controller;
 

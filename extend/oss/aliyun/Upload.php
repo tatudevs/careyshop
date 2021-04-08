@@ -80,7 +80,7 @@ class Upload extends UploadBase
                 return $this->setError($e->getMessage());
             }
 
-            $random = array_rand($result, 1);
+            $random = array_rand($result);
             return $bucket . '.' . $result[$random] . self::HOST;
         }, 7200);
 
@@ -467,14 +467,14 @@ class Upload extends UploadBase
         }
 
         // 检测尺寸是否正确
-        [$sWidth, $sHeight] = @array_pad(isset($styleList['size']) ? $styleList['size'] : [], 2, 0);
+        [$sWidth, $sHeight] = @array_pad($styleList['size'] ?? [], 2, 0);
 
         // 处理缩放尺寸、裁剪尺寸
         if ($sWidth || $sHeight) {
             foreach ($styleList as $key => $value) {
                 switch ($key) {
                     case 'size':
-                        $resize = isset($styleList['resize']) ? $styleList['resize'] : '';
+                        $resize = $styleList['resize'] ?? '';
                         $options .= $this->getSizeParam($sWidth, $sHeight, $resize);
                         break;
 

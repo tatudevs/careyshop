@@ -39,7 +39,7 @@ class AdsPosition extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]|mixed
+     * @var mixed|string[]
      */
     protected $field = [
         'ads_position_id' => '广告位置编号',

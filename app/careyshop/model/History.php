@@ -49,9 +49,9 @@ class History extends CareyShop
     /**
      * hasOne cs_goods
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getGoods()
+    public function getGoods(): object
     {
         $field = [
             'goods_id', 'goods_category_id', 'name', 'short_name', 'brand_id',
@@ -67,8 +67,8 @@ class History extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetGoodsAttr($value = null)
     {

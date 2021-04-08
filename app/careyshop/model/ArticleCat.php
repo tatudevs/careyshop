@@ -215,7 +215,7 @@ class ArticleCat extends CareyShop
     private static function setArticleCatTree(int $parentId, object &$list, $limitLevel = null, $isLayer = false, $level = 0): array
     {
         static $tree = [];
-        $parentId != 0 ?: $isLayer = false; // 返回全部分类不需要本级
+        $parentId != 0 || ($isLayer = false); // 返回全部分类不需要本级
 
         foreach ($list as $key => $value) {
             // 获取分类主Id
@@ -272,7 +272,7 @@ class ArticleCat extends CareyShop
         }
 
         $list = $this->cache('ArticleCatNavi', null, 'ArticleCat')->column('parent_id,cat_name', 'article_cat_id');
-        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = is_empty_parm($data['is_layer']) || $data['is_layer'];
 
         if (!$isLayer && isset($list[$data['article_cat_id']])) {
             $data['article_cat_id'] = $list[$data['article_cat_id']]['parent_id'];

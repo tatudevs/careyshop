@@ -44,9 +44,9 @@ class AuthGroup extends CareyShop
     /**
      * hasMany cs_auth_rule
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function hasAuthRule()
+    public function hasAuthRule(): object
     {
         return $this->hasMany(AuthRule::class, 'group_id');
     }

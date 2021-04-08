@@ -50,9 +50,9 @@ class Article extends CareyShop
     /**
      * hasOne cs_article_cat
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getArticleCat()
+    public function getArticleCat(): object
     {
         return $this
             ->hasOne(ArticleCat::class, 'article_cat_id', 'article_cat_id')
@@ -63,8 +63,8 @@ class Article extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetArticleCatAttr($value = null)
     {

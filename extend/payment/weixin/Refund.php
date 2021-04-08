@@ -24,19 +24,19 @@ class Refund extends Payment
      * 绑定支付的APPID
      * @var string
      */
-    private string $appid;
+    protected string $appid;
 
     /**
      * 商户号
      * @var string
      */
-    private string $mchid;
+    protected string $mchid;
 
     /**
      * 商户支付密钥
      * @var string
      */
-    private string $key;
+    protected string $key;
 
     /**
      * 公众帐号Secert
@@ -168,12 +168,12 @@ class Refund extends Payment
 
         $result = WxPayApi::refund($input);
         if ($result['return_code'] != 'SUCCESS') {
-            $this->error = isset($result['return_msg']) ? $result['return_msg'] : '未知错误';
+            $this->error = $result['return_msg'] ?? '未知错误';
             return false;
         }
 
         if ($result['result_code'] != 'SUCCESS') {
-            $this->error = isset($result['err_code_des']) ? $result['err_code_des'] : '未知错误';
+            $this->error = $result['err_code_des'] ?? '未知错误';
             return false;
         }
 
@@ -194,12 +194,12 @@ class Refund extends Payment
 
         $result = WxPayApi::refundQuery($input);
         if ($result['return_code'] != 'SUCCESS') {
-            $this->error = isset($result['return_msg']) ? $result['return_msg'] : '未知错误';
+            $this->error = $result['return_msg'] ?? '未知错误';
             return false;
         }
 
         if ($result['result_code'] != 'SUCCESS') {
-            $this->error = isset($result['err_code_des']) ? $result['err_code_des'] : '未知错误';
+            $this->error = $result['err_code_des'] ?? '未知错误';
             return false;
         }
 

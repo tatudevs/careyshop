@@ -146,9 +146,9 @@ abstract class Upload
      * 根据文件mime判断资源类型 1=普通资源 3=视频资源
      * @access public
      * @param $mime
-     * @return string
+     * @return int
      */
-    protected function getFileType($mime)
+    protected function getFileType($mime): int
     {
         if (stripos($mime, 'video') !== false) {
             return 3;

@@ -372,7 +372,7 @@ class GoodsCategory extends CareyShop
         $treeCache .= sprintf('id%dis_layer%dlevel%d', $catId, $isLayer, $level ?? -1);
 
         if (Cache::has($treeCache)) {
-            return Cache::get($treeCache);
+            return Cache::get($treeCache, []);
         }
 
         self::$tree = [];

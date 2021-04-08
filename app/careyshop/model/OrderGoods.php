@@ -52,9 +52,9 @@ class OrderGoods extends CareyShop
     /**
      * belongsTo cs_order
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function toOrder()
+    public function toOrder(): object
     {
         return $this->belongsTo(Order::class, 'order_id');
     }
@@ -62,9 +62,9 @@ class OrderGoods extends CareyShop
     /**
      * belongsTo cs_order
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getOrder()
+    public function getOrder(): object
     {
         return $this->belongsTo(Order::class, 'order_id');
     }
@@ -72,9 +72,9 @@ class OrderGoods extends CareyShop
     /**
      * hasMany cs_order_goods
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getOrderGoods()
+    public function getOrderGoods(): object
     {
         return $this->hasMany(OrderGoods::class, 'order_id', 'order_id');
     }

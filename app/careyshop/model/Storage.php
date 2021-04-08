@@ -255,7 +255,7 @@ class Storage extends CareyShop
             ->column('storage_id,parent_id,name', 'storage_id');
 
         // 是否返回本级
-        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = is_empty_parm($data['is_layer']) || $data['is_layer'];
         if (!$isLayer && isset($list[$data['storage_id']])) {
             $data['storage_id'] = $list[$data['storage_id']]['parent_id'];
         }

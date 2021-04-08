@@ -242,7 +242,7 @@ class Menu extends CareyShop
     private static function setMenuTree(int $parentId, object &$list, $limitLevel = null, $isLayer = false, $level = 0): array
     {
         static $tree = [];
-        $parentId != 0 ?: $isLayer = false; // 返回全部菜单不需要本级
+        $parentId != 0 || ($isLayer = false); // 返回全部菜单不需要本级
 
         foreach ($list as $key => $value) {
             // 获取菜单主Id
@@ -329,7 +329,7 @@ class Menu extends CareyShop
             return false;
         }
 
-        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = is_empty_parm($data['is_layer']) || $data['is_layer'];
         $filter['is_navi'] = 1;
         $filter['status'] = 1;
         $data['menu_id'] ??= 0;
@@ -349,7 +349,7 @@ class Menu extends CareyShop
             return false;
         }
 
-        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = is_empty_parm($data['is_layer']) || $data['is_layer'];
         $filter['is_navi'] = 1;
         $filter['status'] = 1;
         $filter['url'] = $data['url'] ?? null;
@@ -530,7 +530,7 @@ class Menu extends CareyShop
         }
 
         $menuId = $data['menu_id'] ?? 0;
-        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = is_empty_parm($data['is_layer']) || $data['is_layer'];
         $level = $data['level'] ?? null;
 
         $filter = null;

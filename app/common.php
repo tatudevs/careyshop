@@ -9,10 +9,10 @@
  */
 
 // 系统默认权限
-define('AUTH_SUPER_ADMINISTRATOR', 1);
-define('AUTH_ADMINISTRATOR', 2);
-define('AUTH_CLIENT', 3);
-define('AUTH_GUEST', 4);
+const AUTH_SUPER_ADMINISTRATOR = 1;
+const AUTH_ADMINISTRATOR = 2;
+const AUTH_CLIENT = 3;
+const AUTH_GUEST = 4;
 
 if (!function_exists('get_version')) {
     /**
@@ -255,9 +255,7 @@ if (!function_exists('auto_hid_substr')) {
         }
 
         $sub_str = mb_substr($str, 0, 1, 'utf-8');
-        for ($i = 0; $i < $len; $i++) {
-            $sub_str .= '*';
-        }
+        $sub_str .= str_repeat('*', $len);
 
         if (mb_strlen($str, 'utf-8') <= 2) {
             $str = $sub_str;
@@ -358,7 +356,7 @@ if (!function_exists('get_ip2region_str')) {
         '0' === $country ?: $ipStr .= $country;
         '0' === $region ?: $ipStr .= $region;
         '0' === $city ?: $ipStr .= $city;
-        '0' === $isp ?: $ipStr .= " {$isp}";
+        '0' === $isp ?: $ipStr .= " $isp";
 
         return trim($ipStr);
     }

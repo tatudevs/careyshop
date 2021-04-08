@@ -93,9 +93,9 @@ class Goods extends CareyShop
     /**
      * hasMany cs_goods_attr
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function goodsAttrItem()
+    public function goodsAttrItem(): object
     {
         return $this->hasMany(GoodsAttr::class, 'goods_id');
     }
@@ -103,9 +103,9 @@ class Goods extends CareyShop
     /**
      * hasMany cs_spec_goods
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function goodsSpecItem()
+    public function goodsSpecItem(): object
     {
         return $this->hasMany(SpecGoods::class, 'goods_id');
     }
@@ -113,9 +113,9 @@ class Goods extends CareyShop
     /**
      * hasMany cs_spec_image
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function specImage()
+    public function specImage(): object
     {
         return $this->hasMany(SpecImage::class, 'goods_id');
     }
@@ -578,7 +578,7 @@ class Goods extends CareyShop
                 $catIdList[] = 0;
             } else {
                 $goodsCat = GoodsCategory::getCategoryList($data['goods_category_id'], false, true);
-                $catIdList = array_column((array)$goodsCat, 'goods_category_id');
+                $catIdList = array_column($goodsCat, 'goods_category_id');
             }
         }
 
@@ -885,7 +885,7 @@ class Goods extends CareyShop
 
             foreach ($attrGroup as $key => $item) {
                 if (isset($attrResult[$key])) {
-                    $attr['text'] = $attrResult[$key] . '：' . implode($attrGroup[$key], '、');
+                    $attr['text'] = $attrResult[$key] . '：' . implode($item, '、');
                     $attr['value'] = [$key, ...$item];
                     $attr['param'] = 'attr_list';
                     $menuList[] = $attr;
@@ -900,10 +900,9 @@ class Goods extends CareyShop
      * 根据商品Id生成价格筛选菜单
      * @access private
      * @param array $goodsIdList 商品编号
-     * @param int   $page        价格分段
      * @return array
      */
-    private function getFilterPrice(array $goodsIdList, $page = 5): array
+    private function getFilterPrice(array $goodsIdList): array
     {
         if (empty($goodsIdList)) {
             return [];
@@ -916,10 +915,10 @@ class Goods extends CareyShop
 
         rsort($priceResult);
         $maxPrice = (int)$priceResult[0]; // 最大金额值
-        $pageSize = ceil($maxPrice / $page); // 每一段累积的值
+        $pageSize = ceil($maxPrice / 5); // 每一段累积的值
         $price = [];
 
-        for ($i = 0; $i < $page; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $start = $i * $pageSize;
             $end = $start + $pageSize;
 
@@ -927,7 +926,6 @@ class Goods extends CareyShop
             foreach ($priceResult as $value) {
                 if ($value > $start && $value <= $end) {
                     $isIn = true;
-                    continue;
                 }
             }
 
@@ -936,7 +934,7 @@ class Goods extends CareyShop
 
             if ($i == 0) {
                 $price[] = ['text' => $end . '以下', 'value' => [$start, $end]];
-            } else if ($i == ($page - 1)) {
+            } else if ($i == (5 - 1)) {
                 $price[] = ['text' => $start . '以上', 'value' => [$start, $end]];
             } else {
                 $price[] = ['text' => $start . '-' . $end, 'value' => [$start, $end]];
@@ -1063,7 +1061,6 @@ class Goods extends CareyShop
                     $result[$key]['text'] = $item;
                     $result[$key]['value'][] = $value;
                     unset($specItemResult[$value['spec_item_id']]); // 加速性能
-                    continue;
                 }
             }
         }
@@ -1120,7 +1117,6 @@ class Goods extends CareyShop
                     $result[$item['goods_attribute_id']]['text'] = $item['attr_name'];
                     $result[$item['goods_attribute_id']]['value'][] = $value->toArray();
                     unset($goodsArrtResult[$key]); // 加速性能
-                    continue;
                 }
             }
         }
@@ -1161,12 +1157,7 @@ class Goods extends CareyShop
             return $result;
         }
 
-        $result = GoodsCategory::getCategoryList($data['goods_category_id'], false, true);
-        if (false === $result) {
-            return [];
-        }
-
-        return $result;
+        return GoodsCategory::getCategoryList($data['goods_category_id'], false, true);
     }
 
     /**
@@ -1185,7 +1176,7 @@ class Goods extends CareyShop
             return false;
         }
 
-        $goodsCateList = array_column((array)$cateList, 'goods_category_id');
+        $goodsCateList = array_column($cateList, 'goods_category_id');
         return true;
     }
 

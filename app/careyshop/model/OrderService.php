@@ -67,9 +67,9 @@ class OrderService extends CareyShop
     /**
      * belongsTo cs_order
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getOrder()
+    public function getOrder(): object
     {
         return $this->belongsTo(Order::class, 'order_no', 'order_no');
     }
@@ -77,9 +77,9 @@ class OrderService extends CareyShop
     /**
      * belongsTo cs_order_goods
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getOrderGoods()
+    public function getOrderGoods(): object
     {
         return $this->belongsTo(OrderGoods::class);
     }
@@ -87,9 +87,9 @@ class OrderService extends CareyShop
     /**
      * belongsTo cs_order_refund
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getOrderRefund()
+    public function getOrderRefund(): object
     {
         return $this
             ->belongsTo(OrderRefund::class, 'refund_no', 'refund_no')
@@ -99,9 +99,9 @@ class OrderService extends CareyShop
     /**
      * hasOne cs_user
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getUser()
+    public function getUser(): object
     {
         return $this
             ->hasOne(User::class, 'user_id', 'user_id')
@@ -111,9 +111,9 @@ class OrderService extends CareyShop
     /**
      * hasOne cs_admin
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getAdmin()
+    public function getAdmin(): object
     {
         return $this
             ->hasOne(Admin::class, 'admin_id', 'admin_id')
@@ -123,9 +123,9 @@ class OrderService extends CareyShop
     /**
      * hasMany cs_service_log
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getServiceLog()
+    public function getServiceLog(): object
     {
         return $this
             ->hasMany(ServiceLog::class)
@@ -134,8 +134,8 @@ class OrderService extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetOrderRefundAttr($value = null)
     {
@@ -144,8 +144,8 @@ class OrderService extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetUserAttr($value = null)
     {
@@ -154,8 +154,8 @@ class OrderService extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetAdminAttr($value = null)
     {
@@ -1602,7 +1602,6 @@ class OrderService extends CareyShop
                         }
 
                         $comment .= ('integral_amount' == $key ? '积分' : '余额') . '退回：' . $value . PHP_EOL;
-                        continue;
                     }
                 }
             }

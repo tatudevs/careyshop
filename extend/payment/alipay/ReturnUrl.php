@@ -53,9 +53,9 @@ class ReturnUrl
     /**
      * 返回总金额
      * @access public
-     * @return string
+     * @return float
      */
-    public function getTotalAmount()
+    public function getTotalAmount(): float
     {
         return $this->totalAmount;
     }
@@ -131,10 +131,10 @@ class ReturnUrl
         }
 
         $arr = $_GET;
-        $this->paymentNo = isset($arr['out_trade_no']) ? $arr['out_trade_no'] : 0;
-        $this->totalAmount = isset($arr['total_amount']) ? $arr['total_amount'] : 0;
-        $this->tradeNo = isset($arr['trade_no']) ? $arr['trade_no'] : '';
-        $this->timestamp = isset($arr['timestamp']) ? $arr['timestamp'] : '';
+        $this->paymentNo = $arr['out_trade_no'] ?? 0;
+        $this->totalAmount = $arr['total_amount'] ?? 0;
+        $this->tradeNo = $arr['trade_no'] ?? '';
+        $this->timestamp = $arr['timestamp'] ?? '';
 
         if (!isset($arr['sign_type'])) {
             return false;

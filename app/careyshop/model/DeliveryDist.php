@@ -27,13 +27,13 @@ class DeliveryDist extends CareyShop
      * 快递鸟查询URL
      * @var string
      */
-    const KDNIAO_URL = 'http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx';
+    const KDNIAO_URL = 'https://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx';
 
     /**
      * 轨迹订阅URL
      * @var string
      */
-    const FOLLOW_URL = 'http://api.kdniao.com/api/dist';
+    const FOLLOW_URL = 'https://api.kdniao.com/api/dist';
 
     /**
      * 是否需要自动写入时间戳
@@ -75,9 +75,9 @@ class DeliveryDist extends CareyShop
     /**
      * hasOne cs_delivery_item
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getDeliveryItem()
+    public function getDeliveryItem(): object
     {
         return $this->hasOne(DeliveryItem::class, 'delivery_item_id', 'delivery_item_id');
     }
@@ -85,9 +85,9 @@ class DeliveryDist extends CareyShop
     /**
      * hasOne cs_user
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getUser()
+    public function getUser(): object
     {
         return $this
             ->hasOne(User::class, 'user_id', 'user_id')
@@ -96,8 +96,8 @@ class DeliveryDist extends CareyShop
 
     /**
      * 关联查询NULL处理
-     * @param Object $value
-     * @return mixed
+     * @param null $value
+     * @return object
      */
     public function getGetUserAttr($value = null)
     {
@@ -201,7 +201,7 @@ class DeliveryDist extends CareyShop
             $result = json_decode($result, true);
 
             if (!isset($result['Success']) || true != $result['Success']) {
-                return $this->setError(isset($result['Reason']) ? $result['Reason'] : '订阅配送轨迹出错');
+                return $this->setError($result['Reason'] ?? '订阅配送轨迹出错');
             }
         }
 

@@ -34,7 +34,7 @@ class DeliveryDist extends CareyShop
     public function getDistCallback(): array
     {
         $vars = ['method' => 'put.delivery.dist.data'];
-        $callbackUrl = Route::buildUrl("api/{$this->version}/delivery_dist", $vars)->domain(true)->build();
+        $callbackUrl = Route::buildUrl("api/$this->version/delivery_dist", $vars)->domain(true)->build();
 
         return ['callback_url' => $callbackUrl];
     }
