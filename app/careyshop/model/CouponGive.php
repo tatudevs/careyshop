@@ -386,7 +386,7 @@ class CouponGive extends CareyShop
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['coupon_give_id' => 'desc'])
+        $result['items'] = $this->setDefaultOrder(['coupon_give.coupon_give_id' => 'desc'])
             ->withoutField('is_delete')
             ->withJoin($with)
             ->where($map)

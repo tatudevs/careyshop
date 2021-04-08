@@ -300,7 +300,7 @@ class OrderRefund extends CareyShop
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['order_refund_id' => 'desc'])
+        $result['items'] = $this->setDefaultOrder(['order_refund.order_refund_id' => 'desc'])
             ->alias('order_refund')
             ->withJoin($with)
             ->where($map)

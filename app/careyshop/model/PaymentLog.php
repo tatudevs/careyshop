@@ -203,12 +203,13 @@ class PaymentLog extends CareyShop
         }
 
         // 获取总数量,为空直接返回
-        $result['total_result'] = $this->withJoin($with)->where($map)->count();
+        $result['total_result'] = $this->alias('payment_log')->withJoin($with)->where($map)->count();
         if ($result['total_result'] <= 0) {
             return $result;
         }
 
-        $result['items'] = $this->setDefaultOrder(['payment_log_id' => 'desc'])
+        $result['items'] = $this->setDefaultOrder(['payment_log.payment_log_id' => 'desc'])
+            ->alias('payment_log')
             ->withJoin($with)
             ->where($map)
             ->withSearch(['page', 'order'], $data)

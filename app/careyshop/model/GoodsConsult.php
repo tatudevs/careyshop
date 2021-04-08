@@ -332,7 +332,7 @@ class GoodsConsult extends CareyShop
         }
 
         // 实际查询
-        $temp = $this->setDefaultOrder(['goods_consult_id' => 'desc'])
+        $temp = $this->setDefaultOrder(['goods_consult.goods_consult_id' => 'desc'])
             ->withJoin($withJoin)
             ->with($with)
             ->where($map)

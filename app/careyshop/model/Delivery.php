@@ -185,7 +185,7 @@ class Delivery extends CareyShop
             $map[] = ['delivery.status', '=', 1];
         }
 
-        $result = $this->setDefaultOrder(['delivery_id' => 'desc'], ['sort' => 'asc'], true)
+        $result = $this->setDefaultOrder(['delivery.delivery_id' => 'desc'], ['delivery.sort' => 'asc'], true)
             ->withJoin(['getDeliveryItem'])
             ->where($map)
             ->withSearch(['order'], $data)

@@ -831,8 +831,11 @@ class GoodsComment extends CareyShop
             };
         }
 
+        // 默认排序
+        $order = ['goods_comment.goods_comment_id' => 'desc'];
+
         // 实际查询
-        $temp = $this->setDefaultOrder(['goods_comment_id' => 'desc'], ['goods_comment_id' => 'desc'])
+        $temp = $this->setDefaultOrder($order, ['goods_comment.goods_comment_id' => 'desc'])
             ->withoutField($field)
             ->withJoin($withJoin)
             ->with($with)

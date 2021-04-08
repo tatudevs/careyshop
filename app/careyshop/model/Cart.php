@@ -353,7 +353,7 @@ class Cart extends CareyShop
         $map[] = ['cart.is_show', '=', 1];
 
         $totalResult = isset($data['total_type']) && 'number' == $data['total_type']
-            ? self::where($map)->withJoin('goods')->sum('goods_num')
+            ? self::where($map)->withJoin('goods')->sum('cart.goods_num')
             : self::where($map)->withJoin('goods')->count();
 
         return ['total_result' => (int)$totalResult];

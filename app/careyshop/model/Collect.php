@@ -179,7 +179,7 @@ class Collect extends CareyShop
         ];
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['collect_id' => 'desc'], ['is_top' => 'desc'], true)
+        $result['items'] = $this->setDefaultOrder(['collect.collect_id' => 'desc'], ['collect.is_top' => 'desc'], true)
             ->withJoin(['getGoods' => $field])
             ->where($map)
             ->withSearch(['page', 'order'], $data)

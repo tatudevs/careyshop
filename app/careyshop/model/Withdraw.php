@@ -189,13 +189,14 @@ class Withdraw extends CareyShop
             $map[] = ['withdraw.user_id', '=', get_client_id()];
         }
 
-        $result['total_result'] = $this->withJoin($with)->where($map)->count();
+        $result['total_result'] = $this->alias('withdraw')->withJoin($with)->where($map)->count();
         if ($result['total_result'] <= 0) {
             return $result;
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['withdraw_id' => 'desc'])
+        $result['items'] = $this->setDefaultOrder(['withdraw.withdraw_id' => 'desc'])
+            ->alias('withdraw')
             ->withJoin($with)
             ->where($map)
             ->withSearch(['page', 'order'], $data)

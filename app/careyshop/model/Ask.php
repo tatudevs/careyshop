@@ -350,7 +350,7 @@ class Ask extends CareyShop
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['ask_id' => 'desc'])
+        $result['items'] = $this->setDefaultOrder(['ask.ask_id' => 'desc'])
             ->alias('ask')
             ->withoutField('ask,answer')
             ->withJoin($with, 'inner')

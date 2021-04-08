@@ -275,7 +275,7 @@ class Ads extends CareyShop
         }
 
         // 实际查询
-        $result['items'] = $this->setDefaultOrder(['ads_id' => 'desc'], ['sort' => 'asc'], true)
+        $result['items'] = $this->setDefaultOrder(['ads.ads_id' => 'desc'], ['ads.sort' => 'asc'], true)
             ->withJoin(['getAdsPosition' => ['ads_position_id', 'name']])
             ->where($map)
             ->withSearch(['page', 'order'], $data)
