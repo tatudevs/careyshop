@@ -102,7 +102,7 @@ class User extends CareyShop
         ],
         'login'   => [
             'username' => 'require|alphaDash|length:4,20',
-            'password' => 'require|min:6',
+            'password' => 'min:6',
             'platform' => 'require|max:50',
         ],
         'refresh' => [

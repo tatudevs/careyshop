@@ -38,6 +38,7 @@ class PlaceUser extends CareyShop
     protected $readonly = [
         'place_user_id',
         'user_id',
+        'username',
         'place_oauth_id',
         'model',
         'openid',
@@ -48,6 +49,7 @@ class PlaceUser extends CareyShop
      * @var string[]
      */
     protected $type = [
+        'raw'            => 'array',
         'place_user_id'  => 'integer',
         'user_id'        => 'integer',
         'place_oauth_id' => 'integer',

@@ -115,6 +115,10 @@ class PlaceOauth extends CareyShop
             return false;
         }
 
+        if (empty($this->params['guid'])) {
+            return $this->setError('guid不能为空');
+        }
+
         // 获取回调数据
         $oauthUser = $this->getCallback();
 
@@ -126,37 +130,65 @@ class PlaceOauth extends CareyShop
             $userMap[] = ['openid', '=', $oauthUser->getId()];
 
             $userDB = new \app\careyshop\model\User();
-            $placeUserDB = PlaceUser::where($userMap)->find();
+            $placeUserDB = PlaceUser::where($userMap)->findOrEmpty();
 
-            if (is_null($placeUserDB)) {
-                // 渠道用户不存在时先创建顾客组账号
-                $password = rand_string(8);
+            // 渠道用户不存在时先创建顾客组账号
+            if ($placeUserDB->isEmpty()) {
                 $userData = [
                     'username'         => rand_number(),
-                    'password'         => $password,
-                    'password_confirm' => $password,
+                    'password'         => rand_string(8),
                     'nickname'         => $oauthUser->getNickname(),
                     'head_pic'         => $oauthUser->getAvatar(),
                 ];
 
+                $userData['password_confirm'] = $userData['password'];
                 if (!$userDB->addUserItem($userData)) {
                     throw new \Exception($userDB->getError());
                 }
-
-                // 再创建渠道用户
-                // todo 202104091700 待续
             } else {
-                // 渠道用户存在需要更新数据
+                $userDB->setAttr('user_id', $placeUserDB->getAttr('user_id'));
+                $userDB->setAttr('username', $placeUserDB->getAttr('username'));
             }
 
+            // 渠道用户数据
+            $placeUserData = [
+                'user_id'        => $userDB->getAttr('user_id'),
+                'username'       => $userDB->getAttr('username'),
+                'place_oauth_id' => $this->params['place_oauth_id'],
+                'model'          => $this->model,
+                'openid'         => $oauthUser->getId(),
+                'raw'            => $oauthUser->getRaw(),
+                'access_token'   => $oauthUser->getAccessToken(),
+                'refresh_token'  => $oauthUser->getRefreshToken(),
+                'expires_in'     => $oauthUser->getExpiresIn(),
+                'token_response' => $oauthUser->getTokenResponse(),
+            ];
+
+            // 插入或更新渠道用户
+            if (!$placeUserDB->save($placeUserData)) {
+                throw new \Exception($placeUserDB->getError());
+            }
+
+            // 模拟登录来获取Token
+            $loginData = [
+                'username' => $userDB->getAttr('username'),
+                'platform' => $this->params['place_oauth_id'],
+            ];
+
+            $oauthData = $userDB->loginUser($loginData, true, true);
+            if (false === $oauthData) {
+                throw new \Exception($userDB->getError());
+            }
+
+            // 写入缓存用于验证授权是否完成
+            Cache::set($this->params['guid'], $oauthData, 60 * 5);
+
             Db::commit();
+            return $oauthData;
         } catch (\Exception $e) {
             Db::rollback();
             return $this->setError($e->getMessage());
         }
-
-        // todo 待续
-        return $oauthUser;
     }
 
     /**

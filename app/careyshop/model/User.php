@@ -492,10 +492,11 @@ class User extends CareyShop
      * @access public
      * @param array $data       外部数据
      * @param bool  $isGetToken 是否需要返回Token
+     * @param bool  $isInline  是否内联登录(不需要验证码与密码)
      * @return array|false
      * @throws
      */
-    public function loginUser(array $data, $isGetToken = true)
+    public function loginUser(array $data, $isGetToken = true, $isInline = false)
     {
         if (!$this->validateData($data, 'login')) {
             return false;
@@ -505,11 +506,13 @@ class User extends CareyShop
         $request = request();
 
         // 验证码识别
-        $appResult = App::getAppCaptcha($request->param('appkey'), false);
-        if (false !== $appResult['captcha']) {
-            $checkResult = \app\careyshop\service\App::checkCaptcha($request->param('login_code'));
-            if (true !== $checkResult) {
-                return $this->setError($checkResult);
+        if (!$isInline) {
+            $appResult = App::getAppCaptcha($request->param('appkey'), false);
+            if (false !== $appResult['captcha']) {
+                $checkResult = \app\careyshop\service\App::checkCaptcha($request->param('login_code'));
+                if (true !== $checkResult) {
+                    return $this->setError($checkResult);
+                }
             }
         }
 
@@ -525,8 +528,14 @@ class User extends CareyShop
             return $this->setError('账号已禁用');
         }
 
-        if (!hash_equals($result->getAttr('password'), user_md5($data['password']))) {
-            return $this->setError('账号或密码错误');
+        if (!$isInline) {
+            if (empty($data['password'])) {
+                return $this->setError('密码不能为空');
+            }
+
+            if (!hash_equals($result->getAttr('password'), user_md5($data['password']))) {
+                return $this->setError('账号或密码错误');
+            }
         }
 
         $data['last_login'] = time();

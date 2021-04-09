@@ -92,7 +92,7 @@ class Token extends CareyShop
         $result = self::where($map)->findOrEmpty();
         $result->save($data);
 
-        return $result->hidden(['username', 'platform'])->toArray();
+        return $result->hidden(['username', 'platform', 'token_id'])->toArray();
     }
 
     /**
