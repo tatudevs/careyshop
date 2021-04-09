@@ -20,6 +20,18 @@ class PlaceUser extends CareyShop
     protected $pk = 'place_user_id';
 
     /**
+     * 是否需要自动写入时间戳
+     * @var bool|string
+     */
+    protected $autoWriteTimestamp = true;
+
+    /**
+     * 创建日期字段
+     * @var false|string
+     */
+    protected $createTime = false;
+
+    /**
      * 只读属性
      * @var string[]
      */

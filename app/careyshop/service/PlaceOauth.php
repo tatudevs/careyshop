@@ -10,9 +10,11 @@
 
 namespace app\careyshop\service;
 
+use app\careyshop\model\PlaceUser;
 use Overtrue\Socialite\SocialiteManager;
 use app\careyshop\model\PlaceOauth as PlaceOauthModel;
 use think\facade\Cache;
+use think\facade\Db;
 
 class PlaceOauth extends CareyShop
 {
@@ -78,7 +80,6 @@ class PlaceOauth extends CareyShop
      */
     public function checkOAuth(array $data)
     {
-        // 没有标识则直接返回
         if (empty($data['guid']) || !Cache::has($data['guid'])) {
             return [];
         }
@@ -117,9 +118,42 @@ class PlaceOauth extends CareyShop
         // 获取回调数据
         $oauthUser = $this->getCallback();
 
-        // 检测渠道用户是否已存在
-        $userMap[] = ['place_oauth_id', '=', $this->params['place_user_id']];
-        $userMap[] = ['model', '=', ];
+        Db::startTrans();
+        try {
+            // 获取渠道用户
+            $userMap[] = ['place_oauth_id', '=', $this->params['place_oauth_id']];
+            $userMap[] = ['model', '=', $this->model];
+            $userMap[] = ['openid', '=', $oauthUser->getId()];
+
+            $userDB = new \app\careyshop\model\User();
+            $placeUserDB = PlaceUser::where($userMap)->find();
+
+            if (is_null($placeUserDB)) {
+                // 渠道用户不存在时先创建顾客组账号
+                $password = rand_string(8);
+                $userData = [
+                    'username'         => rand_number(),
+                    'password'         => $password,
+                    'password_confirm' => $password,
+                    'nickname'         => $oauthUser->getNickname(),
+                    'head_pic'         => $oauthUser->getAvatar(),
+                ];
+
+                if (!$userDB->addUserItem($userData)) {
+                    throw new \Exception($userDB->getError());
+                }
+
+                // 再创建渠道用户
+                // todo 202104091700 待续
+            } else {
+                // 渠道用户存在需要更新数据
+            }
+
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
+            return $this->setError($e->getMessage());
+        }
 
         // todo 待续
         return $oauthUser;
@@ -211,22 +245,10 @@ class PlaceOauth extends CareyShop
     {
         switch ($this->model) {
             case 'douyin':
-                return $this->getDouYinCallback();
-
+                // 预留,如有需要可以像"回调准备"那样实现区分处理
             default:
                 return $this->getOtherCallback();
         }
-    }
-
-    /**
-     * 验证抖音回调数据
-     * @access private
-     * @return mixed
-     */
-    private function getDouYinCallback()
-    {
-        // 预留,如有需求自行实现
-        return $this->getOtherCallback();
     }
 
     /**
