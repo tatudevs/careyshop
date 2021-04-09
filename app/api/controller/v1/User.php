@@ -49,6 +49,8 @@ class User extends CareyShop
             'refresh.user.token'  => ['refreshToken'],
             // 忘记密码
             'find.user.password'  => ['findUserPassword'],
+            // 重新绑定手机或邮箱
+            'set.user.bind'       => ['setUserBind'],
             // 验证账号是否合法
             'check.user.username' => ['checkUserName', UserService::class],
             // 验证账号手机是否合法

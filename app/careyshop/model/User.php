@@ -43,8 +43,6 @@ class User extends CareyShop
     protected $readonly = [
         'user_id',
         'username',
-        'mobile',
-        'email',
         'create_time',
     ];
 
@@ -614,6 +612,45 @@ class User extends CareyShop
         Cache::tag('token:user_' . $result->getAttr('user_id'))->clear();
         $this->hasToken()->where(['client_id' => $result->getAttr('user_id'), 'client_type' => 0])->delete();
         //$verifyDb->useVerificationItem(['number' => $data['mobile']]);
+
+        return true;
+    }
+
+    /**
+     * 重新绑定手机或邮箱
+     * @access public
+     * @param array $data 外部数据
+     * @return bool
+     */
+    public function setUserBind(array $data): bool
+    {
+        if (!$this->validateData($data, 'bind')) {
+            return false;
+        }
+
+        // 执行验证数据
+        $code = 'mobile' == $data['number_type'] ? 'sms' : 'email';
+        $number = 'mobile' == $data['number_type'] ? $data['mobile'] : $data['email'];
+
+        if (empty($number)) {
+            return $this->setError('手机号或邮箱不能为空');
+        }
+
+        if (AUTH_CLIENT !== get_client_group()) {
+            return $this->setError('只允许顾客组使用此接口');
+        }
+
+        $verifyDb = new Verification();
+        if (!$verifyDb->verVerification($number, $code)) {
+            return $this->setError($verifyDb->getError());
+        }
+
+        // 执行更新数据
+        $userData[$data['number_type']] = $number;
+        $map[] = ['user_id', '=', get_client_id()];
+
+        self::update($userData, $map);
+        $verifyDb->useVerificationItem(['number' => $number, 'is_check' => 1]);
 
         return true;
     }
