@@ -14,7 +14,7 @@ class Place extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'place_id'    => 'integer|gt:0',
@@ -34,7 +34,7 @@ class Place extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'place_id'    => '渠道平台编号',
@@ -54,7 +54,7 @@ class Place extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'setting' => [

@@ -14,7 +14,7 @@ class Brand extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'brand_id'          => 'integer|gt:0',
@@ -36,7 +36,7 @@ class Brand extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'brand_id'          => '品牌编号',
@@ -58,7 +58,7 @@ class Brand extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'set'    => [

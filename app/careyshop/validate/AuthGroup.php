@@ -14,7 +14,7 @@ class AuthGroup extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'group_id'    => 'integer|gt:0',
@@ -30,7 +30,7 @@ class AuthGroup extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'group_id'    => '用户组编号',
@@ -46,7 +46,7 @@ class AuthGroup extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'set'    => [

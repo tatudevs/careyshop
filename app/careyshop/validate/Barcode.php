@@ -14,7 +14,7 @@ class Barcode extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'text'      => 'max:255',
@@ -28,7 +28,7 @@ class Barcode extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'text'      => '条形码文本',

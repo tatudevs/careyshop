@@ -14,7 +14,7 @@ class Storage extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'storage_id'  => 'integer|gt:0',
@@ -40,7 +40,7 @@ class Storage extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'storage_id'  => '资源编号',
@@ -66,7 +66,7 @@ class Storage extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'add_directory'  => [

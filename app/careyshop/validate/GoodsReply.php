@@ -14,7 +14,7 @@ class GoodsReply extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'goods_reply_id'   => 'integer|gt:0',
@@ -28,7 +28,7 @@ class GoodsReply extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'goods_reply_id'   => '商品评价回复编号',
@@ -42,7 +42,7 @@ class GoodsReply extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'del'  => [

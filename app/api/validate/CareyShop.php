@@ -16,7 +16,7 @@ class CareyShop extends Validate
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'appkey'     => 'integer|length:8',

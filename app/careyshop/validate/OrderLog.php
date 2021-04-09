@@ -14,7 +14,7 @@ class OrderLog extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'order_id'        => 'require|integer|gt:0',
@@ -28,7 +28,7 @@ class OrderLog extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'order_id'        => '订单编号',
@@ -42,7 +42,7 @@ class OrderLog extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'log' => [

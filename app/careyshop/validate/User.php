@@ -14,15 +14,15 @@ class User extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'client_id'     => 'integer|gt:0',
         'username'      => 'require|alphaDash|length:4,20|unique:user,username,0,user_id',
         'password'      => 'require|min:6|confirm',
-        'mobile'        => 'require|number|length:7,15|unique:user,mobile,0,user_id',
         'code'          => 'integer|max:6',
-        'email'         => 'email|max:60',
+        'mobile'        => 'number|length:7,15|unique:user,mobile,0,user_id',
+        'email'         => 'email|max:60|unique:user,email,0,user_id',
         'nickname'      => 'max:50',
         'head_pic'      => 'max:512',
         'sex'           => 'in:0,1,2',
@@ -34,6 +34,7 @@ class User extends CareyShop
         'refresh'       => 'max:32',
         'account'       => 'max:80',
         'platform'      => 'max:50',
+        'number_type'   => 'in:mobile,email',
         'page_no'       => 'integer|gt:0',
         'page_size'     => 'integer|gt:0',
         'order_type'    => 'requireWith:order_field|in:asc,desc',
@@ -42,14 +43,14 @@ class User extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'client_id'     => '账号编号',
         'username'      => '账号',
         'password'      => '密码',
+        'code'          => '验证码',
         'mobile'        => '手机号',
-        'code'          => '手机验证码',
         'email'         => '邮箱地址',
         'nickname'      => '昵称',
         'head_pic'      => '头像',
@@ -62,6 +63,7 @@ class User extends CareyShop
         'last_login'    => '登录日期',
         'account'       => '账号或手机号',
         'platform'      => '来源终端',
+        'number_type'   => '号码类型',
         'page_no'       => '页码',
         'page_size'     => '每页数量',
         'order_type'    => '排序方式',
@@ -70,7 +72,7 @@ class User extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'set'     => [
@@ -125,6 +127,12 @@ class User extends CareyShop
             'username' => 'require|alphaDash|length:4,20',
             'mobile'   => 'require|number|length:7,15',
             'password',
+        ],
+        'bind'    => [
+            'number_type' => 'require|in:mobile,email',
+            'mobile'      => 'number|length:7,15|unique:user,mobile,0,user_id',
+            'email'       => 'email|max:60|unique:user,email,0,user_id',
+            'code'        => 'require|integer|max:6',
         ],
     ];
 }

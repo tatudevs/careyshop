@@ -14,7 +14,7 @@ class DeliveryItem extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'delivery_item_id' => 'integer|gt:0',
@@ -32,7 +32,7 @@ class DeliveryItem extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'delivery_item_id' => '快递公司编号',
@@ -50,7 +50,7 @@ class DeliveryItem extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'set'       => [

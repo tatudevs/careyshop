@@ -14,7 +14,7 @@ class Admin extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'client_id'    => 'integer|gt:0',
@@ -36,7 +36,7 @@ class Admin extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'client_id'    => '账号编号',
@@ -57,7 +57,7 @@ class Admin extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'set'     => [

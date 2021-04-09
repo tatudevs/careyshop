@@ -14,7 +14,7 @@ class Menu extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'menu_id'   => 'integer|gt:0',
@@ -37,7 +37,7 @@ class Menu extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'menu_id'   => '菜单编号',
@@ -60,7 +60,7 @@ class Menu extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'item'   => [

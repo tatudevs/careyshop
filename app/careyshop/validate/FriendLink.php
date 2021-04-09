@@ -14,7 +14,7 @@ class FriendLink extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'friend_link_id' => 'integer|gt:0',
@@ -30,7 +30,7 @@ class FriendLink extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'friend_link_id' => '友情链接编号',
@@ -46,7 +46,7 @@ class FriendLink extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'set'    => [

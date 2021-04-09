@@ -14,7 +14,7 @@ class Setting extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'data'   => 'require|array',
@@ -27,7 +27,7 @@ class Setting extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'code'   => '键名',
@@ -37,7 +37,7 @@ class Setting extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'get'         => [

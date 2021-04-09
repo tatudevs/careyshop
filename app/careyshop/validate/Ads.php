@@ -14,7 +14,7 @@ class Ads extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'ads_id'          => 'integer|gt:0',
@@ -40,7 +40,7 @@ class Ads extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'ads_id'          => '广告编号',
@@ -66,7 +66,7 @@ class Ads extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'set'    => [

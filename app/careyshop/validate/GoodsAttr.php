@@ -14,7 +14,7 @@ class GoodsAttr extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'goods_id'           => 'require|integer|gt:0',
@@ -27,7 +27,7 @@ class GoodsAttr extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'goods_id'           => '商品属性中的商品编号',

@@ -14,7 +14,7 @@ class PaymentLog extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'payment_log_id' => 'integer|gt:0',
@@ -36,7 +36,7 @@ class PaymentLog extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'payment_log_id' => '支付日志编号',
@@ -58,7 +58,7 @@ class PaymentLog extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'close' => [

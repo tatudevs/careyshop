@@ -14,7 +14,7 @@ class GoodsAttribute extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'goods_attribute_id' => 'integer|gt:0',
@@ -37,7 +37,7 @@ class GoodsAttribute extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'goods_attribute_id' => '商品属性编号',
@@ -60,7 +60,7 @@ class GoodsAttribute extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'body'      => [

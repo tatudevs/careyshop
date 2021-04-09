@@ -14,7 +14,7 @@ class Verification extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'mobile'   => 'number|length:7,15',
@@ -26,7 +26,7 @@ class Verification extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'mobile'   => '手机号',
@@ -38,7 +38,7 @@ class Verification extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'sms'       => [

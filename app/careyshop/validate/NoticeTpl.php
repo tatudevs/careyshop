@@ -14,7 +14,7 @@ class NoticeTpl extends CareyShop
 {
     /**
      * 验证规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $rule = [
         'notice_tpl_id' => 'integer|gt:0',
@@ -30,7 +30,7 @@ class NoticeTpl extends CareyShop
 
     /**
      * 字段描述
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $field = [
         'notice_tpl_id' => '通知系统模板编号',
@@ -46,7 +46,7 @@ class NoticeTpl extends CareyShop
 
     /**
      * 场景规则
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $scene = [
         'item'      => [
