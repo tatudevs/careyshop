@@ -12,7 +12,7 @@ return [
     // 模式 api 或 web
     'mode'      => 'web',
     // 缓存方式 cache 或 session
-    'cacheType' => 'session',
+    'cacheType' => 'cache',
     //验证码位数
     'length'    => 4,
     // 验证码字符集合
