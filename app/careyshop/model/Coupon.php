@@ -22,7 +22,7 @@ class Coupon extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'coupon_id',
@@ -31,7 +31,7 @@ class Coupon extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'coupon_id'        => 'integer',

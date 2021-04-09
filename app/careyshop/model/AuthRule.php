@@ -22,7 +22,7 @@ class AuthRule extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'rule_id',
@@ -32,7 +32,7 @@ class AuthRule extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'rule_id'   => 'integer',

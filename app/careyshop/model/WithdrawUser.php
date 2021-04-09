@@ -26,7 +26,7 @@ class WithdrawUser extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'user_id',
@@ -35,7 +35,7 @@ class WithdrawUser extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'withdraw_user_id',
@@ -44,7 +44,7 @@ class WithdrawUser extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'withdraw_user_id' => 'integer',
@@ -54,7 +54,7 @@ class WithdrawUser extends CareyShop
 
     /**
      * 定义全局的查询范围
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $globalScope = [
         'delete',

@@ -22,7 +22,7 @@ class OrderGoods extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'order_goods_id',
@@ -34,7 +34,7 @@ class OrderGoods extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'order_goods_id' => 'integer',

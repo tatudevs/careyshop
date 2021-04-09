@@ -20,7 +20,7 @@ class SpecConfig extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'spec_config_id',
@@ -28,7 +28,7 @@ class SpecConfig extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'spec_config_id' => 'integer',

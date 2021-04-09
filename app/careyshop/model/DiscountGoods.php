@@ -14,7 +14,7 @@ class DiscountGoods extends CareyShop
 {
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'id',
@@ -23,7 +23,7 @@ class DiscountGoods extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'discount_id',
@@ -31,7 +31,7 @@ class DiscountGoods extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'discount_id' => 'integer',

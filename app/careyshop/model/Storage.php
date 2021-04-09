@@ -30,7 +30,7 @@ class Storage extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'storage_id',
@@ -40,7 +40,7 @@ class Storage extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'storage_id' => 'integer',

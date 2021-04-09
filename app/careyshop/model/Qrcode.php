@@ -22,7 +22,7 @@ class Qrcode extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'qrcode_id',
@@ -30,7 +30,7 @@ class Qrcode extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'qrcode_id' => 'integer',

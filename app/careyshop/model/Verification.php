@@ -32,7 +32,7 @@ class Verification extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'verification_id',
@@ -41,7 +41,7 @@ class Verification extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'verification_id' => 'integer',

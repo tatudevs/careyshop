@@ -22,7 +22,7 @@ class Navigation extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'navigation_id',
@@ -30,7 +30,7 @@ class Navigation extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'navigation_id' => 'integer',

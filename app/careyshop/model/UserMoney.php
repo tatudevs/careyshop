@@ -20,7 +20,7 @@ class UserMoney extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'user_money_id',
@@ -29,7 +29,7 @@ class UserMoney extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'user_money_id' => 'integer',

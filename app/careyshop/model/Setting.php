@@ -23,7 +23,7 @@ class Setting extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'setting_id',
@@ -34,7 +34,7 @@ class Setting extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'setting_id' => 'integer',

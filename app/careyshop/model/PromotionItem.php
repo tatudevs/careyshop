@@ -14,7 +14,7 @@ class PromotionItem extends CareyShop
 {
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'id',
@@ -23,7 +23,7 @@ class PromotionItem extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'promotion_id' => 'integer',

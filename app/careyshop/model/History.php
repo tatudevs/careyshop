@@ -20,7 +20,7 @@ class History extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'user_id',
@@ -28,7 +28,7 @@ class History extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'history_id',
@@ -37,7 +37,7 @@ class History extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'history_id'  => 'integer',

@@ -23,7 +23,7 @@ class PlaceOauth extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'place_oauth_id',
@@ -32,7 +32,7 @@ class PlaceOauth extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'place_oauth_id' => 'integer',

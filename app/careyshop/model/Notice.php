@@ -60,7 +60,7 @@ class Notice extends CareyShop
 
     /**
      * 当前模型名称
-     * @var mixed|string
+     * @var string
      */
     protected $name = 'setting';
 

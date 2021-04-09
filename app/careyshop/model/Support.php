@@ -20,7 +20,7 @@ class Support extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'support_id',
@@ -28,7 +28,7 @@ class Support extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'support_id' => 'integer',

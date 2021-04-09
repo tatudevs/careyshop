@@ -26,7 +26,7 @@ class OrderRefund extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'order_refund_id',
@@ -34,7 +34,7 @@ class OrderRefund extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'order_refund_id',
@@ -44,7 +44,7 @@ class OrderRefund extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'order_refund_id' => 'integer',

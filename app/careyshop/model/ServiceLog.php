@@ -32,7 +32,7 @@ class ServiceLog extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'service_log_id',
@@ -42,7 +42,7 @@ class ServiceLog extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'service_log_id'   => 'integer',

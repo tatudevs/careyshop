@@ -34,7 +34,7 @@ class MessageUser extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'message_user_id',
@@ -46,7 +46,7 @@ class MessageUser extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'message_user_id' => 'integer',

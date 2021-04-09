@@ -32,7 +32,7 @@ class Collect extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'user_id',
@@ -40,7 +40,7 @@ class Collect extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'collect_id',
@@ -50,7 +50,7 @@ class Collect extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'collect_id' => 'integer',

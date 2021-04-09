@@ -53,7 +53,7 @@ class NoticeTpl extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'notice_tpl_id',
@@ -64,7 +64,7 @@ class NoticeTpl extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'notice_tpl_id' => 'integer',

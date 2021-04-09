@@ -24,7 +24,7 @@ class Brand extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'brand_id',
@@ -32,7 +32,7 @@ class Brand extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'brand_id'          => 'integer',

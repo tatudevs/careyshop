@@ -20,7 +20,7 @@ class Ads extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'ads_id',
@@ -28,7 +28,7 @@ class Ads extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'ads_id'          => 'integer',

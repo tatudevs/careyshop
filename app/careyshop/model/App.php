@@ -23,7 +23,7 @@ class App extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'is_delete',
@@ -31,7 +31,7 @@ class App extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'app_id',
@@ -40,7 +40,7 @@ class App extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'app_id'    => 'integer',
@@ -52,7 +52,7 @@ class App extends CareyShop
 
     /**
      * 定义全局的查询范围
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $globalScope = [
         'delete',

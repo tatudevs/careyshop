@@ -23,7 +23,7 @@ class Region extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'is_delete',
@@ -31,7 +31,7 @@ class Region extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'region_id',
@@ -40,7 +40,7 @@ class Region extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'region_id' => 'integer',
@@ -51,7 +51,7 @@ class Region extends CareyShop
 
     /**
      * 定义全局的查询范围
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $globalScope = [
         'delete',

@@ -26,7 +26,7 @@ class PaymentLog extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'payment_log_id',
@@ -34,7 +34,7 @@ class PaymentLog extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'payment_log_id',
@@ -44,7 +44,7 @@ class PaymentLog extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'payment_log_id' => 'integer',

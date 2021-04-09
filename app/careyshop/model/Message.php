@@ -26,7 +26,7 @@ class Message extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'is_delete',
@@ -34,7 +34,7 @@ class Message extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'message_id',
@@ -44,7 +44,7 @@ class Message extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'message_id' => 'integer',

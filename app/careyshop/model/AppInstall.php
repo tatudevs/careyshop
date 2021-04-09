@@ -29,7 +29,7 @@ class AppInstall extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'app_install_id',
@@ -38,7 +38,7 @@ class AppInstall extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'app_install_id' => 'integer',

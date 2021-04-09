@@ -30,7 +30,7 @@ class DeliveryItem extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'is_delete',
@@ -38,7 +38,7 @@ class DeliveryItem extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'delivery_item_id',
@@ -46,7 +46,7 @@ class DeliveryItem extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'delivery_item_id' => 'integer',

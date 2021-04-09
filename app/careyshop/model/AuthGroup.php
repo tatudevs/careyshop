@@ -22,7 +22,7 @@ class AuthGroup extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'group_id',
@@ -32,7 +32,7 @@ class AuthGroup extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'group_id' => 'integer',

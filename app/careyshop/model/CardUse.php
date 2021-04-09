@@ -23,7 +23,7 @@ class CardUse extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'card_use_id',
@@ -34,7 +34,7 @@ class CardUse extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'card_use_id' => 'integer',

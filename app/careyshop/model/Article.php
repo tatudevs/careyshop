@@ -28,7 +28,7 @@ class Article extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'article_id',
@@ -37,7 +37,7 @@ class Article extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'article_id'     => 'integer',

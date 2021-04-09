@@ -20,7 +20,7 @@ class Delivery extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'delivery_id',
@@ -28,7 +28,7 @@ class Delivery extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'delivery_id'         => 'integer',

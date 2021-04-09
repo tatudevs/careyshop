@@ -20,7 +20,7 @@ class DeliveryArea extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'delivery_id',
@@ -28,7 +28,7 @@ class DeliveryArea extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'delivery_area_id',
@@ -37,7 +37,7 @@ class DeliveryArea extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'delivery_area_id'    => 'integer',

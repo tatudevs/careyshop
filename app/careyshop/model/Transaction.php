@@ -44,7 +44,7 @@ class Transaction extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'transaction_id',
@@ -53,7 +53,7 @@ class Transaction extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'transaction_id' => 'integer',

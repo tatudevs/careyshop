@@ -26,7 +26,7 @@ class Topic extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'topic_id',
@@ -35,7 +35,7 @@ class Topic extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'topic_id'    => 'integer',

@@ -29,7 +29,7 @@ class User extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'password',
@@ -38,7 +38,7 @@ class User extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'user_id',
@@ -50,7 +50,7 @@ class User extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'user_id'         => 'integer',
@@ -67,7 +67,7 @@ class User extends CareyShop
 
     /**
      * 定义全局的查询范围
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $globalScope = [
         'delete',

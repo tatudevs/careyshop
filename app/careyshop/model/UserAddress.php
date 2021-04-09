@@ -26,7 +26,7 @@ class UserAddress extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'user_id',
@@ -35,7 +35,7 @@ class UserAddress extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'user_address_id',
@@ -44,7 +44,7 @@ class UserAddress extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'user_address_id' => 'integer',
@@ -55,7 +55,7 @@ class UserAddress extends CareyShop
 
     /**
      * 定义全局的查询范围
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $globalScope = [
         'delete',

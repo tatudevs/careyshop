@@ -20,7 +20,7 @@ class SpecItem extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'spec_item_id',
@@ -29,7 +29,7 @@ class SpecItem extends CareyShop
 
     /**
      * 隐藏属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $hidden = [
         'spec_id',
@@ -37,7 +37,7 @@ class SpecItem extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'spec_item_id' => 'integer',

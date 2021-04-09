@@ -30,7 +30,7 @@ class GoodsCategory extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'goods_category_id',
@@ -38,7 +38,7 @@ class GoodsCategory extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'goods_category_id' => 'integer',

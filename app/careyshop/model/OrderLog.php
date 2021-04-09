@@ -32,7 +32,7 @@ class OrderLog extends CareyShop
 
     /**
      * 只读属性
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $readonly = [
         'order_log_id',
@@ -42,7 +42,7 @@ class OrderLog extends CareyShop
 
     /**
      * 字段类型或者格式转换
-     * @var mixed|string[]
+     * @var string[]
      */
     protected $type = [
         'order_log_id'    => 'integer',
