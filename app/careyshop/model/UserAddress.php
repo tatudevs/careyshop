@@ -285,7 +285,7 @@ class UserAddress extends CareyShop
         $result = $this->where($map)->count();
 
         if (!is_numeric($result) || $result >= self::ADDRESS_COUNT_MAX) {
-            return $this->setError('已到达' . self::ADDRESS_COUNT_MAX . '个收货地址');
+            return $this->setError('最多只能添加' . self::ADDRESS_COUNT_MAX . '个收货地址');
         }
 
         return true;
