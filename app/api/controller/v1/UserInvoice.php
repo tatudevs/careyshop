@@ -29,8 +29,6 @@ class UserInvoice extends CareyShop
             'get.user.invoice.list'      => ['getUserInvoiceList'],
             // 添加一个发票信息
             'add.user.invoice.item'      => ['addUserInvoiceItem'],
-            // 编辑一个发票信息
-            'set.user.invoice.item'      => ['setUserInvoiceItem'],
             // 批量删除发票信息
             'del.user.invoice.list'      => ['delUserInvoiceList'],
             // 检测是否超出最大添加数量

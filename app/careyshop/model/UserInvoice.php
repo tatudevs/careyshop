@@ -26,6 +26,15 @@ class UserInvoice extends CareyShop
     protected $pk = 'user_invoice_id';
 
     /**
+     * 隐藏属性
+     * @var string[]
+     */
+    protected $hidden = [
+        'user_id',
+        'is_delete',
+    ];
+
+    /**
      * 只读属性
      * @var string[]
      */
@@ -43,7 +52,26 @@ class UserInvoice extends CareyShop
         'user_id'         => 'integer',
         'type'            => 'integer',
         'content'         => 'integer',
+        'is_delete'       => 'integer',
     ];
+
+    /**
+     * 定义全局的查询范围
+     * @var string[]
+     */
+    protected $globalScope = [
+        'delete',
+    ];
+
+    /**
+     * 全局是否删除查询条件
+     * @access public
+     * @param object $query 模型
+     */
+    public function scopeDelete(object $query)
+    {
+        $query->where('is_delete', '=', 0);
+    }
 
     /**
      * 获取一个发票信息
@@ -99,31 +127,6 @@ class UserInvoice extends CareyShop
     }
 
     /**
-     * 编辑一个发票信息
-     * @access public
-     * @param array $data 外部数据
-     * @return array|false
-     * @throws
-     */
-    public function setUserInvoiceItem(array $data)
-    {
-        if (!$this->validateData($data, 'set')) {
-            return false;
-        }
-
-        $map[] = ['user_invoice_id', '=', $data['user_invoice_id']];
-        $map[] = ['user_id', '=', get_client_id()];
-
-        $result = $this->where($map)->find();
-        if (is_null($result)) {
-            return $this->setError('数据不存在');
-        }
-
-        $result = self::update($data, $map);
-        return $result->toArray();
-    }
-
-    /**
      * 批量删除发票信息
      * @access public
      * @param array $data 外部数据
@@ -138,7 +141,7 @@ class UserInvoice extends CareyShop
         $map[] = ['user_invoice_id', 'in', $data['user_invoice_id']];
         $map[] = ['user_id', '=', get_client_id()];
 
-        self::where($map)->delete();
+        self::update(['is_delete' => 1], $map);
         return true;
     }
 

@@ -55,18 +55,6 @@ class UserInvoice extends CareyShop
         'item' => [
             'user_invoice_id' => 'require|integer|gt:0',
         ],
-        'set'  => [
-            'user_invoice_id' => 'require|integer|gt:0',
-            'head',
-            'type',
-            'content',
-            'tax',
-            'bank',
-            'account',
-            'address',
-            'phone',
-            'email',
-        ],
         'del'  => [
             'user_invoice_id' => 'require|arrayHasOnlyInts',
         ],
