@@ -97,7 +97,7 @@ class Order extends CareyShop
         'delivery_id'     => 'integer',
         'country'         => 'integer',
         'region_list'     => 'array',
-        'invoice_type'    => 'integer',
+        'invoice_id'      => 'integer',
         'invoice_amount'  => 'float',
         'trade_status'    => 'integer',
         'delivery_status' => 'integer',
@@ -606,7 +606,7 @@ class Order extends CareyShop
 
         // 计算发票税率
         $taxRate = Config::get('careyshop.system_shopping.invoice');
-        if (!empty($this->dataParams['invoice_type']) && $taxRate > 0) {
+        if (!empty($this->dataParams['invoice_id']) && $taxRate > 0) {
             $invoice = $this->cartData['order_price']['pay_amount'] * ($taxRate / 100);
             $this->cartData['order_price']['invoice_amount'] = $invoice;
             $totalAmount += $invoice;
@@ -726,34 +726,30 @@ class Order extends CareyShop
     }
 
     /**
-     * 验证并处理发票数据
+     * 处理发票数据
      * @access private
-     * @param array $invoiceData 订单完整数据
+     * @param array $orderData 订单完整数据
      * @return bool
      */
-    private function setInvoiceData(array &$invoiceData): bool
+    private function setInvoiceData(array &$orderData): bool
     {
-        $invoiceType = $this->dataParams['invoice_type'] ?? 0;
-        if (2 == $invoiceType && empty($this->dataParams['invoice_title'])) {
-            return $this->setError('发票抬头必须填写');
+        $orderData['invoice_id'] = $this->dataParams['invoice_id'] ?? 0;
+        if ($orderData['invoice_id'] > 0) {
+            $invoiceData = [
+                'order_no'        => $orderData['order_no'],
+                'client_id'       => $orderData['user_id'],
+                'user_invoice_id' => $orderData['invoice_id'],
+                'premium'         => Config::get('careyshop.system_shopping.invoice'),
+                'order_amount'    => $orderData['total_amount'],
+                'invoice_amount'  => $orderData['pay_amount'],
+            ];
+
+            $invoiceDB = new Invoice();
+            if (!$invoiceDB->addInvoiceItem($invoiceData)) {
+                return $this->setError($invoiceDB->getError());
+            }
         }
 
-        switch ($invoiceType) {
-            case 1:
-                $invoiceData['invoice_title'] = '个人';
-                $invoiceData['tax_number'] = '';
-                break;
-
-            case 2:
-                $invoiceData['invoice_title'] = $this->dataParams['invoice_title'];
-                $invoiceData['tax_number'] = $this->dataParams['tax_number'];
-                break;
-
-            default:
-                unset($invoiceData['invoice_title'], $invoiceData['tax_number']);
-        }
-
-        $invoiceData['invoice_type'] = $invoiceType;
         return true;
     }
 
@@ -1435,8 +1431,8 @@ class Order extends CareyShop
         // 设置允许修改的字段及避免无关字段
         unset($data['create_time'], $data['update_time']);
         $field = [
-            'consignee', 'country', 'region_list', 'address', 'zipcode',
-            'tel', 'mobile', 'invoice_title', 'tax_number', 'complete_address',
+            'consignee', 'country', 'region_list', 'address', 'zipcode', 'tel',
+            'mobile', 'complete_address',
         ];
 
         // 处理完整收货地址
@@ -2265,8 +2261,7 @@ class Order extends CareyShop
      * 获取可评价或可追评的订单商品列表
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getOrderGoodsComment(array $data)
     {
@@ -2288,7 +2283,11 @@ class Order extends CareyShop
             $goodsDb->withoutField('order_no,user_id,is_comment,status')->where($goodsMap);
         };
 
-        $result = $this->with($with)->field('order_id,order_no')->where($map)->find();
-        return is_null($result) ? null : $result->hidden(['order_id', 'get_order_goods.order_id'])->toArray();
+        return $this->with($with)
+            ->field('order_id,order_no')
+            ->where($map)
+            ->findOrEmpty()
+            ->hidden(['order_id', 'get_order_goods.order_id'])
+            ->toArray();
     }
 }
