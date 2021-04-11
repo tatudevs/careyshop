@@ -128,8 +128,7 @@ class Withdraw extends CareyShop
      * 获取一个提现请求
      * @access public
      * @param array $data 外部数据
-     * @return array|false
-     * @throws
+     * @return array|false|mixed
      */
     public function getWithdrawItem(array $data)
     {
@@ -146,14 +145,14 @@ class Withdraw extends CareyShop
             $map[] = ['withdraw.user_id', '=', get_client_id()];
         }
 
-        $result = $this->alias('withdraw')->withJoin($with)->where($map)->find();
-        if (!is_null($result)) {
-            $temp = [$result->toArray()];
-            self::keyToSnake(['getUser'], $temp);
-            return $temp[0];
-        }
+        $result[] = $this->alias('withdraw')
+            ->withJoin($with)
+            ->where($map)
+            ->findOrEmpty()
+            ->toArray();
 
-        return [];
+        self::keyToSnake(['getUser'], $result);
+        return $result[0];
     }
 
     /**

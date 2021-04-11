@@ -202,8 +202,7 @@ class ActionLog extends CareyShop
      * 获取一条操作日志
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getActionLogItem(array $data)
     {
@@ -211,8 +210,9 @@ class ActionLog extends CareyShop
             return false;
         }
 
-        $result = $this->find($data['action_log_id']);
-        return is_null($result) ? null : $result->append(['action', 'ip_region'])->toArray();
+        return $this->findOrEmpty($data['action_log_id'])
+            ->append(['action', 'ip_region'])
+            ->toArray();
     }
 
     /**

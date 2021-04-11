@@ -373,8 +373,7 @@ class Admin extends CareyShop
      * 获取一个账号
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getAdminItem(array $data)
     {
@@ -382,8 +381,10 @@ class Admin extends CareyShop
             return false;
         }
 
-        $result = $this->with('get_auth_group')->find($data['client_id']);
-        return is_null($result) ? null : $result->append(['last_ip_region'])->toArray();
+        return $this->with('get_auth_group')
+            ->findOrEmpty($data['client_id'])
+            ->append(['last_ip_region'])
+            ->toArray();
     }
 
     /**

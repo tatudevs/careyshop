@@ -235,8 +235,7 @@ class GoodsConsult extends CareyShop
      * 获取一个商品咨询问答明细
      * @access public
      * @param array $data 外部数据
-     * @return array|false
-     * @throws
+     * @return array|false|mixed
      */
     public function getConsultItem(array $data)
     {
@@ -258,15 +257,14 @@ class GoodsConsult extends CareyShop
             $query->withoutField('is_show,status,type')->where('is_delete', '=', 0);
         };
 
-        $result = $this->withJoin($withJoin)->with($with)->where($map)->find();
-        if ($result) {
-            $temp = [$result->toArray()];
-            self::keyToSnake(['getUser', 'getGoods'], $temp);
+        $result[] = $this->withJoin($withJoin)
+            ->with($with)
+            ->where($map)
+            ->findOrEmpty()
+            ->toArray();
 
-            return $temp[0];
-        }
-
-        return false;
+        self::keyToSnake(['getUser', 'getGoods'], $result);
+        return $result[0];
     }
 
     /**

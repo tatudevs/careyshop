@@ -275,8 +275,7 @@ class Ask extends CareyShop
      * 获取一个问答明细
      * @access public
      * @param array $data 外部数据
-     * @return false|mixed
-     * @throws
+     * @return array|false|mixed
      */
     public function getAskItem(array $data)
     {
@@ -296,21 +295,16 @@ class Ask extends CareyShop
         };
 
         // 获取主题与账号信息
-        $result = self::withoutGlobalScope()
+        $result[] = self::withoutGlobalScope()
             ->withoutField('ask,answer')
             ->withJoin($withUser)
             ->with($withItem)
             ->where($map)
-            ->find();
+            ->findOrEmpty()
+            ->toArray();
 
-        if (!is_null($result)) {
-            $temp = [$result->toArray()];
-            self::keyToSnake(['getUser'], $temp);
-
-            return $temp[0];
-        }
-
-        return [];
+        self::keyToSnake(['getUser'], $result);
+        return $result[0];
     }
 
     /**

@@ -369,8 +369,7 @@ class User extends CareyShop
      * 获取一个账号
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getUserItem(array $data)
     {
@@ -378,18 +377,17 @@ class User extends CareyShop
             return false;
         }
 
-        $userId = is_client_admin() ? $data['client_id'] : get_client_id();
-        $result = $this->with(['get_user_money', 'get_user_level', 'get_auth_group'])->find($userId);
-
-        return is_null($result) ? null : $result->append(['last_ip_region'])->toArray();
+        return $this->with(['get_user_money', 'get_user_level', 'get_auth_group'])
+            ->findOrEmpty(is_client_admin() ? $data['client_id'] : get_client_id())
+            ->append(['last_ip_region'])
+            ->toArray();
     }
 
     /**
      * 获取一个账号的简易信息
      * @access public
      * @param array $data 外部数据
-     * @return array|false|null
-     * @throws
+     * @return array|false
      */
     public function getUserInfo(array $data)
     {
@@ -397,8 +395,9 @@ class User extends CareyShop
             return false;
         }
 
-        $result = $this->find(is_client_admin() ? $data['client_id'] : get_client_id());
-        return is_null($result) ? null : $result->append(['last_ip_region'])->toArray();
+        return $this->findOrEmpty(is_client_admin() ? $data['client_id'] : get_client_id())
+            ->append(['last_ip_region'])
+            ->toArray();
     }
 
     /**
