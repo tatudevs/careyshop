@@ -9,9 +9,11 @@
  */
 
 return [
+    // 绑定事件
     'bind' => [
     ],
 
+    // 监听事件
     'listen' => [
         'AppInit'  => [],
         'HttpRun'  => [],
@@ -20,6 +22,7 @@ return [
         'LogWrite' => [],
     ],
 
+    // 订阅事件
     'subscribe' => [
     ],
 ];

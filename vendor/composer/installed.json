@@ -417,6 +417,66 @@
         "description": "The CareyShop ReportAdmin Package"
     },
     {
+        "name": "dnyz520/careyshop-system",
+        "version": "v1.0.2",
+        "version_normalized": "1.0.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/dnyz520/careyshop-system.git",
+            "reference": "f311659ee64615fa94a2bda832f098b5a420e6ea"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-system/zipball/f311659ee64615fa94a2bda832f098b5a420e6ea",
+            "reference": "f311659ee64615fa94a2bda832f098b5a420e6ea",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "dnyz520/careyshop-barcode": "^1.0",
+            "dnyz520/careyshop-captcha": "^1.0",
+            "dnyz520/careyshop-exception": "^1.0",
+            "dnyz520/careyshop-image": "^1.0",
+            "dnyz520/careyshop-ip2region": "^1.0",
+            "dnyz520/careyshop-jump": "^1.0",
+            "dnyz520/careyshop-report": "^1.0",
+            "dnyz520/careyshop-time": "^1.0",
+            "php": ">=7.4.0",
+            "topthink/framework": "^6.0.0"
+        },
+        "time": "2021-04-12T07:22:20+00:00",
+        "type": "library",
+        "extra": {
+            "think": {
+                "services": [
+                    "careyshop\\SystemService"
+                ]
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "careyshop\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "AGPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "careyshop",
+                "email": "dnyz520@126.com"
+            }
+        ],
+        "description": "The CareyShop System Package"
+    },
+    {
         "name": "dnyz520/careyshop-time",
         "version": "v1.0.9",
         "version_normalized": "1.0.9.0",
