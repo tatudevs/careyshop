@@ -33,7 +33,7 @@ class WithdrawUser extends CareyShop
         'withdraw_user_id' => '提现账号编号',
         'client_id'        => '账号编号',
         'name'             => '收款人姓名',
-        'mobile'           => '收款人手机号',
+        'mobile'           => '收款人手机号码',
         'bank_name'        => '收款账户',
         'account'          => '收款账号',
     ];

@@ -26,7 +26,6 @@ class Verification extends CareyShop
             'send.verification.sms'   => ['sendVerificationSms'],
             // 发送邮件验证码
             'send.verification.email' => ['sendVerificationEmail'],
-            // use.verification.item ver.verification.sms ver.verification.email
         ];
     }
 }

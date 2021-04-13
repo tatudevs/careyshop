@@ -20,7 +20,6 @@ class Verification extends CareyShop
         'mobile' => 'number|length:7,15',
         'email'  => 'email|max:60',
         'code'   => 'integer|max:6',
-        'number' => 'max:60',
     ];
 
     /**
@@ -28,10 +27,9 @@ class Verification extends CareyShop
      * @var string[]
      */
     protected $field = [
-        'mobile' => '手机号',
+        'mobile' => '手机号码',
         'email'  => '邮箱地址',
         'code'   => '验证码',
-        'number' => '手机号或邮箱地址',
     ];
 
     /**
@@ -44,9 +42,6 @@ class Verification extends CareyShop
         ],
         'email' => [
             'email' => 'require|email|max:60',
-        ],
-        'check' => [
-            'number' => 'require|max:60',
         ],
     ];
 }

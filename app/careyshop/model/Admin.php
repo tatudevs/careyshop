@@ -486,7 +486,7 @@ class Admin extends CareyShop
             return false;
         }
 
-        // 验证码识别
+        // 图像验证码识别
         $request = request();
         $appResult = App::getAppCaptcha($request->param('appkey'), false);
 

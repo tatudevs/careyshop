@@ -57,6 +57,6 @@ class User extends CareyShop
         $rule = 'require|number|length:7,15|unique:user,mobile';
         $rule .= sprintf(',%d,user_id', $data['exclude_id'] ?? 0);
 
-        return $this->checkField(['mobile|手机号' => $rule], $data);
+        return $this->checkField(['mobile|手机号码' => $rule], $data);
     }
 }

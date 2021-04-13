@@ -504,7 +504,7 @@ class User extends CareyShop
         // 请求实列
         $request = request();
 
-        // 验证码识别
+        // 图像验证码识别
         if (!$isInline) {
             $appResult = App::getAppCaptcha($request->param('appkey'), false);
             if (false !== $appResult['captcha']) {
@@ -604,14 +604,26 @@ class User extends CareyShop
             return $this->setError('账号已禁用');
         }
 
-        if ($result->getAttr('mobile') != $data['mobile']) {
-            return $this->setError('手机号码错误');
+        if (isset($data['mobile'])) {
+            if ($result->getAttr('is_mobile') !== 1) {
+                return $this->setError('当前账号未绑定手机号码，请联系客服找回！');
+            }
+
+            if ($result->getAttr('mobile') != $data['mobile']) {
+                return $this->setError('手机号码错误');
+            }
+        } else {
+            if ($result->getAttr('is_email') !== 1) {
+                return $this->setError('当前账号未绑定邮件地址，请联系客服找回！');
+            }
+
+            if ($result->getAttr('email') != $data['email']) {
+                return $this->setError('邮件地址错误');
+            }
         }
 
-        // 验证验证码
-        $verifyDb = new Verification();
-        if (!$verifyDb->verVerification($data['mobile'], $data['code'])) {
-            return $this->setError($verifyDb->getError());
+        if (!Verification::useVerificationItem($data['mobile'] ?? $data['email'], $data['code'])) {
+            return false;
         }
 
         $result->setAttr('password', $data['password']);
@@ -619,7 +631,6 @@ class User extends CareyShop
 
         Cache::tag('token:user_' . $result->getAttr('user_id'))->clear();
         $this->hasToken()->where(['client_id' => $result->getAttr('user_id'), 'client_type' => 0])->delete();
-        $verifyDb->useVerificationItem(['number' => $data['mobile']]);
 
         return true;
     }
@@ -629,6 +640,7 @@ class User extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return bool
+     * @throws
      */
     public function setUserBind(array $data): bool
     {
@@ -636,29 +648,26 @@ class User extends CareyShop
             return false;
         }
 
-        // 执行验证数据
-        $code = 'mobile' == $data['number_type'] ? 'sms' : 'email';
-        $number = 'mobile' == $data['number_type'] ? $data['mobile'] : $data['email'];
-
-        if (empty($number)) {
-            return $this->setError('手机号或邮箱不能为空');
-        }
-
         if (AUTH_CLIENT !== get_client_group()) {
             return $this->setError('只允许顾客组使用此接口');
         }
 
-        $verifyDb = new Verification();
-        if (!$verifyDb->verVerification($number, $code)) {
-            return $this->setError($verifyDb->getError());
+        $number = $data['mobile'] ?? $data['email'];
+        $type = !empty($data['mobile']) ? 'mobile' : 'email';
+
+        $map[] = ['user_id', '<>', get_client_id()];
+        $map[] = [$type, '=', $number];
+
+        if (self::checkUnique($map)) {
+            return $this->setError(('mobile' === $type ? '手机号码' : '邮件地址') . '已被占用');
         }
 
-        // 执行更新数据
-        $userData[$data['number_type']] = $number;
-        $map[] = ['user_id', '=', get_client_id()];
+        if (!Verification::useVerificationItem($number, $data['code'])) {
+            return false;
+        }
 
-        self::update($userData, $map);
-        $verifyDb->useVerificationItem(['number' => $number, 'is_check' => 1]);
+        $map = [['user_id', '=', get_client_id()]];
+        self::update([$type => $number, 'is_' . $type => 1], $map);
 
         return true;
     }

@@ -10,6 +10,8 @@
 
 namespace app\careyshop\model;
 
+use think\facade\Config;
+
 class Verification extends CareyShop
 {
     /**
@@ -45,6 +47,7 @@ class Verification extends CareyShop
      */
     protected $type = [
         'verification_id' => 'integer',
+        'status'          => 'integer',
     ];
 
     /**
@@ -59,7 +62,7 @@ class Verification extends CareyShop
             return false;
         }
 
-        return $this->sendNotice('sms', $data['mobile']);
+        return $this->sendNotice($data['mobile'], 'sms');
     }
 
     /**
@@ -74,26 +77,34 @@ class Verification extends CareyShop
             return false;
         }
 
-        return $this->sendNotice('email', $data['email']);
+        return $this->sendNotice($data['email'], 'email');
     }
 
     /**
      * 发送验证码
-     * @access public
-     * @param string $code   通知编码 sms或email
-     * @param string $number 手机号或邮箱地址
+     * @access private
+     * @param string $number 号码
+     * @param string $type   短信或邮件
      * @return bool
      * @throws
      */
-    private function sendNotice(string $code, string $number): bool
+    private function sendNotice(string $number, string $type): bool
     {
+        // 获取配置
+        $code = rand_number(6);
+        $setting = json_decode(Config::get('careyshop.notice.' . $type), true);
+
+        if (1 != $setting['status']['value']) {
+            return $this->setError('通知系统' . ('sms' === $type ? '短信' : '邮件') . '已禁用');
+        }
+
+        // 发送频率检测
         $result = $this
             ->where('number', '=', $number)
             ->order(['verification_id' => 'desc'])
             ->find();
 
         if ($result) {
-            // 现在时间与创建日期
             $nowTime = time();
             $createTime = $result->getData('create_time');
 
@@ -102,130 +113,55 @@ class Verification extends CareyShop
             }
         }
 
-        $notice = new NoticeTpl();
-        $data['number'] = rand_number(6);
-
-        if (!$notice->sendNotice($number, $number, Notice::CAPTCHA, $code, $data)) {
-            return $this->setError($notice->getError());
+        // 实际发送
+        if ('sms' === $type) {
+            $body = json_encode(['number' => $code]);
+            \util\Notice::sendSms($number, $body, $setting['code']['value']);
+        } else {
+            $body = str_replace('${number}', $code, $setting['template']['value']);
+            \util\Notice::sendEmail($number, $setting['subject']['value'], $body);
         }
 
-        // 添加新的验证码
-        $data = [
-            'number' => $number,
-            'code'   => $data['number'],
-            'type'   => $code,
-        ];
-
-        self::create($data);
+        // 写入数据
+        self::create(['number' => $number, 'code' => $code]);
         return true;
     }
 
-//    /**
-//     * 使用验证码
-//     * @access public
-//     * @param array $data 外部数据
-//     * @return bool
-//     * @throws
-//     */
-//    public function useVerificationItem(array $data): bool
-//    {
-//        if (!$this->validateData($data, 'use')) {
-//            return false;
-//        }
-//
-//        $map[] = ['number', '=', $data['number']];
-//        $map[] = ['status', '=', 1];
-//
-//        $result = $this->where($map)->order(['verification_id' => 'desc'])->find();
-//        if (is_null($result)) {
-//            return $this->setError('验证码已无效');
-//        }
-//
-//        // 开启事务
-//        $this->startTrans();
-//
-//        try {
-//            // 完成主业务数据
-//            $result->save(['status' => 0]);
-//
-//            // 变更账户验证状态
-//            if (!empty($data['is_check'])) {
-//                $userDb = new User();
-//                $type = $result->getAttr('type');
-//
-//                $userData = [$type == 'sms' ? 'is_mobile' : 'is_email' => 1];
-//                $userMap = [
-//                    [$type == 'sms' ? 'mobile' : 'email', '=', $data['number']],
-//                    ['is_delete', '=', 0],
-//                ];
-//
-//                $userDb->update($userData, $userMap);
-//            }
-//
-//            $this->commit();
-//            return true;
-//        } catch (\Exception $e) {
-//            $this->rollback();
-//            return $this->setError($e->getMessage());
-//        }
-//    }
+    /**
+     * 使用验证码
+     * @access public
+     * @param string $number 手机号码或邮箱地址
+     * @param string $code   验证码
+     * @return bool
+     * @throws
+     */
+    public static function useVerificationItem(string $number, string $code): bool
+    {
+        if (empty($number)) {
+            throw new \Exception('手机号码或邮箱地址不能为空');
+        }
 
-//    /**
-//     * 验证验证码
-//     * @access public
-//     * @param string $number 手机号或邮箱地址
-//     * @param string $code   通知编码 sms或email
-//     * @return bool
-//     * @throws
-//     */
-//    public function verVerification(string $number, string $code): bool
-//    {
-//        $map[] = ['number', '=', $number];
-//        $map[] = ['code', '=', $code];
-//
-//        $result = $this->where($map)->order(['verification_id' => 'desc'])->find();
-//        if (is_null($result)) {
-//            return $this->setError('验证码错误');
-//        }
-//
-//        if ($result->getAttr('status') !== 1) {
-//            return $this->setError('验证码已失效');
-//        }
-//
-//        if (time() - $result->getData('create_time') > 60 * 5) {
-//            return $this->setError('验证码已失效');
-//        }
-//
-//        return true;
-//    }
+        if (empty($code)) {
+            throw new \Exception('验证码不能为空');
+        }
 
-//    /**
-//     * 验证短信验证码
-//     * @access public
-//     * @param array $data 外部数据
-//     * @return bool
-//     */
-//    public function verVerificationSms(array $data): bool
-//    {
-//        if (!$this->validateData($data, 'ver_sms')) {
-//            return false;
-//        }
-//
-//        return $this->verVerification($data['mobile'], $data['code']);
-//    }
-//
-//    /**
-//     * 验证邮件验证码
-//     * @access public
-//     * @param array $data 外部数据
-//     * @return bool
-//     */
-//    public function verVerificationEmail(array $data): bool
-//    {
-//        if (!$this->validateData($data, 'ver_email')) {
-//            return false;
-//        }
-//
-//        return $this->verVerification($data['email'], $data['code']);
-//    }
+        $map[] = ['number', '=', $number];
+        $map[] = ['code', '=', $code];
+
+        $result = self::where($map)->order(['verification_id' => 'desc'])->find();
+        if (is_null($result)) {
+            throw new \Exception('验证码错误');
+        }
+
+        if ($result->getAttr('status') !== 1) {
+            throw new \Exception('验证码已失效');
+        }
+
+        if (time() - $result->getData('create_time') > 60 * 5) {
+            throw new \Exception('验证码已失效');
+        }
+
+        // 使用验证码
+        return $result->save(['status' => 0]);
+    }
 }
