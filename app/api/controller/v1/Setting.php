@@ -26,7 +26,7 @@ class Setting extends CareyShop
             'get.setting.list'       => ['getSettingList'],
             // 设置配送轨迹
             'set.delivery.dist.list' => ['setDeliveryDistList'],
-            // 设置支付完成提示页
+            // 设置支付页面
             'set.payment.list'       => ['setPaymentList'],
             // 设置配送优惠
             'set.delivery.list'      => ['setDeliveryList'],
@@ -38,6 +38,8 @@ class Setting extends CareyShop
             'set.system.list'        => ['setSystemList'],
             // 设置上传配置
             'set.upload.list'        => ['setUploadList'],
+            // 设置通知配置
+            'set.notice.list'        => ['setNoticeList'],
         ];
     }
 }

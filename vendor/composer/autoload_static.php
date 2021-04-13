@@ -18,7 +18,11 @@ class ComposerStaticInit3f6e19bc97f4d33da2a7395f5ebd9950
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        'd767e4fc2dc52fe66584ab8c6684783e' => __DIR__ . '/..' . '/adbario/php-dot-notation/src/helpers.php',
+        '65fec9ebcfbb3cbb4fd0d519687aea01' => __DIR__ . '/..' . '/danielstjules/stringy/src/Create.php',
         'dedcc85cd6292ba67f8bcf9a7983c616' => __DIR__ . '/..' . '/dnyz520/careyshop-captcha/src/helper.php',
+        'b067bc7112e384b61c701452d53a14a8' => __DIR__ . '/..' . '/mtdowling/jmespath.php/src/JmesPath.php',
+        '66453932bc1be9fb2f910a27947d11b6' => __DIR__ . '/..' . '/alibabacloud/client/src/Functions.php',
         'f0e7e63bbb278a92db02393536748c5f' => __DIR__ . '/..' . '/overtrue/wechat/src/Kernel/Support/Helpers.php',
         '6747f579ad6817f318cc3a7e7a0abb93' => __DIR__ . '/..' . '/overtrue/wechat/src/Kernel/Helpers.php',
         '841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
@@ -33,6 +37,7 @@ class ComposerStaticInit3f6e19bc97f4d33da2a7395f5ebd9950
         ),
         'c' => 
         array (
+            'clagiordano\\weblibs\\configmanager\\' => 34,
             'careyshop\\' => 10,
         ),
         'a' => 
@@ -53,6 +58,7 @@ class ComposerStaticInit3f6e19bc97f4d33da2a7395f5ebd9950
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\Cache\\' => 24,
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
+            'Stringy\\' => 8,
         ),
         'Q' => 
         array (
@@ -84,6 +90,10 @@ class ComposerStaticInit3f6e19bc97f4d33da2a7395f5ebd9950
             'League\\Flysystem\\Cached\\' => 24,
             'League\\Flysystem\\' => 17,
         ),
+        'J' => 
+        array (
+            'JmesPath\\' => 9,
+        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
@@ -98,6 +108,11 @@ class ComposerStaticInit3f6e19bc97f4d33da2a7395f5ebd9950
         'C' => 
         array (
             'CodeItNow\\' => 10,
+        ),
+        'A' => 
+        array (
+            'AlibabaCloud\\Client\\' => 20,
+            'Adbar\\' => 6,
         ),
     );
 
@@ -116,6 +131,10 @@ class ComposerStaticInit3f6e19bc97f4d33da2a7395f5ebd9950
             1 => __DIR__ . '/..' . '/topthink/think-helper/src',
             2 => __DIR__ . '/..' . '/topthink/think-orm/src',
             3 => __DIR__ . '/..' . '/topthink/think-template/src',
+        ),
+        'clagiordano\\weblibs\\configmanager\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/clagiordano/weblibs-configmanager/src',
         ),
         'careyshop\\' => 
         array (
@@ -180,6 +199,10 @@ class ComposerStaticInit3f6e19bc97f4d33da2a7395f5ebd9950
         array (
             0 => __DIR__ . '/..' . '/symfony/psr-http-message-bridge',
         ),
+        'Stringy\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/danielstjules/stringy/src',
+        ),
         'Qiniu\\' => 
         array (
             0 => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu',
@@ -240,6 +263,10 @@ class ComposerStaticInit3f6e19bc97f4d33da2a7395f5ebd9950
         array (
             0 => __DIR__ . '/..' . '/league/flysystem/src',
         ),
+        'JmesPath\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mtdowling/jmespath.php/src',
+        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
@@ -263,6 +290,14 @@ class ComposerStaticInit3f6e19bc97f4d33da2a7395f5ebd9950
         'CodeItNow\\' => 
         array (
             0 => __DIR__ . '/..' . '/dnyz520/careyshop-barcode/CodeItNow',
+        ),
+        'AlibabaCloud\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/alibabacloud/client/src',
+        ),
+        'Adbar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/adbario/php-dot-notation/src',
         ),
     );
 

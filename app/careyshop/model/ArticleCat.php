@@ -160,7 +160,7 @@ class ArticleCat extends CareyShop
 
     /**
      * 获取分类所有列表
-     * @access public static
+     * @access public
      * @param int  $catId   分类Id
      * @param bool $isLayer 是否返回本级分类
      * @param null $level   分类深度

@@ -17,11 +17,10 @@ class Verification extends CareyShop
      * @var string[]
      */
     protected $rule = [
-        'mobile'   => 'number|length:7,15',
-        'email'    => 'email|max:60',
-        'code'     => 'integer|max:6',
-        'number'   => 'max:60',
-        'is_check' => 'in:0,1',
+        'mobile' => 'number|length:7,15',
+        'email'  => 'email|max:60',
+        'code'   => 'integer|max:6',
+        'number' => 'max:60',
     ];
 
     /**
@@ -29,11 +28,10 @@ class Verification extends CareyShop
      * @var string[]
      */
     protected $field = [
-        'mobile'   => '手机号',
-        'email'    => '邮箱地址',
-        'code'     => '验证码',
-        'number'   => '手机号或邮箱地址',
-        'is_check' => '是否验证通过',
+        'mobile' => '手机号',
+        'email'  => '邮箱地址',
+        'code'   => '验证码',
+        'number' => '手机号或邮箱地址',
     ];
 
     /**
@@ -41,23 +39,14 @@ class Verification extends CareyShop
      * @var string[]
      */
     protected $scene = [
-        'sms'       => [
+        'sms'   => [
             'mobile' => 'require|number|length:7,15',
         ],
-        'email'     => [
+        'email' => [
             'email' => 'require|email|max:60',
         ],
-        'ver_sms'   => [
-            'mobile' => 'require|number|length:7,15',
-            'code'   => 'require|integer|max:6',
-        ],
-        'ver_email' => [
-            'email' => 'require|email|max:60',
-            'code'  => 'require|integer|max:6',
-        ],
-        'use'       => [
+        'check' => [
             'number' => 'require|max:60',
-            'is_check',
         ],
     ];
 }

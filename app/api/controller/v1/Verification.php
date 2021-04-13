@@ -22,16 +22,11 @@ class Verification extends CareyShop
     protected static function initMethod()
     {
         self::$route = [
-            // 使用验证码
-            'use.verification.item'   => ['useVerificationItem'],
             // 发送短信验证码
             'send.verification.sms'   => ['sendVerificationSms'],
             // 发送邮件验证码
             'send.verification.email' => ['sendVerificationEmail'],
-            // 验证短信验证码
-            'ver.verification.sms'    => ['verVerificationSms'],
-            // 验证邮件验证码
-            'ver.verification.email'  => ['verVerificationEmail'],
+            // use.verification.item ver.verification.sms ver.verification.email
         ];
     }
 }

@@ -173,7 +173,7 @@ class Menu extends CareyShop
 
     /**
      * 根据条件获取菜单列表数据
-     * @access public static
+     * @access public
      * @param string $module  所属模块
      * @param int    $menuId  菜单Id
      * @param bool   $isLayer 是否返回本级菜单

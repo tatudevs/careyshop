@@ -133,7 +133,7 @@ class Setting extends CareyShop
     }
 
     /**
-     * 设置支付完成提示页
+     * 设置支付页面
      * @access public
      * @param array $data 外部数据
      * @return bool
@@ -510,6 +510,43 @@ class Setting extends CareyShop
                     case 'token_expires':
                         empty($value) && $value = 0;
                         $this->setSettingItem($key, $value, 'upload', 'integer');
+                        break;
+
+                    default:
+                        throw new \Exception('键名' . $key . '不在允许范围内');
+                }
+            }
+
+            $this->commit();
+            Cache::tag('setting')->clear();
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            return $this->setError($e->getMessage());
+        }
+    }
+
+    /**
+     * 设置通知配置
+     * @access public
+     * @param array $data 外部数据
+     * @return bool
+     */
+    public function setNoticeList(array $data): bool
+    {
+        if (!$this->validateData($data, 'rule')) {
+            return false;
+        }
+
+        // 开启事务
+        $this->startTrans();
+
+        try {
+            foreach ($data['data'] as $key => $value) {
+                switch ($key) {
+                    case 'sms':
+                    case 'email':
+                        $this->setSettingItem($key, $value, 'notice', 'string', true);
                         break;
 
                     default:

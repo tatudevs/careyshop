@@ -42,7 +42,7 @@ class Setting extends CareyShop
     protected $scene = [
         'get'         => [
             'code'   => 'arrayHasOnlyStrings',
-            'module' => 'require|in:delivery_dist,payment,delivery,system_shopping,service,system_info,upload',
+            'module' => 'require|in:delivery_dist,payment,delivery,system_shopping,service,system_info,upload,notice',
         ],
         'rule'        => [
             'data',

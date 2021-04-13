@@ -48,7 +48,7 @@ class SpecItem extends CareyShop
 
     /**
      * 断开关联或更新商品规格项
-     * @access public static
+     * @access public
      * @param int   $specId 商品规格Id
      * @param array $item   规格项列表
      * @return bool
