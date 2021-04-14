@@ -161,7 +161,7 @@ class CareyShop
             }
         }
 
-        // 验证规则
+        // 根据微信规则所生成的验证规则
         $validate = [
             'image' => ['image' => 'fileSize:10485760|fileExt:bmp,png,jpeg,jpg,gif'],
             'voice' => ['voice' => 'fileSize:2097152|fileExt:mp3,wma,wav,amr'],

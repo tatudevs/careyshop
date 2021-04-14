@@ -407,4 +407,15 @@ class Upload extends CareyShop
 
         exit();
     }
+
+    public function getUploadPath(array $data)
+    {
+        // 规则验证
+        if (!$this->validateData($data, 'path', false, \app\careyshop\validate\Storage::class)) {
+            return false;
+        }
+
+        // todo 待续
+        return [];
+    }
 }

@@ -35,6 +35,8 @@ class Upload extends CareyShop
             'add.upload.list'     => ['addUploadList', UploadService::class],
             // 接收第三方推送数据
             'put.upload.data'     => ['putUploadData', UploadService::class],
+            // 将资源路径转为绝对路径
+            'get.upload.path'     => ['getUploadPath', UploadService::class],
         ];
     }
 }

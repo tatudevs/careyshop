@@ -12,6 +12,8 @@ namespace app\careyshop\service;
 
 class CareyShop
 {
+    use \app\careyshop\validate\Validate;
+
     /**
      * 控制器版本号
      * @var string
