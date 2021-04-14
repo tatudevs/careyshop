@@ -12,7 +12,6 @@ namespace app\api\controller;
 
 use careyshop\ApiOutput;
 use app\careyshop\service\Auth;
-use Exception;
 use think\App;
 use think\facade\Cache;
 use think\facade\Config;
@@ -20,9 +19,13 @@ use think\facade\Db;
 use think\helper\Str;
 use think\Request;
 use think\Validate;
+use Exception;
 
 abstract class CareyShop
 {
+    use \app\careyshop\concern\Base;
+    use \app\careyshop\concern\Error;
+
     /**
      * Request实例
      * @var Request
@@ -100,18 +103,6 @@ abstract class CareyShop
      * @var object|null
      */
     protected static ?object $auth = null;
-
-    /**
-     * 控制器错误信息
-     * @var string
-     */
-    public string $error = '';
-
-    /**
-     * 控制器版本号
-     * @var string
-     */
-    public string $version = 'v1';
 
     /**
      * 是否调试模式
@@ -343,28 +334,6 @@ abstract class CareyShop
         }
 
         return $this->outputResult($result);
-    }
-
-    /*
-     * 设置控制器错误信息
-     * @access public
-     * @param  string $value 错误信息
-     * @return false
-     */
-    public function setError($value)
-    {
-        $this->error = $value;
-        return false;
-    }
-
-    /*
-     * 获取控制器错误信息
-     * @access public
-     * @return string
-     */
-    public function getError(): string
-    {
-        return $this->error;
     }
 
     /**

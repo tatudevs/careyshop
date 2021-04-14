@@ -16,19 +16,9 @@ use think\Model;
 
 abstract class CareyShop extends Model
 {
-    use \app\careyshop\validate\Validate;
-
-    /**
-     * 控制器版本号
-     * @var string
-     */
-    public string $version = 'v1';
-
-    /**
-     * 错误信息
-     * @var string
-     */
-    protected string $error = '';
+    use \app\careyshop\concern\Base;
+    use \app\careyshop\concern\Error;
+    use \app\careyshop\concern\Validate;
 
     /**
      * 默认排序
@@ -72,28 +62,6 @@ abstract class CareyShop extends Model
         }
 
         return true;
-    }
-
-    /**
-     * 返回模型的错误信息
-     * @access public
-     * @return string
-     */
-    public function getError(): string
-    {
-        return $this->error;
-    }
-
-    /**
-     * 设置模型错误信息
-     * @access public
-     * @param string $value 错误信息
-     * @return false
-     */
-    public function setError(string $value)
-    {
-        $this->error = $value;
-        return false;
     }
 
     /**

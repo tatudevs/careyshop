@@ -17,17 +17,8 @@ use think\facade\Filesystem;
 
 class CareyShop
 {
-    /**
-     * 控制器版本号
-     * @var string
-     */
-    public string $version = 'v1';
-
-    /**
-     * 错误信息
-     * @var string
-     */
-    public string $error = '';
+    use \app\careyshop\concern\Base;
+    use \app\careyshop\concern\Error;
 
     /**
      * WeChat 实列
@@ -92,28 +83,6 @@ class CareyShop
         }
 
         return $this->wechat->$plate;
-    }
-
-    /**
-     * 设置错误信息
-     * @access public
-     * @param string $value 错误信息
-     * @return false
-     */
-    public function setError(string $value)
-    {
-        $this->error = $value;
-        return false;
-    }
-
-    /*
-     * 获取错误信息
-     * @access public
-     * @return string
-     */
-    public function getError(): string
-    {
-        return $this->error;
     }
 
     /**
