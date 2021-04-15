@@ -12,7 +12,6 @@ namespace app\careyshop\service;
 
 use app\careyshop\model\Storage;
 use app\careyshop\model\StorageStyle;
-use think\exception\ValidateException;
 use think\facade\Config;
 use think\helper\Str;
 
@@ -147,10 +146,8 @@ class Upload extends CareyShop
     public function replaceUploadItem(array $data)
     {
         // 规则验证
-        try {
-            validate(\app\careyshop\validate\Storage::class)->scene('replace')->check($data);
-        } catch (ValidateException $e) {
-            return $this->setError($e->getMessage());
+        if (!$this->validateData($data, 'replace', false, \app\careyshop\validate\Storage::class)) {
+            return false;
         }
 
         // 获取已存在资源数据

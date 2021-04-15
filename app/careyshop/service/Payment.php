@@ -10,7 +10,6 @@
 
 namespace app\careyshop\service;
 
-use think\exception\ValidateException;
 use think\facade\Route;
 use think\helper\Str;
 
@@ -26,10 +25,8 @@ class Payment extends CareyShop
     public function getPaymentNotify(array $data, $isString = false)
     {
         // 规则验证
-        try {
-            validate(\app\careyshop\validate\Recharge::class)->scene('return')->check($data);
-        } catch (ValidateException $e) {
-            return $this->setError($e->getMessage());
+        if (!$this->validateData($data, 'return', false, \app\careyshop\validate\Recharge::class)) {
+            return false;
         }
 
         // 生成链接
@@ -49,10 +46,8 @@ class Payment extends CareyShop
     public function getPaymentReturn(array $data, $isString = false)
     {
         // 规则验证
-        try {
-            validate(\app\careyshop\validate\Recharge::class)->scene('return')->check($data);
-        } catch (ValidateException $e) {
-            return $this->setError($e->getMessage());
+        if (!$this->validateData($data, 'return', false, \app\careyshop\validate\Recharge::class)) {
+            return false;
         }
 
         // 生成链接

@@ -38,10 +38,8 @@ class Barcode extends CareyShop
     public function getBarcodeItem($data = [])
     {
         // 规则验证
-        try {
-            validate(\app\careyshop\validate\Barcode::class)->check($data);
-        } catch (ValidateException $e) {
-            return $this->setError($e->getMessage());
+        if (!$this->validateData($data, null, false, \app\careyshop\validate\Barcode::class)) {
+            return false;
         }
 
         // 设置默认值
