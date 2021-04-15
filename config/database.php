@@ -10,7 +10,7 @@
 
 return [
     // 默认使用的数据库连接配置
-    'default'         => env('database.driver', 'mysql'),
+    'default'         => env('database.db_driver', 'mysql'),
 
     // 自定义时间查询规则
     'time_query_rule' => [],
@@ -27,23 +27,23 @@ return [
     'connections'     => [
         'mysql' => [
             // 数据库类型
-            'type'            => env('database.type', 'mysql'),
+            'type'            => 'mysql',
             // 服务器地址
-            'hostname'        => env('database.hostname', '127.0.0.1'),
+            'hostname'        => env('database.db_hostname', '127.0.0.1'),
             // 数据库名
-            'database'        => env('database.database', ''),
+            'database'        => env('database.db_database', ''),
             // 用户名
-            'username'        => env('database.username', 'root'),
+            'username'        => env('database.db_username', 'root'),
             // 密码
-            'password'        => env('database.password', ''),
+            'password'        => env('database.db_password', ''),
             // 端口
-            'hostport'        => env('database.hostport', '3306'),
+            'hostport'        => env('database.db_hostport', 3306),
             // 数据库连接参数
             'params'          => [],
             // 数据库编码默认采用utf8
-            'charset'         => env('database.charset', 'utf8mb4'),
+            'charset'         => env('database.db_charset', 'utf8mb4'),
             // 数据库表前缀
-            'prefix'          => env('database.prefix', 'cs_'),
+            'prefix'          => env('database.db_prefix', 'cs_'),
 
             // 数据库部署方式:0 集中式(单一服务器),1 分布式(主从服务器)
             'deploy'          => 0,

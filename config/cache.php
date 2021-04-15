@@ -49,13 +49,13 @@ return [
             // 驱动方式
             'type'       => 'Redis',
             // 服务器地址
-            'host'       => '127.0.0.1',
+            'host'       => env('redis.rdb_host', '127.0.0.1'),
             // 端口
-            'port'       => 6379,
+            'port'       => env('redis.rdb_port', 6379),
             // 密码
-            'password'   => '',
+            'password'   => env('redis.rdb_password', ''),
             // 数据库索引号
-            'select'     => 0,
+            'select'     => env('redis.rdb_select', 0),
             // 连接超时
             'timeout'    => 0,
             // 缓存有效期 0表示永久缓存
@@ -63,7 +63,7 @@ return [
             // 是否持久化
             'persistent' => false,
             // 缓存前缀
-            'prefix'     => '',
+            'prefix'     => env('redis.rdb_prefix', 'cs_'),
             // 缓存标签前缀
             'tag_prefix' => 'tag:',
             // 序列化机制

@@ -126,7 +126,7 @@ class Index
             }
 
             // 缓存配置数据
-            $data['type'] = 'mysql';
+            $data['driver'] = 'mysql';
             Session::set('installData', $data);
 
             // 数据库检测

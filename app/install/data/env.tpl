@@ -5,17 +5,24 @@ API_DEBUG = false
 DEFAULT_TIMEZONE = Asia/Shanghai
 
 [DATABASE]
-TYPE = '{type}'
-HOSTNAME = '{hostname}'
-DATABASE = '{database}'
-USERNAME = '{username}'
-PASSWORD = '{password}'
-HOSTPORT = {hostport}
-CHARSET = utf8mb4
-PREFIX = '{prefix}'
+DB_DRIVER = '{driver}'
+DB_HOSTNAME = '{hostname}'
+DB_DATABASE = '{database}'
+DB_USERNAME = '{username}'
+DB_PASSWORD = '{password}'
+DB_HOSTPORT = {hostport}
+DB_CHARSET = utf8mb4
+DB_PREFIX = '{prefix}'
+
+[REDIS]
+RDB_HOST = '127.0.0.1'
+RDB_PORT = 6379
+RDB_PASSWORD = ''
+RDB_SELECT = 0
+RDB_PREFIX = 'cs_'
 
 [LANG]
-default_lang = zh-cn
+DEFAULT_LANG = zh-cn
 
 [PAGINATE]
 LIST_ROWS = 15
