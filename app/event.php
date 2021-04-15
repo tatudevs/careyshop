@@ -10,11 +10,11 @@
 
 return [
     // 绑定事件
-    'bind' => [
+    'bind'      => [
     ],
 
     // 监听事件
-    'listen' => [
+    'listen'    => [
         'AppInit'  => [],
         'HttpRun'  => [],
         'HttpEnd'  => [],
