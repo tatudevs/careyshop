@@ -322,6 +322,12 @@ class Upload extends UploadBase
             $ossResult = $storageDb->toArray();
         }
 
+        // 获取实际物理路径
+        if ($this->request->param('x:is_actual', false)) {
+            $actualPath = $fileDriver->path($savename);
+            $ossResult['path'] = str_replace(is_windows() ? '/' : '\\', DS, $actualPath);
+        }
+
         $ossResult['oss'] = Config::get('careyshop.upload.oss');
         return $ossResult;
     }

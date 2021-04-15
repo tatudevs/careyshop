@@ -132,8 +132,5 @@ class Storage extends CareyShop
         'clear_cover'    => [
             'storage_id' => 'require|integer|egt:0',
         ],
-        'path'           => [
-            'path' => 'require|max:255',
-        ],
     ];
 }
