@@ -21,11 +21,11 @@ class Notice
      * 发送短信
      * @access public
      * @param string $mobile 手机号码
-     * @param string $body   发送正文
+     * @param array  $body   发送正文
      * @param string $code   模板编号
      * @throws
      */
-    public static function sendSms(string $mobile, string $body, string $code)
+    public static function sendSms(string $mobile, array $body, string $code)
     {
         // 获取配置信息
         $setting = json_decode(Config::get('careyshop.notice.sms'), true);
@@ -35,7 +35,7 @@ class Notice
             'PhoneNumbers'  => $mobile,
             'SignName'      => $setting['sign']['value'],
             'TemplateCode'  => $code,
-            'TemplateParam' => $body,
+            'TemplateParam' => json_encode($body, JSON_UNESCAPED_UNICODE),
         ];
 
         AlibabaCloud::accessKeyClient($setting['key_id']['value'], $setting['key_secret']['value'])
