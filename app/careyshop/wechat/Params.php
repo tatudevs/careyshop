@@ -43,9 +43,9 @@ class Params implements ArrayAccess
      * @param mixed $offset
      * @return mixed
      */
-    public function offsetGet($offset): ?string
+    public function offsetGet($offset)
     {
-        return $this->data[$offset] ?? '';
+        return $this->data[$offset] ?? null;
     }
 
     /**

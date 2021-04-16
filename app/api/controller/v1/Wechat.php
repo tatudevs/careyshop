@@ -232,6 +232,8 @@ class Wechat extends CareyShop
             'get.official_account.template.list'     => ['getTemplateList', Template::class],
             // 删除一个指定模板
             'del.official_account.template.item'     => ['delTemplateItem', Template::class],
+            // 发送消息模板
+            'send.official_account.template.item'    => ['sendTemplateItem', Template::class],
         ]);
     }
 

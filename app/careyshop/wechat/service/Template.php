@@ -180,4 +180,27 @@ class Template extends CareyShop
 
         return true;
     }
+
+    /**
+     * 发送消息模板
+     * @access public
+     * @return bool
+     * @throws
+     */
+    public function sendTemplateItem(): bool
+    {
+        $this->getApp('template_message')->send([
+            'touser'      => $this->params['open_id'],
+            'template_id' => $this->params['template_id'],
+            'url'         => $this->params['url'],
+            'miniprogram' => $this->params['miniprogram'] ?? [],
+            'data'        => $this->params['data'],
+        ]);
+
+        if (isset($result['errcode']) && $result['errcode'] != 0) {
+            return $this->setError($result['errmsg']);
+        }
+
+        return true;
+    }
 }
