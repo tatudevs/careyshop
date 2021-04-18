@@ -19,7 +19,7 @@ class PlaceOauth extends CareyShop
     protected $rule = [
         'place_oauth_id' => 'integer|gt:0',
         'name'           => 'require|max:16',
-        'model'          => 'require|max:16|checkModule:oauth',
+        'module'         => 'require|max:16|checkModule:oauth',
         'place_id'       => 'require|integer|gt:0',
         'client_id'      => 'require|max:32',
         'client_secret'  => 'require|max:128',
@@ -37,7 +37,7 @@ class PlaceOauth extends CareyShop
     protected $field = [
         'place_oauth_id' => '授权机制编号',
         'name'           => '授权名称',
-        'model'          => '所属模块',
+        'module'         => '所属模块',
         'place_id'       => '对应渠道',
         'client_id'      => 'ClientId',
         'client_secret'  => 'ClientSecret',
@@ -56,7 +56,7 @@ class PlaceOauth extends CareyShop
         'set'    => [
             'place_oauth_id' => 'require|integer|gt:0',
             'name',
-            'model',
+            'module',
             'client_id',
             'client_secret',
             'config',

@@ -29,7 +29,7 @@ class Place extends CareyShop
         'place_id',
         'code',
         'platform',
-        'model',
+        'module',
     ];
 
     /**
@@ -130,7 +130,7 @@ class Place extends CareyShop
                 $setting = [];
         }
 
-        if (!array_key_exists($data['model'], $setting)) {
+        if (!array_key_exists($data['module'], $setting)) {
             return $this->setError('配置结构不存在');
         }
 
@@ -145,7 +145,7 @@ class Place extends CareyShop
             return $value;
         };
 
-        return $filter($setting[$data['model']]);
+        return $filter($setting[$data['module']]);
     }
 
     /**
@@ -178,7 +178,7 @@ class Place extends CareyShop
         // 额外需要处理的数据(预留其余平台与模块)
         switch ($source['platform']) {
             case 'wechat':
-                switch ($source['model']) {
+                switch ($source['module']) {
                     case 'official_account':
                         if (!empty($source['code']) && empty($source['setting']['url']['value'])) {
                             $vars = [
@@ -259,7 +259,7 @@ class Place extends CareyShop
             // 对请求参数进行补齐
             $data['code'] = $result->getAttr('code');
             $data['platform'] = $result->getAttr('platform');
-            $data['model'] = $result->getAttr('model');
+            $data['module'] = $result->getAttr('module');
 
             if (!($data['setting'] = $this->refactorSetting($data))) {
                 return false;
@@ -305,7 +305,7 @@ class Place extends CareyShop
         // 搜索条件
         $map = [];
         empty($data['name']) ?: $map[] = ['name', 'like', '%' . $data['name'] . '%'];
-        empty($data['platform']) ?: $map[] = ['platform', '=', $data['model']];
+        empty($data['platform']) ?: $map[] = ['platform', '=', $data['module']];
         empty($data['code']) ?: $map[] = ['code', '=', $data['code']];
         is_empty_parm($data['status']) ?: $map[] = ['status', '=', $data['status']];
 
@@ -396,7 +396,7 @@ class Place extends CareyShop
 
         $oauthDB = new PlaceOauth();
         return $oauthDB->cache(true, null, 'oauth')
-            ->field('name,model,place_oauth_id,logo,icon')
+            ->field('name,module,place_oauth_id,logo,icon')
             ->withAttr('authorize', $attr)
             ->where($map)
             ->select()

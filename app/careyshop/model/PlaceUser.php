@@ -40,7 +40,7 @@ class PlaceUser extends CareyShop
         'user_id',
         'username',
         'place_oauth_id',
-        'model',
+        'module',
         'openid',
     ];
 

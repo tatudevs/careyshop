@@ -21,7 +21,7 @@ class Place extends CareyShop
         'name'        => 'require|max:30|unique:place,name,0,place_id',
         'code'        => 'integer|max:8',
         'platform'    => 'require|max:50',
-        'model'       => 'require|max:50',
+        'module'      => 'require|max:50',
         'setting'     => 'require|array',
         'expand'      => 'array',
         'remark'      => 'max:255',
@@ -41,7 +41,7 @@ class Place extends CareyShop
         'name'        => '渠道平台名称',
         'code'        => '渠道平台识别码',
         'platform'    => '所属平台',
-        'model'       => '所属模块',
+        'module'      => '所属模块',
         'setting'     => '渠道平台配置',
         'expand'      => '渠道平台扩展',
         'remark'      => '渠道平台备注',
@@ -59,7 +59,7 @@ class Place extends CareyShop
     protected $scene = [
         'setting' => [
             'platform',
-            'model',
+            'module',
             'code',
         ],
         'set'     => [

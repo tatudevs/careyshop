@@ -19,10 +19,10 @@ use think\facade\Db;
 class PlaceOauth extends CareyShop
 {
     /**
-     * 对应模型
+     * 对应模块
      * @var string
      */
-    protected string $model = '';
+    protected string $module = '';
 
     /**
      * 配置参数
@@ -64,11 +64,11 @@ class PlaceOauth extends CareyShop
         }
 
         $this->params = $data;
-        $this->model = $config['model'];
+        $this->module = $config['module'];
         $this->basics = $config['basics'];
         $this->config = $config['config'];
 
-        $this->socialite = new SocialiteManager([$this->model => $this->basics]);
+        $this->socialite = new SocialiteManager([$this->module => $this->basics]);
         return true;
     }
 
@@ -126,7 +126,7 @@ class PlaceOauth extends CareyShop
         try {
             // 获取渠道用户
             $userMap[] = ['place_oauth_id', '=', $this->params['place_oauth_id']];
-            $userMap[] = ['model', '=', $this->model];
+            $userMap[] = ['module', '=', $this->module];
             $userMap[] = ['openid', '=', $oauthUser->getId()];
 
             $userDB = new \app\careyshop\model\User();
@@ -155,7 +155,7 @@ class PlaceOauth extends CareyShop
                 'user_id'        => $userDB->getAttr('user_id'),
                 'username'       => $userDB->getAttr('username'),
                 'place_oauth_id' => $this->params['place_oauth_id'],
-                'model'          => $this->model,
+                'module'         => $this->module,
                 'openid'         => $oauthUser->getId(),
                 'raw'            => $oauthUser->getRaw(),
                 'access_token'   => $oauthUser->getAccessToken(),
@@ -198,7 +198,7 @@ class PlaceOauth extends CareyShop
      */
     private function getAuthorize(): string
     {
-        switch ($this->model) {
+        switch ($this->module) {
             case 'wechat':
                 return $this->getWeChatRedirect();
 
@@ -264,7 +264,7 @@ class PlaceOauth extends CareyShop
     {
         return $this
             ->socialite
-            ->create($this->model)
+            ->create($this->module)
             ->redirect();
     }
 
@@ -275,7 +275,7 @@ class PlaceOauth extends CareyShop
      */
     private function getCallback()
     {
-        switch ($this->model) {
+        switch ($this->module) {
             case 'douyin':
                 // 预留,如有需要可以像"回调准备"那样实现区分处理
             default:
@@ -292,7 +292,7 @@ class PlaceOauth extends CareyShop
     {
         return $this
             ->socialite
-            ->create($this->model)
+            ->create($this->module)
             ->userFromCode($this->params['code']);
     }
 }

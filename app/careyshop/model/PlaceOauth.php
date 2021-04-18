@@ -170,7 +170,7 @@ class PlaceOauth extends CareyShop
         }
 
         $map[] = ['place_oauth_id', '=', $data['place_oauth_id']];
-        $result = $this->where($map)->field('model,client_id,client_secret,config,expand')->find();
+        $result = $this->where($map)->field('module,client_id,client_secret,config,expand')->find();
 
         if (is_null($result)) {
             return $this->setError('OAuth模型不存在或已停用');
@@ -179,7 +179,7 @@ class PlaceOauth extends CareyShop
         // 提取配置并尝试合并扩展配置
         $config = @json_decode($result->getAttr('config'), true);
         $expand = @json_decode($result->getAttr('expand'), true);
-        $basics = $result->hidden(['model', 'expand', 'config'])->toArray();
+        $basics = $result->hidden(['module', 'expand', 'config'])->toArray();
 
         if (is_array($expand)) {
             $basics = array_merge($expand, $basics);
@@ -199,7 +199,7 @@ class PlaceOauth extends CareyShop
         return [
             'basics' => $basics,
             'config' => $config,
-            'model'  => $result->getAttr('model'),
+            'module' => $result->getAttr('module'),
         ];
     }
 }

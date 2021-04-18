@@ -47,8 +47,8 @@ return [
     // 渠道平台
     'place'        => [
         'wechat' => [
-            'name'  => '微信',
-            'model' => [
+            'name'   => '微信',
+            'module' => [
                 'official_account' => '公众号',
             ],
         ],
