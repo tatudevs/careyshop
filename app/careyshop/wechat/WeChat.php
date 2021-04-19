@@ -74,7 +74,7 @@ class WeChat
      * 对应模块
      * @var string[]
      */
-    private array $models = [
+    private array $modules = [
         'official_account' => OfficialAccount::class,
         'work'             => Work::class,
         'mini_program'     => MiniProgram::class,
@@ -123,11 +123,11 @@ class WeChat
         }
 
         // 实例化对应模块
-        if (!array_key_exists($setting['model'], $this->models)) {
-            throw new \Exception("Wechat模型 {$setting['model']} 不存在");
+        if (!array_key_exists($setting['module'], $this->modules)) {
+            throw new \Exception("Wechat模型 {$setting['module']} 不存在");
         }
 
-        $this->app = new $this->models[$setting['model']]($this->setting);
+        $this->app = new $this->modules[$setting['module']]($this->setting);
         $this->app->rebind('cache', app(\app\careyshop\wechat\Cache::class));
     }
 
