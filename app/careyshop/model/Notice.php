@@ -33,7 +33,7 @@ class Notice extends CareyShop
     protected $readonly = [
         'notice_id',
         'place_id',
-        'platform',
+        'notice_event_id',
         'type',
     ];
 
@@ -42,9 +42,10 @@ class Notice extends CareyShop
      * @var string[]
      */
     protected $type = [
-        'notice_id' => 'integer',
-        'place_id'  => 'integer',
-        'expand'    => 'array',
-        'status'    => 'integer',
+        'notice_id'       => 'integer',
+        'place_id'        => 'integer',
+        'notice_event_id' => 'integer',
+        'expand'          => 'array',
+        'status'          => 'integer',
     ];
 }

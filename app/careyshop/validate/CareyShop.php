@@ -190,6 +190,7 @@ class CareyShop extends Validate
 
             case 'oauth':
                 $moduleList = config('extra.oauth2');
+                $moduleList['system'] = '系统';
                 break;
 
             default:
