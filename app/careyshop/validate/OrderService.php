@@ -162,7 +162,7 @@ class OrderService extends CareyShop
         'agree'          => [
             'service_no' => 'require|max:50',
         ],
-        'refused'        => [
+        'refuse'         => [
             'service_no' => 'require|max:50',
             'result'     => 'require|max:100',
         ],

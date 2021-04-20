@@ -43,7 +43,7 @@ class OrderService extends CareyShop
             // 同意(接收)一个售后服务单
             'set.order.service.agree'    => ['setOrderServiceAgree'],
             // 拒绝一个售后服务单
-            'set.order.service.refused'  => ['setOrderServiceRefused'],
+            'set.order.service.refuse'   => ['setOrderServiceRefuse'],
             // 设置退换货、维修商品是否寄还商家
             'set.order.service.sendback' => ['setOrderServiceSendback'],
             // 买家上报换货、维修后的快递单号,并填写商家寄回时需要的信息

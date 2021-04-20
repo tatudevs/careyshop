@@ -945,9 +945,9 @@ class OrderService extends CareyShop
      * @return mixed
      * @throws
      */
-    public function setOrderServiceRefused(array $data)
+    public function setOrderServiceRefuse(array $data)
     {
-        if (!$this->validateData($data, 'refused')) {
+        if (!$this->validateData($data, 'refuse')) {
             return false;
         }
 
