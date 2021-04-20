@@ -24,5 +24,13 @@ return [
 
     // 订阅事件
     'subscribe' => [
+        \app\careyshop\event\subscribe\Ask::class,
+        \app\careyshop\event\subscribe\CardUse::class,
+        \app\careyshop\event\subscribe\Goods::class,
+        \app\careyshop\event\subscribe\Invoice::class,
+        \app\careyshop\event\subscribe\Order::class,
+        \app\careyshop\event\subscribe\OrderService::class,
+        \app\careyshop\event\subscribe\User::class,
+        \app\careyshop\event\subscribe\Withdraw::class,
     ],
 ];

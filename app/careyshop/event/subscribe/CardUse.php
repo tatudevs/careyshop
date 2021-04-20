@@ -10,6 +10,16 @@
 
 namespace app\careyshop\event\subscribe;
 
+use think\Event;
+
 class CardUse
 {
+    /**
+     * 事件订阅
+     * @access public
+     * @param Event $event 事件对象
+     */
+    public function subscribe(Event $event)
+    {
+    }
 }
