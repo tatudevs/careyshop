@@ -12,11 +12,7 @@ namespace payment;
 
 class Payment
 {
-    /**
-     * 错误信息
-     * @var string
-     */
-    protected string $error = '';
+    use \app\careyshop\concern\Error;
 
     /**
      * 同步返回URL
@@ -53,16 +49,6 @@ class Payment
      * @var string
      */
     protected string $body = '';
-
-    /**
-     * 返回错误信息
-     * @access public
-     * @return string
-     */
-    public function getError(): string
-    {
-        return $this->error;
-    }
 
     /**
      * 设置同步返回URL

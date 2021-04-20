@@ -14,17 +14,8 @@ use think\Request;
 
 abstract class Upload
 {
-    /**
-     * 控制器版本号
-     * @var string
-     */
-    protected string $version = 'v1';
-
-    /**
-     * 错误信息
-     * @var string
-     */
-    protected string $error = '';
+    use \app\careyshop\concern\Base;
+    use \app\careyshop\concern\Error;
 
     /**
      * Request 实例
@@ -68,28 +59,6 @@ abstract class Upload
      */
     public function initialize()
     {
-    }
-
-    /**
-     * 返回错误信息
-     * @access public
-     * @return string
-     */
-    public function getError(): string
-    {
-        return $this->error;
-    }
-
-    /**
-     * 设置错误信息
-     * @access public
-     * @param string $error 错误信息
-     * @return false
-     */
-    public function setError(string $error)
-    {
-        $this->error = $error;
-        return false;
     }
 
     /**
