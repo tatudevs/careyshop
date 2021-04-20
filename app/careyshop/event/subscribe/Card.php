@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    购物卡使用事件订阅
+ * CareyShop    购物卡事件订阅
  *
  * @author      zxm <252404501@qq.com>
  * @date        2021/4/20
@@ -12,7 +12,7 @@ namespace app\careyshop\event\subscribe;
 
 use think\Event;
 
-class CardUse
+class Card
 {
     /**
      * 事件订阅
@@ -21,5 +21,9 @@ class CardUse
      */
     public function subscribe(Event $event)
     {
+        // 金额增加
+        $event->listen('IncMoney', [$this, 'onIncMoney']);
+        // 金额减少
+        $event->listen('DecMoney', [$this, 'onDecMoney']);
     }
 }

@@ -21,5 +21,9 @@ class Invoice
      */
     public function subscribe(Event $event)
     {
+        // 票据已开
+        $event->listen('CompleteInvoice', [$this, 'onCompleteInvoice']);
+        // 拒绝开票
+        $event->listen('RefuseInvoice', [$this, 'onRefuseInvoice']);
     }
 }

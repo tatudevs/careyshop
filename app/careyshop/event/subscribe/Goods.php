@@ -21,5 +21,11 @@ class Goods
      */
     public function subscribe(Event $event)
     {
+        // 咨询被客服回复
+        $event->listen('ServiceReplyConsult', [$this, 'onServiceReplyConsult']);
+        // 评价被顾客咨询
+        $event->listen('CustomerAdvisoryComment', [$this, 'onCustomerAdvisoryComment']);
+        // 评价被客服回复
+        $event->listen('ServiceReplyComment', [$this, 'onServiceReplyComment']);
     }
 }

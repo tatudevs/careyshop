@@ -21,5 +21,15 @@ class Withdraw
      */
     public function subscribe(Event $event)
     {
+        // 申请提现
+        $event->listen('ApplyWithdraw', [$this, 'onApplyWithdraw']);
+        // 取消提现
+        $event->listen('CancelWithdraw', [$this, 'onCancelWithdraw']);
+        // 处理提现
+        $event->listen('ProcessWithdraw', [$this, 'onProcessWithdraw']);
+        // 完成提现
+        $event->listen('CompleteWithdraw', [$this, 'onCompleteWithdraw']);
+        // 拒绝提现
+        $event->listen('RefuseWithdraw', [$this, 'onRefuseWithdraw']);
     }
 }

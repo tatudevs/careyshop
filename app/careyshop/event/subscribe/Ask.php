@@ -21,5 +21,7 @@ class Ask
      */
     public function subscribe(Event $event)
     {
+        // 提问被回复
+        $event->listen('ReplyAsk', [$this, 'onReplyAsk']);
     }
 }

@@ -21,5 +21,15 @@ class User
      */
     public function subscribe(Event $event)
     {
+        // 账号登录
+        $event->listen('UserLogin', [$this, 'onUserLogin']);
+        // 账号注册
+        $event->listen('UserRegister', [$this, 'onUserRegister']);
+        // 修改密码
+        $event->listen('ChangePassword', [$this, 'onChangePassword']);
+        // 余额增加
+        $event->listen('IncBalance', [$this, 'onIncBalance']);
+        // 余额减少
+        $event->listen('DecBalance', [$this, 'onDecBalance']);
     }
 }
