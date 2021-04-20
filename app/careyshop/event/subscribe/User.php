@@ -15,6 +15,51 @@ use think\Event;
 class User
 {
     /**
+     * 账号登录事件触发
+     * @access public
+     * @param array $userData 账号数据
+     */
+    public function onUserLogin(array $userData)
+    {
+    }
+
+    /**
+     * 账号注册事件触发
+     * @access public
+     * @param array $userData 账号数据
+     */
+    public function onUserRegister(array $userData)
+    {
+    }
+
+    /**
+     * 修改密码事件触发
+     * @access public
+     * @param array $userData 账号数据
+     */
+    public function onChangePassword(array $userData)
+    {
+    }
+
+    /**
+     * 余额增加事件触发
+     * @access public
+     * @param array $moneyData 资金变动数据
+     */
+    public function onIncBalance(array $moneyData)
+    {
+    }
+
+    /**
+     * 余额减少事件触发
+     * @access public
+     * @param array $moneyData 资金变动数据
+     */
+    public function onDecBalance(array $moneyData)
+    {
+    }
+
+    /**
      * 事件订阅
      * @access public
      * @param Event $event 事件对象

@@ -12,6 +12,7 @@ namespace app\careyshop\model;
 
 use careyshop\Ip2Region;
 use think\facade\Cache;
+use think\facade\Event;
 
 class User extends CareyShop
 {
@@ -228,6 +229,8 @@ class User extends CareyShop
             $this->hasUserMoney()->save([]);
 
             $this->commit();
+            Event::trigger('UserRegister', $this->toArray());
+
             return true;
         } catch (\Exception $e) {
             $this->rollback();
@@ -330,8 +333,9 @@ class User extends CareyShop
         $result->setAttr('password', $data['password']);
         $result->save();
 
-        Cache::tag('token:user_' . $userId)->clear();
         $this->hasToken()->where(['client_id' => $userId, 'client_type' => 0])->delete();
+        Cache::tag('token:user_' . $userId)->clear();
+        Event::trigger('ChangePassword', $result->toArray());
 
         return true;
     }
@@ -491,7 +495,7 @@ class User extends CareyShop
      * @access public
      * @param array $data       外部数据
      * @param bool  $isGetToken 是否需要返回Token
-     * @param bool  $isInline  是否内联登录(不需要验证码与密码)
+     * @param bool  $isInline   是否内联登录(不需要验证码与密码)
      * @return array|false
      * @throws
      */
@@ -541,17 +545,20 @@ class User extends CareyShop
         $data['last_ip'] = $request->ip();
         unset($data['user_id']);
         $result->allowField(['last_login', 'last_ip'])->save($data);
+        $userData = $result->toArray();
 
         if (!$isGetToken) {
-            return ['user' => $result->toArray()];
+            return ['user' => $userData];
         }
 
-        $userId = $result->getAttr('user_id');
-        $groupId = $result->getAttr('group_id');
+        $userId = $userData['user_id'];
+        $groupId = $userData['group_id'];
         $tokenResult = Token::setToken($userId, $groupId, 0, $data['username'], $data['platform']);
 
-        Cache::tag('token:user_' . $result->getAttr('user_id'))->clear();
-        return ['user' => $result->toArray(), 'token' => $tokenResult];
+        Cache::tag('token:user_' . $userData['user_id'])->clear();
+        Event::trigger('UserLogin', $userData);
+
+        return ['user' => $userData, 'token' => $tokenResult];
     }
 
     /**

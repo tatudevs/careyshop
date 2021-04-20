@@ -10,6 +10,8 @@
 
 namespace app\careyshop\model;
 
+use think\facade\Event;
+
 class UserMoney extends CareyShop
 {
     /**
@@ -58,7 +60,8 @@ class UserMoney extends CareyShop
         $map[] = ['user_id', '=', $clientId];
 
         // 查询可用余额是否充足
-        if (bccomp($this->where($map)->value('balance', 0), $value, 2) === -1) {
+        $balance = $this->where($map)->value('balance', 0);
+        if (bccomp($balance, $value, 2) === -1) {
             return $this->setError('账号可用余额不足');
         }
 
@@ -66,6 +69,15 @@ class UserMoney extends CareyShop
             return false;
         }
 
+        // 订阅事件
+        $subscribe = [
+            'user_id' => $clientId,
+            'initial' => $balance,
+            'money'   => $value,
+            'balance' => $balance - $value,
+        ];
+
+        Event::trigger('DecBalance', $subscribe);
         return true;
     }
 
@@ -86,7 +98,8 @@ class UserMoney extends CareyShop
         $map[] = ['user_id', '=', $clientId];
 
         // 查询锁定余额是否充足
-        if (bccomp($this->where($map)->value('lock_balance', 0), $value, 2) === -1) {
+        $result = $this->field('balance,lock_balance')->where($map)->findOrFail();
+        if (bccomp($result->getAttr('lock_balance'), $value, 2) === -1) {
             return $this->setError('账号锁定余额不足');
         }
 
@@ -94,6 +107,15 @@ class UserMoney extends CareyShop
             return false;
         }
 
+        // 订阅事件
+        $subscribe = [
+            'user_id' => $clientId,
+            'initial' => $result->getAttr('balance'),
+            'money'   => $value,
+            'balance' => $result->getAttr('balance') + $value,
+        ];
+
+        Event::trigger('IncBalance', $subscribe);
         return true;
     }
 
@@ -225,8 +247,20 @@ class UserMoney extends CareyShop
         // 查询条件
         $map[] = ['user_id', '=', $clientId];
 
+        // 获取余额
+        $balance = $this->where($map)->value('balance', 0);
+
+        // 订阅事件
+        $subscribe = [
+            'user_id' => $clientId,
+            'initial' => $balance,
+            'money'   => $value,
+            'balance' => $value > 0 ? $balance + $value : $balance - $value,
+        ];
+
         if ($value > 0) {
             if ($this->where($map)->inc('balance', $value)->update()) {
+                Event::trigger('IncBalance', $subscribe);
                 return true;
             }
         } else {
@@ -235,6 +269,7 @@ class UserMoney extends CareyShop
             }
 
             if ($this->where($map)->dec('balance', -$value)->update()) {
+                Event::trigger('DecBalance', $subscribe);
                 return true;
             }
         }
