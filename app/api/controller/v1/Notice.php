@@ -23,8 +23,20 @@ class Notice extends CareyShop
     protected static function initMethod()
     {
         self::$route = [
+            // 添加一个通知模板
+            'add.notice.item'   => ['addNoticeItem'],
+            // 编辑一个通知模板
+            'set.notice.item'   => ['setNoticeItem'],
+            // 批量删除通知模板
+            'del.notice.list'   => ['delNoticeList'],
+            // 获取一个通知模板
+            'get.notice.item'   => ['getNoticeItem'],
+            // 获取通知模板列表
+            'get.notice.list'   => ['getNoticeList'],
+            // 批量设置模板状态
+            'set.notice.status' => ['setNoticeStatus'],
             // 根据渠道获取事件列表
-            'get.notice.event' => ['getNoticeEvent', \app\careyshop\model\NoticeEvent::class],
+            'get.notice.event'  => ['getNoticeEvent', \app\careyshop\model\NoticeEvent::class],
         ];
     }
 }
