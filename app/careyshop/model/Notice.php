@@ -34,6 +34,7 @@ class Notice extends CareyShop
         'notice_id',
         'place_id',
         'notice_event_id',
+        'platform',
         'type',
     ];
 
