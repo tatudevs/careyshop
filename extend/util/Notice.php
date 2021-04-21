@@ -32,6 +32,9 @@ class Notice
     {
         // 获取配置信息
         $setting = json_decode(Config::get('careyshop.notice.sms'), true);
+        if ($setting['status']['value'] <= 0) {
+            return;
+        }
 
         // 加载区域结点配置
         \aliyun\core\Config::load();
@@ -73,6 +76,9 @@ class Notice
     {
         // 获取配置信息
         $setting = json_decode(Config::get('careyshop.notice.email'), true);
+        if ($setting['status']['value'] <= 0) {
+            return;
+        }
 
         // 设置PHPMailer
         $mail = new PHPMailer();

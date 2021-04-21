@@ -94,7 +94,7 @@ class Verification extends CareyShop
         $code = rand_number(6);
         $setting = json_decode(Config::get('careyshop.notice.' . $type), true);
 
-        if (1 != $setting['status']['value']) {
+        if ($setting['status']['value'] <= 0) {
             return $this->setError('通知系统' . ('sms' === $type ? '短信' : '邮件') . '已禁用');
         }
 

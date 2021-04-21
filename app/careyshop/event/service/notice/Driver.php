@@ -12,4 +12,16 @@ namespace app\careyshop\event\service\notice;
 
 abstract class Driver
 {
+    /**
+     * @var string 驱动名称
+     */
+    protected string $name;
+
+    /**
+     * 发送通知
+     * @access protected
+     * @param array $params 参数
+     * @return void
+     */
+    abstract protected function send(array $params);
 }
