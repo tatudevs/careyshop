@@ -66,16 +66,31 @@ class Notice
 
         // 生成发送实例并发送
         foreach ($result as $value) {
-            $sendData['notice'] = $value;
-            $value['place_id'] > 0 ? $this->sendPlatform($sendData) : $this->sendSystem($sendData);
+            $this->sendNotice($sendData, $value);
         }
     }
 
-    private function sendSystem(array $data)
+    /**
+     * 调用驱动模块分发通知
+     * @access private
+     * @param array $data   待用数据
+     * @param array $notice 通知数据
+     */
+    private function sendNotice(array $data, array $notice)
     {
-    }
+        // 命名空间
+        $namespace = __NAMESPACE__ . '\\driver\\';
+        $namespace .= Str::title($notice['platform']);
 
-    private function sendPlatform(array $data)
-    {
+        if (!class_exists($namespace)) {
+            return;
+        }
+
+        if (!method_exists($namespace, 'send')) {
+            return;
+        }
+
+        $data['notice'] = $notice;
+        call_user_func([$namespace, 'send'], $data);
     }
 }

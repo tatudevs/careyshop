@@ -15,4 +15,7 @@ use app\careyshop\event\service\notice\Driver;
 
 class System extends Driver
 {
+    public function send(array $params)
+    {
+    }
 }
