@@ -10,53 +10,59 @@
 
 namespace app\careyshop\event\subscribe;
 
+use app\careyshop\event\service\notice\Notice;
 use think\Event;
 
-class User
+class User extends Base
 {
     /**
      * 账号登录事件触发
      * @access public
-     * @param array $userData 账号数据
+     * @param array $user 账号数据
      */
-    public function onUserLogin(array $userData)
+    public function onUserLogin(array $user)
     {
+        Notice::instance()->send($user, self::EVENT_USER_LOGIN);
     }
 
     /**
      * 账号注册事件触发
      * @access public
-     * @param array $userData 账号数据
+     * @param array $user 账号数据
      */
-    public function onUserRegister(array $userData)
+    public function onUserRegister(array $user)
     {
+        Notice::instance()->send($user, self::EVENT_USER_REGISTER);
     }
 
     /**
      * 修改密码事件触发
      * @access public
-     * @param array $userData 账号数据
+     * @param array $user 账号数据
      */
-    public function onChangePassword(array $userData)
+    public function onChangePassword(array $user)
     {
+        Notice::instance()->send($user, self::EVENT_CHANGE_PASSWORD);
     }
 
     /**
      * 余额增加事件触发
      * @access public
-     * @param array $moneyData 资金变动数据
+     * @param array $money 资金变动数据
      */
-    public function onIncBalance(array $moneyData)
+    public function onIncBalance(array $money)
     {
+        Notice::instance()->send($money, self::EVENT_INC_BALANCE);
     }
 
     /**
      * 余额减少事件触发
      * @access public
-     * @param array $moneyData 资金变动数据
+     * @param array $money 资金变动数据
      */
-    public function onDecBalance(array $moneyData)
+    public function onDecBalance(array $money)
     {
+        Notice::instance()->send($money, self::EVENT_DEC_BALANCE);
     }
 
     /**

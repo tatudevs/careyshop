@@ -71,8 +71,5 @@ class Notice extends CareyShop
             'notice_id' => 'require|arrayHasOnlyInts',
             'status'    => 'require|in:0,1',
         ],
-        'event'  => [
-            'platform',
-        ],
     ];
 }

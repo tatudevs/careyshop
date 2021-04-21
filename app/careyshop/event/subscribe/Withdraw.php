@@ -12,7 +12,7 @@ namespace app\careyshop\event\subscribe;
 
 use think\Event;
 
-class Withdraw
+class Withdraw extends Base
 {
     /**
      * 事件订阅

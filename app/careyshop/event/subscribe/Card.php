@@ -12,7 +12,7 @@ namespace app\careyshop\event\subscribe;
 
 use think\Event;
 
-class Card
+class Card extends Base
 {
     /**
      * 事件订阅

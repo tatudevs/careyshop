@@ -10,8 +10,6 @@
 
 namespace app\careyshop\model;
 
-use app\careyshop\validate\Notice as Validate;
-
 class NoticeEvent extends CareyShop
 {
     /**
@@ -27,7 +25,6 @@ class NoticeEvent extends CareyShop
     protected $readonly = [
         'notice_event_id',
         'parent_id',
-        'platform',
         'name',
     ];
 
@@ -43,18 +40,12 @@ class NoticeEvent extends CareyShop
     /**
      * 根据渠道获取事件列表
      * @access public
-     * @param array $data 外部数据
-     * @return array|false
+     * @return array
      * @throws
      */
-    public function getNoticeEvent(array $data)
+    public function getNoticeEvent(): array
     {
-        if (!$this->validateData($data, 'event', false, Validate::class)) {
-            return false;
-        }
-
-        return self::where('platform', '=', $data['platform'])
-            ->cache('NoticeEvent')
+        return self::cache('NoticeEvent')
             ->order(['notice_event_id' => 'asc'])
             ->select()
             ->toArray();
