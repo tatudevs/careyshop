@@ -1,151 +1,5 @@
 [
     {
-        "name": "adbario/php-dot-notation",
-        "version": "2.2.0",
-        "version_normalized": "2.2.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/adbario/php-dot-notation.git",
-            "reference": "eee4fc81296531e6aafba4c2bbccfc5adab1676e"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/adbario/php-dot-notation/zipball/eee4fc81296531e6aafba4c2bbccfc5adab1676e",
-            "reference": "eee4fc81296531e6aafba4c2bbccfc5adab1676e",
-            "shasum": "",
-            "mirrors": [
-                {
-                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                    "preferred": true
-                }
-            ]
-        },
-        "require": {
-            "ext-json": "*",
-            "php": ">=5.5"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.0|^5.0|^6.0",
-            "squizlabs/php_codesniffer": "^3.0"
-        },
-        "time": "2019-01-01T23:59:15+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "src/helpers.php"
-            ],
-            "psr-4": {
-                "Adbar\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Riku Särkinen",
-                "email": "riku@adbar.io"
-            }
-        ],
-        "description": "PHP dot notation access to arrays",
-        "homepage": "https://github.com/adbario/php-dot-notation",
-        "keywords": [
-            "ArrayAccess",
-            "dotnotation"
-        ]
-    },
-    {
-        "name": "alibabacloud/client",
-        "version": "1.5.30",
-        "version_normalized": "1.5.30.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/aliyun/openapi-sdk-php-client.git",
-            "reference": "1f497bb79835b84094318a70b672eb88260f2682"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/aliyun/openapi-sdk-php-client/zipball/1f497bb79835b84094318a70b672eb88260f2682",
-            "reference": "1f497bb79835b84094318a70b672eb88260f2682",
-            "shasum": "",
-            "mirrors": [
-                {
-                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                    "preferred": true
-                }
-            ]
-        },
-        "require": {
-            "adbario/php-dot-notation": "^2.2",
-            "clagiordano/weblibs-configmanager": "^1.0",
-            "danielstjules/stringy": "^3.1",
-            "ext-curl": "*",
-            "ext-json": "*",
-            "ext-libxml": "*",
-            "ext-mbstring": "*",
-            "ext-openssl": "*",
-            "ext-simplexml": "*",
-            "ext-xmlwriter": "*",
-            "guzzlehttp/guzzle": "^6.3|^7.0",
-            "mtdowling/jmespath.php": "^2.5",
-            "php": ">=5.5"
-        },
-        "require-dev": {
-            "composer/composer": "^1.8",
-            "drupal/coder": "^8.3",
-            "ext-dom": "*",
-            "ext-pcre": "*",
-            "ext-sockets": "*",
-            "ext-spl": "*",
-            "league/climate": "^3.2.4",
-            "mikey179/vfsstream": "^1.6",
-            "monolog/monolog": "^1.24",
-            "phpunit/phpunit": "^5.7.27",
-            "psr/cache": "^1.0",
-            "symfony/dotenv": "^3.4",
-            "symfony/var-dumper": "^3.4"
-        },
-        "suggest": {
-            "ext-sockets": "To use client-side monitoring"
-        },
-        "time": "2021-03-22T09:07:59+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "AlibabaCloud\\Client\\": "src"
-            },
-            "files": [
-                "src/Functions.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "authors": [
-            {
-                "name": "Alibaba Cloud SDK",
-                "email": "sdk-team@alibabacloud.com",
-                "homepage": "http://www.alibabacloud.com"
-            }
-        ],
-        "description": "Alibaba Cloud Client for PHP - Use Alibaba Cloud in your PHP project",
-        "homepage": "https://www.alibabacloud.com/",
-        "keywords": [
-            "alibaba",
-            "alibabacloud",
-            "aliyun",
-            "client",
-            "cloud",
-            "library",
-            "sdk",
-            "tool"
-        ]
-    },
-    {
         "name": "aliyuncs/oss-sdk-php",
         "version": "v2.4.1",
         "version_normalized": "2.4.1.0",
@@ -193,126 +47,6 @@
         ],
         "description": "Aliyun OSS SDK for PHP",
         "homepage": "http://www.aliyun.com/product/oss/"
-    },
-    {
-        "name": "clagiordano/weblibs-configmanager",
-        "version": "v1.1.0",
-        "version_normalized": "1.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/clagiordano/weblibs-configmanager.git",
-            "reference": "ecf584f5b3a27929175ff0abdba52f0131bef795"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/clagiordano/weblibs-configmanager/zipball/ecf584f5b3a27929175ff0abdba52f0131bef795",
-            "reference": "ecf584f5b3a27929175ff0abdba52f0131bef795",
-            "shasum": "",
-            "mirrors": [
-                {
-                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                    "preferred": true
-                }
-            ]
-        },
-        "require": {
-            "php": ">=5.4"
-        },
-        "require-dev": {
-            "clagiordano/phpunit-result-printer": "^1",
-            "phpunit/phpunit": "^4.8"
-        },
-        "time": "2020-07-20T20:39:25+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "clagiordano\\weblibs\\configmanager\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "Claudio Giordano",
-                "email": "claudio.giordano@autistici.org",
-                "role": "Developer"
-            }
-        ],
-        "description": "weblibs-configmanager is a tool library for easily read and access to php config array file and direct read/write configuration file / object",
-        "keywords": [
-            "clagiordano",
-            "configuration",
-            "manager",
-            "tool",
-            "weblibs"
-        ]
-    },
-    {
-        "name": "danielstjules/stringy",
-        "version": "3.1.0",
-        "version_normalized": "3.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/danielstjules/Stringy.git",
-            "reference": "df24ab62d2d8213bbbe88cc36fc35a4503b4bd7e"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/danielstjules/Stringy/zipball/df24ab62d2d8213bbbe88cc36fc35a4503b4bd7e",
-            "reference": "df24ab62d2d8213bbbe88cc36fc35a4503b4bd7e",
-            "shasum": "",
-            "mirrors": [
-                {
-                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                    "preferred": true
-                }
-            ]
-        },
-        "require": {
-            "php": ">=5.4.0",
-            "symfony/polyfill-mbstring": "~1.1"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.0"
-        },
-        "time": "2017-06-12T01:10:27+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Stringy\\": "src/"
-            },
-            "files": [
-                "src/Create.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Daniel St. Jules",
-                "email": "danielst.jules@gmail.com",
-                "homepage": "http://www.danielstjules.com"
-            }
-        ],
-        "description": "A string manipulation library with multibyte support",
-        "homepage": "https://github.com/danielstjules/Stringy",
-        "keywords": [
-            "UTF",
-            "helpers",
-            "manipulation",
-            "methods",
-            "multibyte",
-            "string",
-            "utf-8",
-            "utility",
-            "utils"
-        ]
     },
     {
         "name": "dnyz520/careyshop-barcode",
@@ -1362,71 +1096,6 @@
         ]
     },
     {
-        "name": "mtdowling/jmespath.php",
-        "version": "2.6.0",
-        "version_normalized": "2.6.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/jmespath/jmespath.php.git",
-            "reference": "42dae2cbd13154083ca6d70099692fef8ca84bfb"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jmespath/jmespath.php/zipball/42dae2cbd13154083ca6d70099692fef8ca84bfb",
-            "reference": "42dae2cbd13154083ca6d70099692fef8ca84bfb",
-            "shasum": "",
-            "mirrors": [
-                {
-                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                    "preferred": true
-                }
-            ]
-        },
-        "require": {
-            "php": "^5.4 || ^7.0 || ^8.0",
-            "symfony/polyfill-mbstring": "^1.17"
-        },
-        "require-dev": {
-            "composer/xdebug-handler": "^1.4",
-            "phpunit/phpunit": "^4.8.36 || ^7.5.15"
-        },
-        "time": "2020-07-31T21:01:56+00:00",
-        "bin": [
-            "bin/jp.php"
-        ],
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.6-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "JmesPath\\": "src/"
-            },
-            "files": [
-                "src/JmesPath.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Michael Dowling",
-                "email": "mtdowling@gmail.com",
-                "homepage": "https://github.com/mtdowling"
-            }
-        ],
-        "description": "Declaratively specify how to extract elements from a JSON document",
-        "keywords": [
-            "json",
-            "jsonpath"
-        ]
-    },
-    {
         "name": "overtrue/socialite",
         "version": "3.2.1",
         "version_normalized": "3.2.1.0",
@@ -2292,17 +1961,17 @@
     },
     {
         "name": "symfony/cache-contracts",
-        "version": "v2.2.0",
-        "version_normalized": "2.2.0.0",
+        "version": "v2.4.0",
+        "version_normalized": "2.4.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/cache-contracts.git",
-            "reference": "8034ca0b61d4dd967f3698aaa1da2507b631d0cb"
+            "reference": "c0446463729b89dd4fa62e9aeecc80287323615d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/8034ca0b61d4dd967f3698aaa1da2507b631d0cb",
-            "reference": "8034ca0b61d4dd967f3698aaa1da2507b631d0cb",
+            "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/c0446463729b89dd4fa62e9aeecc80287323615d",
+            "reference": "c0446463729b89dd4fa62e9aeecc80287323615d",
             "shasum": "",
             "mirrors": [
                 {
@@ -2313,16 +1982,16 @@
         },
         "require": {
             "php": ">=7.2.5",
-            "psr/cache": "^1.0"
+            "psr/cache": "^1.0|^2.0|^3.0"
         },
         "suggest": {
             "symfony/cache-implementation": ""
         },
-        "time": "2020-09-07T11:33:47+00:00",
+        "time": "2021-03-23T23:28:01+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.2-dev"
+                "dev-main": "2.4-dev"
             },
             "thanks": {
                 "name": "symfony/contracts",
@@ -2362,17 +2031,17 @@
     },
     {
         "name": "symfony/deprecation-contracts",
-        "version": "v2.2.0",
-        "version_normalized": "2.2.0.0",
+        "version": "v2.4.0",
+        "version_normalized": "2.4.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/deprecation-contracts.git",
-            "reference": "5fa56b4074d1ae755beb55617ddafe6f5d78f665"
+            "reference": "5f38c8804a9e97d23e0c8d63341088cd8a22d627"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/5fa56b4074d1ae755beb55617ddafe6f5d78f665",
-            "reference": "5fa56b4074d1ae755beb55617ddafe6f5d78f665",
+            "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/5f38c8804a9e97d23e0c8d63341088cd8a22d627",
+            "reference": "5f38c8804a9e97d23e0c8d63341088cd8a22d627",
             "shasum": "",
             "mirrors": [
                 {
@@ -2384,11 +2053,11 @@
         "require": {
             "php": ">=7.1"
         },
-        "time": "2020-09-07T11:33:47+00:00",
+        "time": "2021-03-23T23:28:01+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.2-dev"
+                "dev-main": "2.4-dev"
             },
             "thanks": {
                 "name": "symfony/contracts",
@@ -2496,17 +2165,17 @@
     },
     {
         "name": "symfony/event-dispatcher-contracts",
-        "version": "v2.2.0",
-        "version_normalized": "2.2.0.0",
+        "version": "v2.4.0",
+        "version_normalized": "2.4.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/event-dispatcher-contracts.git",
-            "reference": "0ba7d54483095a198fa51781bc608d17e84dffa2"
+            "reference": "69fee1ad2332a7cbab3aca13591953da9cdb7a11"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/event-dispatcher-contracts/zipball/0ba7d54483095a198fa51781bc608d17e84dffa2",
-            "reference": "0ba7d54483095a198fa51781bc608d17e84dffa2",
+            "url": "https://api.github.com/repos/symfony/event-dispatcher-contracts/zipball/69fee1ad2332a7cbab3aca13591953da9cdb7a11",
+            "reference": "69fee1ad2332a7cbab3aca13591953da9cdb7a11",
             "shasum": "",
             "mirrors": [
                 {
@@ -2522,11 +2191,11 @@
         "suggest": {
             "symfony/event-dispatcher-implementation": ""
         },
-        "time": "2020-09-07T11:33:47+00:00",
+        "time": "2021-03-23T23:28:01+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.2-dev"
+                "dev-main": "2.4-dev"
             },
             "thanks": {
                 "name": "symfony/contracts",
@@ -2920,17 +2589,17 @@
     },
     {
         "name": "symfony/service-contracts",
-        "version": "v2.2.0",
-        "version_normalized": "2.2.0.0",
+        "version": "v2.4.0",
+        "version_normalized": "2.4.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/service-contracts.git",
-            "reference": "d15da7ba4957ffb8f1747218be9e1a121fd298a1"
+            "reference": "f040a30e04b57fbcc9c6cbcf4dbaa96bd318b9bb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/service-contracts/zipball/d15da7ba4957ffb8f1747218be9e1a121fd298a1",
-            "reference": "d15da7ba4957ffb8f1747218be9e1a121fd298a1",
+            "url": "https://api.github.com/repos/symfony/service-contracts/zipball/f040a30e04b57fbcc9c6cbcf4dbaa96bd318b9bb",
+            "reference": "f040a30e04b57fbcc9c6cbcf4dbaa96bd318b9bb",
             "shasum": "",
             "mirrors": [
                 {
@@ -2941,16 +2610,16 @@
         },
         "require": {
             "php": ">=7.2.5",
-            "psr/container": "^1.0"
+            "psr/container": "^1.1"
         },
         "suggest": {
             "symfony/service-implementation": ""
         },
-        "time": "2020-09-07T11:33:47+00:00",
+        "time": "2021-04-01T10:43:52+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.2-dev"
+                "dev-main": "2.4-dev"
             },
             "thanks": {
                 "name": "symfony/contracts",

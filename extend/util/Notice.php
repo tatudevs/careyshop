@@ -10,7 +10,9 @@
 
 namespace util;
 
-use AlibabaCloud\Client\AlibabaCloud;
+use aliyun\core\DefaultAcsClient;
+use aliyun\core\profile\DefaultProfile;
+use aliyun\SendSmsRequest;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use think\facade\Config;
@@ -21,35 +23,43 @@ class Notice
      * 发送短信
      * @access public
      * @param string $mobile 手机号码
-     * @param array  $body   发送正文
+     * @param string $body   发送正文
      * @param string $code   模板编号
+     * @param mixed  $sign   短信签名
      * @throws
      */
-    public static function sendSms(string $mobile, array $body, string $code)
+    public static function sendSms(string $mobile, string $body, string $code, $sign = null)
     {
         // 获取配置信息
         $setting = json_decode(Config::get('careyshop.notice.sms'), true);
 
-        // 待发送数据
-        $data['query'] = [
-            'PhoneNumbers'  => $mobile,
-            'SignName'      => $setting['sign']['value'],
-            'TemplateCode'  => $code,
-            'TemplateParam' => json_encode($body, JSON_UNESCAPED_UNICODE),
-        ];
+        // 加载区域结点配置
+        \aliyun\core\Config::load();
 
-        AlibabaCloud::accessKeyClient($setting['key_id']['value'], $setting['key_secret']['value'])
-            ->regionId('cn-hangzhou')
-            ->asDefaultClient();
+        // 设置SMS
+        $product = 'Dysmsapi';
+        $domain = 'dysmsapi.aliyuncs.com';
+        $region = 'cn-hangzhou';
+        $endPointName = 'cn-hangzhou';
+        $keyId = $setting['key_id']['value'];
+        $keySecret = $setting['key_secret']['value'];
 
-        AlibabaCloud::rpc()
-            ->product('Dysmsapi')
-            ->version('2017-05-25')
-            ->action('SendSms')
-            ->method('POST')
-            ->host('dysmsapi.aliyuncs.com')
-            ->options($data)
-            ->request();
+        // 初始化用户Profile实例
+        $profile = DefaultProfile::getProfile($region, $keyId, $keySecret);
+
+        // 增加服务结点
+        DefaultProfile::addEndpoint($endPointName, $region, $product, $domain);
+
+        // 设置请求参数
+        $request = new SendSmsRequest();
+        $request->setPhoneNumbers($mobile);
+        $request->setSignName($sign ?? $setting['sign']['value']);
+        $request->setTemplateCode($code);
+        $request->setTemplateParam($body);
+
+        // 正式请求
+        $client = new DefaultAcsClient($profile);
+        $client->getAcsResponse($request);
     }
 
     /**

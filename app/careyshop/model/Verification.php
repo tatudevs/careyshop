@@ -115,7 +115,7 @@ class Verification extends CareyShop
 
         // 实际发送
         if ('sms' === $type) {
-            $body = ['number' => $code];
+            $body = json_encode(['number' => $code], JSON_UNESCAPED_UNICODE);
             \util\Notice::sendSms($number, $body, $setting['code']['value']);
         } else {
             $body = str_replace('${number}', $code, $setting['template']['value']);

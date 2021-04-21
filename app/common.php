@@ -299,7 +299,7 @@ if (!function_exists('xml_to_array')) {
      * @param mixed $xml 值
      * @return mixed|bool
      */
-    function xml_to_array($xml): ?bool
+    function xml_to_array($xml)
     {
         // 禁止引用外部xml实体
         $value = false;
