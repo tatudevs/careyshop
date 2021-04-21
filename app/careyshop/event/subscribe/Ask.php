@@ -10,10 +10,21 @@
 
 namespace app\careyshop\event\subscribe;
 
+use app\careyshop\event\service\notice\Notice;
 use think\Event;
 
 class Ask extends Base
 {
+    /**
+     * 提问被回复
+     * @access public
+     * @param array $ask 回复后的数据
+     */
+    public function onReplyAsk(array $ask)
+    {
+        Notice::instance()->send($ask, self::EVENT_REPLY_ASK);
+    }
+
     /**
      * 事件订阅
      * @access public

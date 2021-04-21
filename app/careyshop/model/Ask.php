@@ -10,6 +10,8 @@
 
 namespace app\careyshop\model;
 
+use think\facade\Event;
+
 class Ask extends CareyShop
 {
     /**
@@ -245,6 +247,7 @@ class Ask extends CareyShop
 
         $result = $this->addAskOrAnswer($data, false);
         if (false !== $result) {
+            Event::trigger('UserLogin', $result);
             return $result;
         }
 
