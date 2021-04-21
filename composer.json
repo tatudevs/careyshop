@@ -32,7 +32,7 @@
         "overtrue/wechat": "^5.0",
         "aliyuncs/oss-sdk-php": "^2.4",
         "qiniu/php-sdk": "^7.3",
-        "phpmailer/phpmailer": "^6.3"
+        "phpmailer/phpmailer": "^6.4"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2"
