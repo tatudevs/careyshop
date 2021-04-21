@@ -11,7 +11,6 @@
 namespace app\careyshop\concern;
 
 use think\exception\ValidateException;
-use think\helper\Str;
 use think\Model;
 
 trait Validate
@@ -70,18 +69,11 @@ trait Validate
      */
     private function getValidateClass(): string
     {
-        $dir = '\\validate\\' . basename(str_replace('\\', '/', static::class));
-        $pos = mb_strrpos(__NAMESPACE__, '\\');
-        $class = Str::substr(__NAMESPACE__, 0, $pos) . $dir;
-
-        /**
-         * 目前只从同级目录中检测是否存在"validate"
-         * 实际也可以同时再检测下"app\careyshop\validate"目录下是否存在规则
-         */
-        if (!class_exists($class)) {
-            throw new ValidateException("验证器 $class 不存在");
+        $namespace = '\\app\\careyshop\\validate\\' . basename(static::class);
+        if (!class_exists($namespace)) {
+            throw new ValidateException("验证器 $namespace 不存在");
         }
 
-        return $class;
+        return $namespace;
     }
 }

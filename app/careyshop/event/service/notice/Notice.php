@@ -12,6 +12,7 @@ namespace app\careyshop\event\service\notice;
 
 use app\careyshop\model\User;
 use app\careyshop\model\Notice as NoticeModel;
+use think\helper\Str;
 
 class Notice
 {
@@ -31,6 +32,13 @@ class Notice
         return self::$instance;
     }
 
+    /**
+     * 发送通知
+     * @access public
+     * @param array $data 由事件触发所得数据
+     * @param int   $code 事件编码
+     * @throws
+     */
     public function send(array $data, int $code)
     {
         if (empty($data['user_id']) && empty($data['admin_id'])) {
@@ -38,7 +46,7 @@ class Notice
         }
 
         // 待发送数据
-        $sendData = ['data' => $data, 'key' => $code];
+        $sendData = ['data' => $data, 'code' => $code];
 
         // 获取用户数据
         if (!empty($data['user_id'])) {
@@ -57,10 +65,17 @@ class Notice
             ->toArray();
 
         // 生成发送实例并发送
-        $namespace = __NAMESPACE__;
-        print_r($namespace);exit();
+        foreach ($result as $value) {
+            $sendData['notice'] = $value;
+            $value['place_id'] > 0 ? $this->sendPlatform($sendData) : $this->sendSystem($sendData);
+        }
+    }
 
-//        foreach ($result as $value) {
-//        }
+    private function sendSystem(array $data)
+    {
+    }
+
+    private function sendPlatform(array $data)
+    {
     }
 }
