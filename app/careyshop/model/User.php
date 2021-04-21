@@ -229,7 +229,7 @@ class User extends CareyShop
             $this->hasUserMoney()->save([]);
 
             $this->commit();
-            Event::trigger('UserRegister', $this->toArray());
+            Event::trigger('UserRegister', ['user_id' => $this->getAttr('user_id')]);
 
             return true;
         } catch (\Exception $e) {
@@ -335,7 +335,7 @@ class User extends CareyShop
 
         $this->hasToken()->where(['client_id' => $userId, 'client_type' => 0])->delete();
         Cache::tag('token:user_' . $userId)->clear();
-        Event::trigger('ChangePassword', $result->toArray());
+        Event::trigger('ChangePassword', ['user_id' => $userId]);
 
         return true;
     }
@@ -552,11 +552,10 @@ class User extends CareyShop
         }
 
         $userId = $userData['user_id'];
-        $groupId = $userData['group_id'];
-        $tokenResult = Token::setToken($userId, $groupId, 0, $data['username'], $data['platform']);
+        $tokenResult = Token::setToken($userId, $userData['group_id'], 0, $data['username'], $data['platform']);
 
-        Cache::tag('token:user_' . $userData['user_id'])->clear();
-        Event::trigger('UserLogin', $userData);
+        Cache::tag('token:user_' . $userId)->clear();
+        Event::trigger('UserLogin', ['user_id' => $userId]);
 
         return ['user' => $userData, 'token' => $tokenResult];
     }
