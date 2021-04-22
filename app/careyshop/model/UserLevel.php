@@ -116,9 +116,11 @@ class UserLevel extends CareyShop
         $this->startTrans();
 
         try {
-            if (!$result->save($data)) {
+            if ($result->save($data)) {
                 // 更新已存在的顾客数据
-                User::update(['level_icon' => $result->getAttr('icon')], $map);
+                User::withoutGlobalScope()
+                    ->where($map)
+                    ->update(['level_icon' => $result->getAttr('icon')]);
             }
 
             $this->commit();
