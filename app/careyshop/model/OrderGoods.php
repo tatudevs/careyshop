@@ -190,10 +190,10 @@ class OrderGoods extends CareyShop
                 'getOrder.order_no', 'getOrder.user_id', 'getOrder.create_user_id',
             ];
 
-            $temp = [$result->hidden($hidden)->toArray()];
-            self::keyToSnake(['getOrder'], $temp);
+            $returnData[] = $result->hidden($hidden)->toArray();
+            self::keyToSnake(['getOrder'], $returnData);
 
-            return $temp[0];
+            return $returnData[0];
         }
 
         return $result;

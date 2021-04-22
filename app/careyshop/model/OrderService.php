@@ -474,10 +474,10 @@ class OrderService extends CareyShop
                 $result->save();
             }
 
-            $temp = [$result->hidden($hidden)->toArray()];
-            self::keyToSnake(['getUser', 'getAdmin', 'getOrderGoods'], $temp);
+            $returnData[] = $result->hidden($hidden)->toArray();
+            self::keyToSnake(['getUser', 'getAdmin', 'getOrderGoods'], $returnData);
 
-            return $temp[0];
+            return $returnData[0];
         }
 
         return is_null($result) ? [] : false;

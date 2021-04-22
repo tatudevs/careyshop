@@ -735,10 +735,10 @@ class GoodsComment extends CareyShop
             $result['get_addition']->append(['ip_address_region']);
         }
 
-        $temp = [$result->append(['ip_address_region'])->toArray()];
-        self::keyToSnake(['getUser', 'getOrderGoods'], $temp);
+        $returnData[] = $result->append(['ip_address_region'])->toArray();
+        self::keyToSnake(['getUser', 'getOrderGoods'], $returnData);
 
-        return $temp[0];
+        return $returnData[0];
     }
 
     /**
