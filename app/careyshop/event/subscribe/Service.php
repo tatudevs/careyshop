@@ -10,10 +10,81 @@
 
 namespace app\careyshop\event\subscribe;
 
+use app\careyshop\event\service\notice\Notice;
 use think\Event;
 
 class Service extends Base
 {
+    /**
+     * 同意售后
+     * @access public
+     * @param array $service 售后数据
+     */
+    public function onAgreeService(array $service)
+    {
+        Notice::instance()->send($service, self::EVENT_AGREE_SERVICE);
+    }
+
+    /**
+     * 拒绝售后
+     * @access public
+     * @param array $service 售后数据
+     */
+    public function onRefuseService(array $service)
+    {
+        Notice::instance()->send($service, self::EVENT_REFUSE_SERVICE);
+    }
+
+    /**
+     * 正在售后
+     * @access public
+     * @param array $service 售后数据
+     */
+    public function onAfterService(array $service)
+    {
+        Notice::instance()->send($service, self::EVENT_AFTER_SERVICE);
+    }
+
+    /**
+     * 售后撤销
+     * @access public
+     * @param array $service 售后数据
+     */
+    public function onCancelService(array $service)
+    {
+        Notice::instance()->send($service, self::EVENT_CANCEL_SERVICE);
+    }
+
+    /**
+     * 售后完成
+     * @access public
+     * @param array $service 售后数据
+     */
+    public function onCompleteService(array $service)
+    {
+        Notice::instance()->send($service, self::EVENT_COMPLETE_SERVICE);
+    }
+
+    /**
+     * 留言被回复
+     * @access public
+     * @param array $service 售后数据
+     */
+    public function onReplyService(array $service)
+    {
+        Notice::instance()->send($service, self::EVENT_REPLY_SERVICE);
+    }
+
+    /**
+     * 商品要求寄回
+     * @access public
+     * @param array $service 售后数据
+     */
+    public function onSendbackService(array $service)
+    {
+        Notice::instance()->send($service, self::EVENT_SENDBACK_SERVICE);
+    }
+
     /**
      * 事件订阅
      * @access public

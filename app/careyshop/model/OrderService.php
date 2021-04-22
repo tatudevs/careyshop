@@ -11,6 +11,7 @@
 namespace app\careyshop\model;
 
 use think\facade\Config;
+use think\facade\Event;
 
 class OrderService extends CareyShop
 {
@@ -877,8 +878,11 @@ class OrderService extends CareyShop
         }
 
         // 写入售后服务单日志
+        $serviceData = $result->toArray();
         $desc = is_client_admin() ? '商家留言' : '买家留言';
-        if ($this->addServiceLog($result->toArray(), $data['message'], $desc)) {
+
+        if ($this->addServiceLog($serviceData, $data['message'], $desc)) {
+            !is_client_admin() ?: Event::trigger('ReplyService', $serviceData);
             return true;
         }
 
@@ -930,7 +934,9 @@ class OrderService extends CareyShop
                 throw new \Exception($this->getError());
             }
 
+            Event::trigger('AgreeService', $returnData);
             $result::commit();
+
             return $returnData;
         } catch (\Exception $e) {
             $result::rollback();
@@ -992,7 +998,7 @@ class OrderService extends CareyShop
                 throw new \Exception($goodsDb->getError());
             }
 
-            $returnData = [$result->toArray()];
+            $returnData[] = $result->toArray();
             self::keyToSnake(['getOrderGoods'], $returnData);
             $comment = '商家已拒绝售后服务，如有需要您可以再次申请。';
 
@@ -1001,7 +1007,9 @@ class OrderService extends CareyShop
                 throw new \Exception($this->getError());
             }
 
+            Event::trigger('RefuseService', $returnData[0]);
             $result::commit();
+
             return $returnData[0];
         } catch (\Exception $e) {
             $result::rollback();
@@ -1060,11 +1068,14 @@ class OrderService extends CareyShop
                 '邮编：' . Config::get('careyshop.service.zipcode', '');
 
             // 写入售后服务单日志
-            if (!$this->addServiceLog($result->toArray(), $comment, '商品寄回')) {
+            $serviceData = $result->toArray();
+            if (!$this->addServiceLog($serviceData, $comment, '商品寄回')) {
                 throw new \Exception($this->getError());
             }
 
+            Event::trigger('SendbackService', $serviceData);
             $result::commit();
+
             return true;
         } catch (\Exception $e) {
             $result::rollback();
@@ -1218,7 +1229,9 @@ class OrderService extends CareyShop
                 throw new \Exception($this->getError());
             }
 
+            Event::trigger('AfterService', $returnData);
             $result::commit();
+
             return $returnData;
         } catch (\Exception $e) {
             $result::rollback();
@@ -1292,11 +1305,13 @@ class OrderService extends CareyShop
                 }
             }
 
-            $result::commit();
-            $temp = [$result->toArray()];
-            self::keyToSnake(['getOrderGoods', 'getOrderRefund'], $temp);
+            $returnData[] = $result->toArray();
+            self::keyToSnake(['getOrderGoods', 'getOrderRefund'], $returnData[0]);
 
-            return $temp[0];
+            Event::trigger('CancelService', $returnData[0]);
+            $result::commit();
+
+            return $returnData[0];
         } catch (\Exception $e) {
             $result::rollback();
             return $this->setError($e->getMessage());
@@ -1738,7 +1753,10 @@ class OrderService extends CareyShop
         }
 
         if (true === $isSuccess) {
-            return $result->toArray();
+            $returnData = $result->toArray();
+            Event::trigger('CompleteService', $returnData);
+
+            return $returnData;
         }
 
         return false;
