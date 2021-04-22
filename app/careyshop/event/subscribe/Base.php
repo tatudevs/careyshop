@@ -30,12 +30,12 @@ class Base
     /**
      * 购物卡-金额增加
      */
-    const EVENT_INCMONEY = 7;
+    const EVENT_INC_MONEY = 7;
 
     /**
      * 购物卡-金额减少
      */
-    const EVENT_DECMONEY = 8;
+    const EVENT_DEC_MONEY = 8;
 
     /**
      * 商品-咨询被客服回复

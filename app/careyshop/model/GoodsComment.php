@@ -11,6 +11,7 @@
 namespace app\careyshop\model;
 
 use careyshop\Ip2Region;
+use think\facade\Event;
 
 class GoodsComment extends CareyShop
 {
@@ -418,6 +419,8 @@ class GoodsComment extends CareyShop
         }
 
         $result = self::create($newData);
+        Event::trigger('ServiceReplyComment', ['user_id' => $newData['user_id']]);
+
         return $result->hidden(['is_show', 'is_top', 'status', 'reply_count'])->toArray();
     }
 

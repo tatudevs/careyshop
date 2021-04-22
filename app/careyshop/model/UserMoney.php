@@ -70,14 +70,13 @@ class UserMoney extends CareyShop
         }
 
         // 订阅事件
-        $subscribe = [
+        Event::trigger('DecBalance', [
             'user_id' => $clientId,
             'initial' => $balance,
             'money'   => $value,
-            'balance' => $balance - $value,
-        ];
+            'balance' => round($balance - $value, 2),
+        ]);
 
-        Event::trigger('DecBalance', $subscribe);
         return true;
     }
 
@@ -103,19 +102,19 @@ class UserMoney extends CareyShop
             return $this->setError('账号锁定余额不足');
         }
 
+        $balance = $result->getAttr('balance');
         if (!$this->where($map)->dec('lock_balance', $value)->inc('balance', $value)->update()) {
             return false;
         }
 
         // 订阅事件
-        $subscribe = [
+        Event::trigger('IncBalance', [
             'user_id' => $clientId,
-            'initial' => $result->getAttr('balance'),
+            'initial' => $balance,
             'money'   => $value,
-            'balance' => $result->getAttr('balance') + $value,
-        ];
+            'balance' => round($balance + $value, 2),
+        ]);
 
-        Event::trigger('IncBalance', $subscribe);
         return true;
     }
 
@@ -255,7 +254,7 @@ class UserMoney extends CareyShop
             'user_id' => $clientId,
             'initial' => $balance,
             'money'   => $value,
-            'balance' => $value > 0 ? $balance + $value : $balance - $value,
+            'balance' => round($value > 0 ? $balance + $value : $balance - $value, 2),
         ];
 
         if ($value > 0) {

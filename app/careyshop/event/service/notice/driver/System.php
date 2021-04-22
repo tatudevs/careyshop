@@ -17,6 +17,6 @@ class System extends Driver
 {
     public function send(array $params)
     {
-        dump($params);exit();
+//        dump($params);exit();
     }
 }

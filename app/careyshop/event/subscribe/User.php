@@ -48,7 +48,7 @@ class User extends Base
     /**
      * 余额增加事件触发
      * @access public
-     * @param array $money 资金变动数据
+     * @param array $money 资金数据
      */
     public function onIncBalance(array $money)
     {
@@ -58,7 +58,7 @@ class User extends Base
     /**
      * 余额减少事件触发
      * @access public
-     * @param array $money 资金变动数据
+     * @param array $money 资金数据
      */
     public function onDecBalance(array $money)
     {

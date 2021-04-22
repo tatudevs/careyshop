@@ -229,7 +229,10 @@ class User extends CareyShop
             $this->hasUserMoney()->save([]);
 
             $this->commit();
-            Event::trigger('UserRegister', ['user_id' => $this->getAttr('user_id')]);
+            Event::trigger('UserRegister', [
+                'user_id'  => $this->getAttr('user_id'),
+                'password' => $data['password'],
+            ]);
 
             return true;
         } catch (\Exception $e) {

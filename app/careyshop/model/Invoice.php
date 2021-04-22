@@ -11,6 +11,8 @@
 
 namespace app\careyshop\model;
 
+use think\facade\Event;
+
 class Invoice extends CareyShop
 {
     /**
@@ -115,6 +117,7 @@ class Invoice extends CareyShop
      * @access public
      * @param array $data 外部数据
      * @return array|false
+     * @throws
      */
     public function setInvoiceItem(array $data)
     {
@@ -122,12 +125,34 @@ class Invoice extends CareyShop
             return false;
         }
 
-        // 允许修改字段与条件
-        $field = ['number', 'remark', 'status'];
         $map[] = ['invoice_id', '=', $data['invoice_id']];
+        $db = $this->where($map)->find();
 
-        $result = self::update($data, $map, $field);
-        return $result->toArray();
+        if (is_null($db)) {
+            return $this->setError('数据不存在');
+        }
+
+        $field = ['number', 'remark', 'status'];
+        $isSubscribe = isset($data['status']) && $data['status'] != $db->getAttr('status');
+
+        if (!$db->allowField($field)->save($data)) {
+            return false;
+        }
+
+        $result = $db->toArray();
+        if ($isSubscribe) {
+            switch ($result['status']) {
+                case 1:
+                    Event::trigger('CompleteInvoice', $result);
+                    break;
+
+                case 2:
+                    Event::trigger('RefuseInvoice', $result);
+                    break;
+            }
+        }
+
+        return $result;
     }
 
     /**

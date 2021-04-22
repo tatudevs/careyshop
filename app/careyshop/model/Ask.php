@@ -247,7 +247,7 @@ class Ask extends CareyShop
 
         $result = $this->addAskOrAnswer($data, false);
         if (false !== $result) {
-            Event::trigger('UserLogin', $result);
+            Event::trigger('ReplyAsk', ['user_id' => $result['user_id']]);
             return $result;
         }
 

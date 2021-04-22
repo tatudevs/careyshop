@@ -18,7 +18,7 @@ class Ask extends Base
     /**
      * 提问被回复
      * @access public
-     * @param array $ask 回复后的数据
+     * @param array $ask 回复数据
      */
     public function onReplyAsk(array $ask)
     {

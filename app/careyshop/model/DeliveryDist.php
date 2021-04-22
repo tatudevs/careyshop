@@ -134,7 +134,7 @@ class DeliveryDist extends CareyShop
         if (!empty($data['delivery_id'])) {
             // 根据配送方式编号获取快递公司编码
             $deliveryResult = Delivery::alias('d')
-                ->field('i.delivery_item_id,i.code')
+                ->field('i.delivery_item_id,i.name,i.code')
                 ->join('delivery_item i', 'i.delivery_item_id = d.delivery_item_id')
                 ->where('d.delivery_id', '=', $data['delivery_id'])
                 ->find();
@@ -160,6 +160,7 @@ class DeliveryDist extends CareyShop
 
         $distResult = $this->where($map)->find();
         if (!is_null($distResult)) {
+            $distResult->setAttr('delivery_name', $deliveryResult->getAttr('name'));
             return $distResult->toArray();
         }
 
@@ -206,6 +207,7 @@ class DeliveryDist extends CareyShop
         }
 
         if ($this->save($data)) {
+            $this->setAttr('delivery_name', $deliveryResult->getAttr('name'));
             return $this->toArray();
         }
 

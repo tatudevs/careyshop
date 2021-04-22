@@ -12,6 +12,7 @@ namespace app\careyshop\model;
 
 use think\facade\Config;
 use think\facade\Db;
+use think\facade\Event;
 
 class CardUse extends CareyShop
 {
@@ -200,7 +201,16 @@ class CardUse extends CareyShop
             return $this->setError(sprintf('卡号 %s 已过使用截止日期 %s', $number, date('Y-m-d H:i:s', $end_time)));
         }
 
+        $money = $result->getAttr('money');
         $result->inc('money', $value)->update();
+        Event::trigger('IncMoney', [
+            'user_id' => $clientId,
+            'initial' => $money,
+            'money'   => $value,
+            'balance' => round($money + $value, 2),
+            'number'  => $number,
+        ]);
+
         return true;
     }
 
@@ -233,7 +243,8 @@ class CardUse extends CareyShop
             return $this->setError('卡号 ' . $number . ' 已失效或不存在');
         }
 
-        if (bccomp($result->getAttr('money'), $value, 2) === -1) {
+        $money = $result->getAttr('money');
+        if (bccomp($money, $value, 2) === -1) {
             return $this->setError('卡号 ' . $number . ' 可用余额不足');
         }
 
@@ -244,6 +255,14 @@ class CardUse extends CareyShop
         }
 
         $result->dec('money', $value)->update();
+        Event::trigger('DecMoney', [
+            'user_id' => $clientId,
+            'initial' => $money,
+            'money'   => $value,
+            'balance' => round($money - $value, 2),
+            'number'  => $number,
+        ]);
+
         return true;
     }
 

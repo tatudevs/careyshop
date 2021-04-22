@@ -13,6 +13,7 @@ namespace app\careyshop\model;
 use app\careyshop\service\Cart as CartSer;
 use careyshop\Time;
 use think\facade\Config;
+use think\facade\Event;
 
 class Order extends CareyShop
 {
@@ -1004,7 +1005,10 @@ class Order extends CareyShop
             }
 
             $this->commit();
-            return $this->hidden(['order_id'])->toArray();
+            $result = $this->hidden(['order_id'])->toArray();
+            Event::trigger('CreateOrder', $result);
+
+            return $result;
         } catch (\Exception $e) {
             $this->rollback();
             return $this->setError($e->getMessage());
@@ -1303,6 +1307,8 @@ class Order extends CareyShop
             }
 
             $this->commit();
+            Event::trigger('CancelOrder', $this->orderData);
+
             return $saveData;
         } catch (\Exception $e) {
             $this->rollback();
@@ -1598,17 +1604,24 @@ class Order extends CareyShop
                 }
 
                 // 修改订单状态
-                $orderData['trade_status'] = $data['is_picking'];
-                $orderData['picking_time'] = $data['is_picking'] == 1 ? time() : 0;
+                $saveData['trade_status'] = $data['is_picking'];
+                $saveData['picking_time'] = $data['is_picking'] == 1 ? time() : 0;
 
-                if (false === $value->save($orderData)) {
+                if (false === $value->save($saveData)) {
                     throw new \Exception($value->getError());
                 }
 
                 // 写入订单操作日志
+                $orderData = $value->toArray();
                 $info = $data['is_picking'] == 1 ? '订单开始配货' : '订单取消配货';
-                if (!$this->addOrderLog($value->toArray(), $info, '订单配货')) {
+
+                if (!$this->addOrderLog($orderData, $info, '订单配货')) {
                     throw new \Exception($this->getError());
+                }
+
+                // 触发事件
+                if ($data['is_picking'] == 1) {
+                    Event::trigger('PickingOrder', $orderData);
                 }
             }
 
@@ -1705,6 +1718,7 @@ class Order extends CareyShop
             }
 
             // 添加一条配送记录
+            $deliveryResult = [];
             if (!empty($data['logistic_code'])) {
                 $deliveryData = [
                     'client_id'     => $this->orderData['user_id'],
@@ -1722,7 +1736,8 @@ class Order extends CareyShop
                 }
 
                 $deliveryDb = new DeliveryDist();
-                if (false === $deliveryDb->addDeliveryDistItem($deliveryData)) {
+                $deliveryResult = $deliveryDb->addDeliveryDistItem($deliveryData);
+                if (false === $deliveryResult) {
                     throw new \Exception($deliveryDb->getError());
                 }
             }
@@ -1741,6 +1756,8 @@ class Order extends CareyShop
             unset($orderData['get_order_goods']);
 
             $this->commit();
+            Event::trigger('DeliveryOrder', array_merge($deliveryResult, $orderData));
+
             return $orderData;
         } catch (\Exception $e) {
             $this->rollback();

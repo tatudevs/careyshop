@@ -11,6 +11,7 @@
 namespace app\careyshop\model;
 
 use think\facade\Config;
+use think\facade\Event;
 
 class Withdraw extends CareyShop
 {
@@ -259,7 +260,10 @@ class Withdraw extends CareyShop
             }
 
             $this->commit();
-            return $this->hidden(['withdraw_user_id'])->toArray();
+            $result = $this->hidden(['withdraw_user_id'])->toArray();
+            Event::trigger('ApplyWithdraw', $result);
+
+            return $result;
         } catch (\Exception $e) {
             $this->rollback();
             return $this->setError($e->getMessage());
@@ -314,6 +318,8 @@ class Withdraw extends CareyShop
             }
 
             $this->commit();
+            Event::trigger('CancelWithdraw', $result->toArray());
+
             return true;
         } catch (\Exception $e) {
             $this->rollback();
@@ -345,6 +351,7 @@ class Withdraw extends CareyShop
 
         $result->setAttr('status', 1);
         if (false !== $result->save()) {
+            Event::trigger('ProcessWithdraw', $result->toArray());
             return true;
         }
 
@@ -387,6 +394,8 @@ class Withdraw extends CareyShop
             }
 
             $this->commit();
+            Event::trigger('CompleteWithdraw', $result->toArray());
+
             return true;
         } catch (\Exception $e) {
             $this->rollback();
@@ -437,6 +446,8 @@ class Withdraw extends CareyShop
             }
 
             $this->commit();
+            Event::trigger('RefuseWithdraw', $result->toArray());
+
             return true;
         } catch (\Exception $e) {
             $this->rollback();

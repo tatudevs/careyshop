@@ -10,6 +10,8 @@
 
 namespace app\careyshop\model;
 
+use think\facade\Event;
+
 class GoodsConsult extends CareyShop
 {
     /**
@@ -221,10 +223,12 @@ class GoodsConsult extends CareyShop
 
             $newData['parent_id'] = $data['goods_consult_id'];
             $newData['content'] = $data['content'];
-            $result = self::create($newData);
+            $result = self::create($newData)->toArray();
 
             $this->commit();
-            return $result->toArray();
+            Event::trigger('ServiceReplyConsult', ['user_id' => $result['user_id']]);
+
+            return $result;
         } catch (\Exception $e) {
             $this->rollback();
             return $this->setError($e->getMessage());

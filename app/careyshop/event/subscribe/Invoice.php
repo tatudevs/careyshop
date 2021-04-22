@@ -10,10 +10,31 @@
 
 namespace app\careyshop\event\subscribe;
 
+use app\careyshop\event\service\notice\Notice;
 use think\Event;
 
 class Invoice extends Base
 {
+    /**
+     * 票据已开
+     * @access public
+     * @param array $invoice 开票数据
+     */
+    public function onCompleteInvoice(array $invoice)
+    {
+        Notice::instance()->send($invoice, self::EVENT_COMPLETE_INVOICE);
+    }
+
+    /**
+     * 拒绝开票
+     * @access public
+     * @param array $invoice 开票数据
+     */
+    public function onRefuseInvoice(array $invoice)
+    {
+        Notice::instance()->send($invoice, self::EVENT_REFUSE_INVOICE);
+    }
+
     /**
      * 事件订阅
      * @access public

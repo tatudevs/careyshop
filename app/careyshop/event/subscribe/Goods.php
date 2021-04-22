@@ -10,10 +10,41 @@
 
 namespace app\careyshop\event\subscribe;
 
+use app\careyshop\event\service\notice\Notice;
 use think\Event;
 
 class Goods extends Base
 {
+    /**
+     * 咨询被客服回复
+     * @access public
+     * @param array $user 账号数据
+     */
+    public function onServiceReplyConsult(array $user)
+    {
+        Notice::instance()->send($user, self::EVENT_SERVICE_REPLY_CONSULT);
+    }
+
+    /**
+     * 评价被顾客咨询
+     * @access public
+     * @param array $user 账号数据
+     */
+    public function onCustomerAdvisoryComment(array $user)
+    {
+        Notice::instance()->send($user, self::EVENT_CUSTOMER_ADVISORY_COMMENT);
+    }
+
+    /**
+     * 评价被客服回复
+     * @access public
+     * @param array $user 账号数据
+     */
+    public function onServiceReplyComment(array $user)
+    {
+        Notice::instance()->send($user, self::EVENT_SERVICE_REPLY_COMMENT);
+    }
+
     /**
      * 事件订阅
      * @access public

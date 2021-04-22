@@ -12,6 +12,7 @@ namespace app\careyshop\model;
 
 use think\facade\Cache;
 use app\careyshop\validate\Recharge as Validate;
+use think\facade\Event;
 
 class Payment extends CareyShop
 {
@@ -645,6 +646,8 @@ class Payment extends CareyShop
             }
 
             $this->commit();
+            Event::trigger('PayOrder', $orderResult->toArray());
+
             return true;
         } catch (\Exception $e) {
             $this->rollback();

@@ -10,6 +10,8 @@
 
 namespace app\careyshop\model;
 
+use think\facade\Event;
+
 class GoodsReply extends CareyShop
 {
     /**
@@ -92,18 +94,18 @@ class GoodsReply extends CareyShop
             $data['nick_name'] = auto_hid_substr($data['nick_name']);
         }
 
-        if (!empty($userId)) {
-            $messageData = [
-                'type'    => 0,
-                'member'  => 1,
-                'title'   => '您的商品评价收到了最新回复',
-                'content' => $data['nick_name'] . ' 对您的评价进行了回复：' . $data['content'],
-            ];
-
-            (new Message())->inAddMessageItem($messageData, [$userId], 0);
-        }
-
         if ($this->save($data)) {
+            if (!empty($userId)) {
+                (new Message())->inAddMessageItem([
+                    'type'    => 0,
+                    'member'  => 1,
+                    'title'   => '您的商品评价收到了最新回复',
+                    'content' => $data['nick_name'] . ' 对您的评价进行了回复：' . $data['content'],
+                ], [$userId], 0);
+
+                Event::trigger('CustomerAdvisoryComment', ['user_id' => $userId]);
+            }
+
             GoodsComment::where($mapComment)->inc('reply_count')->update();
             return $this->hidden(['is_anon'])->toArray();
         }
