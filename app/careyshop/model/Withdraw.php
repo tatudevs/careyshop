@@ -259,9 +259,9 @@ class Withdraw extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            $this->commit();
             $result = $this->hidden(['withdraw_user_id'])->toArray();
             Event::trigger('ApplyWithdraw', $result);
+            $this->commit();
 
             return $result;
         } catch (\Exception $e) {
@@ -317,8 +317,8 @@ class Withdraw extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            $this->commit();
             Event::trigger('CancelWithdraw', $result->toArray());
+            $this->commit();
 
             return true;
         } catch (\Exception $e) {
@@ -393,8 +393,8 @@ class Withdraw extends CareyShop
                 throw new \Exception($userMoneyDb->getError());
             }
 
-            $this->commit();
             Event::trigger('CompleteWithdraw', $result->toArray());
+            $this->commit();
 
             return true;
         } catch (\Exception $e) {
@@ -445,8 +445,8 @@ class Withdraw extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            $this->commit();
             Event::trigger('RefuseWithdraw', $result->toArray());
+            $this->commit();
 
             return true;
         } catch (\Exception $e) {

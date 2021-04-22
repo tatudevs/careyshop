@@ -225,8 +225,8 @@ class GoodsConsult extends CareyShop
             $newData['content'] = $data['content'];
             $result = self::create($newData)->toArray();
 
-            $this->commit();
             Event::trigger('ServiceReplyConsult', ['user_id' => $result['user_id']]);
+            $this->commit();
 
             return $result;
         } catch (\Exception $e) {

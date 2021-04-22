@@ -228,12 +228,12 @@ class User extends CareyShop
             // 添加资金表
             $this->hasUserMoney()->save([]);
 
-            $this->commit();
             Event::trigger('UserRegister', [
                 'user_id'  => $this->getAttr('user_id'),
                 'password' => $data['password'],
             ]);
 
+            $this->commit();
             return true;
         } catch (\Exception $e) {
             $this->rollback();

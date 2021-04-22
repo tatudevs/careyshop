@@ -45,7 +45,7 @@ class NoticeEvent extends CareyShop
      */
     public function getNoticeEvent(): array
     {
-        return self::cache('NoticeEvent')
+        return self::cache()
             ->order(['notice_event_id' => 'asc'])
             ->select()
             ->toArray();

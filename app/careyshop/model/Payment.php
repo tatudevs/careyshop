@@ -645,8 +645,8 @@ class Payment extends CareyShop
                 throw new \Exception();
             }
 
+            Event::trigger('PayOrder', $paymentLogDb->toArray());
             $this->commit();
-            Event::trigger('PayOrder', $orderResult->toArray());
 
             return true;
         } catch (\Exception $e) {

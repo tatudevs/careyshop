@@ -1004,9 +1004,9 @@ class Order extends CareyShop
                 throw new \Exception($this->getError());
             }
 
-            $this->commit();
             $result = $this->hidden(['order_id'])->toArray();
             Event::trigger('CreateOrder', $result);
+            $this->commit();
 
             return $result;
         } catch (\Exception $e) {
@@ -1101,6 +1101,12 @@ class Order extends CareyShop
                 if (!$this->addOrderLog($result->toArray(), $info, '金额调整')) {
                     throw new \Exception($this->getError());
                 }
+
+                Event::trigger('ChangePriceOrder', [
+                    'user_id'      => $result->getAttr('user_id'),
+                    'order_no'     => $data['order_no'],
+                    'total_amount' => $data['total_amount'],
+                ]);
             }
 
             $this->commit();
@@ -1306,8 +1312,8 @@ class Order extends CareyShop
                 }
             }
 
-            $this->commit();
             Event::trigger('CancelOrder', $this->orderData);
+            $this->commit();
 
             return $saveData;
         } catch (\Exception $e) {
@@ -1372,11 +1378,10 @@ class Order extends CareyShop
                         throw new \Exception($this->getError());
                     }
 
+                    Event::trigger('CancelOrder', $this->orderData);
                     $value::commit();
-                    continue;
                 } catch (\Exception $e) {
                     $value::rollback();
-                    continue;
                 }
             }
         }, 'order_id');
@@ -1755,8 +1760,8 @@ class Order extends CareyShop
             unset($orderData['logistic_code']);
             unset($orderData['get_order_goods']);
 
-            $this->commit();
             Event::trigger('DeliveryOrder', array_merge($deliveryResult, $orderData));
+            $this->commit();
 
             return $orderData;
         } catch (\Exception $e) {
@@ -1885,10 +1890,8 @@ class Order extends CareyShop
         $this->startTrans();
 
         try {
-            $saveData = [
-                'trade_status'  => 3,
-                'finished_time' => time(),
-            ];
+            // 待修改数据
+            $saveData = ['trade_status' => 3, 'finished_time' => time()];
 
             foreach ($result as $value) {
                 $orderNo = $value->getAttr('order_no');
@@ -1938,6 +1941,8 @@ class Order extends CareyShop
                         throw new \Exception($this->getError());
                     }
                 }
+
+                Event::trigger('CompleteOrder', $this->orderData);
             }
 
             $this->commit();
@@ -2015,11 +2020,10 @@ class Order extends CareyShop
                         }
                     }
 
+                    Event::trigger('CompleteOrder', $this->orderData);
                     $value::commit();
-                    continue;
                 } catch (\Exception $e) {
                     $value::rollback();
-                    continue;
                 }
             }
         }, 'delivery_time', 'desc');
