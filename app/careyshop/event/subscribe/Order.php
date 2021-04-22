@@ -31,9 +31,9 @@ class Order extends Base
         $event->listen('PickingOrder', [$this, 'onPickingOrder']);
         // 订单发货
         $event->listen('DeliveryOrder', [$this, 'onDeliveryOrder']);
-        // 订单完成
+        // 订单完成 todo 未订阅
         $event->listen('CompleteOrder', [$this, 'onCompleteOrder']);
-        // 调整应付金额
+        // 调整应付金额 todo 未订阅
         $event->listen('ChangePriceOrder', [$this, 'onChangePriceOrder']);
     }
 }
