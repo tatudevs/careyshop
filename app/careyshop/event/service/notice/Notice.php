@@ -10,6 +10,7 @@
 
 namespace app\careyshop\event\service\notice;
 
+use app\careyshop\model\NoticeVariable;
 use app\careyshop\model\User;
 use app\careyshop\model\Notice as NoticeModel;
 use think\helper\Str;
@@ -55,6 +56,11 @@ class Notice
                 ->toArray();
         }
 
+        // 获取宏替换
+        $sendData['variable'] = NoticeVariable::cache()
+            ->where('notice_event_id', '=', $code)
+            ->column('replace_name', 'item_name');
+
         // 获取通知模板
         $map[] = ['notice_event_id', '=', $code];
         $map[] = ['status', '=', 1];
@@ -90,7 +96,9 @@ class Notice
             return;
         }
 
+        $class = new $namespace();
         $data['notice'] = $notice;
-        call_user_func([$namespace, 'send'], $data);
+
+        call_user_func([$class, 'send'], $data);
     }
 }
