@@ -56,7 +56,7 @@ class Notice
                 ->toArray();
         }
 
-        // 获取宏替换
+        // 获取宏替换变量
         $sendData['variable'] = NoticeVariable::cache()
             ->where('notice_event_id', '=', $code)
             ->column('replace_name', 'item_name');

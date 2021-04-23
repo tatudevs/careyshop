@@ -10,12 +10,41 @@
 
 namespace app\careyshop\event\service\notice;
 
+use app\careyshop\event\subscribe\Base;
+use app\careyshop\model\OrderGoods;
+use think\helper\Str;
+
 abstract class Driver
 {
     /**
-     * @var string 驱动名称
+     * @var array 订阅者提供数据
      */
-    protected string $name;
+    protected array $data = [];
+
+    /**
+     * @var int 事件编码(Base)
+     */
+    protected int $code;
+
+    /**
+     * @var array 事件对应账号数据
+     */
+    protected array $user = [];
+
+    /**
+     * @var array 宏替换变量
+     */
+    protected array $variable = [];
+
+    /**
+     * @var array 通知数据结构
+     */
+    protected array $notice = [];
+
+    /**
+     * @var array 待发送实际数据
+     */
+    protected array $ready = [];
 
     /**
      * 发送通知
@@ -24,4 +53,126 @@ abstract class Driver
      * @return void
      */
     abstract protected function send(array $params);
+
+    /**
+     * 根据事件编码获取待发送实际数据
+     * @access protected
+     * @return void
+     */
+    protected function getReadyData()
+    {
+        // 处理通用数据
+        $this->ready = [];
+        $this->ready['username'] = $this->user['username'];
+        $this->ready['nickname'] = empty($this->user['nickname']) ? $this->user['username'] : $this->user['nickname'];
+
+        // 不同的事件中存在相同的变量名,因此需要拆分每个事件进行独立获取
+        switch ($this->code) {
+            case Base::EVENT_COMPLETE_INVOICE:
+            case Base::EVENT_REFUSE_INVOICE:
+                $this->ready['order_no'] = $this->data['order_no'];
+                $this->ready['number'] = $this->data['number'];
+                break;
+
+            case Base::EVENT_INC_MONEY:
+            case Base::EVENT_DEC_MONEY:
+                $this->ready['initial'] = $this->data['initial'];
+                $this->ready['money'] = $this->data['money'];
+                $this->ready['balance'] = $this->data['balance'];
+                $this->ready['number'] = $this->data['number'];
+                break;
+
+            case Base::EVENT_APPLY_WITHDRAW:
+            case Base::EVENT_CANCEL_WITHDRAW:
+            case Base::EVENT_PROCESS_WITHDRAW:
+            case Base::EVENT_COMPLETE_WITHDRAW:
+            case Base::EVENT_REFUSE_WITHDRAW:
+                $this->ready['withdraw_no'] = $this->data['withdraw_no'];
+                $this->ready['money'] = $this->data['money'];
+                break;
+
+            case Base::EVENT_USER_LOGIN:
+                $this->ready['last_login'] = $this->user['last_login'];
+                $this->ready['last_ip'] = $this->user['last_ip'] . '(' . $this->user['last_ip_region'] . ')';
+                break;
+
+            case Base::EVENT_USER_REGISTER:
+                $this->ready['password'] = $this->data['password'];
+                break;
+
+            case Base::EVENT_INC_BALANCE:
+            case Base::EVENT_DEC_BALANCE:
+                $this->ready['initial'] = $this->data['initial'];
+                $this->ready['money'] = $this->data['money'];
+                $this->ready['balance'] = $this->data['balance'];
+                break;
+
+            case Base::EVENT_CREATE_ORDER:
+            case Base::EVENT_CANCEL_ORDER:
+            case Base::EVENT_PICKING_ORDER:
+            case Base::EVENT_DELIVERY_ORDER:
+            case Base::EVENT_COMPLETE_ORDER:
+                $this->ready['order_no'] = $this->data['order_no'];
+                $this->ready['create_time'] = $this->data['create_time'];
+                $this->ready['update_time'] = $this->data['update_time'];
+                $this->ready['picking_time'] = $this->data['picking_time'];
+                $this->ready['delivery_time'] = $this->data['delivery_time'];
+                $this->ready['finished_time'] = $this->data['finished_time'];
+                $this->ready['total_amount'] = $this->data['total_amount'];
+                $this->ready['pay_amount'] = $this->data['pay_amount'];
+                $this->ready['complete'] = $this->data['complete_address'];
+                $this->ready['delivery_name'] = $this->data['delivery_name'] ?? '';
+                $this->ready['logistic_code'] = $this->data['logistic_code'] ?? '';
+                $this->ready['goods_name'] = $this->getOrderGoods();
+                break;
+
+            case Base::EVENT_PAY_ORDER:
+                $this->ready['order_no'] = $this->data['order_no'];
+                $this->ready['amount'] = $this->data['amount'];
+                $this->ready['payment_time'] = $this->data['payment_time'];
+                break;
+
+            case Base::EVENT_CHANGE_PRICE_ORDER:
+                $this->ready['order_no'] = $this->data['order_no'];
+                $this->ready['total_amount'] = $this->data['total_amount'];
+                break;
+
+            case Base::EVENT_AGREE_SERVICE:
+            case Base::EVENT_REFUSE_SERVICE:
+            case Base::EVENT_AFTER_SERVICE:
+            case Base::EVENT_CANCEL_SERVICE:
+            case Base::EVENT_COMPLETE_SERVICE:
+            case Base::EVENT_REPLY_SERVICE:
+            case Base::EVENT_SENDBACK_SERVICE:
+                // todo 未完待续
+                break;
+        }
+
+        print_r($this->ready);exit();
+    }
+
+    /**
+     * 获取订单商品名称
+     * @access private
+     * @return string
+     * @throws
+     */
+    private function getOrderGoods(): string
+    {
+        $result = OrderGoods::where('order_no', '=', $this->data['order_no'])
+            ->select()
+            ->toArray();
+
+        if (empty($result)) {
+            return '';
+        }
+
+        $name = Str::substr($result[0]['goods_name'], 0, 24) . '...';
+        if (count($result) > 1) {
+            $total = array_sum(array_column($result, 'qty'));
+            $name .= "（合计：${total}件）";
+        }
+
+        return $name;
+    }
 }

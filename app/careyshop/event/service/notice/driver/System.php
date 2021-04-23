@@ -15,20 +15,18 @@ use app\careyshop\event\service\notice\Driver;
 
 class System extends Driver
 {
-    /**
-     * @var string 驱动名称
-     */
-    protected string $name = 'System';
-
     public function send(array $params)
     {
         // 解析外部数据成变量
         [
-            'data'     => $data,        // 事件触发时初始提供的数据
-            'code'     => $code,        // 事件编码(Base)
-            'user'     => $user,        // 事件触发对应账号数据
-            'variable' => $variable,    // 宏替换变量
-            'notice'   => $notice,      // 通知系统数据结构
+            'data'     => $this->data,      // 订阅者提供数据
+            'code'     => $this->code,      // 事件编码(Base)
+            'user'     => $this->user,      // 事件对应账号数据
+            'variable' => $this->variable,  // 宏替换变量
+            'notice'   => $this->notice,    // 通知数据结构
         ] = $params;
+
+        // 根据事件编码获取待发送实际数据
+        $this->getReadyData();
     }
 }
