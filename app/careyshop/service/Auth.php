@@ -148,6 +148,12 @@ class Auth extends CareyShop
             return;
         }
 
+        $error = [
+            'status'  => 500,
+            'message' => $error,
+            'data'    => config('app.empty_result'),
+        ];
+
         $data = [
             'client_type' => get_client_type(),
             'user_id'     => get_client_id(),
