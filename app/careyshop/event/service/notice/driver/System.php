@@ -15,6 +15,11 @@ use app\careyshop\event\service\notice\Driver;
 
 class System extends Driver
 {
+    /**
+     * 发送通知
+     * @access public
+     * @param array $params 事件外部数据
+     */
     public function send(array $params)
     {
         // 解析外部数据成变量

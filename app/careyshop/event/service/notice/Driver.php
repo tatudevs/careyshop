@@ -63,8 +63,9 @@ abstract class Driver
     {
         // 处理通用数据
         $this->ready = [];
-        $this->ready['username'] = $this->user['username'];
-        $this->ready['nickname'] = empty($this->user['nickname']) ? $this->user['username'] : $this->user['nickname'];
+        ['username' => $username, 'nickname' => $nickname] = $this->user;
+        $this->ready['username'] = $username;
+        $this->ready['nickname'] = empty($nickname) ? $username : $nickname;
 
         // 不同的事件中存在相同的变量名,因此需要拆分每个事件进行独立获取
         switch ($this->code) {
@@ -79,7 +80,7 @@ abstract class Driver
                 $this->ready['initial'] = $this->data['initial'];
                 $this->ready['money'] = $this->data['money'];
                 $this->ready['balance'] = $this->data['balance'];
-                $this->ready['number'] = $this->data['number'];
+                $this->ready['number'] = auto_hid_substr($this->data['number']);
                 break;
 
             case Base::EVENT_APPLY_WITHDRAW:
@@ -123,7 +124,7 @@ abstract class Driver
                 $this->ready['complete'] = $this->data['complete_address'];
                 $this->ready['delivery_name'] = $this->data['delivery_name'] ?? '';
                 $this->ready['logistic_code'] = $this->data['logistic_code'] ?? '';
-                $this->ready['goods_name'] = $this->getOrderGoods();
+                $this->ready['goods_name'] = $this->getOrderGoods('order_no');
                 break;
 
             case Base::EVENT_PAY_ORDER:
@@ -144,22 +145,31 @@ abstract class Driver
             case Base::EVENT_COMPLETE_SERVICE:
             case Base::EVENT_REPLY_SERVICE:
             case Base::EVENT_SENDBACK_SERVICE:
-                // todo 未完待续
+                $type = [0 => '仅退款', 1 => '退货退款', 2 => '换货', 3 => '维修'];
+                $this->ready['order_goods_id'] = $this->data['order_goods_id'];
+                $this->ready['order_no'] = $this->data['order_no'];
+                $this->ready['service_no'] = $this->data['service_no'];
+                $this->ready['reason'] = $this->data['reason'];
+                $this->ready['qty'] = $this->data['qty'];
+                $this->ready['result'] = $this->data['result'];
+                $this->ready['create_time'] = $this->data['create_time'];
+                $this->ready['update_time'] = $this->data['update_time'];
+                $this->ready['type'] = $type[$this->data['type']];
+                $this->ready['goods_name'] = $this->getOrderGoods('order_goods_id');
                 break;
         }
-
-        print_r($this->ready);exit();
     }
 
     /**
      * 获取订单商品名称
      * @access private
+     * @param string $field 查询字段名
      * @return string
      * @throws
      */
-    private function getOrderGoods(): string
+    private function getOrderGoods(string $field): string
     {
-        $result = OrderGoods::where('order_no', '=', $this->data['order_no'])
+        $result = OrderGoods::where($field, '=', $this->data[$field])
             ->select()
             ->toArray();
 
