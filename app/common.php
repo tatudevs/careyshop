@@ -250,24 +250,25 @@ if (!function_exists('get_randstr')) {
 if (!function_exists('auto_hid_substr')) {
     /**
      * 智能字符串模糊化
-     * @param string $str 被模糊的字符串
-     * @param int    $len 模糊的长度
+     * @param string $str  被模糊的字符串
+     * @param int    $len  模糊的长度
+     * @param int    $show 显示的长度
      * @return string
      */
-    function auto_hid_substr(string $str, $len = 3): string
+    function auto_hid_substr(string $str, $len = 3, $show = 3): string
     {
         if (empty($str)) {
             return '';
         }
 
-        $sub_str = mb_substr($str, 0, 1, 'utf-8');
+        $sub_str = mb_substr($str, 0, $show, 'utf-8');
         $sub_str .= str_repeat('*', $len);
 
         if (mb_strlen($str, 'utf-8') <= 2) {
             $str = $sub_str;
         }
 
-        $sub_str .= mb_substr($str, -1, 1, 'utf-8');
+        $sub_str .= mb_substr($str, -$show, $show, 'utf-8');
         return $sub_str;
     }
 }
