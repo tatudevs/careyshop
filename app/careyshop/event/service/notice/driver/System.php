@@ -33,8 +33,8 @@ class System extends Driver
             'notice'   => $this->notice,    // 通知数据结构
         ] = $params;
 
-        // 根据事件编码获取实际变量名与值
-        $this->getReadyData();
+        // 对订阅者提供的数据进行补齐
+        $this->getPaddedData();
 
         // 检查通知是否启用
         $setting = json_decode(Config::get('careyshop.notice.' . $this->notice['type'], 0), true);
@@ -68,11 +68,11 @@ class System extends Driver
                     continue;
                 }
 
-                if (!isset($this->ready[$this->variable[$value]])) {
+                if (!isset($this->data[$this->variable[$value]])) {
                     continue;
                 }
 
-                $body[$this->variable[$value]] = $this->ready[$this->variable[$value]];
+                $body[$this->variable[$value]] = $this->data[$this->variable[$value]];
             }
 
             $body = json_encode($body ?? [], JSON_UNESCAPED_UNICODE);
@@ -86,12 +86,12 @@ class System extends Driver
                     continue;
                 }
 
-                if (!isset($this->ready[$this->variable[$value]])) {
+                if (!isset($this->data[$this->variable[$value]])) {
                     continue;
                 }
 
                 $search[] = $value;
-                $replace[] = $this->ready[$this->variable[$value]];
+                $replace[] = $this->data[$this->variable[$value]];
             }
 
             $body = str_replace($search ?? [], $replace ?? [], $this->notice['template']);
