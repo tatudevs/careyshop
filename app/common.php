@@ -264,7 +264,7 @@ if (!function_exists('auto_hid_substr')) {
         $sub_str = mb_substr($str, 0, $show, 'utf-8');
         $sub_str .= str_repeat('*', $len);
 
-        if (mb_strlen($str, 'utf-8') <= 2) {
+        if (mb_strlen($str, 'utf-8') <= 2 + $show) {
             $str = $sub_str;
         }
 
