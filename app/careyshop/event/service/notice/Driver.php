@@ -42,7 +42,7 @@ abstract class Driver
     protected array $notice = [];
 
     /**
-     * @var array 待发送实际数据
+     * @var array 实际变量名与值
      */
     protected array $ready = [];
 

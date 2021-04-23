@@ -19,14 +19,6 @@ class Notice extends CareyShop
     protected $pk = 'notice_id';
 
     /**
-     * 隐藏属性
-     * @var string[]
-     */
-    protected $hidden = [
-        'type',
-    ];
-
-    /**
      * 只读属性
      * @var string[]
      */

@@ -16,6 +16,7 @@ use aliyun\SendSmsRequest;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use think\facade\Config;
+use think\facade\Log;
 
 class Notice
 {
@@ -62,7 +63,8 @@ class Notice
 
         // 正式请求
         $client = new DefaultAcsClient($profile);
-        $client->getAcsResponse($request);
+        $result = $client->getAcsResponse($request);
+        'OK' != $result['Code'] && Log::error($result['Message']);
     }
 
     /**
@@ -110,6 +112,8 @@ class Notice
         }
 
         // 正式发送
-        $mail->send();
+        if (!$mail->send()) {
+            Log::error($mail->ErrorInfo);
+        }
     }
 }
