@@ -558,7 +558,7 @@ class User extends CareyShop
         $tokenResult = Token::setToken($userId, $userData['group_id'], 0, $data['username'], $data['platform']);
 
         Cache::tag('token:user_' . $userId)->clear();
-        Event::trigger('UserLogin', ['user_id' => $userId]);
+        Event::trigger('UserLogin', ['user_id' => $userId, 'platform' => $data['platform']]);
 
         return ['user' => $userData, 'token' => $tokenResult];
     }

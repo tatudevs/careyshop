@@ -24,7 +24,7 @@ class Notice extends CareyShop
         'platform'        => 'require|max:16|checkModule:oauth',
         'type'            => 'requireIf:place_id,0|in:sms,email',
         'name'            => 'require|max:32',
-        'template'        => 'require',
+        'template'        => 'min:0',
         'expand'          => 'array',
         'status'          => 'in:0,1',
     ];
