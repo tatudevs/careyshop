@@ -15,7 +15,11 @@ use app\careyshop\event\service\notice\Driver;
 
 class Wechat extends Driver
 {
-    public function send(array $params)
+    /**
+     * 发送通知
+     * @access public
+     */
+    public function send()
     {
     }
 }

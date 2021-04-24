@@ -20,22 +20,9 @@ class System extends Driver
     /**
      * 发送通知
      * @access public
-     * @param array $params 事件外部数据
      */
-    public function send(array $params)
+    public function send()
     {
-        // 解析外部数据成变量
-        [
-            'data'     => $this->data,      // 订阅者提供数据
-            'code'     => $this->code,      // 事件编码(Base)
-            'user'     => $this->user,      // 事件对应账号数据
-            'variable' => $this->variable,  // 宏替换变量
-            'notice'   => $this->notice,    // 通知数据结构
-        ] = $params;
-
-        // 对订阅者提供的数据进行补齐
-        $this->getPaddedData();
-
         // 检查通知是否启用
         $setting = json_decode(Config::get('careyshop.notice.' . $this->notice['type'], 0), true);
         if ((int)$setting['status']['value'] <= 0) {

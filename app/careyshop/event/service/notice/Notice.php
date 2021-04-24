@@ -96,9 +96,8 @@ class Notice
             return;
         }
 
-        $class = new $namespace();
         $data['notice'] = $notice;
-
-        call_user_func([$class, 'send'], $data);
+        $class = new $namespace($data);
+        $class->send();
     }
 }

@@ -42,12 +42,31 @@ abstract class Driver
     protected array $notice = [];
 
     /**
+     * Driver constructor.
+     * @access public
+     * @param array $params 参数
+     */
+    public function __construct(array $params)
+    {
+        // 解析外部数据成变量
+        [
+            'data'     => $this->data,      // 订阅者提供数据
+            'code'     => $this->code,      // 事件编码(Base)
+            'user'     => $this->user,      // 事件对应账号数据
+            'variable' => $this->variable,  // 宏替换变量
+            'notice'   => $this->notice,    // 通知数据结构
+        ] = $params;
+
+        // 对订阅者提供的数据进行补齐
+        $this->getPaddedData();
+    }
+
+    /**
      * 发送通知
      * @access protected
-     * @param array $params 参数
      * @return void
      */
-    abstract protected function send(array $params);
+    abstract protected function send();
 
     /**
      * 对订阅者提供的数据进行补齐
