@@ -24,8 +24,7 @@ class Notice extends CareyShop
         'platform'        => 'require|max:16|checkModule:oauth',
         'type'            => 'requireIf:place_id,0|in:sms,email',
         'name'            => 'require|max:32',
-        'template'        => 'min:0',
-        'expand'          => 'array',
+        'expand'          => 'require|array',
         'status'          => 'in:0,1',
     ];
 
@@ -40,8 +39,7 @@ class Notice extends CareyShop
         'platform'        => '应用渠道',
         'type'            => '系统类型',
         'name'            => '通知名称',
-        'template'        => '通知模板',
-        'expand'          => '扩展配置',
+        'expand'          => '模板配置',
         'status'          => '通知状态',
     ];
 
@@ -53,7 +51,6 @@ class Notice extends CareyShop
         'set'    => [
             'notice_id' => 'require|integer|gt:0',
             'name',
-            'template',
             'expand',
             'status',
         ],

@@ -57,7 +57,7 @@ class System extends Driver
 
         // 从模板中获取宏变量名
         $macroItem = [];
-        if (false === preg_match_all('/{([^}]+)}/', $this->notice['template'], $macroItem)) {
+        if (!preg_match_all('/{([^}]+)}/', $this->notice['expand']['template'], $macroItem)) {
             return;
         }
 
@@ -94,8 +94,9 @@ class System extends Driver
                 $replace[] = $this->data[$this->variable[$value]];
             }
 
-            $body = str_replace($search ?? [], $replace ?? [], $this->notice['template']);
-            Notice::sendEmail($this->user['email'], $this->notice['expand']['title'], $body);
+            ['title' => $title, 'template' => $template] = $this->notice['expand'];
+            $body = str_replace($search ?? [], $replace ?? [], $template);
+            Notice::sendEmail($this->user['email'], $title, $body);
         }
     }
 }
