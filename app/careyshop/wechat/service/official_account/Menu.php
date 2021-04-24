@@ -8,8 +8,9 @@
  * @date        2020/10/28
  */
 
-namespace app\careyshop\wechat\service;
+namespace app\careyshop\wechat\service\official_account;
 
+use app\careyshop\wechat\service\CareyShop;
 use think\facade\Cache;
 
 class Menu extends CareyShop

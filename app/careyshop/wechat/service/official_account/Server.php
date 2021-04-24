@@ -8,9 +8,10 @@
  * @date        2020/10/20
  */
 
-namespace app\careyshop\wechat\service;
+namespace app\careyshop\wechat\service\official_account;
 
 use app\careyshop\wechat\Params;
+use app\careyshop\wechat\service\CareyShop;
 use EasyWeChat\Kernel\Messages\Media;
 use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\Transfer;

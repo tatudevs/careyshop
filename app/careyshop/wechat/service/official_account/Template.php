@@ -8,7 +8,9 @@
  * @date        2020/10/29
  */
 
-namespace app\careyshop\wechat\service;
+namespace app\careyshop\wechat\service\official_account;
+
+use app\careyshop\wechat\service\CareyShop;
 
 class Template extends CareyShop
 {

@@ -8,8 +8,9 @@
  * @date        2020/10/30
  */
 
-namespace app\careyshop\wechat\service;
+namespace app\careyshop\wechat\service\official_account;
 
+use app\careyshop\wechat\service\CareyShop;
 use EasyWeChat\Kernel\Messages\Article;
 
 const DS = DIRECTORY_SEPARATOR;
