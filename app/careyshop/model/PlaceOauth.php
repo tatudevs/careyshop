@@ -41,6 +41,16 @@ class PlaceOauth extends CareyShop
     ];
 
     /**
+     * hasOne db_place
+     * @access public
+     * @return object
+     */
+    public function getPlace(): object
+    {
+        return $this->hasOne(Place::class, 'place_id', 'place_id');
+    }
+
+    /**
      * 添加一条授权机制
      * @access public
      * @param array $data 外部数据

@@ -44,7 +44,7 @@ class System extends Driver
 
         // 从模板中获取宏变量名
         $macroItem = [];
-        if (!preg_match_all('/{([^}]+)}/', $this->notice['expand']['template'], $macroItem)) {
+        if (!preg_match_all('/{{([^}]+)}}/', $this->notice['expand']['template'], $macroItem)) {
             return;
         }
 
@@ -62,8 +62,8 @@ class System extends Driver
                 $body[$this->variable[$value]] = $this->data[$this->variable[$value]];
             }
 
-            $body = json_encode($body ?? [], JSON_UNESCAPED_UNICODE);
             ['code' => $code, 'sign' => $sign] = $this->notice['expand'];
+            $body = json_encode($body ?? [], JSON_UNESCAPED_UNICODE);
             Notice::sendSms($this->user['mobile'], $body, $code, $sign);
         }
 
