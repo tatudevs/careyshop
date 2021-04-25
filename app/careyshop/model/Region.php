@@ -10,8 +10,7 @@
 
 namespace app\careyshop\model;
 
-use think\facade\Cache;
-use think\facade\Config;
+use think\facade\{Cache, Config};
 
 class Region extends CareyShop
 {

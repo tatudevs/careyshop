@@ -10,8 +10,7 @@
 
 namespace app\careyshop\service;
 
-use app\careyshop\model\GoodsCategory;
-use app\careyshop\model\User;
+use app\careyshop\model\{GoodsCategory, User};
 
 class CouponGive extends CareyShop
 {

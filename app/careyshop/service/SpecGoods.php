@@ -10,9 +10,7 @@
 
 namespace app\careyshop\service;
 
-use app\careyshop\model\Spec;
-use app\careyshop\model\SpecImage;
-use app\careyshop\model\SpecItem;
+use app\careyshop\model\{Spec, SpecImage, SpecItem};
 
 class SpecGoods extends CareyShop
 {

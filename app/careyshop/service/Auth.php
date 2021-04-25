@@ -10,9 +10,7 @@
 
 namespace app\careyshop\service;
 
-use app\careyshop\model\ActionLog;
-use app\careyshop\model\AuthRule;
-use app\careyshop\model\Menu;
+use app\careyshop\model\{ActionLog, AuthRule, Menu};
 
 class Auth extends CareyShop
 {

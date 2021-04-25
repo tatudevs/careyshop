@@ -11,10 +11,8 @@
 namespace app\careyshop\service;
 
 use app\careyshop\model\Order;
+use think\facade\{Cache, Config, Db};
 use careyshop\Time;
-use think\facade\Cache;
-use think\facade\Config;
-use think\facade\Db;
 
 class Stats extends CareyShop
 {

@@ -12,15 +12,10 @@ namespace oss\aliyun;
 
 use app\careyshop\model\Storage;
 use oss\Upload as UploadBase;
-use OSS\OssClient;
-use OSS\Core\OssException;
+use OSS\{OssClient, Core\OssException};
 use aliyun\AssumeRoleRequest;
-use aliyun\core\Config as AliyunConfig;
-use aliyun\core\profile\DefaultProfile;
-use aliyun\core\DefaultAcsClient;
-use think\facade\Cache;
-use think\facade\Config;
-use think\facade\Route;
+use aliyun\core\{DefaultAcsClient, Config as AliyunConfig, profile\DefaultProfile};
+use think\facade\{Cache, Config, Route};
 use util\Http;
 
 class Upload extends UploadBase

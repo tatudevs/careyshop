@@ -10,8 +10,7 @@
 
 namespace app\careyshop\model;
 
-use think\facade\Config;
-use think\facade\Event;
+use think\facade\{Config, Event};
 
 class OrderService extends CareyShop
 {

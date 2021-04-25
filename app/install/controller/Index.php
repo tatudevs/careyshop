@@ -12,12 +12,8 @@ declare (strict_types=1);
 
 namespace app\install\controller;
 
-use think\facade\Cache;
-use think\facade\Db;
-use think\facade\Session;
-use think\facade\Validate;
-use think\facade\View;
 use util\Aes;
+use think\facade\{Cache, Db, Session, Validate, View};
 
 const DS = DIRECTORY_SEPARATOR;
 

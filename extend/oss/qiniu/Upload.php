@@ -12,13 +12,8 @@ namespace oss\qiniu;
 
 use app\careyshop\model\Storage;
 use oss\Upload as UploadBase;
-use Qiniu\Auth;
-use Qiniu\Region;
-use Qiniu\Storage\BucketManager;
-use Qiniu\Zone;
-use think\facade\Cache;
-use think\facade\Config;
-use think\facade\Route;
+use Qiniu\{Auth, Region, Zone, Storage\BucketManager};
+use think\facade\{Cache, Config, Route};
 use util\Http;
 
 class Upload extends UploadBase

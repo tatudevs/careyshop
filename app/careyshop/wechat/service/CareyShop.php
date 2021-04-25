@@ -10,10 +10,8 @@
 
 namespace app\careyshop\wechat\service;
 
-use app\careyshop\wechat\Params;
-use app\careyshop\wechat\WeChat;
-use think\facade\Config;
-use think\facade\Filesystem;
+use app\careyshop\wechat\{Params, WeChat};
+use think\facade\{Config, Filesystem};
 
 class CareyShop
 {

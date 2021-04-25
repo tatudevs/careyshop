@@ -10,9 +10,7 @@
 
 namespace app\careyshop\model;
 
-use think\facade\Config;
-use think\facade\Db;
-use think\facade\Event;
+use think\facade\{Config, Db, Event};
 
 class CardUse extends CareyShop
 {

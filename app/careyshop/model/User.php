@@ -11,8 +11,7 @@
 namespace app\careyshop\model;
 
 use careyshop\Ip2Region;
-use think\facade\Cache;
-use think\facade\Event;
+use think\facade\{Cache, Event};
 
 class User extends CareyShop
 {

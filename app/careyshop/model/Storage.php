@@ -11,8 +11,7 @@
 namespace app\careyshop\model;
 
 use app\careyshop\service\Upload;
-use think\facade\Cache;
-use think\facade\Db;
+use think\facade\{Cache, Db};
 
 class Storage extends CareyShop
 {

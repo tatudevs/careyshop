@@ -10,8 +10,7 @@
 
 namespace app\careyshop\concern;
 
-use think\exception\ValidateException;
-use think\Model;
+use think\{Model, exception\ValidateException};
 
 trait Validate
 {

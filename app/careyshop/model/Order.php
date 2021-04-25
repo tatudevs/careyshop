@@ -11,9 +11,8 @@
 namespace app\careyshop\model;
 
 use app\careyshop\service\Cart as CartSer;
+use think\facade\{Config, Event};
 use careyshop\Time;
-use think\facade\Config;
-use think\facade\Event;
 
 class Order extends CareyShop
 {

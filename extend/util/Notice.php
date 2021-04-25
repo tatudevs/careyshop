@@ -10,13 +10,10 @@
 
 namespace util;
 
-use aliyun\core\DefaultAcsClient;
-use aliyun\core\profile\DefaultProfile;
 use aliyun\SendSmsRequest;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use think\facade\Config;
-use think\facade\Log;
+use aliyun\core\{DefaultAcsClient, profile\DefaultProfile};
+use PHPMailer\PHPMailer\{PHPMailer, SMTP};
+use think\facade\{Config, Log};
 
 class Notice
 {

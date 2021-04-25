@@ -10,8 +10,7 @@
 
 namespace app\careyshop\service;
 
-use app\careyshop\model\Storage;
-use app\careyshop\model\StorageStyle;
+use app\careyshop\model\{Storage, StorageStyle};
 use think\facade\Config;
 use think\helper\Str;
 

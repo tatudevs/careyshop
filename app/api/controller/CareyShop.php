@@ -12,13 +12,8 @@ namespace app\api\controller;
 
 use careyshop\ApiOutput;
 use app\careyshop\service\Auth;
-use think\App;
-use think\facade\Cache;
-use think\facade\Config;
-use think\facade\Db;
-use think\helper\Str;
-use think\Request;
-use think\Validate;
+use think\facade\{Cache, Config, Db};
+use think\{App, helper\Str, Request, Validate};
 use Exception;
 
 abstract class CareyShop

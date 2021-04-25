@@ -10,9 +10,7 @@
 
 namespace app\careyshop\event\service\notice;
 
-use app\careyshop\model\NoticeVariable;
-use app\careyshop\model\User;
-use app\careyshop\model\Notice as NoticeModel;
+use app\careyshop\model\{NoticeVariable, User, Notice as NoticeModel};
 use think\helper\Str;
 
 class Notice

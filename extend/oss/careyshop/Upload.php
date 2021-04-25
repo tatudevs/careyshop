@@ -15,9 +15,7 @@ const DS = DIRECTORY_SEPARATOR;
 use app\careyshop\model\Storage;
 use careyshop\Image;
 use oss\Upload as UploadBase;
-use think\facade\Config;
-use think\facade\Filesystem;
-use think\facade\Route;
+use think\facade\{Config, Filesystem, Route};
 use think\File;
 
 class Upload extends UploadBase

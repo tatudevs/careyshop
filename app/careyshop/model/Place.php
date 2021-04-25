@@ -10,8 +10,7 @@
 
 namespace app\careyshop\model;
 
-use think\facade\Cache;
-use think\facade\Route;
+use think\facade\{Cache, Route};
 
 class Place extends CareyShop
 {
@@ -182,7 +181,7 @@ class Place extends CareyShop
                     case 'official_account':
                         if (!empty($source['code']) && empty($source['setting']['url']['value'])) {
                             $vars = [
-                                'method' => 'put.wechat.data',
+                                'method' => 'put.official_account.wechat.data',
                                 'code'   => $source['code'],
                             ];
 

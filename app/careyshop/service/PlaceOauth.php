@@ -13,8 +13,7 @@ namespace app\careyshop\service;
 use app\careyshop\model\PlaceUser;
 use Overtrue\Socialite\SocialiteManager;
 use app\careyshop\model\PlaceOauth as PlaceOauthModel;
-use think\facade\Cache;
-use think\facade\Db;
+use think\facade\{Cache, Db};
 
 class PlaceOauth extends CareyShop
 {

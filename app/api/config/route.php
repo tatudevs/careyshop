@@ -8,8 +8,7 @@
  * @date        2020/7/20
  */
 
-use think\facade\Route;
-use think\facade\Db;
+use think\facade\{Route, Db};
 
 $header['Access-Control-Expose-Headers'] = '*';
 $header['Access-Control-Max-Age'] = '86400'; // 1天

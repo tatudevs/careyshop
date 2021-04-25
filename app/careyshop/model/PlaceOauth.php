@@ -10,8 +10,7 @@
 
 namespace app\careyshop\model;
 
-use think\facade\Cache;
-use think\facade\Route;
+use think\facade\{Cache, Route};
 
 class PlaceOauth extends CareyShop
 {

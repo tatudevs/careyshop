@@ -10,9 +10,8 @@
 
 namespace app\careyshop\model;
 
-use think\facade\Cache;
+use think\facade\{Event, Cache};
 use app\careyshop\validate\Recharge as Validate;
-use think\facade\Event;
 
 class Payment extends CareyShop
 {

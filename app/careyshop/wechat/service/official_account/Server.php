@@ -10,11 +10,8 @@
 
 namespace app\careyshop\wechat\service\official_account;
 
-use app\careyshop\wechat\Params;
-use app\careyshop\wechat\service\CareyShop;
-use EasyWeChat\Kernel\Messages\Media;
-use EasyWeChat\Kernel\Messages\Text;
-use EasyWeChat\Kernel\Messages\Transfer;
+use app\careyshop\wechat\{Params, service\CareyShop};
+use EasyWeChat\Kernel\Messages\{Media, Text, Transfer};
 use think\facade\Cache;
 
 class Server extends CareyShop

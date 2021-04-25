@@ -12,8 +12,7 @@
 namespace app\careyshop\event\service\notice\driver;
 
 use app\careyshop\event\service\notice\Driver;
-use app\careyshop\model\PlaceOauth;
-use app\careyshop\model\PlaceUser;
+use app\careyshop\model\{PlaceOauth, PlaceUser};
 
 class Wechat extends Driver
 {
