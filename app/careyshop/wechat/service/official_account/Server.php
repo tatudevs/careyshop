@@ -28,52 +28,50 @@ class Server extends CareyShop
         $server = $this->getApp('server');
         $message = $server->getMessage();
 
-        if (isset($message['MsgType'])) {
-            switch ($message['MsgType']) {
-                // 事件消息
-                case 'event':
-                    $this->handleEvent();
-                    break;
+        switch ($message['MsgType']) {
+            // 事件消息
+            case 'event':
+                $this->handleEvent();
+                break;
 
-                // 文字消息
-                case 'text':
-                    $this->handleText();
-                    break;
+            // 文字消息
+            case 'text':
+                $this->handleText();
+                break;
 
-                // 图片消息
-                case 'image':
-                    $this->handleImage();
-                    break;
+            // 图片消息
+            case 'image':
+                $this->handleImage();
+                break;
 
-                // 语音消息
-                case 'voice':
-                    $this->handleVoice();
-                    break;
+            // 语音消息
+            case 'voice':
+                $this->handleVoice();
+                break;
 
-                // 视频消息
-                case 'video':
-                    $this->handleVideo();
-                    break;
+            // 视频消息
+            case 'video':
+                $this->handleVideo();
+                break;
 
-                // 坐标消息
-                case 'location':
-                    $this->handleLocation();
-                    break;
+            // 坐标消息
+            case 'location':
+                $this->handleLocation();
+                break;
 
-                // 链接消息
-                case 'link':
-                    $this->handleLink();
-                    break;
+            // 链接消息
+            case 'link':
+                $this->handleLink();
+                break;
 
-                // 文件消息
-                case 'file':
-                    $this->handleFile();
-                    break;
+            // 文件消息
+            case 'file':
+                $this->handleFile();
+                break;
 
-                // 其它消息
-                default:
-                    $this->handleOther($message['MsgType']);
-            }
+            // 其它消息
+            default:
+                $this->handleOther($message['MsgType']);
         }
 
         // 响应实际输出
@@ -82,7 +80,7 @@ class Server extends CareyShop
         // 必须返回,否则将导致后续执行(如日志)中断
         return [
             'callback_return_type' => 'view',
-            'is_callback'          => 'success',
+            'is_callback'          => '',
         ];
     }
 
@@ -235,10 +233,10 @@ class Server extends CareyShop
     /**
      * 处理其它消息
      * @access private
-     * @param string $type 消息类型
+     * @param mixed $type 消息类型
      * @return void
      */
-    private function handleOther(string $type)
+    private function handleOther($type)
     {
     }
 
