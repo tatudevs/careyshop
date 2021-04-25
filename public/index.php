@@ -17,9 +17,7 @@ if (version_compare(PHP_VERSION, '7.4', '<')) {
 }
 
 // 检测是否完成安装
-$appName = '';
 $installPath = __DIR__ . '/../public/static/install';
-
 if (file_exists($installPath) && !is_file($installPath . '/install.lock')) {
     $appName = 'install';
 }
@@ -29,7 +27,7 @@ require __DIR__ . '/../vendor/autoload.php';
 // 执行HTTP应用并响应
 $http = (new App())->http;
 
-$response = $http->name($appName)->run();
+$response = $http->name($appName ?? '')->run();
 
 $response->send();
 

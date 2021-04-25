@@ -152,7 +152,7 @@ if (!function_exists('rand_number')) {
     function rand_number($len = 8): string
     {
         $chars = str_repeat('123456789', 3);
-        if ($len > 10) {
+        if ($len > 16) {
             $chars = str_repeat($chars, $len);
         }
 
@@ -170,7 +170,13 @@ if (!function_exists('rand_string')) {
      */
     function rand_string($len = 32, $lower = true): string
     {
-        $string = mb_substr(md5(uniqid(rand(), true)), 0, $len, 'utf-8');
+        try {
+            $rand = bin2hex(random_bytes($len));
+        } catch (Exception $e) {
+            $rand = md5(uniqid(rand(), true));
+        }
+
+        $string = mb_substr($rand, 0, $len, 'utf-8');
         return $lower ? $string : mb_strtoupper($string, 'utf-8');
     }
 }
