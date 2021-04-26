@@ -45,8 +45,8 @@ class OrderService extends CareyShop
         'my_service'       => 'in:0,1',
         'new_event'        => 'in:0,1',
         'new_affair'       => 'in,0,1',
-        'page_no'          => 'integer|gt:0',
-        'page_size'        => 'integer|gt:0',
+        'page_no'          => 'integer|egt:0',
+        'page_size'        => 'integer|egt:0',
         'order_type'       => 'requireWith:order_field|in:asc,desc',
         'order_field'      => 'requireWith:order_type|in:order_service_id,create_time,update_time',
     ];

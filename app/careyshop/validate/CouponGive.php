@@ -29,8 +29,8 @@ class CouponGive extends CareyShop
         'type'           => 'in:normal,used,invalid,delete',
         'account'        => 'max:80',
         'order_id'       => 'integer|gt:0',
-        'page_no'        => 'integer|gt:0',
-        'page_size'      => 'integer|gt:0',
+        'page_no'        => 'integer|egt:0',
+        'page_size'      => 'integer|egt:0',
     ];
 
     /**

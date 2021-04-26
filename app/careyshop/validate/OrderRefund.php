@@ -29,8 +29,8 @@ class OrderRefund extends CareyShop
         'begin_time'      => 'date|betweenTime|beforeTime:end_time',
         'end_time'        => 'date|betweenTime|afterTime:begin_time',
         'account'         => 'max:80',
-        'page_no'         => 'integer|gt:0',
-        'page_size'       => 'integer|gt:0',
+        'page_no'         => 'integer|egt:0',
+        'page_size'       => 'integer|egt:0',
         'order_type'      => 'requireWith:order_field|in:asc,desc',
         'order_field'     => 'requireWith:order_type|in:order_refund_id,create_time,status',
     ];

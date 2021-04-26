@@ -22,8 +22,8 @@ class GoodsReply extends CareyShop
         'to_name'          => 'max:50',
         'content'          => 'require|max:200',
         'is_anon'          => 'in:0,1',
-        'page_no'          => 'integer|gt:0',
-        'page_size'        => 'integer|gt:0',
+        'page_no'          => 'integer|egt:0',
+        'page_size'        => 'integer|egt:0',
     ];
 
     /**

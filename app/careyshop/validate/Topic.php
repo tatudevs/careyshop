@@ -24,8 +24,8 @@ class Topic extends CareyShop
         'keywords'    => 'max:255',
         'description' => 'max:255',
         'status'      => 'in:0,1',
-        'page_no'     => 'integer|gt:0',
-        'page_size'   => 'integer|gt:0',
+        'page_no'     => 'integer|egt:0',
+        'page_size'   => 'integer|egt:0',
         'order_type'  => 'requireWith:order_field|in:asc,desc',
         'order_field' => 'requireWith:order_type|in:topic_id,title,alias,status,create_time,update_time',
     ];

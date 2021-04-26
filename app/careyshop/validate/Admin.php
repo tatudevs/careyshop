@@ -28,8 +28,8 @@ class Admin extends CareyShop
         'account'      => 'max:80',
         'platform'     => 'max:50',
         'refresh'      => 'length:32',
-        'page_no'      => 'integer|gt:0',
-        'page_size'    => 'integer|gt:0',
+        'page_no'      => 'integer|egt:0',
+        'page_size'    => 'integer|egt:0',
         'order_type'   => 'requireWith:order_field|in:asc,desc',
         'order_field'  => 'requireWith:order_type|in:admin_id,username,group_id,nickname,last_login,status,create_time,update_time',
     ];

@@ -28,8 +28,8 @@ class StorageStyle extends CareyShop
         'style'            => 'max:64|alphaDash',
         'status'           => 'in:0,1',
         'exclude_id'       => 'integer|gt:0',
-        'page_no'          => 'integer|gt:0',
-        'page_size'        => 'integer|gt:0',
+        'page_no'          => 'integer|egt:0',
+        'page_size'        => 'integer|egt:0',
         'order_type'       => 'requireWith:order_field|in:asc,desc',
         'order_field'      => 'requireWith:order_type|in:storage_style_id,name,code,platform,status',
     ];

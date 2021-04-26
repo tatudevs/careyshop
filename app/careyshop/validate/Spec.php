@@ -25,8 +25,8 @@ class Spec extends CareyShop
         'spec_type'     => 'in:0,1,2',
         'sort'          => 'integer|between:0,255',
         'is_detail'     => 'in:0,1',
-        'page_no'       => 'integer|gt:0',
-        'page_size'     => 'integer|gt:0',
+        'page_no'       => 'integer|egt:0',
+        'page_size'     => 'integer|egt:0',
         'order_type'    => 'requireWith:order_field|in:asc,desc',
         'order_field'   => 'requireWith:order_type|in:spec_id,goods_type_id,name,spec_index,sort',
     ];

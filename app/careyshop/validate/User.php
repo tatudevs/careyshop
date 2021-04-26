@@ -34,8 +34,8 @@ class User extends CareyShop
         'refresh'       => 'max:32',
         'account'       => 'max:80',
         'platform'      => 'max:50',
-        'page_no'       => 'integer|gt:0',
-        'page_size'     => 'integer|gt:0',
+        'page_no'       => 'integer|egt:0',
+        'page_size'     => 'integer|egt:0',
         'order_type'    => 'requireWith:order_field|in:asc,desc',
         'order_field'   => 'requireWith:order_type|in:user_id,username,group_id,mobile,nickname,sex,birthday,user_level_id,status,create_time',
     ];

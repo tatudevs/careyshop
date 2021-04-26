@@ -28,8 +28,8 @@ class Message extends CareyShop
         'is_read'     => 'in:0,1',
         'status'      => 'in:0,1',
         'is_unread'   => 'in:0,1',
-        'page_no'     => 'integer|gt:0',
-        'page_size'   => 'integer|gt:0',
+        'page_no'     => 'integer|egt:0',
+        'page_size'   => 'integer|egt:0',
         'order_type'  => 'requireWith:order_field|in:asc,desc',
         'order_field' => 'requireWith:order_type|in:message_id,type,page_views,is_top,status,create_time,update_time',
     ];

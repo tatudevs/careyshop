@@ -31,8 +31,8 @@ class Transaction extends CareyShop
         'begin_time'     => 'date|betweenTime|beforeTime:end_time',
         'end_time'       => 'date|betweenTime|afterTime:begin_time',
         'card_number'    => 'length:11',
-        'page_no'        => 'integer|gt:0',
-        'page_size'      => 'integer|gt:0',
+        'page_no'        => 'integer|egt:0',
+        'page_size'      => 'integer|egt:0',
         'order_type'     => 'requireWith:order_field|in:asc,desc',
         'order_field'    => 'requireWith:order_type|in:transaction_id,type,create_time',
     ];

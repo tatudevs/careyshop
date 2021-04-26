@@ -29,8 +29,8 @@ class GoodsAttribute extends CareyShop
         'is_important'       => 'in:0,1',
         'sort'               => 'integer|between:0,255',
         'attribute_all'      => 'in:0,1',
-        'page_no'            => 'integer|gt:0',
-        'page_size'          => 'integer|gt:0',
+        'page_no'            => 'integer|egt:0',
+        'page_size'          => 'integer|egt:0',
         'order_type'         => 'requireWith:order_field|in:asc,desc',
         'order_field'        => 'requireWith:order_type|in:goods_attribute_id,goods_type_id,attr_name,attr_index,sort',
     ];

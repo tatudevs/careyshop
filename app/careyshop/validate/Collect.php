@@ -20,8 +20,8 @@ class Collect extends CareyShop
         'collect_id'  => 'integer|gt:0',
         'goods_id'    => 'require|integer|gt:0',
         'is_top'      => 'in:0,1',
-        'page_no'     => 'integer|gt:0',
-        'page_size'   => 'integer|gt:0',
+        'page_no'     => 'integer|egt:0',
+        'page_size'   => 'integer|egt:0',
         'order_type'  => 'requireWith:order_field|in:asc,desc',
         'order_field' => 'requireWith:order_type|in:collect_id,goods_id,create_time',
     ];

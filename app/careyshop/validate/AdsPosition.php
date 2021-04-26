@@ -31,8 +31,8 @@ class AdsPosition extends CareyShop
         'status'          => 'in:0,1',
         'not_empty'       => 'in:0,1',
         'exclude_id'      => 'integer|gt:0',
-        'page_no'         => 'integer|gt:0',
-        'page_size'       => 'integer|gt:0',
+        'page_no'         => 'integer|egt:0',
+        'page_size'       => 'integer|egt:0',
         'order_type'      => 'requireWith:order_field|in:asc,desc',
         'order_field'     => 'requireWith:order_type|in:ads_position_id,name,description,width,height,status',
     ];

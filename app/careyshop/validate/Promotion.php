@@ -23,8 +23,8 @@ class Promotion extends CareyShop
         'end_time'        => 'require|date|betweenTime|afterTime:begin_time',
         'status'          => 'in:0,1',
         'promotion_item'  => 'require|array',
-        'page_no'         => 'integer|gt:0',
-        'page_size'       => 'integer|gt:0',
+        'page_no'         => 'integer|egt:0',
+        'page_size'       => 'integer|egt:0',
         'order_type'      => 'requireWith:order_field|in:asc,desc',
         'order_field'     => 'requireWith:order_type|in:promotion_id,name,default_dct,begin_time,end_time,status',
     ];

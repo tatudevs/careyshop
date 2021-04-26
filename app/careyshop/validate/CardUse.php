@@ -31,8 +31,8 @@ class CardUse extends CareyShop
         'type'           => 'in:normal,invalid',
         'account'        => 'max:80',
         'goods_id'       => 'arrayHasOnlyInts',
-        'page_no'        => 'integer|gt:0',
-        'page_size'      => 'integer|gt:0',
+        'page_no'        => 'integer|egt:0',
+        'page_size'      => 'integer|egt:0',
     ];
 
     /**
