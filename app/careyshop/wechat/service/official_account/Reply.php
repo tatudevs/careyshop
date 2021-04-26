@@ -16,12 +16,6 @@ use think\facade\Cache;
 class Reply extends CareyShop
 {
     /**
-     * 公众号用户缓存标识
-     * @var string
-     */
-    const WECHAT_REPLY = 'WechatReply';
-
-    /**
      * 获取自动回复配置
      * @access public
      * @return array

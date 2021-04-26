@@ -13,8 +13,6 @@ namespace app\careyshop\wechat\service\official_account;
 use app\careyshop\wechat\service\CareyShop;
 use EasyWeChat\Kernel\Messages\Article;
 
-const DS = DIRECTORY_SEPARATOR;
-
 class Material extends CareyShop
 {
     /**
@@ -79,7 +77,8 @@ class Material extends CareyShop
         $result = $this->getApp($module)->get($mediaId);
 
         if ($result instanceof \EasyWeChat\Kernel\Http\StreamResponse) {
-            $dir = 'uploads' . DS . 'wechat' . DS . date('Ymd') . DS;
+            $ds = DIRECTORY_SEPARATOR;
+            $dir = 'uploads' . $ds . 'wechat' . $ds . date('Ymd') . $ds;
             $saveName = $result->save(public_path() . $dir);
             $url = url($dir . $saveName, [], false, true)->build();
 

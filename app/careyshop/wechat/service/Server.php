@@ -8,9 +8,9 @@
  * @date        2020/10/20
  */
 
-namespace app\careyshop\wechat\service\official_account;
+namespace app\careyshop\wechat\service;
 
-use app\careyshop\wechat\{Params, service\CareyShop};
+use app\careyshop\wechat\Params;
 use EasyWeChat\Kernel\Messages\{Media, Text, Transfer};
 use think\facade\Cache;
 
@@ -96,7 +96,7 @@ class Server extends CareyShop
             switch ($res['Event']) {
                 // 订阅
                 case 'subscribe':
-                    $cacheKey = User::WECHAT_USER . $this->params['code'];
+                    $cacheKey = self::WECHAT_USER . $this->params['code'];
                     $userList = Cache::store('place')->get($cacheKey, []);
 
                     array_unshift($userList, $res['FromUserName']);
@@ -107,7 +107,7 @@ class Server extends CareyShop
 
                 // 取消订阅
                 case 'unsubscribe':
-                    $cacheKey = User::WECHAT_USER . $this->params['code'];
+                    $cacheKey = self::WECHAT_USER . $this->params['code'];
                     $userList = Cache::store('place')->get($cacheKey, []);
                     $key = array_search($res['FromUserName'], $userList);
 
@@ -142,7 +142,7 @@ class Server extends CareyShop
     {
         $this->getApp('server')->push(function ($res) {
             // 处理关键词回复
-            $cacheKey = Reply::WECHAT_REPLY . $this->params['code'];
+            $cacheKey = self::WECHAT_REPLY . $this->params['code'];
             $cacheData = Cache::store('place')->get($cacheKey, []);
 
             if (array_key_exists('keyword', $cacheData)) {
@@ -301,7 +301,7 @@ class Server extends CareyShop
         if (is_array($source)) {
             $data = new Params($source);
         } else {
-            $cacheKey = Reply::WECHAT_REPLY . $this->params['code'];
+            $cacheKey = self::WECHAT_REPLY . $this->params['code'];
             $cacheData = Cache::store('place')->get($cacheKey, []);
 
             if (!array_key_exists($source, $cacheData)) {

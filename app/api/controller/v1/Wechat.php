@@ -11,8 +11,8 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\careyshop\wechat\service\Server;
 use app\careyshop\wechat\service\official_account\{
-    Server as OfficialAccountServer,
     User as OfficialAccountUser,
     UserTag as OfficialAccountUserTag,
     DataCube as OfficialAccountDataCube,
@@ -33,6 +33,18 @@ class Wechat extends CareyShop
      */
     protected static function initMethod()
     {
+        // 微信-服务端
+        self::$route = [
+            // 接收并响应微信推送
+            'put.wechat.data'    => ['putWechatData', Server::class],
+            // 长链接转短链接
+            'set.wechat.short'   => ['setWechatShort', Server::class],
+            // 获取微信服务器IP(或IP段)
+            'get.wechat.ip'      => ['getWechatIP', Server::class],
+            // 清理接口调用次数(每月10次)
+            'clear.wechat.quota' => ['clearWechatQuota', Server::class],
+        ];
+
         // 加载微信公众号方法路由器
         self::loadOfficialAccount();
 
@@ -47,18 +59,6 @@ class Wechat extends CareyShop
      */
     private static function loadOfficialAccount()
     {
-        // 微信公众号-服务端
-        $server = [
-            // 接收并响应微信推送
-            'put.official_account.wechat.data'    => ['putWechatData', OfficialAccountServer::class],
-            // 长链接转短链接
-            'set.official_account.wechat.short'   => ['setWechatShort', OfficialAccountServer::class],
-            // 获取微信服务器IP(或IP段)
-            'get.official_account.wechat.ip'      => ['getWechatIP', OfficialAccountServer::class],
-            // 清理接口调用次数(每月10次)
-            'clear.official_account.wechat.quota' => ['clearWechatQuota', OfficialAccountServer::class],
-        ];
-
         // 微信公众号-用户管理
         $user = [
             // 同步公众号用户
@@ -218,7 +218,6 @@ class Wechat extends CareyShop
         // 微信公众号-方法合并
         self::$route = array_merge(
             self::$route,
-            $server,
             $user,
             $userTag,
             $dataCube,

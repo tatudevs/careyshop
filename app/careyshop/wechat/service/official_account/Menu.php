@@ -16,12 +16,6 @@ use think\facade\Cache;
 class Menu extends CareyShop
 {
     /**
-     * 公众号菜单缓存标识
-     * $var string
-     */
-    const WECHAT_MENU = 'WechatMenu';
-
-    /**
      * 编辑自定义菜单(配置数据为空时表示全部删除)
      * @access public
      * @return bool

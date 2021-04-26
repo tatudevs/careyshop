@@ -19,6 +19,30 @@ class CareyShop
     use \app\careyshop\concern\Error;
 
     /**
+     * 公众号菜单缓存标识
+     * $var string
+     */
+    const WECHAT_MENU = 'WechatMenu';
+
+    /**
+     * 公众号用户缓存标识
+     * @var string
+     */
+    const WECHAT_REPLY = 'WechatReply';
+
+    /**
+     * 公众号用户缓存标识
+     * @var string
+     */
+    const WECHAT_USER = 'WechatUser';
+
+    /**
+     * 公众号黑名单缓存标识
+     * @var string
+     */
+    const WECHAT_BLACK = 'WechatBlack';
+
+    /**
      * WeChat 实列
      * @var mixed|null
      */
