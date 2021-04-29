@@ -51,23 +51,10 @@ class ActionLog extends CareyShop
         'client_type'   => 'integer',
         'user_id'       => 'integer',
         'header'        => 'json',
+        'params'        => 'json',
+        'result'        => 'json',
         'status'        => 'integer',
     ];
-
-    /**
-     * JSON数据表字段
-     * @var string[]
-     */
-    protected $json = [
-        'params',
-        'result',
-    ];
-
-    /**
-     * JSON数据取出是否需要转换为数组
-     * @var bool
-     */
-    protected $jsonAssoc = true;
 
     /**
      * 敏感词过滤字段
