@@ -26,6 +26,8 @@
 ## 介绍
 CareyShop（简称 CS）是一套基于 ThinkPHP6.0 框架开发的高性能开源商城框架系统，秉承极简、极速、极致的开发理念，采用前后端分离，支持分布式部署。框架内部使用面向对象模块化调用，在多个终端、跨平台时采用 REST API 进行数据交互，可直接对接 PC、移动设备、小程序、云部署，构建 Android、IOS 的 APP。
 
+框架引入渠道概念，配合管理后台您可以动态配置各大平台至“渠道”中进行管理，比如“微信公众号”、“微信小程序”、“头条小程序”等，并且支持店群（绑定多个运营账号）运营模式。
+
 **严正声明：**   
 **为配合国家打击跨境赌博、电信诈骗、断卡等行动，本源码仅限中国大陆地区使用，且！使用站点必须有ICP备案与网安备案，否则一律上报至公安机关！**
 
@@ -46,8 +48,11 @@ CareyShop 后台管理模板 [Github 仓库](https://github.com/dnyz520/careysho
 CareyShop Rest接口调试 [Github 仓库](https://github.com/dnyz520/careyshop-rest "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-rest "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-rest.git "Coding 仓库")
 
 ## 功能
-* 微信公众号（开发中）
 * uniapp小程序（内测中）
+* 发票申请、审批管理（1.3.2）
+* OAuth2.0支持微信、QQ、抖音、淘宝等（1.3.2）
+* 通知订阅（1.3.2）
+* 渠道系统，支持微信公众号等（1.3.2）
 * 数据统计
 * 重构至ThinkPHP6.0
 * REST API内置调试工具
