@@ -418,17 +418,17 @@
     },
     {
         "name": "dnyz520/careyshop-system",
-        "version": "v1.0.2",
-        "version_normalized": "1.0.2.0",
+        "version": "v1.0.4",
+        "version_normalized": "1.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/dnyz520/careyshop-system.git",
-            "reference": "f311659ee64615fa94a2bda832f098b5a420e6ea"
+            "reference": "3ed2057eaaf7eb2b1b04131d2a55aeb69d9a8850"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dnyz520/careyshop-system/zipball/f311659ee64615fa94a2bda832f098b5a420e6ea",
-            "reference": "f311659ee64615fa94a2bda832f098b5a420e6ea",
+            "url": "https://api.github.com/repos/dnyz520/careyshop-system/zipball/3ed2057eaaf7eb2b1b04131d2a55aeb69d9a8850",
+            "reference": "3ed2057eaaf7eb2b1b04131d2a55aeb69d9a8850",
             "shasum": "",
             "mirrors": [
                 {
@@ -449,7 +449,7 @@
             "php": ">=7.4.0",
             "topthink/framework": "^6.0.0"
         },
-        "time": "2021-04-12T07:22:20+00:00",
+        "time": "2021-04-29T07:03:26+00:00",
         "type": "library",
         "extra": {
             "think": {
@@ -730,17 +730,17 @@
     },
     {
         "name": "guzzlehttp/psr7",
-        "version": "1.8.1",
-        "version_normalized": "1.8.1.0",
+        "version": "1.8.2",
+        "version_normalized": "1.8.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/guzzle/psr7.git",
-            "reference": "35ea11d335fd638b5882ff1725228b3d35496ab1"
+            "reference": "dc960a912984efb74d0a90222870c72c87f10c91"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/guzzle/psr7/zipball/35ea11d335fd638b5882ff1725228b3d35496ab1",
-            "reference": "35ea11d335fd638b5882ff1725228b3d35496ab1",
+            "url": "https://api.github.com/repos/guzzle/psr7/zipball/dc960a912984efb74d0a90222870c72c87f10c91",
+            "reference": "dc960a912984efb74d0a90222870c72c87f10c91",
             "shasum": "",
             "mirrors": [
                 {
@@ -764,7 +764,7 @@
         "suggest": {
             "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
         },
-        "time": "2021-03-21T16:25:00+00:00",
+        "time": "2021-04-26T09:17:50+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1097,17 +1097,17 @@
     },
     {
         "name": "overtrue/socialite",
-        "version": "3.2.1",
-        "version_normalized": "3.2.1.0",
+        "version": "3.2.2",
+        "version_normalized": "3.2.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/overtrue/socialite.git",
-            "reference": "4246be157b4c54f2d6960d7e837eeda9afc0b64a"
+            "reference": "0d74b1c18d2469d7357e581f91930500bb2d48f4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/overtrue/socialite/zipball/4246be157b4c54f2d6960d7e837eeda9afc0b64a",
-            "reference": "4246be157b4c54f2d6960d7e837eeda9afc0b64a",
+            "url": "https://api.github.com/repos/overtrue/socialite/zipball/0d74b1c18d2469d7357e581f91930500bb2d48f4",
+            "reference": "0d74b1c18d2469d7357e581f91930500bb2d48f4",
             "shasum": "",
             "mirrors": [
                 {
@@ -1128,7 +1128,7 @@
             "mockery/mockery": "~1.2",
             "phpunit/phpunit": "~9.0"
         },
-        "time": "2021-03-16T03:29:17+00:00",
+        "time": "2021-04-27T01:55:22+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2803,17 +2803,17 @@
     },
     {
         "name": "topthink/framework",
-        "version": "v6.0.7",
-        "version_normalized": "6.0.7.0",
+        "version": "v6.0.8",
+        "version_normalized": "6.0.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/top-think/framework.git",
-            "reference": "db8fe22520a9660dd5e4c87e304034ac49e39270"
+            "reference": "4789343672aef06d571d556da369c0e156609bce"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/top-think/framework/zipball/db8fe22520a9660dd5e4c87e304034ac49e39270",
-            "reference": "db8fe22520a9660dd5e4c87e304034ac49e39270",
+            "url": "https://api.github.com/repos/top-think/framework/zipball/4789343672aef06d571d556da369c0e156609bce",
+            "reference": "4789343672aef06d571d556da369c0e156609bce",
             "shasum": "",
             "mirrors": [
                 {
@@ -2839,7 +2839,7 @@
             "mockery/mockery": "^1.2",
             "phpunit/phpunit": "^7.0"
         },
-        "time": "2021-01-25T14:48:29+00:00",
+        "time": "2021-04-27T00:41:08+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2971,17 +2971,17 @@
     },
     {
         "name": "topthink/think-orm",
-        "version": "v2.0.39",
-        "version_normalized": "2.0.39.0",
+        "version": "v2.0.40",
+        "version_normalized": "2.0.40.0",
         "source": {
             "type": "git",
             "url": "https://github.com/top-think/think-orm.git",
-            "reference": "39a9d0a0e52d9b8bad9d98484d8484cdf5b683a7"
+            "reference": "1119d979b850849f3725856460cf108eec1c3eb8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/top-think/think-orm/zipball/39a9d0a0e52d9b8bad9d98484d8484cdf5b683a7",
-            "reference": "39a9d0a0e52d9b8bad9d98484d8484cdf5b683a7",
+            "url": "https://api.github.com/repos/top-think/think-orm/zipball/1119d979b850849f3725856460cf108eec1c3eb8",
+            "reference": "1119d979b850849f3725856460cf108eec1c3eb8",
             "shasum": "",
             "mirrors": [
                 {
@@ -3001,7 +3001,7 @@
         "require-dev": {
             "phpunit/phpunit": "^7|^8|^9.5"
         },
-        "time": "2021-02-26T10:20:00+00:00",
+        "time": "2021-04-19T13:29:37+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

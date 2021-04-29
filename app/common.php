@@ -385,3 +385,14 @@ if (!function_exists('is_windows')) {
         return strpos(PHP_OS, 'WIN') !== false;
     }
 }
+
+if (!function_exists('is_initialize')) {
+    /**
+     * 检测项目是否已初始化
+     * @return bool
+     */
+    function is_initialize(): bool
+    {
+        return IS_INITIALIZE !== false;
+    }
+}

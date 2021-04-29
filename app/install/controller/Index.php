@@ -30,7 +30,7 @@ class Index
     {
         // 获取运行目录
         if (is_file(public_path() . 'static' . DS . 'install' . DS . 'install.lock')) {
-            $this->error('Carey_Shop已安装，如需重新安装，请删除 public\static\install 目录下的 install.lock 文件');
+            $this->error('项目已初始化，如需重新安装，请删除 public\static\install 目录下的 install.lock 文件');
         }
 
         if (is_file(root_path() . '.env')) {
