@@ -17,6 +17,7 @@ class Collect extends CareyShop
      * @var string[]
      */
     protected $rule = [
+        'client_id'   => 'integer|gt:0',
         'collect_id'  => 'integer|gt:0',
         'goods_id'    => 'require|integer|gt:0',
         'is_top'      => 'in:0,1',
@@ -31,6 +32,7 @@ class Collect extends CareyShop
      * @var string[]
      */
     protected $field = [
+        'client_id'   => '账号编号',
         'collect_id'  => '收藏夹编号',
         'goods_id'    => '商品编号',
         'is_top'      => '是否置顶',
@@ -53,6 +55,7 @@ class Collect extends CareyShop
             'is_top'     => 'require|in:0,1',
         ],
         'list'  => [
+            'client_id' => 'require|integer|gt:0',
             'page_no',
             'page_size',
             'order_type',
@@ -60,6 +63,9 @@ class Collect extends CareyShop
         ],
         'goods' => [
             'goods_id',
+        ],
+        'total' => [
+            'client_id' => 'require|integer|gt:0',
         ],
     ];
 }

@@ -165,7 +165,7 @@ class Collect extends CareyShop
         }
 
         // 搜索条件
-        $map[] = ['collect.user_id', '=', get_client_id()];
+        $map[] = ['collect.user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
 
         $result['total_result'] = $this->withJoin('getGoods')->where($map)->count();
         if ($result['total_result'] <= 0) {
@@ -194,12 +194,17 @@ class Collect extends CareyShop
     /**
      * 获取商品收藏数量
      * @access public
-     * @return array
+     * @param array $data 外部数据
+     * @return array|false
      */
-    public function getCollectCount(): array
+    public function getCollectCount(array $data)
     {
+        if (!$this->validateData($data, 'total')) {
+            return false;
+        }
+
         // 搜索条件
-        $map[] = ['collect.user_id', '=', get_client_id()];
+        $map[] = ['collect.user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
         $totalResult = $this->withJoin('getGoods')->where($map)->count();
 
         return ['total_result' => $totalResult];
