@@ -17,6 +17,7 @@ class Cart extends CareyShop
      * @var string[]
      */
     protected $rule = [
+        'client_id'   => 'integer|gt:0',
         'cart_id'     => 'integer|gt:0',
         'goods_id'    => 'require|integer|gt:0',
         'goods_spec'  => 'arrayHasOnlyInts',
@@ -26,7 +27,6 @@ class Cart extends CareyShop
         'cart_goods'  => 'array',
         'total_type'  => 'in:goods,number',
         'former_spec' => 'max:50',
-        'client_id'   => 'integer|gt:0',
     ];
 
     /**
@@ -34,6 +34,7 @@ class Cart extends CareyShop
      * @var string[]
      */
     protected $field = [
+        'client_id'   => '账号编号',
         'cart_id'     => '购物车编号',
         'goods_id'    => '商品编号',
         'goods_spec'  => '商品规格',
@@ -43,7 +44,6 @@ class Cart extends CareyShop
         'cart_goods'  => '购物车商品列表',
         'total_type'  => '合计类型',
         'former_spec' => '原先的商品规格',
-        'client_id'   => '账号编号',
     ];
 
     /**
@@ -52,8 +52,8 @@ class Cart extends CareyShop
      */
     protected $scene = [
         'list'   => [
-            'show_size',
             'client_id' => 'require|integer|gt:0',
+            'show_size',
         ],
         'select' => [
             'cart_id'     => 'require|arrayHasOnlyInts',
@@ -66,8 +66,8 @@ class Cart extends CareyShop
             'cart_goods' => 'require|array',
         ],
         'total'  => [
-            'total_type' => 'require|in:goods,number',
             'client_id'  => 'require|integer|gt:0',
+            'total_type' => 'require|in:goods,number',
         ],
     ];
 }
