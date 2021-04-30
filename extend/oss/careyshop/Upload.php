@@ -91,6 +91,7 @@ class Upload extends UploadBase
             ['name' => 'x:replace', 'type' => 'hidden', 'default' => $this->replace],
             ['name' => 'x:parent_id', 'type' => 'hidden', 'default' => 0],
             ['name' => 'x:filename', 'type' => 'hidden', 'default' => ''],
+            ['name' => 'x:is_actual', 'type' => 'hidden', 'default' => 0],
             ['name' => 'key', 'type' => 'hidden', 'default' => ''],
             ['name' => 'token', 'type' => 'hidden', 'default' => ''],
             ['name' => 'file', 'type' => 'file', 'default' => ''],
@@ -321,7 +322,7 @@ class Upload extends UploadBase
         }
 
         // 获取实际物理路径
-        if ($this->request->param('x:is_actual', false)) {
+        if ($this->request->param('x:is_actual', 0)) {
             $actualPath = $fileDriver->path($savename);
             $ossResult['path'] = str_replace(is_windows() ? '/' : '\\', DS, $actualPath);
         }
