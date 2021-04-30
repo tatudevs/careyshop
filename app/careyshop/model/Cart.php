@@ -322,7 +322,7 @@ class Cart extends CareyShop
         }
 
         $map[] = ['user_id', '<>', 0];
-        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
         $map[] = ['is_show', '=', 1];
 
         $result = $this
@@ -344,15 +344,19 @@ class Cart extends CareyShop
      * 获取购物车商品数量
      * @access public
      * @param array $data 外部数据
-     * @return int[]
+     * @return false|int[]
      */
-    public static function getCartCount(array $data): array
+    public function getCartCount(array $data)
     {
+        if (!$this->validateData($data, 'list')) {
+            return false;
+        }
+
         $map[] = ['cart.user_id', '<>', 0];
-        $map[] = ['cart.user_id', '=', get_client_id()];
+        $map[] = ['cart.user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
         $map[] = ['cart.is_show', '=', 1];
 
-        $totalResult = isset($data['total_type']) && 'number' == $data['total_type']
+        $totalResult = 'number' == $data['total_type']
             ? self::where($map)->withJoin('goods')->sum('cart.goods_num')
             : self::where($map)->withJoin('goods')->count();
 
