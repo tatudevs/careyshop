@@ -23,7 +23,7 @@ trait Validate
      * @param string|array $validate 验证器规则或类
      * @return bool
      */
-    public function validateData(array &$data, $scene = null, $clean = false, $validate = ''): bool
+    public function validateData(array &$data, string $scene = null, bool $clean = false, $validate = ''): bool
     {
         try {
             // 确定规则来源

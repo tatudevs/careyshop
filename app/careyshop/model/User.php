@@ -501,7 +501,7 @@ class User extends CareyShop
      * @return array|false
      * @throws
      */
-    public function loginUser(array $data, $isGetToken = true, $isInline = false)
+    public function loginUser(array $data, bool $isGetToken = true, bool $isInline = false)
     {
         if (!$this->validateData($data, 'login')) {
             return false;

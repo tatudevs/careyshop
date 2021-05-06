@@ -59,7 +59,7 @@ class Upload extends CareyShop
      * @param string $model 模块
      * @return false|object
      */
-    public function createOssObject(string $file, $model = 'Upload')
+    public function createOssObject(string $file, string $model = 'Upload')
     {
         // 转换模块的名称
         $file = Str::lower($file);
@@ -266,7 +266,7 @@ class Upload extends CareyShop
      * @param bool $getObject 是否返回OSS组件对象
      * @return array|false
      */
-    public function getThumbUrl($getObject = false)
+    public function getThumbUrl(bool $getObject = false)
     {
         // 补齐协议地址
         $request = request();

@@ -20,7 +20,7 @@ class Aes
      * @param bool   $isWrap 是否切段换行
      * @return string
      */
-    public static function encrypt(string $input, string $key = 'careyshop', $isWrap = true): string
+    public static function encrypt(string $input, string $key = 'careyshop', bool $isWrap = true): string
     {
         $key = substr(openssl_digest(openssl_digest($key, 'sha1', true), 'sha1', true), 0, 16);
         $data = openssl_encrypt($input, 'AES-128-ECB', $key, OPENSSL_RAW_DATA);
@@ -37,7 +37,7 @@ class Aes
      * @param bool   $isWrap 是否去除切段换行
      * @return string
      */
-    public static function decrypt(string $input, string $key = 'careyshop', $isWrap = true): string
+    public static function decrypt(string $input, string $key = 'careyshop', bool $isWrap = true): string
     {
         $key = substr(openssl_digest(openssl_digest($key, 'sha1', true), 'sha1', true), 0, 16);
         $encrypted = base64_decode($isWrap ? str_replace(PHP_EOL, '', $input) : $input);

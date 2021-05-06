@@ -281,7 +281,7 @@ class App extends CareyShop
      * @return array
      * @throws
      */
-    public static function getAppCaptcha(string $key, $is_key = true): array
+    public static function getAppCaptcha(string $key, bool $is_key = true): array
     {
         $result = [
             'captcha'    => true,

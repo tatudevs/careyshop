@@ -58,7 +58,7 @@ class Discount extends CareyShop
      * @return bool
      * @throws
      */
-    private function isRepeatGoods(string $beginTime, string $endTime, array $goodsList, $excludeId = 0): bool
+    private function isRepeatGoods(string $beginTime, string $endTime, array $goodsList, int $excludeId = 0): bool
     {
         $map = [];
         $excludeId == 0 ?: $map[] = ['discount_id', '<>', $excludeId];

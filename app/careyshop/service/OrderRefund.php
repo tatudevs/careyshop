@@ -47,7 +47,7 @@ class OrderRefund extends CareyShop
      * @param string  $refundNo 退款流水号
      * @return mixed
      */
-    public function createRefundRequest(array &$data, array &$setting, float $amount, $refundNo = ''): ?bool
+    public function createRefundRequest(array &$data, array &$setting, float $amount, string $refundNo = ''): ?bool
     {
         if (empty($data) || !is_array($setting)) {
             return $this->setError('数据错误');

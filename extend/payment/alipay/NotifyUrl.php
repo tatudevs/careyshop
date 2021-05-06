@@ -86,7 +86,7 @@ class NotifyUrl
      * @param string $msg 消息内容
      * @return array
      */
-    public function getSuccess($msg = ''): array
+    public function getSuccess(string $msg = ''): array
     {
         unset($msg);
         $data['callback_return_type'] = 'view';
@@ -101,7 +101,7 @@ class NotifyUrl
      * @param string $msg 消息内容
      * @return array
      */
-    public function getError($msg = ''): array
+    public function getError(string $msg = ''): array
     {
         unset($msg);
         $data['callback_return_type'] = 'view';

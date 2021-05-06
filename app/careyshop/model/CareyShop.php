@@ -115,7 +115,7 @@ abstract class CareyShop extends Model
      * @param bool  $reverse 是否调整顺序
      * @return $this
      */
-    public function setDefaultOrder(array $order, $fixed = [], $reverse = false): CareyShop
+    public function setDefaultOrder(array $order, array $fixed = [], bool $reverse = false): CareyShop
     {
         $this->defaultOrder = $order;
         $this->fixedOrder = $fixed;

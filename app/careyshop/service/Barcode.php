@@ -11,7 +11,6 @@
 namespace app\careyshop\service;
 
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use think\exception\ValidateException;
 use think\facade\Route;
 
 class Barcode extends CareyShop
@@ -35,7 +34,7 @@ class Barcode extends CareyShop
      * @param array $data 外部数据
      * @return array|false
      */
-    public function getBarcodeItem($data = [])
+    public function getBarcodeItem(array $data = [])
     {
         // 规则验证
         if (!$this->validateData($data, null, false, \app\careyshop\validate\Barcode::class)) {

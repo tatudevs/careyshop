@@ -108,7 +108,7 @@ class Upload extends UploadBase
      * @return array
      * @throws
      */
-    public function getToken($replace = ''): array
+    public function getToken(string $replace = ''): array
     {
         empty($replace) ?: $this->replace = $replace;
         return $this->request->param('type') === 'app' ? $this->getAppToken() : $this->getWebToken();

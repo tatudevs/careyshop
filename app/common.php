@@ -116,7 +116,7 @@ if (!function_exists('user_md5')) {
      * @param string $key      盐
      * @return string
      */
-    function user_md5(string $password, $key = 'Carey_Shop#'): string
+    function user_md5(string $password, string $key = 'Carey_Shop#'): string
     {
         return isset($password) ? md5(sha1($password) . $key) : '';
     }
@@ -128,7 +128,7 @@ if (!function_exists('get_order_no')) {
      * @param string $prefix 头部
      * @return string
      */
-    function get_order_no($prefix = 'CS_'): string
+    function get_order_no(string $prefix = 'CS_'): string
     {
         $year_code = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
@@ -149,7 +149,7 @@ if (!function_exists('rand_number')) {
      * @param int $len 数值长度,默认8位
      * @return string
      */
-    function rand_number($len = 8): string
+    function rand_number(int $len = 8): string
     {
         $chars = str_repeat('123456789', 3);
         if ($len > 16) {
@@ -168,7 +168,7 @@ if (!function_exists('rand_string')) {
      * @param bool $lower 是否小写,否则大写
      * @return string
      */
-    function rand_string($len = 32, $lower = true): string
+    function rand_string(int $len = 32, bool $lower = true): string
     {
         try {
             $rand = bin2hex(random_bytes($len));
@@ -187,7 +187,7 @@ if (!function_exists('guid_v4')) {
      * @param bool $trim
      * @return string
      */
-    function guid_v4($trim = true): string
+    function guid_v4(bool $trim = true): string
     {
         // Windows
         if (function_exists('com_create_guid')) {
@@ -230,7 +230,7 @@ if (!function_exists('get_randstr')) {
      * @param int $len 数值长度,默认6位
      * @return string
      */
-    function get_randstr($len = 6): string
+    function get_randstr(int $len = 6): string
     {
         $chars = [
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
@@ -261,7 +261,7 @@ if (!function_exists('auto_hid_substr')) {
      * @param int    $show 显示的长度
      * @return string
      */
-    function auto_hid_substr(string $str, $len = 3, $show = 3): string
+    function auto_hid_substr(string $str, int $len = 3, int $show = 3): string
     {
         if (empty($str)) {
             return '';
@@ -286,7 +286,7 @@ if (!function_exists('string_to_byte')) {
      * @param int    $dec 小数位数
      * @return float
      */
-    function string_to_byte(string $var, $dec = 2): float
+    function string_to_byte(string $var, int $dec = 2): float
     {
         preg_match('/(^[0-9.]+)(\w+)/', $var, $info);
         $size = $info[1];

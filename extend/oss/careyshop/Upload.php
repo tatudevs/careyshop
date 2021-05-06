@@ -106,7 +106,7 @@ class Upload extends UploadBase
      * @param string $replace 替换资源(path)
      * @return array
      */
-    public function getToken($replace = ''): array
+    public function getToken(string $replace = ''): array
     {
         empty($replace) ?: $this->replace = $replace;
         $tokenExpires = Config::get('careyshop.upload.token_expires');
@@ -377,7 +377,7 @@ class Upload extends UploadBase
      * @param string $type     新的路径方式
      * @return string
      */
-    private function getNewUrl(string $fileName, string $suffix, array $fileInfo, $urlArray = null, $type = 'url'): string
+    private function getNewUrl(string $fileName, string $suffix, array $fileInfo, $urlArray = null, string $type = 'url'): string
     {
         if ($type === 'url') {
             $url = $urlArray['scheme'] . '://';

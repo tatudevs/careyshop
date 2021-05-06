@@ -99,7 +99,7 @@ abstract class Upload
      * @param array $options 查询条件
      * @return string
      */
-    protected function queryToString($options = []): string
+    protected function queryToString(array $options = []): string
     {
         $temp = [];
         foreach ($options as $key => $value) {
@@ -160,7 +160,7 @@ abstract class Upload
      * @param string $replace 替换资源(path)
      * @return array|bool
      */
-    abstract protected function getToken($replace = '');
+    abstract protected function getToken(string $replace = '');
 
     /**
      * 接收第三方推送数据

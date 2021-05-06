@@ -93,7 +93,7 @@ class MessageUser extends CareyShop
      * @param bool   $isAll     是否操作所有
      * @return bool
      */
-    private function updateMessageUserList(array $messageId, string $field, $isAll = false): bool
+    private function updateMessageUserList(array $messageId, string $field, bool $isAll = false): bool
     {
         // 获取已存在的消息
         $clientType = is_client_admin() ? 'admin_id' : 'user_id';

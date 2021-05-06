@@ -343,7 +343,7 @@ class Stats extends CareyShop
                 ->toArray();
 
             $month = date('n');
-            $dayCount = Time::daysMonth();
+            $dayCount = (int)Time::daysMonth();
 
             for ($i = 0; $i <= $dayCount; $i++) {
                 $key = sprintf('%s-%d', $month, $i + 1);

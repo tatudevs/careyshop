@@ -323,7 +323,7 @@ abstract class CareyShop
         }
 
         // 输出结果
-        if (false === $result && !isset($result['callback_return_type'])) {
+        if (!isset($result['callback_return_type']) && false === $result) {
             !empty($this->error) || !is_object(static::$model) || $this->setError(static::$model->getError());
             $this->outputError($this->getError());
         }
@@ -498,11 +498,11 @@ abstract class CareyShop
     /**
      * 输出请求结果
      * @access protected
-     * @param array $data 业务结果
+     * @param mixed $data 业务结果
      * @param int   $code HTTP状态码
      * @return mixed
      */
-    protected function outputResult($data = [], $code = 200)
+    protected function outputResult($data = [], int $code = 200)
     {
         return ApiOutput::outPut($data, $code);
     }
@@ -514,9 +514,9 @@ abstract class CareyShop
      * @param int    $code    错误编码
      * @return void
      */
-    protected function outputError($message = '', $code = 500)
+    protected function outputError(string $message = '', int $code = 500)
     {
-        abort($code, (string)$message);
+        abort($code, $message);
     }
 
     /**

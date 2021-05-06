@@ -56,7 +56,7 @@ class Promotion extends CareyShop
      * @return bool
      * @throws
      */
-    private function isRepeatPromotion(string $beginTime, string $endTime, $excludeId = 0): bool
+    private function isRepeatPromotion(string $beginTime, string $endTime, int $excludeId = 0): bool
     {
         $map = [];
         $excludeId == 0 ?: $map[] = ['promotion_id', '<>', $excludeId];

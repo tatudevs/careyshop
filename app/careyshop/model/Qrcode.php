@@ -44,7 +44,7 @@ class Qrcode extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getQrcodeItem($data = [])
+    public function getQrcodeItem(array $data = [])
     {
         if (!$this->validateData($data)) {
             return false;

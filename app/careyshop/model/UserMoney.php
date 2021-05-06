@@ -50,7 +50,7 @@ class UserMoney extends CareyShop
      * @param int   $clientId 账号编号
      * @return bool
      */
-    public function decBalanceAndIncLock($value = 0.0, $clientId = 0): bool
+    public function decBalanceAndIncLock(float $value = 0.0, int $clientId = 0): bool
     {
         if ($value <= 0 || $clientId == 0) {
             return $this->setError('数值或账号编号错误');
@@ -87,7 +87,7 @@ class UserMoney extends CareyShop
      * @param int   $clientId 账号编号
      * @return bool
      */
-    public function incBalanceAndDecLock($value = 0.0, $clientId = 0): bool
+    public function incBalanceAndDecLock(float $value = 0.0, int $clientId = 0): bool
     {
         if ($value <= 0 || $clientId == 0) {
             return $this->setError('数值或账号编号错误');
@@ -125,7 +125,7 @@ class UserMoney extends CareyShop
      * @param int $clientId 账号编号
      * @return bool
      */
-    public function decPointsAndIncLock($value = 0, $clientId = 0): bool
+    public function decPointsAndIncLock(int $value = 0, int $clientId = 0): bool
     {
         if ($value <= 0 || $clientId == 0) {
             return $this->setError('数值或账号编号错误');
@@ -153,7 +153,7 @@ class UserMoney extends CareyShop
      * @param int $clientId 账号编号
      * @return bool
      */
-    public function incPointsAndDecLocl($value = 0, $clientId = 0): bool
+    public function incPointsAndDecLocl(int $value = 0, int $clientId = 0): bool
     {
         if ($value <= 0 || $clientId == 0) {
             return $this->setError('数值或账号编号错误');
@@ -181,7 +181,7 @@ class UserMoney extends CareyShop
      * @param int   $clientId 账号编号
      * @return bool
      */
-    public function decLockBalance($value = 0.0, $clientId = 0): bool
+    public function decLockBalance(float $value = 0.0, int $clientId = 0): bool
     {
         if ($value <= 0 || $clientId == 0) {
             return $this->setError('数值或账号编号错误');
@@ -209,7 +209,7 @@ class UserMoney extends CareyShop
      * @param int $clientId 账号编号
      * @return bool
      */
-    public function decLockPoints($value = 0, $clientId = 0): bool
+    public function decLockPoints(int $value = 0, int $clientId = 0): bool
     {
         if ($value <= 0 || $clientId == 0) {
             return $this->setError('数值或账号编号错误');
@@ -237,7 +237,7 @@ class UserMoney extends CareyShop
      * @param int   $clientId 账号编号
      * @return bool
      */
-    public function setBalance($value = 0.0, $clientId = 0): bool
+    public function setBalance(float $value = 0.0, int $clientId = 0): bool
     {
         if ($value == 0 || $clientId == 0) {
             return $this->setError('数值或账号编号错误');
@@ -283,7 +283,7 @@ class UserMoney extends CareyShop
      * @param int $clientId 账号编号
      * @return bool
      */
-    public function setPoints($value = 0, $clientId = 0): bool
+    public function setPoints(int $value = 0, int $clientId = 0): bool
     {
         if ($value == 0 || $clientId == 0) {
             return $this->setError('数值或账号编号错误');
@@ -317,7 +317,7 @@ class UserMoney extends CareyShop
      * @return bool
      * @throws
      */
-    public function incTotalMoney($value = 0.0, $clientId = 0): bool
+    public function incTotalMoney(float $value = 0.0, int $clientId = 0): bool
     {
         if ($value <= 0 || $clientId == 0) {
             return $this->setError('数值或账号编号错误');
@@ -345,7 +345,7 @@ class UserMoney extends CareyShop
      * @return bool
      * @throws
      */
-    public function decTotalMoney($value = 0.0, $clientId = 0): bool
+    public function decTotalMoney(float $value = 0.0, int $clientId = 0): bool
     {
         if ($value <= 0 || $clientId == 0) {
             return $this->setError('数值或账号编号错误');

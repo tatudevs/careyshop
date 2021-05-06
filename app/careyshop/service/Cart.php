@@ -55,7 +55,7 @@ class Cart extends CareyShop
      * @param bool  $isConcise  是否返回简洁数据
      * @return array|false
      */
-    public function checkCartGoodsList(array $goodsData, bool $isCheckout, $isConcise = false)
+    public function checkCartGoodsList(array $goodsData, bool $isCheckout, bool $isConcise = false)
     {
         // 此处并非不再检测是否限购,在添加至购物车时已进行过检测,
         // 只有在用户已添加至购物车,而管理组进行了调整才会出现,几率很小,但影响效率

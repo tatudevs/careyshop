@@ -82,7 +82,7 @@ class Upload extends UploadBase
      * @param string $replace 替换资源(path)
      * @return array|false
      */
-    public function getToken($replace = '')
+    public function getToken(string $replace = '')
     {
         // 初始化Auth状态
         empty($replace) ?: $this->replace = $replace;

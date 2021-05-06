@@ -173,7 +173,7 @@ class CardUse extends CareyShop
      * @return bool
      * @throws
      */
-    public function incCardUseMoney($number = '', $value = 0.0, $clientId = 0): bool
+    public function incCardUseMoney(string $number = '', float $value = 0.0, int $clientId = 0): bool
     {
         if (empty($number)) {
             return $this->setError('卡号不能为空');
@@ -221,7 +221,7 @@ class CardUse extends CareyShop
      * @return bool
      * @throws
      */
-    public function decCardUseMoney($number = '', $value = 0.0, $clientId = 0): bool
+    public function decCardUseMoney(string $number = '', float $value = 0.0, int $clientId = 0): bool
     {
         if (empty($number)) {
             return $this->setError('卡号不能为空');
@@ -537,7 +537,7 @@ class CardUse extends CareyShop
      * @param float $decMoney      准备减少的可用金额
      * @return bool
      */
-    private function checkCard(array $card, array $goodsCategory, $decMoney = 0.0): bool
+    private function checkCard(array $card, array $goodsCategory, float $decMoney = 0.0): bool
     {
         if ($decMoney > 0 && bccomp($decMoney, $card['money'], 2) === 1) {
             return $this->setError('卡号 ' . $card['number'] . ' 可用余额不足');

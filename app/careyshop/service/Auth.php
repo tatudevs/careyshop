@@ -132,7 +132,7 @@ class Auth extends CareyShop
      * @param string $error   错误信息
      * @return void
      */
-    public function saveLog(string $url, object $request, $result, string $class, $error = '')
+    public function saveLog(string $url, object $request, $result, string $class, string $error = '')
     {
         // 转为小写
         $url = mb_strtolower($url, 'utf-8');

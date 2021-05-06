@@ -22,7 +22,7 @@ class Payment extends CareyShop
      * @param bool  $isString 是否直接返回URL地址
      * @return array|false|string
      */
-    public function getPaymentNotify(array $data, $isString = false)
+    public function getPaymentNotify(array $data, bool $isString = false)
     {
         // 规则验证
         if (!$this->validateData($data, 'return', false, \app\careyshop\validate\Recharge::class)) {
@@ -43,7 +43,7 @@ class Payment extends CareyShop
      * @param bool  $isString 是否直接返回URL地址
      * @return array|false|string
      */
-    public function getPaymentReturn(array $data, $isString = false)
+    public function getPaymentReturn(array $data, bool $isString = false)
     {
         // 规则验证
         if (!$this->validateData($data, 'return', false, \app\careyshop\validate\Recharge::class)) {
@@ -92,7 +92,7 @@ class Payment extends CareyShop
      * @param string  $body    订单描述
      * @return false|mixed
      */
-    public function createPaymentPay(array &$data, array &$setting, string $request, string $subject, $body = '')
+    public function createPaymentPay(array &$data, array &$setting, string $request, string $subject, string $body = '')
     {
         if (empty($data) || !is_array($setting)) {
             return $this->setError('数据错误');

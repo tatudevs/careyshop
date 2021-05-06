@@ -52,7 +52,7 @@ class ArticleCat extends CareyShop
      * @param null $level        分类深度
      * @return array|false
      */
-    public function getArticleCatList($articleCatId = 0, $isLayer = false, $level = null)
+    public function getArticleCatList(int $articleCatId = 0, bool $isLayer = false, $level = null)
     {
         try {
             $catData = $this->getParams();

@@ -75,7 +75,7 @@ class Setting extends CareyShop
      * @param bool   $toJson 是否转为json
      * @throws
      */
-    private function setSettingItem(string $key, $value, string $module, string $scene, $toJson = false)
+    private function setSettingItem(string $key, $value, string $module, string $scene, bool $toJson = false)
     {
         $data = ['value' => $value];
         if (!$this->validateData($data, $scene)) {

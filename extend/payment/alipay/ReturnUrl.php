@@ -86,7 +86,7 @@ class ReturnUrl
      * @param string $msg 消息内容
      * @return array
      */
-    public function getSuccess($msg = '支付结算完成'): array
+    public function getSuccess(string $msg = '支付结算完成'): array
     {
         $data['callback_return_type'] = 'view';
         $data['is_callback'] = sprintf(
@@ -105,7 +105,7 @@ class ReturnUrl
      * @param string $msg 消息内容
      * @return array
      */
-    public function getError($msg = '支付结算失败'): array
+    public function getError(string $msg = '支付结算失败'): array
     {
         $data['callback_return_type'] = 'view';
         $data['is_callback'] = sprintf(

@@ -17,6 +17,10 @@ use AopClient;
 use payment\Payment;
 use think\facade\Request;
 
+/**
+ * 支付宝SDK来源,项目中只添加了常用接口,如有增加需求访问下述地址
+ * https://github.com/alipay/alipay-sdk-php-all
+ */
 require_once __DIR__ . '/lib/AopClient.php';
 require_once __DIR__ . '/lib/request/AlipayTradePagePayRequest.php';
 require_once __DIR__ . '/lib/request/AlipayTradeWapPayRequest.php';
@@ -154,11 +158,11 @@ class Alipay extends Payment
      * sdkClient
      * @access public
      * @param mixed $request 接口请求参数对象
-     * @param bool   $ispage  是否是页面接口,电脑网站支付是页面表单接口
+     * @param bool  $ispage  是否是页面接口,电脑网站支付是页面表单接口
      * @return mixed
      * @throws
      */
-    private function aopclientRequestExecute($request, $ispage = false)
+    private function aopclientRequestExecute($request, bool $ispage = false)
     {
         $aop = new AopClient();
         $aop->appId = $this->appId;

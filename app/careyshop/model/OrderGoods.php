@@ -154,7 +154,7 @@ class OrderGoods extends CareyShop
      * @return array|false|object
      * @throws
      */
-    public function getOrderGoodsItem(array $data, $returnArray = true, $hasOrderGoods = true)
+    public function getOrderGoodsItem(array $data, bool $returnArray = true, bool $hasOrderGoods = true)
     {
         if (!$this->validateData($data, 'goods_item', false, Validate::class)) {
             return false;

@@ -312,7 +312,7 @@ class OrderService extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getOrderServiceGoods(array $data, &$orderGoodsDb = null, $isRefundFee = false)
+    public function getOrderServiceGoods(array $data, &$orderGoodsDb = null, bool $isRefundFee = false)
     {
         if (!$this->validateData($data)) {
             return false;

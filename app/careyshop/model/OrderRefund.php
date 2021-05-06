@@ -123,7 +123,7 @@ class OrderRefund extends CareyShop
      * @param null  $refundNo  退款单号
      * @return bool
      */
-    public function refundOrderPayment(array $orderData, $amount = 0.0, &$refundNo = null): bool
+    public function refundOrderPayment(array $orderData, float $amount = 0.0, &$refundNo = null): bool
     {
         if (!$this->validateData($orderData, 'refund')) {
             return false;

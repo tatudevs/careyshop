@@ -102,7 +102,8 @@ class GoodsCategory extends CareyShop
                 return $this->setError('上级分类不能设为自身');
             }
 
-            if (false === ($result = self::getCategoryList($data['goods_category_id']))) {
+            $result = self::getCategoryList($data['goods_category_id']);
+            if (empty($result)) {
                 return false;
             }
 
@@ -147,7 +148,9 @@ class GoodsCategory extends CareyShop
 
         if (1 == $data['not_empty']) {
             $idList = $data['goods_category_id'];
-            if (false === ($result = self::getCategoryList(0, true))) {
+            $result = self::getCategoryList(0, true);
+
+            if (empty($result)) {
                 return false;
             }
         }
@@ -214,7 +217,7 @@ class GoodsCategory extends CareyShop
             ->order('sort,goods_category_id')
             ->column('goods_category_id,parent_id,name,alias', 'goods_category_id');
 
-        $isLayer = !is_empty_parm($data['is_layer']) ? (bool)$data['is_layer'] : true;
+        $isLayer = is_empty_parm($data['is_layer']) || $data['is_layer'];
         if (!$isLayer && isset($catList[$data['goods_category_id']])) {
             $data['goods_category_id'] = $catList[$data['goods_category_id']]['parent_id'];
         }
@@ -280,9 +283,9 @@ class GoodsCategory extends CareyShop
      * @param int     $level      分类深度
      * @return array
      */
-    private static function setCategoryTree(int $parentId, object &$list, $limitLevel = null, $isLayer = false, $level = 0): array
+    private static function setCategoryTree(int $parentId, object &$list, $limitLevel = null, bool $isLayer = false, int $level = 0): array
     {
-        $parentId != 0 ?: $isLayer = false; // 返回全部分类不需要本级
+        $parentId != 0 || ($isLayer = false); // 返回全部分类不需要本级
         foreach ($list as $key => $value) {
             // 获取分类主Id
             $goodsCategoryId = $value->getAttr('goods_category_id');
@@ -330,7 +333,7 @@ class GoodsCategory extends CareyShop
      * @param null $level        分类深度
      * @return array
      */
-    public static function getCategoryList($catId = 0, $isGoodsTotal = false, $isLayer = false, $level = null): array
+    public static function getCategoryList(int $catId = 0, bool $isGoodsTotal = false, bool $isLayer = false, $level = null): array
     {
         // 搜索条件
         $map = [];
@@ -376,7 +379,7 @@ class GoodsCategory extends CareyShop
         }
 
         self::$tree = [];
-        $tree = self::setCategoryTree((int)$catId, $result, $level, $isLayer);
+        $tree = self::setCategoryTree($catId, $result, $level, $isLayer);
         Cache::tag('GoodsCategory')->set($treeCache, $tree);
 
         return $tree;

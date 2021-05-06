@@ -117,7 +117,7 @@ class Payment
      * @access public
      * @param string $body 描述
      */
-    public function setBody($body = '')
+    public function setBody(string $body = '')
     {
         $this->body = $body;
     }

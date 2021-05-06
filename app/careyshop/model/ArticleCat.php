@@ -167,7 +167,7 @@ class ArticleCat extends CareyShop
      * @param null $isNavi  过滤是否导航
      * @return array
      */
-    public static function getArticleCatList($catId = 0, $isLayer = false, $level = null, $isNavi = null): array
+    public static function getArticleCatList(int $catId = 0, bool $isLayer = false, $level = null, $isNavi = null): array
     {
         // 子查询,查询关联的文章数量
         $article = Article::field('article_cat_id,count(*) num')
@@ -196,7 +196,7 @@ class ArticleCat extends CareyShop
         }
 
         // 处理原始数据至分类数据
-        $tree = self::setArticleCatTree((int)$catId, $result, $level, $isLayer);
+        $tree = self::setArticleCatTree($catId, $result, $level, $isLayer);
         Cache::tag('ArticleCat')->set($treeCache, $tree);
 
         return $tree;
@@ -212,7 +212,7 @@ class ArticleCat extends CareyShop
      * @param int    $level      分类深度
      * @return array
      */
-    private static function setArticleCatTree(int $parentId, object &$list, $limitLevel = null, $isLayer = false, $level = 0): array
+    private static function setArticleCatTree(int $parentId, object &$list, $limitLevel = null, bool $isLayer = false, int $level = 0): array
     {
         static $tree = [];
         $parentId != 0 || ($isLayer = false); // 返回全部分类不需要本级

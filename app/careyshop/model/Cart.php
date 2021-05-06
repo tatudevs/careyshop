@@ -110,7 +110,7 @@ class Cart extends CareyShop
      * @return array|false
      * @throws
      */
-    public function setCartItem(array $data, $isBuyNow = false)
+    public function setCartItem(array $data, bool $isBuyNow = false)
     {
         // 避免无关字段,并初始化部分数据
         $data['user_id'] = get_client_id();

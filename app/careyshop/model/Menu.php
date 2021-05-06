@@ -181,7 +181,7 @@ class Menu extends CareyShop
      * @param null   $filter  过滤'is_navi'与'status'
      * @return array
      */
-    public static function getMenuListData(string $module, $menuId = 0, $isLayer = false, $level = null, $filter = null): array
+    public static function getMenuListData(string $module, int $menuId = 0, bool $isLayer = false, $level = null, $filter = null): array
     {
         // 缓存名称
         $treeCache = 'MenuTree:' . $module;
@@ -217,7 +217,7 @@ class Menu extends CareyShop
             return Cache::get($treeCache);
         }
 
-        $tree = self::setMenuTree((int)$menuId, $result, $level, $isLayer);
+        $tree = self::setMenuTree($menuId, $result, $level, $isLayer);
         if (!empty(self::$menuAuth)) {
             foreach ($result as $value) {
                 $value->setAttr('level', 0);
@@ -239,7 +239,7 @@ class Menu extends CareyShop
      * @param int    $level      层级深度
      * @return array
      */
-    private static function setMenuTree(int $parentId, object &$list, $limitLevel = null, $isLayer = false, $level = 0): array
+    private static function setMenuTree(int $parentId, object &$list, $limitLevel = null, bool $isLayer = false, int $level = 0): array
     {
         static $tree = [];
         $parentId != 0 || ($isLayer = false); // 返回全部菜单不需要本级
@@ -424,7 +424,7 @@ class Menu extends CareyShop
      * @param null   $filter  过滤'is_navi'与'status'
      * @return array
      */
-    public static function getParentList(string $module, int $menuId, $isLayer = false, $filter = null): array
+    public static function getParentList(string $module, int $menuId, bool $isLayer = false, $filter = null): array
     {
         // 搜索条件
         $map[] = ['module', '=', $module];
@@ -574,7 +574,7 @@ class Menu extends CareyShop
      * @param int    $status 菜单状态
      * @return array
      */
-    public static function getUrlMenuList(string $module, $status = 1): array
+    public static function getUrlMenuList(string $module, int $status = 1): array
     {
         // 缓存名称
         $key = 'urlMenuList' . $module . $status;

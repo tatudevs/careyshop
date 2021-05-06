@@ -480,7 +480,7 @@ class Admin extends CareyShop
      * @return array|false
      * @throws
      */
-    public function loginAdmin(array $data, $isGetToken = true)
+    public function loginAdmin(array $data, bool $isGetToken = true)
     {
         if (!$this->validateData($data, 'login')) {
             return false;

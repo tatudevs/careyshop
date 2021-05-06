@@ -74,7 +74,7 @@ class GoodsCategory extends CareyShop
      * @param null $level        分类深度
      * @return array|false
      */
-    public function getCategoryList($catId = 0, $isGoodsTotal = false, $isLayer = false, $level = null)
+    public function getCategoryList(int $catId = 0, bool $isGoodsTotal = false, bool $isLayer = false, $level = null)
     {
         try {
             $catData = $this->getParams();

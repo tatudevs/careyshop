@@ -14,7 +14,7 @@
  * @param mixed  $idx  下步序号
  * @return string
  */
-function get_url($vars = '', $idx = null): string
+function get_url(string $vars = '', $idx = null): string
 {
     $url = request()->baseFile();
     if (!empty($vars) && $vars != '/') {
@@ -160,7 +160,7 @@ function macro_str_replace(string $sql, array $data)
 {
     if (is_array($data)) {
         foreach ($data as $key => $value) {
-            $sql = str_replace("{$key}", $value, $sql);
+            $sql = str_replace("$key", $value, $sql);
         }
     }
 

@@ -74,7 +74,7 @@ class Place extends CareyShop
      * @param false $isInternal 内部调用则不进行规则检测
      * @return array|false
      */
-    public function getPlaceSetting(array $data, $isInternal = false)
+    public function getPlaceSetting(array $data, bool $isInternal = false)
     {
         if (!$isInternal && !$this->validateData($data, 'setting')) {
             return false;
