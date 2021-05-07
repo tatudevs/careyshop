@@ -253,6 +253,12 @@ class Upload extends UploadBase
         $path = Filesystem::getDiskConfig('public')['url'] . DS . $savename;
         $path = str_replace('\\', '/', $path);
 
+        // 附件绝对路径
+        if ($this->request->param('x:is_actual', 0)) {
+            $actualPath = $fileDriver->path($savename);
+            $actualPath = str_replace(is_windows() ? '/' : '\\', DS, $actualPath);
+        }
+
         // 自定义附件名
         $filename = $this->request->param('x:filename');
 
@@ -271,7 +277,7 @@ class Upload extends UploadBase
             'size'      => $file->getSize(),
             'pixel'     => $isImage ? ['width' => $width, 'height' => $height] : [],
             'hash'      => $file->sha1(),
-            'path'      => $path,
+            'path'      => $actualPath ?? $path,
             'url'       => $host . $path . '?type=' . self::MODULE,
             'protocol'  => self::MODULE,
             'type'      => $isImage ? 0 : $this->getFileType($file->getMime()),
@@ -319,12 +325,6 @@ class Upload extends UploadBase
 
             $storageDb->setAttr('status', 200);
             $ossResult = $storageDb->toArray();
-        }
-
-        // 获取实际物理路径
-        if ($this->request->param('x:is_actual', 0)) {
-            $actualPath = $fileDriver->path($savename);
-            $ossResult['path'] = str_replace(is_windows() ? '/' : '\\', DS, $actualPath);
         }
 
         $ossResult['oss'] = Config::get('careyshop.upload.oss');
@@ -455,7 +455,7 @@ class Upload extends UploadBase
         }
 
         // 获取源文件位置,并且生成缩略图文件名,验证源文件是否存在
-        $source = $this->getNewUrl('', '', $fileInfo, null, null);
+        $source = $this->getNewUrl('', '', $fileInfo, null, '');
         $fileSign = $this->getFileSign($styleList, $source);
 
         if (false === $fileSign) {
