@@ -82,6 +82,8 @@ class ActionLog extends CareyShop
         'email',
         'account',
         'aes_key',
+        'auth_app_id',
+        'seller_id',
     ];
 
     /**
