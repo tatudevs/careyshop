@@ -27,6 +27,7 @@ class Invoice extends CareyShop
         'invoice_amount'  => 'float|egt:0|regex:^\d+(\.\d{1,2})?$',
         'number'          => 'max:32',
         'remark'          => 'max:255',
+        'attachment'      => 'array',
         'status'          => 'in:0,1,2',
         'begin_time'      => 'date|betweenTime|beforeTime:end_time',
         'end_time'        => 'date|betweenTime|afterTime:begin_time',
@@ -50,6 +51,7 @@ class Invoice extends CareyShop
         'invoice_amount'  => '开票金额',
         'number'          => '发票编号',
         'remark'          => '发票备注',
+        'attachment'      => '开票资源',
         'status'          => '发票状态',
         'begin_time'      => '开始日期',
         'end_time'        => '结束日期',
@@ -68,6 +70,7 @@ class Invoice extends CareyShop
             'invoice_id' => 'require|integer|gt:0',
             'number',
             'remark',
+            'attachment',
             'status',
         ],
         'order' => [

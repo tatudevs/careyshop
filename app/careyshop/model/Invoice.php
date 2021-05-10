@@ -38,7 +38,6 @@ class Invoice extends CareyShop
      * @var string[]
      */
     protected $hidden = [
-        'user_id',
         'user_invoice_id',
     ];
 
@@ -64,6 +63,7 @@ class Invoice extends CareyShop
         'premium'         => 'float',
         'order_amount'    => 'float',
         'invoice_amount'  => 'float',
+        'attachment'      => 'array',
         'status'          => 'integer',
     ];
 
@@ -102,6 +102,7 @@ class Invoice extends CareyShop
         }
 
         // 处理部分数据
+        $data['attachment'] = [];
         $data['user_id'] = is_client_admin() ? $data['client_id'] : get_client_id();
         unset($data['invoice_id'], $data['status'], $data['client_id']);
 
@@ -132,7 +133,7 @@ class Invoice extends CareyShop
             return $this->setError('数据不存在');
         }
 
-        $field = ['number', 'remark', 'status'];
+        $field = ['number', 'remark', 'attachment', 'status'];
         $isSubscribe = isset($data['status']) && $data['status'] != $db->getAttr('status');
 
         if (!$db->allowField($field)->save($data)) {

@@ -23,14 +23,13 @@ class Invoice extends CareyShop
     protected static function initMethod()
     {
         self::$route = [
-            // 添加一条票据
-            'add.invoice.item'  => ['addInvoiceItem'],
             // 编辑一条票据
             'set.invoice.item'  => ['setInvoiceItem'],
             // 根据订单号获取一条票据
             'get.invoice.order' => ['getInvoiceOrder'],
             // 获取票据列表
             'get.invoice.list'  => ['getInvoiceList'],
+            'add.invoice.item' => ['addInvoiceItem']
         ];
     }
 }
