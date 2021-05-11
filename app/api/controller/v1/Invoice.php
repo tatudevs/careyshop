@@ -24,12 +24,13 @@ class Invoice extends CareyShop
     {
         self::$route = [
             // 编辑一条票据
-            'set.invoice.item'  => ['setInvoiceItem'],
+            'set.invoice.item'   => ['setInvoiceItem'],
+            // 重置一个票据
+            'reset.invoice.item' => ['resetInvoiceItem'],
             // 根据订单号获取一条票据
-            'get.invoice.order' => ['getInvoiceOrder'],
+            'get.invoice.order'  => ['getInvoiceOrder'],
             // 获取票据列表
-            'get.invoice.list'  => ['getInvoiceList'],
-            'add.invoice.item' => ['addInvoiceItem']
+            'get.invoice.list'   => ['getInvoiceList'],
         ];
     }
 }

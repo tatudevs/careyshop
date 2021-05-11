@@ -11,6 +11,7 @@
 
 namespace app\careyshop\model;
 
+use think\facade\Config;
 use think\facade\Event;
 
 class Invoice extends CareyShop
@@ -32,14 +33,6 @@ class Invoice extends CareyShop
      * @var false|string
      */
     protected $updateTime = false;
-
-    /**
-     * 隐藏属性
-     * @var string[]
-     */
-    protected $hidden = [
-        'user_invoice_id',
-    ];
 
     /**
      * 只读属性
@@ -114,6 +107,28 @@ class Invoice extends CareyShop
     }
 
     /**
+     * 重置一个票据
+     * @access public
+     * @param array $data 外部数据
+     * @return array|false
+     */
+    public function resetInvoiceItem(array $data)
+    {
+        if (!$this->validateData($data, 'reset')) {
+            return false;
+        }
+
+        $data['number'] = '';
+        $data['attachment'] = [];
+        $data['status'] = 0;
+
+        $map[] = ['invoice_id', '=', $data['invoice_id']];
+        $result = self::update($data, $map);
+
+        return $result->toArray();
+    }
+
+    /**
      * 编辑一条票据
      * @access public
      * @param array $data 外部数据
@@ -133,14 +148,26 @@ class Invoice extends CareyShop
             return $this->setError('数据不存在');
         }
 
+        if (0 !== $db->getAttr('status')) {
+            return $this->setError('此发票状态已不允许修改');
+        }
+
+        1 === $data['status'] ?: $data['attachment'] = [];
         $field = ['number', 'remark', 'attachment', 'status'];
-        $isSubscribe = isset($data['status']) && $data['status'] != $db->getAttr('status');
+
+        if (1 === $data['send_email'] && 1 === $data['status']) {
+            if (!$this->sendEmail($db->toArray(), $data['attachment'])) {
+                return false;
+            }
+        }
 
         if (!$db->allowField($field)->save($data)) {
             return false;
         }
 
         $result = $db->toArray();
+        $isSubscribe = isset($data['status']) && $data['status'] != $db->getAttr('status');
+
         if ($isSubscribe) {
             switch ($result['status']) {
                 case 1:
@@ -154,6 +181,37 @@ class Invoice extends CareyShop
         }
 
         return $result;
+    }
+
+    /**
+     * 通过电子邮箱发送电子发票
+     * @access private
+     * @param array $data       开票数据
+     * @param mixed $attachment 电子发票资源
+     * @return bool
+     */
+    private function sendEmail(array $data, $attachment = null): bool
+    {
+        if (empty($attachment)) {
+            return $this->setError('缺少开票资源');
+        } else {
+            foreach ($attachment as &$value) {
+                $value = str_replace('\\', '/', public_path() . $value);
+            }
+        }
+
+        $email = UserInvoice::withoutGlobalScope()
+            ->where('user_invoice_id', '=', $data['user_invoice_id'])->value('email');
+
+        if (!$email) {
+            return $this->setError('收票邮箱不能为空');
+        }
+
+        $subject = '收到来自' . Config::get('careyshop.system_info.name') . '的电子发票';
+        $body = "您好！来自订单号：{$data['order_no']}开具的{$data['invoice_amount']}元电子发票，详见附件。";
+        \util\Notice::sendEmail($email, $subject, $body, $attachment);
+
+        return true;
     }
 
     /**

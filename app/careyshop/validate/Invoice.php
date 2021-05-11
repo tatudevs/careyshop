@@ -29,6 +29,7 @@ class Invoice extends CareyShop
         'remark'          => 'max:255',
         'attachment'      => 'array',
         'status'          => 'in:0,1,2',
+        'send_email'      => 'in:0,1',
         'begin_time'      => 'date|betweenTime|beforeTime:end_time',
         'end_time'        => 'date|betweenTime|afterTime:begin_time',
         'page_no'         => 'integer|egt:0',
@@ -53,6 +54,7 @@ class Invoice extends CareyShop
         'remark'          => '发票备注',
         'attachment'      => '开票资源',
         'status'          => '发票状态',
+        'send_email'      => '发送系统邮件',
         'begin_time'      => '开始日期',
         'end_time'        => '结束日期',
         'page_no'         => '页码',
@@ -72,6 +74,10 @@ class Invoice extends CareyShop
             'remark',
             'attachment',
             'status',
+            'send_email',
+        ],
+        'reset' => [
+            'invoice_id' => 'require|integer|gt:0',
         ],
         'order' => [
             'order_no' => 'require|max:50',

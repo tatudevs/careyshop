@@ -22,11 +22,11 @@ class UserInvoice extends CareyShop
         'head'            => 'require|max:128',
         'type'            => 'require|in:0,1,2',
         'content'         => 'require|in:0,1',
-        'tax'             => 'requireWith:type|max:128',
-        'bank'            => 'requireWith:type|max:64',
-        'account'         => 'requireWith:type|max:64',
-        'address'         => 'require|max:128',
-        'phone'           => 'require|max:64',
+        'tax'             => 'require|max:128',
+        'bank'            => 'requireIf:type,2|max:64',
+        'account'         => 'requireIf:type,2|max:64',
+        'address'         => 'requireIf:type,2|max:128',
+        'phone'           => 'requireIf:type,2|max:64',
         'email'           => 'require|email|max:128',
     ];
 
@@ -43,7 +43,7 @@ class UserInvoice extends CareyShop
         'bank'            => '开户银行',
         'account'         => '开户账号',
         'address'         => '场所地址',
-        'phone'           => '联系电话',
+        'phone'           => '固定电话',
         'email'           => '收票邮箱',
     ];
 
