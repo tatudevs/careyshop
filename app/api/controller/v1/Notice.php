@@ -12,6 +12,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
+use app\careyshop\model\NoticeEvent;
 
 class Notice extends CareyShop
 {
@@ -36,7 +37,7 @@ class Notice extends CareyShop
             // 批量设置模板状态
             'set.notice.status' => ['setNoticeStatus'],
             // 根据渠道获取事件列表
-            'get.notice.event'  => ['getNoticeEvent', \app\careyshop\model\NoticeEvent::class],
+            'get.notice.event'  => ['getNoticeEvent', NoticeEvent::class],
         ];
     }
 }

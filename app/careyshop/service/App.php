@@ -31,12 +31,13 @@ class App extends CareyShop
     /**
      * 获取应用验证码
      * @access public
+     * @param array $data 外部数据
      * @return array
      */
-    public function imageAppCaptcha(): array
+    public function imageAppCaptcha(array $data): array
     {
-        $keyID = input('param.session_id', '');
-        $generate = input('param.generate');
+        $generate = $data['generate'];
+        $keyID = $data['session_id'] ?? '';
 
         // 获取验证码
         $config = ['mode' => 'api', 'cacheType' => 'cache'];

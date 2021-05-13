@@ -12,6 +12,7 @@ namespace app\careyshop\service;
 
 use app\careyshop\model\{Storage, StorageStyle};
 use think\facade\Config;
+use think\facade\Request;
 use think\helper\Str;
 
 class Upload extends CareyShop
@@ -221,11 +222,12 @@ class Upload extends CareyShop
     /**
      * 接收第三方推送数据
      * @access public
+     * @param array $data 外部数据
      * @return array|false
      */
-    public function putUploadData()
+    public function putUploadData(array $data)
     {
-        $ossObject = $this->createOssObject(input('param.module', ''));
+        $ossObject = $this->createOssObject($data['module'] ?? '');
         if (false === $ossObject) {
             return false;
         }
@@ -241,13 +243,14 @@ class Upload extends CareyShop
     /**
      * 获取资源缩略图
      * @access public
+     * @param array $data 外部数据
      * @return void
      */
-    public function getThumb()
+    public function getThumb(array $data)
     {
-        $url = $this->getThumbUrl();
+        $url = $this->getThumbUrl($data);
         if (false === $url) {
-            header('Location:' . input('param.url', ''), true, 301);
+            header('Location:' . $data['url'] ?? '', true, 301);
             exit;
         }
 
@@ -263,18 +266,18 @@ class Upload extends CareyShop
     /**
      * 获取资源缩略图实际路径
      * @access public
-     * @param bool $getObject 是否返回OSS组件对象
+     * @param array $data      外部数据
+     * @param bool  $getObject 是否返回OSS组件对象
      * @return array|false
      */
-    public function getThumbUrl(bool $getObject = false)
+    public function getThumbUrl(array $data, bool $getObject = false)
     {
         // 补齐协议地址
-        $request = request();
-        $url = $request->param('url', '');
-
+        $url = $data['url'] ?? '';
         $pattern = '/^((http|https)?:\/\/)/i';
+
         if (!preg_match($pattern, $url)) {
-            $url = ($request->isSsl() ? 'https' : 'http') . '://' . $url;
+            $url = (Request::isSsl() ? 'https' : 'http') . '://' . $url;
         }
 
         // 从URL分析获取对应模型
@@ -297,15 +300,15 @@ class Upload extends CareyShop
         $patterns = [];
 
         // 是否定义资源样式
-        if ($request->has('code', 'param', true)) {
+        if (!is_empty_parm($data['code'])) {
             $style = new StorageStyle();
-            $styleResult = $style->getStorageStyleCode(['code' => $request->param('code')]);
+            $styleResult = $style->getStorageStyleCode(['code' => $data['code']]);
 
             if ($styleResult) {
                 foreach ($styleResult as $key => $value) {
                     // 提取设定资源样式
                     if ('scale' === $key) {
-                        $isMobile = $request->isMobile() ? 'mobile' : 'pc';
+                        $isMobile = Request::isMobile() ? 'mobile' : 'pc';
                         if (array_key_exists($isMobile, $value)) {
                             $patterns = $value[$isMobile];
                         }
@@ -324,7 +327,7 @@ class Upload extends CareyShop
             return false;
         }
 
-        $patterns = array_merge($patterns, $request->param('', []));
+        $patterns = array_merge($patterns, $data);
         $url = $ossObject->getThumbUrl($urlArray, $patterns);
         $notPrefix = preg_replace($pattern, '', $url);
 
@@ -344,45 +347,41 @@ class Upload extends CareyShop
     /**
      * 获取资源缩略图信息
      * @access public
+     * @param array $data 外部数据
      * @return array|false
      */
-    public function getThumbInfo()
+    public function getThumbInfo(array $data)
     {
-        // 协议头
-        $request = request();
-
-        $url = $request->param('url');
-        if (!$url) {
+        if (!$data['url']) {
             return $this->setError('url参数值不能为空');
         }
 
-        $source = $request->param('source');
-        if (!$source) {
+        if (!$data['source']) {
             return $this->setError('source参数值不能为空');
         }
 
-        if (!in_array($source, array_column($this->getUploadModule(), 'module'))) {
+        if (!in_array($data['source'], array_column($this->getUploadModule(), 'module'))) {
             return $this->setError('source参数值错误');
         }
 
-        $ossObject = $this->createOssObject($source);
+        $ossObject = $this->createOssObject($data['source']);
         if (false === $ossObject) {
             return false;
         }
 
-        return $ossObject->getThumbInfo($url);
+        return $ossObject->getThumbInfo($data['url']);
     }
 
     /**
      * 获取资源下载链接
      * @access public
+     * @param array $data 外部数据
      * @return void
      */
-    public function getDownload()
+    public function getDownload(array $data)
     {
         // 下载的资源还是需要经过样式处理
-        $request = request();
-        $url = $this->getThumbUrl(true);
+        $url = $this->getThumbUrl($data, true);
 
         // 文件不存在,则返回 404 错误提示
         if (empty($url['url_prefix'])) {
@@ -391,14 +390,14 @@ class Upload extends CareyShop
         }
 
         // 不需要强制另存为文件名,也直接返回
-        if (!$request->has('filename')) {
+        if (!isset($data['filename'])) {
             header('Location:' . $url['url_prefix'], true, 301);
             exit();
         }
 
         // 最终的处理方式由组件决定
         if (isset($url['ossObject'])) {
-            $url['ossObject']->getDownload($url['url_prefix'], $request->get('filename'));
+            $url['ossObject']->getDownload($url['url_prefix'], $data['filename']);
         }
 
         exit();
