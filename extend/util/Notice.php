@@ -105,7 +105,15 @@ class Notice
 
         // 添加附件
         foreach ($attachments as $file) {
-            is_file($file) && $mail->addAttachment($file);
+            if (is_string($file) && is_file($file)) {
+                $mail->addAttachment($file);
+                continue;
+            }
+
+            if (is_array($file)) {
+                ['name' => $name, 'source' => $source] = $file;
+                is_file($source) && $mail->addAttachment($source, $name);
+            }
         }
 
         // 正式发送
