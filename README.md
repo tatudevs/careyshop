@@ -37,15 +37,12 @@ CareyShop（简称 CS）是一套基于 ThinkPHP6.0 框架开发的高性能开�
 [后台 Demo 预览](https://demo.careyshop.cn/admin "后台 Demo 预览") | [RestAPI 接口调试](https://demo.careyshop.cn/api "RestAPI 接口调试") | [经典配套款](https://doc.careyshop.cn/guide/white/) | [深灰商务款](https://doc.careyshop.cn/guide/gray/)
 
 ## 文档
-[文档中心](https://doc.careyshop.cn "CareyShop文档中心")
+[CareyShop开发文档](https://doc.careyshop.cn "CareyShop开发文档")
 
 ## 仓库
-[Github 仓库](https://github.com/dnyz520/careyshop "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop.git "Coding 仓库")
+[Github 仓库](https://github.com/dnyz520/careyshop "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop "码云仓库") | [Coding 仓库](https://careyshop.coding.net/public/careyshop/careyshop/git "Coding 仓库")
 
-## 生态
-CareyShop 后台管理模板 [Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-admin.git "Coding 仓库")
-
-CareyShop Rest接口调试 [Github 仓库](https://github.com/dnyz520/careyshop-rest "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-rest "码云仓库") | [Coding 仓库](https://e.coding.net/careyshop/careyshop-rest.git "Coding 仓库")
+CareyShop 后台管理模板 [Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://careyshop.coding.net/public/careyshop-admin/careyshop-admin/git "Coding 仓库")
 
 ## 功能
 * uniapp小程序（内测中）
@@ -162,6 +159,8 @@ CareyShop Rest接口调试 [Github 仓库](https://github.com/dnyz520/careyshop-
 ![](https://aliyun.oss.careyshop.cn/poster/gray/%E7%BC%A9%E7%95%A5%E5%9B%BE%E8%AE%BE%E8%AE%A1-%E7%81%B0.png)
 
 #### 声明
-CareyShop 使用 AGPLv3 开源协议，请遵守 AGPLv3 的相关条款，商用需进行授权，
+本程序使用 AGPLv3 开源协议，未遵守协议视为违约将承担法律责任，商用需进行授权，
 
-本项目包含的源码（包括第三方）和二进制文件存在版权信息另行标注的情况。
+所包含的源码（包括第三方）和二进制文件存在版权信息另行标注（附加许可）的情况，
+
+CareyShop® 商标和著作权所有者为宁波互明科技有限公司。
