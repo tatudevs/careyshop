@@ -13,6 +13,7 @@ namespace app\careyshop\model;
 
 use think\facade\Config;
 use think\facade\Event;
+use think\facade\Request;
 
 class Invoice extends CareyShop
 {
@@ -194,10 +195,6 @@ class Invoice extends CareyShop
     {
         if (empty($attachment)) {
             return $this->setError('缺少开票资源');
-        } else {
-            foreach ($attachment as &$value) {
-                $value = str_replace('\\', '/', public_path() . $value);
-            }
         }
 
         $email = UserInvoice::withoutGlobalScope()
@@ -208,9 +205,19 @@ class Invoice extends CareyShop
         }
 
         $subject = '收到来自' . Config::get('careyshop.system_info.name') . '的电子发票';
-        $body = "您好！来自订单号：{$data['order_no']}开具的{$data['invoice_amount']}元电子发票，详见附件。";
-        \util\Notice::sendEmail($email, $subject, $body, $attachment);
+        $body = "您好！来自订单号：{$data['order_no']}开具的{$data['invoice_amount']}元电子发票。";
 
+        $pattern = '/^((http|https)?:\/\/)/i';
+        foreach ($attachment as $value) {
+            if (!preg_match($pattern, $value['source'])) {
+                $value['source'] = (Request::isSsl() ? 'https' : 'http') . '://' . $value['source'];
+            }
+
+            ['name' => $name, 'source' => $file] = $value;
+            $body .= sprintf('<br/><a href="%s" target="_blank" rel="noopener">%s(链接另存为保存)</a>', $file, $name);
+        }
+
+        \util\Notice::sendEmail($email, $subject, $body);
         return true;
     }
 
