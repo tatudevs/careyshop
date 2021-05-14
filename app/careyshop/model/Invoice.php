@@ -209,11 +209,11 @@ class Invoice extends CareyShop
 
         $pattern = '/^((http|https)?:\/\/)/i';
         foreach ($attachment as $value) {
-            if (!preg_match($pattern, $value['source'])) {
-                $value['source'] = (Request::isSsl() ? 'https' : 'http') . '://' . $value['source'];
+            if (!preg_match($pattern, $value['url'])) {
+                $value['url'] = (Request::isSsl() ? 'https' : 'http') . '://' . $value['url'];
             }
 
-            ['name' => $name, 'source' => $file] = $value;
+            ['name' => $name, 'url' => $file] = $value;
             $body .= sprintf('<br/><a href="%s" target="_blank" rel="noopener">%s(链接另存为保存)</a>', $file, $name);
         }
 
