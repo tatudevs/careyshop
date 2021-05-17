@@ -2,7 +2,7 @@
 /**
  * @copyright   Copyright (c) http://careyshop.cn All rights reserved.
  *
- * CareyShop    通知系统验证器
+ * CareyShop    通知模板验证器
  *
  * @author      zxm <252404501@qq.com>
  * @version     v1.1
