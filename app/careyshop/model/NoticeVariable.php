@@ -37,4 +37,23 @@ class NoticeVariable extends CareyShop
         'notice_variable_id' => 'integer',
         'notice_event_id'    => 'integer',
     ];
+
+    /**
+     * 根据事件获取替换变量
+     * @access public
+     * @param array $data 外部数据
+     * @return array
+     * @throws
+     */
+    public function getNoticeVariable(array $data): array
+    {
+        if (is_empty_parm($data['notice_event_id'])) {
+            return [];
+        }
+
+        return self::cache()
+            ->where('notice_event_id', '=', $data['notice_event_id'])
+            ->select()
+            ->toArray();
+    }
 }

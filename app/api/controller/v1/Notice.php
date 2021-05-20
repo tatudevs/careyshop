@@ -12,7 +12,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\CareyShop;
-use app\careyshop\model\NoticeEvent;
+use app\careyshop\model\{NoticeEvent, NoticeVariable};
 
 class Notice extends CareyShop
 {
@@ -25,19 +25,21 @@ class Notice extends CareyShop
     {
         self::$route = [
             // 添加一个通知模板
-            'add.notice.item'   => ['addNoticeItem'],
+            'add.notice.item'     => ['addNoticeItem'],
             // 编辑一个通知模板
-            'set.notice.item'   => ['setNoticeItem'],
+            'set.notice.item'     => ['setNoticeItem'],
             // 批量删除通知模板
-            'del.notice.list'   => ['delNoticeList'],
+            'del.notice.list'     => ['delNoticeList'],
             // 获取一个通知模板
-            'get.notice.item'   => ['getNoticeItem'],
+            'get.notice.item'     => ['getNoticeItem'],
             // 获取通知模板列表
-            'get.notice.list'   => ['getNoticeList'],
+            'get.notice.list'     => ['getNoticeList'],
             // 批量设置模板状态
-            'set.notice.status' => ['setNoticeStatus'],
+            'set.notice.status'   => ['setNoticeStatus'],
             // 根据渠道获取事件列表
-            'get.notice.event'  => ['getNoticeEvent', NoticeEvent::class],
+            'get.notice.event'    => ['getNoticeEvent', NoticeEvent::class],
+            // 根据事件获取替换变量
+            'get.notice.variable' => ['getNoticeVariable', NoticeVariable::class],
         ];
     }
 }
