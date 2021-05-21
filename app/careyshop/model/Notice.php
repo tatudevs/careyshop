@@ -130,7 +130,10 @@ class Notice extends CareyShop
         $map[] = ['place_id', '=', $data['place_id']];
         empty($data['type']) ?: $map[] = ['type', '=', $data['type']];
 
-        return self::where($map)->select()->toArray();
+        return self::where($map)
+            ->order('notice_event_id', 'asc')
+            ->select()
+            ->toArray();
     }
 
     /**
