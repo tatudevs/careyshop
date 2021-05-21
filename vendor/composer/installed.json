@@ -1160,17 +1160,17 @@
     },
     {
         "name": "overtrue/wechat",
-        "version": "5.5.0",
-        "version_normalized": "5.5.0.0",
+        "version": "5.5.1",
+        "version_normalized": "5.5.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/w7corp/easywechat.git",
-            "reference": "c5c0adcc9063d78f453da5cc7061fbddca197831"
+            "reference": "535f40b3132e5931aff3548baf3f84c6d85f3a68"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/w7corp/easywechat/zipball/c5c0adcc9063d78f453da5cc7061fbddca197831",
-            "reference": "c5c0adcc9063d78f453da5cc7061fbddca197831",
+            "url": "https://api.github.com/repos/w7corp/easywechat/zipball/535f40b3132e5931aff3548baf3f84c6d85f3a68",
+            "reference": "535f40b3132e5931aff3548baf3f84c6d85f3a68",
             "shasum": "",
             "mirrors": [
                 {
@@ -1205,7 +1205,7 @@
             "phpstan/phpstan": "^0.12.0",
             "phpunit/phpunit": "^9.3"
         },
-        "time": "2021-04-01T08:39:54+00:00",
+        "time": "2021-05-14T03:19:58+00:00",
         "type": "library",
         "extra": {
             "hooks": {
@@ -1875,17 +1875,17 @@
     },
     {
         "name": "symfony/cache",
-        "version": "v5.2.8",
-        "version_normalized": "5.2.8.0",
+        "version": "v5.2.9",
+        "version_normalized": "5.2.9.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/cache.git",
-            "reference": "c13bfc6682a669e6ba592ba3305139ebf946a811"
+            "reference": "17a6d585603fade3838bc692548b619d97ded67e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/cache/zipball/c13bfc6682a669e6ba592ba3305139ebf946a811",
-            "reference": "c13bfc6682a669e6ba592ba3305139ebf946a811",
+            "url": "https://api.github.com/repos/symfony/cache/zipball/17a6d585603fade3838bc692548b619d97ded67e",
+            "reference": "17a6d585603fade3838bc692548b619d97ded67e",
             "shasum": "",
             "mirrors": [
                 {
@@ -1916,7 +1916,7 @@
         },
         "require-dev": {
             "cache/integration-tests": "dev-master",
-            "doctrine/cache": "^1.6",
+            "doctrine/cache": "^1.6|^2.0",
             "doctrine/dbal": "^2.10|^3.0",
             "predis/predis": "^1.1",
             "psr/simple-cache": "^1.0",
@@ -1927,7 +1927,7 @@
             "symfony/messenger": "^4.4|^5.0",
             "symfony/var-dumper": "^4.4|^5.0"
         },
-        "time": "2021-05-07T13:41:16+00:00",
+        "time": "2021-05-17T19:35:40+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
