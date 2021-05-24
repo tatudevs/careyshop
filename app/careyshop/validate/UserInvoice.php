@@ -23,7 +23,7 @@ class UserInvoice extends CareyShop
         'head'            => 'require|max:128',
         'type'            => 'require|in:0,1,2',
         'content'         => 'require|in:0,1',
-        'tax'             => 'require|max:128',
+        'tax'             => 'requireCallback:checkType|max:128',
         'bank'            => 'requireIf:type,2|max:64',
         'account'         => 'requireIf:type,2|max:64',
         'address'         => 'requireIf:type,2|max:128',
@@ -69,4 +69,15 @@ class UserInvoice extends CareyShop
             'client_id',
         ],
     ];
+
+    /**
+     * 验证发票类型
+     * @param $value
+     * @param $data
+     * @return bool
+     */
+    public function checkType($value, $data): bool
+    {
+        return $data['type'] != 0;
+    }
 }
