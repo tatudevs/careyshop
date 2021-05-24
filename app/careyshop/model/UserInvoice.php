@@ -86,7 +86,7 @@ class UserInvoice extends CareyShop
         }
 
         $map[] = ['user_invoice_id', '=', $data['user_invoice_id']];
-        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
 
         return $this->where($map)->findOrEmpty()->toArray();
     }
@@ -94,12 +94,17 @@ class UserInvoice extends CareyShop
     /**
      * 获取发票信息列表
      * @access public
-     * @return array
+     * @param array $data 外部数据
+     * @return array|false
      * @throws
      */
-    public function getUserInvoiceList(): array
+    public function getUserInvoiceList(array $data): array
     {
-        $map[] = ['user_id', '=', get_client_id()];
+        if (!$this->validateData($data, 'list')) {
+            return false;
+        }
+
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
         return $this->where($map)->select()->toArray();
     }
 
@@ -117,7 +122,7 @@ class UserInvoice extends CareyShop
 
         // 处理部分数据
         unset($data['user_invoice_id']);
-        $data['user_id'] = get_client_id();
+        $data['user_id'] = is_client_admin() ? $data['client_id'] : get_client_id();
 
         if ($this->save($data)) {
             return $this->toArray();
@@ -139,7 +144,7 @@ class UserInvoice extends CareyShop
         }
 
         $map[] = ['user_invoice_id', 'in', $data['user_invoice_id']];
-        $map[] = ['user_id', '=', get_client_id()];
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
 
         self::update(['is_delete' => 1], $map);
         return true;
@@ -148,11 +153,16 @@ class UserInvoice extends CareyShop
     /**
      * 检测是否超出最大添加数量
      * @access public
+     * @param array $data 外部数据
      * @return bool
      */
-    public function checkUserInvoiceMaximum(): bool
+    public function checkUserInvoiceMaximum(array $data): bool
     {
-        $map[] = ['user_id', '=', get_client_id()];
+        if (!$this->validateData($data, 'maximum')) {
+            return false;
+        }
+
+        $map[] = ['user_id', '=', is_client_admin() ? $data['client_id'] : get_client_id()];
         $result = $this->where($map)->count();
 
         if (!is_numeric($result) || $result >= self::INVOICE_COUNT_MAX) {

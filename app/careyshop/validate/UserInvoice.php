@@ -18,6 +18,7 @@ class UserInvoice extends CareyShop
      * @var string[]
      */
     protected $rule = [
+        'client_id'       => 'require|integer|gt:0',
         'user_invoice_id' => 'integer|gt:0',
         'head'            => 'require|max:128',
         'type'            => 'require|in:0,1,2',
@@ -35,6 +36,7 @@ class UserInvoice extends CareyShop
      * @var string[]
      */
     protected $field = [
+        'client_id'       => '账号编号',
         'user_invoice_id' => '开票信息编号',
         'head'            => '发票抬头',
         'type'            => '发票类型',
@@ -52,11 +54,19 @@ class UserInvoice extends CareyShop
      * @var string[]
      */
     protected $scene = [
-        'item' => [
+        'item'    => [
+            'client_id',
             'user_invoice_id' => 'require|integer|gt:0',
         ],
-        'del'  => [
+        'list'    => [
+            'client_id',
+        ],
+        'del'     => [
+            'client_id',
             'user_invoice_id' => 'require|arrayHasOnlyInts',
+        ],
+        'maximum' => [
+            'client_id',
         ],
     ];
 }
