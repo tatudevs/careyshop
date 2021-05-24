@@ -98,7 +98,7 @@ class UserInvoice extends CareyShop
      * @return array|false
      * @throws
      */
-    public function getUserInvoiceList(array $data): array
+    public function getUserInvoiceList(array $data)
     {
         if (!$this->validateData($data, 'list')) {
             return false;
