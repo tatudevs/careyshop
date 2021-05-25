@@ -418,10 +418,10 @@ class GoodsComment extends CareyShop
             $newData['parent_id'] = $result->getAttr('parent_id');
         }
 
-        $result = self::create($newData);
-        Event::trigger('ServiceReplyComment', ['user_id' => $newData['user_id']]);
+        $result = self::create($newData)->hidden(['is_show', 'is_top', 'status', 'reply_count'])->toArray();
+        Event::trigger('ServiceReplyComment', $result);
 
-        return $result->hidden(['is_show', 'is_top', 'status', 'reply_count'])->toArray();
+        return $result;
     }
 
     /**
