@@ -50,7 +50,7 @@ class App extends CareyShop
             ];
         } else {
             $result = response($image, 200, ['Content-Length' => strlen($image)])
-                ->contentType('image/png');
+                ->header(['Content-Type' => 'image/png']);
 
             return [
                 'callback_return_type' => 'response',

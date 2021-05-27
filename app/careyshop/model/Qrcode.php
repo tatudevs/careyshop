@@ -108,7 +108,7 @@ class Qrcode extends CareyShop
             ];
         } else {
             $result = response($content, 200, ['Content-Length' => strlen($content)])
-                ->contentType($qrCode->getContentType());
+                ->header(['Content-Type' => $qrCode->getContentType()]);
 
             return [
                 'callback_return_type' => 'response',

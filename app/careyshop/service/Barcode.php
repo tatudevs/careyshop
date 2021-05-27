@@ -109,7 +109,7 @@ class Barcode extends CareyShop
         } else {
             $content = base64_decode($content);
             $result = response($content, 200, ['Content-Length' => strlen($content)])
-                ->contentType('image/' . $data['suffix']);
+                ->header(['Content-Type' => 'image/' . $data['suffix']]);
 
             return [
                 'callback_return_type' => 'response',
