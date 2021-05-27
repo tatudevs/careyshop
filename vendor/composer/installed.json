@@ -1097,17 +1097,17 @@
     },
     {
         "name": "overtrue/socialite",
-        "version": "3.2.2",
-        "version_normalized": "3.2.2.0",
+        "version": "3.2.3",
+        "version_normalized": "3.2.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/overtrue/socialite.git",
-            "reference": "0d74b1c18d2469d7357e581f91930500bb2d48f4"
+            "reference": "e331d3e2eb7040a53c674590dfa475b3ae141d32"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/overtrue/socialite/zipball/0d74b1c18d2469d7357e581f91930500bb2d48f4",
-            "reference": "0d74b1c18d2469d7357e581f91930500bb2d48f4",
+            "url": "https://api.github.com/repos/overtrue/socialite/zipball/e331d3e2eb7040a53c674590dfa475b3ae141d32",
+            "reference": "e331d3e2eb7040a53c674590dfa475b3ae141d32",
             "shasum": "",
             "mirrors": [
                 {
@@ -1128,7 +1128,7 @@
             "mockery/mockery": "~1.2",
             "phpunit/phpunit": "~9.0"
         },
-        "time": "2021-04-27T01:55:22+00:00",
+        "time": "2021-05-27T05:04:00+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
