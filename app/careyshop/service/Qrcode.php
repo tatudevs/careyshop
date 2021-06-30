@@ -35,21 +35,25 @@ class Qrcode extends CareyShop
      */
     public static function getQrcodeLogoPath(string $path): string
     {
-        // 如果是网络文件直接返回
-        if (filter_var($path, FILTER_VALIDATE_URL)) {
-            return urldecode($path);
-        }
-
-        $public = public_path();
         $DS = DIRECTORY_SEPARATOR;
+        $public = public_path();
+        $file = $public . 'static' . $DS . 'api' . $DS . 'images' . $DS . 'qrcode_logo.png';
 
-        $path = $public . $path;
-        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+        if (filter_var($path, FILTER_VALIDATE_URL)) {
+            // 如果是网络资源
+            if (false !== stripos(parse_url($path, PHP_URL_SCHEME), 'http')) {
+                return urldecode($path);
+            }
+        } else {
+            // 尝试查找本地资源
+            $path = $public . $path;
+            $path = str_replace('/', $DS, $path);
 
-        if (is_file($path)) {
-            return $path;
+            if (is_file($path)) {
+                return $path;
+            }
         }
 
-        return $public . 'static' . $DS . 'api' . $DS . 'images' . $DS . 'qrcode_logo.png';
+        return $file;
     }
 }

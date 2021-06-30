@@ -590,8 +590,7 @@ class Upload extends UploadBase
      */
     public function getDownload(string $url, string $filename)
     {
-        $fileInfo = parse_url($url);
-        $filePath = public_path() . $fileInfo['path'];
+        $filePath = public_path() . parse_url($url, PHP_URL_PATH);
         $filePath = str_replace(is_windows() ? '/' : '\\', DS, $filePath);
 
         if (!is_readable($filePath)) {
@@ -651,10 +650,10 @@ class Upload extends UploadBase
         ];
 
         try {
-            $fileInfo = parse_url($url);
-            $pos = mb_strpos($fileInfo['path'], '/');
+            $path = parse_url($url, PHP_URL_PATH);
+            $pos = mb_strpos($path, '/');
 
-            $filePath = public_path() . mb_substr($fileInfo['path'], $pos, null, 'utf-8');
+            $filePath = public_path() . mb_substr($path, $pos, null, 'utf-8');
             $result = str_replace(is_windows() ? '/' : '\\', DS, $filePath);
 
             if (!file_exists($result)) {

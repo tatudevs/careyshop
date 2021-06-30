@@ -97,6 +97,10 @@ class Index
      */
     public function step4(): string
     {
+        if (Session::get('step') != 3) {
+            $this->error('请按步骤安装');
+        }
+
         // POST 用于验证
         if ($this->request->isPost()) {
             // 验证配置数据
@@ -176,10 +180,6 @@ class Index
 
             // 准备工作完成
             $this->success('success', get_url('step4'));
-        }
-
-        if (Session::get('step') != 3) {
-            $this->redirect(get_url());
         }
 
         Session::set('step', 4);

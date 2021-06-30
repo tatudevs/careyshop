@@ -516,8 +516,8 @@ class Storage extends CareyShop
             return $this->setError('资源图片不存在');
         }
 
-        $url = parse_url($result['url']);
-        $newUrl = sprintf('%s?type=%s&rand=%s', $url['path'], $result['protocol'], mt_rand(0, time()));
+        $url = parse_url($result['url'], PHP_URL_PATH);
+        $newUrl = sprintf('%s?type=%s&rand=%s', $url, $result['protocol'], mt_rand(0, time()));
 
         // 修改记录
         $result->save(['url' => $newUrl]);
