@@ -530,17 +530,17 @@
     },
     {
         "name": "easywechat-composer/easywechat-composer",
-        "version": "1.4.0",
-        "version_normalized": "1.4.0.0",
+        "version": "1.4.1",
+        "version_normalized": "1.4.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/mingyoung/easywechat-composer.git",
-            "reference": "93cfce1ec842b9a5b1b0791a52afd18b833f114a"
+            "reference": "3fc6a7ab6d3853c0f4e2922539b56cc37ef361cd"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/mingyoung/easywechat-composer/zipball/93cfce1ec842b9a5b1b0791a52afd18b833f114a",
-            "reference": "93cfce1ec842b9a5b1b0791a52afd18b833f114a",
+            "url": "https://api.github.com/repos/mingyoung/easywechat-composer/zipball/3fc6a7ab6d3853c0f4e2922539b56cc37ef361cd",
+            "reference": "3fc6a7ab6d3853c0f4e2922539b56cc37ef361cd",
             "shasum": "",
             "mirrors": [
                 {
@@ -557,7 +557,7 @@
             "composer/composer": "^1.0 || ^2.0",
             "phpunit/phpunit": "^6.5 || ^7.0"
         },
-        "time": "2020-07-23T11:06:47+00:00",
+        "time": "2021-07-05T04:03:22+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "EasyWeChatComposer\\Plugin"
@@ -730,17 +730,17 @@
     },
     {
         "name": "guzzlehttp/psr7",
-        "version": "1.8.2",
-        "version_normalized": "1.8.2.0",
+        "version": "2.0.0",
+        "version_normalized": "2.0.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/guzzle/psr7.git",
-            "reference": "dc960a912984efb74d0a90222870c72c87f10c91"
+            "reference": "1dc8d9cba3897165e16d12bb13d813afb1eb3fe7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/guzzle/psr7/zipball/dc960a912984efb74d0a90222870c72c87f10c91",
-            "reference": "dc960a912984efb74d0a90222870c72c87f10c91",
+            "url": "https://api.github.com/repos/guzzle/psr7/zipball/1dc8d9cba3897165e16d12bb13d813afb1eb3fe7",
+            "reference": "1dc8d9cba3897165e16d12bb13d813afb1eb3fe7",
             "shasum": "",
             "mirrors": [
                 {
@@ -750,35 +750,35 @@
             ]
         },
         "require": {
-            "php": ">=5.4.0",
-            "psr/http-message": "~1.0",
-            "ralouphie/getallheaders": "^2.0.5 || ^3.0.0"
+            "php": "^7.2.5 || ^8.0",
+            "psr/http-factory": "^1.0",
+            "psr/http-message": "^1.0",
+            "ralouphie/getallheaders": "^3.0"
         },
         "provide": {
+            "psr/http-factory-implementation": "1.0",
             "psr/http-message-implementation": "1.0"
         },
         "require-dev": {
-            "ext-zlib": "*",
-            "phpunit/phpunit": "~4.8.36 || ^5.7.27 || ^6.5.14 || ^7.5.20 || ^8.5.8 || ^9.3.10"
+            "bamarni/composer-bin-plugin": "^1.4.1",
+            "http-interop/http-factory-tests": "^0.9",
+            "phpunit/phpunit": "^8.5.8 || ^9.3.10"
         },
         "suggest": {
             "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
         },
-        "time": "2021-04-26T09:17:50+00:00",
+        "time": "2021-06-30T20:03:07+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.7-dev"
+                "dev-master": "2.0-dev"
             }
         },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
                 "GuzzleHttp\\Psr7\\": "src/"
-            },
-            "files": [
-                "src/functions_include.php"
-            ]
+            }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
@@ -793,6 +793,11 @@
             {
                 "name": "Tobias Schultze",
                 "homepage": "https://github.com/Tobion"
+            },
+            {
+                "name": "Márk Sági-Kazár",
+                "email": "mark.sagikazar@gmail.com",
+                "homepage": "https://sagikazarmark.hu"
             }
         ],
         "description": "PSR-7 message implementation that also provides common utility methods",
@@ -1006,17 +1011,17 @@
     },
     {
         "name": "monolog/monolog",
-        "version": "2.2.0",
-        "version_normalized": "2.2.0.0",
+        "version": "2.3.1",
+        "version_normalized": "2.3.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Seldaek/monolog.git",
-            "reference": "1cb1cde8e8dd0f70cc0fe51354a59acad9302084"
+            "reference": "9738e495f288eec0b187e310b7cdbbb285777dbe"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1cb1cde8e8dd0f70cc0fe51354a59acad9302084",
-            "reference": "1cb1cde8e8dd0f70cc0fe51354a59acad9302084",
+            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/9738e495f288eec0b187e310b7cdbbb285777dbe",
+            "reference": "9738e495f288eec0b187e310b7cdbbb285777dbe",
             "shasum": "",
             "mirrors": [
                 {
@@ -1041,7 +1046,7 @@
             "php-amqplib/php-amqplib": "~2.4",
             "php-console/php-console": "^3.1.3",
             "phpspec/prophecy": "^1.6.1",
-            "phpstan/phpstan": "^0.12.59",
+            "phpstan/phpstan": "^0.12.91",
             "phpunit/phpunit": "^8.5",
             "predis/predis": "^1.1",
             "rollbar/rollbar": "^1.3",
@@ -1062,7 +1067,7 @@
             "rollbar/rollbar": "Allow sending log messages to Rollbar",
             "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
         },
-        "time": "2020-12-14T13:15:25+00:00",
+        "time": "2021-07-14T11:56:39+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1159,17 +1164,17 @@
     },
     {
         "name": "overtrue/wechat",
-        "version": "5.6.0",
-        "version_normalized": "5.6.0.0",
+        "version": "5.7.0",
+        "version_normalized": "5.7.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/w7corp/easywechat.git",
-            "reference": "e3317820163c944a78d3ced0d49ec1b85bf606a3"
+            "reference": "e04ba441fa45e6602ddd7829a5fc0fa05f25c4cf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/w7corp/easywechat/zipball/e3317820163c944a78d3ced0d49ec1b85bf606a3",
-            "reference": "e3317820163c944a78d3ced0d49ec1b85bf606a3",
+            "url": "https://api.github.com/repos/w7corp/easywechat/zipball/e04ba441fa45e6602ddd7829a5fc0fa05f25c4cf",
+            "reference": "e04ba441fa45e6602ddd7829a5fc0fa05f25c4cf",
             "shasum": "",
             "mirrors": [
                 {
@@ -1204,7 +1209,7 @@
             "phpstan/phpstan": "^0.12.0",
             "phpunit/phpunit": "^9.3"
         },
-        "time": "2021-06-29T08:22:11+00:00",
+        "time": "2021-07-17T12:53:39+00:00",
         "type": "library",
         "extra": {
             "hooks": {
@@ -1597,6 +1602,66 @@
         ]
     },
     {
+        "name": "psr/http-factory",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/http-factory.git",
+            "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-fig/http-factory/zipball/12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
+            "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "require": {
+            "php": ">=7.0.0",
+            "psr/http-message": "^1.0"
+        },
+        "time": "2019-04-30T12:38:16+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Psr\\Http\\Message\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "PHP-FIG",
+                "homepage": "http://www.php-fig.org/"
+            }
+        ],
+        "description": "Common interfaces for PSR-7 HTTP message factories",
+        "keywords": [
+            "factory",
+            "http",
+            "message",
+            "psr",
+            "psr-17",
+            "psr-7",
+            "request",
+            "response"
+        ]
+    },
+    {
         "name": "psr/http-message",
         "version": "1.0.1",
         "version_normalized": "1.0.1.0",
@@ -1874,17 +1939,17 @@
     },
     {
         "name": "symfony/cache",
-        "version": "v5.3.0",
-        "version_normalized": "5.3.0.0",
+        "version": "v5.3.3",
+        "version_normalized": "5.3.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/cache.git",
-            "reference": "44fd0f97d1fb198d344f22379dfc56af2221e608"
+            "reference": "82962a497f090e95e3b357c21bf6f54991c9b1a5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/cache/zipball/44fd0f97d1fb198d344f22379dfc56af2221e608",
-            "reference": "44fd0f97d1fb198d344f22379dfc56af2221e608",
+            "url": "https://api.github.com/repos/symfony/cache/zipball/82962a497f090e95e3b357c21bf6f54991c9b1a5",
+            "reference": "82962a497f090e95e3b357c21bf6f54991c9b1a5",
             "shasum": "",
             "mirrors": [
                 {
@@ -1927,7 +1992,7 @@
             "symfony/messenger": "^4.4|^5.0",
             "symfony/var-dumper": "^4.4|^5.0"
         },
-        "time": "2021-05-26T17:43:10+00:00",
+        "time": "2021-06-24T08:13:00+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2235,17 +2300,17 @@
     },
     {
         "name": "symfony/http-foundation",
-        "version": "v5.3.2",
-        "version_normalized": "5.3.2.0",
+        "version": "v5.3.3",
+        "version_normalized": "5.3.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/http-foundation.git",
-            "reference": "7b6dd714d95106b831aaa7f3c9c612ab886516bd"
+            "reference": "0e45ab1574caa0460d9190871a8ce47539e40ccf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/7b6dd714d95106b831aaa7f3c9c612ab886516bd",
-            "reference": "7b6dd714d95106b831aaa7f3c9c612ab886516bd",
+            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/0e45ab1574caa0460d9190871a8ce47539e40ccf",
+            "reference": "0e45ab1574caa0460d9190871a8ce47539e40ccf",
             "shasum": "",
             "mirrors": [
                 {
@@ -2269,7 +2334,7 @@
         "suggest": {
             "symfony/mime": "To use the file extension guesser"
         },
-        "time": "2021-06-12T10:15:17+00:00",
+        "time": "2021-06-27T09:19:40+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2659,17 +2724,17 @@
     },
     {
         "name": "symfony/var-dumper",
-        "version": "v4.4.25",
-        "version_normalized": "4.4.25.0",
+        "version": "v4.4.26",
+        "version_normalized": "4.4.26.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/var-dumper.git",
-            "reference": "31ea689a8e7d2410016b0d25fc15a1ba05a6e2e0"
+            "reference": "a586efdf2aa832d05b9249e9115d24f6a2691160"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/31ea689a8e7d2410016b0d25fc15a1ba05a6e2e0",
-            "reference": "31ea689a8e7d2410016b0d25fc15a1ba05a6e2e0",
+            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/a586efdf2aa832d05b9249e9115d24f6a2691160",
+            "reference": "a586efdf2aa832d05b9249e9115d24f6a2691160",
             "shasum": "",
             "mirrors": [
                 {
@@ -2699,7 +2764,7 @@
             "ext-intl": "To show region name in time zone dump",
             "symfony/console": "To use the ServerDumpCommand and/or the bin/var-dump-server script"
         },
-        "time": "2021-05-27T09:48:32+00:00",
+        "time": "2021-06-17T06:35:48+00:00",
         "bin": [
             "Resources/bin/var-dump-server"
         ],
@@ -2739,17 +2804,17 @@
     },
     {
         "name": "symfony/var-exporter",
-        "version": "v5.3.2",
-        "version_normalized": "5.3.2.0",
+        "version": "v5.3.3",
+        "version_normalized": "5.3.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/var-exporter.git",
-            "reference": "df663fb63bdcd7298373cbd431165ab031706cb2"
+            "reference": "903c2c0babd6267de5bcb2995e8fc1efb5f01f1f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/var-exporter/zipball/df663fb63bdcd7298373cbd431165ab031706cb2",
-            "reference": "df663fb63bdcd7298373cbd431165ab031706cb2",
+            "url": "https://api.github.com/repos/symfony/var-exporter/zipball/903c2c0babd6267de5bcb2995e8fc1efb5f01f1f",
+            "reference": "903c2c0babd6267de5bcb2995e8fc1efb5f01f1f",
             "shasum": "",
             "mirrors": [
                 {
@@ -2765,7 +2830,7 @@
         "require-dev": {
             "symfony/var-dumper": "^4.4.9|^5.0.9"
         },
-        "time": "2021-06-09T10:57:10+00:00",
+        "time": "2021-06-27T09:16:08+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2971,17 +3036,17 @@
     },
     {
         "name": "topthink/think-orm",
-        "version": "v2.0.40",
-        "version_normalized": "2.0.40.0",
+        "version": "v2.0.42",
+        "version_normalized": "2.0.42.0",
         "source": {
             "type": "git",
             "url": "https://github.com/top-think/think-orm.git",
-            "reference": "1119d979b850849f3725856460cf108eec1c3eb8"
+            "reference": "008b991ebd65db0b51f7f7bfb45def352174a688"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/top-think/think-orm/zipball/1119d979b850849f3725856460cf108eec1c3eb8",
-            "reference": "1119d979b850849f3725856460cf108eec1c3eb8",
+            "url": "https://api.github.com/repos/top-think/think-orm/zipball/008b991ebd65db0b51f7f7bfb45def352174a688",
+            "reference": "008b991ebd65db0b51f7f7bfb45def352174a688",
             "shasum": "",
             "mirrors": [
                 {
@@ -3001,7 +3066,7 @@
         "require-dev": {
             "phpunit/phpunit": "^7|^8|^9.5"
         },
-        "time": "2021-04-19T13:29:37+00:00",
+        "time": "2021-07-19T01:12:52+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

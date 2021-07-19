@@ -273,12 +273,12 @@ class Client extends BaseClient
      *
      * @param string $handoverUserId
      * @param string $takeoverUserId
-     * @param string $cursor
+     * @param null|string $cursor
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function transferResult(string $handoverUserId, string $takeoverUserId, $cursor = null)
+    public function transferResult(string $handoverUserId, string $takeoverUserId, ?string $cursor = null)
     {
         $params = [
             'handover_userid' => $handoverUserId,
@@ -286,7 +286,7 @@ class Client extends BaseClient
             'cursor' => $cursor,
         ];
 
-        return $this->httpPostJson('cgi-bin/externalcontact/get_transfer_result', $params);
+        return $this->httpPostJson('cgi-bin/externalcontact/resigned/transfer_result', $params);
     }
 
     /**
@@ -419,11 +419,11 @@ class Client extends BaseClient
             "id" => $id
         ];
 
-        if (!\is_null($name)){
+        if (!\is_null($name)) {
             $params['name'] = $name;
         }
 
-        if (!\is_null($order)){
+        if (!\is_null($order)) {
             $params['order'] = $order;
         }
 
