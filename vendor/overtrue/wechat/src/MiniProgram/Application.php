@@ -50,6 +50,9 @@ use EasyWeChat\Kernel\ServiceContainer;
  * @property \EasyWeChat\MiniProgram\Shop\Account\Client        $shop_account
  * @property \EasyWeChat\MiniProgram\Shop\Spu\Client            $shop_spu
  * @property \EasyWeChat\MiniProgram\Shop\Order\Client          $shop_order
+ * @property \EasyWeChat\MiniProgram\Shop\Delivery\Client       $shop_delivery
+ * @property \EasyWeChat\MiniProgram\Shop\Aftersale\Client      $shop_aftersale
+ * @property \EasyWeChat\MiniProgram\Business\Client            $business
  */
 class Application extends ServiceContainer
 {
@@ -89,6 +92,9 @@ class Application extends ServiceContainer
         Shop\Account\ServiceProvider::class,
         Shop\Spu\ServiceProvider::class,
         Shop\Order\ServiceProvider::class,
+        Shop\Delivery\ServiceProvider::class,
+        Shop\Aftersale\ServiceProvider::class,
+        Business\ServiceProvider::class,
     ];
 
     /**
