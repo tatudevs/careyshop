@@ -12,6 +12,7 @@ return array(
     'careyshop\\' => array($vendorDir . '/dnyz520/careyshop-captcha/src', $vendorDir . '/dnyz520/careyshop-exception/src', $vendorDir . '/dnyz520/careyshop-image/src', $vendorDir . '/dnyz520/careyshop-ip2region/src', $vendorDir . '/dnyz520/careyshop-jump/src', $vendorDir . '/dnyz520/careyshop-report/src', $vendorDir . '/dnyz520/careyshop-system/src', $vendorDir . '/dnyz520/careyshop-time/src'),
     'app\\' => array($baseDir . '/app'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
+    'Symfony\\Polyfill\\Php73\\' => array($vendorDir . '/symfony/polyfill-php73'),
     'Symfony\\Polyfill\\Php72\\' => array($vendorDir . '/symfony/polyfill-php72'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Contracts\\Service\\' => array($vendorDir . '/symfony/service-contracts'),
