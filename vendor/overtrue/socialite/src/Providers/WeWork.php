@@ -7,29 +7,55 @@ use Overtrue\Socialite\Exceptions\InvalidArgumentException;
 use Overtrue\Socialite\Exceptions\MethodDoesNotSupportException;
 use Overtrue\Socialite\User;
 
+/**
+ * @link https://open.work.weixin.qq.com/api/doc/90000/90135/91022
+ */
 class WeWork extends Base
 {
     public const NAME = 'wework';
     protected bool $detailed = false;
     protected ?int $agentId;
     protected ?string $apiAccessToken;
+    protected string $baseUrl = 'https://qyapi.weixin.qq.com';
+
+    public function __construct(array $config)
+    {
+        parent::__construct($config);
+
+        if ($this->getConfig()->has('base_url')) {
+            $this->baseUrl = $this->getConfig()->get('base_url');
+        }
+    }
 
     /**
-     * @param int $agentId
-     *
-     * @return $this
+     * @deprecated will remove at 4.0
      */
-    public function setAgentId(int $agentId)
+    public function setAgentId(int $agentId): WeWork
     {
         $this->agentId = $agentId;
 
         return $this;
     }
 
+    /**
+     * @deprecated will remove at 4.0
+     */
+    public function withAgentId(int $agentId): WeWork
+    {
+        $this->agentId = $agentId;
+
+        return $this;
+    }
+
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
     public function userFromCode(string $code): User
     {
         $token = $this->getApiAccessToken();
-        $user = $this->getUserId($token, $code);
+        $user = $this->getUser($token, $code);
 
         if ($this->detailed) {
             $user = $this->getUserById($user['UserId']);
@@ -45,46 +71,35 @@ class WeWork extends Base
         return $this;
     }
 
-    /**
-     * @param string $apiAccessToken
-     *
-     * @return $this
-     */
-    public function withApiAccessToken(string $apiAccessToken)
+    public function withApiAccessToken(string $apiAccessToken): WeWork
     {
         $this->apiAccessToken = $apiAccessToken;
 
         return $this;
     }
 
-    /**
-     * @return string
-     * @throws \Overtrue\Socialite\Exceptions\InvalidArgumentException
-     */
     public function getAuthUrl(): string
     {
         // 网页授权登录
-        if (!empty($this->scopes)) {
-            return $this->getOAuthUrl();
+        if (empty($this->agentId)) {
+            $queries = [
+                'appid' => $this->getClientId(),
+                'redirect_uri' => $this->redirectUrl,
+                'response_type' => 'code',
+                'scope' => $this->formatScopes($this->scopes, $this->scopeSeparator),
+                'state' => $this->state,
+            ];
+
+            return sprintf('https://open.weixin.qq.com/connect/oauth2/authorize?%s#wechat_redirect', http_build_query($queries));
         }
 
         // 第三方网页应用登录（扫码登录）
         return $this->getQrConnectUrl();
     }
 
-    protected function getOAuthUrl(): string
-    {
-        $queries = [
-            'appid' => $this->getClientId(),
-            'redirect_uri' => $this->redirectUrl,
-            'response_type' => 'code',
-            'scope' => $this->formatScopes($this->scopes, $this->scopeSeparator),
-            'state' => $this->state,
-        ];
-
-        return sprintf('https://open.weixin.qq.com/connect/oauth2/authorize?%s#wechat_redirect', http_build_query($queries));
-    }
-
+    /**
+     * @deprecated will remove at 4.0
+     */
     public function getQrConnectUrl()
     {
         $queries = [
@@ -102,9 +117,6 @@ class WeWork extends Base
     }
 
     /**
-     * @param string $token
-     *
-     * @return array
      * @throws \Overtrue\Socialite\Exceptions\MethodDoesNotSupportException
      */
     protected function getUserByToken(string $token): array
@@ -112,23 +124,15 @@ class WeWork extends Base
         throw new MethodDoesNotSupportException('WeWork doesn\'t support access_token mode');
     }
 
-    protected function getApiAccessToken()
+    protected function getApiAccessToken(): string
     {
-        return $this->apiAccessToken ?? $this->apiAccessToken = $this->createApiAccessToken();
+        return $this->apiAccessToken ?? $this->apiAccessToken = $this->requestApiAccessToken();
     }
 
-    /**
-     * @param  string  $token
-     * @param  string  $code
-     *
-     * @return array
-     * @throws \Overtrue\Socialite\Exceptions\AuthorizeFailedException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    protected function getUserId(string $token, string $code): array
+    protected function getUser(string $token, string $code): array
     {
         $response = $this->getHttpClient()->get(
-            'https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo',
+            $this->baseUrl . '/cgi-bin/user/getuserinfo',
             [
                 'query' => array_filter(
                     [
@@ -143,7 +147,7 @@ class WeWork extends Base
 
         if (($response['errcode'] ?? 1) > 0 || (empty($response['UserId']) && empty($response['OpenId']))) {
             throw new AuthorizeFailedException('Failed to get user openid:' . $response['errmsg'] ?? 'Unknown.', $response);
-        } else if (empty($response['UserId'])) {
+        } elseif (empty($response['UserId'])) {
             $this->detailed = false;
         }
 
@@ -151,16 +155,13 @@ class WeWork extends Base
     }
 
     /**
-     * @param  string  $userId
-     *
-     * @return array
-     * @throws \Overtrue\Socialite\Exceptions\AuthorizeFailedException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Overtrue\Socialite\Exceptions\AuthorizeFailedException
      */
     protected function getUserById(string $userId): array
     {
         $response = $this->getHttpClient()->post(
-            'https://qyapi.weixin.qq.com/cgi-bin/user/get',
+            $this->baseUrl . '/cgi-bin/user/get',
             [
                 'query' => [
                     'access_token' => $this->getApiAccessToken(),
@@ -208,15 +209,15 @@ class WeWork extends Base
      * @throws \Overtrue\Socialite\Exceptions\AuthorizeFailedException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function createApiAccessToken(): string
+    protected function requestApiAccessToken(): string
     {
         $response = $this->getHttpClient()->get(
-            'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
+            $this->baseUrl . '/cgi-bin/gettoken',
             [
                 'query' => array_filter(
                     [
-                        'corpid' => $this->config->get('corp_id') ?? $this->config->get('corpid'),
-                        'corpsecret' => $this->config->get('corp_secret') ?? $this->config->get('corpsecret'),
+                        'corpid' => $this->config->get('corp_id') ?? $this->config->get('corpid') ?? $this->config->get('client_id'),
+                        'corpsecret' => $this->config->get('corp_secret') ?? $this->config->get('corpsecret') ?? $this->config->get('client_secret'),
                     ]
                 ),
             ]
