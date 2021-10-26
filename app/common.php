@@ -118,7 +118,7 @@ if (!function_exists('user_md5')) {
      */
     function user_md5(string $password, string $key = 'Carey_Shop#'): string
     {
-        return isset($password) ? md5(sha1($password) . $key) : '';
+        return !empty($password) ? md5(sha1($password) . $key) : '';
     }
 }
 
@@ -256,12 +256,12 @@ if (!function_exists('get_randstr')) {
 if (!function_exists('auto_hid_substr')) {
     /**
      * 智能字符串模糊化
-     * @param string $str  被模糊的字符串
-     * @param int    $len  模糊的长度
-     * @param int    $show 显示的长度
+     * @param string|null $str  被模糊的字符串
+     * @param int         $len  模糊的长度
+     * @param int         $show 显示的长度
      * @return string
      */
-    function auto_hid_substr(string $str, int $len = 3, int $show = 3): string
+    function auto_hid_substr(?string $str, int $len = 3, int $show = 3): string
     {
         if (empty($str)) {
             return '';
@@ -324,7 +324,7 @@ if (!function_exists('xml_to_array')) {
 
 if (!function_exists('unique_and_delzero')) {
     /**
-     * 先去除重复数值,再移除0值
+     * 先去除重复数值,再移除"0"值
      * @param array $var 数组
      * @return void
      */
