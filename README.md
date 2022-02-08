@@ -31,7 +31,7 @@ CareyShop（简称 CS）是一套基于 ThinkPHP6.0 框架开发的高性能开�
 **严正声明：**   
 **为配合国家打击跨境赌博、电信诈骗、断卡等行动，本源码仅限中国大陆地区使用，且！使用站点必须有ICP备案与网安备案，否则一律上报至公安机关！**
 
-**CareyShop（QQ）交流群：714593455**
+**CareyShop（QQ）交流1群：714593455 交流2群：817814861**
 
 ## 预览
 [后台 Demo 预览](https://demo.careyshop.cn/admin "后台 Demo 预览") | [RestAPI 接口调试](https://demo.careyshop.cn/api "RestAPI 接口调试") | [经典配套款](https://doc.careyshop.cn/guide/white/) | [深灰商务款](https://doc.careyshop.cn/guide/gray/)
@@ -45,7 +45,6 @@ CareyShop（简称 CS）是一套基于 ThinkPHP6.0 框架开发的高性能开�
 CareyShop 后台管理模板 [Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://careyshop.coding.net/public/careyshop-admin/careyshop-admin/git "Coding 仓库")
 
 ## 功能
-* uniapp小程序（内测中）
 * 发票申请、审批管理（1.3.2）
 * OAuth2.0支持微信、QQ、抖音、淘宝等（1.3.2）
 * 通知订阅（1.3.2）
