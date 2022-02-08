@@ -160,7 +160,7 @@ function macro_str_replace(string $sql, array $data)
 {
     if (is_array($data)) {
         foreach ($data as $key => $value) {
-            $sql = str_replace("$key", $value, $sql);
+            $sql = str_replace("{" . $key . "}", $value, $sql);
         }
     }
 

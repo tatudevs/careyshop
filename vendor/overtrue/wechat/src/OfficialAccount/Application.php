@@ -29,6 +29,7 @@ use EasyWeChat\Kernel\ServiceContainer;
  * @property \EasyWeChat\OfficialAccount\User\TagClient                $user_tag
  * @property \EasyWeChat\OfficialAccount\Menu\Client                   $menu
  * @property \EasyWeChat\OfficialAccount\TemplateMessage\Client        $template_message
+ * @property \EasyWeChat\OfficialAccount\SubscribeMessage\Client       $subscribe_message
  * @property \EasyWeChat\OfficialAccount\Material\Client               $material
  * @property \EasyWeChat\OfficialAccount\CustomerService\Client        $customer_service
  * @property \EasyWeChat\OfficialAccount\CustomerService\SessionClient $customer_service_session
@@ -51,6 +52,8 @@ use EasyWeChat\Kernel\ServiceContainer;
  * @property \EasyWeChat\OfficialAccount\WiFi\DeviceClient             $wifi_device
  * @property \EasyWeChat\OfficialAccount\WiFi\ShopClient               $wifi_shop
  * @property \EasyWeChat\OfficialAccount\Guide\Client                  $guide
+ * @property \EasyWeChat\OfficialAccount\Draft\Client                  $draft
+ * @property \EasyWeChat\OfficialAccount\FreePublish\Client            $free_publish
  */
 class Application extends ServiceContainer
 {
@@ -64,6 +67,7 @@ class Application extends ServiceContainer
         OAuth\ServiceProvider::class,
         Menu\ServiceProvider::class,
         TemplateMessage\ServiceProvider::class,
+        SubscribeMessage\ServiceProvider::class,
         Material\ServiceProvider::class,
         CustomerService\ServiceProvider::class,
         Semantic\ServiceProvider::class,
@@ -80,6 +84,8 @@ class Application extends ServiceContainer
         OCR\ServiceProvider::class,
         Goods\ServiceProvider::class,
         WiFi\ServiceProvider::class,
+        Draft\ServiceProvider::class,
+        FreePublish\ServiceProvider::class,
         // Base services
         BasicService\QrCode\ServiceProvider::class,
         BasicService\Media\ServiceProvider::class,
