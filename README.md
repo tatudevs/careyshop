@@ -159,8 +159,4 @@ CareyShop 后台管理模板 [Github 仓库](https://github.com/dnyz520/careysho
 ![](https://aliyun.oss.careyshop.cn/poster/gray/%E7%BC%A9%E7%95%A5%E5%9B%BE%E8%AE%BE%E8%AE%A1-%E7%81%B0.png)
 
 #### 声明
-本程序使用 AGPLv3 开源协议，未遵守协议视为违约将承担法律责任，商用需进行授权，
-
-所包含的源码（包括第三方）和二进制文件存在版权信息另行标注（附加许可）的情况，
-
 CareyShop® 商标和著作权所有者为宁波互明科技有限公司。
