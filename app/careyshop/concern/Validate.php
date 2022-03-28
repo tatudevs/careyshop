@@ -68,7 +68,15 @@ trait Validate
      */
     private function getValidateClass(): string
     {
-        $namespace = '\\app\\careyshop\\validate\\' . basename(static::class);
+        $classname = basename(static::class);
+        if (strpos($classname, '\\') !== false) {
+            $arr = explode('\\', $classname);
+            if (is_array($arr)) {
+                $classname = $arr[count($arr) - 1];
+            }
+        }
+
+        $namespace = '\\app\\careyshop\\validate\\' . $classname;
         if (!class_exists($namespace)) {
             throw new ValidateException("验证器 $namespace 不存在");
         }
