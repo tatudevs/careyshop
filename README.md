@@ -5,21 +5,6 @@
 <h1 align="center">CareyShop 商城框架系统</h1>
 
 <p align="center">
-    <a href="https://www.careyshop.cn">
-        <img src="https://img.shields.io/badge/website-CareyShop-yellow.svg" alt="careyshop"/>
-    </a>
-    <a href="https://www.careyshop.cn">
-        <img src="https://img.shields.io/github/license/dnyz520/careyshop.svg" alt="careyshop_license"/>
-    </a>
-    <a href="https://www.careyshop.cn/download.html">
-        <img src="https://img.shields.io/github/release/dnyz520/careyshop.svg" alt="careyshop_release"/>
-    </a>
-    <a href="https://www.careyshop.cn">
-        <img src="https://img.shields.io/github/last-commit/dnyz520/careyshop.svg" alt="careyshop_last-commit"/>
-    </a>
-</p>
-
-<p align="center">
     <b>如果对您有帮助，请帮忙点右上角 "Star" 支持一下 谢谢！</b>
 </p>
 
@@ -38,11 +23,6 @@ CareyShop（简称 CS）是一套基于 ThinkPHP6.0 框架开发的高性能开�
 
 ## 文档
 [CareyShop开发文档](https://doc.careyshop.cn "CareyShop开发文档")
-
-## 仓库
-[Github 仓库](https://github.com/dnyz520/careyshop "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop "码云仓库") | [Coding 仓库](https://careyshop.coding.net/public/careyshop/careyshop/git "Coding 仓库")
-
-CareyShop 后台管理模板 [Github 仓库](https://github.com/dnyz520/careyshop-admin "Github 仓库") | [码云仓库](https://gitee.com/careyshop/careyshop-admin "码云仓库") | [Coding 仓库](https://careyshop.coding.net/public/careyshop-admin/careyshop-admin/git "Coding 仓库")
 
 ## 功能
 * 发票申请、审批管理（1.3.2）

@@ -10,16 +10,14 @@
         "framework"
     ],
     "homepage": "https://careyshop.cn/",
-    "license": "AGPL-3.0",
     "authors": [
         {
-            "name": "dnyz520",
-            "email": "dnyz520@126.com"
+            "name": "careyshop",
+            "email": "careyshop@careyshop.cn"
         }
     ],
     "support": {
-        "email": "dnyz520@126.com",
-        "issues": "https://github.com/dnyz520/careyshop/issues",
+        "email": "careyshop@careyshop.cn",
         "source": "https://www.careyshop.cn"
     },
     "require": {
