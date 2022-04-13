@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '1fc2ed4328132fd6f9ffed8c806688317bff2291',
+        'reference' => '21c5978a3343984c9c4c10104181fc2dd16bcb33',
         'name' => 'dnyz520/careyshop',
         'dev' => true,
     ),
@@ -25,7 +25,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '1fc2ed4328132fd6f9ffed8c806688317bff2291',
+            'reference' => '21c5978a3343984c9c4c10104181fc2dd16bcb33',
             'dev_requirement' => false,
         ),
         'dnyz520/careyshop-barcode' => array(
@@ -164,12 +164,12 @@
             'dev_requirement' => false,
         ),
         'league/mime-type-detection' => array(
-            'pretty_version' => '1.9.0',
-            'version' => '1.9.0.0',
+            'pretty_version' => '1.10.0',
+            'version' => '1.10.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../league/mime-type-detection',
             'aliases' => array(),
-            'reference' => 'aa70e813a6ad3d1558fc927863d47309b4c23e69',
+            'reference' => '3e4a35d756eedc67096f30240a68a3149120dae7',
             'dev_requirement' => false,
         ),
         'monolog/monolog' => array(
