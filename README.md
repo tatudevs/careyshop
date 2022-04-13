@@ -143,4 +143,4 @@ CareyShop（简称 CS）是一套基于 ThinkPHP6 框架开发的高性能开源
 ![](https://aliyun.oss.careyshop.cn/poster/gray/%E7%BC%A9%E7%95%A5%E5%9B%BE%E8%AE%BE%E8%AE%A1-%E7%81%B0.png)
 
 #### 声明
-版权所有归宁波互明科技有限公司所有
+版权归宁波互明科技有限公司所有
