@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '5884195369390b7c819a740dae0aa8a3bf0c05bd',
+        'reference' => '1fc2ed4328132fd6f9ffed8c806688317bff2291',
         'name' => 'dnyz520/careyshop',
         'dev' => true,
     ),
@@ -25,7 +25,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '5884195369390b7c819a740dae0aa8a3bf0c05bd',
+            'reference' => '1fc2ed4328132fd6f9ffed8c806688317bff2291',
             'dev_requirement' => false,
         ),
         'dnyz520/careyshop-barcode' => array(
